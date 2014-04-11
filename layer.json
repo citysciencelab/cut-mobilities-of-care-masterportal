@@ -34,7 +34,8 @@
         "title": "bab_novkl,bab_vkl",
         "format": "image/png",
         "visibility": true,
-        "version": "1.1.1"
+        "version": "1.1.1",
+		"uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6"
     },
 	{
         "id": "parkhaus",
@@ -42,8 +43,9 @@
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
         "title": "parkhaeuser",
         "format": "image/png",
-        "visibility": true,
-        "version": "1.1.1"
+        "visibility": false,
+        "version": "1.1.1",
+		"uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014"
     },
 	{
         "id": "kita",
@@ -52,6 +54,7 @@
         "title": "KitaEinrichtungen",
         "format": "image/png",
         "visibility": false,
-        "version": "1.1.1"
+        "version": "1.1.1",
+		"uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71"
     }
 ]
