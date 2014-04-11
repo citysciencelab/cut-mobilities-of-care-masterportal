@@ -1,0 +1,57 @@
+<div class="navbar-header">
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <span class="sr-only">Navigation ein-/ausblenden</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <span class="navbar-brand" href="#"><%= viewerName %></span>
+</div>
+<!-- Alle Navigationslinks, Formulare und anderer Inhalt werden hier zusammengefasst und können dann ein- und ausgeblendet werden -->
+<div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+    <% if (layerTree === true) { %>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span>&nbsp;|&nbsp;Layers<b class="caret"></b></a>
+            <ul id="tree" class="dropdown-menu">
+            </ul>
+        </li>
+    <% } %>
+    <% if (tools === true) { %>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;|&nbsp;Werkzeuge<b class="caret"></b></a>
+            <ul id="tools" class="dropdown-menu">
+            <!--    <li><a href="#"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;&nbsp;Koordinate anzeigen</a></li>-->
+            <!--    <li><a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Messen</a></li>-->
+            <!--    <li><a href="#" class="active"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Informationen abfragen</a></li>-->
+            <!--    <li class="divider"></li>-->
+            <!--    <li><a href="#"><span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;Drucken</a></li>-->
+            </ul>
+        </li>
+    <% } %>
+    <% if (helpButton === true) { %>
+        <li>
+            <a href="#"><span class="glyphicon glyphicon-question-sign"></span>&nbsp;|&nbsp;Hilfe</a>
+        </li>
+    <% } %>
+    <% if (contactButton === true) { %>
+        <li>
+            <a href="#"><span class="glyphicon glyphicon-envelope"></span>&nbsp;|&nbsp;Kontakt</a>
+        </li>
+    <% } %>
+    </ul>
+    <% if (searchBar === true) { %>
+    <div class="col-sm-3 col-md-3 navbar-right">
+        <form class="navbar-form" role="search">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Adresssuche">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <% } %>
+</div>

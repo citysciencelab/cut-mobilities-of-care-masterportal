@@ -9,6 +9,7 @@ define([
 
     var WMSLayerView = Backbone.View.extend({
         className : 'list-group-item',
+        tagName: 'li',
         template: _.template(wmsLayerTemplate),
         events: {
             'change input[type=checkbox]': 'toggleVisibility',
@@ -22,7 +23,6 @@ define([
             this.model.toggleVisibility();
         },
         getMetadata: function () {
-            console.log(this.model.get('uuid'));
             window.open('http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=' + this.model.get('uuid'), "_blank");
         },
         render: function () {

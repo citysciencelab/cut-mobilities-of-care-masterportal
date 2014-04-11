@@ -1,0 +1,39 @@
+[
+    {
+        "id": "stadtplanIntranet",
+        "name": "Stadtplan",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+        "title": "geobasisdaten",
+        "format": "image/jpeg",
+        "visibility": true,
+        "version": "1.1.0"
+    },
+    {
+        "id": "luftbilderIntranet",
+        "name": "Luftbilder",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+        "title": "dop",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "uuid": "B2013F67-EB8A-4629-8E6D-55A5F74CE129"
+    },
+    {
+        "id": "stadtplanGrauIntranet",
+        "name": "Stadtplan grau blau",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/Test_Image/Geobasisdaten_GB_Test/MapServer/WmsServer",
+        "title": "1,5,9,13,17",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0"
+    },
+	{
+        "id": "verkehrslageAutobahnen",
+        "name": "Verkehrslage auf Autobahnen",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
+        "title": "bab_novkl,bab_vkl",
+        "format": "image/png",
+        "visibility": true,
+        "version": "1.1.0"
+    }
+]

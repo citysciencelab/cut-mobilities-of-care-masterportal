@@ -8,7 +8,7 @@ define([
 
     var WMSLayerList = Backbone.Collection.extend({
         model: WMSLayer,
-        url: '../libs/layer/layer.json',
+        url: '../libs/lgv/layer.json',
         initialize: function () {
             this.fetch({
                 cache: false,

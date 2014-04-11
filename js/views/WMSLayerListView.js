@@ -8,8 +8,7 @@ define([
 ], function ($, _, Backbone, WMSLayerView) {
 
     var WMSLayerListView = Backbone.View.extend({
-        el: '.modal-body',
-        className: 'list-group',
+        el: '#tree',
         initialize: function () {
             this.render();
         },
