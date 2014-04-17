@@ -27,7 +27,7 @@
         "visibility": false,
         "version": "1.1.0"
     },
-	{
+    {
         "id": "verkehrslageAutobahnen",
         "name": "Verkehrslage auf Autobahnen",
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
@@ -35,9 +35,9 @@
         "format": "image/png",
         "visibility": true,
         "version": "1.1.1",
-		"uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6"
+        "uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6"
     },
-	{
+    {
         "id": "parkhaus",
         "name": "Parkhäuser",
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
@@ -45,9 +45,9 @@
         "format": "image/png",
         "visibility": false,
         "version": "1.1.1",
-		"uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014"
+        "uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014"
     },
-	{
+    {
         "id": "kita",
         "name": "Kindertagesstätten",
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms",
@@ -55,6 +55,6 @@
         "format": "image/png",
         "visibility": false,
         "version": "1.1.1",
-		"uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71"
+        "uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71"
     }
 ]

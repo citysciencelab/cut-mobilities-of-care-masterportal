@@ -1,15 +1,15 @@
 <% if (coord === true) { %>
-<li id="coords">
-    <a href="#"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;&nbsp;Koordinate anzeigen</a>
+<li id="coordinateMenu" <% if (active === "coords") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;&nbsp;Koordinate abfragen</a>
 </li>
 <% }
 if (measure === true) { %>
-<li>
+<li id="measureMenu" <% if (active === "measure") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Messen</a>
 </li>
 <% }
 if (gfi === true) { %>
-<li>
+<li id="gfiMenu" <% if (active === "gfi") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Informationen abfragen</a>
 </li>
 <% }

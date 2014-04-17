@@ -28,7 +28,7 @@ define([
             var attr = this.model.toJSON();
             $('body').append(this.$el.append(this.template(attr)));
             new WMSLayerListView({collection: WMSLayerList});
-            new ToolsView({model: new Tools()});
+            new ToolsView({model: Tools});
         }
     });
 

@@ -14,5 +14,5 @@ define([
         }
     });
 
-    return Menubar;
+    return new Menubar();
 });

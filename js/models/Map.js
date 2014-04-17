@@ -4,17 +4,19 @@ define([
     'backbone',
     'openlayers',
     'collections/WMSLayerList',
+    'eventbus',
+    'models/CoordPopup',
     'proj4js'
-], function (_, Backbone, ol, WMSLayerList) {
+], function (_, Backbone, ol, WMSLayerList, EventBus, CoordPopup) {
 
     Proj4js.defs["EPSG:25832"] = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs";
 
     /**
-     * @exports MAP
+     * @exports Map
      * @requires WMSLayerList
      * @classdesc hier beschreiben wir das modul
      */
-    var MAP = Backbone.Model.extend(
+    var Map = Backbone.Model.extend(
     {
         /** A property of the module.*/
         default: {
@@ -26,6 +28,10 @@ define([
          * @return {String} The data.
          */
         initialize: function () {
+            EventBus.on('activateClick', this.activateClick, this);
+
+            this.set('coordOverlay', CoordPopup.get('coordOverlay'));
+            
             this.set('projection', new ol.proj.configureProj4jsProjection({
                 code: 'EPSG:25832',
                 units: 'm',
@@ -39,7 +45,6 @@ define([
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
                 resolution: 26.458319045841044,
                 resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ],
-                //resolutions: [ 66.1458333333333, 26.458333333333, 15.875, 10.583333333333, 5.2916666666666, 2.64583333333333, 1.32291666666667, 0.661458333333333, 0.264583333333333 ]
             }));
             this.set('map',  new ol.Map({
                 layers: WMSLayerList.pluck('layer'),
@@ -47,22 +52,24 @@ define([
                 renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                 target: 'map',
                 view: this.get('view'),
-                controls: []
+                controls: [this.get('coordOverlay')]
             }));
-            this.get('map').on('click', this.something, this);
         },
-        something: function (evt) {
-            console.log($('#tools'));
-            console.log(evt);
+        activateClick: function (evt) {
+            if (evt === 'coords') {
+                this.get('map').on('click', function (evt) {
+                    EventBus.trigger('createPopup', evt);
+                });
+            }
         },
         /**
          * was macht den diese schöne methode
          * @param {String} id The id of get data for.
          * @return {String} The data.
          */
-        test: function () {
+        test: function (evt) {
         }
     });
 
-    return MAP;
+    return Map;
 });
