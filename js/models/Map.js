@@ -1,4 +1,3 @@
-/*global define*/
 define([
     'underscore',
     'backbone',
@@ -6,8 +5,9 @@ define([
     'collections/WMSLayerList',
     'eventbus',
     'models/CoordPopup',
+    'views/CoordPopupView',
     'proj4js'
-], function (_, Backbone, ol, WMSLayerList, EventBus, CoordPopup) {
+], function (_, Backbone, ol, WMSLayerList, EventBus, CoordPopup, CoordPopupView) {
 
     Proj4js.defs["EPSG:25832"] = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs";
 
@@ -30,7 +30,9 @@ define([
         initialize: function () {
             EventBus.on('activateClick', this.activateClick, this);
 
-            this.set('coordOverlay', CoordPopup.get('coordOverlay'));
+            var test = new CoordPopupView();
+            this.set('coordOverlay', test.model.get('coordOverlay'));
+            //this.set('coordOverlay', CoordPopup.get('coordOverlay'));
             
             this.set('projection', new ol.proj.configureProj4jsProjection({
                 code: 'EPSG:25832',
