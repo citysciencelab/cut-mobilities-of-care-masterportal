@@ -6,7 +6,12 @@ define([
 ], function (_, Backbone, EventBus, ol) {
 
     var CoordPopup = Backbone.Model.extend({
+        defaultStatus: {
+            coordinate: []
+        },
         initialize: function () {
+            EventBus.on('setPositionCoordPopup', this.setPosition, this);
+            this.set('coordinate', []);
             this.set('coordOverlay', new ol.Overlay({
                 element: $('#popup')
             }));
@@ -19,8 +24,8 @@ define([
             this.get('element').popover('show');
         },
         setPosition: function (coordinate) {
-            this.set('coordinate', coordinate);
             this.get('coordOverlay').setPosition(coordinate);
+            this.set('coordinate', coordinate);
         }
     });
 

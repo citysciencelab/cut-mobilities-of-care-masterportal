@@ -6,17 +6,17 @@ define([
      * @exports EventBus
      * @classdesc Dieses Modul gibt ein Objekt vom Typ Backbone.Events zurück. Damit ist es möglich
      * objektunabhängig Events zwischen MV-Komponenten abzufangen und zu triggern.
-     * @example // In der 'initialize-Funktion' der View A wird das Event 'statusPopup' registriert
+     * @example // In der 'initialize-Funktion' der ViewA wird das Event 'statusPopup' registriert
      * var ViewA = Backbone.View.extend({
      *     initialize: function () {
-     *         EventBus.on('statusPopup', this.statusPopup, this);
+     *         EventBus.on('statusPopup', this.status, this);
      *     },
-     *     statusPopup: function (status) {
-     *         // wird in View B das Event ausgelöst, passiert hier was
+     *     status: function (status) {
+     *         // wird in ViewB das Event 'statusPopup' ausgelöst, passiert hier was
      *     }
      * });
      *
-     * // Beim Aufrufen der 'getStatus-Funktion' der View B wird das Event ausgelöst.
+     * // Beim Aufrufen der 'getStatus-Funktion' der ViewB wird das Event ausgelöst.
      * var ViewB = Backbone.View.extend({
      *     getStatus: function () {
      *         EventBus.trigger('statusPopup');

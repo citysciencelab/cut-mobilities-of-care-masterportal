@@ -23,16 +23,7 @@ define([
             this.set('active', 'gfi');
         },
         activateTool: function () {
-            EventBus.trigger('activateClick', this.get('active')); // für die Map
-            if (this.get('active') === 'coords') {
-                EventBus.trigger('togglePopup', true);
-            }
-            else if (this.get('active') === 'measure') {
-                EventBus.trigger('togglePopup', false);
-            }
-            else if (this.get('active') === 'gfi') {
-                EventBus.trigger('togglePopup', false);
-            }
+            EventBus.trigger('activateClick', this.get('active'));
         }
     });
 

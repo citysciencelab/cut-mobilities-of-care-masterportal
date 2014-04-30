@@ -32,7 +32,6 @@ define([
 
             var test = new CoordPopupView();
             this.set('coordOverlay', test.model.get('coordOverlay'));
-            //this.set('coordOverlay', CoordPopup.get('coordOverlay'));
             
             this.set('projection', new ol.proj.configureProj4jsProjection({
                 code: 'EPSG:25832',
@@ -57,11 +56,12 @@ define([
                 controls: [this.get('coordOverlay')]
             }));
         },
-        activateClick: function (evt) {
-            if (evt === 'coords') {
-                this.get('map').on('click', function (evt) {
-                    EventBus.trigger('createPopup', evt);
-                });
+        activateClick: function (tool) {
+            if (tool === 'coords') {
+                this.get('map').on('click', this.test);
+            }
+            else {
+                this.get('map').un('click', this.test);
             }
         },
         /**
@@ -70,6 +70,7 @@ define([
          * @return {String} The data.
          */
         test: function (evt) {
+            EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         }
     });
 

@@ -10,34 +10,24 @@ define([
     var CoordPopupView = Backbone.View.extend({
         template: _.template(CoordPopupTemplate),
         events: {
-            'click': 'test' // hier bin ich stehen geblieben...funkt noch nicht
+            'click #span': 'destroy'
         },
         initialize: function () {
             this.model = CoordPopup;
-            EventBus.on('togglePopup', this.togglePopup, this);
+            this.listenTo(this.model, 'change', this.render);
         },
-        togglePopup: function (status) {
-            this.model.destroyPopup();
-            if (status === true) {
-                EventBus.on('createPopup', this.createPopup, this);
-            }
-            else {
-                EventBus.off('createPopup', this.createPopup, this);
-            }
-        },
-        createPopup: function (evt) {
-            this.model.destroyPopup();
-            this.model.setPosition(evt.coordinate);
+        render: function (evt) {
             var attr = this.model.toJSON();
+            this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
                 'placement': 'auto',
                 'html': true,
-                'content': this.template(attr)
+                'content': this.$el
             });
             this.model.showPopup();
         },
-        test: function () {
-            console.log(23423);
+        destroy: function () {
+            this.model.destroyPopup();
         }
     });
 
