@@ -3,10 +3,11 @@ define([
     'underscore',
     'backbone',
     'text!templates/Tools.html',
-    'views/CoordPopupView'
-], function ($, _, Backbone, ToolsTemplate) {
+    'models/Tools'
+], function ($, _, Backbone, ToolsTemplate, Tools) {
 
     var ToolsView = Backbone.View.extend({
+        model: Tools,
         el: '#tools',
         template: _.template(ToolsTemplate),
         initialize: function () {

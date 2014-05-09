@@ -3,18 +3,17 @@ define([
     'underscore',
     'backbone',
     'text!templates/CoordPopup.html',
-    'models/CoordPopup',
-    'eventbus'
-], function ($, _, Backbone, CoordPopupTemplate, CoordPopup, EventBus) {
+    'models/CoordPopup'
+], function ($, _, Backbone, CoordPopupTemplate, CoordPopup) {
 
     var CoordPopupView = Backbone.View.extend({
+        model: CoordPopup,
         template: _.template(CoordPopupTemplate),
         events: {
-            'click #span': 'destroy'
+            'click .close': 'destroy'
         },
         initialize: function () {
-            this.model = CoordPopup;
-            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'change:coordinateGeo', this.render);
         },
         render: function (evt) {
             var attr = this.model.toJSON();

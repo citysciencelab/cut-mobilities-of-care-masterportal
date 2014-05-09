@@ -5,12 +5,11 @@ define([
     'text!templates/Menubar.html',
     'views/WMSLayerListView',
     'collections/WMSLayerList',
-    'views/ToolsView',
-    'models/Tools',
-    'bootstrap'
-], function ($, _, Backbone, MenubarTemplate, WMSLayerListView, WMSLayerList, ToolsView, Tools) {
+    'models/Menubar'
+], function ($, _, Backbone, MenubarTemplate, WMSLayerListView, WMSLayerList, Menubar) {
 
     var MenubarView = Backbone.View.extend({
+        model: Menubar,
         tagName: 'nav',
         className: 'navbar navbar-default navbar-fixed-top',
         attributes: {"role": "navigation"},
@@ -27,9 +26,9 @@ define([
             var attr = this.model.toJSON();
             $('body').append(this.$el.append(this.template(attr)));
             new WMSLayerListView({collection: WMSLayerList});
-            new ToolsView({model: Tools});
         }
     });
 
     return MenubarView;
+
 });

@@ -4,10 +4,8 @@ define([
     'openlayers',
     'collections/WMSLayerList',
     'eventbus',
-    'models/CoordPopup',
-    'views/CoordPopupView',
     'proj4js'
-], function (_, Backbone, ol, WMSLayerList, EventBus, CoordPopup, CoordPopupView) {
+], function (_, Backbone, ol, WMSLayerList, EventBus) {
 
     Proj4js.defs["EPSG:25832"] = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs";
 
@@ -29,10 +27,8 @@ define([
          */
         initialize: function () {
             EventBus.on('activateClick', this.activateClick, this);
+            EventBus.on('addOver', this.addOverlays, this);
 
-            var test = new CoordPopupView();
-            this.set('coordOverlay', test.model.get('coordOverlay'));
-            
             this.set('projection', new ol.proj.configureProj4jsProjection({
                 code: 'EPSG:25832',
                 units: 'm',
@@ -52,8 +48,7 @@ define([
                 ol3Logo: false,	// default true
                 renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                 target: 'map',
-                view: this.get('view'),
-                controls: [this.get('coordOverlay')]
+                view: this.get('view')
             }));
         },
         activateClick: function (tool) {
@@ -63,6 +58,9 @@ define([
             else {
                 this.get('map').un('click', this.test);
             }
+        },
+        addOverlays: function (overlay) {
+            this.get('map').addOverlay(overlay);
         },
         /**
          * was macht den diese schöne methode

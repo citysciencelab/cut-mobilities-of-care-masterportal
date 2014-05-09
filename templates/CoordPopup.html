@@ -1,1 +1,9 @@
-<p>The location you clicked was:<span id="span" style="float: right">X</span></p><code><%= coordinate %></code>
+<p>
+    <span class="close">&times;</span>
+</p>
+<p><small>UTM-Koordinate (ETRS 89):</small>
+    <pre>Rechtswert: <%= coordinateUTM[0] %><br>Hochwert: <%= coordinateUTM[1] %></pre>
+</p>
+<p><small>Geografische-Koordinate (WGS 84):</small>
+    <pre><%= coordinateGeo %></pre>
+</p>

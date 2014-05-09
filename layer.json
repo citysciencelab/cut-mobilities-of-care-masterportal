@@ -21,8 +21,26 @@
     {
         "id": "stadtplanGrauIntranet",
         "name": "Stadtplan grau blau",
-        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/Test_Image/Geobasisdaten_GB_Test/MapServer/WmsServer",
-        "title": "1,5,9,13,17",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_GB_neu/MapServer/WMSServer",
+        "title": "1,5,9,13",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0"
+    },
+    {
+        "id": "stadtplanFarbigIntranet",
+        "name": "Stadtplan Farbig",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_neu/MapServer/WMSServer",
+        "title": "1,5,9,13",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0"
+    },
+    {
+        "id": "stadtplanSchwarzIntranet",
+        "name": "Stadtplan Schwarz",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_SW_neu/MapServer/WMSServer",
+        "title": "1,5,9,13",
         "format": "image/jpeg",
         "visibility": false,
         "version": "1.1.0"
