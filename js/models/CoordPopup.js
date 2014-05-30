@@ -12,7 +12,7 @@ define([
                 element: $('#popup')
             }));
             this.set('element', this.get('coordOverlay').getElement());
-            EventBus.trigger('addOver', this.get('coordOverlay'));
+            EventBus.trigger('addOverlay', this.get('coordOverlay'));
         },
         destroyPopup: function () {
             this.get('element').popover('destroy');

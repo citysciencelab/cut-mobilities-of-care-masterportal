@@ -3,10 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!templates/Menubar.html',
-    'views/WMSLayerListView',
-    'collections/WMSLayerList',
+    //'views/LayerListView',
+    'views/TreefolderListView',
     'models/Menubar'
-], function ($, _, Backbone, MenubarTemplate, WMSLayerListView, WMSLayerList, Menubar) {
+], function ($, _, Backbone, MenubarTemplate, TreefolderListView, Menubar) {
 
     var MenubarView = Backbone.View.extend({
         model: Menubar,
@@ -25,7 +25,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             $('body').append(this.$el.append(this.template(attr)));
-            new WMSLayerListView({collection: WMSLayerList});
+            new TreefolderListView();
         }
     });
 

@@ -1,7 +1,28 @@
-<p>
-    <input type="checkbox" <% if(visibility === true) print("checked") %>>&nbsp;<%= name %>
-    <span class="glyphicon glyphicon-info-sign"></span>
-</p>
-<p>
-    <input type="range" min="0" max="100" value="0">
-</p>
+  <div>
+    <% if(visibility === true) {%>
+    <span class="glyphicon glyphicon-check"></span>
+    &nbsp;<small><%= name %></small>
+    <span class="glyphicon glyphicon-info-sign pull-right"></span>
+    <% } else { %>
+    <span class="glyphicon glyphicon-unchecked color"></span>
+    &nbsp;<small class="color"><%= name %></small>
+    <span class="glyphicon glyphicon-info-sign pull-right color"></span>
+    <% } %>
+  </div>
+  <% if(visibility === true) { %>
+  <div style="font-size: 11px; margin-top: 2px;">
+    <span class="pull-left">Transparenz</span>
+    <!--<input class="pull-left" type="range" min="0" max="100" value="0" style="width: 80px; margin-left: 5px;">-->
+<div class="layer-slider pull-left" id="slider"></div>
+    <span class="glyphicon glyphicon-arrow-up pull-right"></span>
+    <span class="glyphicon glyphicon-arrow-down pull-right"></span>
+  </div>
+    <% } else { %>
+  <div class="color" style="font-size: 11px; margin-top: 2px;">
+    <span class="pull-left">Transparenz</span>
+    <!--<input class="pull-left" type="range" min="0" max="100" value="0" style="width: 80px; margin-left: 5px;">-->
+<div class="layer-slider pull-left" id="slider"></div>
+    <span class="glyphicon glyphicon-arrow-up pull-right"></span>
+    <span class="glyphicon glyphicon-arrow-down pull-right"></span>
+  </div>
+     <% } %>

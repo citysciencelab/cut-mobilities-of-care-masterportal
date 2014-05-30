@@ -1,0 +1,17 @@
+<div class="panel-heading">
+    <% if (isChecked == false) { %>
+        <span class="glyphicon glyphicon-unchecked"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-check"></span>
+    <% } %>
+    &nbsp;<strong><%= name.toUpperCase() %></strong>
+    <% if (isExpanded == false) { %>
+    <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+    <% } else { %>
+    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+    <% } %>
+</div>
+<div class="divider"></div>
+<!-- Listengruppe -->
+<div class="list-group collapse <%= name %>">
+</div>

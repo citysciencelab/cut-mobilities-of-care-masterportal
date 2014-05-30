@@ -1,0 +1,26 @@
+<p>
+    <span class="close">&times;</span>
+</p>
+<p>
+    <strong><%= gfiTitle[gfiCounter-gfiTitle.length] %></strong>
+</p>
+<% if(gfiContent[gfiCounter-gfiTitle.length] !== undefined) {
+console.log(gfiContent[gfiCounter-gfiTitle.length].childNodes);
+var test = _.filter(gfiContent[gfiCounter-gfiTitle.length].childNodes, function (element) {if (element.nodeType === 1) return element});
+                           
+_.each(test, function(element) { %>
+<p>
+        <%= element.localName + ': ' + element.textContent %>
+</p>
+<% })}; %>
+
+<% if(gfiTitle.length > 1) { %>
+<ul class="pager">
+  <% if(gfiCounter-gfiTitle.length >= 1) { %>
+    <li class="previous"><a href="#">&larr; zurück</a></li>
+  <% } %>
+  <% if(gfiCounter-gfiTitle.length < gfiTitle.length - 1) { %>
+  <li class="next"><a href="#">vor &rarr;</a></li>
+  <% } %>
+</ul>
+<% } %>

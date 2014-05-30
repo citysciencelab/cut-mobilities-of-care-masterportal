@@ -13,9 +13,11 @@ define([
             visibility: '',
             version: '',
             source: '',
-            layer: ''
+            layer: '',
+            opacity: 1
         },
         initialize: function () {
+            this.listenTo(this, 'change:visibility', this.vis);
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
                 params: {
@@ -37,18 +39,21 @@ define([
             if (this.get('visibility') === true)
             {
                 this.set({'visibility': false});
-                this.get('layer').setVisible(false);
+                //this.get('layer').setVisible(false);
             }
             else
             {
                 this.set({'visibility': true});
-                this.get('layer').setVisible(true);
+                //this.get('layer').setVisible(true);
             }
         },
         updateOpacity: function (opacity) {
             var transparence = (100 - opacity) / 100;
             this.get('layer').setOpacity(transparence);
             this.set({'opacity': transparence});
+        },
+        vis: function () {
+            this.get('layer').setVisible(this.get('visibility'));
         }
     });
 

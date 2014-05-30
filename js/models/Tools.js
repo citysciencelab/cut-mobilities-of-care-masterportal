@@ -9,6 +9,7 @@ define([
         initialize: function () {
             _.each(Config.tools, this.setAttributes, this);
             this.listenTo(this, 'change:active', this.activateTool);
+            EventBus.trigger('activateClick', 'gfi');
         },
         setAttributes: function (value, key) {
             this.set(key, value);

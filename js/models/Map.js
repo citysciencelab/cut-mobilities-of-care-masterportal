@@ -2,7 +2,7 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'collections/WMSLayerList',
+    'collections/LayerList',
     'eventbus',
     'proj4js'
 ], function (_, Backbone, ol, WMSLayerList, EventBus) {
@@ -27,7 +27,8 @@ define([
          */
         initialize: function () {
             EventBus.on('activateClick', this.activateClick, this);
-            EventBus.on('addOver', this.addOverlays, this);
+            EventBus.on('addOverlay', this.addOverlay, this);
+            EventBus.on('moveLayer', this.moveLayer, this);
 
             this.set('projection', new ol.proj.configureProj4jsProjection({
                 code: 'EPSG:25832',
@@ -48,27 +49,59 @@ define([
                 ol3Logo: false,	// default true
                 renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                 target: 'map',
-                view: this.get('view')
+                view: this.get('view'),
+                controls: []
             }));
         },
         activateClick: function (tool) {
             if (tool === 'coords') {
-                this.get('map').on('click', this.test);
+                this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').on('click', this.setPositionCoordPopup);
+                
             }
-            else {
-                this.get('map').un('click', this.test);
+            else if (tool === 'gfi') {
+                this.get('map').un('click', this.setPositionCoordPopup);
+                this.get('map').on('click', this.setGFIParams, this);
             }
         },
-        addOverlays: function (overlay) {
+        /**
+         */
+        addOverlay: function (overlay) {
             this.get('map').addOverlay(overlay);
+        },
+        /**
+         */
+        moveLayer: function (args) {
+            var layers, index, layersCollection;
+            layers = this.get('map').getLayers().getArray();
+            index = layers.indexOf(args[1]);
+            layersCollection = this.get('map').getLayers();
+            layersCollection.removeAt(index);
+            layersCollection.insertAt(index + args[0], args[1]);
         },
         /**
          * was macht den diese schöne methode
          * @param {String} id The id of get data for.
          * @return {String} The data.
          */
-        test: function (evt) {
+        setPositionCoordPopup: function (evt) {
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
+        },
+        setGFIParams: function (evt) {
+            var urls = [], resolution, projection, layers, coordinate;
+            coordinate = evt.coordinate;
+            layers = this.get('map').getLayers().getArray();
+            resolution = this.get('view').getResolution();
+            projection = this.get('view').getProjection();
+            _.each(layers, function (element, index) {
+                var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                    coordinate, resolution, projection,
+                    {'INFO_FORMAT': 'text/xml'}
+                )
+                urls.push(gfiURL);
+            });
+            EventBus.trigger('setGFIURLs', urls);
+            EventBus.trigger('setGFIPopupPosition', coordinate);
         }
     });
 
