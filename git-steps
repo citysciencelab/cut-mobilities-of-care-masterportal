@@ -11,4 +11,5 @@ PUSH to it
 
 GIVE blessed bare repo a preview ; use libs/lgv for it
 - (go to libs-folder)
-- open lgv.git/hooks/post-receive
+- create lgv.git/hooks/post-receive 
+- test
