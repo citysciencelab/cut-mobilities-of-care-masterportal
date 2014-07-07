@@ -1,0 +1,14 @@
+CREATE bare repo (blessed)
+- (go to libs-folder)
+- # mkdir lgv.git
+- # cd lgv.git
+- # git --bare init
+
+PUSH to it
+- # cd ../lgv
+- # git remote add blessed ../lgv.git
+- push branch master of this repo to blessed repo branch master: # git push blessed master
+
+GIVE blessed bare repo a preview ; use libs/lgv for it
+- (go to libs-folder)
+- open lgv.git/hooks/post-receive
