@@ -21,11 +21,7 @@
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;|&nbsp;Werkzeuge<b class="caret"></b></a>
             <ul id="tools" class="dropdown-menu">
-            <!--    <li><a href="#"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;&nbsp;Koordinate anzeigen</a></li>-->
-            <!--    <li><a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Messen</a></li>-->
-            <!--    <li><a href="#" class="active"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Informationen abfragen</a></li>-->
-            <!--    <li class="divider"></li>-->
-            <!--    <li><a href="#"><span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;Drucken</a></li>-->
+                
             </ul>
         </li>
     <% } %>
@@ -36,22 +32,10 @@
     <% } %>
     <% if (contactButton === true) { %>
         <li>
-            <a href="#"><span class="glyphicon glyphicon-envelope"></span>&nbsp;|&nbsp;Kontakt</a>
+            <a href="mailto:LGVGeoPortal-Hilfe@gv.hamburg.de?subject=Frage%20zum%20HWRM-Portal&body=Zur%20weiteren%20Bearbeitung%20bitten%20wir%20Sie%20die%20nachstehenden%20Angaben%20zu%20machen.%20Bei%20Bedarf%20fuegen%20Sie%20bitte%20noch%20einen%20Screenshot%20hinzu.%20Vielen%20Dank!%0A%0A1.%20Name:%0A2.%20Telefon:%0A3.%20Anliegen:";"><span class="glyphicon glyphicon-envelope"></span>&nbsp;|&nbsp;Kontakt</a>
         </li>
     <% } %>
     </ul>
-    <% if (searchBar === true) { %>
-    <div class="col-sm-3 col-md-3 navbar-right">
-        <form class="navbar-form" role="search">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Adresssuche">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
+    <div id="searchbar" class="col-sm-3 col-md-3 navbar-right">
     </div>
-    <% } %>
 </div>

@@ -3,48 +3,32 @@ define([
     'underscore',
     'backbone',
     'collections/TreefolderList',
-    'collections/LayerList',
     'views/TreeFolderView',
     'views/WMSLayerView',
+    'eventbus',
     'bootstrap'
-], function ($, _, Backbone, TreefolderList, LayerList, TreeFolderView, WMSLayerView) {
+], function ($, _, Backbone, TreefolderList, TreeFolderView, WMSLayerView) {
 
     var TreeFolderListView = Backbone.View.extend({
         collection: TreefolderList,
         el: '#tree',
         initialize: function () {
+            this.listenTo(this.collection, 'change:isChecked', this.render);
+            this.listenTo(this.collection, 'change:isExpanded', this.render);
             this.render();
-            this.listenTo(this.collection, 'change:isExpanded', this.test1);
-            this.listenTo(this.collection, 'change:isChecked', this.test2);
         },
         render: function () {
             this.$el.html('');
-            this.collection.forEach(this.addOne, this);
-            LayerList.forEach(this.addlay, this);
+            this.collection.forEach(this.addTreeFolder, this);
+            $(".layer-slider").slider();
         },
-        addOne: function (treeFolder) {
+        addTreeFolder: function (treeFolder) {
             var treefold = new TreeFolderView({model: treeFolder});
             this.$el.append(treefold.el);
-        },
-        addlay: function (wmslayer) {
-            var wmsLayerView = new WMSLayerView({model: wmslayer});
-            $('.' + wmsLayerView.model.get('treeFolder')).append(wmsLayerView.render().el);
-        },
-        test1: function (test) {
-            $('.' + test.get('name')).collapse('toggle');
-        },
-        test2: function (test) {
-            LayerList.forEach(this.vis, test);
-        },
-        vis: function (test) {
-            if (test.get('treeFolder') === this.get('name')) {
-                if (this.get('isChecked') === true) {
-                    test.set('visibility', true);
-                }
-                else {
-                    test.set('visibility', false);
-                }
-            }
+            _.each(treefold.model.get('layerList'), function (element) {
+                var wmsLayerView = new WMSLayerView({model: element});
+                $('.' + wmsLayerView.model.get('treeFolder')).append(wmsLayerView.render().el);
+            });
         }
     });
 

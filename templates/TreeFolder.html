@@ -1,4 +1,4 @@
-<div class="panel-heading">
+<div id="<%= name %>" class="panel-heading">
     <% if (isChecked == false) { %>
         <span class="glyphicon glyphicon-unchecked"></span>
     <% } else { %>
@@ -13,5 +13,10 @@
 </div>
 <div class="divider"></div>
 <!-- Listengruppe -->
+<% if (isExpanded == false) { %>
 <div class="list-group collapse <%= name %>">
 </div>
+<% } else { %>
+<div class="list-group collapse.in <%= name %>">
+</div>
+<% } %>

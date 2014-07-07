@@ -4,7 +4,8 @@ define([
     'backbone',
     'text!templates/WMSLayer.html',
     'eventbus',
-    'jquery_ui'
+    'jquery_ui',
+    'jquery_ui_touch'
 ], function ($, _, Backbone, wmsLayerTemplate, EventBus) {
 
     var WMSLayerView = Backbone.View.extend({
@@ -12,15 +13,13 @@ define([
         tagName: 'li',
         template: _.template(wmsLayerTemplate),
         initialize: function () {
-            this.listenTo(this.model, 'change:visibility', this.test);
+            this.listenTo(this.model, 'change:visibility', this.render);
         },
         events: {
             'slide': 'updateOpacity',
             'click span.glyphicon-info-sign': 'getMetadata',
-            'click span.glyphicon-check': 'toggleVisibility',
-            'click span.glyphicon-unchecked': 'toggleVisibility',
-            'click span.glyphicon-arrow-up': 'moveLayer',
-            'click span.glyphicon-arrow-down': 'moveLayer',
+            'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
+            'click .glyphicon-arrow-up, .glyphicon-arrow-down': 'moveLayer',
         },
         moveLayer: function (evt) {
             var className = evt.currentTarget.className;
@@ -36,7 +35,6 @@ define([
         },
         toggleVisibility: function (evt) {
             this.model.toggleVisibility();
-            this.render();
         },
         getMetadata: function () {
             window.open('http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=' + this.model.get('uuid'), "_blank");
@@ -46,9 +44,6 @@ define([
             this.$el.html(this.template(attr));
             $(".layer-slider").slider();
             return this;
-        },
-        test: function (model) {
-            this.render();
         }
     });
 

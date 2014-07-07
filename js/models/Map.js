@@ -17,7 +17,7 @@ define([
     var Map = Backbone.Model.extend(
     {
         /** A property of the module.*/
-        default: {
+        defaults: {
             zur: ''
         },
         /**
@@ -29,6 +29,7 @@ define([
             EventBus.on('activateClick', this.activateClick, this);
             EventBus.on('addOverlay', this.addOverlay, this);
             EventBus.on('moveLayer', this.moveLayer, this);
+            EventBus.on('setCenter', this.setCenter, this);
 
             this.set('projection', new ol.proj.configureProj4jsProjection({
                 code: 'EPSG:25832',
@@ -44,6 +45,7 @@ define([
                 resolution: 26.458319045841044,
                 resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ],
             }));
+            
             this.set('map',  new ol.Map({
                 layers: WMSLayerList.pluck('layer'),
                 ol3Logo: false,	// default true
@@ -88,12 +90,15 @@ define([
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
         setGFIParams: function (evt) {
-            var urls = [], resolution, projection, layers, coordinate;
+            var layersVisible, urls = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();
             resolution = this.get('view').getResolution();
             projection = this.get('view').getProjection();
-            _.each(layers, function (element, index) {
+            layersVisible = _.filter(layers, function (element) {
+                return element.getVisible() === true;
+            });
+            _.each(layersVisible, function (element, index) {
                 var gfiURL = element.getSource().getGetFeatureInfoUrl(
                     coordinate, resolution, projection,
                     {'INFO_FORMAT': 'text/xml'}
@@ -102,6 +107,11 @@ define([
             });
             EventBus.trigger('setGFIURLs', urls);
             EventBus.trigger('setGFIPopupPosition', coordinate);
+        },
+        setCenter: function (value) {
+            console.log(value);
+            this.get('map').getView().setCenter(value);
+            this.get('map').getView().setZoom(5);
         }
     });
 

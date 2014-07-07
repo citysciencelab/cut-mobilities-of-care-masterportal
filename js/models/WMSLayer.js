@@ -1,8 +1,9 @@
 define([
     'underscore',
     'backbone',
-    'openlayers'
-], function (_, Backbone, ol) {
+    'openlayers',
+    'eventbus'
+], function (_, Backbone, ol, EventBus) {
 
     var WMSLayer = Backbone.Model.extend({
         defaults: {
@@ -17,7 +18,7 @@ define([
             opacity: 1
         },
         initialize: function () {
-            this.listenTo(this, 'change:visibility', this.vis);
+            this.listenTo(this, 'change:visibility', this.setVisibility);
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
                 params: {
@@ -36,23 +37,20 @@ define([
             this.get('layer').setVisible(this.get('visibility'));
         },
         toggleVisibility: function () {
-            if (this.get('visibility') === true)
-            {
+            if (this.get('visibility') === true) {
                 this.set({'visibility': false});
-                //this.get('layer').setVisible(false);
             }
-            else
-            {
+            else {
                 this.set({'visibility': true});
-                //this.get('layer').setVisible(true);
             }
+            EventBus.trigger('checkVisibilityByFolder');
         },
         updateOpacity: function (opacity) {
             var transparence = (100 - opacity) / 100;
             this.get('layer').setOpacity(transparence);
             this.set({'opacity': transparence});
         },
-        vis: function () {
+        setVisibility: function () {
             this.get('layer').setVisible(this.get('visibility'));
         }
     });

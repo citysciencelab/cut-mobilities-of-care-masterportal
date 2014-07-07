@@ -5,7 +5,7 @@ define([
     'config'
 ], function (_, Backbone, WMSLayer, Config) {
 
-    var WMSLayerList = Backbone.Collection.extend({
+    var LayerList = Backbone.Collection.extend({
         model: WMSLayer,
         url: '../libs/lgv/layer.json',
         initialize: function () {
@@ -25,8 +25,11 @@ define([
             return this.reset(_.map(idArray, function (model) {
                 return this.get(model);
             }, this));
+        },
+        filterByFolder: function (value) {
+            return this.where({treeFolder: value});
         }
     });
 
-    return new WMSLayerList();
+    return new LayerList();
 });

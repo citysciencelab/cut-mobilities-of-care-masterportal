@@ -68,7 +68,7 @@ define([
         /**
          *
          */
-        setGFIPopup: function (value) {
+        setGFIPopup: function () {
             var gfiTitle = [], gfiContent = [], gfiURLs = this.get('gfiURLs'), i;
             
             for (i = 0; i < gfiURLs.length; i += 1) {
@@ -77,18 +77,29 @@ define([
                     async: false,
                     type: 'GET',
                     success: function (data, textStatus, jqXHR) {
+                        var attr, nodeList, gfi = {};
                         try {
-                            //console.log(data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling);
-                            //var test = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling;
-                            //console.log(_.without(test.childNodes, '<TextNode textContent="\n ">'));
-                            //console.log(test.childNodes.length);
-                           //var tests = _.filter(test.childNodes, function (element) {if (element.nodeType === 1) return element});
-                            //console.log(tests.childNodes.length);
-                            //console.log(data.getElementsByTagName('gml:featureMember')[0].children[0]);
-                            gfiTitle.push(data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.localName);
-                            //gfiTitle.push(data.getElementsByTagName('gml:featureMember')[0].children[0].localName);
-                            gfiContent.push(data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling);
-
+                            // ArcGIS
+                            if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
+                                gfiTitle.push('noch n Problem');
+                                attr = data.getElementsByTagName('FIELDS')[0].attributes;
+                                _.each(attr, function (element) {
+                                    gfi[element.localName] = element.textContent.trim();
+                                });
+                                gfiContent.push(gfi);
+                            }
+                            // deegree
+                            else if (data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling !== undefined) {
+                                gfiTitle.push(data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.localName);
+                                nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[element.localName] = element.textContent.trim();
+                                });
+                                gfiContent.push(gfi);
+                            }
                         }
                         catch (error) {
                             console.log(error);
@@ -100,7 +111,6 @@ define([
                     }
                 });
             }
-            console.log(gfiContent);
             this.set('gfiTitle', gfiTitle);
             this.set('gfiContent', gfiContent);
             this.set('gfiCounter', gfiTitle.length);

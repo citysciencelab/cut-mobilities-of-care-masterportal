@@ -3,7 +3,6 @@ define([
     'underscore',
     'backbone',
     'text!templates/Menubar.html',
-    //'views/LayerListView',
     'views/TreefolderListView',
     'models/Menubar'
 ], function ($, _, Backbone, MenubarTemplate, TreefolderListView, Menubar) {

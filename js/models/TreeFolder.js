@@ -1,25 +1,67 @@
 define([
     'underscore',
-    'backbone'
-], function (_, Backbone) {
+    'backbone',
+    'eventbus'
+], function (_, Backbone, EventBus) {
 
     var TreeFolder = Backbone.Model.extend({
-        defaultStatus: {
+        defaults: {
             name: '',
             isExpanded: '',
-            isChecked: ''
+            isChecked: '',
+            layerList: ''
         },
-        setVisibility: function () {
-            this.set('isChecked', true);
+        initialize: function () {
+            this.listenTo(this, 'change:isChecked', this.setVisibilityByFolder);
+            this.listenTo(this, 'change:isExpanded', this.collapse);
+            EventBus.on('checkVisibilityByFolder', this.checkVisibilityByFolder, this);
         },
-        setVisibility2: function () {
-            this.set('isChecked', false);
+        toggleVisibility: function (evt) {
+            if (this.get('isChecked') === true) {
+                this.set('isChecked', false);
+            }
+            else {
+                this.set('isChecked', true);
+            }
         },
-        setExpand: function () {
-            this.set('isExpanded', true);
+        toggleExpanding: function () {
+            if (this.get('isExpanded') === true) {
+                this.set('isExpanded', false);
+            }
+            else {
+                this.set('isExpanded', true);
+            }
         },
-        setExpand2: function () {
-            this.set('isExpanded', false);
+        setVisibilityByFolder: function () {
+            var bool = this.checkVisibilityLayerList();
+            if (bool === true || this.get('isChecked') === true) {
+                _.each(this.get('layerList'), function (element) {
+                    element.set('visibility', this.get('isChecked'));
+                }, this);
+            }
+        },
+        checkVisibilityByFolder: function () {
+            var bool = this.checkVisibilityLayerList();
+            if (bool === true) {
+                this.set('isChecked', true);
+            }
+            else {
+                this.set('isChecked', false);
+            }
+        },
+        checkVisibilityLayerList: function () {
+            var bool = _.every(this.get('layerList'), function (element) {
+                return element.get('visibility') === true;
+            });
+            return bool;
+        },
+        collapse: function () {
+            if (this.get('isExpanded') === true) {
+                $('.' + this.get('name')).collapse('show');
+            }
+            else {
+                $('.' + this.get('name')).collapse('hide');
+            }
         }
     });
 

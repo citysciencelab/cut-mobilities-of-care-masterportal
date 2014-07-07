@@ -2,12 +2,11 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'views/WMSLayerView',
     'text!templates/TreeFolder.html',
     'models/TreeFolder',
-    'eventbus',
+    'views/WMSLayerView',
     'bootstrap'
-], function ($, _, Backbone, WMSLayerView, TreeFolderTemplate, TreeFolder, EventBus) {
+], function ($, _, Backbone, TreeFolderTemplate, TreeFolder) {
 
     var TreeFolderView = Backbone.View.extend({
         model: TreeFolder,
@@ -16,29 +15,18 @@ define([
             this.render();
         },
         events: {
-            'click span.glyphicon-check': 'uncheckAll',
-            'click span.glyphicon-unchecked': 'checkAll',
-            'click span.glyphicon-chevron-right': 'expanded',
-            'click span.glyphicon-chevron-down': 'unexpanded',
+            'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
+            'click .glyphicon-chevron-right, .glyphicon-chevron-down': 'toggleExpanding'
         },
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         },
-        checkAll: function (evt) {
-            this.model.setVisibility();
-            $(evt.target).toggleClass('glyphicon-check glyphicon-unchecked');
+        toggleVisibility: function (evt) {
+            this.model.toggleVisibility();
         },
-        uncheckAll: function (evt) {
-            this.model.setVisibility2();
-            $(evt.target).toggleClass('glyphicon-check glyphicon-unchecked');
-        },
-        expanded: function (evt) {
-            this.model.setExpand();
-            $(evt.target).toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
-        },
-        unexpanded: function (evt) {
-            this.model.setExpand2();
+        toggleExpanding: function (evt) {
+            this.model.toggleExpanding();
             $(evt.target).toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
         }
     });

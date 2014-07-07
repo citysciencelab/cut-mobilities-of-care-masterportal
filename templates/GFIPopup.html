@@ -5,12 +5,9 @@
     <strong><%= gfiTitle[gfiCounter-gfiTitle.length] %></strong>
 </p>
 <% if(gfiContent[gfiCounter-gfiTitle.length] !== undefined) {
-console.log(gfiContent[gfiCounter-gfiTitle.length].childNodes);
-var test = _.filter(gfiContent[gfiCounter-gfiTitle.length].childNodes, function (element) {if (element.nodeType === 1) return element});
-                           
-_.each(test, function(element) { %>
+    _.each(gfiContent[gfiCounter-gfiTitle.length], function(value, key) {%>
 <p>
-        <%= element.localName + ': ' + element.textContent %>
+        <%= key + ': ' + value %>
 </p>
 <% })}; %>
 

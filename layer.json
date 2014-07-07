@@ -21,9 +21,19 @@
         "treeFolder": "geobasisdaten"
     },
     {
+        "id": "luftbilderInternet",
+        "name": "Luftbilder",
+        "url": "http://www.geodienste-hamburg.de/HH_WMS_DOP20",
+        "title": "1",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "treeFolder": "geobasisdaten"
+    },
+    {
         "id": "stadtplanGrauIntranet",
         "name": "Geobasisdaten (grau-blau)",
-        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_GB_neu/MapServer/WMSServer",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_GB/MapServer/WMSServer",
         "title": "1,5,9,13",
         "format": "image/jpeg",
         "visibility": false,
@@ -45,7 +55,7 @@
     {
         "id": "stadtplanSchwarzIntranet",
         "name": "Geobasisdaten (schwarz-weiß)",
-        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_SW_neu/MapServer/WMSServer",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_SW/MapServer/WMSServer",
         "title": "1,5,9,13",
         "format": "image/jpeg",
         "visibility": false,
@@ -59,7 +69,18 @@
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
         "title": "bab_novkl,bab_vkl",
         "format": "image/png",
-        "visibility": true,
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "verkehrslageAutobahnenInternet",
+        "name": "Verkehrslage auf Autobahnen",
+        "url": "http://geodienste-hamburg.de/HH_WMS_BWVI_opendata",
+        "title": "bab_novkl,bab_vkl",
+        "format": "image/png",
+        "visibility": false,
         "version": "1.1.1",
         "uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
         "treeFolder": "verkehrsdaten"
@@ -70,7 +91,18 @@
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
         "title": "parkhaeuser",
         "format": "image/png",
-        "visibility": true,
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "parkhaeuserInternet",
+        "name": "Parkhäuser",
+        "url": "http://geodienste-hamburg.de/HH_WMS_BWVI_opendata",
+        "title": "parkhaeuser",
+        "format": "image/png",
+        "visibility": false,
         "version": "1.1.1",
         "uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014",
         "treeFolder": "verkehrsdaten"
@@ -81,7 +113,7 @@
         "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
         "title": "parkandride",
         "format": "image/png",
-        "visibility": true,
+        "visibility": false,
         "version": "1.1.1",
         "uuid" : "",
         "treeFolder": "verkehrsdaten"
@@ -95,5 +127,16 @@
         "visibility": false,
         "version": "1.1.1",
         "uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71"
+    },
+    {
+        "id": "stadtteil",
+        "name": "Stadtteile",
+        "url": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+        "title": "3",
+        "format": "image/png",
+        "visibility": true,
+        "version": "1.1.1",
+        "uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71",
+        "treeFolder": "verwaltungsgrenzen"
     }
 ]
