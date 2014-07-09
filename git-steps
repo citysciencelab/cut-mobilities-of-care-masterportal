@@ -14,3 +14,4 @@ GIVE blessed bare repo a preview ; use libs/lgv for it
 - create lgv.git/hooks/post-receive 
 - test again and again and again and again and AGAIN
 - test 222
+- test finally
