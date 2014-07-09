@@ -1,16 +1,18 @@
-  <div <%if (visibility === false) { print("class='color'") }%>>
+<div class="row" <%if (visibility === false) { print("class='color row'") }%>>
     <% if(visibility === true) {%>
-    <span class="glyphicon glyphicon-check"></span>
+    <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1"><span class="glyphicon glyphicon-check"></span></div>
     <% } else { %>
-    <span class="glyphicon glyphicon-unchecked"></span>
+    <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1"><span class="glyphicon glyphicon-unchecked"></span></div>
     <% } %>
-    &nbsp;<small><%= name %></small>
-    <span class="glyphicon glyphicon-info-sign pull-right"></span>
+    <div class="col-md-7 col-xs-7"><small><%= name %></small></div>
+    <div class="col-md-1 col-xs-1"><span class="glyphicon glyphicon-info-sign"></span></div>
+</div>
 
-  </div>
-  <div <%if (visibility === false) { print("class='color'") }%> style="font-size: 11px; margin-top: 2px;">
-    <span class="pull-left">Transparenz</span>
-    <div class="layer-slider pull-left"></div>
-    <span class="glyphicon glyphicon-arrow-up pull-right"></span>
-    <span class="glyphicon glyphicon-arrow-down pull-right"></span>
-  </div>
+<div class="row" <%if (visibility === false) { print("class='color row'") }%> style="font-size: 11px;">
+    <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1"><span>Transparenz</span></div>
+    <div class="col-md-4 col-xs-4"><div class="layer-slider"></div></div>
+    <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1">
+        <span class="glyphicon glyphicon-arrow-up"></span>
+   <span class="glyphicon glyphicon-arrow-down"></span>
+    </div>
+</div>

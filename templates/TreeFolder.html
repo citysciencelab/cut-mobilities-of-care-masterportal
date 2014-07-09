@@ -1,22 +1,24 @@
-<div id="<%= name %>" class="panel-heading">
-    <% if (isChecked == false) { %>
-        <span class="glyphicon glyphicon-unchecked"></span>
-    <% } else { %>
-        <span class="glyphicon glyphicon-check"></span>
-    <% } %>
-    &nbsp;<strong><%= name.toUpperCase() %></strong>
-    <% if (isExpanded == false) { %>
-    <span class="glyphicon glyphicon-chevron-right pull-right"></span>
-    <% } else { %>
-    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
-    <% } %>
+<div class="panel-heading">
+    <div class="row">
+        <% if (isChecked == false) { %>
+        <div class="col-md-1 col-xs-1"><span class="glyphicon glyphicon-unchecked"></span></div>
+        <% } else { %>
+        <div class="col-md-1 col-xs-1"><span class="glyphicon glyphicon-check"></span></div>
+        <% } %>
+        <div class="col-md-6 col-xs-6"><strong><%= name.toUpperCase() %></strong></div>
+        <% if (isExpanded == false) { %>
+        <div class="col-md-offset-3 col-xs-offset-3 col-md-1 col-xs-1"><span class="glyphicon glyphicon-chevron-right"></span></div>
+        <% } else { %>
+        <div class="col-md-offset-3 col-xs-offset-3 col-md-1 col-xs-1"><span class="glyphicon glyphicon-chevron-down"></span></div>
+        <% } %>
+    </div>
 </div>
-<div class="divider"></div>
+
 <!-- Listengruppe -->
 <% if (isExpanded == false) { %>
-<div class="list-group collapse <%= name %>">
-</div>
+<ul class="list-group collapse <%= name %>">
+</ul>
 <% } else { %>
-<div class="list-group collapse.in <%= name %>">
-</div>
+<ul class="list-group collapse.in <%= name %>">
+</ul>
 <% } %>

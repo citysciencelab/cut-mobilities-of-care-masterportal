@@ -109,7 +109,6 @@ define([
             EventBus.trigger('setGFIPopupPosition', coordinate);
         },
         setCenter: function (value) {
-            console.log(value);
             this.get('map').getView().setCenter(value);
             this.get('map').getView().setZoom(5);
         }

@@ -8,7 +8,7 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-arrow-down, .glyphicon-arrow-up{
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-arrow-down, .glyphicon-arrow-up, .glyphicon-chevron-right, .glyphicon-chevron-down{
     cursor: pointer;
 }
 
@@ -21,13 +21,31 @@ html, body {
 .color {
     color: #cdcdcd;
 }
-/*.panel-heading span:after {*/
-/*    font-family: 'Glyphicons Halflings';*/
-/*    content: "\e080";*/
-/*    float: right; */
-/*    color: grey; */
-/*}*/
-/**/
-/*.panel-heading span.collapse.in:after {*/
-/*    content: "\e114";*/
-/*}*/
+
+#autocompletePanel {
+    border-top: 0 none;
+    display: none;
+    min-width: 210px;
+    position: absolute;
+}
+
+/*bootstrap überschreiben*/
+.panel {
+    margin-bottom: 0 !important;
+    border: 0 !important;
+    min-width: 300px;
+}
+
+.panel-heading {
+    background-color: #ffffff !important;
+}
+
+.dropdown-menu {
+    padding:  0 !important;
+}
+
+.list-group-item {
+    padding: 5px 5px;
+    border: 0 !important;
+    border-bottom: 2px dashed #ddd !important;
+}
