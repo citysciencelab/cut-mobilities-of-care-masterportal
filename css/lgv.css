@@ -45,7 +45,7 @@ html, body {
 }
 
 .list-group-item {
-    padding: 5px 5px;
+    padding: 5px 2px;
     border: 0 !important;
     border-bottom: 2px dashed #ddd !important;
 }
