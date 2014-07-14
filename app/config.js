@@ -2,8 +2,8 @@
 define(function () {
 
     var config = {
-        layerConf: '../layer.json',
-        layerIDs: ['stadtplanIntranet',
+        wmsLayerConf: '../wmsLayer.json',
+        wmsLayerIDs: ['stadtplanIntranet',
                     'luftbilderInternet',
                     'stadtplanGrauIntranet',
                     'stadtplanFarbigIntranet',
@@ -13,6 +13,9 @@ define(function () {
                     'parkrideIntranet',
                     'stadtteil'
                     ],
+        wfsLayerConf: '../wfsLayer.json',
+        wfsLayerIDs: ['krankenhaeuser'
+                    ],            	
         menubar: true,
         menu: {
             viewerName: 'GeoViewer',
