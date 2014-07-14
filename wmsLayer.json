@@ -1,0 +1,142 @@
+[
+    {
+        "id": "stadtplanIntranet",
+        "name": "Stadtplan",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+        "title": "geobasisdaten",
+        "format": "image/jpeg",
+        "visibility": true,
+        "version": "1.1.0",
+        "treeFolder": "geobasisdaten"
+    },
+    {
+        "id": "luftbilderIntranet",
+        "name": "Luftbilder",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+        "title": "dop",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "uuid": "B2013F67-EB8A-4629-8E6D-55A5F74CE129",
+        "treeFolder": "geobasisdaten"
+    },
+    {
+        "id": "luftbilderInternet",
+        "name": "Luftbilder",
+        "url": "http://www.geodienste-hamburg.de/HH_WMS_DOP20",
+        "title": "1",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "treeFolder": "geobasisdaten"
+    },
+    {
+        "id": "stadtplanGrauIntranet",
+        "name": "Geobasisdaten (grau-blau)",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_GB/MapServer/WMSServer",
+        "title": "1,5,9,13",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "uuid": "BE8E6014-60AD-4FD4-BE99-2FD8D75E0BDE",
+        "treeFolder": "geobasisdaten"
+    },
+    {
+        "id": "stadtplanFarbigIntranet",
+        "name": "Geobasisdaten (farbig)",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_neu/MapServer/WMSServer",
+        "title": "1,5,9,13",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "uuid": "3CFD37D9-C920-4DD5-81B3-B3FE1671D7B9",
+        "treeFolder": "geobasisdaten"
+    },
+    {
+        "id": "stadtplanSchwarzIntranet",
+        "name": "Geobasisdaten (schwarz-weiß)",
+        "url": "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_SW/MapServer/WMSServer",
+        "title": "1,5,9,13",
+        "format": "image/jpeg",
+        "visibility": false,
+        "version": "1.1.0",
+        "uuid": "50F13A9D-5FCD-4C70-ACE1-F13005D34EDA",
+        "treeFolder": "geobasisdaten"
+    },
+    {
+        "id": "verkehrslageAutobahnenIntranet",
+        "name": "Verkehrslage auf Autobahnen",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
+        "title": "bab_novkl,bab_vkl",
+        "format": "image/png",
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "verkehrslageAutobahnenInternet",
+        "name": "Verkehrslage auf Autobahnen",
+        "url": "http://geodienste-hamburg.de/HH_WMS_BWVI_opendata",
+        "title": "bab_novkl,bab_vkl",
+        "format": "image/png",
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "parkhaeuserIntranet",
+        "name": "Parkhäuser",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
+        "title": "parkhaeuser",
+        "format": "image/png",
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "parkhaeuserInternet",
+        "name": "Parkhäuser",
+        "url": "http://geodienste-hamburg.de/HH_WMS_BWVI_opendata",
+        "title": "parkhaeuser",
+        "format": "image/png",
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "parkrideIntranet",
+        "name": "Park+Ride",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata",
+        "title": "parkandride",
+        "format": "image/png",
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : "",
+        "treeFolder": "verkehrsdaten"
+    },
+    {
+        "id": "kita",
+        "name": "Kindertagesstätten",
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms",
+        "title": "KitaEinrichtungen",
+        "format": "image/png",
+        "visibility": false,
+        "version": "1.1.1",
+        "uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71"
+    },
+    {
+        "id": "stadtteil",
+        "name": "Stadtteile",
+        "url": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+        "title": "3",
+        "format": "image/png",
+        "visibility": true,
+        "version": "1.1.1",
+        "uuid" : " CFE9BB2A-F7B9-4C47-A2AC-300AC8243F71",
+        "treeFolder": "verwaltungsgrenzen"
+    }
+]
