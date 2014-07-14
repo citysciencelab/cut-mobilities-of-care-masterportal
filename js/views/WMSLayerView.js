@@ -19,7 +19,7 @@ define([
             'slide': 'updateOpacity',
             'click span.glyphicon-info-sign': 'getMetadata',
             'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
-            'click .glyphicon-arrow-up, .glyphicon-arrow-down': 'moveLayer',
+            'click .glyphicon-upload, .glyphicon-download': 'moveLayer',
         },
         moveLayer: function (evt) {
             var className = evt.currentTarget.className;
