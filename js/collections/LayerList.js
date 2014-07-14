@@ -7,7 +7,7 @@ define([
 
     var LayerList = Backbone.Collection.extend({
         model: WMSLayer,
-        url: Config.layerConf,
+        url: Config.wmsLayerConf,
         initialize: function () {
             this.fetch({
                 cache: false,
@@ -16,7 +16,7 @@ define([
                     console.log('Service Request failure');
                 },
                 success: function (collection) {
-                    var idArray = Config.layerIDs;
+                    var idArray = Config.wmsLayerIDs;
                     collection.filterById(idArray);
                 }
             });
