@@ -8,13 +8,12 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-arrow-down, .glyphicon-arrow-up, .glyphicon-chevron-right, .glyphicon-chevron-down{
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down{
     cursor: pointer;
 }
 
 .layer-slider {
-    width: 80px;
-    margin-left: 12px;
+    width: 90px;
     margin-top: 5px;
 }
 
@@ -22,10 +21,9 @@ html, body {
     color: #cdcdcd;
 }
 
-#autocompletePanel {
+#autoCompleteBody {
     border-top: 0 none;
     display: none;
-    min-width: 210px;
     position: absolute;
 }
 
@@ -33,7 +31,7 @@ html, body {
 .panel {
     margin-bottom: 0 !important;
     border: 0 !important;
-    min-width: 300px;
+    min-width: 290px;
 }
 
 .panel-heading {
@@ -45,7 +43,9 @@ html, body {
 }
 
 .list-group-item {
-    padding: 5px 2px;
-    border: 0 !important;
-    border-bottom: 2px dashed #ddd !important;
+    padding:  6px 10px !important;
+}
+
+.list-group-item:last-child {
+    border-bottom: 1px solid #ddd !important;
 }

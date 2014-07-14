@@ -3,9 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!templates/Searchbar.html',
+    'text!templates/AutoCompleteSearch.html',
     'models/Searchbar',
     'eventbus'
-], function ($, _, Backbone, SearchbarTemplate, Searchbar, EventBus) {
+], function ($, _, Backbone, SearchbarTemplate, AutoCompleteSearchTemplate, Searchbar, EventBus) {
 
     var SearchbarView = Backbone.View.extend({
         model: Searchbar,
@@ -13,29 +14,40 @@ define([
         template: _.template(SearchbarTemplate),
         events: {
             'change input': 'setSearchString',
-            'keyup input': 'test',
-            'click button': 'searchAddress'
+            'keyup input': 'autoComplete',
+            'click button': 'searchAddress',
+            'click .list-group-item': 'zoomToStreet'
         },
         initialize: function () {
             this.render();
         },
         render: function () {
-            this.$el.html(this.template());
+            var attr = this.model.toJSON();
+            this.$el.html(this.template(attr));
         },
         setSearchString: function (evt) {
             var value = $(evt.currentTarget).val();
             this.model.setSearchString(value);
         },
-        test: function (evt) {
+        autoComplete: function (evt) {
             var value = $(evt.currentTarget).val();
             if (value.length > 2) {
                 this.model.setSearchString(value);
                 this.searchAddress();
-                $('#autocompletePanel').css("display", "block");
+                var attr = this.model.toJSON();
+                $('#autoCompleteBody').html(_.template(AutoCompleteSearchTemplate, attr));
+                $('#autoCompleteBody').css("display", "block");
             }
             else {
-                $('#autocompletePanel').css("display", "none");
+                $('#autoCompleteBody').css("display", "none");
             }
+        },
+        zoomToStreet: function (evt) {
+            var value = evt.target.textContent;
+            this.model.setSearchString(value);
+            this.searchAddress();
+            $('#searchInput').val(value);
+            $('#autoCompleteBody').css("display", "none");
         },
         searchAddress: function () {
             var requestURL, coordinate = [], streetNames = [];
@@ -47,16 +59,16 @@ define([
                 success: function (data, textStatus, jqXHR) {
                     try {
                         var hits = data.getElementsByTagName("wfs:member");
-                        $('#autocompleteBody').html('');
+                        $('#autoCompleteBody').html('');
                         _.each(hits, function (element, index, list) {
                             if (index < 10) {
                                 streetNames.push(data.getElementsByTagName('dog:strassenname')[index].textContent);
-                                $('#autocompleteBody').append('<div class="row"><p class="col-md-offset-1">' + streetNames[index] + '</p></div>');
+                                //$('#autoCompleteBody').append('<a href="#" class="list-group-item">' + streetNames[index] + '</a>');
                             }
                         }, this);
                         if (hits.length === 0) {
                             streetNames.push('Kein Ergebnis gefunden.');
-                            $('#autocompleteBody').append('<div class="row"><p class="col-md-offset-1">' + streetNames[0] + '</p></div>');
+                            //$('#autoCompleteBody').append('<a href="#" class="list-group-item results">' + streetNames[0] + '</a>');
                         }
                         else {
                             coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
@@ -70,7 +82,6 @@ define([
                 }
             });
             this.model.set('autoCompleteResults', streetNames);
-            console.log(this.model.get('autoCompleteResults'));
         }
     });
 

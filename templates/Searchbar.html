@@ -1,14 +1,12 @@
 <form class="navbar-form" role="search">
     <div class="input-group">
-        <input class="form-control" type="text" placeholder="Adresssuche">
+        <input id="searchInput" class="form-control" type="text" placeholder="Adresssuche" value=<%= searchString %>>
         <div class="input-group-btn">
             <button class="btn btn-default" data-toggle="dropdown">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
         </div>
     </div>
-    <div id="autocompletePanel" class="panel panel-default">
-        <div id="autocompleteBody" class="panel-body">
-        </div>
+    <div id="autoCompleteBody" class="list-group">
     </div>
 </form>

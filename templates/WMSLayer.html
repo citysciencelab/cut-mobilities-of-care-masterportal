@@ -1,18 +1,26 @@
 <div class="row <%if (visibility === false) { print('color') }%>">
-    <% if(visibility === true) {%>
-    <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1"><span class="glyphicon glyphicon-check"></span></div>
-    <% } else { %>
-    <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1"><span class="glyphicon glyphicon-unchecked"></span></div>
-    <% } %>
-    <div class="col-md-7 col-xs-7"><small><%= name %></small></div>
-    <div class="col-md-1 col-xs-1"><span class="glyphicon glyphicon-info-sign"></span></div>
+    <div class="col-md-9 col-xs-9 col-md-offset-1 col-xs-offset-1">
+        <% if(visibility === true) {%>
+        <span class="glyphicon glyphicon-check"></span>
+        <% } else { %>
+        <span class="glyphicon glyphicon-unchecked"></span>
+        <% } %>
+        <small><%= name %></small>
+    </div>
+    <div class="col-md-1 col-xs-1">
+        <span class="glyphicon glyphicon-info-sign"></span>
+    </div>
 </div>
 
-<div class="row <%if (visibility === false) { print('color') }%>" style="font-size: 11px;">
-    <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1"><span>Transparenz</span></div>
-    <div class="col-md-4 col-xs-4"><div class="layer-slider"></div></div>
-    <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1">
-        <span class="glyphicon glyphicon-arrow-up"></span>
-   <span class="glyphicon glyphicon-arrow-down"></span>
+<div class="row <%if (visibility === false) { print('color') }%>">
+    <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1" style="font-size: 11px;">
+        <span>Transparenz</span>
+    </div>
+    <div class="col-md-4 col-xs-4">
+        <div class="layer-slider"></div>
+    </div>
+    <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1 text-center">
+        <span class="glyphicon glyphicon-upload"></span>
+        <span class="glyphicon glyphicon-download"></span>
     </div>
 </div>
