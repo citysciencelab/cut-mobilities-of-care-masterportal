@@ -15,7 +15,7 @@ define([
         events: {
             'change input': 'setSearchString',
             'keyup input': 'autoComplete',
-            'click button': 'searchAddress',
+            'click button': 'zoomTo',
             'click .list-group-item': 'zoomToStreet'
         },
         initialize: function () {
@@ -42,10 +42,17 @@ define([
                 $('#autoCompleteBody').css("display", "none");
             }
         },
+        zoomTo: function (evt) {
+            this.searchAddress();
+            EventBus.trigger('setCenter', this.model.get('coordinate'));
+            $('#searchInput').val(value);
+            $('#autoCompleteBody').css("display", "none");
+        },
         zoomToStreet: function (evt) {
             var value = evt.target.textContent;
             this.model.setSearchString(value);
             this.searchAddress();
+            EventBus.trigger('setCenter', this.model.get('coordinate'));
             $('#searchInput').val(value);
             $('#autoCompleteBody').css("display", "none");
         },
@@ -73,7 +80,7 @@ define([
                         else {
                             coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
                             coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[1]));
-                            EventBus.trigger('setCenter', coordinate);
+                            //EventBus.trigger('setCenter', coordinate);
                         }
                     }
                     catch (error) {
@@ -81,6 +88,7 @@ define([
                     }
                 }
             });
+            this.model.set('coordinate', coordinate);
             this.model.set('autoCompleteResults', streetNames);
         }
     });
