@@ -2,19 +2,19 @@ define([
     'underscore',
     'backbone',
     'models/TreeFolder',
-    'collections/LayerList',
+    'collections/WMSLayerList',
     'config'
-], function (_, Backbone, TreeFolder, LayerList) {
+], function (_, Backbone, TreeFolder, WMSLayerList) {
 
     var TreefolderList = Backbone.Collection.extend({
         initialize: function () {
-            var attr = _.uniq(LayerList.pluck('treeFolder'));
+            var attr = _.uniq(WMSLayerList.pluck('treeFolder'));
             _.each(attr, this.addModel, this);
         },
         addModel: function (element) {
             var attr, treeFolder, bool, folderName;
             folderName = element;
-            attr = LayerList.where({treeFolder: folderName});
+            attr = WMSLayerList.where({treeFolder: folderName});
             bool = _.every(attr, function (element) {
                 return element.get('visibility') === true;
             });
@@ -22,7 +22,7 @@ define([
                 'name': folderName,
                 'isExpanded': false,
                 'isChecked': bool,
-                'layerList': attr
+                'WMSLayerList': attr
             });
             this.add(treeFolder);
         }
