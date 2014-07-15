@@ -15,10 +15,10 @@ define(function () {
                     ],
         wfsLayerConf: '../wfsLayer.json',
         wfsLayerIDs: ['krankenhaeuser'
-                    ],            	
+                    ],
         menubar: true,
         menu: {
-            viewerName: 'Test',
+            viewerName: 'GeoViewer',
             searchBar: true,
             layerTree: true,
             helpButton: true,
