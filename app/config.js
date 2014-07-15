@@ -18,7 +18,7 @@ define(function () {
                     ],            	
         menubar: true,
         menu: {
-            viewerName: 'GeoViewer',
+            viewerName: 'Test',
             searchBar: true,
             layerTree: true,
             helpButton: true,
