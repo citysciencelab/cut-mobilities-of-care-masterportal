@@ -110,7 +110,7 @@ define([
         },
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);
-            this.get('map').getView().setZoom(5);
+            this.get('map').getView().setZoom(7);
         }
     });
 
