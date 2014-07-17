@@ -5,7 +5,7 @@ define([
     'config'
 ], function (_, Backbone, WMSLayer, Config) {
 
-    var LayerList = Backbone.Collection.extend({
+    var WMSLayerList = Backbone.Collection.extend({
         model: WMSLayer,
         url: Config.wmsLayerConf,
         initialize: function () {
@@ -31,5 +31,5 @@ define([
         }
     });
 
-    return new LayerList();
+    return new WMSLayerList();
 });

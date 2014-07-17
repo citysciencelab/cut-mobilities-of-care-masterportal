@@ -9,7 +9,7 @@ define([
             name: '',
             isExpanded: '',
             isChecked: '',
-            layerList: ''
+            WMSLayerList: ''
         },
         initialize: function () {
             this.listenTo(this, 'change:isChecked', this.setVisibilityByFolder);
@@ -33,15 +33,15 @@ define([
             }
         },
         setVisibilityByFolder: function () {
-            var bool = this.checkVisibilityLayerList();
+            var bool = this.checkVisibilityWMSLayerList();
             if (bool === true || this.get('isChecked') === true) {
-                _.each(this.get('layerList'), function (element) {
+                _.each(this.get('WMSLayerList'), function (element) {
                     element.set('visibility', this.get('isChecked'));
                 }, this);
             }
         },
         checkVisibilityByFolder: function () {
-            var bool = this.checkVisibilityLayerList();
+            var bool = this.checkVisibilityWMSLayerList();
             if (bool === true) {
                 this.set('isChecked', true);
             }
@@ -49,8 +49,8 @@ define([
                 this.set('isChecked', false);
             }
         },
-        checkVisibilityLayerList: function () {
-            var bool = _.every(this.get('layerList'), function (element) {
+        checkVisibilityWMSLayerList: function () {
+            var bool = _.every(this.get('WMSLayerList'), function (element) {
                 return element.get('visibility') === true;
             });
             return bool;

@@ -2,7 +2,7 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'collections/LayerList',
+    'collections/WMSLayerList',
     'eventbus',
     'proj4js'
 ], function (_, Backbone, ol, WMSLayerList, EventBus) {

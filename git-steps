@@ -13,8 +13,9 @@ GIVE blessed bare repo a preview ; use libs/lgv for it
 - (go to libs-folder)
 - create lgv.git/hooks/post-receive 
 - test again and again and again and again and AGAIN
-- test 222
+- test 22
 - test finally
 - test finally 2 germany
 - test core
 - test 25
+- test cb

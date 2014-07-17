@@ -25,7 +25,7 @@ define([
         addTreeFolder: function (treeFolder) {
             var treefold = new TreeFolderView({model: treeFolder});
             this.$el.append(treefold.el);
-            _.each(treefold.model.get('layerList'), function (element) {
+            _.each(treefold.model.get('WMSLayerList'), function (element) {
                 var wmsLayerView = new WMSLayerView({model: element});
                 $('.' + wmsLayerView.model.get('treeFolder')).append(wmsLayerView.render().el);
             });
