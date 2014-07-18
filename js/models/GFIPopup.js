@@ -73,7 +73,7 @@ define([
             
             for (i = 0; i < gfiURLs.length; i += 1) {
                 $.ajax({
-                    url: '../../cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURLs[i]),
+                    url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURLs[i]),
                     async: false,
                     type: 'GET',
                     success: function (data, textStatus, jqXHR) {
