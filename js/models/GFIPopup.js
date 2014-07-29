@@ -19,7 +19,7 @@ define([
             gfiOverlay: new ol.Overlay({ element: $('#gfipopup')}), // ol.Overlay
             coordinate: '', // Die Position vom Overlay auf der Karte
             element: '',    // Das DOM-Element für das Overlay
-            gfiTitle: '',   // Die Ueberschrift
+            gfiTitles: '',   // Die Ueberschrift
             gfiContent: '', // Der Inhalt
             gfiURLs: '',    // Die Request-URLs
             gfiCounter: ''  // Die Anzahl der GFI-Requests
@@ -37,7 +37,7 @@ define([
          */
         registerListener: function () {
             this.listenTo(this, 'change:gfiURLs', this.setGFIPopup);
-            EventBus.on('setGFIURLs', this.setGFIURLs, this);
+            EventBus.on('setGFIParams', this.setGFIParams, this);
             EventBus.on('setGFIPopupPosition', this.setPosition, this);
         },
         /**
@@ -62,15 +62,15 @@ define([
         /**
          *
          */
-        setGFIURLs: function (value) {
-            this.set('gfiURLs', _.without(value, undefined));
+        setGFIParams: function (params) {
+            this.set('gfiURLs', _.pluck(params, 'url'));
+            this.set('gfiTitles', _.pluck(params, 'name'));
         },
         /**
          *
          */
         setGFIPopup: function () {
-            var gfiTitle = [], gfiContent = [], gfiURLs = this.get('gfiURLs'), i;
-            
+            var gfiContent = [], gfiURLs = this.get('gfiURLs'), i;
             for (i = 0; i < gfiURLs.length; i += 1) {
                 $.ajax({
                     url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURLs[i]),
@@ -81,16 +81,16 @@ define([
                         try {
                             // ArcGIS
                             if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                                gfiTitle.push('noch n Problem');
                                 attr = data.getElementsByTagName('FIELDS')[0].attributes;
                                 _.each(attr, function (element) {
-                                    gfi[element.localName] = element.textContent.trim();
+                                    if (element.localName.search('SHP') === -1) {
+                                        gfi[element.localName] = element.textContent.trim();
+                                    }
                                 });
                                 gfiContent.push(gfi);
                             }
                             // deegree
                             else if (data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling !== undefined) {
-                                gfiTitle.push(data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.localName);
                                 nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
                                 attr = _.filter(nodeList, function (element) {
                                     return element.nodeType === 1;
@@ -111,9 +111,8 @@ define([
                     }
                 });
             }
-            this.set('gfiTitle', gfiTitle);
             this.set('gfiContent', gfiContent);
-            this.set('gfiCounter', gfiTitle.length);
+            this.set('gfiCounter', gfiContent.length);
         }
     });
 

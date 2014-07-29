@@ -1,22 +1,27 @@
 <p>
     <span class="close">&times;</span>
 </p>
-<p>
-    <strong><%= gfiTitle[gfiCounter-gfiTitle.length] %></strong>
-</p>
-<% if(gfiContent[gfiCounter-gfiTitle.length] !== undefined) {
-    _.each(gfiContent[gfiCounter-gfiTitle.length], function(value, key) {%>
-<p>
-        <%= key + ': ' + value %>
-</p>
+<h5><strong><%= gfiTitles[gfiCounter-gfiContent.length] %></strong></h5>
+<table class="table table-condensed table-hover">
+<% if(gfiContent[gfiCounter-gfiContent.length] !== undefined) {
+    _.each(gfiContent[gfiCounter-gfiContent.length], function(value, key) { %>
+<tr>
+    <td><small>
+        <%= key + ':'%>
+    </small></td>
+    <td><small>
+        <%= value%>
+    </small></td>
+</tr>
 <% })}; %>
+</table>
 
-<% if(gfiTitle.length > 1) { %>
+<% if(gfiContent.length > 1) { %>
 <ul class="pager">
-  <% if(gfiCounter-gfiTitle.length >= 1) { %>
+  <% if(gfiCounter-gfiContent.length >= 1) { %>
     <li class="previous"><a href="#">&larr; zurück</a></li>
   <% } %>
-  <% if(gfiCounter-gfiTitle.length < gfiTitle.length - 1) { %>
+  <% if(gfiCounter-gfiContent.length < gfiContent.length - 1) { %>
   <li class="next"><a href="#">vor &rarr;</a></li>
   <% } %>
 </ul>

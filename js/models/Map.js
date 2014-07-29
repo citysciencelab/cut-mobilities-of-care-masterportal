@@ -90,7 +90,7 @@ define([
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
         setGFIParams: function (evt) {
-            var layersVisible, urls = [], resolution, projection, layers, coordinate;
+            var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();
             resolution = this.get('view').getResolution();
@@ -99,13 +99,19 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element, index) {
-                var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                    coordinate, resolution, projection,
-                    {'INFO_FORMAT': 'text/xml'}
-                )
-                urls.push(gfiURL);
+                if (element.get('folder') !== 'geobasisdaten') {
+                    var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                        coordinate, resolution, projection,
+                        {'INFO_FORMAT': 'text/xml'}
+                    )
+    
+                    gfiParams.push({
+                        url: gfiURL,
+                        name: element.get('name')
+                    });
+                }
             });
-            EventBus.trigger('setGFIURLs', urls);
+            EventBus.trigger('setGFIParams', gfiParams);
             EventBus.trigger('setGFIPopupPosition', coordinate);
         },
         setCenter: function (value) {
