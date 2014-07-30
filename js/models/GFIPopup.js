@@ -63,19 +63,20 @@ define([
          *
          */
         setGFIParams: function (params) {
+            this.set('gfiTitles', _.toArray(_.pluck(params, 'name')));
             this.set('gfiURLs', _.pluck(params, 'url'));
-            this.set('gfiTitles', _.pluck(params, 'name'));
         },
         /**
          *
          */
         setGFIPopup: function () {
-            var gfiContent = [], gfiURLs = this.get('gfiURLs'), i;
+            var gfiContent = [], gfiTitles = [], gfiURLs = this.get('gfiURLs'), i;
             for (i = 0; i < gfiURLs.length; i += 1) {
                 $.ajax({
                     url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURLs[i]),
                     async: false,
                     type: 'GET',
+                    context: this,  // das model
                     success: function (data, textStatus, jqXHR) {
                         var attr, nodeList, gfi = {};
                         try {
@@ -87,7 +88,6 @@ define([
                                         gfi[element.localName] = element.textContent.trim();
                                     }
                                 });
-                                gfiContent.push(gfi);
                             }
                             // deegree
                             else if (data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling !== undefined) {
@@ -98,8 +98,9 @@ define([
                                 _.each(attr, function (element) {
                                     gfi[element.localName] = element.textContent.trim();
                                 });
-                                gfiContent.push(gfi);
                             }
+                            gfiContent.push(gfi);
+                            gfiTitles.push(this.get('gfiTitles')[i]);
                         }
                         catch (error) {
                             console.log(error);
@@ -112,6 +113,7 @@ define([
                 });
             }
             this.set('gfiContent', gfiContent);
+            this.set('gfiTitles', gfiTitles);
             this.set('gfiCounter', gfiContent.length);
         }
     });
