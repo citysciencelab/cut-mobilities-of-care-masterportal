@@ -89,7 +89,7 @@ define([
             $.ajax({
                 url: requestURL,
                 context: this,  // das model
-                async: false,
+                async: true,
                 type: 'GET',
                 success: function (data, textStatus, jqXHR) {
                     try {
