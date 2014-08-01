@@ -111,8 +111,7 @@ define([
                     });
                 }
             });
-            EventBus.trigger('setGFIParams', gfiParams);
-            EventBus.trigger('setGFIPopupPosition', coordinate);
+            EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
         },
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);

@@ -5,9 +5,6 @@ define([
     'openlayers'
 ], function (_, Backbone, EventBus, ol) {
 
-    /**
-     *
-     */
     var GFIPopup = Backbone.Model.extend({
         /**
          * The defaults hash (or function) can be used to specify
@@ -17,59 +14,47 @@ define([
          */
         defaults: {
             gfiOverlay: new ol.Overlay({ element: $('#gfipopup')}), // ol.Overlay
-            coordinate: '', // Die Position vom Overlay auf der Karte
-            element: '',    // Das DOM-Element für das Overlay
-            gfiTitles: '',   // Die Ueberschrift
-            gfiContent: '', // Der Inhalt
-            gfiURLs: '',    // Die Request-URLs
-            gfiCounter: ''  // Die Anzahl der GFI-Requests
         },
         /**
-         * It will be invoked when the model is created.
+         * Wird aufgerufen wenn das Model erzeugt wird.
          */
         initialize: function () {
-            this.registerListener();
+            this.listenTo(this, 'change:gfiURLs', this.setPopupContent);
             this.set('element', this.get('gfiOverlay').getElement());
-            EventBus.trigger('addOverlay', this.get('gfiOverlay'));
+            EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener ist in map.js
+            EventBus.on('setGFIParams', this.setGFIParams, this); // wird in map.js ausgelöst
         },
         /**
-         * Registriert die Listener.
+         * Vernichtet das Popup.
          */
-        registerListener: function () {
-            this.listenTo(this, 'change:gfiURLs', this.setGFIPopup);
-            EventBus.on('setGFIParams', this.setGFIParams, this);
-            EventBus.on('setGFIPopupPosition', this.setPosition, this);
+        destroyPopup: function () {
+            this.get('element').popover('destroy');
         },
         /**
-         * Set the position for this overlay and the coordinate attribute
+         * Zeigt das Popup.
          */
-        setPosition: function (coordinate) {
+        showPopup: function () {
+            this.get('element').popover('show');
+        },
+        /**
+         * params: [0] = Objekt mit name und url; [1] = Koordinate
+         */
+        setGFIParams: function (params) {
+            var
+                titles = _.pluck(params[0], 'name'),
+                urls = _.pluck(params[0], 'url'),
+                coordinate = params[1];
+
+            this.set('gfiTitles', titles);
+            this.set('gfiURLs', urls);
+            
             this.get('gfiOverlay').setPosition(coordinate);
             this.set('coordinate', coordinate);
         },
         /**
          *
          */
-        destroyPopup: function () {
-            this.get('element').popover('destroy');
-        },
-        /**
-         *
-         */
-        showPopup: function () {
-            this.get('element').popover('show');
-        },
-        /**
-         *
-         */
-        setGFIParams: function (params) {
-            this.set('gfiTitles', _.toArray(_.pluck(params, 'name')));
-            this.set('gfiURLs', _.pluck(params, 'url'));
-        },
-        /**
-         *
-         */
-        setGFIPopup: function () {
+        setPopupContent: function () {
             var gfiContent = [], gfiTitles = [], gfiURLs = this.get('gfiURLs'), i;
             for (i = 0; i < gfiURLs.length; i += 1) {
                 $.ajax({
@@ -88,9 +73,11 @@ define([
                                         gfi[element.localName] = element.textContent.trim();
                                     }
                                 });
+                                gfiContent.push(gfi);
+                                gfiTitles.push(this.get('gfiTitles')[i]);
                             }
                             // deegree
-                            else if (data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling !== undefined) {
+                            else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
                                 nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
                                 attr = _.filter(nodeList, function (element) {
                                     return element.nodeType === 1;
@@ -98,9 +85,9 @@ define([
                                 _.each(attr, function (element) {
                                     gfi[element.localName] = element.textContent.trim();
                                 });
+                                gfiContent.push(gfi);
+                                gfiTitles.push(this.get('gfiTitles')[i]);
                             }
-                            gfiContent.push(gfi);
-                            gfiTitles.push(this.get('gfiTitles')[i]);
                         }
                         catch (error) {
                             console.log(error);

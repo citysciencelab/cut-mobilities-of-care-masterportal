@@ -15,15 +15,9 @@ define([
             'click .previous': 'renderPrevious'
         },
         /**
-         *
+         * Wird aufgerufen wenn die View erzeugt wird.
          */
         initialize: function () {
-            this.registerListener();
-        },
-        /**
-         *
-         */
-        registerListener: function () {
             this.listenTo(this.model, 'change:coordinate', this.render);
             this.listenTo(this.model, 'change:gfiCounter', this.render);
         },
