@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'eventbus'
-], function ($, _, Backbone, EventBus) {
+    'eventbus',
+    'config'
+], function ($, _, Backbone, EventBus, Config) {
 
     var Searchbar = Backbone.Model.extend({
         defaults: {
@@ -14,7 +15,7 @@ define([
             houseNumbers: [],
             affix: '',
             coordinate: [],
-            gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0'
+            gazetteerURL: Config.gazetteerURL
         },
         initialize: function () {
             this.listenTo(this, 'change:coordinate', this.zoomToCoordinate);

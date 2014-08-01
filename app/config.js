@@ -25,6 +25,7 @@ define(function () {
             contactButton: true,
             tools: true
         },
+        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
             measure: true,
