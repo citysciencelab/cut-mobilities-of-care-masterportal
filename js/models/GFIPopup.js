@@ -88,6 +88,18 @@ define([
                                 gfiContent.push(gfi);
                                 gfiTitles.push(this.get('gfiTitles')[i]);
                             }
+                            // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
+                            else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
+                                nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[element.localName] = element.textContent.trim();
+                                });
+                                gfiContent.push(gfi);
+                                gfiTitles.push(this.get('gfiTitles')[i]);
+                            }
                         }
                         catch (error) {
                             console.log(error);

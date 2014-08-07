@@ -8,13 +8,8 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down{
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign {
     cursor: pointer;
-}
-
-.layer-slider {
-    width: 90px;
-    margin-top: 5px;
 }
 
 .color {
@@ -60,4 +55,8 @@ html, body {
 
 .table {
     margin-bottom: 4px !important;
+}
+
+.badge {
+    font-size: 10px;
 }

@@ -94,11 +94,22 @@ define([
                 type: 'GET',
                 success: function (data, textStatus, jqXHR) {
                     try {
-                        var hits = data.getElementsByTagName("wfs:member");
-                        _.each(hits, function (element, index, list) {
-                            streetNames.push(data.getElementsByTagName('dog:strassenname')[index].textContent);
-                        }, this);
-                        this.set('streetNames', streetNames);
+                         // Firefox, IE
+                        if (data.getElementsByTagName("wfs:member").length > 0) {
+                            var hits = data.getElementsByTagName("wfs:member");
+                            _.each(hits, function (element, index, list) {
+                                streetNames.push(data.getElementsByTagName('dog:strassenname')[index].textContent);
+                            }, this);
+                            this.set('streetNames', streetNames);
+                        }
+                        // WebKit
+                        else if (data.getElementsByTagName("member") !== undefined) {
+                            var hits = data.getElementsByTagName("member");
+                            _.each(hits, function (element, index, list) {
+                                streetNames.push(data.getElementsByTagName('strassenname')[index].textContent);
+                            }, this);
+                            this.set('streetNames', streetNames);
+                        }
                     }
                     catch (error) {
                         //console.log(error);
@@ -116,24 +127,48 @@ define([
                 type: 'GET',
                 success: function (data, textStatus, jqXHR) {
                     try {
-                        var hits = data.getElementsByTagName("wfs:member");
-                        _.each(hits, function (element, index, list) {
-                            number = element.getElementsByTagName('dog:hausnummer')[0].textContent;
-                            if (element.getElementsByTagName('dog:hausnummernzusatz')[0] !== undefined) {
-                                affix = element.getElementsByTagName('dog:hausnummernzusatz')[0].textContent;
-                                houseNumbers.push(number + affix);
-                            }
-                            else {
-                                houseNumbers.push(number + ' ');
-                            }
-                        });
-                        houseNumbers = _.sortBy(houseNumbers.sort(), function (element) {
-                            return element.length;
-                        });
-                        _.each(houseNumbers, function (element, index, list) {
-                            houseNumbers[index] = element.trim();
-                        });
-                        this.set('houseNumbers', houseNumbers);
+                        // Firefox, IE
+                        if (data.getElementsByTagName("wfs:member").length > 0) {
+                            var hits = data.getElementsByTagName("wfs:member");
+                            _.each(hits, function (element, index, list) {
+                                number = element.getElementsByTagName('dog:hausnummer')[0].textContent;
+                                if (element.getElementsByTagName('dog:hausnummernzusatz')[0] !== undefined) {
+                                    affix = element.getElementsByTagName('dog:hausnummernzusatz')[0].textContent;
+                                    houseNumbers.push(number + affix);
+                                }
+                                else {
+                                    houseNumbers.push(number + ' ');
+                                }
+                            });
+                            houseNumbers = _.sortBy(houseNumbers.sort(), function (element) {
+                                return element.length;
+                            });
+                            _.each(houseNumbers, function (element, index, list) {
+                                houseNumbers[index] = element.trim();
+                            });
+                            this.set('houseNumbers', houseNumbers);
+                        }
+                        // WebKit
+                        else if (data.getElementsByTagName("member") !== undefined) {
+                            var hits = data.getElementsByTagName("member");
+                            _.each(hits, function (element, index, list) {
+                                number = element.getElementsByTagName('hausnummer')[0].textContent;
+                                if (element.getElementsByTagName('hausnummernzusatz')[0] !== undefined) {
+                                    affix = element.getElementsByTagName('hausnummernzusatz')[0].textContent;
+                                    houseNumbers.push(number + affix);
+                                }
+                                else {
+                                    houseNumbers.push(number + ' ');
+                                }
+                            });
+                            houseNumbers = _.sortBy(houseNumbers.sort(), function (element) {
+                                return element.length;
+                            });
+                            _.each(houseNumbers, function (element, index, list) {
+                                houseNumbers[index] = element.trim();
+                            });
+                            this.set('houseNumbers', houseNumbers);
+                        }
                     }
                     catch (error) {
                         //console.log(error);
@@ -151,9 +186,18 @@ define([
                 type: 'GET',
                 success: function (data, textStatus, jqXHR) {
                     try {
-                        coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
-                        coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[1]));
-                        this.set('coordinate', coordinate);
+                        // Firefox, IE
+                        if (data.getElementsByTagName("gml:pos").length > 0) {
+                            coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
+                            coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[1]));
+                            this.set('coordinate', coordinate);
+                        }
+                        // WebKit
+                        else if (data.getElementsByTagName("pos") !== undefined) {
+                            coordinate.push(parseFloat(data.getElementsByTagName('pos')[0].textContent.split(' ')[0]));
+                            coordinate.push(parseFloat(data.getElementsByTagName('pos')[0].textContent.split(' ')[1]));
+                            this.set('coordinate', coordinate);
+                        }
                     }
                     catch (error) {
                         //console.log(error);
@@ -171,9 +215,18 @@ define([
                 type: 'GET',
                 success: function (data, textStatus, jqXHR) {
                     try {
-                        coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
-                        coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[1]));
-                        this.set('coordinate', coordinate);
+                        // Firefox, IE
+                        if (data.getElementsByTagName("gml:pos").length > 0) {
+                            coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
+                            coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[1]));
+                            this.set('coordinate', coordinate);
+                        }
+                        // WebKit
+                        else if (data.getElementsByTagName("pos") !== undefined) {
+                            coordinate.push(parseFloat(data.getElementsByTagName('pos')[0].textContent.split(' ')[0]));
+                            coordinate.push(parseFloat(data.getElementsByTagName('pos')[0].textContent.split(' ')[1]));
+                            this.set('coordinate', coordinate);
+                        }
                     }
                     catch (error) {
                         console.log(error);

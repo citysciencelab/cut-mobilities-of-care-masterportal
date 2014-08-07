@@ -3,12 +3,28 @@ define([
     'backbone',
     'openlayers',
     'collections/WMSLayerList',
-    'eventbus',
-    'proj4js'
+    'eventbus'
 ], function (_, Backbone, ol, WMSLayerList, EventBus) {
 
-    Proj4js.defs["EPSG:25832"] = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs";
+    // Definition der Projektion EPSG:25832
+    ol.proj.addProjection(new ol.proj.Projection({
+        code: 'EPSG:25832',
+        units: 'm',
+        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
+        axisOrientation: 'enu', // default
+        global: false,  // default
+    }));
+    var proj25832 = ol.proj.get('EPSG:25832');
+    proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
 
+    var source = new ol.source.Vector();
+    var draw = new ol.interaction.Draw({
+        source: source,
+        type: 'Polygon'
+    });
+    var vector = new ol.layer.Vector({
+        source: source
+    });
     /**
      * @exports Map
      * @requires WMSLayerList
@@ -31,14 +47,9 @@ define([
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
 
-            this.set('projection', new ol.proj.configureProj4jsProjection({
-                code: 'EPSG:25832',
-                units: 'm',
-                extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-                axisOrientation: 'enu', // default
-                global: false,  // default
-            })),
-            this.set('view', new ol.View2D({
+            this.set('projection', proj25832);
+
+            this.set('view', new ol.View({
                 projection: this.get('projection'),
                 center: [565874, 5934140],
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
@@ -56,14 +67,24 @@ define([
             }));
         },
         activateClick: function (tool) {
+
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
-                
+                this.get('map').removeLayer(vector);
+                this.get('map').removeInteraction(draw);
             }
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
+                this.get('map').removeLayer(vector);
+                this.get('map').removeInteraction(draw);
+            }
+            else if (tool === 'measure') {
+                this.get('map').un('click', this.setPositionCoordPopup);
+                this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').addLayer(vector);
+                this.get('map').addInteraction(draw);
             }
         },
         /**

@@ -3,9 +3,7 @@ define([
     'underscore',
     'backbone',
     'text!templates/WMSLayer.html',
-    'eventbus',
-    'jquery_ui',
-    'jquery_ui_touch'
+    'eventbus'
 ], function ($, _, Backbone, wmsLayerTemplate, EventBus) {
 
     var WMSLayerView = Backbone.View.extend({
@@ -14,9 +12,11 @@ define([
         template: _.template(wmsLayerTemplate),
         initialize: function () {
             this.listenTo(this.model, 'change:visibility', this.render);
+            this.listenTo(this.model, 'change:transparence', this.render);
         },
         events: {
-            'slide': 'updateOpacity',
+            'click .glyphicon-plus-sign': 'upTransparence',
+            'click .glyphicon-minus-sign': 'downTransparence',
             'click span.glyphicon-info-sign': 'getMetadata',
             'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
             'click .glyphicon-upload, .glyphicon-download': 'moveLayer',
@@ -30,19 +30,21 @@ define([
                 EventBus.trigger('moveLayer', [1, this.model.get('layer')]);
             }
         },
-        updateOpacity: function (evt, ui) {
-            this.model.updateOpacity(ui.value);
+        upTransparence: function (evt) {
+            this.model.setUpTransparence(10);
+        },
+        downTransparence: function (evt) {
+            this.model.setDownTransparence(10);
         },
         toggleVisibility: function (evt) {
             this.model.toggleVisibility();
         },
         getMetadata: function () {
-            window.open('http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=' + this.model.get('uuid'), "_blank");
+            window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('uuid'), "_blank");
         },
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-            $(".layer-slider").slider();
             return this;
         }
     });

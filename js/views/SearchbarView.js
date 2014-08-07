@@ -49,7 +49,7 @@ define([
         },
         searchHouseNumbers: function (evt) {
             var value = evt.target.textContent;
-            $('#searchInput').val(value + ' ').focus();
+            $('#searchInput').val(value).focus();
             $('#autoCompleteBody').css("display", "none");
             this.checkStringForComplete();
         },
