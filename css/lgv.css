@@ -60,3 +60,8 @@ html, body {
 .badge {
     font-size: 10px;
 }
+
+#measurePopup {
+    position: absolute;
+    top: 70px;
+}

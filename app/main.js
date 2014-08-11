@@ -49,6 +49,12 @@ require([
                             new GFIPopupView();
                         });
                     }
+                    if (Config.tools.measure === true) {
+                        require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
+                            new MeasureModalView();
+                            new MeasurePopupView();
+                        });
+                    }
                 });
             }
             if (Config.menu.searchBar === true) {
