@@ -121,7 +121,7 @@ define([
             layersVisible = _.filter(layers, function (element) {
                 return element.getVisible() === true;
             });
-            _.each(layersVisible, function (element, index) {
+            _.each(layersVisible, function (element) {
                 if (element.get('folder') !== 'geobasisdaten') {
                     var gfiURL = element.getSource().getGetFeatureInfoUrl(
                         coordinate, resolution, projection,

@@ -92,12 +92,12 @@ define([
                 context: this,  // das model
                 async: true,
                 type: 'GET',
-                success: function (data, textStatus, jqXHR) {
+                success: function (data) {
                     try {
                          // Firefox, IE
                         if (data.getElementsByTagName("wfs:member").length > 0) {
                             var hits = data.getElementsByTagName("wfs:member");
-                            _.each(hits, function (element, index, list) {
+                            _.each(hits, function (element, index) {
                                 streetNames.push(data.getElementsByTagName('dog:strassenname')[index].textContent);
                             }, this);
                             this.set('streetNames', streetNames);
@@ -105,7 +105,7 @@ define([
                         // WebKit
                         else if (data.getElementsByTagName("member") !== undefined) {
                             var hits = data.getElementsByTagName("member");
-                            _.each(hits, function (element, index, list) {
+                            _.each(hits, function (element, index) {
                                 streetNames.push(data.getElementsByTagName('strassenname')[index].textContent);
                             }, this);
                             this.set('streetNames', streetNames);
@@ -125,12 +125,12 @@ define([
                 context: this,  // das model
                 async: false,
                 type: 'GET',
-                success: function (data, textStatus, jqXHR) {
+                success: function (data) {
                     try {
                         // Firefox, IE
                         if (data.getElementsByTagName("wfs:member").length > 0) {
                             var hits = data.getElementsByTagName("wfs:member");
-                            _.each(hits, function (element, index, list) {
+                            _.each(hits, function (element) {
                                 number = element.getElementsByTagName('dog:hausnummer')[0].textContent;
                                 if (element.getElementsByTagName('dog:hausnummernzusatz')[0] !== undefined) {
                                     affix = element.getElementsByTagName('dog:hausnummernzusatz')[0].textContent;
@@ -143,7 +143,7 @@ define([
                             houseNumbers = _.sortBy(houseNumbers.sort(), function (element) {
                                 return element.length;
                             });
-                            _.each(houseNumbers, function (element, index, list) {
+                            _.each(houseNumbers, function (element, index) {
                                 houseNumbers[index] = element.trim();
                             });
                             this.set('houseNumbers', houseNumbers);
@@ -151,7 +151,7 @@ define([
                         // WebKit
                         else if (data.getElementsByTagName("member") !== undefined) {
                             var hits = data.getElementsByTagName("member");
-                            _.each(hits, function (element, index, list) {
+                            _.each(hits, function (element) {
                                 number = element.getElementsByTagName('hausnummer')[0].textContent;
                                 if (element.getElementsByTagName('hausnummernzusatz')[0] !== undefined) {
                                     affix = element.getElementsByTagName('hausnummernzusatz')[0].textContent;
@@ -164,7 +164,7 @@ define([
                             houseNumbers = _.sortBy(houseNumbers.sort(), function (element) {
                                 return element.length;
                             });
-                            _.each(houseNumbers, function (element, index, list) {
+                            _.each(houseNumbers, function (element, index) {
                                 houseNumbers[index] = element.trim();
                             });
                             this.set('houseNumbers', houseNumbers);
@@ -184,7 +184,7 @@ define([
                 context: this,  // das model
                 async: false,
                 type: 'GET',
-                success: function (data, textStatus, jqXHR) {
+                success: function (data) {
                     try {
                         // Firefox, IE
                         if (data.getElementsByTagName("gml:pos").length > 0) {
@@ -213,7 +213,7 @@ define([
                 context: this,  // das model
                 async: false,
                 type: 'GET',
-                success: function (data, textStatus, jqXHR) {
+                success: function (data) {
                     try {
                         // Firefox, IE
                         if (data.getElementsByTagName("gml:pos").length > 0) {
