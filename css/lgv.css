@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+* {
+    border-radius: 0 !important;
+}
+
 #map {
     height: 100%;
     width: 100%;
@@ -12,14 +16,12 @@ html, body {
     cursor: pointer;
 }
 
-.color {
-    color: #cdcdcd;
+.navbar {
+    height: 50px;
 }
 
-#autoCompleteBody {
-    border-top: 0 none;
-    display: none;
-    position: absolute;
+.color {
+    color: #cdcdcd;
 }
 
 /*bootstrap überschreiben*/
