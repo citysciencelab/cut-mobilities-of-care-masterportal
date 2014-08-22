@@ -17,6 +17,7 @@ html, body {
 }
 
 .navbar {
+    min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
     height: 50px;
 }
 

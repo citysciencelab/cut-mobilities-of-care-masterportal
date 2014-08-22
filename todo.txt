@@ -1,6 +1,6 @@
-﻿FEATURES
+FEATURES
 #1	Suchfeld: (bisher Adressen) erweitern um weitere WFS-Suchen (z.B. nach Krankenhäusern, B-Plänen); ideal mit config-Optionen wie [WFS-URL, search_field, display_field, geom_field] o.Ä.)	und nach WFS differenzierte Ergebnisdarstellung
-#2	Suchfeld: bleibt mobil zentral oben in Menubar sichtbar
+#2	Suchfeld: bleibt mobil zentral oben in Menubar sichtbar --> erledigt SD
 #3	Menubar: mobil: Icons (an/aus, auf/zu, ..) reagieren auch auf iPhone flüssig
 #4	Menubar: mobil: Menus (zB Geodaten) separat scrollbar, nicht die gesamte Menubar
 #5	Menubar: initial an/aus als config-Option
