@@ -18,14 +18,6 @@ define([
     var proj25832 = ol.proj.get('EPSG:25832');
     proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
 
-    //var source = new ol.source.Vector();
-    //var draw = new ol.interaction.Draw({
-    //    source: source,
-    //    type: 'Polygon'
-    //});
-    //var vector = new ol.layer.Vector({
-    //    source: source
-    //});
     /**
      * @exports Map
      * @requires WMSLayerList
@@ -121,7 +113,7 @@ define([
             layersVisible = _.filter(layers, function (element) {
                 return element.getVisible() === true;
             });
-            _.each(layersVisible, function (element, index) {
+            _.each(layersVisible, function (element) {
                 if (element.get('folder') !== 'geobasisdaten') {
                     var gfiURL = element.getSource().getGetFeatureInfoUrl(
                         coordinate, resolution, projection,
