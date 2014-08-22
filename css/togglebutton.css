@@ -1,0 +1,20 @@
+#toggleButton {
+    position: fixed;
+    right: 10px;
+    top: 50px;
+    z-index: 200;
+    padding: 3px;
+    padding-right: 6px;
+    padding-top: 8px;
+    background: #a50f15;
+}
+
+#toggleButton:hover {
+    cursor: pointer;
+    background: #cb181d;
+}
+
+.glyphicon-bookmark {
+    font-size: 35px;
+    color: #f3f3f3;
+}

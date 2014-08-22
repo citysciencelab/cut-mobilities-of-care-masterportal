@@ -34,8 +34,9 @@ require([
     new Map();
 
     if (Config.menubar === true) {
-        require(['views/MenubarView'], function (MenubarView) {
+        require(['views/MenubarView', 'views/ToggleButtonView'], function (MenubarView, ToggleButtonView) {
             new MenubarView();
+            new ToggleButtonView();
             if (Config.menu.tools === true) {
                 require(['views/ToolsView'], function (ToolsView) {
                     new ToolsView();
