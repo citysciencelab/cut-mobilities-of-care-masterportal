@@ -1,8 +1,7 @@
 #toggleButton {
     position: fixed;
     right: 10px;
-    top: 50px;
-    z-index: 200;
+    z-index: 1000;
     padding: 3px;
     padding-right: 6px;
     padding-top: 8px;

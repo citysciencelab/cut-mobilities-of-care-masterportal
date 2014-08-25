@@ -82,7 +82,14 @@ define([
                         this.searchHouseNumbers();
                     }
                 }
+                else {
+                    $('#autoCompleteBody').css("display", "none");
+                }
             }
+            else if (this.get('searchString').length <= 2){
+                $('#autoCompleteBody').css("display", "none");
+            }
+            console.log(this.get('houseNumber').toString());
         },
         searchStreets: function () {
             var requestURL, streetNames = [];
@@ -109,6 +116,12 @@ define([
                                 streetNames.push(data.getElementsByTagName('strassenname')[index].textContent);
                             }, this);
                             this.set('streetNames', streetNames);
+                        }
+                        if (streetNames.length > 1) {
+                            $('#autoCompleteBody').css("display", "block");
+                        }
+                        else {
+                            $('#autoCompleteBody').css("display", "none");
                         }
                     }
                     catch (error) {
@@ -169,6 +182,12 @@ define([
                             });
                             this.set('houseNumbers', houseNumbers);
                         }
+                        if (houseNumbers.length > 1) {
+                            $('#autoCompleteBody').css("display", "block");
+                        }
+                        else {
+                            $('#autoCompleteBody').css("display", "none");
+                        }
                     }
                     catch (error) {
                         //console.log(error);
@@ -198,6 +217,7 @@ define([
                             coordinate.push(parseFloat(data.getElementsByTagName('pos')[0].textContent.split(' ')[1]));
                             this.set('coordinate', coordinate);
                         }
+                        $('#autoCompleteBody').css("display", "none");
                     }
                     catch (error) {
                         //console.log(error);
@@ -227,6 +247,7 @@ define([
                             coordinate.push(parseFloat(data.getElementsByTagName('pos')[0].textContent.split(' ')[1]));
                             this.set('coordinate', coordinate);
                         }
+                        $('#autoCompleteBody').css("display", "none");
                     }
                     catch (error) {
                         console.log(error);

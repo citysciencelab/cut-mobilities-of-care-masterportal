@@ -14,17 +14,10 @@ define([
             this.render();
         },
         render: function () {
-            $('body').append(this.$el.html(this.template));
+            $('#toggleRow').append(this.$el.html(this.template));
         },
         toggleNavigation: function () {
-            if($('#toggleButton').css('top') === "50px") {
-                $('.navbar').slideToggle('slow');
-                $('#toggleButton').animate({ top: '0px'}, 'slow');
-            }
-            else {
-                $('.navbar').slideToggle('slow');
-                $('#toggleButton').animate({ top: '50px'}, 'slow');
-            }
+            $('#navbarRow').slideToggle('slow');
         }
     });
 

@@ -49,23 +49,19 @@ define([
         showStreetNames: function () {
             var attr = this.model.toJSON();
             $('#autoCompleteBody').html(_.template(SearchbarStreetsTemplate, attr));
-            $('#autoCompleteBody').css("display", "block");
         },
         showHouseNumbers: function () {
             var attr = this.model.toJSON();
             $('#autoCompleteBody').html(_.template(SearchbarNumbersTemplate, attr));
-            $('#autoCompleteBody').css("display", "block");
         },
         searchHouseNumbers: function (evt) {
             var value = evt.target.textContent;
             $('#searchInput').val(value).focus();
-            $('#autoCompleteBody').css("display", "none");
             this.checkStringForComplete();
         },
         setHouseNumber: function (evt) {
             var value = evt.target.textContent;
             $('#searchInput').val(this.model.get('streetName') + ' ' + value).focus();
-            $('#autoCompleteBody').css("display", "none");
             this.checkStringForSearch();
         }
     });
