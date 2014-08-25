@@ -19,20 +19,22 @@ define([
                 type: value
             }));
             EventBus.trigger('activateClick', 'measure');
-            this.get('draw').on('drawstart', function (evt) {
-                var features = this.get('source').getFeatures();
-                if (features.length > 0) {
-                    this.get('source').removeFeature(features[0]);
-                }
-            }, this);
-            this.get('draw').on('drawend', function (evt) {
-                if (evt.feature.getGeometry().getType() === 'LineString') {
-                    this.formatLength(evt.feature.getGeometry())
-                }
-                else {
-                    this.formatArea(evt.feature.getGeometry())
-                }
-            }, this);
+            this.get('draw').on('drawstart', this.deleteGeometries, this);
+            this.get('draw').on('drawend', this.getResult, this);
+        },
+        deleteGeometries: function () {
+            var features = this.get('source').getFeatures();
+            if (features.length > 0) {
+                this.get('source').removeFeature(features[0]);
+            }
+        },
+        getResult: function (evt) {
+            if (evt.feature.getGeometry().getType() === 'LineString') {
+                this.formatLength(evt.feature.getGeometry())
+            }
+            else {
+                this.formatArea(evt.feature.getGeometry())
+            }
         },
         formatLength: function (line) {
             var length = Math.round(line.getLength() * 100) / 100;

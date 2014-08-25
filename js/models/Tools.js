@@ -30,7 +30,6 @@ define([
             else {
                 EventBus.trigger('activateClick', this.get('active'));
             }
-            this.set('active', '');
         }
     });
 

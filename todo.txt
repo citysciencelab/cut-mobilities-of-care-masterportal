@@ -12,4 +12,4 @@ FEATURES
 
 BUGS
 #1	Das Messen ist noch ein wenig "verbugt"
-    --> bin ich dabei (SD)
+    --> erledigt (SD)
