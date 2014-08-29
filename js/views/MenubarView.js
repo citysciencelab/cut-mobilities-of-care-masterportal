@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!templates/Menubar.html',
     'views/TreefolderListView',
-    'models/Menubar'
-], function ($, _, Backbone, MenubarTemplate, TreefolderListView, Menubar) {
+    'models/Menubar',
+    'config',
+], function ($, _, Backbone, MenubarTemplate, TreefolderListView, Menubar, Config) {
 
     var MenubarView = Backbone.View.extend({
         model: Menubar,
@@ -24,6 +25,9 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             $('body').append(this.$el.append(this.template(attr)));
+            if(Config.isMenubarVisible === false) {
+                $('#navbarRow').css('display', 'none');
+            }
             new TreefolderListView();
         }
     });
