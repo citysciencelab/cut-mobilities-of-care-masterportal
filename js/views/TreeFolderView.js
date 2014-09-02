@@ -4,7 +4,6 @@ define([
     'backbone',
     'text!templates/TreeFolder.html',
     'models/TreeFolder',
-    'views/WMSLayerView',
     'bootstrap'
 ], function ($, _, Backbone, TreeFolderTemplate, TreeFolder) {
 

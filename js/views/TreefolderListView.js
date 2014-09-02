@@ -5,9 +5,10 @@ define([
     'collections/TreefolderList',
     'views/TreeFolderView',
     'views/WMSLayerView',
+    'views/WFSLayerView',
     'eventbus',
     'bootstrap'
-], function ($, _, Backbone, TreefolderList, TreeFolderView, WMSLayerView) {
+], function ($, _, Backbone, TreefolderList, TreeFolderView, WMSLayerView, WFSLayerView) {
 
     var TreeFolderListView = Backbone.View.extend({
         collection: TreefolderList,
@@ -23,11 +24,16 @@ define([
             $(".layer-slider").slider();
         },
         addTreeFolder: function (treeFolder) {
+        		alert('treefolderlistview');
             var treefold = new TreeFolderView({model: treeFolder});
             this.$el.append(treefold.el);
-            _.each(treefold.model.get('WMSLayerList'), function (element) {
+            _.each(treefold.model.get('WMSLayerList'), function (element) {            
                 var wmsLayerView = new WMSLayerView({model: element});
                 $('.' + wmsLayerView.model.get('treeFolder')).append(wmsLayerView.render().el);
+            });
+            _.each(treefold.model.get('WFSLayerList'), function (element) {
+                var wfsLayerView = new WFSLayerView({model: element});
+                $('.' + wfsLayerView.model.get('treeFolder')).append(wfsLayerView.render().el);
             });
         }
     });
