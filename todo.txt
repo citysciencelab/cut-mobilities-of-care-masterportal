@@ -7,8 +7,9 @@ FEATURES
 #5	Menubar: initial an/aus als config-Option
    --> erledigt (sd) Parameter : isMenubarVisible
 #6	Layerbaum: Transparenz und ggf. weitere Einstellungen auslagern in Untermenü
+   --> dabei (sd)
 #7	neue diensteAPI integrieren
-#8	Legende 
+#8	Legende
 
 
 BUGS
