@@ -21,7 +21,6 @@ define([
         render: function () {
             this.$el.html('');
             this.collection.forEach(this.addTreeFolder, this);
-            $(".layer-slider").slider();
         },
         addTreeFolder: function (treeFolder) {
         		alert('treefolderlistview');

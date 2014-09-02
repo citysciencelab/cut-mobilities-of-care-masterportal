@@ -15,10 +15,12 @@ define([
             version: '',
             source: '',
             layer: '',
-            opacity: 1
+            opacity: 1,
+            transparence: 0
         },
         initialize: function () {
             this.listenTo(this, 'change:visibility', this.setVisibility);
+            this.listenTo(this, 'change:transparence', this.updateOpacity)
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
                 params: {
@@ -32,7 +34,9 @@ define([
                 })
             }));
             this.set('layer', new ol.layer.Tile({
-                source: this.get('source')
+                source: this.get('source'),
+                name: this.get('name'),
+                folder: this.get('treeFolder')
             }));
             this.get('layer').setVisible(this.get('visibility'));
         },
@@ -45,10 +49,20 @@ define([
             }
             EventBus.trigger('checkVisibilityByFolder');
         },
-        updateOpacity: function (opacity) {
-            var transparence = (100 - opacity) / 100;
-            this.get('layer').setOpacity(transparence);
-            this.set({'opacity': transparence});
+        setUpTransparence: function (value) {
+            if (this.get('transparence') < 100) {
+                this.set('transparence', this.get('transparence') + value);
+            }
+        },
+        setDownTransparence: function (value) {
+            if (this.get('transparence') > 0) {
+                this.set('transparence', this.get('transparence') - value);
+            }
+        },
+        updateOpacity: function () {
+            var opacity = (100 - this.get('transparence')) / 100;
+            this.get('layer').setOpacity(opacity);
+            this.set({'opacity': opacity});
         },
         setVisibility: function () {
             this.get('layer').setVisible(this.get('visibility'));

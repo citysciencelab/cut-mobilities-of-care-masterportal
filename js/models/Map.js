@@ -3,11 +3,20 @@ define([
     'backbone',
     'openlayers',
     'collections/WMSLayerList',
-    'eventbus',
-    'proj4js'
-], function (_, Backbone, ol, WMSLayerList, EventBus) {
+    'models/MeasurePopup',
+    'eventbus'
+], function (_, Backbone, ol, WMSLayerList, MeasurePopup, EventBus) {
 
-    Proj4js.defs["EPSG:25832"] = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs";
+    // Definition der Projektion EPSG:25832
+    ol.proj.addProjection(new ol.proj.Projection({
+        code: 'EPSG:25832',
+        units: 'm',
+        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
+        axisOrientation: 'enu', // default
+        global: false,  // default
+    }));
+    var proj25832 = ol.proj.get('EPSG:25832');
+    proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
 
     /**
      * @exports Map
@@ -31,14 +40,9 @@ define([
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
 
-            this.set('projection', new ol.proj.configureProj4jsProjection({
-                code: 'EPSG:25832',
-                units: 'm',
-                extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-                axisOrientation: 'enu', // default
-                global: false,  // default
-            })),
-            this.set('view', new ol.View2D({
+            this.set('projection', proj25832);
+
+            this.set('view', new ol.View({
                 projection: this.get('projection'),
                 center: [565874, 5934140],
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
@@ -59,11 +63,22 @@ define([
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
-                
+                this.get('map').removeLayer(MeasurePopup.get('layer'));
+                this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                $('#measurePopup').html('');
             }
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
+                this.get('map').removeLayer(MeasurePopup.get('layer'));
+                this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                $('#measurePopup').html('');
+            }
+            else if (tool === 'measure') {
+                this.get('map').un('click', this.setPositionCoordPopup);
+                this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').addLayer(MeasurePopup.get('layer'));
+                this.get('map').addInteraction(MeasurePopup.get('draw'));
             }
         },
         /**
@@ -90,7 +105,7 @@ define([
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
         setGFIParams: function (evt) {
-            var layersVisible, urls = [], resolution, projection, layers, coordinate;
+            var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();
             resolution = this.get('view').getResolution();
@@ -98,19 +113,24 @@ define([
             layersVisible = _.filter(layers, function (element) {
                 return element.getVisible() === true;
             });
-            _.each(layersVisible, function (element, index) {
-                var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                    coordinate, resolution, projection,
-                    {'INFO_FORMAT': 'text/xml'}
-                )
-                urls.push(gfiURL);
+            _.each(layersVisible, function (element) {
+                if (element.get('folder') !== 'geobasisdaten') {
+                    var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                        coordinate, resolution, projection,
+                        {'INFO_FORMAT': 'text/xml'}
+                    )
+    
+                    gfiParams.push({
+                        url: gfiURL,
+                        name: element.get('name')
+                    });
+                }
             });
-            EventBus.trigger('setGFIURLs', urls);
-            EventBus.trigger('setGFIPopupPosition', coordinate);
+            EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
         },
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);
-            this.get('map').getView().setZoom(5);
+            this.get('map').getView().setZoom(7);
         }
     });
 

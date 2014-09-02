@@ -9,7 +9,7 @@ define([
 
     var TreeFolderView = Backbone.View.extend({
         model: TreeFolder,
-        className: 'panel panel-default',
+        className: 'tree-panel panel-default',
         template: _.template(TreeFolderTemplate),
         initialize: function () {
             this.render();

@@ -3,93 +3,66 @@ define([
     'underscore',
     'backbone',
     'text!templates/Searchbar.html',
-    'text!templates/AutoCompleteSearch.html',
-    'models/Searchbar',
-    'eventbus'
-], function ($, _, Backbone, SearchbarTemplate, AutoCompleteSearchTemplate, Searchbar, EventBus) {
+    'text!templates/SearchbarStreets.html',
+    'text!templates/SearchbarNumbers.html',
+    'models/Searchbar'
+], function ($, _, Backbone, SearchbarTemplate, SearchbarStreetsTemplate, SearchbarNumbersTemplate, Searchbar) {
 
     var SearchbarView = Backbone.View.extend({
         model: Searchbar,
-        el: '#searchbar',
+        id: 'searchbar',
+        className: 'col-md-5 col-sm-4 col-xs-9',
         template: _.template(SearchbarTemplate),
         events: {
-            'change input': 'setSearchString',
-            'keyup input': 'autoComplete',
-            'click button': 'zoomTo',
-            'click .list-group-item': 'zoomToStreet'
+            'click button': 'checkStringForSearch', // Klick auf Lupe
+            'submit form': 'checkStringForSearch', // Entertaste in der Searchbar
+            'keyup input': 'checkStringForComplete',
+            'click .streets': 'searchHouseNumbers',
+            'click .numbers': 'setHouseNumber'
         },
         initialize: function () {
             this.render();
+            this.listenTo(this.model, 'change:streetNames', this.showStreetNames);
+            this.listenTo(this.model, 'change:houseNumbers', this.showHouseNumbers);
+
+            $(window).resize($.proxy(function () {
+                this.render();
+            }, this));
         },
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-        },
-        setSearchString: function (evt) {
-            var value = $(evt.currentTarget).val();
-            this.model.setSearchString(value);
-        },
-        autoComplete: function (evt) {
-            var value = $(evt.currentTarget).val();
-            if (value.length > 2) {
-                this.model.setSearchString(value);
-                this.searchAddress();
-                var attr = this.model.toJSON();
-                $('#autoCompleteBody').html(_.template(AutoCompleteSearchTemplate, attr));
-                $('#autoCompleteBody').css("display", "block");
-            }
-            else {
-                $('#autoCompleteBody').css("display", "none");
+            if (window.innerWidth < 768) {
+                $('.navbar-toggle').before(this.$el); // vor dem toggleButton
+            } else {
+                $('.navbar-collapse').append(this.$el); // rechts in der Menuebar
             }
         },
-        zoomTo: function (evt) {
-            this.searchAddress();
-            EventBus.trigger('setCenter', this.model.get('coordinate'));
-            $('#searchInput').val(value);
-            $('#autoCompleteBody').css("display", "none");
+        checkStringForSearch: function () {
+            this.model.setSearchString($('#searchInput').val());
+            this.model.checkSearchString('search');
         },
-        zoomToStreet: function (evt) {
+        checkStringForComplete: function () {
+            this.model.setSearchString($('#searchInput').val());
+            this.model.checkSearchString('complete');
+        },
+        showStreetNames: function () {
+            var attr = this.model.toJSON();
+            $('#autoCompleteBody').html(_.template(SearchbarStreetsTemplate, attr));
+        },
+        showHouseNumbers: function () {
+            var attr = this.model.toJSON();
+            $('#autoCompleteBody').html(_.template(SearchbarNumbersTemplate, attr));
+        },
+        searchHouseNumbers: function (evt) {
             var value = evt.target.textContent;
-            this.model.setSearchString(value);
-            this.searchAddress();
-            EventBus.trigger('setCenter', this.model.get('coordinate'));
-            $('#searchInput').val(value);
-            $('#autoCompleteBody').css("display", "none");
+            $('#searchInput').val(value).focus();
+            this.checkStringForComplete();
         },
-        searchAddress: function () {
-            var requestURL, coordinate = [], streetNames = [];
-            requestURL = this.model.get('findeStraßeURL') + encodeURIComponent(this.model.get('searchString'));
-            $.ajax({
-                url: requestURL,
-                async: false,
-                type: 'GET',
-                success: function (data, textStatus, jqXHR) {
-                    try {
-                        var hits = data.getElementsByTagName("wfs:member");
-                        $('#autoCompleteBody').html('');
-                        _.each(hits, function (element, index, list) {
-                            if (index < 10) {
-                                streetNames.push(data.getElementsByTagName('dog:strassenname')[index].textContent);
-                                //$('#autoCompleteBody').append('<a href="#" class="list-group-item">' + streetNames[index] + '</a>');
-                            }
-                        }, this);
-                        if (hits.length === 0) {
-                            streetNames.push('Kein Ergebnis gefunden.');
-                            //$('#autoCompleteBody').append('<a href="#" class="list-group-item results">' + streetNames[0] + '</a>');
-                        }
-                        else {
-                            coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[0]));
-                            coordinate.push(parseFloat(data.getElementsByTagName('gml:pos')[0].textContent.split(' ')[1]));
-                            //EventBus.trigger('setCenter', coordinate);
-                        }
-                    }
-                    catch (error) {
-                        console.log(error);
-                    }
-                }
-            });
-            this.model.set('coordinate', coordinate);
-            this.model.set('autoCompleteResults', streetNames);
+        setHouseNumber: function (evt) {
+            var value = evt.target.textContent;
+            $('#searchInput').val(this.model.get('streetName') + ' ' + value).focus();
+            this.checkStringForSearch();
         }
     });
 

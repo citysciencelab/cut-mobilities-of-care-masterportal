@@ -5,9 +5,6 @@ define([
     'openlayers'
 ], function (_, Backbone, EventBus, ol) {
 
-    /**
-     *
-     */
     var GFIPopup = Backbone.Model.extend({
         /**
          * The defaults hash (or function) can be used to specify
@@ -17,80 +14,70 @@ define([
          */
         defaults: {
             gfiOverlay: new ol.Overlay({ element: $('#gfipopup')}), // ol.Overlay
-            coordinate: '', // Die Position vom Overlay auf der Karte
-            element: '',    // Das DOM-Element für das Overlay
-            gfiTitle: '',   // Die Ueberschrift
-            gfiContent: '', // Der Inhalt
-            gfiURLs: '',    // Die Request-URLs
-            gfiCounter: ''  // Die Anzahl der GFI-Requests
         },
         /**
-         * It will be invoked when the model is created.
+         * Wird aufgerufen wenn das Model erzeugt wird.
          */
         initialize: function () {
-            this.registerListener();
+            this.listenTo(this, 'change:gfiURLs', this.setPopupContent);
             this.set('element', this.get('gfiOverlay').getElement());
-            EventBus.trigger('addOverlay', this.get('gfiOverlay'));
+            EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener ist in map.js
+            EventBus.on('setGFIParams', this.setGFIParams, this); // wird in map.js ausgelöst
         },
         /**
-         * Registriert die Listener.
+         * Vernichtet das Popup.
          */
-        registerListener: function () {
-            this.listenTo(this, 'change:gfiURLs', this.setGFIPopup);
-            EventBus.on('setGFIURLs', this.setGFIURLs, this);
-            EventBus.on('setGFIPopupPosition', this.setPosition, this);
+        destroyPopup: function () {
+            this.get('element').popover('destroy');
         },
         /**
-         * Set the position for this overlay and the coordinate attribute
+         * Zeigt das Popup.
          */
-        setPosition: function (coordinate) {
+        showPopup: function () {
+            this.get('element').popover('show');
+        },
+        /**
+         * params: [0] = Objekt mit name und url; [1] = Koordinate
+         */
+        setGFIParams: function (params) {
+            var
+                titles = _.pluck(params[0], 'name'),
+                urls = _.pluck(params[0], 'url'),
+                coordinate = params[1];
+
+            this.set('gfiTitles', titles);
+            this.set('gfiURLs', urls);
+            
             this.get('gfiOverlay').setPosition(coordinate);
             this.set('coordinate', coordinate);
         },
         /**
          *
          */
-        destroyPopup: function () {
-            this.get('element').popover('destroy');
-        },
-        /**
-         *
-         */
-        showPopup: function () {
-            this.get('element').popover('show');
-        },
-        /**
-         *
-         */
-        setGFIURLs: function (value) {
-            this.set('gfiURLs', _.without(value, undefined));
-        },
-        /**
-         *
-         */
-        setGFIPopup: function () {
-            var gfiTitle = [], gfiContent = [], gfiURLs = this.get('gfiURLs'), i;
-            
+        setPopupContent: function () {
+            var gfiContent = [], gfiTitles = [], gfiURLs = this.get('gfiURLs'), i;
             for (i = 0; i < gfiURLs.length; i += 1) {
                 $.ajax({
-                    url: '../cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURLs[i]),
+                    url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURLs[i]),
                     async: false,
                     type: 'GET',
+                    context: this,  // das model
                     success: function (data, textStatus, jqXHR) {
                         var attr, nodeList, gfi = {};
                         try {
                             // ArcGIS
                             if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                                gfiTitle.push('noch n Problem');
                                 attr = data.getElementsByTagName('FIELDS')[0].attributes;
                                 _.each(attr, function (element) {
-                                    gfi[element.localName] = element.textContent.trim();
+                                    if (element.localName.search('SHP') === -1) {
+                                        gfi[element.localName] = element.textContent.trim();
+                                    }
                                 });
                                 gfiContent.push(gfi);
+                                gfiTitles.push(this.get('gfiTitles')[i]);
                             }
                             // deegree
-                            else if (data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling !== undefined) {
-                                gfiTitle.push(data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.localName);
+                            else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
                                 nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
                                 attr = _.filter(nodeList, function (element) {
                                     return element.nodeType === 1;
@@ -99,6 +86,19 @@ define([
                                     gfi[element.localName] = element.textContent.trim();
                                 });
                                 gfiContent.push(gfi);
+                                gfiTitles.push(this.get('gfiTitles')[i]);
+                            }
+                            // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
+                            else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
+                                nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[element.localName] = element.textContent.trim();
+                                });
+                                gfiContent.push(gfi);
+                                gfiTitles.push(this.get('gfiTitles')[i]);
                             }
                         }
                         catch (error) {
@@ -111,9 +111,9 @@ define([
                     }
                 });
             }
-            this.set('gfiTitle', gfiTitle);
             this.set('gfiContent', gfiContent);
-            this.set('gfiCounter', gfiTitle.length);
+            this.set('gfiTitles', gfiTitles);
+            this.set('gfiCounter', gfiContent.length);
         }
     });
 

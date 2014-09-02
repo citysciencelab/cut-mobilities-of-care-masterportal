@@ -1,0 +1,28 @@
+@media (max-width: 768px) {
+    #searchbar {
+        margin-top: 8px;
+    }
+    #searchForm {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    #searchbar {
+        float: right;
+    }
+}
+
+#searchbar {
+    margin-right: 20px;
+}
+
+#autoCompleteBody {
+    border-top: 0 none;
+    display: none;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+}

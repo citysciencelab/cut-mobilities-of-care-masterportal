@@ -2,33 +2,30 @@ html, body {
     height: 100%;
 }
 
+* {
+    border-radius: 0 !important;
+}
+
 #map {
     height: 100%;
     width: 100%;
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down{
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign {
     cursor: pointer;
 }
 
-.layer-slider {
-    width: 90px;
-    margin-top: 5px;
+.navbar {
+    min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
 }
 
 .color {
     color: #cdcdcd;
 }
 
-#autoCompleteBody {
-    border-top: 0 none;
-    display: none;
-    position: absolute;
-}
-
 /*bootstrap überschreiben*/
-.panel {
+.tree-panel {
     margin-bottom: 0 !important;
     border: 0 !important;
     min-width: 290px;
@@ -48,4 +45,25 @@ html, body {
 
 .list-group-item:last-child {
     border-bottom: 1px solid #ddd !important;
+}
+
+.popover {
+    max-width: none !important;
+}
+
+.popover-content {
+    padding: 2px 10px !important;
+}
+
+.table {
+    margin-bottom: 4px !important;
+}
+
+.badge {
+    font-size: 10px;
+}
+
+#measurePopup {
+    position: absolute;
+    top: 70px;
 }

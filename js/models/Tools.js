@@ -24,7 +24,12 @@ define([
             this.set('active', 'gfi');
         },
         activateTool: function () {
-            EventBus.trigger('activateClick', this.get('active'));
+            if (this.get('active') === 'measure') {
+                EventBus.trigger('showMeasureModal');
+            }
+            else {
+                EventBus.trigger('activateClick', this.get('active'));
+            }
         }
     });
 
