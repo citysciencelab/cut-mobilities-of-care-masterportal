@@ -2,7 +2,7 @@ html, body {
     height: 100%;
 }
 
-* {
+*:not(.badge) {
     border-radius: 0 !important;
 }
 
@@ -12,7 +12,7 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign {
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh {
     cursor: pointer;
 }
 
@@ -33,14 +33,21 @@ html, body {
 
 .panel-heading {
     background-color: #ffffff !important;
+    padding-left: 10px !important;
 }
 
 .dropdown-menu {
     padding:  0 !important;
 }
 
+/*
 .list-group-item {
-    padding:  6px 10px !important;
+    padding-top:  6px !important;
+    padding-bottom:  6px !important;
+}
+*/
+.list-group {
+    margin-bottom: 0px !important;
 }
 
 .list-group-item:last-child {
@@ -57,10 +64,6 @@ html, body {
 
 .table {
     margin-bottom: 4px !important;
-}
-
-.badge {
-    font-size: 10px;
 }
 
 #measurePopup {

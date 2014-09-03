@@ -17,7 +17,7 @@ define(function () {
         wfsLayerIDs: ['krankenhaeuser'
                     ],
         menubar: true,
-        isMenubarVisible: false,
+        isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,

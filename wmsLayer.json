@@ -131,7 +131,7 @@
     {
         "id": "stadtteil",
         "name": "Stadtteile",
-        "url": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+        "url": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
         "title": "3",
         "format": "image/png",
         "visibility": true,

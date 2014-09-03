@@ -1,17 +1,22 @@
-<div class="row <%if (visibility === false) { print('color') }%>">
-    <div class="col-md-9 col-xs-9 col-md-offset-1 col-xs-offset-1">
+<div class="<%if (visibility === false) { print('color') }%>" style="padding-left: 18px;">
+    <% if(settings === false) {%>
         <% if(visibility === true) {%>
-        <span class="glyphicon glyphicon-check"></span>
+            <span class="glyphicon glyphicon-check"></span>
         <% } else { %>
-        <span class="glyphicon glyphicon-unchecked"></span>
+            <span class="glyphicon glyphicon-unchecked"></span>
         <% } %>
         <small><%= name %></small>
-    </div>
-    <div class="col-md-1 col-xs-1">
-        <span class="glyphicon glyphicon-info-sign"></span>
-    </div>
+        <span class="glyphicon glyphicon-refresh pull-right"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        <span class="glyphicon glyphicon-minus-sign"></span>
+        <span style="margin-left: 10px;"><small>Transparenz</small></span>
+        <span class="badge" style="margin-left: 10px;"><%= transparence + '%'%></span></a>
+        <span class="glyphicon glyphicon-refresh pull-right"></span>
+        <span class="glyphicon glyphicon-info-sign pull-right" style="margin-right: 10px;"></span>
+    <% } %>
 </div>
-
+<!--
 <div class="row <%if (visibility === false) { print('color') }%>">
     <div class="col-md-7 col-xs-7 col-md-offset-1 col-xs-offset-1">
         <span><small>Transparenz</small></span>
@@ -20,9 +25,10 @@
     <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1 text-center">
         <span class="glyphicon glyphicon-plus-sign"></span>
         <span class="glyphicon glyphicon-minus-sign"></span>
-    </div>
+
+<!--    </div>-->
     <!--<div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1 text-center">-->
     <!--    <span class="glyphicon glyphicon-upload"></span>-->
     <!--    <span class="glyphicon glyphicon-download"></span>-->
     <!--</div>-->
-</div>
+<!--</div>-->

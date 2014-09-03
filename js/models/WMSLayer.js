@@ -16,7 +16,8 @@ define([
             source: '',
             layer: '',
             opacity: 1,
-            transparence: 0
+            transparence: 0,
+            settings: false
         },
         initialize: function () {
             this.listenTo(this, 'change:visibility', this.setVisibility);
@@ -66,6 +67,14 @@ define([
         },
         setVisibility: function () {
             this.get('layer').setVisible(this.get('visibility'));
+        },
+        toggleSettings: function () {
+            if (this.get('settings') === true) {
+                this.set({'settings': false});
+            }
+            else {
+                this.set({'settings': true});
+            }
         }
     });
 
