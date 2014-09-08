@@ -2,17 +2,12 @@
 define(function () {
 
     var config = {
-        wmsLayerConf: '../wmsLayer.json',
-        wmsLayerIDs: ['stadtplanIntranet',
-                    'luftbilderInternet',
-                    'stadtplanGrauIntranet',
-                    'stadtplanFarbigIntranet',
-                    'stadtplanSchwarzIntranet',
-                    'parkhaeuserIntranet',
-                    'verkehrslageAutobahnenIntranet',
-                    'parkrideIntranet',
-                    'stadtteil'
-                    ],
+//        wmsLayerConf: '../wmsLayer.json',
+        wmsLayerConf: '../../libs/lgv/diensteapiFHHNET.json',
+        wmsLayerIDs: [
+            '8',
+            '444'
+        ],
         wfsLayerConf: '../wfsLayer.json',
         wfsLayerIDs: ['krankenhaeuser'
                     ],

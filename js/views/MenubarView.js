@@ -3,10 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!templates/Menubar.html',
-    'views/TreefolderListView',
+    'views/WMSLayerListView',
     'models/Menubar',
     'config',
-], function ($, _, Backbone, MenubarTemplate, TreefolderListView, Menubar, Config) {
+], function ($, _, Backbone, MenubarTemplate, WMSLayerListView, Menubar, Config) {
 
     var MenubarView = Backbone.View.extend({
         model: Menubar,
@@ -28,7 +28,8 @@ define([
             if(Config.isMenubarVisible === false) {
                 $('#navbarRow').css('display', 'none');
             }
-            new TreefolderListView();
+//            new TreefolderListView();
+            new WMSLayerListView();
         }
     });
 

@@ -24,6 +24,10 @@ html, body {
     color: #cdcdcd;
 }
 
+#tree {
+    border: 0;
+}
+
 /*bootstrap überschreiben*/
 .tree-panel {
     margin-bottom: 0 !important;
@@ -38,6 +42,7 @@ html, body {
 
 .dropdown-menu {
     padding:  0 !important;
+    min-width: 320px !important;
 }
 
 /*
