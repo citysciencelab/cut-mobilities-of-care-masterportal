@@ -3,7 +3,7 @@ define(function () {
 
     var config = {
 //        wmsLayerConf: '../wmsLayer.json',
-        wmsLayerConf: '../../libs/lgv/diensteapiFHHNET.json',
+        wmsLayerConf: 'http://wscd0096/libs/lgv/diensteapiFHHNET.json',
         wmsLayerIDs: [
             '8',
             '444'
