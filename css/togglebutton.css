@@ -2,18 +2,24 @@
     position: fixed;
     right: 10px;
     z-index: 1000;
-    padding: 3px;
-    padding-right: 6px;
-    padding-top: 8px;
-    background: #a50f15;
 }
 
 #toggleButton:hover {
     cursor: pointer;
-    background: #cb181d;
 }
 
-.glyphicon-bookmark {
-    font-size: 35px;
+.glyphicon-chevron-up, .glyphicon-chevron-down {
+    font-size: 30px;
     color: #f3f3f3;
+    background-color: #d42132;
+    border-color: #d42132;
+    border-style: solid;
+}
+
+.glyphicon-chevron-up {
+    border-width: 5px 4px 8px 6px;
+}
+
+.glyphicon-chevron-down {
+    border-width: 8px 6px 5px 4px;
 }

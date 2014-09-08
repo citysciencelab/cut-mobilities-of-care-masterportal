@@ -1,12 +1,13 @@
 define([
     'jquery',
     'underscore',
-    'backbone'
-], function ($, _, Backbone) {
+    'backbone',
+    'config'
+], function ($, _, Backbone, Config) {
 
     var ToggleButtonView = Backbone.View.extend({
         id: 'toggleButton',
-        template: '<span class="glyphicon glyphicon-bookmark"></span>',
+//        template: '<span class="glyphicon glyphicon-chevron-up"></span>',
         events: {
             'click': 'toggleNavigation'
         },
@@ -14,10 +15,17 @@ define([
             this.render();
         },
         render: function () {
+            if(Config.isMenubarVisible === true) {
+                this.template = '<span class="glyphicon glyphicon-chevron-up"></span>';
+            }
+            else {
+                this.template = '<span class="glyphicon glyphicon-chevron-down"></span>';
+            }
             $('#toggleRow').append(this.$el.html(this.template));
         },
         toggleNavigation: function () {
             $('#navbarRow').slideToggle('slow');
+            $('#toggleButton > span').toggleClass('glyphicon-chevron-up glyphicon-chevron-down');
         }
     });
 
