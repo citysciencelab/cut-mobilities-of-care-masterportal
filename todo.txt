@@ -9,7 +9,7 @@ FEATURES
 #6	Layerbaum: Transparenz und ggf. weitere Einstellungen auslagern in Untermenü
    --> erledigt (sd)
 #7	neue diensteAPI integrieren
-   --> dabei (sd)
+   --> erledigt (sd)
 #8	Legende
 
 
