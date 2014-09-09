@@ -114,17 +114,14 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                if (element.get('folder') !== 'geobasisdaten') {
-                    var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                        coordinate, resolution, projection,
-                        {'INFO_FORMAT': 'text/xml'}
-                    )
-    
-                    gfiParams.push({
-                        url: gfiURL,
-                        name: element.get('name')
-                    });
-                }
+                var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                    coordinate, resolution, projection,
+                    {'INFO_FORMAT': 'text/xml'}
+                );
+                gfiParams.push({
+                    url: gfiURL,
+                    name: element.get('name')
+                });
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
         },

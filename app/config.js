@@ -6,7 +6,9 @@ define(function () {
         wmsLayerConf: 'http://wscd0096/libs/lgv/diensteapiFHHNET.json',
         wmsLayerIDs: [
             '8',
-            '444'
+            '444',
+            '582',
+            '583'
         ],
         wfsLayerConf: '../wfsLayer.json',
         wfsLayerIDs: ['krankenhaeuser'

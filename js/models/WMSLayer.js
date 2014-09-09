@@ -72,7 +72,8 @@ define([
          */
         setAttributionLayer: function () {
             this.set('layer', new ol.layer.Tile({
-                source: this.get('source')
+                source: this.get('source'),
+                name: this.get('name')
             }));
         },
         /**
