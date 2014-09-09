@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 @import "http://wscd0096/libs/bootstrap-3.1.1/css/bootstrap.css";
-@import "http://wscd0096/libs/OpenLayers-3.0.0-beta.5/css/ol.css";
+@import "http://wscd0096/libs/OpenLayers-3.0.0/css/ol.css";
 @import "lgv.css";
 @import "http://fast.fonts.com/cssapi/ecf72570-6ad2-463d-a585-b433c31c75eb.css";
 @import "searchbar.css";

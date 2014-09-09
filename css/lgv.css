@@ -31,6 +31,10 @@ html, body {
     color: #cdcdcd;
 }
 
+.gfiPic{
+    width: 150px;
+}
+
 #tree {
     border: 0;
 }

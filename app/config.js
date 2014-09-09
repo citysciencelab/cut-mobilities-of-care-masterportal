@@ -7,8 +7,8 @@ define(function () {
         wmsLayerIDs: [
             '8',
             '444',
-            '582',
-            '583'
+            '582'
+//            '182'
         ],
         wfsLayerConf: '../wfsLayer.json',
         wfsLayerIDs: ['krankenhaeuser'
