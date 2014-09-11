@@ -89,7 +89,6 @@ define([
             else if (this.get('searchString').length <= 2){
                 $('#autoCompleteBody').css("display", "none");
             }
-            console.log(this.get('houseNumber').toString());
         },
         searchStreets: function () {
             var requestURL, streetNames = [];

@@ -28,7 +28,13 @@ define([
             this.$el.append(treefold.el);
             _.each(treefold.model.get('WMSLayerList'), function (element) {            
                 var wmsLayerView = new WMSLayerView({model: element});
-                $('.' + wmsLayerView.model.get('treeFolder')).append(wmsLayerView.render().el);
+                _.each(wmsLayerView.model.get('kategorieOpendata'), function (element) {
+                    if(treeFolder.get('name') === element) {
+                        // NOTE hier gehts weiter
+                        $('.' + element).append(wmsLayerView.render().el);
+                    }
+                    });
+//                $('.' + wmsLayerView.model.get('treeFolder')).append(wmsLayerView.render().el);
             });
             _.each(treefold.model.get('WFSLayerList'), function (element) {
                 var wfsLayerView = new WFSLayerView({model: element});

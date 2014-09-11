@@ -10,7 +10,13 @@
         <%= key + ':'%>
     </small></td>
     <td><small>
-        <%= value%>
+        <% if (value.search('.html') !== -1) { %>
+            <a href="<%= value%>">weitere Informationen</a>
+        <% } else if (value.search('.jpg') !== -1) { %>
+            <img class="gfiPic" src="<%= value%>">
+        <% } else { %>
+            <%= value %>
+        <% } %>
     </small></td>
 </tr>
 <% })}; %>

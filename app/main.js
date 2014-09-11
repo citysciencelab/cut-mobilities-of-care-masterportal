@@ -1,7 +1,7 @@
 /*global require*/
 require.config({
     paths: {
-        openlayers: 'http://wscd0096/libs/OpenLayers-3.0.0-gamma.2/build/ol-simple',
+        openlayers: 'http://wscd0096/libs/OpenLayers-3.0.0/build/ol',
         jquery: 'http://wscd0096/libs/jQuery-2.0.3/jquery.min',
         underscore: 'http://wscd0096/libs/underscore-1.6.0/underscore.min',
         backbone: 'http://wscd0096/libs/backbone-1.1.2/backbone.min',

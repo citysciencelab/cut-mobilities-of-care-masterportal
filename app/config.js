@@ -2,22 +2,19 @@
 define(function () {
 
     var config = {
-        wmsLayerConf: '../wmsLayer.json',
-        wmsLayerIDs: ['stadtplanIntranet',
-                    'luftbilderInternet',
-                    'stadtplanGrauIntranet',
-                    'stadtplanFarbigIntranet',
-                    'stadtplanSchwarzIntranet',
-                    'parkhaeuserIntranet',
-                    'verkehrslageAutobahnenIntranet',
-                    'parkrideIntranet',
-                    'stadtteil'
-                    ],
+//        wmsLayerConf: '../wmsLayer.json',
+        wmsLayerConf: 'http://wscd0096/libs/lgv/diensteapiFHHNET.json',
+        wmsLayerIDs: [
+            '8',
+            '444',
+            '582'
+//            '182'
+        ],
         wfsLayerConf: '../wfsLayer.json',
         wfsLayerIDs: ['krankenhaeuser'
                     ],
         menubar: true,
-        isMenubarVisible: false,
+        isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,

@@ -13,7 +13,7 @@ define([
         units: 'm',
         extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
         axisOrientation: 'enu', // default
-        global: false,  // default
+        global: false  // default
     }));
     var proj25832 = ol.proj.get('EPSG:25832');
     proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
@@ -47,7 +47,7 @@ define([
                 center: [565874, 5934140],
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
                 resolution: 26.458319045841044,
-                resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ],
+                resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
             }));
             
             this.set('map',  new ol.Map({
@@ -114,17 +114,14 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                if (element.get('folder') !== 'geobasisdaten') {
-                    var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                        coordinate, resolution, projection,
-                        {'INFO_FORMAT': 'text/xml'}
-                    )
-    
-                    gfiParams.push({
-                        url: gfiURL,
-                        name: element.get('name')
-                    });
-                }
+                var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                    coordinate, resolution, projection,
+                    {'INFO_FORMAT': 'text/xml'}
+                );
+                gfiParams.push({
+                    url: gfiURL,
+                    name: element.get('name')
+                });
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
         },

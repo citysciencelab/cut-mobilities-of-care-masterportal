@@ -13,6 +13,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, 'change:visibility', this.render);
             this.listenTo(this.model, 'change:transparence', this.render);
+            this.listenTo(this.model, 'change:settings', this.render);
         },
         events: {
             'click .glyphicon-plus-sign': 'upTransparence',
@@ -20,6 +21,7 @@ define([
             'click span.glyphicon-info-sign': 'getMetadata',
             'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
             'click .glyphicon-upload, .glyphicon-download': 'moveLayer',
+            'click .glyphicon-refresh': 'toggleSettings'
         },
         moveLayer: function (evt) {
             var className = evt.currentTarget.className;
@@ -41,6 +43,9 @@ define([
         },
         getMetadata: function () {
             window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('uuid'), "_blank");
+        },
+        toggleSettings: function () {
+            this.model.toggleSettings();
         },
         render: function () {
             var attr = this.model.toJSON();

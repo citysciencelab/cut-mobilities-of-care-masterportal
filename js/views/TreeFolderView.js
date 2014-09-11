@@ -16,7 +16,7 @@ define([
         },
         events: {
             'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
-            'click .glyphicon-chevron-right, .glyphicon-chevron-down': 'toggleExpanding'
+            'click .glyphicon-plus-sign, .glyphicon-minus-sign': 'toggleExpanding'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -27,7 +27,7 @@ define([
         },
         toggleExpanding: function (evt) {
             this.model.toggleExpanding();
-            $(evt.target).toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+            $(evt.target).toggleClass('glyphicon-plus-sign glyphicon-minus-sign');
         }
     });
 
