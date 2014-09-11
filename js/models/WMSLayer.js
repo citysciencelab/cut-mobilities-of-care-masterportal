@@ -5,6 +5,17 @@ define([
     'eventbus'
 ], function (_, Backbone, ol, EventBus) {
 
+    // Definition der Projektion EPSG:25832
+    ol.proj.addProjection(new ol.proj.Projection({
+        code: 'EPSG:25832',
+        units: 'm',
+        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
+        axisOrientation: 'enu', // default
+        global: false  // default
+    }));
+    var proj25832 = ol.proj.get('EPSG:25832');
+    proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
+
     /**
      *
      */
@@ -17,8 +28,7 @@ define([
             this.listenTo(this, 'change:visibility', this.setVisibility);
             this.listenTo(this, 'change:transparence', this.updateOpacity);
 
-            if (this.get('typ') === 'WMS') {
-                // NOTE in 'setAttributionLayerSource()' wird später zwischen WMS und WFS differenziert
+            // NOTE in 'setAttributionLayerSource()' und 'setAttributionLayer()' wird zwischen WMS und WFS differenziert
                 this.setAttributionLayerSource();
                 this.setAttributionLayer();
 
@@ -31,13 +41,11 @@ define([
                 // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
                 this.setAttributions();
                 this.unset('datasets');
-            }
         },
         /**
          *
          */
         setAttributionLayerSource: function () {
-            // Layer source for tile data from WMS servers
             if (this.get('typ') === 'WMS') {
                 this.set('source', new ol.source.TileWMS({
                     url: this.get('url'),
@@ -66,15 +74,48 @@ define([
                     })
                 }));
             }
+            else if (this.get('typ') === 'WFS') {
+                this.set('source', new ol.source.ServerVector({
+                    format: new ol.format.WFS({
+                        featureNS: 'http://www.deegree.org/app',
+                        featureType: 'bikeandride'
+                    }),
+                    loader: function (extent, resolution, projection) {
+                        var url = 'http://geofos/fachdaten_public/services/wfs_bwvi_opendata?service=WFS&request=GetFeature&version=1.1.0&typename=bikeandride';
+                        $.ajax({
+                            url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(url),
+                            async: false,
+                            context: this,
+                            success: function (data, textStatus, jqXHR) {
+                                this.addFeatures(this.readFeatures(data));
+                            },
+                            error: function (data, textStatus, jqXHR) {
+                                console.log(textStatus);
+                            }
+                        });
+                    },
+                    projection: proj25832 //'EPSG:25832'
+                }));
+            }
         },
         /**
          *
          */
         setAttributionLayer: function () {
-            this.set('layer', new ol.layer.Tile({
-                source: this.get('source'),
-                name: this.get('name')
-            }));
+            if (this.get('typ') === 'WMS') {
+                this.set('layer', new ol.layer.Tile({
+                    source: this.get('source'),
+                    name: this.get('name'),
+                    typ: this.get('typ')
+                }));
+            }
+            else if (this.get('typ') === 'WFS') {
+                this.set('layer', new ol.layer.Vector({
+                    source: this.get('source'),
+                    name: this.get('name'),
+                    typ: this.get('typ')
+                }));
+            }
         },
         /**
          *

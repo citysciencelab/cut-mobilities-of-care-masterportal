@@ -13,7 +13,7 @@ define([
          * any unspecified attributes will be set to their default value.
          */
         defaults: {
-            gfiOverlay: new ol.Overlay({ element: $('#gfipopup')}), // ol.Overlay
+            gfiOverlay: new ol.Overlay({ element: $('#gfipopup')}) // ol.Overlay
         },
         /**
          * Wird aufgerufen wenn das Model erzeugt wird.

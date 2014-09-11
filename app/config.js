@@ -7,12 +7,14 @@ define(function () {
         wmsLayerIDs: [
             '8',
             '444',
-            '582'
+            '453',
+            '582',
+            '45'
 //            '182'
         ],
-        wfsLayerConf: '../wfsLayer.json',
-        wfsLayerIDs: ['krankenhaeuser'
-                    ],
+//        wfsLayerConf: '../wfsLayer.json',
+//        wfsLayerIDs: ['krankenhaeuser'
+//                    ],
         menubar: true,
         isMenubarVisible: true,
         menu: {

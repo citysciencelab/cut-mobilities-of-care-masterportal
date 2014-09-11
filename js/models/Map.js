@@ -111,7 +111,8 @@ define([
             resolution = this.get('view').getResolution();
             projection = this.get('view').getProjection();
             layersVisible = _.filter(layers, function (element) {
-                return element.getVisible() === true;
+                // NOTE GFI-Filter Nur WMS und Sichtbar
+                return element.getVisible() === true && element.getProperties().typ === 'WMS';
             });
             _.each(layersVisible, function (element) {
                 var gfiURL = element.getSource().getGetFeatureInfoUrl(
