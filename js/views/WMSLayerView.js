@@ -42,7 +42,7 @@ define([
             this.model.toggleVisibility();
         },
         getMetadata: function () {
-            window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('uuid'), "_blank");
+            window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('metaID'), "_blank");
         },
         toggleSettings: function () {
             this.model.toggleSettings();
