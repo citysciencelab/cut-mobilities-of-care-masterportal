@@ -2,11 +2,22 @@ define([
     'underscore',
     'backbone',
     'models/wmslayer',
+    'models/wfslayer',
     'config'
-], function (_, Backbone, WMSLayer, Config) {
+], function (_, Backbone, WMSLayer, WFSLayer, Config) {
 
-    var WMSLayerList = Backbone.Collection.extend({
-        model: WMSLayer,
+    var LayerList = Backbone.Collection.extend({
+        model: function (attrs, options) {
+            if (attrs.typ == 'WMS') {
+                return new WMSLayer(attrs, options);
+            }
+            else if (attrs.typ == 'WFS') {
+                return new WFSLayer(attrs, options);
+            }
+            else {
+                console.log('Typ ' + attrs.typ + ' nicht in LayerList konfiguriert.');
+            }
+        },
         url: Config.wmsLayerConf,
         initialize: function () {
             this.fetch({
@@ -31,5 +42,5 @@ define([
         }
     });
 
-    return new WMSLayerList();
+    return new LayerList();
 });

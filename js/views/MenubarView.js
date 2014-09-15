@@ -3,10 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!templates/Menubar.html',
-    'views/WMSLayerListView',
+    'views/LayerListView',
     'models/Menubar',
     'config',
-], function ($, _, Backbone, MenubarTemplate, WMSLayerListView, Menubar, Config) {
+], function ($, _, Backbone, MenubarTemplate, LayerListView, Menubar, Config) {
 
     var MenubarView = Backbone.View.extend({
         model: Menubar,
@@ -29,7 +29,7 @@ define([
                 $('#navbarRow').css('display', 'none');
             }
 //            new TreefolderListView();
-            new WMSLayerListView();
+            new LayerListView();
         }
     });
 
