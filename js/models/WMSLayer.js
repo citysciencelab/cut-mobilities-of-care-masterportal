@@ -2,8 +2,9 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'eventbus'
-], function (_, Backbone, ol, EventBus) {
+    'eventbus',
+    'config'
+], function (_, Backbone, ol, EventBus, Config) {
 
     /**
      *
@@ -22,7 +23,12 @@ define([
             this.setAttributionLayer();
 
             // TODO standardmäßig alle Layer sichtbar --> über config steuern
-            this.set('visibility', true);
+            if (_.contains(Config.visibleLayer, this.get('id'))) {
+                this.set('visibility', true);
+            }
+            else {
+                this.set('visibility', false);
+            }
             this.get('layer').setVisible(this.get('visibility'));
             this.set('settings', false);
             this.set('transparence', 0);

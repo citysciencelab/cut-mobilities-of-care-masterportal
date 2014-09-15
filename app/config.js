@@ -9,7 +9,11 @@ define(function () {
             '453',
             '582',
             '45'
-//            '182'
+        ],
+        // Layer die Initial sichtbar sein sollen
+        visibleLayer: [
+            '8',
+            '444'
         ],
         menubar: true,
         isMenubarVisible: true,
