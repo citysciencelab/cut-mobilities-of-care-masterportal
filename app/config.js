@@ -8,7 +8,7 @@ define(function () {
             '444',
             '453',
             '582',
-            '45'
+            '9999'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [

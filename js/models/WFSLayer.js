@@ -2,8 +2,9 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'eventbus'
-], function (_, Backbone, ol, EventBus) {
+    'eventbus',
+    'config'
+], function (_, Backbone, ol, EventBus, Config) {
 
     // Definition der Projektion EPSG:25832
     ol.proj.addProjection(new ol.proj.Projection({
@@ -28,19 +29,22 @@ define([
             this.listenTo(this, 'change:visibility', this.setVisibility);
             this.listenTo(this, 'change:transparence', this.updateOpacity);
 
-            // NOTE in 'setAttributionLayerSource()' und 'setAttributionLayer()' wird zwischen WMS und WFS differenziert
-                this.setAttributionLayerSource();
-                this.setAttributionLayer();
+            this.setAttributionLayerSource();
+            this.setAttributionLayer();
 
-                // TODO standardmäßig alle Layer sichtbar --> über config steuern
+            if (_.contains(Config.visibleLayer, this.get('id'))) {
                 this.set('visibility', true);
-                this.get('layer').setVisible(this.get('visibility'));
-                this.set('settings', false);
-                this.set('transparence', 0);
+            }
+            else {
+                this.set('visibility', false);
+            }
+            this.get('layer').setVisible(this.get('visibility'));
+            this.set('settings', false);
+            this.set('transparence', 0);
 
-                // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
-                this.setAttributions();
-                this.unset('datasets');
+            // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
+            this.setAttributions();
+            this.unset('datasets');
         },
         /**
          *
@@ -49,16 +53,16 @@ define([
             var getrequest = this.get('url')
                 + '?REQUEST=GetFeature'
                 + '&SERVICE=WFS';
-            if (this.get('featureType') && this.get('featureType') != '') {
+            if (this.get('featureType') && this.get('featureType') !== '') {
                 getrequest += '&TYPENAME=' + this.get('featureType');
             }
-            if (this.get('version') && this.get('version') != '') {
+            if (this.get('version') && this.get('version') !== '') {
                 getrequest += '&VERSION=' + this.get('version');
             }
-            if (this.get('outputFormat') && this.get('outputFormat') != '') {
+            if (this.get('outputFormat') && this.get('outputFormat') !== '') {
                 getrequest += '&OUTPUTFORMAT=' + this.get('outputFormat');
             }
-            if (this.get('srsname') && this.get('srsname') != '') {
+            if (this.get('srsname') && this.get('srsname') !== '') {
                 getrequest += '&SRSNAME=' + this.get('srsname');
             }
             this.set('source', new ol.source.ServerVector({
