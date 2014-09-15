@@ -2,9 +2,8 @@
 define(function () {
 
     var config = {
-//        wmsLayerConf: '../wmsLayer.json',
-        wmsLayerConf: 'http://wscd0096/libs/lgv/diensteapiFHHNET.json',
-        wmsLayerIDs: [
+       layerConf: 'http://wscd0096/libs/lgv/diensteapiFHHNET.json',
+       layerIDs: [
             '8',
             '444',
             '453',
@@ -12,9 +11,6 @@ define(function () {
             '45'
 //            '182'
         ],
-//        wfsLayerConf: '../wfsLayer.json',
-//        wfsLayerIDs: ['krankenhaeuser'
-//                    ],
         menubar: true,
         isMenubarVisible: true,
         menu: {

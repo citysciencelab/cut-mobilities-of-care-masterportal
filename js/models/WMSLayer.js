@@ -5,17 +5,6 @@ define([
     'eventbus'
 ], function (_, Backbone, ol, EventBus) {
 
-    // Definition der Projektion EPSG:25832
-    ol.proj.addProjection(new ol.proj.Projection({
-        code: 'EPSG:25832',
-        units: 'm',
-        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-        axisOrientation: 'enu', // default
-        global: false  // default
-    }));
-    var proj25832 = ol.proj.get('EPSG:25832');
-    proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
-
     /**
      *
      */
@@ -29,18 +18,18 @@ define([
             this.listenTo(this, 'change:transparence', this.updateOpacity);
 
             // NOTE in 'setAttributionLayerSource()' und 'setAttributionLayer()' wird zwischen WMS und WFS differenziert
-                this.setAttributionLayerSource();
-                this.setAttributionLayer();
+            this.setAttributionLayerSource();
+            this.setAttributionLayer();
 
-                // TODO standardmäßig alle Layer sichtbar --> über config steuern
-                this.set('visibility', true);
-                this.get('layer').setVisible(this.get('visibility'));
-                this.set('settings', false);
-                this.set('transparence', 0);
+            // TODO standardmäßig alle Layer sichtbar --> über config steuern
+            this.set('visibility', true);
+            this.get('layer').setVisible(this.get('visibility'));
+            this.set('settings', false);
+            this.set('transparence', 0);
 
-                // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
-                this.setAttributions();
-                this.unset('datasets');
+            // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
+            this.setAttributions();
+            this.unset('datasets');
         },
         /**
          *
@@ -50,12 +39,12 @@ define([
                 url: this.get('url'),
                 params: {
                     'LAYERS': this.get('layers'),
-                    // NOTE Format für Layer standardmäßig auf 'image/jpeg', da nicht immer in der json vorhanden
+                    // NOTE Format für Layer standardmäßig auf 'image/png', da nicht immer in der json vorhanden
                     'FORMAT': 'image/png',
                     'VERSION': this.get('version')
                 },
                 tileGrid: new ol.tilegrid.TileGrid({
-                    resolutions : [
+                    resolutions: [
                         66.14614761460263,
                         26.458319045841044,
                         15.874991427504629,
@@ -87,7 +76,7 @@ define([
          *
          */
         setAttributions: function () {
-            if(this.get('datasets')[0] !== undefined) {
+            if (this.get('datasets')[0] !== undefined) {
                 var dataset = this.get('datasets')[0];
                 this.set('metaID', dataset.md_id);
                 this.set('metaName', dataset.md_name);
@@ -99,10 +88,13 @@ define([
          */
         toggleVisibility: function () {
             if (this.get('visibility') === true) {
-                this.set({'visibility': false});
-            }
-            else {
-                this.set({'visibility': true});
+                this.set({
+                    'visibility': false
+                });
+            } else {
+                this.set({
+                    'visibility': true
+                });
             }
             EventBus.trigger('checkVisibilityByFolder');
         },
@@ -128,7 +120,9 @@ define([
         updateOpacity: function () {
             var opacity = (100 - this.get('transparence')) / 100;
             this.get('layer').setOpacity(opacity);
-            this.set({'opacity': opacity});
+            this.set({
+                'opacity': opacity
+            });
         },
         /**
          *
@@ -141,10 +135,13 @@ define([
          */
         toggleSettings: function () {
             if (this.get('settings') === true) {
-                this.set({'settings': false});
-            }
-            else {
-                this.set({'settings': true});
+                this.set({
+                    'settings': false
+                });
+            } else {
+                this.set({
+                    'settings': true
+                });
             }
         }
     });

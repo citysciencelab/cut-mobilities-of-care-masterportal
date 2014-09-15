@@ -18,7 +18,7 @@ define([
                 console.log('Typ ' + attrs.typ + ' nicht in LayerList konfiguriert.');
             }
         },
-        url: Config.wmsLayerConf,
+        url: Config.layerConf,
         initialize: function () {
             this.fetch({
                 cache: false,
@@ -27,7 +27,7 @@ define([
                     console.log('Service Request failure');
                 },
                 success: function (collection) {
-                    var idArray = Config.wmsLayerIDs;
+                    var idArray = Config.layerIDs;
                     collection.filterById(idArray);
                 }
             });
@@ -36,9 +36,6 @@ define([
             return this.reset(_.map(idArray, function (model) {
                 return this.get(model);
             }, this));
-        },
-        filterByFolder: function (value) {
-            return this.where({treeFolder: value});
         }
     });
 
