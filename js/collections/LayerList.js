@@ -8,10 +8,10 @@ define([
 
     var LayerList = Backbone.Collection.extend({
         model: function (attrs, options) {
-            if (attrs.typ == 'WMS') {
+            if (attrs.typ === 'WMS') {
                 return new WMSLayer(attrs, options);
             }
-            else if (attrs.typ == 'WFS') {
+            else if (attrs.typ === 'WFS') {
                 return new WFSLayer(attrs, options);
             }
             else {
