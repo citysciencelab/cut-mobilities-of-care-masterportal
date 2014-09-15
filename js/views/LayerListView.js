@@ -2,14 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'collections/WMSLayerList',
-    'views/WMSLayerView',
+    'collections/LayerList',
+    'views/LayerView',
     'eventbus',
     'bootstrap'
-], function ($, _, Backbone, WMSLayerList, WMSLayerView) {
+], function ($, _, Backbone, LayerList, LayerView) {
 
-    var WMSLayerListView = Backbone.View.extend({
-        collection: WMSLayerList,
+    var LayerListView = Backbone.View.extend({
+        collection: LayerList,
         el: '#tree',
         initialize: function () {
             this.listenTo(this.collection, 'change:isChecked', this.render);
@@ -21,10 +21,10 @@ define([
             this.collection.forEach(this.addTreeNode, this);
         },
         addTreeNode: function (node) {
-            var wmsLayerView = new WMSLayerView({model: node});
-            $('#tree').append(wmsLayerView.render().el);
+            var layerView = new LayerView({model: node});
+            $('#tree').append(layerView.render().el);
         }
     });
 
-    return WMSLayerListView;
+    return LayerListView;
 });

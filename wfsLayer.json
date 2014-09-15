@@ -1,0 +1,16 @@
+[
+    {
+        "id": "krankenhaeuser",
+        "name": "Krankenhäuser",
+        "url": "http://geofos/fachdaten_public/services/wfs_hh_krankenhaeuser",
+        "outputFormat": "text/xml; subtype=gml/3.2.1",
+        "request": "GetFeature",
+        "service": "WFS",
+        "srsname": "EPSG:25832",
+        "typename": "app:krankenhaeuser_hh",
+        "version": "1.1.0",
+        "featureNS": "http://www.opengis.net/wfs",
+        "featureType": "krankenhaeuser_hh",
+        "visibility": true
+    }
+]

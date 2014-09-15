@@ -2,10 +2,10 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'collections/WMSLayerList',
+    'collections/LayerList',
     'models/MeasurePopup',
     'eventbus'
-], function (_, Backbone, ol, WMSLayerList, MeasurePopup, EventBus) {
+], function (_, Backbone, ol, LayerList, MeasurePopup, EventBus) {
 
     // Definition der Projektion EPSG:25832
     ol.proj.addProjection(new ol.proj.Projection({
@@ -20,7 +20,7 @@ define([
 
     /**
      * @exports Map
-     * @requires WMSLayerList
+     * @requires LayerList
      * @classdesc hier beschreiben wir das modul
      */
     var Map = Backbone.Model.extend(
@@ -51,7 +51,7 @@ define([
             }));
             
             this.set('map',  new ol.Map({
-                layers: WMSLayerList.pluck('layer'),
+                layers: LayerList.pluck('layer'),
                 ol3Logo: false,	// default true
                 renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                 target: 'map',

@@ -2,14 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/WMSLayer.html',
+    'text!templates/Layer.html',
     'eventbus'
-], function ($, _, Backbone, wmsLayerTemplate, EventBus) {
+], function ($, _, Backbone, LayerTemplate, EventBus) {
 
-    var WMSLayerView = Backbone.View.extend({
+    var LayerView = Backbone.View.extend({
         className : 'list-group-item',
         tagName: 'li',
-        template: _.template(wmsLayerTemplate),
+        template: _.template(LayerTemplate),
         initialize: function () {
             this.listenTo(this.model, 'change:visibility', this.render);
             this.listenTo(this.model, 'change:transparence', this.render);
@@ -54,5 +54,5 @@ define([
         }
     });
 
-    return WMSLayerView;
+    return LayerView;
 });

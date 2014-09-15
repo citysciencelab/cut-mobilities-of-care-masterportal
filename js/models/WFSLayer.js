@@ -19,7 +19,7 @@ define([
     /**
      *
      */
-    var WMSLayer = Backbone.Model.extend({
+    var WFSLayer = Backbone.Model.extend({
 
         /**
          *
@@ -46,41 +46,73 @@ define([
          *
          */
         setAttributionLayerSource: function () {
-            this.set('source', new ol.source.TileWMS({
-                url: this.get('url'),
-                params: {
-                    'LAYERS': this.get('layers'),
-                    // NOTE Format für Layer standardmäßig auf 'image/jpeg', da nicht immer in der json vorhanden
-                    'FORMAT': 'image/png',
-                    'VERSION': this.get('version')
+            var getrequest = this.get('url')
+                + '?REQUEST=GetFeature'
+                + '&SERVICE=WFS';
+            if (this.get('featureType') && this.get('featureType') != '') {
+                getrequest += '&TYPENAME=' + this.get('featureType');
+            }
+            if (this.get('version') && this.get('version') != '') {
+                getrequest += '&VERSION=' + this.get('version');
+            }
+            if (this.get('outputFormat') && this.get('outputFormat') != '') {
+                getrequest += '&OUTPUTFORMAT=' + this.get('outputFormat');
+            }
+            if (this.get('srsname') && this.get('srsname') != '') {
+                getrequest += '&SRSNAME=' + this.get('srsname');
+            }
+            this.set('source', new ol.source.ServerVector({
+                format: new ol.format.WFS({
+                    featureNS: this.get('featureNS'),
+                    featureType: this.get('featureType')
+                }),
+                loader: function (extent, resolution, projection) {
+                    $.ajax({
+                        url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(getrequest),
+                        async: false,
+                        context: this,
+                        success: function (data, textStatus, jqXHR) {
+                            this.addFeatures(this.readFeatures(data));
+                        },
+                        error: function (data, textStatus, jqXHR) {
+                            console.log(textStatus);
+                        }
+                    });
                 },
-                tileGrid: new ol.tilegrid.TileGrid({
-                    resolutions : [
-                        66.14614761460263,
-                        26.458319045841044,
-                        15.874991427504629,
-                        10.583327618336419,
-                        5.2916638091682096,
-                        2.6458319045841048,
-                        1.3229159522920524,
-                        0.6614579761460262,
-                        0.2645831904584105
-                    ],
-                    origin: [
-                        442800,
-                        5809000
-                    ]
-                })
+                extractStyles: false,
+                /* experimental in OL3
+                strategy: ol.loadingstrategy.createTile(new ol.tilegrid.XYZ({
+                    maxZoom: 19
+                })),*/
+                projection: proj25832 //'EPSG:25832'
             }));
+            this.set('style', [new ol.style.Style({
+                /*image: new ol.style.Circle({
+                    radius: 10,
+                    fill: new ol.style.Fill({
+                        color: [0, 153, 255, 1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [0, 0, 0, 1]
+                    })
+                }),*/
+                image: new ol.style.Icon({
+                    src: '../img/unknown.png',
+                    width: 10,
+                    height: 10
+                }),
+                zIndex: 'Infinity'
+            })]);
         },
         /**
          *
          */
         setAttributionLayer: function () {
-            this.set('layer', new ol.layer.Tile({
+            this.set('layer', new ol.layer.Vector({
                 source: this.get('source'),
                 name: this.get('name'),
-                typ: this.get('typ')
+                typ: this.get('typ'),
+                style: this.get('style')
             }));
         },
         /**
@@ -149,5 +181,5 @@ define([
         }
     });
 
-    return WMSLayer;
+    return WFSLayer;
 });
