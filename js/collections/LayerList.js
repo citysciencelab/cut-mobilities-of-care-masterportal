@@ -7,6 +7,7 @@ define([
 ], function (_, Backbone, WMSLayer, WFSLayer, Config) {
 
     var LayerList = Backbone.Collection.extend({
+        url: Config.layerConf,
         model: function (attrs, options) {
             if (attrs.typ === 'WMS') {
                 return new WMSLayer(attrs, options);
@@ -18,7 +19,14 @@ define([
                 console.log('Typ ' + attrs.typ + ' nicht in LayerList konfiguriert.');
             }
         },
-        url: Config.layerConf,
+        parse: function (response) {
+            var idArray = Config.layerIDs;
+            return _.filter(response, function (element) {
+                if (_.contains(idArray, element.id)) {
+                    return element;
+                }
+            });
+        },
         initialize: function () {
             this.fetch({
                 cache: false,
@@ -27,15 +35,9 @@ define([
                     console.log('Service Request failure');
                 },
                 success: function (collection) {
-                    var idArray = Config.layerIDs;
-                    collection.filterById(idArray);
+                    console.log(collection);
                 }
             });
-        },
-        filterById: function (idArray) {
-            return this.reset(_.map(idArray, function (model) {
-                return this.get(model);
-            }, this));
         }
     });
 
