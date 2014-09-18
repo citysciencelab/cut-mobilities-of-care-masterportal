@@ -1,0 +1,16 @@
+[
+    {
+        "id" : "1",
+        "subclass" : "Icon",
+        "src" : "../img/unknown.png",
+        "width" : "10",
+        "height" : "10"
+    },
+    {
+        "id" : "2",
+        "subclass" : "Circle",
+        "src" : "../img/unknown.png",
+        "width" : "10",
+        "height" : "10"
+    }
+]

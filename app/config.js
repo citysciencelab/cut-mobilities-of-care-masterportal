@@ -2,18 +2,19 @@
 define(function () {
 
     var config = {
-       layerConf: 'http://wscd0096/libs/lgv/diensteapiFHHNET.json',
+       layerConf: '../diensteapiFHHNET.json',
        layerIDs: [
-            '8',
-            '444',
             '453',
-            '582',
             '9999'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '8',
-            '444'
+            '453',
+            '9999'
+        ],
+        styleConf: '../style.json',
+        layerstyle: [
+            {layer: '9999', style: '1'}
         ],
         menubar: true,
         isMenubarVisible: true,
@@ -21,7 +22,7 @@ define(function () {
             viewerName: 'GeoViewer',
             searchBar: true,
             layerTree: true,
-            helpButton: true,
+            helpButton: false,
             contactButton: true,
             tools: true
         },

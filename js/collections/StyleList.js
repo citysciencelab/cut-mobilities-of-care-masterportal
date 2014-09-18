@@ -1,32 +1,24 @@
 define([
     'underscore',
     'backbone',
-    'models/wmslayer',
-    'models/wfslayer',
+    'models/wfsstyle',
     'config'
-], function (_, Backbone, WMSLayer, WFSLayer, Config) {
+], function (_, Backbone, WFSStyle, Config) {
 
-    var LayerList = Backbone.Collection.extend({
-        url: Config.layerConf,
-        model: function (attrs, options) {
-            if (attrs.typ === 'WMS') {
-                return new WMSLayer(attrs, options);
-            }
-            else if (attrs.typ === 'WFS') {
-                return new WFSLayer(attrs, options);
-            }
-            else {
-                console.log('Typ ' + attrs.typ + ' nicht in LayerList konfiguriert.');
-            }
-        },
+    var StyleList = Backbone.Collection.extend({
+        model: WFSStyle,
         parse: function (response) {
-            var idArray = Config.layerIDs;
+            var idArray = new Array ();
+            for (i in Config.layerstyle) {
+                idArray.push(Config.layerstyle[i].style);
+            }
             return _.filter(response, function (element) {
                 if (_.contains(idArray, element.id)) {
                     return element;
                 }
             });
         },
+        url: Config.styleConf,
         initialize: function () {
             this.fetch({
                 cache: false,
@@ -40,6 +32,5 @@ define([
             });
         }
     });
-
-    return new LayerList();
+    return new StyleList();
 });

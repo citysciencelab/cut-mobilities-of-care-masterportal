@@ -4,9 +4,9 @@ define([
     'openlayers',
     'eventbus',
     'config',
-    'models/Layer'
-], function (_, Backbone, ol, EventBus, Config, Layer) {
-
+    'models/Layer',
+    'collections/stylelist',
+], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
     // Definition der Projektion EPSG:25832
     ol.proj.addProjection(new ol.proj.Projection({
         code: 'EPSG:25832',
@@ -17,12 +17,10 @@ define([
     }));
     var proj25832 = ol.proj.get('EPSG:25832');
     proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
-
     /**
      *
      */
     var WFSLayer = Layer.extend({
-
         /**
          *
          */
@@ -67,23 +65,22 @@ define([
                 })),*/
                 projection: proj25832 //'EPSG:25832'
             }));
-            this.set('style', [new ol.style.Style({
-                /*image: new ol.style.Circle({
-                    radius: 10,
-                    fill: new ol.style.Fill({
-                        color: [0, 153, 255, 1]
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: [0, 0, 0, 1]
-                    })
-                }),*/
-                image: new ol.style.Icon({
-                    src: '../img/unknown.png',
-                    width: 10,
-                    height: 10
-                }),
-                zIndex: 'Infinity'
-            })]);
+
+            // Finde StyleId zu dieser Layer-Id, hole den Style und weise ihn dem Layer zu
+            var id = this.get('id');
+            var layerstyle = _.find(Config.layerstyle, function(num) {
+                if (num.layer == id) {
+                    return num;
+                }
+            });
+            this.set('styleId', layerstyle.style);
+
+            var wfsStyle = _.find(StyleList.models, function (num) {
+                if (num.id == layerstyle.style) {
+                    return num;
+                }
+            });
+            this.set('style', wfsStyle.attributes.style);
         },
         /**
          *
