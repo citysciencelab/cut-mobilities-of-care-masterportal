@@ -14,6 +14,8 @@ FEATURES
 #9  Tool: Standorterkennung
 #10 Tool: 'In meiner Nähe' auf Vektorlayern
 #11 featureInfo: mobil: div scrollbar, wenn zu lang
+#12 parametrierter Aufruf mit featureID eines WFS
+#13 featureInfo für WFS 
 
 
 BUGS
