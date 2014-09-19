@@ -1,5 +1,5 @@
 FEATURES
-#1	Suchfeld: (bisher Adressen) erweitern um weitere WFS-Suchen (z.B. nach Krankenhäusern, B-Plänen); ideal mit config-Optionen wie [WFS-URL, search_field, display_field, geom_field] o.Ä.)	und nach WFS differenzierte Ergebnisdarstellung
+#1	Suchfeld: (bisher Adressen) erweitern um weitere WFS-Suchen (z.B. nach Krankenhäusern, B-Plänen); ideal mit config-Optionen wie [WFS-URL, search_field, display_field, geom_field] o.Ä.) und nach WFS differenzierte Ergebnisdarstellung
 #2	Suchfeld: bleibt mobil zentral oben in Menubar sichtbar 
     --> erledigt (sd)
 #3	Menubar: mobil: Icons (an/aus, auf/zu, ..) reagieren auch auf iPhone flüssig
@@ -10,9 +10,19 @@ FEATURES
    --> erledigt (sd)
 #7	neue diensteAPI integrieren
    --> erledigt (sd)
-#8	Legende
+#8  Legende
+#9  Tool: Standorterkennung
+#10 Tool: 'In meiner Nähe' auf Vektorlayern
+#11 featureInfo: mobil: div scrollbar, wenn zu lang
 
 
 BUGS
 #1	Das Messen ist noch ein wenig "verbugt"
     --> erledigt (sd)
+    
+LAYER.JSON
+#1  für WFS: layers wird zu featureType, ns-prefix entfernen, featureTypeNS aus WFS-DescribeFeatureType auslesen
+
+SONST
+#1  check Einbindung ESRI-WFS --> michael
+#2  check outputformat in ol3, deegree und ESRI WFS --> michael
