@@ -5,6 +5,7 @@ define(function () {
        layerConf: '../diensteapiFHHNET.json',
        layerIDs: [
             '453',
+            '8',
             '9999'
         ],
         // Layer die Initial sichtbar sein sollen
@@ -14,7 +15,7 @@ define(function () {
         ],
         styleConf: '../style.json',
         layerstyle: [
-            {layer: '9999', style: '1'}
+            {layer: '9999', style: '1', clusterDistance: 40}
         ],
         menubar: true,
         isMenubarVisible: true,

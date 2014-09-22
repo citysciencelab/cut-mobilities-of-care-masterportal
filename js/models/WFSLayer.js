@@ -25,6 +25,7 @@ define([
          *
          */
         setAttributionLayerSource: function () {
+            // Stelle GetRequest zusammen
             var getrequest = this.get('url')
                 + '?REQUEST=GetFeature'
                 + '&SERVICE=WFS';
@@ -40,31 +41,6 @@ define([
             if (this.get('srsname') && this.get('srsname') !== '') {
                 getrequest += '&SRSNAME=' + this.get('srsname');
             }
-            this.set('source', new ol.source.ServerVector({
-                format: new ol.format.WFS({
-                    featureNS: this.get('featureNS'),
-                    featureType: this.get('featureType')
-                }),
-                loader: function (extent, resolution, projection) {
-                    $.ajax({
-                        url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(getrequest),
-                        async: false,
-                        context: this,
-                        success: function (data, textStatus, jqXHR) {
-                            this.addFeatures(this.readFeatures(data));
-                        },
-                        error: function (data, textStatus, jqXHR) {
-                            console.log(textStatus);
-                        }
-                    });
-                },
-                extractStyles: false,
-                /* experimental in OL3
-                strategy: ol.loadingstrategy.createTile(new ol.tilegrid.XYZ({
-                    maxZoom: 19
-                })),*/
-                projection: proj25832 //'EPSG:25832'
-            }));
 
             // Finde StyleId zu dieser Layer-Id, hole den Style und weise ihn dem Layer zu
             var id = this.get('id');
@@ -74,13 +50,59 @@ define([
                 }
             });
             this.set('styleId', layerstyle.style);
+            this.set('clusterDistance', layerstyle.clusterDistance);
 
+            //Lade Style
             var wfsStyle = _.find(StyleList.models, function (num) {
                 if (num.id == layerstyle.style) {
                     return num;
                 }
             });
-            this.set('style', wfsStyle.attributes.style);
+            var pStyle = wfsStyle.attributes.style;
+
+            // Lade Daten
+            var pServerVector = new ol.source.ServerVector({
+                format: new ol.format.WFS({
+                    featureNS: this.get('featureNS'),
+                    featureType: this.get('featureType')
+                }),
+                loader: function (extent, resolution, projection) {
+                    // im Loader wird der Ajax-Request nicht bei Cluster aufgerufen, daher ausgelagert.
+                },
+                extractStyles: false,
+                /* experimental in OL3
+                strategy: ol.loadingstrategy.createTile(new ol.tilegrid.XYZ({
+                    maxZoom: 19
+                })),*/
+                projection: proj25832 //'EPSG:25832'
+            });
+            $.ajax({
+                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(getrequest),
+                async: false,
+                context: this,
+                success: function (data, textStatus, jqXHR) {
+                    pServerVector.addFeatures(pServerVector.readFeatures(data));
+                },
+                error: function (data, textStatus, jqXHR) {
+                    console.log(textStatus);
+                }
+            });
+
+            // Prüfe Übernehme Symbolisierung
+            if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
+                this.set('source', pServerVector);
+                this.set('style', pStyle);
+            }
+            else {
+                var pCluster = new ol.source.Cluster({
+                    source : pServerVector,
+                    distance : this.get('clusterDistance')
+                });
+                this.set('source', pCluster);
+                this.set('style', pStyle);
+            }
+
+
         },
         /**
          *

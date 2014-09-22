@@ -2,7 +2,7 @@
     {
         "id" : "1",
         "subclass" : "Icon",
-        "src" : "../img/unknown.png",
+        "src" : "../img/krankenhaus.png",
         "width" : "10",
         "height" : "10"
     },
