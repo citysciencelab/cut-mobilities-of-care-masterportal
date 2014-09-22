@@ -15,7 +15,7 @@ define(function () {
         ],
         styleConf: '../style.json',
         layerstyle: [
-            {layer: '9999', style: '1', clusterDistance: 40}
+            {layer: '9999', style: '1', clusterDistance: 30}
         ],
         menubar: true,
         isMenubarVisible: true,

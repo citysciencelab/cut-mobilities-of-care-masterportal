@@ -98,8 +98,22 @@ define([
                     source : pServerVector,
                     distance : this.get('clusterDistance')
                 });
+                styleCache = {};
                 this.set('source', pCluster);
-                this.set('style', pStyle);
+                this.set('style', function (feature, resolution) {
+                    var size = feature.get('features').length;
+                    var style = styleCache[size];
+                    if (!style) {
+                        if (size != '1') {
+                            style = wfsStyle.getClusterSymbol(size);
+                        }
+                        else {
+                            style = pStyle;
+                        }
+                        styleCache[size] = style;
+                    }
+                    return style;
+                });
             }
 
 
