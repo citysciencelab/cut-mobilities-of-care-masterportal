@@ -17,6 +17,16 @@ html, body {
     cursor: pointer;
 }
 
+@media (max-width: 768px) {
+
+}
+
+@media (min-width: 768px) {
+    .navbar, .connav, .navbar-collapse, #navbarRow {
+        max-height: 50px;
+    }
+}
+
 .navbar {
     min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
     background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
