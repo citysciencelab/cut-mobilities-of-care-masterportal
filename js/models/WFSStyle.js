@@ -9,32 +9,42 @@ define([
         defaults: {
             subclass : 'Icon',
             // für Icon
-            src : '../img/unknown.png',
-            width : 10,
-            height : 10,
+            imagesrc : '../img/unknown.png',
+            imagewidth : 10,
+            imageheight : 10,
             // für Circle
             radius : 10,
             fillcolor : [0, 153, 255, 1],
             strokecolor : [0, 0, 0, 1],
             // Für ClusterText
-            clusterfont : 'Verdana',
-            clusterscale : 2,
+            clusterfont : 'Courier',
+            clusterscale : 1,
             clusteroffsetx : 0,
-            clusteroffsety : 2,
-            clusterfillcolor : [255, 0, 0, 1],
-            clusterstrokecolor : [255, 255, 0, 1],
+            clusteroffsety : 0,
+            clusterfillcolor : [255, 255, 255, 1],
+            clusterstrokecolor : [0, 0, 0, 1],
             clusterstrokewidth : 3
+        },
+        returnColor: function (textstring) {
+            if (typeof textstring == 'string') {
+                var pArray = new Array();
+                pArray = textstring.replace('[', '').replace(']', '').replace(/ /g, '').split(',');
+                return [pArray[0], pArray[1], pArray[2], pArray[3]];
+            }
+            else {
+                return textstring;
+            }
         },
         getClusterSymbol : function (anzahl) {
             if (!anzahl == '') {
-                var font = this.get('clusterfont');
-                var color = this.get('clustercolor');
-                var scale = this.get('clusterscale');
-                var offsetX = this.get('clusteroffsetx');
-                var offsetY = this.get('clusteroffsety');
-                var fillcolor = this.get('clusterfillcolor');
-                var strokecolor = this.get('clusterstrokecolor');
-                var strokewidth = this.get('clusterstrokewidth');
+                var font = this.get('clusterfont').toString();
+                var color = this.returnColor(this.get('clustercolor'));
+                var scale = parseInt(this.get('clusterscale'));
+                var offsetX = parseInt(this.get('clusteroffsetx'));
+                var offsetY = parseInt(this.get('clusteroffsety'));
+                var fillcolor = this.returnColor(this.get('clusterfillcolor'));
+                var strokecolor = this.returnColor(this.get('clusterstrokecolor'));
+                var strokewidth = parseInt(this.get('clusterstrokewidth'));
                 var clusterText = new ol.style.Text({
                     text : anzahl.toString(),
                     offsetX : offsetX,
@@ -50,11 +60,12 @@ define([
                         width : strokewidth
                     })
                 });
+                console.log(clusterText);
             }
             if (this.get('subclass') == 'Icon') {
-                var src = this.get('src');
-                var width = this.get('width');
-                var height = this.get('height');
+                var src = this.get('imagesrc');
+                var width = this.get('imagewidth');
+                var height = this.get('imageheight');
                 var imagestyle = new ol.style.Icon({
                     src: src,
                     width: width,
@@ -63,8 +74,8 @@ define([
             }
             else if (this.get('subclass') == 'Circle') {
                 var radius = this.get('radius');
-                var fillcolor = this.get('fillcolor');
-                var strokecolor = this.get('strokecolor');
+                var fillcolor = this.returnColor(this.get('fillcolor'));
+                var strokecolor = this.returnColor(this.get('strokecolor'));
                 var imagestyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({

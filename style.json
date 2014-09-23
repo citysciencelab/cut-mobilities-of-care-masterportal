@@ -2,9 +2,14 @@
     {
         "id" : "1",
         "subclass" : "Icon",
-        "src" : "../img/krankenhaus.png",
-        "width" : "10",
-        "height" : "10"
+        "imagesrc" : "../img/krankenhaus.png",
+        "imagewidth" : "10",
+        "imageheight" : "10",
+        "clusterscale" : "2",
+        "clusteroffsety" : "2",
+        "clusterfillcolor" : "[255, 0, 0, 1]",
+        "clusterstrokecolor" : "[255, 255, 0, 1]",
+        "clusterstrokewidth" : "3"
     },
     {
         "id" : "2",
