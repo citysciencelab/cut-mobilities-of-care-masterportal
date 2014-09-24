@@ -2,8 +2,11 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'openlayers'
-], function (_, Backbone, EventBus, ol) {
+    'openlayers',
+    'proj4'
+], function (_, Backbone, EventBus, ol, proj4) {
+
+    proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
     var CoordPopup = Backbone.Model.extend({
         initialize: function () {
@@ -23,7 +26,7 @@ define([
         setPosition: function (coordinate) {
             this.get('coordOverlay').setPosition(coordinate);
             this.set('coordinateUTM', coordinate);
-            this.set('coordinateGeo', ol.coordinate.toStringHDMS(ol.proj.transform(this.get('coordinateUTM'), 'EPSG:25832', 'EPSG:4326')));
+            this.set('coordinateGeo', ol.coordinate.toStringHDMS(proj4(proj4('EPSG:25832'), proj4('EPSG:4326'), this.get('coordinateUTM'))));
         }
     });
 

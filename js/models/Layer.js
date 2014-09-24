@@ -55,7 +55,7 @@ define([
          *
          */
         setUpTransparence: function (value) {
-            if (this.get('transparence') < 100) {
+            if (this.get('transparence') < 90) {
                 this.set('transparence', this.get('transparence') + value);
             }
         },

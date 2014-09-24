@@ -7,7 +7,6 @@ define([
 
     var ToggleButtonView = Backbone.View.extend({
         id: 'toggleButton',
-//        template: '<span class="glyphicon glyphicon-chevron-up"></span>',
         events: {
             'click': 'toggleNavigation'
         },

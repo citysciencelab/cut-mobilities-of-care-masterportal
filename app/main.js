@@ -7,6 +7,7 @@ require.config({
         backbone: 'http://wscd0096/libs/backbone-1.1.2/backbone.min',
         text: 'http://wscd0096/libs/require-2.1.11/plugins/text-2.0.10/text',
         bootstrap: 'http://wscd0096/libs/bootstrap-3.1.1/js/bootstrap.min',
+        proj4: 'http://wscd0096/libs/proj4-2.2.1/dist/proj4',
         config: 'config',
         eventbus: '../js/EventBus',
         views: '../js/views',
