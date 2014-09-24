@@ -111,18 +111,28 @@ define([
             resolution = this.get('view').getResolution();
             projection = this.get('view').getProjection();
             layersVisible = _.filter(layers, function (element) {
-                // NOTE GFI-Filter Nur WMS und Sichtbar
-                return element.getVisible() === true && element.getProperties().typ === 'WMS';
+                // NOTE GFI-Filter Nur Sichtbar
+                return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                    coordinate, resolution, projection,
-                    {'INFO_FORMAT': 'text/xml'}
-                );
-                gfiParams.push({
-                    url: gfiURL,
-                    name: element.get('name')
-                });
+                if (element.getProperties().typ === 'WMS') {
+                    var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                        coordinate, resolution, projection,
+                        {'INFO_FORMAT': 'text/xml'}
+                    );
+                    gfiParams.push({
+                        typ: 'WMS',
+                        url: gfiURL,
+                        name: element.get('name')
+                    });
+                }
+                else if (element.getProperties().typ === 'WFS') {
+                    gfiParams.push({
+                        typ: 'WFS',
+                        source: element.getSource(),
+                        name: element.get('name')
+                    });
+                }
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
         },

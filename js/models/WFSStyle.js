@@ -12,10 +12,11 @@ define([
             imagesrc : '../img/unknown.png',
             imagewidth : 10,
             imageheight : 10,
+            imagescale : 1,
             // für Circle
-            radius : 10,
-            fillcolor : [0, 153, 255, 1],
-            strokecolor : [0, 0, 0, 1],
+            circleradius : 10,
+            circlefillcolor : [0, 153, 255, 1],
+            circlestrokecolor : [0, 0, 0, 1],
             // Für ClusterText
             clusterfont : 'Courier',
             clusterscale : 1,
@@ -60,22 +61,23 @@ define([
                         width : strokewidth
                     })
                 });
-                console.log(clusterText);
             }
             if (this.get('subclass') == 'Icon') {
                 var src = this.get('imagesrc');
                 var width = this.get('imagewidth');
                 var height = this.get('imageheight');
+                var scale = parseFloat(this.get('imagescale'));
                 var imagestyle = new ol.style.Icon({
                     src: src,
                     width: width,
-                    height: height
+                    height: height,
+                    scale: scale
                 });
             }
             else if (this.get('subclass') == 'Circle') {
-                var radius = this.get('radius');
-                var fillcolor = this.returnColor(this.get('fillcolor'));
-                var strokecolor = this.returnColor(this.get('strokecolor'));
+                var radius = parseInt(this.get('circleradius'));
+                var fillcolor = this.returnColor(this.get('circlefillcolor'));
+                var strokecolor = this.returnColor(this.get('circlestrokecolor'));
                 var imagestyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({

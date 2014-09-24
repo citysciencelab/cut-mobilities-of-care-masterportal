@@ -2,9 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'eventbus',
     'text!templates/GFIPopup.html',
     'models/GFIPopup'
-], function ($, _, Backbone, GFIPopupTemplate, GFIPopup) {
+], function ($, _, Backbone, EventBus, GFIPopupTemplate, GFIPopup) {
 
     var GFIPopupView = Backbone.View.extend({
         model: GFIPopup,
@@ -19,12 +20,13 @@ define([
          */
         initialize: function () {
             this.listenTo(this.model, 'change:coordinate', this.render);
-            this.listenTo(this.model, 'change:gfiCounter', this.render);
+            //this.listenTo(this.model, 'change', this.render);
+            EventBus.on('render', this.render, this);
         },
         /**
          *
          */
-        render: function (evt) {
+        render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
@@ -39,12 +41,14 @@ define([
          */
         renderNext: function () {
             this.model.set('gfiCounter', this.model.get('gfiCounter') + 1);
+            this.render();
         },
         /**
          *
          */
         renderPrevious: function () {
             this.model.set('gfiCounter', this.model.get('gfiCounter') - 1);
+            this.render();
         },
         /**
          *

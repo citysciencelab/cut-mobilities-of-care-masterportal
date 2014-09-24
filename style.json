@@ -2,18 +2,17 @@
     {
         "id" : "1",
         "subclass" : "Icon",
-        "imagesrc" : "../img/krankenhaus.png",
-        "imagewidth" : "10",
-        "imageheight" : "10",
+        "imagesrc" : "../img/krankenhaus.svg",
+        "imagescale" : "0.07",
         "clusterscale" : "2",
         "clusteroffsety" : "2",
         "clusterfillcolor" : "[255, 0, 0, 1]",
-        "clusterstrokecolor" : "[255, 255, 0, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
         "clusterstrokewidth" : "3"
     },
     {
         "id" : "2",
-        "subclass" : "Circle",
+        "subclass" : "Icon",
         "src" : "../img/unknown.png",
         "width" : "10",
         "height" : "10"
