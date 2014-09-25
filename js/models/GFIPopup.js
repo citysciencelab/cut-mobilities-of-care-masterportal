@@ -52,7 +52,7 @@ define([
                     gfiContent = this.setWMSPopupContent(sortedParams[i].url);
                 }
                 else if (sortedParams[i].typ === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1]);
+                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
                 }
                 if (gfiContent && typeof gfiContent == 'object') {
                     pContent.push(gfiContent);
@@ -81,18 +81,31 @@ define([
         /**
          *
          */
-        setWFSPopupContent: function (pSource, pCoordinate) {
-            pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
-            // noch implementieren: sinnvolle Abstandsberechnung um pCoordinate
-            pValues = pFeatures.values_.features[0].values_;
-            var pContentArray = new Array;
-            _.each(pValues, function (value, key, list) {
-                if (typeof value == 'string') {
-                    pContentArray.push([key, value]);
-                }
-            });
-            var pContent = _.object(pContentArray);
-            return pContent;
+        setWFSPopupContent: function (pSource, pCoordinate, pScale) {
+            var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
+            // 5 mm um Klickpunkt
+            var pMaxDist = 0.005 * pScale;
+            var pExtent = pFeatures.values_.features[0].getGeometry().getExtent();
+            var pX = pCoordinate[0];
+            var pY = pCoordinate[1];
+            var pMinX = pExtent[0] - pMaxDist;
+            var pMaxX = pExtent[2] + pMaxDist;
+            var pMinY = pExtent[1] - pMaxDist;
+            var pMaxY = pExtent[3] + pMaxDist;
+            if (pX < pMinX || pX > pMaxX || pY < pMinY || pY > pMaxY) {
+                return;
+            }
+            else {
+                pValues = pFeatures.values_.features[0].values_;
+                var pContentArray = new Array;
+                _.each(pValues, function (value, key, list) {
+                    if (typeof value == 'string') {
+                        pContentArray.push([key, value]);
+                    }
+                });
+                var pContent = _.object(pContentArray);
+                return pContent;
+            }
         },
 
         setWMSPopupContent: function (gfiURL) {

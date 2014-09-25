@@ -59,6 +59,15 @@ define([
                 controls: []
             }));
         },
+        getCurrentScale: function () // wird in GFI Popup verwendet.
+        {
+            var resolution = this.get('view').getResolution();
+            var units = this.get('map').getView().getProjection().getUnits();
+            var dpi = 25.4 / 0.28;
+            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var scale = resolution * mpu * 39.37 * dpi;
+            return scale;
+        },
         activateClick: function (tool) {
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
@@ -110,6 +119,7 @@ define([
             layers = this.get('map').getLayers().getArray();
             resolution = this.get('view').getResolution();
             projection = this.get('view').getProjection();
+            scale = this.getCurrentScale();
             layersVisible = _.filter(layers, function (element) {
                 // NOTE GFI-Filter Nur Sichtbar
                 return element.getVisible() === true;
@@ -122,6 +132,7 @@ define([
                     );
                     gfiParams.push({
                         typ: 'WMS',
+                        scale: scale,
                         url: gfiURL,
                         name: element.get('name')
                     });
@@ -129,6 +140,7 @@ define([
                 else if (element.getProperties().typ === 'WFS') {
                     gfiParams.push({
                         typ: 'WFS',
+                        scale: scale,
                         source: element.getSource(),
                         name: element.get('name')
                     });
