@@ -44,17 +44,17 @@ define([
 
             // Finde StyleId zu dieser Layer-Id, hole den Style und weise ihn dem Layer zu
             var id = this.get('id');
-            var layerstyle = _.find(Config.layerstyle, function(num) {
+            var wfsconfig = _.find(Config.wfsconfig, function(num) {
                 if (num.layer == id) {
                     return num;
                 }
             });
-            this.set('styleId', layerstyle.style);
-            this.set('clusterDistance', layerstyle.clusterDistance);
+            this.set('styleId', wfsconfig.style);
+            this.set('clusterDistance', wfsconfig.clusterDistance);
 
             //Lade Style
             var wfsStyle = _.find(StyleList.models, function (num) {
-                if (num.id == layerstyle.style) {
+                if (num.id == wfsconfig.style) {
                     return num;
                 }
             });

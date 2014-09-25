@@ -14,7 +14,7 @@ define(function () {
             '9999'
         ],
         styleConf: '../style.json',
-        layerstyle: [
+        wfsconfig: [
             {layer: '9999', style: '1', clusterDistance: 30}
         ],
         menubar: true,
