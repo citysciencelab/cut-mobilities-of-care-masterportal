@@ -11,13 +11,16 @@ define([
             searchString: '',
             streetName: '',
             streetNames: [],
+            wfsFeatures: [],
             houseNumber: '',
             houseNumbers: [],
             affix: '',
             coordinate: [],
-            gazetteerURL: Config.gazetteerURL
+            gazetteerURL: Config.gazetteerURL,
+            WFSLayersToObserve: new Array()
         },
         initialize: function () {
+            EventBus.on('LayerVisibilityChangedForSearchbar', this.controlObservalbe, this);
             this.listenTo(this, 'change:coordinate', this.zoomToCoordinate);
         },
         setSearchString: function (value) {
@@ -33,6 +36,14 @@ define([
         /**
          *
          */
+        controlObservalbe: function (changedLayer) {
+            var pObserveable = this.get('WFSLayersToObserve');
+            pObserveable = _.reject(pObserveable, function (element) {return element.cid == changedLayer.cid});
+            if (changedLayer.get('typ') == 'WFS' && changedLayer.get('searchField') && changedLayer.get('visibility') == true){
+                pObserveable.push(changedLayer);
+            }
+            this.set('WFSLayersToObserve', pObserveable);
+        },
         checkSearchString: function (value) {
             this.setDefaults();
             var houseNumberPos, splitString = [], street = '';
@@ -65,7 +76,12 @@ define([
 
             // ***** Adresssuche oder AutoComplete ***** //
             if (value === 'search') {
-                if (this.get('affix') !== '') {
+                var coordinate = this.searchWFSFeature();
+                if (coordinate.length == 2) {
+                    this.set('coordinate', coordinate);
+                    $('#autoCompleteBody').css("display", "none");
+                }
+                else if (this.get('affix') !== '') {
                     this.searchAddressWithAffix();
                 }
                 else if (this.get('houseNumber') !== '') {
@@ -77,9 +93,17 @@ define([
             }
             else if (value === 'complete' && this.get('searchString').length > 2) {
                 if (this.get('houseNumber') === '') {
+                    this.searchWFSLayer();
                     this.searchStreets();
                     if (this.get('streetNames').length === 1 && splitString[splitString.length - 1] === '') {
+                        $('#autoCompleteBody').css("display", "none");
                         this.searchHouseNumbers();
+                    }
+                    else if (this.get('streetNames').length > 1 || this.get('wfsFeatures').length > 1) {
+                        $('#autoCompleteBody').css("display", "block");
+                    }
+                    else {
+                        $('#autoCompleteBody').css("display", "none");
                     }
                 }
                 else {
@@ -89,6 +113,62 @@ define([
             else if (this.get('searchString').length <= 2){
                 $('#autoCompleteBody').css("display", "none");
             }
+        },
+        searchWFSFeature: function () {
+            var coordinate = [];
+            var pSearchString = this.get('searchString');
+            var pObservable = this.get('WFSLayersToObserve');
+            _.each(pObservable, function (element, index, list) {
+                var pSearchFieldName = element.get('searchField');
+                var pFeatures = element.get('source').getFeatures();
+                _.each(pFeatures, function(feature, index, list) {
+                    if (coordinate.length != 2) {
+                        if (feature.values_.features) {
+                            if (feature.values_.features[0].get(pSearchFieldName).indexOf(pSearchString) > -1 ) {
+                                console.log(feature);
+                                var pExtent = feature.getGeometry().getExtent();
+                                coordinate.push(pExtent[0] + (pExtent[2] - pExtent[0]));
+                                coordinate.push(pExtent[1] + (pExtent[3] - pExtent[1]));
+                            }
+                        }
+                        else {
+                            if (feature.get(pSearchFieldName).indexOf(pSearchString) > -1 ) {
+                                var pExtent = feature.getGeometry().getExtent();
+                                coordinate.push(pExtent[0] + (pExtent[2] - pExtent[0]));
+                                coordinate.push(pExtent[1] + (pExtent[3] - pExtent[1]));
+                            }
+                        }
+                    }
+                });
+            });
+            console.log(coordinate);
+            return coordinate;
+        },
+        searchWFSLayer: function () {
+            var pObserveable = this.get('WFSLayersToObserve');
+            var pSearchString = this.get('searchString');
+            var pList = [];
+            _.each(pObserveable, function (element, index, list) {
+                var pSearchFieldName = element.get('searchField');
+                var pFeatures = element.get('source').getFeatures();
+                if (pFeatures.length == 0) {
+                    console.log('no Features');
+                }
+                _.each(pFeatures, function(feature, index, list) {
+                    if (feature.values_.features) {
+                        if (feature.values_.features[0].get(pSearchFieldName).toUpperCase().indexOf(pSearchString.toUpperCase()) > -1 ) {
+                            pList.push(feature.values_.features[0].get(pSearchFieldName));
+                        }
+                    }
+                    else {
+                        if (feature.get(pSearchFieldName).toUpperCase().indexOf(pSearchString.toUpperCase()) > -1 ) {
+                            pList.push(feature.get(pSearchFieldName));
+                        }
+                    }
+                });
+            });
+            pList.sort();
+            this.set('wfsFeatures', pList);
         },
         searchStreets: function () {
             var requestURL, streetNames = [];
@@ -115,12 +195,6 @@ define([
                                 streetNames.push(data.getElementsByTagName('strassenname')[index].textContent);
                             }, this);
                             this.set('streetNames', streetNames);
-                        }
-                        if (streetNames.length > 1) {
-                            $('#autoCompleteBody').css("display", "block");
-                        }
-                        else {
-                            $('#autoCompleteBody').css("display", "none");
                         }
                     }
                     catch (error) {

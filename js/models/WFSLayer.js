@@ -42,7 +42,7 @@ define([
                 getrequest += '&SRSNAME=' + this.get('srsname');
             }
 
-            // Finde StyleId zu dieser Layer-Id, hole den Style und weise ihn dem Layer zu
+            // Finde wfsconfig zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
             var id = this.get('id');
             var wfsconfig = _.find(Config.wfsconfig, function(num) {
                 if (num.layer == id) {
@@ -51,8 +51,9 @@ define([
             });
             this.set('styleId', wfsconfig.style);
             this.set('clusterDistance', wfsconfig.clusterDistance);
+            this.set('searchField', wfsconfig.searchField);
 
-            //Lade Style
+            // Lade Style
             var wfsStyle = _.find(StyleList.models, function (num) {
                 if (num.id == wfsconfig.style) {
                     return num;
@@ -84,7 +85,7 @@ define([
                     pServerVector.addFeatures(pServerVector.readFeatures(data));
                 },
                 error: function (data, textStatus, jqXHR) {
-                    console.log(textStatus);
+                    console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
                 }
             });
 
@@ -115,8 +116,6 @@ define([
                     return style;
                 });
             }
-
-
         },
         /**
          *
@@ -130,6 +129,5 @@ define([
             }));
         }
     });
-
     return WFSLayer;
 });

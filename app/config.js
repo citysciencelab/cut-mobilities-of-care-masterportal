@@ -15,7 +15,7 @@ define(function () {
         ],
         styleConf: '../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 30}
+            {layer: '9999', style: '1', clusterDistance: 30, searchField: 'name'}
         ],
         menubar: true,
         isMenubarVisible: true,

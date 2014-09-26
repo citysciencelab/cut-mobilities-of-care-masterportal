@@ -18,12 +18,14 @@ define([
             'submit form': 'checkStringForSearch', // Entertaste in der Searchbar
             'keyup input': 'checkStringForComplete',
             'click .streets': 'searchHouseNumbers',
-            'click .numbers': 'setHouseNumber'
+            'click .numbers': 'setHouseNumber',
+            'click .wfsfeatures': 'setWFSFeature'
         },
         initialize: function () {
             this.render();
             this.listenTo(this.model, 'change:streetNames', this.showStreetNames);
             this.listenTo(this.model, 'change:houseNumbers', this.showHouseNumbers);
+            this.listenTo(this.model, 'change:wfsFeatures', this.showStreetNames);
 
             $(window).resize($.proxy(function () {
                 this.render();
@@ -62,6 +64,11 @@ define([
         setHouseNumber: function (evt) {
             var value = evt.target.textContent;
             $('#searchInput').val(this.model.get('streetName') + ' ' + value).focus();
+            this.checkStringForSearch();
+        },
+        setWFSFeature: function (evt) {
+            var value = evt.target.textContent;
+            $('#searchInput').val(value).focus();
             this.checkStringForSearch();
         }
     });

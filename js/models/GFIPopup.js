@@ -2,9 +2,8 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'openlayers',
-    'collections/LayerList'
-], function (_, Backbone, EventBus, ol, wfsLayer) {
+    'openlayers'
+], function (_, Backbone, EventBus, ol) {
 
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -60,12 +59,12 @@ define([
                     if (sortedParams[i].url) {
                         pURLs.push(sortedParams[i].url);
                     }
-                    else {
+                    else if (sortedParams[i].source.source_) {
                         pURLs.push(sortedParams[i].source.source_.format.featureType_);
                     }
-                }
-                else {
-                    console.log("keine Infos von " + sortedParams[i].name);
+                    else if (sortedParams[i].source){
+                        pURLs.push(sortedParams[i].source.format.featureType_);
+                    }
                 }
             }
             if (pContent.length > 0) {
@@ -85,7 +84,7 @@ define([
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
             // 5 mm um Klickpunkt
             var pMaxDist = 0.005 * pScale;
-            var pExtent = pFeatures.values_.features[0].getGeometry().getExtent();
+            var pExtent = pFeatures.getGeometry().getExtent();
             var pX = pCoordinate[0];
             var pY = pCoordinate[1];
             var pMinX = pExtent[0] - pMaxDist;
@@ -96,7 +95,12 @@ define([
                 return;
             }
             else {
-                pValues = pFeatures.values_.features[0].values_;
+                if (pFeatures.getProperties().features) {
+                    pValues = pFeatures.getProperties().features[0].getProperties();
+                }
+                else {
+                    pValues = pFeatures.getProperties();
+                }
                 var pContentArray = new Array;
                 _.each(pValues, function (value, key, list) {
                     if (typeof value == 'string') {

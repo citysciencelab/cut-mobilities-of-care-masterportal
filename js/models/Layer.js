@@ -3,7 +3,8 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config'
+    'config',
+    'views/searchbarview'
 ], function (_, Backbone, ol, EventBus, Config) {
 
     /**
@@ -49,7 +50,7 @@ define([
             else {
                 this.set({'visibility': true});
             }
-            EventBus.trigger('checkVisibilityByFolder');
+            //EventBus.trigger('checkVisibilityByFolder');
         },
         /**
          *
@@ -80,6 +81,7 @@ define([
          */
         setVisibility: function () {
             this.get('layer').setVisible(this.get('visibility'));
+            EventBus.trigger('LayerVisibilityChangedForSearchbar', this);
         },
         /**
          *
@@ -93,6 +95,5 @@ define([
             }
         }
     });
-
     return Layer;
 });
