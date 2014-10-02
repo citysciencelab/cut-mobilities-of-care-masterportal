@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!templates/Tools.html',
-    'models/Tools'
-], function ($, _, Backbone, ToolsTemplate, Tools) {
+    'models/Tools',
+    'eventbus'
+], function ($, _, Backbone, ToolsTemplate, Tools, EventBus) {
 
     var ToolsView = Backbone.View.extend({
         model: Tools,
@@ -17,7 +18,8 @@ define([
         events: {
             'click #coordinateMenu': 'activateCoordinate',
             'click #gfiMenu': 'activateGFI',
-            'click #measureMenu': 'activateMeasure'
+            'click #measureMenu': 'activateMeasure',
+            'click #printMenu': 'activatePrint'
         },
         activateCoordinate: function () {
             this.model.activateCoordinate();
@@ -27,6 +29,9 @@ define([
         },
         activateMeasure: function () {
             this.model.activateMeasure();
+        },
+        activatePrint: function () {
+            EventBus.trigger('togglePrintWin');
         },
         render: function () {
             var attr = this.model.toJSON();

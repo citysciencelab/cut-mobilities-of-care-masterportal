@@ -3,8 +3,9 @@ define([
     'backbone',
     'models/wmslayer',
     'models/wfslayer',
-    'config'
-], function (_, Backbone, WMSLayer, WFSLayer, Config) {
+    'config',
+    'eventbus'
+], function (_, Backbone, WMSLayer, WFSLayer, Config, EventBus) {
 
     var LayerList = Backbone.Collection.extend({
         url: Config.layerConf,
@@ -28,6 +29,8 @@ define([
             });
         },
         initialize: function () {
+            EventBus.on('getLayersForPrint', this.printLayer, this);
+
             this.fetch({
                 cache: false,
                 async: false,
@@ -38,6 +41,16 @@ define([
                     //console.log(collection);
                 }
             });
+        },
+        /**
+         * Gibt alle Sichtbaren Layer zurück.
+         *
+         */
+        getVisibleLayer: function () {
+            return this.where({visibility: true});
+        },
+        printLayer: function () {
+            EventBus.trigger('sendLayersForPrint', this.getVisibleLayer());
         }
     });
 

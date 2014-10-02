@@ -88,6 +88,10 @@ html, body {
     border-bottom: 1px solid #ddd !important;
 }
 
+.form-group:last-child {
+    margin-bottom: 0px;
+}
+
 .popover {
     max-width: none !important;
 }

@@ -57,6 +57,11 @@ require([
                             new MeasurePopupView();
                         });
                     }
+                    if (Config.tools.print === true) {
+                        require(['views/PrintView'], function (PrintView) {
+                            new PrintView();
+                        });
+                    }
                 });
             }
             if (Config.menu.searchBar === true) {
