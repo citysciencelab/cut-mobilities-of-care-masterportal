@@ -2,16 +2,20 @@
 define(function () {
 
     var config = {
-       layerConf: '../diensteapiFHHNET.json',
-       layerIDs: [
+        view: {
+            center: [565874, 5934140], // Rathausmarkt
+            resolution: 15.874991427504629, // 1:60.000
+            scale: 60000 // für print.js benötigt
+        },
+        layerConf: '../diensteapiFHHNET.json',
+        layerIDs: [
             '453',
             '8',
             '9999'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '453',
-            '9999'
+            '453'
         ],
         styleConf: '../style.json',
         wfsconfig: [

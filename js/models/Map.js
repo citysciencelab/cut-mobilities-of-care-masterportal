@@ -4,11 +4,12 @@ define([
     'openlayers',
     'collections/LayerList',
     'models/MeasurePopup',
+    'config',
     'eventbus'
-], function (_, Backbone, ol, LayerList, MeasurePopup, EventBus) {
+], function (_, Backbone, ol, LayerList, MeasurePopup, Config, EventBus) {
 
-    var DOTS_PER_INCH = $('#testdiv').outerWidth();
-    $('#testdiv').remove();
+    var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
+    $('#dpidiv').remove();
 //    var POINTS_PER_INCH = 72; //PostScript points 1/72"  --> = dpi nicht ppi
     var MM_PER_INCHES = 25.4;
 
@@ -45,9 +46,11 @@ define([
             this.set('view', new ol.View({
                 projection: this.get('projection'),
                 // NOTE über config steuern
-                center: [565874, 5934140],
+//                center: [565874, 5934140],
+                center: Config.view.center,
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
-                resolution: 26.458319045841044,
+                resolution: Config.view.resolution,
+//                resolution: 26.458319045841044,
                 resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
             }));
 
@@ -62,6 +65,7 @@ define([
 
             // View listener
             this.get('view').on('change:resolution', function () {
+                console.log(this.getCurrentScale());
                 EventBus.trigger('currentMapScale', Math.round(this.getCurrentScale()));
             },this);
             this.get('view').on('change:center', function () {

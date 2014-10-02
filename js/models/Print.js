@@ -2,8 +2,9 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'openlayers'
-], function (_, Backbone, EventBus, ol) {
+    'openlayers',
+    'config'
+], function (_, Backbone, EventBus, ol, Config) {
 
     /**
      *
@@ -12,8 +13,8 @@ define([
         url: 'http://wscd0096/cgi-bin/proxy.cgi?url=http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
         initialize: function () {
             // NOTE über config steuern
-            this.set('currentMapScale', 100000);
-            this.set('currentMapCenter', [565874, 5934140]);
+            this.set('currentMapScale', Config.view.scale);
+            this.set('currentMapCenter', Config.view.center);
 
             // get print config
             this.fetch({
