@@ -45,12 +45,9 @@ define([
 
             this.set('view', new ol.View({
                 projection: this.get('projection'),
-                // NOTE über config steuern
-//                center: [565874, 5934140],
                 center: Config.view.center,
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
                 resolution: Config.view.resolution,
-//                resolution: 26.458319045841044,
                 resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
             }));
 
@@ -65,7 +62,6 @@ define([
 
             // View listener
             this.get('view').on('change:resolution', function () {
-                console.log(this.getCurrentScale());
                 EventBus.trigger('currentMapScale', Math.round(this.getCurrentScale()));
             },this);
             this.get('view').on('change:center', function () {
@@ -179,8 +175,8 @@ define([
         calculatePageBoundsPixels: function () {
             var s = $('#scaleField').val();
             var size = $('#layoutField').val().split(',');
-            var width = parseInt(size[0]);
-            var height = parseInt(size[1]);
+            var width = parseInt(size[0], 10);
+            var height = parseInt(size[1], 10);
             var view = this.get('map').getView();
             var resolution = view.getResolution();
             var w = width / DOTS_PER_INCH * MM_PER_INCHES / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO;
@@ -205,7 +201,6 @@ define([
             var height = size[1] * ol.has.DEVICE_PIXEL_RATIO;
             var width = size[0] * ol.has.DEVICE_PIXEL_RATIO;
             var minx, miny, maxx, maxy;
-//            var printPageRectangle = this.get('printPageRectangle');
             var printPageRectangle = this.calculatePageBoundsPixels();
             minx = printPageRectangle[0], miny = printPageRectangle[1],
             maxx = printPageRectangle[2], maxy = printPageRectangle[3];

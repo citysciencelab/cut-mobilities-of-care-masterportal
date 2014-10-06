@@ -11,6 +11,8 @@ define(function () {
         layerIDs: [
             '453',
             '8',
+            '1347',
+            '1346',
             '9999'
         ],
         // Layer die Initial sichtbar sein sollen
@@ -38,7 +40,9 @@ define(function () {
             print: true,
             coord: true,
             active: 'gfi'
-        }
+        },
+        printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
+        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
     }
 
     return config;

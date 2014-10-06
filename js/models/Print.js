@@ -10,7 +10,8 @@ define([
      *
      */
     var Print = Backbone.Model.extend({
-        url: 'http://wscd0096/cgi-bin/proxy.cgi?url=http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
+//        url: 'http://wscd0096/cgi-bin/proxy.cgi?url=http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
+        url: Config.proxyURL + "?url=" + Config.printURL,
         initialize: function () {
             // NOTE über config steuern
             this.set('currentMapScale', Config.view.scale);
@@ -99,7 +100,8 @@ define([
             };
             var jsonSpec = JSON.stringify(spec);
             $.ajax({
-                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + this.get('createURL'),
+//                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + this.get('createURL'),
+                url: Config.proxyURL + "?url=" + this.get("createURL"),
                 type: 'POST',
                 data: jsonSpec,
                 headers: {
