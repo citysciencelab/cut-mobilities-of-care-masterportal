@@ -104,7 +104,13 @@ define([
                 var pContentArray = new Array;
                 _.each(pValues, function (value, key, list) {
                     if (typeof value == 'string') {
-                        pContentArray.push([key, value]);
+                        pKey = key.replace('_', ' ');
+                        pKeyArray = pKey.split(' ');
+                        for (var i=0; i<pKeyArray.length; i++) {
+                            pKeyArray[i] = pKeyArray[i].substring(0, 1).toUpperCase() + pKeyArray[i].substring(1);
+                        }
+                        pKey = pKeyArray.join(' ');
+                        pContentArray.push([pKey, value]);
                     }
                 });
                 var pContent = _.object(pContentArray);
