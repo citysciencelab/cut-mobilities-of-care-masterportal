@@ -1,5 +1,5 @@
 FEATURES
-#1	Suchfeld: (bisher Adressen) erweitern um weitere WFS-Suchen (z.B. nach Krankenhäusern, B-Plänen); ideal mit config-Optionen wie [WFS-URL, search_field, display_field, geom_field] o.Ä.) und nach WFS differenzierte Ergebnisdarstellung
+#1	Suchfeld: (bisher Adressen) erweitern um weitere WFS-Suchen (z.B. nach Krankenhäusern, B-Plänen); ideal mit config-Optionen wie [WFS-URL, search_field, display_field, geom_field] o.Ä.) und nach WFS differenzierte Ergebnisdarstellung, update nach termin am 8.10.: vorschläge und suche differenzieren: vorschläge: die ersten 5 'wie google' gemischt von allen wfs, ergebnisse auf enter, ergebnisse: kategorisierte liste aller ergebnisse; welche kategorie aufgeklappt, ist konfigurierbar --> SD
 #2	Suchfeld: bleibt mobil zentral oben in Menubar sichtbar 
     --> erledigt (sd)
 #3	Menubar: mobil: Icons (an/aus, auf/zu, ..) reagieren auch auf iPhone flüssig
@@ -15,7 +15,10 @@ FEATURES
 #10 Tool: 'In meiner Nähe' auf Vektorlayern
 #11 featureInfo: mobil: div scrollbar, wenn zu lang
 #12 parametrierter Aufruf mit featureID eines WFS
-#13 featureInfo für WFS 
+#13 featureInfo für WFS --> MBi, erledigt
+#14	gfi: 'blank' statt _, erster Buchstabe groß bei allen Worten --> MBi
+#15: gfiConfig für API definieren und im gfi-Model umsetzen --> SD
+#16: gfi: vor/zurück nach oben / Titelzeile nicht scrollen --> SD
 
 
 BUGS
@@ -23,7 +26,7 @@ BUGS
     --> erledigt (sd)
     
 LAYER.JSON
-#1  für WFS: layers wird zu featureType, ns-prefix entfernen, featureTypeNS aus WFS-DescribeFeatureType auslesen
+#1  für WFS: layers wird zu featureType, ns-prefix entfernen (app:krankenhaeuser wird zu krankenhaeuser), featureTypeNS aus WFS-DescribeFeatureType auslesen 
 
 SONST
 #1  check Einbindung ESRI-WFS --> michael
