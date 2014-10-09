@@ -13,7 +13,7 @@ FEATURES
 #8  Legende
 #9  Tool: Standorterkennung
 #10 Tool: 'In meiner Nähe' auf Vektorlayern
-#11 featureInfo: mobil: div scrollbar, wenn zu lang
+#11 featureInfo: mobil: div scrollbar, wenn zu lang --> erledigt
 #12 parametrierter Aufruf mit featureID eines WFS
 #13 featureInfo für WFS --> MBi, erledigt
 #14	gfi: 'blank' statt _, erster Buchstabe groß bei allen Worten --> MBi
