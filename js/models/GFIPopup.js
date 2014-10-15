@@ -24,8 +24,8 @@ define([
          */
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
-            EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener ist in map.js
-            EventBus.on('setGFIParams', this.setGFIParams, this); // wird in map.js ausgelöst
+            EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
+            EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
         },
         /**
          * Vernichtet das Popup.
@@ -48,10 +48,10 @@ define([
             var pContent = [], pTitles = [], pURLs = [];
             for (i=0; i < sortedParams.length; i++) {
                 if (sortedParams[i].typ === "WMS") {
-                    gfiContent = this.setWMSPopupContent(sortedParams[i].url);
+                    gfiContent = this.setWMSPopupContent(sortedParams[i]);
                 }
                 else if (sortedParams[i].typ === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
+                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
                 }
                 if (gfiContent && typeof gfiContent == 'object') {
                     pContent.push(gfiContent);
@@ -68,19 +68,18 @@ define([
                 }
             }
             if (pContent.length > 0) {
-                //this.set('coordinate', params[1]);
                 this.set('gfiURLs', pURLs);
                 this.get('gfiOverlay').setPosition(params[1]);
                 this.set('gfiContent', pContent);
                 this.set('gfiTitles', pTitles);
                 this.set('gfiCounter', pContent.length);
-                EventBus.trigger('render');
+                this.set('coordinate', params[1]);
             }
         },
         /**
          *
          */
-        setWFSPopupContent: function (pSource, pCoordinate, pScale) {
+        setWFSPopupContent: function (pSource, pCoordinate, pScale, attributes) {
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
             // 5 mm um Klickpunkt
             var pMaxDist = 0.005 * pScale;
@@ -104,7 +103,9 @@ define([
                 var pContentArray = new Array;
                 _.each(pValues, function (value, key, list) {
                     if (typeof value == 'string') {
-                        pContentArray.push([key, value]);
+                        if (_.has(attributes, key)) {
+                            pContentArray.push([attributes[key], value]);
+                        }
                     }
                 });
                 var pContent = _.object(pContentArray);
@@ -112,58 +113,60 @@ define([
             }
         },
 
-        setWMSPopupContent: function (gfiURL) {
-            var pgfi={};
-            $.ajax({
-                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURL),
-                async: false,
-                type: 'GET',
-                context: this,  // das model
-                success: function (data, textStatus, jqXHR) {
-                    var attr, nodeList, gfi = {};
-                    try {
-                        // ArcGIS
-                        if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                            attr = data.getElementsByTagName('FIELDS')[0].attributes;
-                            _.each(attr, function (element) {
-                                if (element.localName.search('SHP') === -1) {
-                                    gfi[element.localName] = element.textContent.trim();
-                                }
-                            });
-                            pgfi=gfi;
+        setWMSPopupContent: function (params) {
+            if(params.attributes !== undefined) {
+                var pgfi;
+                $.ajax({
+                    url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(params.url),
+                    async: false,
+                    type: 'GET',
+                    context: this,  // das model
+                    success: function (data, textStatus, jqXHR) {
+                        var attr, nodeList, gfi = {};
+                        try {
+                            // ArcGIS
+                            if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
+                                attr = data.getElementsByTagName('FIELDS')[0].attributes;
+                                _.each(attr, function (element) {
+                                    if (element.localName.search('SHP') === -1 && _.has(params.attributes, element.localName) === true) {
+                                        gfi[params.attributes[element.localName]] = element.textContent.trim();
+                                    }
+                                });
+                                pgfi=gfi;
+                            }
+                            // deegree
+                            else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
+                                nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[params.attributes[element.localName]] = element.textContent.trim();
+                                });
+                                pgfi=gfi;
+                            }
+                            // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
+                            else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
+                                nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[params.attributes[element.localName]] = element.textContent.trim();
+                                });
+                                pgfi=gfi;
+                            }
                         }
-                        // deegree
-                        else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
-                            nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
-                            attr = _.filter(nodeList, function (element) {
-                                return element.nodeType === 1;
-                            });
-                            _.each(attr, function (element) {
-                                gfi[element.localName] = element.textContent.trim();
-                            });
-                            pgfi=gfi;
+                        catch (error) {
+                            console.log(error);
                         }
-                        // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
-                        else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
-                            nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
-                            attr = _.filter(nodeList, function (element) {
-                                return element.nodeType === 1;
-                            });
-                            _.each(attr, function (element) {
-                                gfi[element.localName] = element.textContent.trim();
-                            });
-                            pgfi=gfi;
-                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //console.log('Ajax-Request ' + textStatus);
                     }
-                    catch (error) {
-                        console.log(error);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    //console.log('Ajax-Request ' + textStatus);
-                }
-            });
-            return pgfi;
+                });
+                return pgfi;
+            }
         }
     });
 

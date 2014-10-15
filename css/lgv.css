@@ -13,7 +13,7 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-right, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh {
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh {
     cursor: pointer;
 }
 
@@ -90,21 +90,6 @@ html, body {
 
 .form-group:last-child {
     margin-bottom: 0px;
-}
-
-.popover {
-    max-width: none !important;
-}
-
-.popover-content {
-    padding: 2px 10px !important;
-    max-height: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.table {
-    margin-bottom: 4px !important;
 }
 
 #measurePopup {

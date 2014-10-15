@@ -49,7 +49,8 @@ define([
             this.set('layer', new ol.layer.Tile({
                 source: this.get('source'),
                 name: this.get('name'),
-                typ: this.get('typ')
+                typ: this.get('typ'),
+                gfiAttributes: this.get('gfiAttributes')
             }));
         }
     });

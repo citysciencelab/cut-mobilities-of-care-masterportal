@@ -13,11 +13,12 @@ define(function () {
             '8',
             '1347',
             '1346',
-            '9999'
+            '9999',
+            '1117'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '453'
+            '9999'
         ],
         styleConf: '../style.json',
         wfsconfig: [
