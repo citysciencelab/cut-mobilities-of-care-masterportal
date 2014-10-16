@@ -96,3 +96,22 @@ html, body {
     position: absolute;
     top: 70px;
 }
+
+/******* Ajax Loader *******/
+#loader
+{
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 2000;
+}
+
+#loader img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+}

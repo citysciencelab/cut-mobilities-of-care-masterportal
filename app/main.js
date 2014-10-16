@@ -30,7 +30,8 @@ require.config({
 
 require([
     'config',
-    'models/Map'
+    'models/Map',
+    'jquery'
 ], function (Config, Map) {
     new Map();
 
@@ -71,4 +72,7 @@ require([
             }
         });
     }
+    $(function () {
+        $('#loader').hide();
+    });
 });
