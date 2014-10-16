@@ -109,8 +109,10 @@ define([
                 },
                 success: function (data) {
                     window.open(data.getURL);
+                    $('#loader').hide();
                 },
                 error: function (err) {
+                    $('#loader').hide();
 //                    console.log(err);
                 }
             });

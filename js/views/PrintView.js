@@ -27,6 +27,7 @@ define([
             this.model.updatePrintPage();
         },
         getLayersForPrint: function () {
+            $('#loader').show();
             this.model.getLayersForPrint();
         },
         render: function () {
