@@ -10,27 +10,23 @@ define([
     var TreeFilterView = Backbone.View.extend({
         model: TreeFilter,
         id: 'treeFilterWin',
-        className: 'panel panel-treeFilter',
+        className: 'panel panel-master',
         template: _.template(TreeFilterTemplate),
         initialize: function () {
             this.render();
             EventBus.on('toggleFilterTreeWin', this.toggleFilterTreeWin, this);
-            this.listenTo(this.model, 'change:showContent', this.render);
         },
         events: {
-            'click .glyphicon-chevron-up': 'hideContent',
-            'click .glyphicon-chevron-down': 'showContent',
+            'click .glyphicon-chevron-up, .glyphicon-chevron-down': 'toggleContent',
             'click .close': 'toggleFilterTreeWin'
         },
         render: function () {
             var attr = this.model.toJSON();
              $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
-        hideContent: function () {
-            this.model.set('showContent', false);
-        },
-        showContent: function () {
-            this.model.set('showContent', true);
+        toggleContent: function () {
+            $('#treeFilterWin > .panel-body').toggle('slow');
+            $('#treeFilterWin > .panel-heading > .toggleChevron').toggleClass('glyphicon-chevron-up glyphicon-chevron-down');
         },
         toggleFilterTreeWin: function () {
             $('#treeFilterWin').toggle();
