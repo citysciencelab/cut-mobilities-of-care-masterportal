@@ -22,6 +22,7 @@ define([
                     // NOTE Format für Layer standardmäßig auf 'image/png', da nicht immer in der json vorhanden
                     'FORMAT': 'image/png',
                     'VERSION': this.get('version')
+//                    'SLD' : 'http://wscd0096/master_sd/xml/filterSLD.xml'
                 },
                 tileGrid: new ol.tilegrid.TileGrid({
                     resolutions: [

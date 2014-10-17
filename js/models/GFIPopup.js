@@ -43,38 +43,40 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         setGFIParams: function (params) {
-            // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
-            var sortedParams = _.sortBy(params[0], 'name');
-            var pContent = [], pTitles = [], pURLs = [];
-            for (i=0; i < sortedParams.length; i++) {
-                if (sortedParams[i].typ === "WMS") {
-                    gfiContent = this.setWMSPopupContent(sortedParams[i]);
-                }
-                else if (sortedParams[i].typ === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
-                }
-                if (gfiContent && typeof gfiContent == 'object') {
-                    pContent.push(gfiContent);
-                    pTitles.push(sortedParams[i].name);
-                    if (sortedParams[i].url) {
-                        pURLs.push(sortedParams[i].url);
+             if(params[0].attributes !== false) {
+                // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
+                var sortedParams = _.sortBy(params[0], 'name');
+                var pContent = [], pTitles = [], pURLs = [];
+                for (i=0; i < sortedParams.length; i++) {
+                    if (sortedParams[i].typ === "WMS") {
+                        gfiContent = this.setWMSPopupContent(sortedParams[i]);
                     }
-                    else if (sortedParams[i].source.source_) {
-                        pURLs.push(sortedParams[i].source.source_.format.featureType_);
+                    else if (sortedParams[i].typ === "WFS") {
+                        gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
                     }
-                    else if (sortedParams[i].source){
-                        pURLs.push(sortedParams[i].source.format.featureType_);
+                    if (gfiContent && typeof gfiContent == 'object') {
+                        pContent.push(gfiContent);
+                        pTitles.push(sortedParams[i].name);
+                        if (sortedParams[i].url) {
+                            pURLs.push(sortedParams[i].url);
+                        }
+                        else if (sortedParams[i].source.source_) {
+                            pURLs.push(sortedParams[i].source.source_.format.featureType_);
+                        }
+                        else if (sortedParams[i].source){
+                            pURLs.push(sortedParams[i].source.format.featureType_);
+                        }
                     }
                 }
-            }
-            if (pContent.length > 0) {
-                this.set('gfiURLs', pURLs);
-                this.get('gfiOverlay').setPosition(params[1]);
-                this.set('gfiContent', pContent);
-                this.set('gfiTitles', pTitles);
-                this.set('gfiCounter', pContent.length);
-                this.set('coordinate', params[1]);
-            }
+                if (pContent.length > 0) {
+                    this.set('gfiURLs', pURLs);
+                    this.get('gfiOverlay').setPosition(params[1]);
+                    this.set('gfiContent', pContent);
+                    this.set('gfiTitles', pTitles);
+                    this.set('gfiCounter', pContent.length);
+                    this.set('coordinate', params[1]);
+                }
+             }
         },
         /**
          *
@@ -106,67 +108,96 @@ define([
                         if (_.has(attributes, key)) {
                             pContentArray.push([attributes[key], value]);
                         }
+                        else if (attributes === 'showAll') { // showAll
+                            key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
+                            pContentArray.push([key, value]);
+                        }
                     }
                 });
                 var pContent = _.object(pContentArray);
                 return pContent;
             }
         },
-
         setWMSPopupContent: function (params) {
-            if(params.attributes !== undefined) {
-                var pgfi;
-                $.ajax({
-                    url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(params.url),
-                    async: false,
-                    type: 'GET',
-                    context: this,  // das model
-                    success: function (data, textStatus, jqXHR) {
-                        var attr, nodeList, gfi = {};
-                        try {
-                            // ArcGIS
-                            if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                                attr = data.getElementsByTagName('FIELDS')[0].attributes;
-                                _.each(attr, function (element) {
-                                    if (element.localName.search('SHP') === -1 && _.has(params.attributes, element.localName) === true) {
+            var pgfi;
+            $.ajax({
+                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(params.url),
+                async: false,
+                type: 'GET',
+                context: this,  // das model
+                success: function (data, textStatus, jqXHR) {
+                    var attr, nodeList, gfi = {};
+                    try {
+                        // ArcGIS
+                        if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
+                            attr = data.getElementsByTagName('FIELDS')[0].attributes;
+                            _.each(attr, function (element) {
+                                if (params.attributes === 'showAll') {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
+                                }
+                                else {
+                                    if (_.has(params.attributes, element.localName) === true) {
                                         gfi[params.attributes[element.localName]] = element.textContent.trim();
                                     }
+                                }
+                            });
+                            pgfi=gfi;
+                        }
+                        // deegree
+                        else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
+                            nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
+                            if (params.attributes === 'showAll') {
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
                                 });
-                                pgfi=gfi;
+                                _.each(attr, function (element) {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
+                                });
                             }
-                            // deegree
-                            else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
-                                nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
+                            else {
                                 attr = _.filter(nodeList, function (element) {
                                     return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
                                 });
                                 _.each(attr, function (element) {
                                     gfi[params.attributes[element.localName]] = element.textContent.trim();
                                 });
-                                pgfi=gfi;
                             }
-                            // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
-                            else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
-                                nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                            pgfi=gfi;
+                        }
+                        // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
+                        else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
+                            nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                            if (params.attributes === 'showAll') {
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
+                                });
+                                _.each(attr, function (element) {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
+                                });
+                            }
+                            else {
                                 attr = _.filter(nodeList, function (element) {
                                     return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
                                 });
                                 _.each(attr, function (element) {
                                     gfi[params.attributes[element.localName]] = element.textContent.trim();
                                 });
-                                pgfi=gfi;
                             }
+                            pgfi=gfi;
                         }
-                        catch (error) {
-                            console.log(error);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        //console.log('Ajax-Request ' + textStatus);
                     }
-                });
-                return pgfi;
-            }
+                    catch (error) {
+                        console.log(error);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //console.log('Ajax-Request ' + textStatus);
+                }
+            });
+            return pgfi;
         }
     });
 
