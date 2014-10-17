@@ -37,7 +37,7 @@
     border-bottom: 0px;
 }
 
-.panel-heading > .glyphicon-chevron-up, .glyphicon-chevron-down {
+.panel-heading > .glyphicon-chevron-up, .panel-heading > .glyphicon-chevron-down {
     color: #000;
     float: right;
     font-size: 15px;
@@ -46,6 +46,6 @@
     cursor: pointer;
 }
 
-.panel-heading > .glyphicon-chevron-up:hover, .glyphicon-chevron-down:hover {
+.panel-heading > .glyphicon-chevron-up:hover, .panel-heading > .glyphicon-chevron-down:hover {
     opacity: 0.5;
 }
