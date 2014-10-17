@@ -65,6 +65,11 @@ require([
                     }
                 });
             }
+            if (Config.menu.treeFilter === true) {
+                require(['views/TreeFilterView'], function (TreeFilterView) {
+                    new TreeFilterView();
+                });
+            }
             if (Config.menu.searchBar === true) {
                 require(['views/SearchbarView'], function (SearchbarView) {
                     new SearchbarView();

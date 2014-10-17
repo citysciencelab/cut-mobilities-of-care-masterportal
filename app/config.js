@@ -11,14 +11,15 @@ define(function () {
         layerIDs: [
             '453',
             '8',
-            '1347',
+            '7777',
             '1346',
             '9999',
-            '1117'
+            '1117',
+            '1166'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '9999'
+            '7777'
         ],
         styleConf: '../style.json',
         wfsconfig: [
@@ -32,7 +33,8 @@ define(function () {
             layerTree: true,
             helpButton: false,
             contactButton: true,
-            tools: true
+            tools: true,
+            treeFilter: true
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {

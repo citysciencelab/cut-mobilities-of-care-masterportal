@@ -1,0 +1,70 @@
+<div class="panel-heading">
+    <h3 class="panel-title" style="font-size: 14px; float: left; padding: 10px 0px;"><span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;Filtereinstellungen</h3>
+    <span class="close" style="padding: 8px;">×</span>
+    <% if (showContent === true) { %>
+        <span class="glyphicon glyphicon-chevron-up"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-chevron-down"></span>
+    <% } %>
+</div>
+<% if (showContent === true) { %>
+<div class="panel-body">
+    <form class="form-horizontal" role="form">
+        <div class="form-group form-group-sm">
+            <label for="" class="control-label col-md-5">Gattung</label>
+            <div class="col-md-7">
+                <select class="form-control input-sm" id="">
+                </select>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="" class="control-label col-md-5">Art</label>
+            <div class="col-md-7">
+                <select class="form-control input-sm" id="">
+                </select>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="control-label col-md-5">Pflanzjahr</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control input-sm">
+            </div>
+            <div class="col-md-1">
+                <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control input-sm">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="control-label col-md-5">Kronendurchmesser[m]</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control input-sm">
+            </div>
+            <div class="col-md-1">
+                <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control input-sm">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="control-label col-md-5">Stammumfang[cm]</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control input-sm">
+            </div>
+            <div class="col-md-1">
+                <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control input-sm">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-treeFilter col-md-12">Filtern</label>
+            </div>
+        </div>
+    </form>
+</div>
+<% } %>
