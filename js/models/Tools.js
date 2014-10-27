@@ -23,6 +23,9 @@ define([
         activateGFI: function () {
             this.set('active', 'gfi');
         },
+        activateOrientation: function () {
+            this.set('active', 'orientation');
+        },
         activateTool: function () {
             if (this.get('active') === 'measure') {
                 EventBus.trigger('showMeasureModal');
