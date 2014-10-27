@@ -77,7 +77,6 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     pServerVector.addFeatures(pServerVector.readFeatures(data));
-                    console.log(pServerVector.getFeatures());
                 },
                 error: function (data, textStatus, jqXHR) {
                     console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
