@@ -7,6 +7,7 @@
       "layers" : "1",
       "format" : "image/jpeg",
       "version" : "1.3.0",
+      "gfiAttributes": false,
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
@@ -20778,6 +20779,10 @@
       "layers" : "6",
       "format" : "image/png",
       "version" : "1.3.0",
+      "gfiAttributes": {
+            "STRASSENNA": "Straße",
+            "STADTTEIL": "Stadtteil"
+      },
       "datasets" : [
          {
             "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
@@ -20854,6 +20859,7 @@
       "layers" : "0",
       "format" : "image/png",
       "version" : "1.3.0",
+      "gfiAttributes": "showAll",
       "datasets" : [
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
@@ -21387,6 +21393,7 @@
       "format" : "image/png",
       "version" : "1.3.0",
       "datasets" : [],
+      "gfiAttributes": "showAll",
       "singleTile" : "nicht vorhanden"
    },
    {
@@ -21543,6 +21550,7 @@
       "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "datasets" : [],
+      "gfiAttributes": "showAll",
       "singleTile" : "nicht vorhanden"
    },
    {
@@ -24904,7 +24912,11 @@
       "format" : "image/png",
       "version" : "1.1.1",
       "datasets" : [],
-      "singleTile" : "nicht vorhanden"
+      "singleTile" : "nicht vorhanden",
+      "gfiAttributes": {
+          "planrecht": "Planrecht",
+          "feststellung": "Feststellung"
+      }
    },
    {
       "id" : "1347",
@@ -32345,21 +32357,7 @@
       "singleTile" : "nicht vorhanden"
    },
    {
-      "id" : "9998",
-      "name" : "iso19112:SI_LocationType",
-      "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
-      "typ" : "WFS",
-      "layers" : "iso19112:SI_LocationType",
-      "format" : "nicht vorhanden",
-      "version" : "1.1.0",
-      "datasets" : [],
-      "singleTile" : "nicht vorhanden",
-      "featureNS": "http://www.deegree.org/app",
-      "featureType": "bikeandride",
-      "visibility": true
-   },
-   {
-      "id": "9999",
+      "id": "99999",
       "name": "Krankenhäuser",
       "url": "http://geofos/fachdaten_public/services/wfs_hh_krankenhaeuser",
       "outputFormat": "text/xml%3B+subtype=gml/3.1.1",
@@ -32372,6 +32370,63 @@
       "featureType": "krankenhaeuser_hh",
       "visibility": true
     },
+    {
+        "id": "9999",
+        "name": "Krankenhäuser",
+        "url": "http://geofos/fachdaten_public/services/wfs_hh_krankenhaeuser",
+        "featureType": "krankenhaeuser_hh",
+        "outputFormat": "text/xml;+subtype=gml/3.1.1",
+        "typ": "WFS",
+        "version": "1.1.0",
+        "datasets" : [],
+        "featureNS": "http://www.deegree.org/app",
+        "gfiAttributes": {
+            "name": "Name",
+            "adresse": "Adresse",
+            "ort": "Ort",
+            "anzahl_gesamtbetten": "Anzahl Gesamtbetten",
+            "anzahl_planbetten": "Anzahl Planbetten",
+            "anzahl_teilbehandlung": "Anzahl Teilbehandlung",
+            "kh_nummer": "Krankenhausnummer",
+            "homepage": "Homepage"
+        }
+    },
+    {
+        "id": "9998",
+        "name" : "BikeandRide",
+        "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
+        "featureType": "bikeandride",
+        "outputFormat": "text/xml;+subtype=gml/3.1.1",
+        "typ": "WFS",
+        "version": "1.1.0",
+        "datasets" : [],
+        "featureNS": "http://www.deegree.org/app"
+    },
+    {
+      "id" : "7777",
+      "name" : "Strassenbaumkataster_2013",
+      "url" : "http://wsca0348.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Test_Baumkataster_km/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "datasets" : [
+         {
+            "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
+            "rs_id" : "HMDK#C1C61928-C602-4E37-AF31-2D23901E2540",
+            "md_name" : "Straßenbaumkataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ],
+      "singleTile" : "nicht vorhanden"
+   },
     {
       "id" : "8999",
       "name" : "Landschaftsform",
@@ -32440,8 +32495,7 @@
                "hmbtg",
                "#opendata_hh#"
             ]
-         }
-      ],
+    }],
      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
      "featureType": "Unsichtbares_Objekt",
       "singleTile" : "nicht vorhanden"
@@ -32591,5 +32645,4 @@
      "featureType": "Stein_und_Fels",
      "singleTile" : "nicht vorhanden"
    }
-
 ]

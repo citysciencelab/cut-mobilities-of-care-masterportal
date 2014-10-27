@@ -31,8 +31,7 @@ define(function () {
             '8996',
             '8997',
             '8998',
-            '8999',
-
+            '8999'
         ],
         styleConf: '../style.json',
         wfsconfig: [
@@ -54,7 +53,8 @@ define(function () {
             layerTree: true,
             helpButton: false,
             contactButton: true,
-            tools: true
+            tools: true,
+            treeFilter: true
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
