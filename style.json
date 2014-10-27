@@ -3,7 +3,7 @@
         "id" : "1",
         "subclass" : "Icon",
         "imagesrc" : "../img/krankenhaus.svg",
-        "imagescale" : "0.07",
+        "imagescale" : "1",
         "clusterscale" : "2",
         "clusteroffsety" : "2",
         "clusterfillcolor" : "[255, 0, 0, 1]",

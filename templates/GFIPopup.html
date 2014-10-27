@@ -23,7 +23,7 @@
         </td>
         <td>
             <% if (value.search('.html') !== -1) { %>
-                <a href="<%= value%>">weitere Informationen</a>
+                <a href="<%= value%>">Link</a>
             <% } else if (value.substr(0, 7) == 'http://') { %>
                 <a href="<%= value%>"><%= value%></a>
             <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49') { %>

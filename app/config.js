@@ -11,19 +11,16 @@ define(function () {
         layerIDs: [
             '453',
             '8',
-            '7777',
-            '1346',
-            '9999',
-            '1117',
-            '1166'
+            '9999'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '7777'
+            '453',
+            '9999'
         ],
         styleConf: '../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 30, searchField: 'name'}
+            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name'}
         ],
         menubar: true,
         isMenubarVisible: true,
