@@ -83,6 +83,7 @@ define([
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
+                this.get('map').un('click', this.setOrientation);
                 this.get('map').removeLayer(MeasurePopup.get('layer'));
                 this.get('map').removeInteraction(MeasurePopup.get('draw'));
                 $('#measurePopup').html('');
@@ -90,6 +91,7 @@ define([
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
+                this.get('map').un('click', this.setOrientation);
                 this.get('map').removeLayer(MeasurePopup.get('layer'));
                 this.get('map').removeInteraction(MeasurePopup.get('draw'));
                 $('#measurePopup').html('');
@@ -97,8 +99,17 @@ define([
             else if (tool === 'measure') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').un('click', this.setOrientation);
                 this.get('map').addLayer(MeasurePopup.get('layer'));
                 this.get('map').addInteraction(MeasurePopup.get('draw'));
+            }
+            else if (tool === 'orientation') {
+                this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').un('click', this.setPositionCoordPopup);
+                this.get('map').on('click', this.setOrientation);
+                this.get('map').removeLayer(MeasurePopup.get('layer'));
+                this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                $('#measurePopup').html('');
             }
         },
         /**
@@ -119,6 +130,9 @@ define([
         /**
          *
          */
+        setOrientation: function (evt) {
+            EventBus.trigger('setOrientation', evt.coordinate);
+        },
         setPositionCoordPopup: function (evt) {
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
