@@ -6,7 +6,8 @@ define([
     'views/LayerListView',
     'models/Menubar',
     'config',
-], function ($, _, Backbone, MenubarTemplate, LayerListView, Menubar, Config) {
+    'eventbus'
+], function ($, _, Backbone, MenubarTemplate, LayerListView, Menubar, Config, EventBus) {
 
     var MenubarView = Backbone.View.extend({
         model: Menubar,
@@ -22,6 +23,9 @@ define([
                 }
             });
         },
+        events: {
+            'click .filterTree': 'activateFilterTree'
+        },
         render: function () {
             var attr = this.model.toJSON();
             $('body').append(this.$el.append(this.template(attr)));
@@ -30,6 +34,9 @@ define([
             }
 //            new TreefolderListView();
             new LayerListView();
+        },
+        activateFilterTree: function () {
+            EventBus.trigger('toggleFilterTreeWin');
         }
     });
 

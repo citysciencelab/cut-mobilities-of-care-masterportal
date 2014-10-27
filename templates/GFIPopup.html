@@ -1,38 +1,40 @@
-<p>
+<div id="gfiHeader">
+    <span id="gfiTop">Objekt-Information</span>
     <span class="close">&times;</span>
-</p>
-<h5><strong><%= gfiTitles[gfiCounter-gfiContent.length] %></strong></h5>
-<table class="table table-condensed table-hover">
-<% if(gfiContent[gfiCounter-gfiContent.length] !== undefined) {
-    _.each(gfiContent[gfiCounter-gfiContent.length], function(value, key) { %>
-<tr>
-    <td><small>
-        <%= key + ':'%>
-    </small></td>
-    <td><small>
-        <% if (value.search('.html') !== -1) { %>
-            <a href="<%= value%>">weitere Informationen</a>
-        <% } else if (value.substr(0, 7) == 'http://') { %>
-            <a href="<%= value%>"><%= value%></a>
-        <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49') { %>
-            <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-        <% } else if (value.search('.jpg') !== -1) { %>
-            <img class="gfiPic" src="<%= value%>">
-        <% } else { %>
-            <%= value %>
-        <% } %>
-    </small></td>
-</tr>
-<% })}; %>
-</table>
+    <% if(gfiContent.length > 1) { %>
+        <ul class="pager">
+            <li class="pager-left <% if(gfiCounter-gfiContent.length === 0) { print ('disabled') } %>"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li class="pager-right <% if(gfiContent.length-gfiCounter === gfiContent.length - 1) { print ('disabled') } %>"><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+        </ul>
+    <% } %>
+</div>
 
-<% if(gfiContent.length > 1) { %>
-<ul class="pager">
-  <% if(gfiCounter-gfiContent.length >= 1) { %>
-    <li class="previous"><a href="#">zurück</a></li>
-  <% } %>
-  <% if(gfiCounter-gfiContent.length < gfiContent.length - 1) { %>
-  <li class="next"><a href="#">vor</a></li>
-  <% } %>
-</ul>
-<% } %>
+<div id="gfiTitle">
+    <strong><%= gfiTitles[gfiContent.length-gfiCounter] %></strong>
+</div>
+
+<div id="gfiContent">
+    <table class="table table-condensed table-hover">
+    <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
+       _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) { %>
+    <tr>
+        <td>
+            <strong><%= key + ':'%></strong>
+        </td>
+        <td>
+            <% if (value.search('.html') !== -1) { %>
+                <a href="<%= value%>">weitere Informationen</a>
+            <% } else if (value.substr(0, 7) == 'http://') { %>
+                <a href="<%= value%>"><%= value%></a>
+            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49') { %>
+                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+            <% } else if (value.search('.jpg') !== -1) { %>
+                <img class="gfiPic" src="<%= value%>">
+            <% } else { %>
+                <%= value %>
+            <% } %>
+        </td>
+    </tr>
+    <% })}; %>
+    </table>
+</div>

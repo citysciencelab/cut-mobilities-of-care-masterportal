@@ -1,0 +1,51 @@
+#gfiHeader {
+    margin: 8px 12px;
+}
+
+#gfiHeader ul {
+    margin: 0 auto;
+}
+
+#gfiTop {
+    float: left;
+    color: #777;
+}
+
+#gfiTitle {
+    padding: 10px;
+    font-size: 12px;
+    background-color:
+        rgba(0, 0, 0, 0.3);
+    clear: both;
+    color: #fff
+}
+
+#gfiContent {
+    font-size: 11px;
+}
+
+.popover {
+    max-width: none;
+    min-width: 280px;
+    padding: 0px;
+}
+
+.close {
+    font-size: 24px;
+}
+
+.pager {
+    margin: 0 auto;
+}
+
+.pager li > a {
+    padding: 1px 6px;
+}
+
+.popover-content {
+    padding: 0px !important;
+}
+
+.table {
+    margin-bottom: 4px !important;
+}

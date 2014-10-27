@@ -208,7 +208,8 @@ define([
                 source: this.get('source'),
                 name: this.get('name'),
                 typ: this.get('typ'),
-                style: this.get('style')
+                style: this.get('style'),
+                gfiAttributes: this.get('gfiAttributes')
             }));
         }
     });

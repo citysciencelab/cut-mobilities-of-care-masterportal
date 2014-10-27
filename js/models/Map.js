@@ -157,7 +157,8 @@ define([
                         typ: 'WMS',
                         scale: scale,
                         url: gfiURL,
-                        name: element.get('name')
+                        name: element.get('name'),
+                        attributes: element.get('gfiAttributes')
                     });
                 }
                 else if (element.getProperties().typ === 'WFS') {
@@ -165,7 +166,8 @@ define([
                         typ: 'WFS',
                         scale: scale,
                         source: element.getSource(),
-                        name: element.get('name')
+                        name: element.get('name'),
+                        attributes: element.get('gfiAttributes')
                     });
                 }
             });

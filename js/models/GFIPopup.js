@@ -24,8 +24,8 @@ define([
          */
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
-            EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener ist in map.js
-            EventBus.on('setGFIParams', this.setGFIParams, this); // wird in map.js ausgelöst
+            EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
+            EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
         },
         /**
          * Vernichtet das Popup.
@@ -43,44 +43,45 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         setGFIParams: function (params) {
-            // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
-            var sortedParams = _.sortBy(params[0], 'name');
-            var pContent = [], pTitles = [], pURLs = [];
-            for (i=0; i < sortedParams.length; i++) {
-                if (sortedParams[i].typ === "WMS") {
-                    gfiContent = this.setWMSPopupContent(sortedParams[i].url);
-                }
-                else if (sortedParams[i].typ === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
-                }
-                if (gfiContent && typeof gfiContent == 'object') {
-                    pContent.push(gfiContent);
-                    pTitles.push(sortedParams[i].name);
-                    if (sortedParams[i].url) {
-                        pURLs.push(sortedParams[i].url);
+             if(params[0].attributes !== false) {
+                // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
+                var sortedParams = _.sortBy(params[0], 'name');
+                var pContent = [], pTitles = [], pURLs = [];
+                for (i=0; i < sortedParams.length; i++) {
+                    if (sortedParams[i].typ === "WMS") {
+                        gfiContent = this.setWMSPopupContent(sortedParams[i]);
                     }
-                    else if (sortedParams[i].source.source_) {
-                        pURLs.push(sortedParams[i].source.source_.format.featureType_);
+                    else if (sortedParams[i].typ === "WFS") {
+                        gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
                     }
-                    else if (sortedParams[i].source){
-                        pURLs.push(sortedParams[i].source.format.featureType_);
+                    if (gfiContent && typeof gfiContent == 'object') {
+                        pContent.push(gfiContent);
+                        pTitles.push(sortedParams[i].name);
+                        if (sortedParams[i].url) {
+                            pURLs.push(sortedParams[i].url);
+                        }
+                        else if (sortedParams[i].source.source_) {
+                            pURLs.push(sortedParams[i].source.source_.format.featureType_);
+                        }
+                        else if (sortedParams[i].source){
+                            pURLs.push(sortedParams[i].source.format.featureType_);
+                        }
                     }
                 }
-            }
-            if (pContent.length > 0) {
-                //this.set('coordinate', params[1]);
-                this.set('gfiURLs', pURLs);
-                this.get('gfiOverlay').setPosition(params[1]);
-                this.set('gfiContent', pContent);
-                this.set('gfiTitles', pTitles);
-                this.set('gfiCounter', pContent.length);
-                EventBus.trigger('render');
-            }
+                if (pContent.length > 0) {
+                    this.set('gfiURLs', pURLs);
+                    this.get('gfiOverlay').setPosition(params[1]);
+                    this.set('gfiContent', pContent);
+                    this.set('gfiTitles', pTitles);
+                    this.set('gfiCounter', pContent.length);
+                    this.set('coordinate', params[1]);
+                }
+             }
         },
         /**
          *
          */
-        setWFSPopupContent: function (pSource, pCoordinate, pScale) {
+        setWFSPopupContent: function (pSource, pCoordinate, pScale, attributes) {
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
             // 5 mm um Klickpunkt
             var pMaxDist = 0.005 * pScale;
@@ -104,24 +105,23 @@ define([
                 var pContentArray = new Array;
                 _.each(pValues, function (value, key, list) {
                     if (typeof value == 'string') {
-                        pKey = key.replace('_', ' ');
-                        pKeyArray = pKey.split(' ');
-                        for (var i=0; i<pKeyArray.length; i++) {
-                            pKeyArray[i] = pKeyArray[i].substring(0, 1).toUpperCase() + pKeyArray[i].substring(1);
+                        if (_.has(attributes, key)) {
+                            pContentArray.push([attributes[key], value]);
                         }
-                        pKey = pKeyArray.join(' ');
-                        pContentArray.push([pKey, value]);
+                        else if (attributes === 'showAll') { // showAll
+                            key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
+                            pContentArray.push([key, value]);
+                        }
                     }
                 });
                 var pContent = _.object(pContentArray);
                 return pContent;
             }
         },
-
-        setWMSPopupContent: function (gfiURL) {
-            var pgfi={};
+        setWMSPopupContent: function (params) {
+            var pgfi;
             $.ajax({
-                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(gfiURL),
+                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(params.url),
                 async: false,
                 type: 'GET',
                 context: this,  // das model
@@ -132,8 +132,14 @@ define([
                         if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
                             attr = data.getElementsByTagName('FIELDS')[0].attributes;
                             _.each(attr, function (element) {
-                                if (element.localName.search('SHP') === -1) {
-                                    gfi[element.localName] = element.textContent.trim();
+                                if (params.attributes === 'showAll') {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
+                                }
+                                else {
+                                    if (_.has(params.attributes, element.localName) === true) {
+                                        gfi[params.attributes[element.localName]] = element.textContent.trim();
+                                    }
                                 }
                             });
                             pgfi=gfi;
@@ -141,23 +147,45 @@ define([
                         // deegree
                         else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
                             nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
-                            attr = _.filter(nodeList, function (element) {
-                                return element.nodeType === 1;
-                            });
-                            _.each(attr, function (element) {
-                                gfi[element.localName] = element.textContent.trim();
-                            });
+                            if (params.attributes === 'showAll') {
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
+                                });
+                                _.each(attr, function (element) {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
+                                });
+                            }
+                            else {
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[params.attributes[element.localName]] = element.textContent.trim();
+                                });
+                            }
                             pgfi=gfi;
                         }
                         // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
                         else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
                             nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
-                            attr = _.filter(nodeList, function (element) {
-                                return element.nodeType === 1;
-                            });
-                            _.each(attr, function (element) {
-                                gfi[element.localName] = element.textContent.trim();
-                            });
+                            if (params.attributes === 'showAll') {
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1;
+                                });
+                                _.each(attr, function (element) {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
+                                });
+                            }
+                            else {
+                                attr = _.filter(nodeList, function (element) {
+                                    return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
+                                });
+                                _.each(attr, function (element) {
+                                    gfi[params.attributes[element.localName]] = element.textContent.trim();
+                                });
+                            }
                             pgfi=gfi;
                         }
                     }
