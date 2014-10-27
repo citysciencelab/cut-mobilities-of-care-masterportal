@@ -57,6 +57,11 @@ require([
                             new MeasurePopupView();
                         });
                     }
+                    if (Config.tools.orientation === true) {
+                        require(['views/OrientationView'], function (OrientationView) {
+                            new OrientationView();
+                        });
+                    }
                     if (Config.tools.print === true) {
                         require(['views/PrintView'], function (PrintView) {
                             new PrintView();
