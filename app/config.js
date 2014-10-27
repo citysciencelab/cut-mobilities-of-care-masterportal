@@ -39,6 +39,7 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
+            orientation: true,
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
