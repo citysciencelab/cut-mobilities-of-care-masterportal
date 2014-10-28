@@ -32384,11 +32384,13 @@
             "name": "Name",
             "adresse": "Adresse",
             "ort": "Ort",
-            "anzahl_gesamtbetten": "Anzahl Gesamtbetten",
-            "anzahl_planbetten": "Anzahl Planbetten",
-            "anzahl_teilbehandlung": "Anzahl Teilbehandlung",
-            "kh_nummer": "Krankenhausnummer",
-            "homepage": "Homepage"
+            "anzahl_gesamtbetten": "Gesamtbetten",
+            "anzahl_planbetten": "Planbetten",
+            "anzahl_teilbehandlung": "teilstationäre Behandlungsplätze",
+            "homepage": "Homepage",
+            "teilnahme_notversorgung": "Not- und Unfallversorgung",
+            "link_einzelblatt": "Einzelblatt",
+            "geburtsklinik": "Geburtsklinik"
         }
     },
     {
