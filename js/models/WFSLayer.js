@@ -25,6 +25,7 @@ define([
          *
          */
         setAttributionLayerSource: function () {
+            EventBus.on('mapInitialized', this.mapInitialized, this);
             // Stelle GetRequest zusammen
             var getrequest = this.get('url')
                 + '?REQUEST=GetFeature'
@@ -54,8 +55,9 @@ define([
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);
             this.set('attributeField', wfsconfig.attributeField);
+            this.set('mouseHoverField', wfsconfig.mouseHoverField);
 
-            // Lade Daten
+            // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
                 format: new ol.format.WFS({
                     featureNS: this.get('featureNS'),
@@ -83,8 +85,10 @@ define([
                     console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
                 }
             });
+
+            // CRHISTOPHER FRAGEN!!!!!
             if(this.get('attributeField')){
-                // Prüfe Übernehme Symbolisierung
+                // Prüfe Symbolisierung nach ClusterDistance
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
                     this.set('source', pServerVector);
                     // Lade Style
@@ -130,7 +134,6 @@ define([
                                         }
                                     });
                                 }
-
                                 style=wfsStyle.getClusterSymbol(size);
                             }
                             else {
@@ -160,7 +163,6 @@ define([
                 }
             }
             else {
-
                 var wfsStyle = new Array();
                 for(var i = 0; i<wfsconfig.style.length;i++){
                     style=_.find(StyleList.models, function (num) {
@@ -198,7 +200,6 @@ define([
                     });
                 }
             }
-
         },
         /**
          *
@@ -211,6 +212,23 @@ define([
                 style: this.get('style'),
                 gfiAttributes: this.get('gfiAttributes')
             }));
+        },
+        /**
+        *
+        */
+        mapInitialized: function (map) {
+            // MouseHover Init
+            // Zunächst wird WFSLayer geladen. Map erst später.
+            if (this.get('mouseHoverField')) {
+                this.set('selectMouseMove', new ol.interaction.Select({
+                    condition: ol.events.condition.mouseMove
+                }));
+                map.addInteraction(this.get('selectMouseMove'));
+                this.set('mouseHoverCollection', this.get('selectMouseMove').getFeatures());
+                this.get('mouseHoverCollection').on('add', function() {
+                    alert('hallo welt');
+                }, this);
+            }
         }
     });
     return WFSLayer;
