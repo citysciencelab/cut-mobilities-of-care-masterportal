@@ -13,6 +13,11 @@ if (gfi === true) { %>
     <a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Informationen abfragen</a>
 </li>
 <% }
+if (orientation === true) { %>
+<li id="orientationMenu" <% if (active === "orientation") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Standpunkt</a>
+</li>
+<% }
 if (print === true) { %>
 <li class="divider"></li>
 <li id="printMenu">

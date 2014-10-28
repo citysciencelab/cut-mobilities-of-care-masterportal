@@ -15,7 +15,14 @@ define([
             */
             var idArray = new Array ();
             for (i in Config.wfsconfig) {
-                idArray.push(Config.wfsconfig[i].style);
+                if(Config.wfsconfig[i].style.length>1){
+                    for (var j = 0; j<Config.wfsconfig[i].style.length;j++){
+                        idArray.push(Config.wfsconfig[i].style[j])
+                    }
+                }
+                else{
+                    idArray.push(Config.wfsconfig[i].style[0]);
+                }
             }
             return _.filter(response, function (element) {
                 if (_.contains(idArray, element.id)) {

@@ -9,11 +9,11 @@ require.config({
         bootstrap: 'http://wscd0096/libs/bootstrap-3.1.1/js/bootstrap.min',
         proj4: 'http://wscd0096/libs/proj4-2.2.1/dist/proj4',
         config: 'config',
-        eventbus: '../js/EventBus',
-        views: '../js/views',
-        models: '../js/models',
-        collections: '../js/collections',
-        templates: '../templates'
+        eventbus: '../../js/EventBus',
+        views: '../../js/views',
+        models: '../../js/models',
+        collections: '../../js/collections',
+        templates: '../../templates'
     },
     shim: {
         bootstrap: {
@@ -56,6 +56,11 @@ require([
                         require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
                             new MeasureModalView();
                             new MeasurePopupView();
+                        });
+                    }
+                    if (Config.tools.orientation === true) {
+                        require(['views/OrientationView'], function (OrientationView) {
+                            new OrientationView();
                         });
                     }
                     if (Config.tools.print === true) {

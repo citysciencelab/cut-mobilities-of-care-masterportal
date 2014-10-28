@@ -25,6 +25,7 @@ define([
          *
          */
         setAttributionLayerSource: function () {
+            EventBus.on('mapInitialized', this.mapInitialized, this);
             // Stelle GetRequest zusammen
             var getrequest = this.get('url')
                 + '?REQUEST=GetFeature'
@@ -49,19 +50,14 @@ define([
                     return num;
                 }
             });
+
             this.set('styleId', wfsconfig.style);
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);
+            this.set('attributeField', wfsconfig.attributeField);
+            this.set('mouseHoverField', wfsconfig.mouseHoverField);
 
-            // Lade Style
-            var wfsStyle = _.find(StyleList.models, function (num) {
-                if (num.id == wfsconfig.style) {
-                    return num;
-                }
-            });
-            var pStyle = wfsStyle.attributes.style;
-
-            // Lade Daten
+            // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
                 format: new ol.format.WFS({
                     featureNS: this.get('featureNS'),
@@ -83,38 +79,129 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     pServerVector.addFeatures(pServerVector.readFeatures(data));
+<<<<<<< HEAD
+=======
+                    //console.log(pServerVector.getFeatures());
+>>>>>>> origin/master
                 },
                 error: function (data, textStatus, jqXHR) {
                     console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
                 }
             });
 
-            // Prüfe Übernehme Symbolisierung
-            if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
-                this.set('source', pServerVector);
-                this.set('style', pStyle);
+            // CRHISTOPHER FRAGEN!!!!!
+            if(this.get('attributeField')){
+                // Prüfe Symbolisierung nach ClusterDistance
+                if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
+                    this.set('source', pServerVector);
+                    // Lade Style
+                    this.set('style', function (feature, resolution) {
+                        var wfsStyle = new Array();
+                        for(var i = 0; i<wfsconfig.style.length;i++){
+                            style=_.find(StyleList.models, function (num) {
+                                if (num.id == wfsconfig.style[i]) {
+                                    return num;
+                                }
+                            });
+                             wfsStyle.push(style);
+                        }
+                        for(var i = 0; i<wfsStyle.length;i++){
+                            for(var j = 0; j<StyleList.models.length; j++){
+                                if(feature.getProperties().features[0].values_.Kategorie==StyleList.models[j].attributes.name && StyleList.models[j].id==wfsStyle[i].id){
+                                    feature.setStyle(wfsStyle[i].attributes.style[0]);
+                                }
+                                else{
+                                    //alert('No Style found');
+                                };
+                            }
+                        };
+                    });
+                }
+                else {
+                     // Lade Style
+                    var pCluster = new ol.source.Cluster({
+                        source : pServerVector,
+                        distance : this.get('clusterDistance')
+                    });
+                    var size;
+                    this.set('source', pCluster);
+                    this.set('style', function (feature, resolution) {
+                        var size;
+                        var size = feature.get('features').length;
+                            if (size != '1') {
+                                var wfsStyle = new Array();
+                                for(var i = 0; i<wfsconfig.style.length;i++){
+                                    wfsStyle=_.find(StyleList.models, function (num) {
+                                        if (num.id == id+"_cluster") {
+                                            return num;
+                                        }
+                                    });
+                                }
+                                style=wfsStyle.getClusterSymbol(size);
+                            }
+                            else {
+                                var wfsStyle = new Array();
+                                for(var i = 0; i<wfsconfig.style.length;i++){
+                                    style=_.find(StyleList.models, function (num) {
+                                        if (num.id == wfsconfig.style[i]) {
+                                            return num;
+                                        }
+                                    });
+                                     wfsStyle.push(style);
+                                }
+                                for(var i = 0; i<wfsStyle.length;i++){
+                                    for(var j = 0; j<StyleList.models.length; j++){
+                                        if(feature.getProperties().features[0].values_.Kategorie==StyleList.models[j].attributes.name && StyleList.models[j].id==wfsStyle[i].id){
+                                            feature.setStyle(wfsStyle[i].attributes.style[0]);
+                                            return wfsStyle[i].attributes.style[0];
+                                        }
+                                        else{
+                                            //alert('No Style found');
+                                        };
+                                    }
+                                };
+                            }
+                        return style;
+                    });
+                }
             }
             else {
-                var pCluster = new ol.source.Cluster({
-                    source : pServerVector,
-                    distance : this.get('clusterDistance')
-                });
-                styleCache = {};
-                this.set('source', pCluster);
-                this.set('style', function (feature, resolution) {
-                    var size = feature.get('features').length;
-                    var style = styleCache[size];
-                    if (!style) {
-                        if (size != '1') {
-                            style = wfsStyle.getClusterSymbol(size);
+                var wfsStyle = new Array();
+                for(var i = 0; i<wfsconfig.style.length;i++){
+                    style=_.find(StyleList.models, function (num) {
+                        if (num.id == wfsconfig.style[i]) {
+                            return num;
                         }
-                        else {
-                            style = pStyle;
+                    });
+                     wfsStyle.push(style);
+                }
+                var pStyle = wfsStyle[0].attributes.style;
+                if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
+                    this.set('source', pServerVector);
+                    this.set('style', pStyle);
+                }
+                else{
+                    var pCluster = new ol.source.Cluster({
+                        source : pServerVector,
+                        distance : this.get('clusterDistance')
+                    });
+                    styleCache = {};
+                    this.set('source', pCluster);
+                    this.set('style', function (feature, resolution) {
+                        var size = feature.get('features').length;
+                        var style = styleCache[size];
+                        if (!style) {
+                            if (size != '1') {
+                                style = wfsStyle[0].getClusterSymbol(size);
+                            }
+                            else {
+                                style = pStyle;
+                            }
+                            styleCache[size] = style;
                         }
-                        styleCache[size] = style;
-                    }
-                    return style;
-                });
+                        return style;
+                    });
+                }
             }
         },
         /**
@@ -128,6 +215,23 @@ define([
                 style: this.get('style'),
                 gfiAttributes: this.get('gfiAttributes')
             }));
+        },
+        /**
+        *
+        */
+        mapInitialized: function (map) {
+            // MouseHover Init
+            // Zunächst wird WFSLayer geladen. Map erst später.
+            if (this.get('mouseHoverField')) {
+                this.set('selectMouseMove', new ol.interaction.Select({
+                    condition: ol.events.condition.mouseMove
+                }));
+                map.addInteraction(this.get('selectMouseMove'));
+                this.set('mouseHoverCollection', this.get('selectMouseMove').getFeatures());
+                this.get('mouseHoverCollection').on('add', function() {
+                    alert('hallo welt');
+                }, this);
+            }
         }
     });
     return WFSLayer;
