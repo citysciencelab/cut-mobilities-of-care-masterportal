@@ -131,7 +131,16 @@ define([
          *
          */
         setOrientation: function (evt) {
-            EventBus.trigger('setOrientation', evt.coordinate);
+            //projection = this.get('view').getProjection();
+            var geolocation = new ol.Geolocation({
+                projection  :   this.get('view').getProjection()
+            });
+            /*geolocation.on('change', function(evt) {
+              window.console.log(geolocation.getPosition());
+            });*/
+
+
+            EventBus.trigger('setOrientation', evt.coordinate, projection);
         },
         setPositionCoordPopup: function (evt) {
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);

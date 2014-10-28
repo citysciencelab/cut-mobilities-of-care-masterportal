@@ -23,7 +23,7 @@ define([
         showPopup: function () {
             this.get('element').popover('show');
         },
-        setPosition: function (coordinate) {
+        setOrientation: function (projection) {
             this.get('coordOverlay').setPosition(coordinate);
             this.set('coordinateUTM', coordinate);
             this.set('coordinateGeo', ol.coordinate.toStringHDMS(proj4(proj4('EPSG:25832'), proj4('EPSG:4326'), this.get('coordinateUTM'))));

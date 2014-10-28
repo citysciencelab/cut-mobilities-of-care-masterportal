@@ -13,9 +13,10 @@ define([
             'click .close': 'destroy'
         },
         initialize: function () {
-            this.listenTo(this.model, 'change:coordinateGeo', this.render);
+            this.listenTo(this.model, 'change:position', this.render);
         },
         render: function (evt) {
+            var test = Map.getView();
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
