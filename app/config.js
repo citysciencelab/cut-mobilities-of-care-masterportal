@@ -36,6 +36,11 @@ define(function () {
             tools: true,
             treeFilter: true
         },
+        treeFilter: {
+            layer: '7777',
+            styleName: 'treefilter',
+            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
+        },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
