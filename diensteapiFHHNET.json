@@ -2640,6 +2640,7 @@
       "layers" : "0",
       "format" : "nicht vorhanden",
       "version" : "1.3.0",
+      "gfiAttributes": "showAll",
       "datasets" : [
          {
             "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
@@ -32411,7 +32412,16 @@
       "typ" : "WMS",
       "layers" : "0",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.3.0",
+      "gfiAttributes": {
+          "BOTANISCHE": "Gattung",
+          "BAUMART": "Baumart",
+          "PFLANZJAHR": "Pflanzjahr",
+          "KRONE_DM": "Kronendurchmesser",
+          "STANDORT": "Standort",
+          "STAMMUMFAN": "Stammumfang"
+      },
       "datasets" : [
          {
             "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",

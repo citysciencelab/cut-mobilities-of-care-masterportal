@@ -1,4 +1,3 @@
-/*global define*/
 define(function () {
 
     var config = {
@@ -7,20 +6,23 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
+        layerConf: '../diensteapiFHHNET.json',
         layerIDs: [
             '453',
             '8',
-            '9999'
+            '7777',
+            '1346',
+            '9999',
+            '1117',
+            '1166'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '453',
-            '9999'
+            '7777'
         ],
-        styleConf: '../../style.json',
+        styleConf: '../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'}
+            {layer: '9999', style: '1', clusterDistance: 30, searchField: 'name'}
         ],
         menubar: true,
         isMenubarVisible: true,
@@ -44,7 +46,6 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
-            orientation: false,
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',

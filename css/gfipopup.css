@@ -14,10 +14,9 @@
 #gfiTitle {
     padding: 10px;
     font-size: 12px;
-    background-color:
-        rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     clear: both;
-    color: #fff
+    color: #fff;
 }
 
 #gfiContent {
