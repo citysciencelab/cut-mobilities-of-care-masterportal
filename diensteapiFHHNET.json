@@ -8359,6 +8359,7 @@
       "layers" : "geobasisdaten",
       "format" : "nicht vorhanden",
       "version" : "1.1.1",
+      "gfiAttributes": false,
       "datasets" : [
          {
             "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
@@ -32447,7 +32448,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Landschaftsform",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
 
       ],
@@ -32463,7 +32475,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Bauwerke",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -32492,7 +32515,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Unsichtbares_Objekt",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -32520,7 +32554,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Sehenswerte_Objekte",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -32549,7 +32594,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Bergbau",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -32578,7 +32634,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Wasser_und_Wasserbau",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -32607,7 +32674,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:GeologischeObjekte",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -32636,7 +32714,18 @@
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Stein_und_Fels",
       "format" : "nicht vorhanden",
+      "gfiAttributes": "showAll",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",

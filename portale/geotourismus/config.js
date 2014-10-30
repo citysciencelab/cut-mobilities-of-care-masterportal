@@ -60,7 +60,7 @@ define(function () {
             measure: true,
             print: false,
             coord: true,
-            orientation: false,
+            orientation: true,
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
