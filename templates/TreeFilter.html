@@ -8,27 +8,31 @@
         <div class="form-group form-group-sm">
             <label for="" class="control-label col-md-5">Gattung</label>
             <div class="col-md-7">
-                <select class="form-control input-sm" id="">
+                <select class="form-control input-sm" id="treeCategory">
+                    <option>keine Auswahl</option>
+                    <option>Sorbus aria</option>
                 </select>
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label for="" class="control-label col-md-5">Art</label>
+            <label for="" class="control-label col-md-5">Baumart</label>
             <div class="col-md-7">
-                <select class="form-control input-sm" id="">
+                <select class="form-control input-sm" id="treeType" disabled>
+                    <option>Alle Arten</option>
+                    <option>Echte Mehlbeere</option>
                 </select>
             </div>
         </div>
         <div class="form-group form-group-sm">
             <label class="control-label col-md-5">Pflanzjahr</label>
             <div class="col-md-3">
-                <input type="text" class="form-control input-sm">
+                <input id="yearStart" type="text" class="form-control input-sm" value="1914">
             </div>
             <div class="col-md-1">
                 <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control input-sm">
+                <input id="yearEnd" type="text" class="form-control input-sm" value="1985">
             </div>
         </div>
         <div class="form-group form-group-sm">
@@ -57,7 +61,7 @@
         </div>
         <div class="form-group form-group-sm">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-panel-submit col-md-12">Filtern</label>
+                <button id="filterbutton" class="btn btn-panel-submit col-md-12" type="button">Filtern</button>
             </div>
         </div>
     </form>
