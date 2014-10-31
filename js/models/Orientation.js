@@ -10,7 +10,7 @@ define([
 
     var Orientation = Backbone.Model.extend({
         initialize: function () {
-            EventBus.on('setOrientation', this.setPosition, this);
+            EventBus.on('setOrientation', this.setOrientation, this);
             this.set('coordOverlay', new ol.Overlay({
                 element: $('#popup')
             }));
@@ -24,6 +24,30 @@ define([
             this.get('element').popover('show');
         },
         setOrientation: function (projection) {
+            // Geolocation marker
+            var markerEl = document.getElementById('geolocation_marker');
+            var marker = new ol.Overlay({
+              positioning: 'center-center',
+              element: markerEl,
+              stopEvent: false
+            });
+            map.addOverlay(marker);
+
+            // LineString to store the different geolocation positions. This LineString
+            // is time aware.
+            // The Z dimension is actually used to store the rotation (heading).
+            var positions = new ol.geom.LineString([],
+                /** @type {ol.geom.GeometryLayout} */ ('XYZM'));
+
+            // Geolocation Control
+            var geolocation = new ol.Geolocation(/** @type {olx.GeolocationOptions} */ ({
+              projection: view.getProjection(),
+              trackingOptions: {
+                maximumAge: 10000,
+                enableHighAccuracy: true,
+                timeout: 600000
+              }
+            }));
             this.get('coordOverlay').setPosition(coordinate);
             this.set('coordinateUTM', coordinate);
             this.set('coordinateGeo', ol.coordinate.toStringHDMS(proj4(proj4('EPSG:25832'), proj4('EPSG:4326'), this.get('coordinateUTM'))));

@@ -212,7 +212,8 @@ define([
                 gfiAttributes: this.get('gfiAttributes')
             }));
         },
-        /**
+        /*
+        *
         *
         */
         mapInitialized: function (map) {
