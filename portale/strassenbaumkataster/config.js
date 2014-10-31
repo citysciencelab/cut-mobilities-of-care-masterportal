@@ -6,21 +6,21 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../diensteapiFHHNET.json',
+        layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
             '453',
             '8',
             '7777',
-            '1346',
+            '1388',
             '9999',
             '1117',
             '1166'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '7777'
+            '1388'
         ],
-        styleConf: '../style.json',
+        styleConf: '../../style.json',
         wfsconfig: [
             {layer: '9999', style: '1', clusterDistance: 30, searchField: 'name'}
         ],
@@ -34,11 +34,6 @@ define(function () {
             contactButton: true,
             tools: true,
             treeFilter: true
-        },
-        treeFilter: {
-            layer: '7777',
-            styleName: 'treefilter',
-            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
