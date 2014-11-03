@@ -120,3 +120,7 @@ html, body {
           bottom: 40px;
           left: 10px;
       }
+
+#coordPopup {
+    padding: 10px;
+}

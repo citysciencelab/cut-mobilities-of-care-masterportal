@@ -11,7 +11,8 @@ define(function () {
         layerIDs: [
             '453',
             '8',
-            '9999'
+            '9999',
+            '1346'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
@@ -31,7 +32,7 @@ define(function () {
             helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: true
+            treeFilter: false
         },
         treeFilter: {
             layer: '7777',

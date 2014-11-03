@@ -69,7 +69,7 @@ define([
             },this);
 
             // Trigger wenn map vollständig geladen. Wird für WFSLayer benötigt.
-            EventBus.trigger('mapInitialized', this.get('map'));
+//            EventBus.trigger('mapInitialized', this.get('map'));
         },
 
         getCurrentScale: function () // wird in GFI Popup verwendet.
