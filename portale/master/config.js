@@ -1,10 +1,75 @@
-/*global define*/
 define(function () {
 
+    // Parsen des parametrisierten Aufruf --> http://wscd0096/master_sd/portale/master/index.html?center=555874,5934140&layerIDs=8994,453&zoomLevel=4
+    var query = location.search.substr(1); // URL --> alles nach ? wenn vorhanden
+    var result = {};
+    query.split("&").forEach(function (keyValue) {
+        var item = keyValue.split("=");
+        result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+    });
+
+    /**
+     * Gibt die initiale Zentrumskoordinate zurück.
+     * Ist der Parameter 'center' vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
+     * @returns {Array} -- Die Zentrumskoordinate
+     */
+    function getCenter () {
+        if (result['center'] !== undefined) {
+            var coords = result['center'].split(",");
+            return [parseInt(coords[0], 10), parseInt(coords[1], 10)];
+        }
+        else {
+            return [565874, 5934140]; // Rathausmarkt
+        }
+    }
+
+    /**
+     * Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
+     * Ist der Parameter 'layerIDs' vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
+     * @returns {Array} -- Die LayerIDs kommasepariert als String
+     */
+    function getVisibleLayer () {
+        if (result['layerIDs'] !== undefined) {
+            var layers = result['layerIDs'].split(",");
+            return layers;
+        }
+        else {
+            return [
+                '453',  // Luftbilder (WMS)
+                '8999', // Landschaftsform (WFS)
+                '8994'  // Wasser und Wasserbau (WFS)
+            ];
+        }
+    }
+
+    /**
+     * Gibt die initiale Resolution (Zoomlevel) zurück.
+     * Ist der Parameter 'zoomLevel' vorhanden wird die passende Resolution zurückgegeben, ansonsten der Standardwert.
+     * @returns {Number} -- Die Resolution
+     */
+    function getResolution () {
+        var resolutions = {
+            '1': 66.14614761460263,  // 1:250:000
+            '2': 26.458319045841044, // 1:100.000
+            '3': 15.874991427504629, // 1:60.000
+            '4': 10.583327618336419, // 1:40.000
+            '5': 5.2916638091682096, // 1:20.000
+            '6': 2.6458319045841048, // 1:10.000
+            '7': 1.3229159522920524, // 1:5.000
+            '8': 0.6614579761460262, // 1:2.500
+            '9': 0.2645831904584105  // 1:1.000
+        };
+        if (result['zoomLevel'] !== undefined) {
+            return resolutions[result['zoomLevel']];
+        }
+        else {
+            return 15.874991427504629 // 1:60.000
+        }
+    }
     var config = {
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
+            center: getCenter(),
+            resolution: getResolution(),
             scale: 60000 // für print.js benötigt
         },
         layerConf: '../../diensteapiFHHNET.json',
@@ -12,16 +77,16 @@ define(function () {
             '453',
             '8',
             '9999',
-            '1346'
+            '1346',
+            '8999',
+            '8994'
         ],
-        // Layer die Initial sichtbar sein sollen
-        visibleLayer: [
-            '453',
-            '9999'
-        ],
+        visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'}
+            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'},
+            {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8994', style: ['18','19','20','21','22','8994_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
         ],
         menubar: true,
         isMenubarVisible: true,
