@@ -40,6 +40,7 @@ define([
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
+            EventBus.on('initMouseHover', this.initMouseHover, this);
 
             this.set('projection', proj25832);
 
@@ -67,9 +68,10 @@ define([
             this.get('view').on('change:center', function () {
                 EventBus.trigger('currentMapCenter', this.get('view').getCenter());
             },this);
+        },
 
-            // Trigger wenn map vollständig geladen. Wird für WFSLayer benötigt.
-            EventBus.trigger('mapInitialized', this.get('map'));
+        initMouseHover: function () {
+            EventBus.trigger('checkmousehover', this.get('map'));
         },
 
         getCurrentScale: function () // wird in GFI Popup verwendet.

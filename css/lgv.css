@@ -97,6 +97,11 @@ html, body {
     top: 70px;
 }
 
+#mousehoverpopup {
+    position: absolute;
+    top: 70px;
+}
+
 /******* Ajax Loader *******/
 #loader
 {
