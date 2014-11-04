@@ -78,13 +78,10 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     pServerVector.addFeatures(pServerVector.readFeatures(data));
-<<<<<<< HEAD
                     // hinzufügen der LayerId für MouseHover
                     pServerVector.forEachFeature(function (ele) {
                         ele.layerId = this.get('id');
                     }, this);
-=======
->>>>>>> origin/master
                 },
                 error: function (data, textStatus, jqXHR) {
                     console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
@@ -217,27 +214,6 @@ define([
                 style: this.get('style'),
                 gfiAttributes: this.get('gfiAttributes')
             }));
-<<<<<<< HEAD
-=======
-        },
-        /*
-        *
-        *
-        */
-        mapInitialized: function (map) {
-            // MouseHover Init
-            // Zunächst wird WFSLayer geladen. Map erst später.
-            if (this.get('mouseHoverField')) {
-                this.set('selectMouseMove', new ol.interaction.Select({
-                    condition: ol.events.condition.mouseMove
-                }));
-                map.addInteraction(this.get('selectMouseMove'));
-                this.set('mouseHoverCollection', this.get('selectMouseMove').getFeatures());
-                this.get('mouseHoverCollection').on('add', function() {
-                    alert('hallo welt');
-                }, this);
-            }
->>>>>>> origin/master
         }
     });
     return WFSLayer;

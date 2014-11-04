@@ -70,13 +70,8 @@ define([
             },this);
         },
 
-<<<<<<< HEAD
         initMouseHover: function () {
-            EventBus.trigger('checkmousehover', this.get('map')); // Trigger wenn map vollständig geladen. Wird für WFSLayer benötigt.
-=======
-            // Trigger wenn map vollständig geladen. Wird für WFSLayer benötigt.
-//            EventBus.trigger('mapInitialized', this.get('map'));
->>>>>>> origin/master
+            EventBus.trigger('checkmousehover', this.get('map'));
         },
 
         getCurrentScale: function () // wird in GFI Popup verwendet.
