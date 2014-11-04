@@ -66,6 +66,7 @@ define(function () {
             return 15.874991427504629 // 1:60.000
         }
     }
+
     var config = {
         view: {
             center: getCenter(),
@@ -76,17 +77,25 @@ define(function () {
         layerIDs: [
             '453',
             '8',
-            '9999',
-            '1346',
+            '7777',
+            '1388',
+            '1117',
+            '1166',
             '8999',
             '8994'
         ],
+        // Layer die Initial sichtbar sein sollen
         visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'},
             {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8994', style: ['18','19','20','21','22','8994_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
+            {layer: '8998', style: ['32','33','34','35','8998_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8997', style: ['10','8997_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8996', style: ['11','12','13','14','15','16','17','8996_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8995', style: ['9','10','8995_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8994', style: ['18','19','20','21','22','8994_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8993', style: ['23','24','25','26','27','28','8993_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
+            {layer: '8992', style: ['29','30','31','8992_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
         ],
         menubar: true,
         isMenubarVisible: true,
@@ -97,12 +106,7 @@ define(function () {
             helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: false
-        },
-        treeFilter: {
-            layer: '7777',
-            styleName: 'treefilter',
-            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
+            treeFilter: true
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {

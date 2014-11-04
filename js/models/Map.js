@@ -71,7 +71,7 @@ define([
         },
 
         initMouseHover: function () {
-            EventBus.trigger('checkmousehover', this.get('map'));
+            EventBus.trigger('checkmousehover', this.get('map')); // Trigger wenn map vollständig geladen. Wird für WFSLayer benötigt.
         },
 
         getCurrentScale: function () // wird in GFI Popup verwendet.
@@ -136,7 +136,16 @@ define([
          *
          */
         setOrientation: function (evt) {
-            EventBus.trigger('setOrientation', evt.coordinate);
+            //projection = this.get('view').getProjection();
+            var geolocation = new ol.Geolocation({
+                projection  :   this.get('view').getProjection()
+            });
+            /*geolocation.on('change', function(evt) {
+              window.console.log(geolocation.getPosition());
+            });*/
+
+
+            EventBus.trigger('setOrientation', evt.coordinate, projection);
         },
         setPositionCoordPopup: function (evt) {
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);

@@ -2,21 +2,21 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/CoordPopup.html',
-    'models/CoordPopup'
-], function ($, _, Backbone, CoordPopupTemplate, CoordPopup) {
+    'text!templates/Orientation.html',
+    'models/Orientation'
+], function ($, _, Backbone, OrientationTemplate, Orientation) {
 
-    var CoordPopupView = Backbone.View.extend({
-        model: CoordPopup,
-        id: 'coordPopup',
-        template: _.template(CoordPopupTemplate),
+    var OrientationView = Backbone.View.extend({
+        model: Orientation,
+        template: _.template(OrientationTemplate),
         events: {
             'click .close': 'destroy'
         },
         initialize: function () {
-            this.listenTo(this.model, 'change:coordinateGeo', this.render);
+            this.listenTo(this.model, 'change:position', this.render);
         },
         render: function (evt) {
+            var test = Map.getView();
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
@@ -31,5 +31,5 @@ define([
         }
     });
 
-    return CoordPopupView;
+    return OrientationView;
 });

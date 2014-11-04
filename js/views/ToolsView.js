@@ -19,6 +19,7 @@ define([
             'click #coordinateMenu': 'activateCoordinate',
             'click #gfiMenu': 'activateGFI',
             'click #measureMenu': 'activateMeasure',
+            'click #orientationMenu': 'activateOrientation',
             'click #printMenu': 'activatePrint'
         },
         activateCoordinate: function () {
@@ -29,6 +30,9 @@ define([
         },
         activateMeasure: function () {
             this.model.activateMeasure();
+        },
+        activateOrientation: function () {
+            this.model.activateOrientation();
         },
         activatePrint: function () {
             EventBus.trigger('togglePrintWin');
