@@ -14,14 +14,17 @@ define([
          * any unspecified attributes will be set to their default value.
          */
         defaults: {
-            //gfiOverlay: new ol.Overlay({ element: $('#mousehoverpopup')}), // ol.Overlay
+            mhpOverlay: new ol.Overlay({ element: $('#mousehoverpopup')}), // ol.Overlay
             wfsList: [],
-            result: ''
+            mhpresult: '',
+            mhpcoordinates: [],
+            mhptimeout: ''
         },
         /**
          *
          */
         initialize: function () {
+            this.set('element', this.get('mhpOverlay').getElement());
             EventBus.on('newMouseHover', this.newMouseHover, this); // MouseHover auslösen. Trigger in mouseHoverCollection
             EventBus.on('checkmousehover', this.checkLayer, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
             EventBus.trigger('initMouseHover', this);
@@ -82,17 +85,17 @@ define([
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            this.get('element').popover('destroy');
+            this.set('mhpresult', '');
+            this.get('element').tooltip('destroy');
         },
         /**
          * Zeigt das Popup.
          */
         showPopup: function () {
-            this.get('element').popover('show');
+            this.get('element').tooltip('show');
         },
         /**
-        * newMouseHover wird nur beim hovern über sichtbaren
-        * Elementen ausgeführt.
+        *
         */
         newMouseHover: function (elementlist) {
             if (elementlist.element.features) {
@@ -166,8 +169,12 @@ define([
                     }
                 }
             }, this);
-            if (this.get('result') != value) {
-                this.set('result', value);
+            // sicherstellen, dass neuer Wert vorhanden, bevor Tooltip erzeugt wird
+            if (this.get('mhpresult') != value) {
+                EventBus.trigger('addOverlay', this.get('mhpOverlay'));
+                this.set('mhpresult', value);
+                this.get('mhpOverlay').setPosition(coord);
+                this.set('mhpcoordinates', coord);
             }
         }
     });
