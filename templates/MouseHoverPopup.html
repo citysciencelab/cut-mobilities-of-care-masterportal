@@ -23,15 +23,13 @@
         </td>
         <td>
             <% if (value.search('.html') !== -1) { %>
-                <a href="<%= value%>" target="_blank">Link</a>
+                <a href="<%= value%>">Link</a>
             <% } else if (value.substr(0, 7) == 'http://') { %>
-                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                    <img class="gfiPic" src="<%= value%>">
-                <% } else { %>
-                    <a href="<%= value%>"><%= value%></a>
-                <% } %>
+                <a href="<%= value%>"><%= value%></a>
             <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49') { %>
                 <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+            <% } else if (value.search('.jpg') !== -1) { %>
+                <img class="gfiPic" src="<%= value%>">
             <% } else { %>
                 <%= value %>
             <% } %>

@@ -5,7 +5,8 @@ define([
     'eventbus',
     'config',
     'models/Layer',
-    'collections/stylelist',
+    'collections/stylelist'
+
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
     // Definition der Projektion EPSG:25832
     ol.proj.addProjection(new ol.proj.Projection({
@@ -25,7 +26,6 @@ define([
          *
          */
         setAttributionLayerSource: function () {
-            EventBus.on('mapInitialized', this.mapInitialized, this);
             // Stelle GetRequest zusammen
             var getrequest = this.get('url')
                 + '?REQUEST=GetFeature'
@@ -50,7 +50,6 @@ define([
                     return num;
                 }
             });
-
             this.set('styleId', wfsconfig.style);
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);
@@ -79,6 +78,10 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     pServerVector.addFeatures(pServerVector.readFeatures(data));
+                    // hinzufügen der LayerId für MouseHover
+                    pServerVector.forEachFeature(function (ele) {
+                        ele.layerId = this.get('id');
+                    }, this);
                 },
                 error: function (data, textStatus, jqXHR) {
                     console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
@@ -211,24 +214,6 @@ define([
                 style: this.get('style'),
                 gfiAttributes: this.get('gfiAttributes')
             }));
-        },
-        /*
-        *
-        *
-        */
-        mapInitialized: function (map) {
-            // MouseHover Init
-            // Zunächst wird WFSLayer geladen. Map erst später.
-            if (this.get('mouseHoverField')) {
-                this.set('selectMouseMove', new ol.interaction.Select({
-                    condition: ol.events.condition.mouseMove
-                }));
-                map.addInteraction(this.get('selectMouseMove'));
-                this.set('mouseHoverCollection', this.get('selectMouseMove').getFeatures());
-                this.get('mouseHoverCollection').on('add', function() {
-                    alert('hallo welt');
-                }, this);
-            }
         }
     });
     return WFSLayer;

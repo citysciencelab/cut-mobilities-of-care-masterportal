@@ -30,6 +30,7 @@ define([
         },
         initialize: function () {
             EventBus.on('getLayersForPrint', this.printLayer, this);
+            EventBus.on('updateStyleByID', this.updateStyleByID, this);
 
             this.fetch({
                 cache: false,
@@ -51,6 +52,13 @@ define([
         },
         printLayer: function () {
             EventBus.trigger('sendLayersForPrint', this.getVisibleLayer());
+        },
+        /**
+         * Aktualisiert den Style vom Layer mit SLD_BODY.
+         * args[0] = id, args[1] = SLD_Body
+         */
+        updateStyleByID: function (args) {
+            this.get(args[0]).get('source').updateParams({'SLD_BODY': args[1]});
         }
     });
 

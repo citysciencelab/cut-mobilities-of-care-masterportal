@@ -33,6 +33,11 @@ require([
     'models/Map',
     'jquery'
 ], function (Config, Map) {
+    if (Config.mouseHover === true) {
+        require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
+            new MouseHoverPopupView();
+        });
+    }
     new Map();
 
     if (Config.menubar === true) {
@@ -56,6 +61,11 @@ require([
                         require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
                             new MeasureModalView();
                             new MeasurePopupView();
+                        });
+                    }
+                    if (Config.tools.orientation === true) {
+                        require(['views/OrientationView'], function (OrientationView) {
+                            new OrientationView();
                         });
                     }
                     if (Config.tools.print === true) {
