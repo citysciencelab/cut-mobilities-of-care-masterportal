@@ -10,24 +10,18 @@ define([
         model: Orientation,
         template: _.template(OrientationTemplate),
         events: {
-            'click .close': 'destroy'
+            'click': 'getOrientation'
         },
         initialize: function () {
-            this.listenTo(this.model, 'change:position', this.render);
+            this.render();
         },
-        render: function (evt) {
-            var test = Map.getView();
+        render: function () {
             var attr = this.model.toJSON();
-            this.$el.html(this.template(attr));
-            $(this.model.get('element')).popover({
-                'placement': 'auto',
-                'html': true,
-                'content': this.$el
-            });
-            this.model.showPopup();
+            //$('body').append(this.$el.append(this.template(attr)));
+            $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
-        destroy: function () {
-            this.model.destroyPopup();
+        getOrientation: function (){
+            this.model.setOrientation();
         }
     });
 
