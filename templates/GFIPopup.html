@@ -26,7 +26,7 @@
                 <a href="<%= value%>" target="_blank">Link</a>
             <% } else if (value.substr(0, 7) == 'http://') { %>
                 <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                    <img class="gfiPic" src="<%= value%>">
+                    <img height="150" src="<%= value%>">
                 <% } else { %>
                     <a href="<%= value%>"><%= value%></a>
                 <% } %>
