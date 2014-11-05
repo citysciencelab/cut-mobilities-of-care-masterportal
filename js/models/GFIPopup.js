@@ -86,7 +86,6 @@ define([
             // 5 mm um Klickpunkt forEachFeatureInExtent
             var pMaxDist = 0.005 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
-            console.log(pExtent);
             var pX = pCoordinate[0];
             var pY = pCoordinate[1];
             var pMinX = pExtent[0] - pMaxDist;
