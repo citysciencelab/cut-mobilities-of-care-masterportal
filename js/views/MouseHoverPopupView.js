@@ -9,7 +9,7 @@ define([
         model: MouseHoverPopup,
         id: 'mousehoverpopup',
         events: {
-            'click': 'destroy'
+            'click .tooltip-inner': 'destroy'
         },
         initialize: function () {
             this.listenTo(this.model, 'change:mhpcoordinates', this.render);
