@@ -1,0 +1,29 @@
+.buttonStandpunkt {
+          position: absolute;
+          z-index: 8000;
+          right:40px;
+          margin-top: 15px;
+          margin-right: 15px;
+}
+#geolocate{
+    width: 30px;
+    height:30px;
+    font-size:30px;
+    cursor:pointer;
+}
+#info {
+    background-color: lightgrey;
+    font-size: 0.7em;
+    padding: 4px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+#centerDiv{
+    position: absolute;
+    right:50%;
+    top:50%;
+    width:15px;
+    height:15px;
+    visibility:hidden;
+}
