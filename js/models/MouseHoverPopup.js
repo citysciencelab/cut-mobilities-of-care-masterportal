@@ -21,7 +21,10 @@ define([
             mhptimeout: ''
         },
         /**
-         *
+         * FEHLER: map.addInteraction() bewirkt zwar das hinzufügen der Interaction, fortan kann die map aber nicht mehr
+         * verschoben werden. Weder hier noch in map.js läßt sich addInteraction() erfolgreich ausführen.
+         * Weder über addInteraction noch über interactios:ol.interaction.defaults().extend([])
+         * Ursache: ol.events.condition.mouseMove ist experimental. Mit ol.events.condition.click klappt es.
          */
         initialize: function () {
             this.set('element', this.get('mhpOverlay').getElement());

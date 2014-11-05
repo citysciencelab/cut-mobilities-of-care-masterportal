@@ -20,10 +20,10 @@ define(function () {
         ],
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 30, searchField: 'name', mouseHoverField: 'name'}
+            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'}
         ],
         menubar: true,
-        mouseHover: true,
+        mouseHover: false,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
