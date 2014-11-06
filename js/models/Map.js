@@ -139,7 +139,7 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                if (element.getProperties().typ === 'WMS') {
+                if (element.getProperties().typ === 'WMS' && element.get('gfiAttributes') !== false) {
                     var gfiURL = element.getSource().getGetFeatureInfoUrl(
                         coordinate, resolution, projection,
                         {'INFO_FORMAT': 'text/xml'}
