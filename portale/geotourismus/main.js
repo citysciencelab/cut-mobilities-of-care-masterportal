@@ -85,6 +85,11 @@ require([
                     new PointOfInterestView();
                 });
             }
+            if (Config.menu.legend === true) {
+                require(['views/LegendView'], function (LegendView) {
+                    new LegendView();
+                });
+            }
         });
     }
     $(function () {

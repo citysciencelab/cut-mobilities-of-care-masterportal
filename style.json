@@ -196,7 +196,7 @@
         "id" : "29",
         "name":"Strassenpflaster",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/straßenpflaster_10.png",
+        "imagesrc" : "../../img/strassenpflaster_10.png",
         "imagescale" : "0.5"
     },
     {

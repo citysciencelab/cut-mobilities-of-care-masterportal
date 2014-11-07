@@ -24,7 +24,8 @@ define([
             });
         },
         events: {
-            'click .filterTree': 'activateFilterTree'
+            'click .filterTree': 'activateFilterTree',
+            'click .legend': 'activateLegend'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -37,6 +38,9 @@ define([
         },
         activateFilterTree: function () {
             EventBus.trigger('toggleFilterTreeWin');
+        },
+        activateLegend: function () {
+            EventBus.trigger('toggleLegendWin');
         }
     });
 

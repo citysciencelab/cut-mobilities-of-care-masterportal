@@ -124,3 +124,6 @@ html, body {
 #coordPopup {
     padding: 10px;
 }
+#poiPanel{
+    visibility: hidden;
+}

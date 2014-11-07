@@ -3,16 +3,23 @@ define([
     'backbone',
     'eventbus',
     'openlayers',
-    'proj4'
-], function (_, Backbone, EventBus, ol, proj4) {
+    'proj4',
+    'collections/stylelist'
+], function (_, Backbone, EventBus, ol, proj4, StyleList) {
 
     proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
     var Orientation = Backbone.Model.extend({
+        defaults: {
+            poiContent: []
+        },
+
         initialize: function () {
             EventBus.on('setOrientation', this.setOrientation, this);
+            EventBus.on('getPOI', this.getPOI, this);
+            EventBus.on('getPOIParams', this.getPOIParams, this);
         },
-        setOrientation: function () {
+        setOrientation: function (btn) {
             // Geolocation marker
             proj4326=ol.proj.get('EPSG:4326');
             var positions = new ol.geom.LineString([],
@@ -23,18 +30,15 @@ define([
               projection: proj4326,
               tracking: true
             }));
-            var deltaMean = 500; // the geolocation sampling period mean in ms
 
             // Listen to position changes
             var position
             geolocation.on('change', function(evt) {
               position = geolocation.getPosition();
-              var accuracy = geolocation.getAccuracy();
-              var heading = geolocation.getHeading() || 0;
-              var speed = geolocation.getSpeed() || 0;
-              var m = Date.now();
 
               var newCenter = proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position);
+              EventBus.trigger('setCenter', newCenter);
+
               var marker = document.getElementById('geolocation_marker');
               //marker.style.visibility='visible';
               //marker.appendChild(document.getElementById('geolocation_marker'));
@@ -46,40 +50,43 @@ define([
 
               });
             EventBus.trigger('addOverlay', marker);
+            geolocation.setTracking(false);
 
-              var coords = positions.getCoordinates();
-              var len = coords.length;
-              if (len >= 2) {
-                deltaMean = (coords[len - 1][3] - coords[0][3]) / (len - 1);
-              }
-            //Infobox
-            /*var html = [
-                'Position: ' + position[0].toFixed(2) + ', ' + position[1].toFixed(2),
-                'Accuracy: ' + accuracy,
-                'Heading: ' + Math.round(radToDeg(heading)) + '&deg;',
-                'Speed: ' + (speed * 3.6).toFixed(1) + ' km/h',
-                'Delta: ' + Math.round(deltaMean) + 'ms'
-              ].join('<br />');
-              document.getElementById('info').innerHTML = html;*/
-             geolocation.setTracking(false);
-                EventBus.trigger('setCenter', newCenter);
-            });
-            // convert radians to degrees
-            function radToDeg(rad) {
-              return rad * 360 / (Math.PI * 2);
+            if (btn=="poi"){
+                this.getPOI(position);
             }
-            // convert degrees to radians
-            function degToRad(deg) {
-              return deg * Math.PI * 2 / 360;
-            }
-            // modulo for negative values
-            function mod(n) {
-              return ((n % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
-            }
-
+            },this);
            geolocation.on('error', function() {
               alert('Standpunktbestimmung momentan nicht verfügbar!');
             });
+
+        },
+        getPOI: function(stdPkt){
+            var circle= new ol.geom.Polygon.circular(new ol.Sphere(6378137), stdPkt, 500);
+            var topleft=[circle.getExtent()[0],circle.getExtent()[1]];
+            var botright=[circle.getExtent()[2],circle.getExtent()[3]];
+            var circleExtent=new Array();
+            var circleExtent=proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), topleft);
+            var botrightUTM=proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), botright);
+            circleExtent[2]=botrightUTM[0];
+            circleExtent[3]=botrightUTM[1];
+            var circleCoord = circle.getCoordinates();
+            this.set('circleExtent', circleExtent);
+            EventBus.trigger('setPOIParams', this);
+        },
+        getPOIParams: function(params){
+            var featureArray= new Array();
+
+            for(var i =0;i<params.length;i++){
+                psource=params[i].source;
+                psource.forEachFeatureInExtent(this.get('circleExtent'), function addFeature(feature){featureArray.push(feature)});
+
+            }
+            if(featureArray.length>0){
+                this.set('poiContent', featureArray);
+            }
+            EventBus.trigger('showPOIModal', this.get('poiContent'),StyleList);
+
         }
     });
 
