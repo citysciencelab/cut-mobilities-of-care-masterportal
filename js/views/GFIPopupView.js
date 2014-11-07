@@ -27,7 +27,7 @@ define([
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
-                'placement': 'bottom',
+                'placement': 'auto',
                 'html': true,
                 'content': this.$el
             });

@@ -43,47 +43,49 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         setGFIParams: function (params) {
-             if(params[0].attributes !== false) {
-                // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
-                var sortedParams = _.sortBy(params[0], 'name');
-                var pContent = [], pTitles = [], pURLs = [];
-                for (i=0; i < sortedParams.length; i++) {
-                    if (sortedParams[i].typ === "WMS") {
-                        gfiContent = this.setWMSPopupContent(sortedParams[i]);
-                    }
-                    else if (sortedParams[i].typ === "WFS") {
-                        gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
-                    }
-                    if (gfiContent && typeof gfiContent == 'object') {
-                        pContent.push(gfiContent);
+            var gfiContent;
+            // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
+            var sortedParams = _.sortBy(params[0], 'name');
+            var pContent = [], pTitles = [], pURLs = [];
+            for (var i=0; i < sortedParams.length; i+=1) {
+                if (sortedParams[i].typ === "WMS") {
+                    gfiContent = this.setWMSPopupContent(sortedParams[i]);
+                }
+                else if (sortedParams[i].typ === "WFS") {
+                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
+                }
+                // vorher if (gfiContent && typeof gfiContent == 'object') {
+                if (gfiContent !== undefined) {
+                    _.each(gfiContent, function (content) {
+                        pContent.push(content);
                         pTitles.push(sortedParams[i].name);
-                        if (sortedParams[i].url) {
-                            pURLs.push(sortedParams[i].url);
-                        }
-                        else if (sortedParams[i].source.source_) {
-                            pURLs.push(sortedParams[i].source.source_.format.featureType_);
-                        }
-                        else if (sortedParams[i].source){
-                            pURLs.push(sortedParams[i].source.format.featureType_);
-                        }
+                    });
+                    if (sortedParams[i].url) {
+                        pURLs.push(sortedParams[i].url);
+                    }
+                    else if (sortedParams[i].source.source_) {
+                        pURLs.push(sortedParams[i].source.source_.format.featureType_);
+                    }
+                    else if (sortedParams[i].source){
+                        pURLs.push(sortedParams[i].source.format.featureType_);
                     }
                 }
-                if (pContent.length > 0) {
-                    this.set('gfiURLs', pURLs);
-                    this.get('gfiOverlay').setPosition(params[1]);
-                    this.set('gfiContent', pContent);
-                    this.set('gfiTitles', pTitles);
-                    this.set('gfiCounter', pContent.length);
-                    this.set('coordinate', params[1]);
-                }
-             }
+            }
+            if (pContent.length > 0) {
+                this.set('gfiURLs', pURLs);
+                this.get('gfiOverlay').setPosition(params[1]);
+                this.set('gfiContent', pContent);
+                this.set('gfiTitles', pTitles);
+                this.set('gfiCounter', pContent.length);
+                this.set('coordinate', params[1]);
+            }
         },
         /**
          *
          */
         setWFSPopupContent: function (pSource, pCoordinate, pScale, attributes) {
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
-            // 5 mm um Klickpunkt
+            // 5 mm um Klickpunkt forEachFeatureInExtent
             var pMaxDist = 0.005 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
             var pX = pCoordinate[0];
@@ -96,30 +98,50 @@ define([
                 return;
             }
             else {
+                var pContent;
                 if (pFeatures.getProperties().features) {
-                    pValues = pFeatures.getProperties().features[0].getProperties();
+                    var contentArray = [];
+                    for (var i = 0; i < pFeatures.getProperties().features.length; i += 1) {
+                        pValues = pFeatures.getProperties().features[i].getProperties();
+                        var pContentArray = new Array;
+                        // NOTE Attributes === 'showAll' vorher abfragen
+                        _.each(pValues, function (value, key, list) {
+                            if (typeof value === 'string') { // Geometrie ist als Objekt in den Properties
+                                if (_.has(attributes, key)) {
+                                    pContentArray.push([attributes[key], value]);
+                                }
+                                else if (attributes === 'showAll') { // showAll
+                                    key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
+                                    pContentArray.push([key, value]);
+                                }
+                            }
+                        });
+                        pContent = _.object(pContentArray);
+                        contentArray.push(pContent);
+                    }
+                    return contentArray;
                 }
                 else {
                     pValues = pFeatures.getProperties();
+                    var pContentArray = new Array;
+                    _.each(pValues, function (value, key, list) {
+                        if (typeof value == 'string') {
+                            if (_.has(attributes, key)) {
+                                pContentArray.push([attributes[key], value]);
+                            }
+                            else if (attributes === 'showAll') { // showAll
+                                key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
+                                pContentArray.push([key, value]);
+                            }
+                        }
+                    });
+                    pContent = _.object(pContentArray);
+                    return pContent;
                 }
-                var pContentArray = new Array;
-                _.each(pValues, function (value, key, list) {
-                    if (typeof value == 'string') {
-                        if (_.has(attributes, key)) {
-                            pContentArray.push([attributes[key], value]);
-                        }
-                        else if (attributes === 'showAll') { // showAll
-                            key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
-                            pContentArray.push([key, value]);
-                        }
-                    }
-                });
-                var pContent = _.object(pContentArray);
-                return pContent;
             }
         },
         setWMSPopupContent: function (params) {
-            var pgfi;
+            var pgfi = [];
             $.ajax({
                 url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(params.url),
                 async: false,
@@ -142,7 +164,7 @@ define([
                                     }
                                 }
                             });
-                            pgfi=gfi;
+                            pgfi.push(gfi);
                         }
                         // deegree
                         else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
@@ -164,7 +186,7 @@ define([
                                     gfi[params.attributes[element.localName]] = element.textContent.trim();
                                 });
                             }
-                            pgfi=gfi;
+                            pgfi.push(gfi);
                         }
                         // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
                         else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
@@ -186,7 +208,7 @@ define([
                                     gfi[params.attributes[element.localName]] = element.textContent.trim();
                                 });
                             }
-                            pgfi=gfi;
+                            pgfi.push(gfi);
                         }
                     }
                     catch (error) {

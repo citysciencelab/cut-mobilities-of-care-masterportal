@@ -16,12 +16,12 @@ define([
             this.listenTo(this.model, 'change:settings', this.render);
         },
         events: {
-            'click .glyphicon-plus-sign': 'upTransparence',
-            'click .glyphicon-minus-sign': 'downTransparence',
-            'click span.glyphicon-info-sign': 'getMetadata',
-            'click .glyphicon-check, .glyphicon-unchecked': 'toggleVisibility',
-            'click .glyphicon-upload, .glyphicon-download': 'moveLayer',
-            'click .glyphicon-refresh': 'toggleSettings'
+            'click .plus': 'upTransparence',
+            'click .minus': 'downTransparence',
+            'click .info': 'getMetadata',
+            'click .check, .unchecked': 'toggleVisibility',
+//            'click .upload, .download': 'moveLayer',
+            'click .refresh': 'toggleSettings'
         },
         moveLayer: function (evt) {
             var className = evt.currentTarget.className;
