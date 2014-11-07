@@ -1,16 +1,14 @@
 .buttonStandpunkt {
     position: fixed;
     z-index: 8000;
-    right: 70px;
+    right: 100px;
     margin-top: 5px;
 }
 .buttonPOI {
-          position: absolute;
-          z-index: 8000;
-          right:0px;
-          top:80px;
-          margin-top: 15px;
-          margin-right: 15px;
+    position: fixed;
+    z-index: 8000;
+    right:60px;
+    margin-top: 5px;
 }
 
 #geolocate{

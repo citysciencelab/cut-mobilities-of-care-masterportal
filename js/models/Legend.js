@@ -7,9 +7,15 @@ define([
 
     var Legend = Backbone.Model.extend({
         defaults:{
+            img:[]
         },
-        initialize: function () {
+        setAttributions: function(params){
+            this.set('img', []);
 
+            _.each(params, function(element, index) {
+                name= element.name.replace(/ /g, "_");
+                this.get('img').push("../../img/"+name+".png");
+            },this);
         }
 
 

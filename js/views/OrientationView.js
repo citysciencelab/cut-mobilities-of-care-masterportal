@@ -18,7 +18,6 @@ define([
         },
         render: function () {
             var attr = this.model.toJSON();
-            //$('body').append(this.$el.append(this.template(attr)));
             $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
         getOrientation: function (){

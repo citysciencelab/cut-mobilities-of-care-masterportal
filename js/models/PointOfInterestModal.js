@@ -14,7 +14,6 @@ define([
         img: []
         },
         setAttributions: function(poiContent, StyleList){
-            console.log(poiContent);
             this.set('name', []);
             this.set('kategorie', []);
             this.set('coord', []);

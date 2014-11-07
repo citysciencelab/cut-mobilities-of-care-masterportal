@@ -14,15 +14,15 @@ define([
         template: _.template(LegendTemplate),
         initialize: function () {
             this.render();
-            EventBus.on('showLegend', this.show);
+            EventBus.on('showLegend', this.show, this);
             EventBus.on('toggleLegendWin', this.toggleLegendWin, this);
         },
         events: {
            'click button': 'onLegendClick'
         },
-        show: function () {
-            //alert();
-            //this.render();
+        show: function (params) {
+            this.model.setAttributions(params);
+            this.render();
             this.$el.modal({
                 backdrop: 'static',
                 show: true

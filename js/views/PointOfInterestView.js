@@ -14,19 +14,14 @@ define([
         template: _.template(PointOfInterestTemplate),
         events: {
           'click .poiRow': 'onPOIClick'
-//            'click button': 'activateDraw'
         },
         initialize: function () {
             EventBus.on('showPOIModal', this.show, this);
-//            this.render();
         },
         onPOIClick: function (evt) {
-
             this.$el.modal('hide');
             newCenter=evt.target.title.split(',');
             newCenter.pop();
-            console.log(evt.target);
-            //console.log(this.model);
             EventBus.trigger('setCenter', [parseInt(newCenter[0],10),parseInt(newCenter[1],10)]);
         },
         show: function (poiContent, StyleList) {
