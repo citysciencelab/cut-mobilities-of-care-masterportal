@@ -60,7 +60,8 @@ define([
                 renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                 target: 'map',
                 view: this.get('view'),
-                controls: []
+                controls: [],
+                interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
             }));
 
             // View listener

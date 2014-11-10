@@ -29,8 +29,9 @@ define([
             });
         },
         initialize: function () {
-            EventBus.on('getLayersForPrint', this.printLayer, this);
+            EventBus.on('getLayersForPrint', this.sendVisibleWMSLayer, this);
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
+            EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
 
             this.fetch({
                 cache: false,
@@ -50,7 +51,23 @@ define([
         getVisibleLayer: function () {
             return this.where({visibility: true});
         },
-        printLayer: function () {
+        /**
+         * Gibt alle Sichtbaren WFS-Layer zurück.
+         *
+         */
+        getVisibleWFSLayer: function () {
+            return this.where({visibility: true, typ: "WFS"});
+        },
+        /**
+         *
+         */
+        sendVisibleWFSLayer: function () {
+            EventBus.trigger('sendVisibleWFSLayer', this.getVisibleWFSLayer());
+        },
+        /**
+         *
+         */
+        sendVisibleWMSLayer: function () {
             EventBus.trigger('sendLayersForPrint', this.getVisibleLayer());
         },
         /**

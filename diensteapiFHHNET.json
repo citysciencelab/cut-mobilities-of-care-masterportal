@@ -27783,9 +27783,20 @@
       "name" : "Landschaftsform",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Landschaftsform",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27802,16 +27813,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Landschaftsform",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "353",
       "name" : "Bauwerke",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Bauwerke",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27828,16 +27852,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Bauwerke",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "354",
-      "name" : "Unsichtbares_Objekt",
+      "name" : "Unsichtbares Objekt",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Unsichtbares_Objekt",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27854,16 +27891,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Unsichtbares_Objekt",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "355",
-      "name" : "Sehenswerte_Objekte",
+      "name" : "Sehenswerte Objekte",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Sehenswerte_Objekte",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27880,16 +27930,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Sehenswerte_Objekte",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "356",
       "name" : "Bergbau",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Bergbau",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27906,16 +27969,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Bergbau",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "357",
-      "name" : "Wasser_und_Wasserbau",
+      "name" : "Wasser und Wasserbau",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Wasser_und_Wasserbau",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27932,16 +28008,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Wasser_und_Wasserbau",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "358",
-      "name" : "GeologischeObjekte",
+      "name" : "Geologische Objekte",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:GeologischeObjekte",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27958,16 +28047,29 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "GeologischeObjekte",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "359",
-      "name" : "Stein_und_Fels",
+      "name" : "Stein und Fels",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
+      "srsname": "EPSG:25832",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Stein_und_Fels",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
+      "gfiAttributes": {
+          "Name": "Name",
+          "LINK_Bild" : "Bild",
+          "Kategorie":"Kategorie",
+          "Lage": "Lage",
+          "Bezirk": "Bezirk",
+          "Objekt_Geotouren" : "Objekt Geotouren",
+          "URL_Geologie" : "weitere Informationen",
+          "Geotope" : "Geotope"
+      },
       "datasets" : [
          {
             "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
@@ -27984,7 +28086,9 @@
             ]
          }
       ],
-      "singleTile" : "nicht vorhanden"
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+     "featureType": "Stein_und_Fels",
+     "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "360",
