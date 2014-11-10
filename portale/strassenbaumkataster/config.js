@@ -36,8 +36,7 @@ define(function () {
         else {
             return [
                 '453',  // Luftbilder (WMS)
-                '8999', // Landschaftsform (WFS)
-                '8994'  // Wasser und Wasserbau (WFS)
+                '5182'
             ];
         }
     }
@@ -81,8 +80,7 @@ define(function () {
             '1388',
             '1117',
             '1166',
-            '8999',
-            '8994'
+            '5182'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: getVisibleLayer(),
