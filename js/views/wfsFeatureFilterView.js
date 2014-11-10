@@ -71,7 +71,6 @@ var wfsFeatureFilterView = Backbone.View.extend({
 
                             if (showall === true) {
                                 if (layer.defaultStyle) {
-                                    console.log('showall');
                                     layer.setStyle(layer.defaultStyle);
                                     delete layer.defaultStyle;
                                     layer.getSource().getFeatures().forEach(function (feature) {
