@@ -41,6 +41,7 @@ define([
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('initMouseHover', this.initMouseHover, this);
+            EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
 //            EventBus.on('setPOIParams', this.setPOIParams, this);
             EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
 
@@ -71,6 +72,10 @@ define([
             this.get('view').on('change:center', function () {
                 EventBus.trigger('currentMapCenter', this.get('view').getCenter());
             },this);
+        },
+
+        initWfsFeatureFilter: function () {
+            EventBus.trigger('checkwfsfeaturefilter', this.get('map'));
         },
 
         initMouseHover: function () {
