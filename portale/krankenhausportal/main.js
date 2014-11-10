@@ -85,6 +85,11 @@ require([
                     new SearchbarView();
                 });
             }
+            if (Config.menu.wfsFeatureFilter === true) {
+                require(['views/wfsFeatureFilterView'], function (wfsFeatureFilterView) {
+                    new wfsFeatureFilterView();
+                });
+            }
         });
     }
     $(function () {

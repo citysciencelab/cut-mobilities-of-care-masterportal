@@ -41,6 +41,7 @@ define([
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('initMouseHover', this.initMouseHover, this);
+            EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
 
             this.set('projection', proj25832);
 
@@ -68,6 +69,10 @@ define([
             this.get('view').on('change:center', function () {
                 EventBus.trigger('currentMapCenter', this.get('view').getCenter());
             },this);
+        },
+
+        initWfsFeatureFilter: function () {
+            EventBus.trigger('checkwfsfeaturefilter', this.get('map'));
         },
 
         initMouseHover: function () {
