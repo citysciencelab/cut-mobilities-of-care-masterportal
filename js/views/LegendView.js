@@ -10,7 +10,7 @@ define([
     var LegendView = Backbone.View.extend({
         model: Legend,
         id: 'base-modal',
-        className: 'modal fade in',
+        className: 'modal fade bs-example-modal-sm',
         template: _.template(LegendTemplate),
         initialize: function () {
             this.render();

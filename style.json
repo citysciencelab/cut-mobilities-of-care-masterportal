@@ -242,7 +242,7 @@
         "imagescale" : "0.5"
     },
     {
-        "id" : "8992_cluster",
+        "id" : "359_cluster",
         "name":"Stein und Fels",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -255,7 +255,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8993_cluster",
+        "id" : "358_cluster",
         "name":"Geologische Objekte",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -268,7 +268,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8994_cluster",
+        "id" : "357_cluster",
         "name":"Wasser und Wasserbau",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -281,7 +281,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8995_cluster",
+        "id" : "356_cluster",
         "name":"Bergbau",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -294,7 +294,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8996_cluster",
+        "id" : "355_cluster",
         "name":"Sehenswerte Objekte",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -307,7 +307,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8997_cluster",
+        "id" : "354_cluster",
         "name":"Unsichtbares Objekt",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -320,7 +320,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8998_cluster",
+        "id" : "353_cluster",
         "name":"Bauwerke",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -333,7 +333,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "8999_cluster",
+        "id" : "352_cluster",
         "name":"Landschaftsform",
         "subclass" : "Circle",
         "imagescale" : "0.5",

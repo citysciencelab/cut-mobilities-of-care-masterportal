@@ -4,6 +4,13 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Schließen</span></button>
         <h4 class="modal-title" id="meinModalLabel">In meiner Nähe</h4>
       </div>
+      <div class="modal-tabs">
+          <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"id="500m"><a href="#500Meter" role="tab" data-toggle="tab">500 Meter</a></li>
+              <li role="presentation" id="1000m"><a href="#1000Meter" role="tab" data-toggle="tab">1000 Meter</a></li>
+              <li role="presentation" id="2000m"><a href="#2000Meter" role="tab" data-toggle="tab">2000 Meter</a></li>
+          </ul>
+      </div>
       <div class="modal-body">
         <table>
             <%  if(poiContent.length >0) {
@@ -30,7 +37,17 @@
                     <strong title=<%=coord[index]%>>  <%= name[index] %></strong >
                 </td>
             </tr>
-            <% })};%>
+            <% })}
+             else{ %>
+                    <tr class= "poiRow" %>>
+                <td>
+                <p>  </p>
+                </td>
+                <td style="padding-left:5px; vertical-align:middle;">
+                    <strong>In der gewählten Entfernung und den ausgewählten Themen befinden sich keine Objekte zu Ihrem Standpunkt!</strong >
+                </td>
+            </tr>
+            <%}%>
         </table>
       </div>
       <div class="modal-footer">

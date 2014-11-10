@@ -9,14 +9,16 @@ define([
 
     var MeasurePopupView = Backbone.View.extend({
         model: PointOfInterestModal,
-        id: 'base-modal',
         className: 'modal fade in',
         template: _.template(PointOfInterestTemplate),
         events: {
-          'click .poiRow': 'onPOIClick'
+          'click .poiRow': 'onPOIClick',
+            'click #500m': 'onClick500m',
+            'click #1000m': 'onClick1000m',
+            'click #2000m': 'onClick2000m',
         },
         initialize: function () {
-            EventBus.on('showPOIModal', this.show, this);
+            EventBus.on('showPOIModal', this.show, this, this);
         },
         onPOIClick: function (evt) {
             this.$el.modal('hide');
@@ -24,7 +26,16 @@ define([
             newCenter.pop();
             EventBus.trigger('setCenter', [parseInt(newCenter[0],10),parseInt(newCenter[1],10)]);
         },
-        show: function (poiContent, StyleList) {
+        onClick500m: function (evt) {
+            EventBus.trigger('setOrientation', 500);
+        },
+        onClick1000m: function () {
+            EventBus.trigger('setOrientation', 1000);
+        },
+        onClick2000m: function () {
+            EventBus.trigger('setOrientation', 2000);
+        },
+        show: function (poiContent, StyleList, distance) {
             this.model.setAttributions(poiContent, StyleList);
             this.model.set('poiContent', poiContent);
             this.model.set('StyleList', StyleList);
@@ -33,6 +44,8 @@ define([
                 backdrop: 'static',
                 show: true
             });
+            $('#'+distance+'m a[href="#'+distance+'Meter"]').tab('show')
+
         },
         render: function () {
             var attr = this.model.toJSON();

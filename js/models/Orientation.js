@@ -41,23 +41,21 @@ define([
             EventBus.trigger('addOverlay', marker);
             geolocation.setTracking(false);
             if (btn=="poi"){
-                this.getPOI(position);
+                this.getPOI(newCenter, 500);
+            }
+            else if(btn==500||btn==1000||btn==2000){
+                this.getPOI(newCenter,btn);
             }
             },this);
            geolocation.on('error', function() {
               alert('Standpunktbestimmung momentan nicht verfügbar!');
             });
         },
-        getPOI: function(stdPkt){
-            var circle= new ol.geom.Polygon.circular(new ol.Sphere(6378137), stdPkt, 500);
-            var topleft=[circle.getExtent()[0],circle.getExtent()[1]];
-            var botright=[circle.getExtent()[2],circle.getExtent()[3]];
-            var circleExtent=new Array();
-            var circleExtent=proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), topleft);
-            var botrightUTM=proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), botright);
-            circleExtent[2]=botrightUTM[0];
-            circleExtent[3]=botrightUTM[1];
-            var circleCoord = circle.getCoordinates();
+        getPOI: function(stdPkt, distance){
+            this.set('distance', distance);
+            var circle=new ol.geom.Circle(stdPkt, distance);
+            var circleExtent=circle.getExtent();
+            var circleCoord = circle.getCenter();
             this.set('circleExtent', circleExtent);
             EventBus.trigger('setPOIParams', this);
         },
@@ -70,7 +68,7 @@ define([
             if(featureArray.length>0){
                 this.set('poiContent', featureArray);
             }
-            EventBus.trigger('showPOIModal', this.get('poiContent'),StyleList);
+            EventBus.trigger('showPOIModal', this.get('poiContent'),StyleList,this.get('distance'));
 
         }
     });
