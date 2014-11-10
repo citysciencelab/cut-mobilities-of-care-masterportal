@@ -54,7 +54,6 @@ define([
                 else if (sortedParams[i].typ === "WFS") {
                     gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
                 }
-                // vorher if (gfiContent && typeof gfiContent == 'object') {
                 if (gfiContent !== undefined) {
                     _.each(gfiContent, function (content) {
                         pContent.push(content);
@@ -136,7 +135,7 @@ define([
                         }
                     });
                     pContent = _.object(pContentArray);
-                    return pContent;
+                    return [pContent];
                 }
             }
         },
