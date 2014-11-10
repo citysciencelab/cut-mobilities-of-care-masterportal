@@ -41,7 +41,7 @@ define([
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('initMouseHover', this.initMouseHover, this);
-            EventBus.on('setPOIParams', this.setPOIParams, this);
+//            EventBus.on('setPOIParams', this.setPOIParams, this);
             EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
 
             this.set('projection', proj25832);
@@ -165,30 +165,6 @@ define([
                 }
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
-        },
-        setPOIParams: function (evt) {
-            var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
-            coordinate = evt.coordinate;
-            layers = this.get('map').getLayers().getArray();
-            resolution = this.get('view').getResolution();
-            projection = this.get('view').getProjection();
-            var scale = this.getCurrentScale();
-            layersVisible = _.filter(layers, function (element) {
-                // NOTE GFI-Filter Nur Sichtbar
-                return element.getVisible() === true;
-            });
-            _.each(layersVisible, function (element) {
-                if (element.getProperties().typ === 'WFS') {
-                    gfiParams.push({
-                        typ: 'WFS',
-                        scale: scale,
-                        source: element.getSource(),
-                        name: element.get('name'),
-                        attributes: element.get('gfiAttributes')
-                    });
-                }
-            });
-            EventBus.trigger('getPOIParams', gfiParams);
         },
         getVisibleLayer: function(evt){
             var layersVisible, gfiParams = [], layers;
