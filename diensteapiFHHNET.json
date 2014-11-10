@@ -32444,7 +32444,7 @@
     {
       "id" : "8999",
       "name" : "Landschaftsform",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Landschaftsform",
@@ -32464,14 +32464,14 @@
       "datasets" : [
 
       ],
-     "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+     "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Landschaftsform",
      "visibility": true
    },
    {
       "id" : "8998",
       "name" : "Bauwerke",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Bauwerke",
@@ -32504,14 +32504,14 @@
             ]
          }
       ],
-      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Bauwerke",
      "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "8997",
       "name" : "Unsichtbares Objekt",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Unsichtbares_Objekt",
@@ -32543,14 +32543,14 @@
                "#opendata_hh#"
             ]
     }],
-     "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+     "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Unsichtbares_Objekt",
       "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "8996",
       "name" : "Sehenswerte Objekte",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Sehenswerte_Objekte",
@@ -32583,14 +32583,14 @@
             ]
          }
       ],
-      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Sehenswerte_Objekte",
      "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "8995",
       "name" : "Bergbau",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Bergbau",
@@ -32623,14 +32623,14 @@
             ]
          }
       ],
-      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Bergbau",
      "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "8994",
       "name" : "Wasser und Wasserbau",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Wasser_und_Wasserbau",
@@ -32663,14 +32663,14 @@
             ]
          }
       ],
-      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Wasser_und_Wasserbau",
      "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "8993",
       "name" : "Geologische Objekte",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:GeologischeObjekte",
@@ -32703,14 +32703,14 @@
             ]
          }
       ],
-      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "GeologischeObjekte",
      "singleTile" : "nicht vorhanden"
    },
    {
       "id" : "8992",
       "name" : "Stein und Fels",
-      "url" : "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
       "typ" : "WFS",
       "srsname": "EPSG:25832",
       "layers" : "Test_Map_Geotourismus_WFS_Test:Stein_und_Fels",
@@ -32743,8 +32743,41 @@
             ]
          }
       ],
-      "featureNS": "http://wsca0694.fhhnet.stadt.hamburg.de/arcgis/services/Test_Map/Geotourismus_WFS_Test/MapServer/WFSServer",
+      "featureNS": "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
      "featureType": "Stein_und_Fels",
      "singleTile" : "nicht vorhanden"
+   },
+   {
+      "id" : "5182",
+      "name" : "Strassenbaumkataster_2013",
+      "url" : "http://wscd0096/fachdaten_public/services/wms_hh_strassenbaumkataster",
+      "typ" : "WMS",
+      "layers" : "strassenbaum",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "gfiAttributes": {
+            "baumart": "Baumart",
+            "pflanzjahr": "Pflanzjahr",
+            "stammumfang": "Stammumfang",
+            "standort": "Standort",
+            "kronendurchmesser": "Kronendurchmesser",
+            "botanischer_name": "Gattung"
+      },
+      "datasets" : [
+         {
+            "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
+            "rs_id" : "HMDK#C1C61928-C602-4E37-AF31-2D23901E2540",
+            "md_name" : "Straßenbaumkataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ],
+      "singleTile" : "nicht vorhanden"
    }
 ]

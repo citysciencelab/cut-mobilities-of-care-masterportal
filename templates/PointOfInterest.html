@@ -1,40 +1,8 @@
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Schließen</span></button>
-        <h4 class="modal-title" id="meinModalLabel">In meiner Nähe</h4>
-      </div>
-      <div class="modal-body">
-        <table>
-            <%  if(poiContent.length >0) {
-            _.each(name, function(element, index) {%>
-<!--
-                var featureCluster=feature.getProperties();
-                _.each(featureCluster.features, function(value,key) {
-                var name=value.getProperties().Name;
-                var kategorie=value.getProperties().Kategorie;
-                var coord=value.getGeometry().getCoordinates();
-                var img;
-                _.find(StyleList.models, function (num) {
-                    if (num.attributes.name == kategorie) {
-                        img= num.attributes.imagesrc;
-                        return;
-                    }
-                });
--->
-            <tr class= "poiRow" title=<%=coord[index]%>>
-                <td>
-                <p><img src=<%=img[index]%> width="50" height="50" title="<%=coord[index]%>">  </p>
-                </td>
-                <td style="padding-left:5px; vertical-align:middle;"title=<%=coord[index]%>>
-                    <strong title=<%=coord[index]%>>  <%= name[index] %></strong >
-                </td>
-            </tr>
-            <% })};%>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-      </div>
-    </div>
-  </div>
+<td>
+    <p>
+        <img src=<%=img%> width="50" height="50">
+    </p>
+</td>
+<td style="padding-left:5px; vertical-align:middle;">
+    <strong><%= name %></strong >
+</td>
