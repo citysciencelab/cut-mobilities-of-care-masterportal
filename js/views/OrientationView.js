@@ -10,18 +10,21 @@ define([
         model: Orientation,
         template: _.template(OrientationTemplate),
         events: {
-            'click': 'getOrientation'
+            'click .buttonStandpunkt': 'getOrientation',
+            'click .buttonPOI': 'getPOI'
         },
         initialize: function () {
             this.render();
         },
         render: function () {
             var attr = this.model.toJSON();
-            //$('body').append(this.$el.append(this.template(attr)));
             $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
         getOrientation: function (){
-            this.model.setOrientation();
+            this.model.setOrientation("stdPkt");
+        },
+        getPOI: function (){
+            this.model.setOrientation("poi");
         }
     });
 

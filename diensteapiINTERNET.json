@@ -27881,7 +27881,7 @@
    },
    {
       "id" : "354",
-      "name" : "Unsichtbares_Objekt",
+      "name" : "Unsichtbares Objekt",
       "url" : "http://geodienste-hamburg.de/HH_WFS_Geotourismus",
       "typ" : "WFS",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Unsichtbares_Objekt",
@@ -27907,7 +27907,7 @@
    },
    {
       "id" : "355",
-      "name" : "Sehenswerte_Objekte",
+      "name" : "Sehenswerte Objekte",
       "url" : "http://geodienste-hamburg.de/HH_WFS_Geotourismus",
       "typ" : "WFS",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Sehenswerte_Objekte",
@@ -27959,7 +27959,7 @@
    },
    {
       "id" : "357",
-      "name" : "Wasser_und_Wasserbau",
+      "name" : "Wasser und Wasserbau",
       "url" : "http://geodienste-hamburg.de/HH_WFS_Geotourismus",
       "typ" : "WFS",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Wasser_und_Wasserbau",
@@ -27985,7 +27985,7 @@
    },
    {
       "id" : "358",
-      "name" : "GeologischeObjekte",
+      "name" : "Geologische Objekte",
       "url" : "http://geodienste-hamburg.de/HH_WFS_Geotourismus",
       "typ" : "WFS",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:GeologischeObjekte",
@@ -28011,7 +28011,7 @@
    },
    {
       "id" : "359",
-      "name" : "Stein_und_Fels",
+      "name" : "Stein und Fels",
       "url" : "http://geodienste-hamburg.de/HH_WFS_Geotourismus",
       "typ" : "WFS",
       "layers" : "FD_FHH_Map_WFS_BSU_U_Geotourismus:Stein_und_Fels",

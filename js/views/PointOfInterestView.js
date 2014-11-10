@@ -3,25 +3,18 @@ define([
     'underscore',
     'backbone',
     'text!templates/PointOfInterest.html',
-    'models/PointOfInterest'
-], function ($, _, Backbone, PointOfInterestTemplate, PointOfInterest) {
+    'models/PointOfInterest',
+    'eventbus'
+], function ($, _, Backbone, PointOfInterestTemplate, PointOfInterest, EventBus) {
 
     var PointOfInterestView = Backbone.View.extend({
         model: PointOfInterest,
+        tagName: "tr",
         template: _.template(PointOfInterestTemplate),
-        events: {
-            'click': 'getPointOfInterest'
-        },
-        initialize: function () {
-            this.render();
-        },
         render: function () {
             var attr = this.model.toJSON();
-            //$('body').append(this.$el.append(this.template(attr)));
-            $('#toggleRow').append(this.$el.html(this.template(attr)));
-        },
-        getPointOfInterest: function (){
-            this.model.setPointOfInterest();
+            this.$el.html(this.template(attr));
+            return this;
         }
     });
 

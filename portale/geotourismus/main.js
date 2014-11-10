@@ -35,6 +35,7 @@ require([
 ], function (Config, Map) {
     new Map();
 
+
     if (Config.menubar === true) {
         require(['views/MenubarView', 'views/ToggleButtonView'], function (MenubarView, ToggleButtonView) {
             new MenubarView();
@@ -81,8 +82,14 @@ require([
                 });
             }
             if (Config.poi === true) {
-                require(['views/PointOfInterestView'], function (PointOfInterestView) {
-                    new PointOfInterestView();
+                require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
+//                    new PointOfInterestView();
+                    new PointOfInterestListView();
+                });
+            }
+            if (Config.menu.legend === true) {
+                require(['views/LegendView'], function (LegendView) {
+                    new LegendView();
                 });
             }
         });

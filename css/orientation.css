@@ -1,9 +1,16 @@
 .buttonStandpunkt {
     position: fixed;
     z-index: 8000;
-    right: 70px;
+    right: 100px;
     margin-top: 5px;
 }
+.buttonPOI {
+    position: fixed;
+    z-index: 8000;
+    right:60px;
+    margin-top: 5px;
+}
+
 #geolocate{
     cursor:pointer;
     background: none repeat scroll 0 0 #fff;
@@ -28,4 +35,7 @@
     width:15px;
     height:15px;
     visibility:hidden;
+}
+.poiRow{
+    cursor:pointer;
 }

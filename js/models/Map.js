@@ -42,6 +42,8 @@ define([
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('initMouseHover', this.initMouseHover, this);
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
+//            EventBus.on('setPOIParams', this.setPOIParams, this);
+            EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
 
             this.set('projection', proj25832);
 
@@ -59,7 +61,8 @@ define([
                 renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                 target: 'map',
                 view: this.get('view'),
-                controls: []
+                controls: [],
+                interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
             }));
 
             // View listener
@@ -144,7 +147,7 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                if (element.getProperties().typ === 'WMS') {
+                if (element.getProperties().typ === 'WMS' && element.get('gfiAttributes') !== false) {
                     var gfiURL = element.getSource().getGetFeatureInfoUrl(
                         coordinate, resolution, projection,
                         {'INFO_FORMAT': 'text/xml'}
@@ -168,6 +171,26 @@ define([
                 }
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
+        },
+        getVisibleLayer: function(evt){
+            var layersVisible, gfiParams = [], layers;
+            coordinate = evt.coordinate;
+            layers = this.get('map').getLayers().getArray();
+            layersVisible = _.filter(layers, function (element) {
+                // NOTE GFI-Filter Nur Sichtbar
+                return element.getVisible() === true;
+            });
+            _.each(layersVisible, function (element) {
+                if (element.getProperties().typ === 'WFS') {
+                    gfiParams.push({
+                        typ: 'WFS',
+                        source: element.getSource(),
+                        name: element.get('name'),
+                        attributes: element.get('gfiAttributes')
+                    });
+                }
+            });
+            EventBus.trigger('showLegend', gfiParams);
         },
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);
