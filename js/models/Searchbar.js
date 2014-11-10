@@ -141,7 +141,6 @@ define([
                     }
                 });
             });
-            console.log(coordinate);
             return coordinate;
         },
         searchWFSLayer: function () {

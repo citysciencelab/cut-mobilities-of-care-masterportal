@@ -135,6 +135,7 @@ define([
                                         }
                                     });
                                 }
+                                console.log(wfsStyle.getClusterSymbol(size));
                                 style=wfsStyle.getClusterSymbol(size);
                             }
                             else {

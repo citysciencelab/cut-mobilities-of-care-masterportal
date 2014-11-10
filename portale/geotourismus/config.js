@@ -52,6 +52,7 @@ define(function () {
             contactButton: true,
             tools: true,
             treeFilter: false,
+            wfsFeatureFilter: false,
             legend: true
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
