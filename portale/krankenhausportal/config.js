@@ -11,7 +11,7 @@ define(function () {
         layerIDs: [
             '453',
             '8',
-            '9999',
+            '9999'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
@@ -20,7 +20,20 @@ define(function () {
         ],
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'}
+            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+             filterOptions: [
+                 {
+                     'fieldName': 'geburtsklinik',
+                     'filterType': 'combo',
+                     'filterString': ['*','Perinatalzentrum Level 1','Perinatalzentrum Level 2','Perinataler Schwerpunkt','Geburtsklinik','nein']
+                 },
+                 {
+                     'fieldName': 'teilnahme_notversorgung',
+                     'filterType': 'combo',
+                     'filterString': ['*','ja','eingeschränkt','nein']
+                 }
+             ]
+            }
         ],
         menubar: true,
         mouseHover: false,
@@ -32,7 +45,8 @@ define(function () {
             helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: true,
+            treeFilter: false,
+            wfsFeatureFilter: true,
             legend: false
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
