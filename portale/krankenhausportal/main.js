@@ -40,6 +40,7 @@ require([
             new MouseHoverPopupView();
         });
     }
+
     if (Config.menubar === true) {
         require(['views/MenubarView', 'views/ToggleButtonView'], function (MenubarView, ToggleButtonView) {
             new MenubarView();
@@ -88,6 +89,11 @@ require([
             if (Config.menu.wfsFeatureFilter === true) {
                 require(['views/wfsFeatureFilterView'], function (wfsFeatureFilterView) {
                     new wfsFeatureFilterView();
+                });
+            }
+            if (Config.menu.legend === true) {
+                require(['views/LegendView'], function (LegendView) {
+                    new LegendView();
                 });
             }
         });
