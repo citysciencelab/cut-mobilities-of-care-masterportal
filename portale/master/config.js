@@ -78,8 +78,8 @@ define(function () {
             '8',
             '9999',
             '1346',
-            '8999',
-            '8994'
+            '358',
+            '359'
         ],
         visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
@@ -98,8 +98,8 @@ define(function () {
                  }
              ]
             },
-            {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8994', style: ['18','19','20','21','22','8994_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
+            {layer: '358', style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
         menubar: true,
         mouseHover: false,
