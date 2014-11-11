@@ -63,7 +63,9 @@ define([
             _.each(visibleWFSLayers, function (layer) {
                 layer.get('source').forEachFeatureInExtent(this.get('circleExtent'), function (feature) {
                     featureArray.push(feature);
-                    EventBus.trigger('setModel', feature, StyleList, this.get('distance'));
+                    console.log(this.get('newCenter'));
+                    console.log(this.get('distance'));
+                    EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'));
                 }, this);
             }, this);
             // Hier jetzt model poi erstellen
