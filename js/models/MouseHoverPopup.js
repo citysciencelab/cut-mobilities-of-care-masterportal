@@ -1,10 +1,11 @@
 define([
+    'jquery',
     'underscore',
     'backbone',
     'openlayers',
     'eventbus',
     'config'
-], function (_, Backbone, ol, EventBus, Config) {
+], function ($, _, Backbone, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         /**
@@ -28,9 +29,9 @@ define([
          */
         initialize: function () {
             this.set('element', this.get('mhpOverlay').getElement());
-            EventBus.on('newMouseHover', this.newMouseHover, this); // MouseHover auslösen. Trigger in mouseHoverCollection
-            EventBus.on('checkmousehover', this.checkLayer, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
-            EventBus.trigger('initMouseHover', this);
+            EventBus.on('newMouseHover', this.newMouseHover, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
+            EventBus.on('setMap', this.checkLayer, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
+            EventBus.trigger('getMap', this);
         },
         checkLayer: function (map) {
             // Lese Config-Optionen ein und speichere Ergebnisse
@@ -44,34 +45,18 @@ define([
                     });
                 }
             });
-            // Werte map-Layer aus.
-            var layers = map.getLayers().getArray();
-            _.each(layers, function(element, key, list) {
-                if (element.values) {
-                    var typ = element.values.typ;
-                }
-                else if (element.values_) {
-                    var typ = element.values_.typ;
-                }
-                if (typ == "WFS") {
-                    // _.find nutzt das Attribut layerId. dieses muss von WFSLayer bereitgestellt werden.
-                    var wfslistlayer = _.find(wfsList, function (layer) {
-                        if (element.source) {
-                            if (element.source.layerId == layer.layerId) {
-                                return layer;
-                            }
-                        }
-                        else if (element.values_) {
-                            if (element.source_.layerId == layer.layerId) {
-                                return layer;
-                            }
-                        }
+            // Füge zugehörige Layer der wfsList hinzu
+            map.getLayers().forEach(function (layer) {
+                if (layer.getProperties().typ === 'WFS') {
+                    var layerId = layer.getSource().getFeatures()[0].layerId;
+                    var wfslistlayer = _.find(wfsList, function(listlayer) {
+                        return listlayer.layerId === layerId
                     });
                     if (wfslistlayer) {
-                        wfslistlayer.layer = element;
+                        wfslistlayer.layer = layer;
                     }
                 }
-            });
+            }, this);
             this.set('wfsList', wfsList);
             if (wfsList && wfsList.length > 0) {
                 var selectMouseMove = new ol.interaction.Select({

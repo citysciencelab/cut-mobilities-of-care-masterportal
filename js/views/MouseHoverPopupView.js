@@ -1,9 +1,9 @@
 define([
-    'jquery',
     'underscore',
     'backbone',
-    'models/MouseHoverPopup'
-], function ($, _, Backbone, MouseHoverPopup) {
+    'models/MouseHoverPopup',
+    'bootstrap'
+], function (_, Backbone, MouseHoverPopup) {
 
     var MouseHoverPopupView = Backbone.View.extend({
         model: MouseHoverPopup,
