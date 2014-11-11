@@ -104,7 +104,9 @@ define(function () {
             helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: true
+            treeFilter: true,
+            wfsFeatureFilter: false,
+            legend: false
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {

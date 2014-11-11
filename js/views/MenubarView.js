@@ -25,6 +25,7 @@ define([
         },
         events: {
             'click .filterTree': 'activateFilterTree',
+            'click .filterWfsFeature': 'activateWfsFilter',
             'click .legend': 'activateLegend'
         },
         render: function () {
@@ -33,11 +34,13 @@ define([
             if(Config.isMenubarVisible === false) {
                 $('#navbarRow').css('display', 'none');
             }
-//            new TreefolderListView();
             new LayerListView();
         },
         activateFilterTree: function () {
             EventBus.trigger('toggleFilterTreeWin');
+        },
+        activateWfsFilter: function () {
+            EventBus.trigger('toggleFilterWfsWin');
         },
         activateLegend: function () {
             EventBus.trigger('toggleLegendWin');

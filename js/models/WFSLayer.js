@@ -53,8 +53,7 @@ define([
             this.set('styleId', wfsconfig.style);
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);
-            this.set('attributeField', wfsconfig.attributeField);
-            this.set('mouseHoverField', wfsconfig.mouseHoverField);
+            this.set('styleField', wfsconfig.styleField);
 
             // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
@@ -78,7 +77,7 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     pServerVector.addFeatures(pServerVector.readFeatures(data));
-                    // hinzufügen der LayerId für MouseHover
+                    // hinzufügen der LayerId für MouseHover und wfsFeatureFilter
                     pServerVector.forEachFeature(function (ele) {
                         ele.layerId = this.get('id');
                     }, this);
@@ -88,8 +87,8 @@ define([
                 }
             });
 
-            // CRHISTOPHER FRAGEN!!!!!
-            if(this.get('attributeField')){
+            // Wenn styleField gesetzt ist, wird anhand des Arrays der möglichen Styles die Zuordnung getroffen
+            if(this.get('styleField')){
                 // Prüfe Symbolisierung nach ClusterDistance
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
                     this.set('source', pServerVector);
@@ -136,6 +135,7 @@ define([
                                         }
                                     });
                                 }
+                                console.log(wfsStyle.getClusterSymbol(size));
                                 style=wfsStyle.getClusterSymbol(size);
                             }
                             else {

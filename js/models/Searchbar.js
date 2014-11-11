@@ -96,8 +96,12 @@ define([
                     this.searchWFSLayer();
                     this.searchStreets();
                     if (this.get('streetNames').length === 1 && splitString[splitString.length - 1] === '') {
+                        console.log(5);
                         $('#autoCompleteBody').css("display", "none");
                         this.searchHouseNumbers();
+                    }
+                    else if (this.get('streetNames').length === 1 || this.get('wfsFeatures').length) {
+                        $('#autoCompleteBody').css("display", "block");
                     }
                     else if (this.get('streetNames').length > 1 || this.get('wfsFeatures').length > 1) {
                         $('#autoCompleteBody').css("display", "block");
@@ -108,6 +112,7 @@ define([
                 }
                 else {
                     $('#autoCompleteBody').css("display", "none");
+                    console.log(8);
                 }
             }
             else if (this.get('searchString').length <= 2){
@@ -141,7 +146,6 @@ define([
                     }
                 });
             });
-            console.log(coordinate);
             return coordinate;
         },
         searchWFSLayer: function () {

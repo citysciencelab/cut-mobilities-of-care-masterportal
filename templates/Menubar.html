@@ -29,6 +29,13 @@
                     </ul>
                 </li>
             <% } %>
+            <% if (wfsFeatureFilter === true) { %>
+                <li>
+                    <a href="#" class="filterWfsFeature">
+                        <span class="glyphicon glyphicon-filter"></span>&nbsp;Filter
+                    </a>
+                </li>
+            <% } %>
             <% if (treeFilter === true) { %>
                 <li>
                     <a href="#" class="filterTree">

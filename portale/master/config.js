@@ -84,11 +84,25 @@ define(function () {
         visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name'},
+            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+             filterOptions: [
+                 {
+                     'fieldName': 'geburtsklinik',
+                     'filterType': 'combo',
+                     'filterString': ['*','Perinatalzentrum Level 1','Perinatalzentrum Level 2','Perinataler Schwerpunkt','Geburtsklinik','nein']
+                 },
+                 {
+                     'fieldName': 'teilnahme_notversorgung',
+                     'filterType': 'combo',
+                     'filterString': ['*','ja','eingeschränkt','nein']
+                 }
+             ]
+            },
             {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
             {layer: '8994', style: ['18','19','20','21','22','8994_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
         ],
         menubar: true,
+        mouseHover: false,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
@@ -97,13 +111,15 @@ define(function () {
             helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: false
+            treeFilter: false,
+            wfsFeatureFilter: false,
+            legend: false
         },
-        treeFilter: {
-            layer: '7777',
-            styleName: 'treefilter',
-            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
-        },
+//        treeFilter: {
+//            layer: '7777',
+//            styleName: 'treefilter',
+//            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
+//        },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
