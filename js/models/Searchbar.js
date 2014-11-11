@@ -96,7 +96,6 @@ define([
                     this.searchWFSLayer();
                     this.searchStreets();
                     if (this.get('streetNames').length === 1 && splitString[splitString.length - 1] === '') {
-                        console.log(5);
                         $('#autoCompleteBody').css("display", "none");
                         this.searchHouseNumbers();
                     }
@@ -112,7 +111,6 @@ define([
                 }
                 else {
                     $('#autoCompleteBody').css("display", "none");
-                    console.log(8);
                 }
             }
             else if (this.get('searchString').length <= 2){
@@ -130,7 +128,7 @@ define([
                     if (coordinate.length != 2) {
                         if (feature.values_.features) {
                             if (feature.values_.features[0].get(pSearchFieldName).indexOf(pSearchString) > -1 ) {
-                                console.log(feature);
+//                                console.log(feature);
                                 var pExtent = feature.getGeometry().getExtent();
                                 coordinate.push(pExtent[0] + (pExtent[2] - pExtent[0]));
                                 coordinate.push(pExtent[1] + (pExtent[3] - pExtent[1]));
@@ -156,7 +154,7 @@ define([
                 var pSearchFieldName = element.get('searchField');
                 var pFeatures = element.get('source').getFeatures();
                 if (pFeatures.length == 0) {
-                    console.log('no Features');
+//                    console.log('no Features');
                 }
                 _.each(pFeatures, function(feature, index, list) {
                     if (feature.values_.features) {
@@ -327,7 +325,7 @@ define([
                         $('#autoCompleteBody').css("display", "none");
                     }
                     catch (error) {
-                        console.log(error);
+//                        console.log(error);
                     }
                 }
             });

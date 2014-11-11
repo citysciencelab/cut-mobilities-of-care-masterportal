@@ -53,14 +53,13 @@ define([
             $('#autoCompleteBody').html(_.template(SearchbarStreetsTemplate, attr));
         },
         showHouseNumbers: function () {
-//            if (this.model.get('streetName').length === 0) {
-//                console.log(4);
-//                this.checkStringForComplete();
-//            }
-//            else {
+            if (this.model.get('streetName').length === 0) {
+                this.showStreetNames();
+            }
+            else {
                 var attr = this.model.toJSON();
                 $('#autoCompleteBody').html(_.template(SearchbarNumbersTemplate, attr));
-//            }
+            }
         },
         searchHouseNumbers: function (evt) {
             var value = evt.target.textContent + ' ';
