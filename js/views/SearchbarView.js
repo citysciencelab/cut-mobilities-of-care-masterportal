@@ -53,11 +53,16 @@ define([
             $('#autoCompleteBody').html(_.template(SearchbarStreetsTemplate, attr));
         },
         showHouseNumbers: function () {
-            var attr = this.model.toJSON();
-            $('#autoCompleteBody').html(_.template(SearchbarNumbersTemplate, attr));
+            if (this.model.get('streetName').length === 0) {
+                this.showStreetNames();
+            }
+            else {
+                var attr = this.model.toJSON();
+                $('#autoCompleteBody').html(_.template(SearchbarNumbersTemplate, attr));
+            }
         },
         searchHouseNumbers: function (evt) {
-            var value = evt.target.textContent;
+            var value = evt.target.textContent + ' ';
             $('#searchInput').val(value).focus();
             this.checkStringForComplete();
         },
