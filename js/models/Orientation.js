@@ -15,7 +15,7 @@ define([
 //        },
         initialize: function () {
             EventBus.on('setOrientation', this.setOrientation, this);
-//            EventBus.on('getPOI', this.getPOI, this);
+            EventBus.on('getPOI', this.getPOI, this);
 //            EventBus.on('getPOIParams', this.getPOIParams, this);
             EventBus.on('sendVisibleWFSLayer', this.getPOIParams, this);
         },
@@ -30,11 +30,11 @@ define([
             var position;
             geolocation.on('change', function(evt) {
               position = geolocation.getPosition();
-              var newCenter = proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position);
-              EventBus.trigger('setCenter', newCenter);
+              this.set('newCenter',proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position));
+              EventBus.trigger('setCenter', this.get('newCenter'));
               var marker = document.getElementById('geolocation_marker');
               var marker= new ol.Overlay({
-                  position:newCenter,
+                  position:this.get('newCenter'),
                   positioning: 'center-center',
                   element: marker,
                   stopEvent: false
@@ -42,19 +42,17 @@ define([
             EventBus.trigger('addOverlay', marker);
             geolocation.setTracking(false);
             if (btn=="poi"){
-                this.getPOI(newCenter, 500);
-            }
-            else if(btn==500||btn==1000||btn==2000){
-                this.getPOI(newCenter,btn);
+                this.getPOI(500);
             }
             },this);
            geolocation.on('error', function() {
               alert('Standpunktbestimmung momentan nicht verfügbar!');
             });
         },
-        getPOI: function(stdPkt, distance){
+        getPOI: function(distance){
             this.set('distance', distance);
-            var circle=new ol.geom.Circle(stdPkt, distance);
+            console.log(distance);
+            var circle=new ol.geom.Circle(this.get('newCenter'), this.get('distance'));
             var circleExtent=circle.getExtent();
             var circleCoord = circle.getCenter();
             this.set('circleExtent', circleExtent);

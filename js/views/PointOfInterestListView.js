@@ -14,10 +14,14 @@ define([
         className: 'modal fade in',
         template: _.template(PointOfInterestListTemplate),
         events: {
-            'click .close, button': 'removeAllModels'
+            'click .close, button,table,#500m,#1000m,#2000m': 'removeAllModels',
+            'click #500m': 'onClick500m',
+            'click #1000m': 'onClick1000m',
+            'click #2000m': 'onClick2000m',
         },
         initialize: function () {
             EventBus.on('showPOIModal', this.show, this);
+            EventBus.on('hidePOIModal', this.hide, this);
             this.listenTo(this.collection, 'add', this.addOne);
             this.render();
         },
@@ -37,6 +41,18 @@ define([
                 backdrop: 'static',
                 show: true
             });
+        },
+        hide: function(){
+            this.$el.modal('hide');
+        },
+        onClick500m: function (evt) {
+            EventBus.trigger('getPOI', 500);
+        },
+        onClick1000m: function () {
+            EventBus.trigger('getPOI', 1000);
+        },
+        onClick2000m: function () {
+            EventBus.trigger('getPOI', 2000);
         }
     });
 
