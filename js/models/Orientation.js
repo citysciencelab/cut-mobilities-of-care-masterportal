@@ -51,7 +51,6 @@ define([
         },
         getPOI: function(distance){
             this.set('distance', distance);
-            console.log(distance);
             var circle=new ol.geom.Circle(this.get('newCenter'), this.get('distance'));
             var circleExtent=circle.getExtent();
             var circleCoord = circle.getCenter();
@@ -63,8 +62,6 @@ define([
             _.each(visibleWFSLayers, function (layer) {
                 layer.get('source').forEachFeatureInExtent(this.get('circleExtent'), function (feature) {
                     featureArray.push(feature);
-                    console.log(this.get('newCenter'));
-                    console.log(this.get('distance'));
                     EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'));
                 }, this);
             }, this);
