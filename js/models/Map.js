@@ -39,7 +39,7 @@ define([
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
-            EventBus.on('getMap', this.getMap, this);
+            EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
 //            EventBus.on('setPOIParams', this.setPOIParams, this);
             EventBus.on('getVisibleLayer', this.getVisibleLayer, this);

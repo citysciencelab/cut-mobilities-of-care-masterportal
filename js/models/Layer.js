@@ -3,8 +3,7 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config',
-    'views/searchbarview'
+    'config'
 ], function (_, Backbone, ol, EventBus, Config) {
 
     /**
@@ -12,6 +11,10 @@ define([
      */
     var Layer = Backbone.Model.extend({
         initialize: function () {
+            // Trigger in Searchbar
+            EventBus.on('getBackboneLayer', function() {
+                EventBus.trigger('LayerVisibilityChangedForSearchbar', this);
+            }, this);
             this.listenTo(this, 'change:visibility', this.setVisibility);
             this.listenTo(this, 'change:transparence', this.updateOpacity);
 
