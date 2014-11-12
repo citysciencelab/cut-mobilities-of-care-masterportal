@@ -98,27 +98,25 @@ define([
         },
         activateClick: function (tool) {
             var MeasurePopup = this.get('MeasurePopup');
-            if (MeasurePopup) {
-                if (tool === 'coords') {
-                    this.get('map').un('click', this.setGFIParams, this);
-                    this.get('map').on('click', this.setPositionCoordPopup);
-                    this.get('map').removeLayer(MeasurePopup.get('layer'));
-                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                    $('#measurePopup').html('');
-                }
-                else if (tool === 'gfi') {
-                    this.get('map').un('click', this.setPositionCoordPopup);
-                    this.get('map').on('click', this.setGFIParams, this);
-                    this.get('map').removeLayer(MeasurePopup.get('layer'));
-                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                    $('#measurePopup').html('');
-                }
-                else if (tool === 'measure') {
-                    this.get('map').un('click', this.setPositionCoordPopup);
-                    this.get('map').un('click', this.setGFIParams, this);
-                    this.get('map').addLayer(MeasurePopup.get('layer'));
-                    this.get('map').addInteraction(MeasurePopup.get('draw'));
-                }
+            if (tool === 'coords') {
+                this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').on('click', this.setPositionCoordPopup);
+                this.get('map').removeLayer(MeasurePopup.get('layer'));
+                this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                $('#measurePopup').html('');
+            }
+            else if (tool === 'gfi') {
+                this.get('map').un('click', this.setPositionCoordPopup);
+                this.get('map').on('click', this.setGFIParams, this);
+                this.get('map').removeLayer(MeasurePopup.get('layer'));
+                this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                $('#measurePopup').html('');
+            }
+            else if (tool === 'measure') {
+                this.get('map').un('click', this.setPositionCoordPopup);
+                this.get('map').un('click', this.setGFIParams, this);
+                this.get('map').addLayer(MeasurePopup.get('layer'));
+                this.get('map').addInteraction(MeasurePopup.get('draw'));
             }
         },
         /**
