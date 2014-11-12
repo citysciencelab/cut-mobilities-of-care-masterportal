@@ -101,16 +101,20 @@ define([
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
-                this.get('map').removeLayer(MeasurePopup.get('layer'));
-                this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                $('#measurePopup').html('');
+                if (MeasurePopup) {
+                    this.get('map').removeLayer(MeasurePopup.get('layer'));
+                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                    $('#measurePopup').html('');
+                }
             }
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
-                this.get('map').removeLayer(MeasurePopup.get('layer'));
-                this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                $('#measurePopup').html('');
+                if (MeasurePopup) {
+                    this.get('map').removeLayer(MeasurePopup.get('layer'));
+                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                    $('#measurePopup').html('');
+                }
             }
             else if (tool === 'measure') {
                 this.get('map').un('click', this.setPositionCoordPopup);
