@@ -10,19 +10,13 @@ define([
     proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
     var Orientation = Backbone.Model.extend({
-//        defaults: {
-//            poiContent: []
-//        },
         initialize: function () {
             EventBus.on('setOrientation', this.setOrientation, this);
             EventBus.on('getPOI', this.getPOI, this);
-//            EventBus.on('getPOIParams', this.getPOIParams, this);
             EventBus.on('sendVisibleWFSLayer', this.getPOIParams, this);
         },
         setOrientation: function (btn) {
             proj4326=ol.proj.get('EPSG:4326');
-//            var positions = new ol.geom.LineString([],
-//                /** @type {ol.geom.GeometryLayout} */ ('XYZM'));
             var geolocation = new ol.Geolocation(/** @type {olx.GeolocationOptions} */ ({
               projection: proj4326,
               tracking: true
@@ -65,10 +59,6 @@ define([
                     EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'));
                 }, this);
             }, this);
-            // Hier jetzt model poi erstellen
-//            if(featureArray.length>0){
-//                this.set('poiContent', featureArray);
-//            }
             EventBus.trigger('showPOIModal');
         }
     });

@@ -41,7 +41,7 @@ define([
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
-//            EventBus.on('setPOIParams', this.setPOIParams, this);
+            EventBus.on('setPOICenter', this.setPOICenter, this);
             EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
             EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
 
@@ -204,6 +204,11 @@ define([
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);
             this.get('map').getView().setZoom(7);
+        },
+         setPOICenter: function (center, zoom) {
+            console.log(zoom);
+            this.get('map').getView().setCenter(center);
+            this.get('map').getView().setZoom(zoom);
         },
         updatePrintPage: function (active) {
             if(active === true) {
