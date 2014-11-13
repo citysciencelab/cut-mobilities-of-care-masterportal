@@ -41,6 +41,9 @@ define([
                 backdrop: 'static',
                 show: true
             });
+            $(function () {
+                $('#loader').hide();
+            });
         },
         hide: function(){
             this.$el.modal('hide');

@@ -10,8 +10,19 @@ define([
 //            console.log(this);
         },
         setCenter: function(){
+            var zoom;
+            if(this.get('distance')<500){
+                zoom=7;
+            }
+            else if(this.get('distance')>500&&this.get('distance')<1000){
+                zoom=5;
+            }
+            else{
+                zoom=2;
+            }
+            console.log(this.get('distance'));
             EventBus.trigger('hidePOIModal');
-            EventBus.trigger('setCenter', [parseInt(this.get('xCoord'),10),parseInt(this.get('yCoord'),10)]);
+            EventBus.trigger('setPOICenter', [parseInt(this.get('xCoord'),10),parseInt(this.get('yCoord'),10)], zoom);
         }
 
     });

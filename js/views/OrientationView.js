@@ -24,6 +24,9 @@ define([
             this.model.setOrientation("stdPkt");
         },
         getPOI: function (){
+            $(function () {
+                $('#loader').show();
+            });
             this.model.setOrientation("poi");
         }
     });
