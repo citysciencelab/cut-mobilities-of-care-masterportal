@@ -4,7 +4,8 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config'
+    'config',
+    'models/map'
 ], function ($, _, Backbone, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({
@@ -82,6 +83,7 @@ define([
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
+            this.set('mhpresult', '');
             this.get('element').tooltip('destroy');
         },
         /**
@@ -98,7 +100,6 @@ define([
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
                 oldSelection = this.get('oldSelection');
                 this.set('newSelection', selection);
-
                 if (layer && oldSelection != selection) {
                     var pFeatureArray = new Array();
                     var selProps = selection.getProperties();
