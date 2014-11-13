@@ -53,7 +53,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             orientation: false,
             active: 'gfi'
