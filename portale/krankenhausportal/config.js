@@ -36,7 +36,7 @@ define(function () {
             }
         ],
         menubar: true,
-        mouseHover: false,
+        mouseHover: true,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',

@@ -8,11 +8,8 @@ define([
     var MouseHoverPopupView = Backbone.View.extend({
         model: MouseHoverPopup,
         id: 'mousehoverpopup',
-        events: {
-            'click .tooltip-inner': 'destroy'
-        },
         initialize: function () {
-            this.listenTo(this.model, 'change:mhpcoordinates', this.render);
+            this.listenTo(this.model, 'change:mhpresult', this.render);
         },
         /**
         * Render merkt sich zunächst den neuen Wert newText, weil this.model mit this.destroy() zerstört wird.
@@ -22,20 +19,18 @@ define([
         * erkannt werden
         */
         render: function (evt) {
+            var oldSelection = this.model.get('oldSelection');
+            var newSelection = this.model.get('newSelection');
             var newText = this.model.get('mhpresult');
-            var myTimeout = this.model.get('mhptimeout');
-            if (myTimeout) {
-                clearTimeout(myTimeout);
-                this.model.set('mhptimeout', '');
+            if (oldSelection != ''){
+                this.destroy(); //lösche alten Tooltip sofern vorhanden
             }
-            this.destroy(); //lösche alten Tooltip sofern vorhanden
             var attr = this.model.toJSON();
-
             $(this.model.get('element')).tooltip({
                 'html': true,
                 'title': newText,
                 'placement': 'auto',
-                'delay': { show: 500, hide: 100 }
+                'delay': { show: 100, hide: 100 }
             });
             this.model.showPopup();
             var that = this;
@@ -43,9 +38,15 @@ define([
                 that.destroy();
             }, 3000);
             this.model.set('mhptimeout', myTimeout) ;
+            this.model.set('oldSelection', newSelection);
         },
         destroy: function () {
-            this.model.set('mhptimeout', '');
+            var myTimeout = this.model.get('mhptimeout');
+            if (myTimeout != '') {
+                clearTimeout(myTimeout);
+                this.model.set('mhptimeout', '');
+            }
+            this.model.set('oldSelection', '');
             this.model.destroyPopup();
         }
     });
