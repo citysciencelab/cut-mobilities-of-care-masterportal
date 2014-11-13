@@ -23,7 +23,7 @@ define([
             var newSelection = this.model.get('newSelection');
             var newText = this.model.get('mhpresult');
             if (oldSelection != ''){
-                this.destroy(); //lösche alten Tooltip sofern vorhanden
+                var result = this.destroy(); //lösche alten Tooltip sofern vorhanden
             }
             var attr = this.model.toJSON();
             $(this.model.get('element')).tooltip({
@@ -48,6 +48,7 @@ define([
             }
             this.model.set('oldSelection', '');
             this.model.destroyPopup();
+            return true;
         }
     });
 
