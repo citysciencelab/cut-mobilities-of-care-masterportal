@@ -35,10 +35,10 @@ define([
             });
             this.model.showPopup();
             var that = this;
-//            var myTimeout = setTimeout(function(){
-//                that.destroy();
-//            }, 3000);
-//            this.model.set('mhptimeout', myTimeout) ;
+            var myTimeout = setTimeout(function(){
+                that.destroy();
+            }, 3000);
+            this.model.set('mhptimeout', myTimeout) ;
             this.model.set('oldSelection', newSelection);
         },
         destroy: function () {
