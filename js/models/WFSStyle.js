@@ -9,7 +9,7 @@ define([
         defaults: {
             subclass : 'Icon',
             // für Icon
-            imagesrc : '../img/unknown.png',
+            imagesrc : '../../img/unknown.png',
             imagewidth : 10,
             imageheight : 10,
             imagescale : 1,

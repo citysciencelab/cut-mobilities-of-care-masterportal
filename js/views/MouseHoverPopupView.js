@@ -30,14 +30,15 @@ define([
                 'html': true,
                 'title': newText,
                 'placement': 'auto',
-                'delay': { show: 100, hide: 100 }
+                'delay': { show: 100, hide: 100 },
+                'template' : '<div class="tooltip" role="tooltip"><div class="tooltip-inner mouseHover"></div></div>'
             });
             this.model.showPopup();
             var that = this;
-            var myTimeout = setTimeout(function(){
-                that.destroy();
-            }, 3000);
-            this.model.set('mhptimeout', myTimeout) ;
+//            var myTimeout = setTimeout(function(){
+//                that.destroy();
+//            }, 3000);
+//            this.model.set('mhptimeout', myTimeout) ;
             this.model.set('oldSelection', newSelection);
         },
         destroy: function () {
