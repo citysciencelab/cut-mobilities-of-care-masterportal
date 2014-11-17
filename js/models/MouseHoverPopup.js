@@ -22,13 +22,18 @@ define([
             mhpcoordinates: [],
             mhptimeout: '',
             oldSelection: '',
-            newSelection: ''
+            newSelection: '',
+            GFIPopupVisibility: false
         },
         initialize: function () {
             this.set('element', this.get('mhpOverlay').getElement());
             EventBus.on('newMouseHover', this.newMouseHover, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
+            EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
             EventBus.on('setMap', this.checkLayer, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
             EventBus.trigger('getMap', this);
+        },
+        GFIPopupVisibility: function (GFIPopupVisibility) {
+            this.set('GFIPopupVisibility', GFIPopupVisibility);
         },
         checkLayer: function (map) {
             // Lese Config-Optionen ein und speichere Ergebnisse
@@ -57,7 +62,9 @@ define([
             this.set('wfsList', wfsList);
             if (wfsList && wfsList.length > 0) {
                 map.on('pointermove', function(evt) {
-                    EventBus.trigger('newMouseHover', evt, map);
+                    if (this.get('GFIPopupVisibility') === false) {
+                        EventBus.trigger('newMouseHover', evt, map);
+                    }
                 }, this);
                 /**
                  * FEHLER: map.addInteraction() bewirkt zwar das hinzufügen der Interaction, fortan kann die map aber nicht mehr
