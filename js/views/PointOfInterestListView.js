@@ -41,18 +41,24 @@ define([
                 backdrop: 'static',
                 show: true
             });
+            $(function () {
+                $('#loader').hide();
+            });
         },
         hide: function(){
             this.$el.modal('hide');
         },
         onClick500m: function (evt) {
             EventBus.trigger('getPOI', 500);
+            $('#500m a[href="#500Meter"]').tab('show')
         },
         onClick1000m: function () {
             EventBus.trigger('getPOI', 1000);
+            $('#1000m a[href="#1000Meter"]').tab('show')
         },
         onClick2000m: function () {
             EventBus.trigger('getPOI', 2000);
+            $('#2000m a[href="#2000Meter"]').tab('show')
         }
     });
 

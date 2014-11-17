@@ -36,7 +36,7 @@ define(function () {
             }
         ],
         menubar: true,
-        mouseHover: false,
+        mouseHover: true,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
@@ -53,7 +53,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             orientation: false,
             active: 'gfi'

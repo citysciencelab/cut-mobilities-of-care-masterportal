@@ -46,34 +46,34 @@ require([
             new MenubarView();
             new ToggleButtonView();
             if (Config.menu.tools === true) {
+                if (Config.tools.coord === true) {
+                    require(['views/CoordPopupView'], function (CoordPopupView) {
+                        new CoordPopupView();
+                    });
+                }
+                if (Config.tools.gfi === true) {
+                    require(['views/GFIPopupView'], function (GFIPopupView) {
+                        new GFIPopupView();
+                    });
+                }
+                if (Config.tools.measure === true) {
+                    require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
+                        new MeasureModalView();
+                        new MeasurePopupView();
+                    });
+                }
+                if (Config.tools.orientation === true) {
+                    require(['views/OrientationView'], function (OrientationView) {
+                        new OrientationView();
+                    });
+                }
+                if (Config.tools.print === true) {
+                    require(['views/PrintView'], function (PrintView) {
+                        new PrintView();
+                    });
+                }
                 require(['views/ToolsView'], function (ToolsView) {
                     new ToolsView();
-                    if (Config.tools.coord === true) {
-                        require(['views/CoordPopupView'], function (CoordPopupView) {
-                            new CoordPopupView();
-                        });
-                    }
-                    if (Config.tools.gfi === true) {
-                        require(['views/GFIPopupView'], function (GFIPopupView) {
-                            new GFIPopupView();
-                        });
-                    }
-                    if (Config.tools.measure === true) {
-                        require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
-                            new MeasureModalView();
-                            new MeasurePopupView();
-                        });
-                    }
-                    if (Config.tools.orientation === true) {
-                        require(['views/OrientationView'], function (OrientationView) {
-                            new OrientationView();
-                        });
-                    }
-                    if (Config.tools.print === true) {
-                        require(['views/PrintView'], function (PrintView) {
-                            new PrintView();
-                        });
-                    }
                 });
             }
             if (Config.menu.treeFilter === true) {

@@ -52,7 +52,6 @@ var wfsFeatureFilterView = Backbone.View.extend({
         filterLayers: function (layerfilters) {
             var that = this;
             _.each(layerfilters, function(layerfilter, index, list) {
-
                 // Prüfe, ob alle Filter des Layers auf * stehen, damit evtl. der defaultStyle geladen werden kann
                 var showall = true;
                 _.each(layerfilter.filter, function (filter, index, list) {
@@ -146,6 +145,7 @@ var wfsFeatureFilterView = Backbone.View.extend({
                     }
                 }, this);
             });
+            this.model.set('layerfilters', layerfilters);
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -160,9 +160,23 @@ var wfsFeatureFilterView = Backbone.View.extend({
             $('#wfsFilterWin > .panel-heading > .toggleChevron').toggleClass('glyphicon-chevron-up glyphicon-chevron-down');
         },
         toggleFilterWfsWin: function () {
-            this.model.prep();
-            this.refreshHtml();
-            $('#wfsFilterWin').toggle();
+            if ($('#wfsFilterWin').is(":visible")){
+                var layerfilters = this.model.get('layerfilters');
+                if (layerfilters) {
+                    _.each(layerfilters, function(layerfilter, index, list) {
+                        _.each(layerfilter.filter, function (filter, index, list) {
+                            filter.fieldValue = '*';
+                        });
+                    });
+                    this.filterLayers(layerfilters);
+                }
+                $('#wfsFilterWin').hide();
+            }
+            else {
+                this.model.prep();
+                this.refreshHtml();
+                $('#wfsFilterWin').toggle();
+            }
         }
     });
 

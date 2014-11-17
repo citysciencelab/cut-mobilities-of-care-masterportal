@@ -3,10 +3,9 @@ define([
     'backbone',
     'openlayers',
     'collections/LayerList',
-    'models/MeasurePopup',
     'config',
     'eventbus'
-], function (_, Backbone, ol, LayerList, MeasurePopup, Config, EventBus) {
+], function (_, Backbone, ol, LayerList, Config, EventBus) {
 
     var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
     $('#dpidiv').remove();
@@ -37,13 +36,15 @@ define([
         initialize: function () {
             EventBus.on('activateClick', this.activateClick, this);
             EventBus.on('addOverlay', this.addOverlay, this);
+            EventBus.on('removeOverlay', this.removeOverlay, this);
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
-            EventBus.on('initMouseHover', this.initMouseHover, this);
+            EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
-//            EventBus.on('setPOIParams', this.setPOIParams, this);
+            EventBus.on('setPOICenter', this.setPOICenter, this);
             EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
+            EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
 
             this.set('projection', proj25832);
 
@@ -74,12 +75,16 @@ define([
             },this);
         },
 
+        setMeasurePopup: function (ele) {
+            this.set('MeasurePopup', ele);
+        },
+
         initWfsFeatureFilter: function () {
             EventBus.trigger('checkwfsfeaturefilter', this.get('map'));
         },
 
-        initMouseHover: function () {
-            EventBus.trigger('checkmousehover', this.get('map'));
+        getMap: function () {
+            EventBus.trigger('setMap', this.get('map'));
         },
 
         getCurrentScale: function () // wird in GFI Popup verwendet.
@@ -93,19 +98,24 @@ define([
             return scale;
         },
         activateClick: function (tool) {
+            var MeasurePopup = this.get('MeasurePopup');
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
-                this.get('map').removeLayer(MeasurePopup.get('layer'));
-                this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                $('#measurePopup').html('');
+                if (MeasurePopup) {
+                    this.get('map').removeLayer(MeasurePopup.get('layer'));
+                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                    $('#measurePopup').html('');
+                }
             }
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
-                this.get('map').removeLayer(MeasurePopup.get('layer'));
-                this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                $('#measurePopup').html('');
+                if (MeasurePopup) {
+                    this.get('map').removeLayer(MeasurePopup.get('layer'));
+                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
+                    $('#measurePopup').html('');
+                }
             }
             else if (tool === 'measure') {
                 this.get('map').un('click', this.setPositionCoordPopup);
@@ -118,6 +128,16 @@ define([
          */
         addOverlay: function (overlay) {
             this.get('map').addOverlay(overlay);
+        },
+        /**
+         */
+        removeOverlay: function (overlay) {
+            var map = this.get('map');
+            map.getOverlays().forEach(function (ol) {
+                if (ol == overlay) {
+                    map.removeOverlay(overlay);
+                }
+            });
         },
         /**
          */
@@ -195,6 +215,11 @@ define([
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);
             this.get('map').getView().setZoom(7);
+        },
+         setPOICenter: function (center, zoom) {
+            console.log(zoom);
+            this.get('map').getView().setCenter(center);
+            this.get('map').getView().setZoom(zoom);
         },
         updatePrintPage: function (active) {
             if(active === true) {

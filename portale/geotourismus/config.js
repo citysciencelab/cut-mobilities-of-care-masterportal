@@ -33,14 +33,14 @@ define(function () {
         ],
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '352', style: ['5','6','7','8','352_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '353', style: ['32','33','34','35','353_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '354', style: ['10','354_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '355', style: ['11','12','13','14','15','16','17','355_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '356', style: ['9','10','356_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '357', style: ['18','19','20','21','22','357_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '358', style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
+            {layer: '352', style: ['5','6','7','8','352_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '353', style: ['32','33','34','35','353_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '354', style: ['10','354_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '355', style: ['11','12','13','14','15','16','17','355_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '356', style: ['9','10','356_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '357', style: ['18','19','20','21','22','357_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '358', style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
         menubar: true,
         isMenubarVisible: false,

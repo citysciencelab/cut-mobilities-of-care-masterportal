@@ -12,6 +12,7 @@ define([
             this.set('layer', new ol.layer.Vector({
                 source: this.get('source')
             }));
+            EventBus.trigger('setMeasurePopup', this); //MeasurePopup wird zeitlich nach der Map geladen und übergibt dann sich selbst an die map
         },
         setGeometrieType: function (value) {
             this.set('draw', new ol.interaction.Draw({
