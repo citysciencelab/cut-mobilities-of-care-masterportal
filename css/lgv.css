@@ -93,11 +93,6 @@ html, body {
     top: 70px;
 }
 
-#mousehoverpopup {
-    position: absolute;
-    top: 70px;
-}
-
 /******* Ajax Loader *******/
 #loader
 {
@@ -123,8 +118,6 @@ html, body {
 #poiPanel{
     visibility: hidden;
 }
-
-
 
 .treeFilterError {
     font-size: 9px;

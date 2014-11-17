@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!templates/GFIPopup.html',
-    'models/GFIPopup'
-], function ($, _, Backbone, GFIPopupTemplate, GFIPopup) {
+    'models/GFIPopup',
+    'eventbus'
+], function ($, _, Backbone, GFIPopupTemplate, GFIPopup, EventBus) {
 
     var GFIPopupView = Backbone.View.extend({
         model: GFIPopup,
@@ -32,6 +33,7 @@ define([
                 'content': this.$el
             });
             this.model.showPopup();
+            EventBus.trigger('GFIPopupVisibility', true);
         },
         /**
          *
@@ -55,6 +57,7 @@ define([
          *
          */
         destroy: function () {
+            EventBus.trigger('GFIPopupVisibility', false);
             this.model.destroyPopup();
         }
     });
