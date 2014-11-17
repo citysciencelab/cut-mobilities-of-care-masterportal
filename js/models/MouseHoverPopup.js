@@ -97,11 +97,11 @@ define([
         * wenn 2. Parameter (layer) == null, dann kein Layer
         */
         newMouseHover: function (evt, map) {
+            var pFeatureArray = new Array();
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
                 oldSelection = this.get('oldSelection');
                 this.set('newSelection', selection);
                 if (layer && oldSelection != selection) {
-                    var pFeatureArray = new Array();
                     var selProps = selection.getProperties();
                     if (selProps.features) {
                         var list = selProps.features;
@@ -118,36 +118,39 @@ define([
                             layerId: selection.layerId
                         });
                     }
-                    // für jedes gehoverte Feature...
-                    var wfsList = this.get('wfsList');
-                    var value = '';
-                    var coord = new Array(); //coord wird im Moment nicht benutzt für MouseHover
-                    _.each(pFeatureArray, function(element, index, list) {
-                        if (value != '') {
-                            value = value + '</br></br>';
-                        }
-                        var listEintrag = _.find(wfsList, function (ele) {
-                            return ele.layerId = element.layerId;
-                        });
-                        if (listEintrag) {
-                            var mouseHoverField = listEintrag.fieldname;
-                            if (mouseHoverField) {
-                                if (_.has(element.attributes, mouseHoverField)) {
-                                    value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
-                                    if (coord.length == 0) {
-                                        coord.push(element.attributes.geom.getFlatCoordinates()[0]);
-                                        coord.push(element.attributes.geom.getFlatCoordinates()[1]);
-                                    }
+                }
+            }, this);
+            var wfsList = this.get('wfsList');
+            var value = '';
+            var coord = new Array(); //coord wird im Moment nicht benutzt für MouseHover
+            if (pFeatureArray.length > 0) {
+                // für jedes gehoverte Feature...
+                _.each(pFeatureArray, function(element, index, list) {
+                    if (value != '') {
+                        value = value + '</br></br>';
+                    }
+                    var listEintrag = _.find(wfsList, function (ele) {
+                        return ele.layerId = element.layerId;
+                    });
+                    if (listEintrag) {
+                        var mouseHoverField = listEintrag.fieldname;
+                        if (mouseHoverField) {
+                            if (_.has(element.attributes, mouseHoverField)) {
+                                value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
+                                if (coord.length == 0) {
+                                    coord.push(element.attributes.geom.getFlatCoordinates()[0]);
+                                    coord.push(element.attributes.geom.getFlatCoordinates()[1]);
                                 }
                             }
                         }
-                    }, this);
-                    EventBus.trigger('addOverlay', this.get('mhpOverlay'));
+                    }
+                }, this);
+                if (value != '') {
                     this.set('mhpresult', value);
                     this.get('mhpOverlay').setPosition(coord);
                     this.set('mhpcoordinates', coord);
                 }
-            }, this);
+            }
         }
     });
     return new MouseHoverPopup();

@@ -36,6 +36,7 @@ define([
         initialize: function () {
             EventBus.on('activateClick', this.activateClick, this);
             EventBus.on('addOverlay', this.addOverlay, this);
+            EventBus.on('removeOverlay', this.removeOverlay, this);
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
@@ -127,6 +128,16 @@ define([
          */
         addOverlay: function (overlay) {
             this.get('map').addOverlay(overlay);
+        },
+        /**
+         */
+        removeOverlay: function (overlay) {
+            var map = this.get('map');
+            map.getOverlays().forEach(function (ol) {
+                if (ol == overlay) {
+                    map.removeOverlay(overlay);
+                }
+            });
         },
         /**
          */
