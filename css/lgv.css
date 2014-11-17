@@ -119,12 +119,11 @@ html, body {
     visibility: hidden;
 }
 
-
-
 .treeFilterError {
     font-size: 9px;
     color: #a94442;
     display: none;
+}
 
 .mouseHover {
     font-size: 12px;
