@@ -119,9 +119,16 @@ html, body {
     visibility: hidden;
 }
 
+
+
+.treeFilterError {
+    font-size: 9px;
+    color: #a94442;
+    display: none;
+
 .mouseHover {
     font-size: 12px;
     background-color: rgba(150, 150, 150, 1);
     color: #fff;
-    font-weight: bold
+    font-weight: bold;
 }
