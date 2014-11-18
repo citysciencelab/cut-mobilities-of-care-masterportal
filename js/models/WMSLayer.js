@@ -15,14 +15,37 @@ define([
          *
          */
         setAttributionLayerSource: function () {
+            if (this.get('version') && this.get('version') != '' && this.get('version') != 'nicht vorhanden') {
+                var version = this.get('version');
+            }
+            else {
+                var version = '1.3.0';
+            }
+            if (this.get('format') && this.get('format') != '' && this.get('format') != 'nicht vorhanden') {
+                var format = this.get('format');
+            }
+            else {
+                var format = 'image/png';
+            }
+            if (version === '1.1.1' || version === '1.1.0' || version === '1.0.0') {
+                var params = {
+                    'LAYERS': this.get('layers'),
+                    'FORMAT': format,
+                    'VERSION': version,
+                    'SRS': 'EPSG:25832'
+                }
+            }
+            else {
+                var params = {
+                    'LAYERS': this.get('layers'),
+                    'FORMAT': format,
+                    'VERSION': version,
+                    'CRS': 'EPSG:25832'
+                }
+            }
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
-                params: {
-                    'LAYERS': this.get('layers'),
-                    // NOTE Format für Layer standardmäßig auf 'image/png', da nicht immer in der json vorhanden
-                    'FORMAT': 'image/png',
-                    'VERSION': this.get('version')
-                },
+                params: params,
                 tileGrid: new ol.tilegrid.TileGrid({
                     resolutions: [
                         66.14614761460263,
@@ -41,6 +64,7 @@ define([
                     ]
                 })
             }));
+            console.log (this.get('source'));
         },
         /**
          *
