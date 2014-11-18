@@ -1,6 +1,6 @@
 define(function () {
 
-    // Parsen des parametrisierten Aufruf --> http://wscd0096/master_sd/portale/master/index.html?center=555874,5934140&layerIDs=8994,453&zoomLevel=4
+    // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
     var query = location.search.substr(1); // URL --> alles nach ? wenn vorhanden
     var result = {};
     query.split("&").forEach(function (keyValue) {
@@ -66,6 +66,23 @@ define(function () {
             return 15.874991427504629 // 1:60.000
         }
     }
+    
+    /**
+    * Gibt den Wert für die config-Option isMenubarVisible zurück.
+    * Ist der Parameter 'isMenubarVisible' vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+    * @returns {Boolean}  
+    *
+    */
+    function getIsMenubarVisible() {
+        console.log(result);
+        if (result['isMenubarVisible'] !== undefined) {
+            return (result['isMenubarVisible'] === "true");  
+        }
+        else {
+            return true;
+        }
+    }
+            
     var config = {
         view: {
             center: getCenter(),
@@ -103,7 +120,7 @@ define(function () {
         ],
         menubar: true,
         mouseHover: false,
-        isMenubarVisible: true,
+        isMenubarVisible: getIsMenubarVisible(),
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,
