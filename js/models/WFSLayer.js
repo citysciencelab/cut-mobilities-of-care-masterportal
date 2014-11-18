@@ -36,13 +36,15 @@ define([
             if (this.get('version') && this.get('version') !== '') {
                 getrequest += '&VERSION=' + this.get('version');
             }
-            if (this.get('outputFormat') && this.get('outputFormat') !== '') {
-                getrequest += '&OUTPUTFORMAT=' + this.get('outputFormat');
+            else {
+                getrequest += '&VERSION=1.1.0';
             }
             if (this.get('srsname') && this.get('srsname') !== '') {
                 getrequest += '&SRSNAME=' + this.get('srsname');
             }
-
+            else {
+                getrequest += '&SRSNAME=EPSG:25832';
+            }
             // Finde wfsconfig zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
             var id = this.get('id');
             var wfsconfig = _.find(Config.wfsconfig, function(num) {
