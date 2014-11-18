@@ -64,7 +64,6 @@ define([
                     ]
                 })
             }));
-            console.log (this.get('source'));
         },
         /**
          *
