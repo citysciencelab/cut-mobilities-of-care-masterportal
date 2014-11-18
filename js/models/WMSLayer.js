@@ -27,21 +27,25 @@ define([
             else {
                 var format = 'image/png';
             }
+            var params = {
+                'LAYERS': this.get('layers'),
+                'FORMAT': format,
+                'VERSION': version
+            }
             if (version === '1.1.1' || version === '1.1.0' || version === '1.0.0') {
-                var params = {
-                    'LAYERS': this.get('layers'),
-                    'FORMAT': format,
-                    'VERSION': version,
-                    'SRS': 'EPSG:25832'
-                }
+                params = _.extend(params, {
+                    "SRS": 'EPSG:25832'
+                });
             }
             else {
-                var params = {
-                    'LAYERS': this.get('layers'),
-                    'FORMAT': format,
-                    'VERSION': version,
-                    'CRS': 'EPSG:25832'
-                }
+                params = _.extend(params, {
+                    "CRS": 'EPSG:25832'
+                });
+            }
+            if (this.get('styles') && this.get('styles') != '' && this.get('styles') != 'nicht vorhanden') {
+                params = _.extend(params, {
+                    "STYLES": this.get('styles')
+                });
             }
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
