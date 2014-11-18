@@ -29,17 +29,15 @@ define([
             // Stelle GetRequest zusammen
             var getrequest = this.get('url')
                 + '?REQUEST=GetFeature'
-                + '&SERVICE=WFS';
-            if (this.get('featureType') && this.get('featureType') !== '') {
-                getrequest += '&TYPENAME=' + this.get('featureType');
-            }
-            if (this.get('version') && this.get('version') !== '') {
+                + '&SERVICE=WFS'
+                + '&TYPENAME=' + this.get('featureType');
+            if (this.get('version') && this.get('version') !== '' && this.get('version') !== 'nicht vorhanden') {
                 getrequest += '&VERSION=' + this.get('version');
             }
             else {
                 getrequest += '&VERSION=1.1.0';
             }
-            if (this.get('srsname') && this.get('srsname') !== '') {
+            if (this.get('srsname') && this.get('srsname') !== '' && this.get('srsname') !== 'nicht vorhanden') {
                 getrequest += '&SRSNAME=' + this.get('srsname');
             }
             else {
