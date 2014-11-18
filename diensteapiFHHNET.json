@@ -32482,7 +32482,6 @@
         "name": "Krankenhäuser",
         "url": "http://geofos/fachdaten_public/services/wfs_hh_krankenhaeuser",
         "featureType": "krankenhaeuser_hh",
-        "outputFormat": "text/xml;+subtype=gml/3.1.1",
         "typ": "WFS",
         "version": "1.1.0",
         "datasets" : [],
