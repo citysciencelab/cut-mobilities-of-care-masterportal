@@ -21,12 +21,19 @@ define([
             }
         },
         parse: function (response) {
+            /* NOTE
+             * die Response beinhaltet die Konfigurationen aus der json.
+             * Die config.layerID werden durchlaufen und die passende Konfiguration
+             * wird zwischengespeichert.
+             * Rückgabe als Array.
+             */
             var idArray = Config.layerIDs;
-            return _.filter(response, function (element) {
-                if (_.contains(idArray, element.id)) {
-                    return element;
-                }
+            var dienstArray = new Array();
+            _.each(idArray, function(element, index, list) {
+                var dienst = _.findWhere(response, {id: element});
+                dienstArray.push(dienst);
             });
+            return dienstArray;
         },
         initialize: function () {
             EventBus.on('getLayersForPrint', this.sendVisibleWMSLayer, this);
@@ -48,8 +55,8 @@ define([
          * Gibt alle Sichtbaren Layer zurück.
          *
          */
-        getVisibleLayer: function () {
-            return this.where({visibility: true});
+        getVisibleWMSLayer: function () {
+            return this.where({visibility: true, typ: "WMS"});
         },
         /**
          * Gibt alle Sichtbaren WFS-Layer zurück.
@@ -68,7 +75,7 @@ define([
          *
          */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger('sendLayersForPrint', this.getVisibleLayer());
+            EventBus.trigger('sendLayersForPrint', this.getVisibleWMSLayer());
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
