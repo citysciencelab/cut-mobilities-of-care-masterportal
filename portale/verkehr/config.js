@@ -41,8 +41,8 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: false,
-            tools: false,
+            contactButton: true,
+            tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: false
