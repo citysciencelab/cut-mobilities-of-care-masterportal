@@ -119,18 +119,18 @@ define(function () {
             {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
         menubar: true,
-        mouseHover: false,
+        mouseHover: true,
         isMenubarVisible: getIsMenubarVisible(),
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,
             layerTree: true,
-            helpButton: false,
+            helpButton: true,
             contactButton: true,
             tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: false
+            treeFilter: true,
+            wfsFeatureFilter: true,
+            legend: true
         },
 //        treeFilter: {
 //            layer: '7777',
@@ -143,11 +143,12 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
-            orientation: false,
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
+        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        orientation: true,
+        poi: true
     }
 
     return config;

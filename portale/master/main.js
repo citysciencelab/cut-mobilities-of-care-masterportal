@@ -121,6 +121,17 @@ require([
                     new wfsFeatureFilterView();
                 });
             }
+            if (Config.orientation === true) {
+                require(['views/OrientationView'], function (OrientationView) {
+                    new OrientationView();
+                });
+            }
+            if (Config.poi === true) {
+                require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
+//                    new PointOfInterestView();
+                    new PointOfInterestListView();
+                });
+            }
             if (Config.menu.legend === true) {
                 require(['views/LegendView'], function (LegendView) {
                     new LegendView();
