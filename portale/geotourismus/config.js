@@ -74,7 +74,6 @@ define(function () {
     *
     */
     function getIsMenubarVisible() {
-        console.log(result);
         if (result['isMenubarVisible'] !== undefined) {
             return (result['isMenubarVisible'] === "true");
         }
