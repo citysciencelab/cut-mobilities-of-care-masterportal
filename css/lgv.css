@@ -122,7 +122,7 @@ html, body {
 .treeFilterError {
     font-size: 9px;
     color: #a94442;
-    display: none;
+/*    display: none;*/
 }
 
 .mouseHover {

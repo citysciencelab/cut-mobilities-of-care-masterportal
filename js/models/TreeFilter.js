@@ -7,10 +7,23 @@ define([
 ], function ($, _, Backbone, EventBus, Config) {
 
     var TreeFilter = Backbone.Model.extend({
+        defaults: {
+            filter: "",
+            filterHits: "", // Filtertreffer
+            errors: "",
+            treeCategory: "keine Auswahl",  // Baumgattung
+            treeType: "Alle Arten", // Baumart
+            yearMin: "1914",    // Pflanzjahr von
+            yearMax: "1985",    // Pflanzjahr bis
+            diameterMin: "1",   // Kronendurchmesser[m] von
+            diameterMax: "50",  // Kronendurchmesser[m] bis
+            perimeterMin: "1",  // Stammumfang[cm] von
+            perimeterMax: "100" // Stammumfang[cm] bis
+
+        },
         initialize: function () {
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
-            this.listenTo(this, 'invalid', this.showError);
-
+            this.listenTo(this, 'change:SLDBody', this.getFilterHits);
             this.set('layerID', '5182');
         },
         patterns: {
@@ -38,32 +51,25 @@ define([
             if (attributes.yearMax !== null && attributes.yearMin !== null) {
                 if (this.validators.hasCharacters(attributes.yearMax) === true || this.validators.hasCharacters(attributes.yearMin) === true) {
                     errors.yearError = "Die Jahreszahl muss aus Ziffern bestehen";
-                }
-                else if (this.validators.minLength(attributes.yearMax, 4) === false || this.validators.minLength(attributes.yearMin, 4) === false) {
+                } else if (this.validators.minLength(attributes.yearMax, 4) === false || this.validators.minLength(attributes.yearMin, 4) === false) {
                     errors.yearError = "Bitte geben Sie eine vierstellige Zahl ein";
-                }
-                else if (this.validators.maxLength(attributes.yearMax, 4) === false || this.validators.maxLength(attributes.yearMin, 4) === false) {
+                } else if (this.validators.maxLength(attributes.yearMax, 4) === false || this.validators.maxLength(attributes.yearMin, 4) === false) {
                     errors.yearError = "Bitte geben Sie eine vierstellige Zahl ein";
-                }
-                else if (this.validators.isLessThan(attributes.yearMin, attributes.yearMax) === false) {
+                } else if (this.validators.isLessThan(attributes.yearMin, attributes.yearMax) === false) {
                     errors.yearError = "Logischer Fehler der Werte";
                 }
             }
+            this.set('errors', errors);
             if (_.isEmpty(errors) === false) {
                 return errors;
             }
         },
-        showError: function () {
-            _.each(this.validationError, function (value, key) {
-                $('#' + key).show().text(value);
-                $('#' + key).parent().children().each(function (index, element) {
-                    if($(element).is("div")) {
-                        $(element).addClass("has-error").show();
-                    }
-                });
-            }, this);
+        setCategory: function () {
+            this.set('treeCategory', $('#treeCategory').val());
         },
-        setFilterParams: function () {
+        setFilterParams: function () {  // NOTE aufbröseln in einzelMethoden
+            this.set('treeCategory', $('#treeCategory').val());
+            this.set('treeType', $('#treeType').val());
             this.set('yearMax', $('#yearMax > input').val());
             this.set('yearMin', $('#yearMin > input').val());
             this.set('diameterMax', $('#diameterMax > input').val());
@@ -72,12 +78,6 @@ define([
             this.set('perimeterMin', $('#perimeterMin > input').val());
 
             if (this.isValid() === true) {
-                $("input").parent().removeClass('has-error');
-                $("span").each(function (index, element) {
-                    if($(element).hasClass("treeFilterError") === true) {
-                        $(element).hide();
-                    }
-                });
                 this.createFilter();
             }
         },
@@ -92,9 +92,9 @@ define([
 
             // Filter Gattung und Art
             if ($('#treeCategory').val() !== "keine Auswahl") {
-                filterCategory = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:botanischer_name</ogc:PropertyName><ogc:Literal>' + $('#treeCategory').val() + '</ogc:Literal></ogc:PropertyIsEqualTo>';
+                filterCategory = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:botanischer_name</ogc:PropertyName><ogc:Literal>' + this.get('treeCategory') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
                 if ($('#treeType').val() !== "Alle Arten") {
-                    filterType = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:baumart</ogc:PropertyName><ogc:Literal>' + $('#treeType').val() + '</ogc:Literal></ogc:PropertyIsEqualTo>';
+                    filterType = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:baumart</ogc:PropertyName><ogc:Literal>' + this.get('treeType') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
                 } else {
                     filterType = '';
                 }
@@ -103,31 +103,46 @@ define([
                 filterType = '';
             }
 
-             // Filter Pflanzjahr
-            filterYear = '<ogc:PropertyIsBetween><ogc:PropertyName>app:pflanzjahr</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + $('#yearMin > input').val() + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + $('#yearMax > input').val() + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
-            filterDiameter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' +$('#diameterMin > input').val() + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + $('#diameterMax > input').val() + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
-            filterPerimeter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:stammumfangzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + $('#perimeterMin > input').val() + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + $('#perimeterMax > input').val() + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
+            // Filter Pflanzjahr
+            filterYear = '<ogc:PropertyIsBetween><ogc:PropertyName>app:pflanzjahr</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("yearMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("yearMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
+            filterDiameter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("diameterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("diameterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
+            filterPerimeter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:stammumfangzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("perimeterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("perimeterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
             var header = "<sld:StyledLayerDescriptor xmlns:sld='http://www.opengis.net/sld' xmlns:se='http://www.opengis.net/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:app='http://www.deegree.org/app' xmlns:ogc='http://www.opengis.net/ogc' xmlns='http://www.opengis.net/sld' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd'><sld:NamedLayer><se:Name>strassenbaum</se:Name><sld:UserStyle><se:FeatureTypeStyle><se:Rule>";
             var filter = "<ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
             var symbolizer = "<se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#24ac3b</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#24ac3b</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer>";
             var footer = "</se:Rule></se:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>";
+            this.set('filter', filter);
             this.set('SLDBody', header + filter + symbolizer + footer);
-            console.log(this.get('SLDBody'));
-
-//            $.ajax({
-//                url: Config.proxyURL + "?url=http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_LP_Baumkataster/MapServer/WFSServer" +  encodeURIComponent("?service=WFS&version=1.1.0&typeName=BSU_LP_Baumkataster:Strassenbaumkataster_2013&resultType=hits&request=GetFeature&Filter=<ogc:Filter>" + filterCategory + "</ogc:Filter>"),
-//                async: true,
-//                type: 'GET',
-//                success: function (data) {
-//                        console.log(data);
-//                },
-//                error: function (err) {
-//                    console.log(err)
-//                }
-//            });
-            }
+        },
+        getFilterHits: function () {
+            $('#loader').show();
+            $.ajax({
+                url: Config.proxyURL + "?url=http://wscd0096/fachdaten_public/services/wfs_hh_strassenbaumkataster",
+                data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature version="1.1.0" resultType="hits" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:strassenbaumkataster">' + this.get('filter') + '</wfs:Query></wfs:GetFeature>',
+                type: 'POST',
+                context: this,  // model
+                contentType: "text/xml",
+                success: function (data) {
+                    var hits;
+                     // Firefox, IE
+                    if (data.getElementsByTagName("wfs:FeatureCollection") !== undefined) {
+                        hits = data.getElementsByTagName('wfs:FeatureCollection')[0].getAttribute('numberOfFeatures');
+                    }
+                    // WebKit
+                    else if (data.getElementsByTagName("FeatureCollection") !== undefined) {
+                        hits = data.getElementsByTagName('FeatureCollection')[0].getAttribute('numberOfFeatures');
+                    }
+                    this.set('filterHits', hits);
+                    $('#loader').hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                    $('#loader').hide();
+                }
+            });
+        }
     });
-//    http://lgvfds01/arcgis/services/FD_FHH_Map/BSU_LP_Baumkataster/MapServer/WFSServer?request=GetFeature&service=wfs&version=1.1&typeName=BSU_LP_Baumkataster:Strassenbaumkataster_2013&resultType=hits&Filter=%3Cogc:Filter%3E%3Cogc:PropertyIsBetween%3E%3Cogc:PropertyName%3Eapp:pflanzjahr%3C/ogc:PropertyName%3E%3Cogc:LowerBoundary%3E%3Cogc:Literal%3E1974%3C/ogc:Literal%3E%3C/ogc:LowerBoundary%3E%3Cogc:UpperBoundary%3E%3Cogc:Literal%3E1974%3C/ogc:Literal%3E%3C/ogc:UpperBoundary%3E%3C/ogc:PropertyIsBetween%3E%3C/ogc:Filter%3E
 
     return new TreeFilter();
 });
