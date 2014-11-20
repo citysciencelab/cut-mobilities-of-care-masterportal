@@ -1,32 +1,28 @@
 .buttonStandpunkt {
-    position: fixed;
-    z-index: 8000;
-    right: 100px;
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+    top:0px;
     margin-top: 5px;
 }
 .buttonPOI {
-    position: fixed;
-    z-index: 8000;
-    right:60px;
+    position: absolute;
+    z-index: 100;
+    right:0px;
+    top:50px;
     margin-top: 5px;
 }
 
 #geolocate{
     cursor:pointer;
-    background: none repeat scroll 0 0 #fff;
-    border-radius: 50px !important;
-    font-size: 35px;
-    height: 35px;
-    line-height: 1;
-    width: 35px;
-}
-#info {
-    background-color: lightgrey;
-    font-size: 0.7em;
+    color: #F3F3F3;
     padding: 4px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
+    background: none repeat scroll #D42132;
+    border-radius: 50px !important;
+    font-size: 32px;
+    height: 40px;
+    line-height: 1;
+    width: 40px;
 }
 #centerDiv{
     position: absolute;
@@ -38,4 +34,21 @@
 }
 .poiRow{
     cursor:pointer;
+}
+#geolocation_marker{
+    cursor:pointer;
+    color: #F3F3F3;
+    padding: 3px;
+    background: none repeat scroll #D42132;
+    border-radius: 50px !important;
+    font-size: 30px;
+    height: 35px;
+    line-height: 1;
+    width: 35px;
+}
+#toggleDiv {
+    position: relative;
+    top:50px;
+    right: 10px;
+    z-index: 1000;
 }

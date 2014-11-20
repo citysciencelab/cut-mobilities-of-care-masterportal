@@ -9,6 +9,7 @@ define([
         initialize: function () {
             EventBus.on('setModel', this.setModel, this);
         },
+        comparator: "distance",
         setModel: function (clusterFeature, styleList, maxDist, newCenter) {
             // NOTE bisher nur Cluster-WFS
             _.each(clusterFeature.getProperties().features, function (feature) {
