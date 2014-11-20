@@ -22,15 +22,18 @@ define([
         initialize: function () {
             EventBus.on('showPOIModal', this.show, this);
             EventBus.on('hidePOIModal', this.hide, this);
-            this.listenTo(this.collection, 'add', this.addOne);
+            this.listenTo(this.collection, 'sort', this.addPOIS);
             this.render();
         },
         render: function () {
             this.$el.html(this.template());
         },
-        addOne: function (model) {
-            var poiView = new PointOfInterestView({model: model});
-            this.$('table').append(poiView.render().el);
+        addPOIS: function (collection) {
+            this.$('table').html('');
+            _.each(collection.models, function(model){
+                var poiView = new PointOfInterestView({model: model});
+                this.$('table').append(poiView.render().el);
+            }, this);
         },
         removeAllModels: function () {
             this.collection.removeAllModels();

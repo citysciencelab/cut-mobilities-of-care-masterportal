@@ -1,6 +1,6 @@
 define(function () {
 
-    // Parsen des parametrisierten Aufruf --> http://wscd0096/master_sd/portale/master/index.html?center=555874,5934140&layerIDs=8994,453&zoomLevel=4
+    // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
     var query = location.search.substr(1); // URL --> alles nach ? wenn vorhanden
     var result = {};
     query.split("&").forEach(function (keyValue) {
@@ -66,6 +66,23 @@ define(function () {
             return 15.874991427504629 // 1:60.000
         }
     }
+    
+    /**
+    * Gibt den Wert für die config-Option isMenubarVisible zurück.
+    * Ist der Parameter 'isMenubarVisible' vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+    * @returns {Boolean}  
+    *
+    */
+    function getIsMenubarVisible() {
+        console.log(result);
+        if (result['isMenubarVisible'] !== undefined) {
+            return (result['isMenubarVisible'] === "true");  
+        }
+        else {
+            return true;
+        }
+    }
+            
     var config = {
         view: {
             center: getCenter(),
@@ -102,18 +119,18 @@ define(function () {
             {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
         menubar: true,
-        mouseHover: false,
-        isMenubarVisible: true,
+        mouseHover: true,
+        isMenubarVisible: getIsMenubarVisible(),
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,
             layerTree: true,
-            helpButton: false,
+            helpButton: true,
             contactButton: true,
             tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: false
+            treeFilter: true,
+            wfsFeatureFilter: true,
+            legend: true
         },
 //        treeFilter: {
 //            layer: '7777',
@@ -126,11 +143,12 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
-            orientation: false,
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
+        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        orientation: true,
+        poi: true
     }
 
     return config;

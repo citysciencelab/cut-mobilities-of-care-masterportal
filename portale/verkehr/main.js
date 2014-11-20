@@ -1,4 +1,3 @@
-
 /*global require*/
 require.config({
     paths: {
@@ -90,17 +89,6 @@ require([
             if (Config.menu.wfsFeatureFilter === true) {
                 require(['views/wfsFeatureFilterView'], function (wfsFeatureFilterView) {
                     new wfsFeatureFilterView();
-                });
-            }
-            if (Config.orientation === true) {
-                require(['views/OrientationView'], function (OrientationView) {
-                    new OrientationView();
-                });
-            }
-            if (Config.poi === true) {
-                require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
-//                    new PointOfInterestView();
-                    new PointOfInterestListView();
                 });
             }
             if (Config.menu.legend === true) {
