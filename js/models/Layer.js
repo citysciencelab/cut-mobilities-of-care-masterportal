@@ -36,11 +36,14 @@ define([
             this.unset('datasets');
         },
         setAttributions: function () {
-            if(this.get('datasets')[0] !== undefined) {
-                var dataset = this.get('datasets')[0];
-                this.set('metaID', dataset.md_id);
-                this.set('metaName', dataset.md_name);
-                this.set('kategorieOpendata', dataset.kategorie_opendata);
+            var datasets = this.get('datasets');
+            if (datasets) {
+                if(datasets[0] !== undefined) {
+                    var dataset = this.get('datasets')[0];
+                    this.set('metaID', dataset.md_id);
+                    this.set('metaName', dataset.md_name);
+                    this.set('kategorieOpendata', dataset.kategorie_opendata);
+                }
             }
         },
         /**

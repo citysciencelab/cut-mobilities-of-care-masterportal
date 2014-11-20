@@ -6,8 +6,8 @@
 <div class="panel-body">
     <form class="form-horizontal" role="form">
         <div class="form-group form-group-sm">
-            <label for="" class="control-label col-md-5">Gattung</label>
-            <div class="col-md-7">
+            <label class="control-label col-xs-5">Gattung</label>
+            <div class="col-xs-7">
                 <select class="form-control input-sm" id="treeCategory">
                     <option>keine Auswahl</option>
                     <option>Sorbus aria</option>
@@ -15,8 +15,8 @@
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label for="" class="control-label col-md-5">Baumart</label>
-            <div class="col-md-7">
+            <label class="control-label col-xs-5">Baumart</label>
+            <div class="col-xs-7">
                 <select class="form-control input-sm" id="treeType" disabled>
                     <option>Alle Arten</option>
                     <option>Echte Mehlbeere</option>
@@ -24,44 +24,48 @@
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label class="control-label col-md-5">Pflanzjahr</label>
-            <div class="col-md-3">
-                <input id="yearStart" type="text" class="form-control input-sm" value="1914">
+            <label class="control-label col-xs-5">Pflanzjahr</label>
+            <div id="yearMin" class="col-xs-3">
+                <input type="text" class="form-control input-sm" value="1914">
             </div>
-            <div class="col-md-1">
+            <div class="col-xs-1">
                 <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
             </div>
-            <div class="col-md-3">
-                <input id="yearEnd" type="text" class="form-control input-sm" value="1985">
+            <div id="yearMax" class="col-xs-3">
+                <input type="text" class="form-control input-sm" value="1985">
+            </div>
+            <br>
+            <span id="yearError" class="col-xs-7 col-xs-offset-5 treeFilterError"></span>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="control-label col-xs-5">Kronendurchmesser[m]</label>
+            <div id="diameterMin" class="col-xs-3">
+                <input type="text" class="form-control input-sm" value="1">
+            </div>
+            <div class="col-xs-1">
+                <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
+            </div>
+            <div id="diameterMax" class="col-xs-3">
+                <input type="text" class="form-control input-sm" value="50">
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label class="control-label col-md-5">Kronendurchmesser[m]</label>
-            <div class="col-md-3">
-                <input type="text" class="form-control input-sm">
+            <label class="control-label col-xs-5">Stammumfang[cm]</label>
+            <div id="perimeterMin" class="col-xs-3">
+                <input type="text" class="form-control input-sm" value="1">
             </div>
-            <div class="col-md-1">
+            <div class="col-xs-1">
                 <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
             </div>
-            <div class="col-md-3">
-                <input type="text" class="form-control input-sm">
+            <div id="perimeterMax" class="col-xs-3">
+                <input type="text" class="form-control input-sm" value="100">
             </div>
         </div>
+        <div id="errorPerimeter" class="col-xs-7 col-xs-offset-5" style="float: right; font-size: 11px; color: #a94442;"></div>
         <div class="form-group form-group-sm">
-            <label class="control-label col-md-5">Stammumfang[cm]</label>
-            <div class="col-md-3">
-                <input type="text" class="form-control input-sm">
-            </div>
-            <div class="col-md-1">
-                <span class="glyphicon glyphicon-minus" style="vertical-align: bottom;"></span>
-            </div>
-            <div class="col-md-3">
-                <input type="text" class="form-control input-sm">
-            </div>
-        </div>
-        <div class="form-group form-group-sm">
-            <div class="col-md-12">
-                <button id="filterbutton" class="btn btn-panel-submit col-md-12" type="button">Filtern</button>
+            <div class="col-xs-12">
+                <button id="filterRemoveButton" class="btn btn-panel-submit col-xs-5" type="button">Aufheben</button>
+                <button id="filterbutton" class="btn btn-panel-submit col-xs-5 col-xs-offset-2" type="button">Filtern</button>
             </div>
         </div>
     </form>

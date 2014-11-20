@@ -9,14 +9,17 @@ define(function () {
         },
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
-            '453',
             '8',
-            '9999'
+            '453',
+            '5689',
+            '1346',
+            '1347',
+            '1205'
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: [
             '453',
-            '9999'
+            '1347'
         ],
         styleConf: '../../style.json',
         wfsconfig: [
@@ -36,7 +39,7 @@ define(function () {
             }
         ],
         menubar: true,
-        mouseHover: true,
+        mouseHover: false,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
@@ -46,14 +49,14 @@ define(function () {
             contactButton: true,
             tools: true,
             treeFilter: false,
-            wfsFeatureFilter: true,
+            wfsFeatureFilter: false,
             legend: false
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             orientation: false,
             active: 'gfi'

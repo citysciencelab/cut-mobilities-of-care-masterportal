@@ -1,12 +1,24 @@
+@media (min-width: 768px) {
+    .panel-master {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel-master {
+        margin-top: 50px;
+    }
+}
+
 .panel-master {
     position: fixed;
     left: 20px;
-    margin-top: 20px;
     margin-right: 20px;
     z-index: 100;
     font-size: 12px;
     display: none;
     max-width: 400px;
+    min-width: 370px;
 }
 
 .panel-master > .panel-heading {

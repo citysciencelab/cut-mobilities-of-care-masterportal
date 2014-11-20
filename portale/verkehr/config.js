@@ -1,9 +1,7 @@
-/*global define*/
 define(function () {
-
     var config = {
         view: {
-            center: [565874, 5934140], // Rathausmarkt
+            center: [561210, 5932600],
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
@@ -11,32 +9,32 @@ define(function () {
         layerIDs: [
             '453',
             '8',
-            '9999'
+            'extern1',
+            'extern2',
+            'extern3',
+            'extern4',
+            'extern5',
+            '1682',
+            '1358',
+            '1357',
+            '1688',
+            '1361',
+            '1363',
+            '1686',
+            '1359',
+            '1362',
+            '1364',
+            '1365'
         ],
-        // Layer die Initial sichtbar sein sollen
         visibleLayer: [
-            '453',
-            '9999'
+            '453'
         ],
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
-             filterOptions: [
-                 {
-                     'fieldName': 'geburtsklinik',
-                     'filterType': 'combo',
-                     'filterString': ['*','Perinatalzentrum Level 1','Perinatalzentrum Level 2','Perinataler Schwerpunkt','Geburtsklinik','nein']
-                 },
-                 {
-                     'fieldName': 'teilnahme_notversorgung',
-                     'filterType': 'combo',
-                     'filterString': ['*','ja','eingeschränkt','nein']
-                 }
-             ]
-            }
+            {layer: '44', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: '', filterOptions: []}
         ],
         menubar: true,
-        mouseHover: true,
+        mouseHover: false,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
@@ -46,14 +44,14 @@ define(function () {
             contactButton: true,
             tools: true,
             treeFilter: false,
-            wfsFeatureFilter: true,
+            wfsFeatureFilter: false,
             legend: false
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             orientation: false,
             active: 'gfi'
