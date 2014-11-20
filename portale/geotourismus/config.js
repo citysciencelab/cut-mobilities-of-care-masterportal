@@ -35,9 +35,15 @@ define(function () {
         }
         else {
             return [
-                '453',  // Luftbilder (WMS)
-                '8999', // Landschaftsform (WFS)
-                '8994'  // Wasser und Wasserbau (WFS)
+            '94',
+            '352',
+            '353',
+            '354',
+            '355',
+            '356',
+            '357',
+            '358',
+            '359'
             ];
         }
     }
@@ -84,8 +90,8 @@ define(function () {
 
     var config = {
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
+            center: getCenter(), // Rathausmarkt
+            resolution: getResolution(), // 1:60.000
             scale: 60000 // für print.js benötigt
         },
         layerConf: '../../diensteapiFHHNET.json',
@@ -101,17 +107,7 @@ define(function () {
             '359'
         ],
         // Layer die Initial sichtbar sein sollen
-        visibleLayer: [
-            '94',
-            '352',
-            '353',
-            '354',
-            '355',
-            '356',
-            '357',
-            '358',
-            '359'
-        ],
+        visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
         wfsconfig: [
             {layer: '352', style: ['5','6','7','8','352_cluster'], clusterDistance: 30, styleField :'Kategorie'},
