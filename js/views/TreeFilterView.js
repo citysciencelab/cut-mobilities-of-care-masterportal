@@ -14,14 +14,16 @@ define([
         template: _.template(TreeFilterTemplate),
         initialize: function () {
             this.render();
+            this.model.on('change:filterHits change:treeCategory invalid', this.render, this);
             EventBus.on('toggleFilterTreeWin', this.toggleFilterTreeWin, this);
         },
         events: {
             'click .glyphicon-chevron-up, .glyphicon-chevron-down': 'toggleContent',
             'click .close': 'toggleFilterTreeWin',
-            'click #treeCategory': 'checkCombobox',
+            'change #treeCategory': 'setCategory',
             'click #filterbutton': 'setFilterParams',
-            'click #filterRemoveButton': 'removeFilter'
+            'click #filterRemoveButton': 'removeFilter',
+            'change #yearMin': 'render' // --> erst noch setzen
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -34,13 +36,8 @@ define([
         toggleFilterTreeWin: function () {
             $('#treeFilterWin').toggle();
         },
-        checkCombobox: function () {
-            if($('#treeCategory').val() !== "keine Auswahl") {
-                $('#treeType').prop("disabled", false);
-            }
-            else {
-                $('#treeType').prop("disabled", true);
-            }
+        setCategory: function () {
+            this.model.setCategory();
         },
         removeFilter: function () {
             this.model.removeFilter();

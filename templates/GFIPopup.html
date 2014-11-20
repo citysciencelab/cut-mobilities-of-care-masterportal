@@ -16,8 +16,9 @@
 <div id="gfiContent">
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
-       _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) { %>
+       _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {%>
     <tr>
+        <% if(key!=='Bild'){%>
         <td>
             <strong><%= key + ':'%></strong>
         </td>
@@ -36,6 +37,24 @@
                 <%= value %>
             <% } %>
         </td>
+        <% } else {%>
+
+         <td colspan="2" >
+           <% if (value.search('.html') !== -1) { %>
+                <a href="<%= value%>" target="_blank">Link</a>
+            <% } else if (value.substr(0, 7) == 'http://') { %>
+                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                    <img height="150" src="<%= value%>">
+                <% } else { %>
+                    <a href="<%= value%>"><%= value%></a>
+                <% } %>
+            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49') { %>
+                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+            <% } else { %>
+                <%= value %>
+            <% } %>
+        </td>
+        <% }%>
     </tr>
     <% })}; %>
     </table>

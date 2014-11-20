@@ -8,6 +8,7 @@ define([
 
     var OrientationView = Backbone.View.extend({
         model: Orientation,
+        id:'toggleDiv',
         template: _.template(OrientationTemplate),
         events: {
             'click .buttonStandpunkt': 'getOrientation',
@@ -17,8 +18,11 @@ define([
             this.render();
         },
         render: function () {
-            var attr = this.model.toJSON();
-            $('#toggleRow').append(this.$el.html(this.template(attr)));
+            //var attr = this.model.toJSON();
+            //this.getOrientation();
+            //$('#toggleRow').append(this.$el.html(this.template(attr)));
+
+            $('#toggleRow').append(this.$el.html(this.template));
         },
         getOrientation: function (){
             this.model.setOrientation("stdPkt");

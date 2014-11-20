@@ -217,7 +217,6 @@ define([
             this.get('map').getView().setZoom(7);
         },
          setPOICenter: function (center, zoom) {
-            console.log(zoom);
             this.get('map').getView().setCenter(center);
             this.get('map').getView().setZoom(zoom);
         },
