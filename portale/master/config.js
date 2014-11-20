@@ -119,7 +119,7 @@ define(function () {
             {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
         menubar: true,
-        mouseHover: false,
+        mouseHover: true,
         isMenubarVisible: getIsMenubarVisible(),
         menu: {
             viewerName: 'GeoViewer',
