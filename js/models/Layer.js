@@ -20,14 +20,9 @@ define([
 
             this.setAttributionLayerSource();
             this.setAttributionLayer();
-
-            if (_.contains(Config.visibleLayer, this.get('id'))) {
-                this.set('visibility', true);
-            }
-            else {
-                this.set('visibility', false);
-            }
-            this.get('layer').setVisible(this.get('visibility'));
+            // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
+            this.get('layer').setVisible(false);
+            this.set('visibility', false);
             this.set('settings', false);
             this.set('transparence', 0);
 
@@ -86,7 +81,8 @@ define([
          *
          */
         setVisibility: function () {
-            this.get('layer').setVisible(this.get('visibility'));
+            var visibility = this.get('visibility');
+            this.get('layer').setVisible(visibility);
             EventBus.trigger('LayerVisibilityChangedForSearchbar', this);
         },
         /**

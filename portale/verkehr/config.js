@@ -7,27 +7,22 @@ define(function () {
         },
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
-            '453',
-            '8',
-            'extern1',
-            'extern2',
-            'extern3',
-            'extern4',
-            'extern5',
-            '1682',
-            '1358',
-            '1357',
-            '1688',
-            '1361',
-            '1363',
-            '1686',
-            '1359',
-            '1362',
-            '1364',
-            '1365'
-        ],
-        visibleLayer: [
-            '453'
+            {id: '453', visible: true},
+            {id: '8', visible: false},
+            {id: 'extern1', visible: false},
+            {id: ['extern3', 'extern2'], visible: false, name: 'HVV Buslinien'},
+            {id: 'extern4', visible: false},
+            {id: 'extern5', visible: false},
+            {id: '1682', visible: false},
+            {id: '1358', visible: false},
+            {id: '1357', visible: false},
+            {id: '1688', visible: false},
+            {id: '1361', visible: false},
+            {id: '1363', visible: false},
+            {id: '1686', visible: false},
+            {id: '1359', visible: false},
+            {id: '1362'},
+            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: true}
         ],
         styleConf: '../../style.json',
         wfsconfig: [
@@ -51,7 +46,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             orientation: false,
             active: 'gfi'

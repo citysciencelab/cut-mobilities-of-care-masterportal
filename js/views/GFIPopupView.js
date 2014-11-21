@@ -20,6 +20,7 @@ define([
          */
         initialize: function () {
             this.listenTo(this.model, 'change:coordinate', this.render);
+            EventBus.on('closeGFIParams', this.destroy, this); // trigger in map.js
         },
         /**
          *

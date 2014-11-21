@@ -50,6 +50,10 @@ define([
                     return num;
                 }
             });
+            if (!wfsconfig) {
+                console.log('Layer ' + id + ' nicht konfiguriert.');
+                return;
+            }
             this.set('styleId', wfsconfig.style);
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);

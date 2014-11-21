@@ -30,12 +30,19 @@ require.config({
 
 require([
     'config',
-    'models/Map',
     'jquery'
-], function (Config, Map) {
-    new Map();
+], function (Config, _){
+    if (Config.allowParametricURL && Config.allowParametricURL === true) {
+        require(['models/ParametricURL'], function (ParametricURL) {
+            new ParametricURL();
+        });
+    }
 
-    if (Config.mouseHover === true) {
+    require(['models/map'], function (Map) {
+        new Map();
+    });
+
+    if (Config.mouseHover && Config.mouseHover === true) {
         require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
             new MouseHoverPopupView();
         });
