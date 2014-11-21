@@ -45,6 +45,7 @@ define([
             EventBus.on('setPOICenter', this.setPOICenter, this);
             EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
             EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
+            EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geööfnet oder nicht
 
             this.set('projection', proj25832);
 
@@ -73,6 +74,15 @@ define([
             this.get('view').on('change:center', function () {
                 EventBus.trigger('currentMapCenter', this.get('view').getCenter());
             },this);
+        },
+
+        GFIPopupVisibility: function(value) {
+            if (value === true) {
+                this.set('GFIPopupVisibility', true);
+            }
+            else {
+                this.set('GFIPopupVisibility', false);
+            }
         },
 
         setMeasurePopup: function (ele) {
@@ -156,6 +166,9 @@ define([
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
         setGFIParams: function (evt) {
+            if (this.get('GFIPopupVisibility') === true) {
+                EventBus.trigger('closeGFIParams', this);
+            }
             var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();
