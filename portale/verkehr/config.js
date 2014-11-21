@@ -10,8 +10,7 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: 'extern1', visible: false},
-            {id: 'extern2', visible: false},
-            {id: 'extern3', visible: false},
+            {id: ['extern3', 'extern2'], visible: false, name: 'HVV Buslinien'},
             {id: 'extern4', visible: false},
             {id: 'extern5', visible: false},
             {id: '1682', visible: false},
@@ -23,7 +22,7 @@ define(function () {
             {id: '1686', visible: false},
             {id: '1359', visible: false},
             {id: '1362'},
-            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: false}
+            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: true}
         ],
         styleConf: '../../style.json',
         wfsconfig: [
@@ -47,7 +46,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             orientation: false,
             active: 'gfi'
