@@ -22,8 +22,8 @@ define(function () {
             {id: '1363', visible: false},
             {id: '1686', visible: false},
             {id: '1359', visible: false},
-            {id: '1362', visible: false},
-            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: true}
+            {id: '1362'},
+            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: false}
         ],
         styleConf: '../../style.json',
         wfsconfig: [

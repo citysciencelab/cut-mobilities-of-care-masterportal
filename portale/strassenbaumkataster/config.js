@@ -1,86 +1,20 @@
 define(function () {
-
-    // Parsen des parametrisierten Aufruf --> http://wscd0096/master_sd/portale/master/index.html?center=555874,5934140&layerIDs=8994,453&zoomLevel=4
-    var query = location.search.substr(1); // URL --> alles nach ? wenn vorhanden
-    var result = {};
-    query.split("&").forEach(function (keyValue) {
-        var item = keyValue.split("=");
-        result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-    });
-
-    /**
-     * Gibt die initiale Zentrumskoordinate zurück.
-     * Ist der Parameter 'center' vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
-     * @returns {Array} -- Die Zentrumskoordinate
-     */
-    function getCenter () {
-        if (result['center'] !== undefined) {
-            var coords = result['center'].split(",");
-            return [parseInt(coords[0], 10), parseInt(coords[1], 10)];
-        }
-        else {
-            return [565874, 5934140]; // Rathausmarkt
-        }
-    }
-
-    /**
-     * Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
-     * Ist der Parameter 'layerIDs' vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
-     * @returns {Array} -- Die LayerIDs kommasepariert als String
-     */
-    function getVisibleLayer () {
-        if (result['layerIDs'] !== undefined) {
-            var layers = result['layerIDs'].split(",");
-            return layers;
-        }
-        else {
-            return [
-                '453',  // Luftbilder (WMS)
-                '5182'
-            ];
-        }
-    }
-
-    /**
-     * Gibt die initiale Resolution (Zoomlevel) zurück.
-     * Ist der Parameter 'zoomLevel' vorhanden wird die passende Resolution zurückgegeben, ansonsten der Standardwert.
-     * @returns {Number} -- Die Resolution
-     */
-    function getResolution () {
-        var resolutions = {
-            '1': 66.14614761460263,  // 1:250:000
-            '2': 26.458319045841044, // 1:100.000
-            '3': 15.874991427504629, // 1:60.000
-            '4': 10.583327618336419, // 1:40.000
-            '5': 5.2916638091682096, // 1:20.000
-            '6': 2.6458319045841048, // 1:10.000
-            '7': 1.3229159522920524, // 1:5.000
-            '8': 0.6614579761460262, // 1:2.500
-            '9': 0.2645831904584105  // 1:1.000
-        };
-        if (result['zoomLevel'] !== undefined) {
-            return resolutions[result['zoomLevel']];
-        }
-        else {
-            return 15.874991427504629 // 1:60.000
-        }
-    }
-
     var config = {
+        allowParametricURL: true,
         view: {
-            center: getCenter(),
-            resolution: getResolution(),
+            center: [565874, 5934140],
+            resolution: 15.874991427504629,
             scale: 60000 // für print.js benötigt
         },
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
-            '453',
-            '8',
-            '7777',
-            '1388',
-            '1117',
-            '1166',
-            '5182'
+            {id: '453', visible: true},
+            {id: '8', visible: false},
+            {id: '7777', visible: false},
+            {id: '1388', visible: false},
+            {id: '1117', visible: false},
+            {id: '1166', visible: false},
+            {id: '5182', visible: true}
         ],
         // Layer die Initial sichtbar sein sollen
         visibleLayer: getVisibleLayer(),

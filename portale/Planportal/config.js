@@ -9,17 +9,12 @@ define(function () {
         },
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
-            '8',
-            '453',
-            '5689',
-            '1346',
-            '1347',
-            '1205'
-        ],
-        // Layer die Initial sichtbar sein sollen
-        visibleLayer: [
-            '453',
-            '1347'
+            {id: '8', visible: false},
+            {id: '453', visible: true},
+            {id: '5689', visible: false},
+            {id: '1346', visible: false},
+            {id: '1347', visible: true},
+            {id: '1205', visible: false}
         ],
         styleConf: '../../style.json',
         wfsconfig: [

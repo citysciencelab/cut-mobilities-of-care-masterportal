@@ -37,6 +37,10 @@ define([
             var idArray = Config.layerIDs;
             var dienstArray = new Array();
             _.each(idArray, function(layerdef, index, list) {
+                // Defaultwert, falls visible nicht gesetzt
+                if (!_.has(layerdef, 'visible')) {
+                    layerdef.visible = false;
+                }
                 /* NOTE
                  * Prüfung ob Eintrag in config.js einen Gruppenlayer beschreibt (id == Array)
                  */
@@ -83,40 +87,6 @@ define([
                     console.log ('Ungültige Layerdefinition in config.js');
                 }
 
-
-
-//                var dienst = _.findWhere(response, {id: layerdef.id});
-//                if (dienst) {
-//                    dienstArray.push(dienst);
-//                }
-//                else if (_.has(layerdef, 'layerIDs')) {
-//                     var returnValue = {
-//                         id: layerdef.id,
-//                         name: layerdef.name,
-//                         typ: 'GROUP',
-//                         defaultVisibility: layerdef.visible,
-//                         layerdefinitions: []
-//                    }
-//                    _.each(layerdef.layerIDs, function(childlayer, index, list) {
-//                        var dienst = _.findWhere(response, {id: childlayer});
-//                        if (dienst) {
-//                            returnValue.layerdefinitions.push({
-//                                id: childlayer,
-//                                dienst: dienst
-//                            });
-//                        }
-//                        else {
-//                            console.error ('LayerID ' + childlayer + ' nicht in JSON gefunden.');
-//                        }
-//                    });
-//                    if (returnValue.layerdefinitions.length > 0) {
-//                        dienstArray.push(returnValue);
-//                    }
-//                }
-//                else {
-//                    console.log ('Layer nicht in JSON gefunden.');
-//                    console.log (layerdef);
-//                }
             });
             return dienstArray;
         },
