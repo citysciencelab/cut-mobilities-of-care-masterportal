@@ -24,20 +24,25 @@ define([
          */
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
+
+            this.listenTo(this, 'change:isPopupVisible', this.sendGFIForPrint);
             EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
             EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
+//            EventBus.on('getGFIForPrint', this.sendGFIForPrint, this);
         },
         /**
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
             this.get('element').popover('destroy');
+            this.set('isPopupVisible', false);
         },
         /**
          * Zeigt das Popup.
          */
         showPopup: function () {
             this.get('element').popover('show');
+            this.set('isPopupVisible', true);
         },
         /**
          * params: [0] = Objekt mit name und url; [1] = Koordinate
@@ -219,6 +224,9 @@ define([
                 }
             });
             return pgfi;
+        },
+        sendGFIForPrint: function () {
+            EventBus.trigger('gfiForPrint', [this.get('gfiContent')[0], this.get('isPopupVisible')]);
         }
     });
 

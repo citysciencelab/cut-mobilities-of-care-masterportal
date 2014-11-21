@@ -75,7 +75,7 @@ define([
          *
          */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger('sendLayersForPrint', this.getVisibleWMSLayer());
+            EventBus.trigger('layerForPrint', this.getVisibleWMSLayer());
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.

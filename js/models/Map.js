@@ -68,6 +68,7 @@ define([
 
             // View listener
             this.get('view').on('change:resolution', function () {
+                // NOTE brauche ich wahrscheinlich nicht mehr (sd)
                 EventBus.trigger('currentMapScale', Math.round(this.getCurrentScale()));
             },this);
             this.get('view').on('change:center', function () {

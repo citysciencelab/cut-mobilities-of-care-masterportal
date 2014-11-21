@@ -18,7 +18,7 @@
     font-size: 12px;
     display: none;
     max-width: 400px;
-    min-width: 370px;
+/*    min-width: 370px;*/
 }
 
 .panel-master > .panel-heading {

@@ -117,7 +117,7 @@ define(function () {
             orientation: false,
             active: 'gfi'
         },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
+        printURL: 'http://wscd0096:8680/mapfish_print_2.0/',
         proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
     }
 

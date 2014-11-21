@@ -2,20 +2,22 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'openlayers',
     'config'
-], function (_, Backbone, EventBus, ol, Config) {
+], function (_, Backbone, EventBus, Config) {
 
     /**
      *
      */
     var Print = Backbone.Model.extend({
-//        url: 'http://wscd0096/cgi-bin/proxy.cgi?url=http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        url: Config.proxyURL + "?url=" + Config.printURL,
+        defaults: {
+            spec: {}, // JSON die an den Druckdienst geschickt wird
+            layerToPrint: [],   // die sichtbaren Layer
+            gfiToPrint: [],  // die sichtbaren GFIs
+            currentMapScale: Config.view.scale, // akuteller Maßstab
+            currentMapCenter: Config.view.center    // aktuelle Zentrumkoordinate
+        },
+        url: Config.proxyURL + "?url=" + Config.printURL + 'master/info.json',
         initialize: function () {
-            // NOTE über config steuern
-            this.set('currentMapScale', Config.view.scale);
-            this.set('currentMapCenter', Config.view.center);
 
             // get print config
             this.fetch({
@@ -23,32 +25,13 @@ define([
                 async: false
             });
 
-            EventBus.on('togglePrintWin', this.togglePrintWin, this);
-
-            EventBus.on('sendLayersForPrint', this.setLayerParams, this);
-            EventBus.on('currentMapScale', this.setCurrentMapScale, this);
+            EventBus.on('layerForPrint', this.setLayerToPrint, this);
+            EventBus.on('gfiForPrint', this.setGFIToPrint, this);
             EventBus.on('currentMapCenter', this.setCurrentMapCenter, this);
         },
         updatePrintPage: function () {
             EventBus.trigger('updatePrintPage', this.get('active'));
-        },
-        /**
-         *
-         */
-        togglePrintWin: function () {
-            $('#printWin').toggle();
-            if($('#printWin').css('display') === 'block') {
-                this.set('active', true);
-            }
-            else {
-                this.set('active', false);
-            }
-        },
-        /**
-         *
-         */
-        setCurrentMapScale: function (scale) {
-            this.set('currentMapScale', scale);
+            this.set('currentMapScale', $('#scaleField').val());
         },
         setCurrentMapCenter: function (center) {
             this.set('currentMapCenter', center);
@@ -60,50 +43,75 @@ define([
             EventBus.trigger('getLayersForPrint');
         },
         /**
+         * [[Description]]
+         * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
+         */
+        setGFIToPrint: function (values) {
+            this.set('gfiParams', _.pairs(values[0]));
+            this.set('hasPrintGFIParams', values[1]);
+            if (this.get('hasPrintGFIParams') === true) {
+                switch (this.get('gfiParams').length) {
+                    case 4:
+                        this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master_gfi_4/create.json');
+                        break;
+                    case 5:
+                        this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master_gfi_5/create.json');
+                        break;
+                    case 6:
+                        this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master_gfi_6/create.json');
+                        break;
+                }
+            }
+            else {
+                this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master/create.json');
+            }
+        },
+        /**
          *
          */
-        setLayerParams: function (layers) {
-//            console.log(layers);
-            var layersArray = [];
+        setLayerToPrint: function (layers) {
             _.each(layers, function (layer) {
-//                console.log(layer.get('url'));
-                layersArray.push({
+                this.get('layerToPrint').push({
                     type: layer.get('typ'),
                     layers: layer.get('layers').split(),
                     baseURL: layer.get('url'),
                     format: "image/png",
                     opacity: layer.get('opacity')
                 });
-            });
-            this.set('layerParams', layersArray);
-            this.setSPEC();
+            }, this);
+            this.setSpec();
         },
         /**
          *
          */
-        setSPEC: function () {
-            var spec = {
+        setSpec: function () {
+            this.set('spec', {
                 layout: $('#layoutField option:selected').html(),
                 srs: "EPSG:25832",
                 units: "m",
                 outputFilename: "test",
                 outputFormat: "pdf",
-                layers: this.get('layerParams'),
+                layers: this.get('layerToPrint'),
                 pages: [
                     {
                         center: this.get('currentMapCenter'),
-                        scale:  $('#scaleField').val(),
+                        scale:  this.get('currentMapScale'),
                         dpi: 96,
                         mapTitle: 'test'
                     }
                 ]
-            };
-            var jsonSpec = JSON.stringify(spec);
+            });
+
+            if (this.get('hasPrintGFIParams') === true) {
+                _.each(_.flatten(this.get('gfiParams')), function (element, index) {
+                    this.get('spec').pages[0]["attr_" + index] = element;
+                }, this);
+            }
+
             $.ajax({
-//                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + this.get('createURL'),
                 url: Config.proxyURL + "?url=" + this.get("createURL"),
                 type: 'POST',
-                data: jsonSpec,
+                data: JSON.stringify(this.get('spec')),
                 headers: {
                     "Content-Type": "application/json; charset=UTF-8"
                 },
@@ -113,7 +121,6 @@ define([
                 },
                 error: function (err) {
                     $('#loader').hide();
-//                    console.log(err);
                 }
             });
         }
