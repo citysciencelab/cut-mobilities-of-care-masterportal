@@ -42,6 +42,11 @@ require([
         new Map();
     });
 
+    if (Config.mouseHover && Config.mouseHover === true) {
+        require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
+            new MouseHoverPopupView();
+        });
+    }
 
     if (Config.menubar === true) {
         require(['views/MenubarView', 'views/ToggleButtonView'], function (MenubarView, ToggleButtonView) {
