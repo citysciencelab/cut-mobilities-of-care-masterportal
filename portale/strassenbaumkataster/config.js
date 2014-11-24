@@ -16,8 +16,6 @@ define(function () {
             {id: '1166', visible: false},
             {id: '5182', visible: true}
         ],
-        // Layer die Initial sichtbar sein sollen
-        visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
         wfsconfig: [
             {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},

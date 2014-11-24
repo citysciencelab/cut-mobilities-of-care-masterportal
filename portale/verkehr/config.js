@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        allowParametricURL: true,
         view: {
             center: [561210, 5932600],
             resolution: 15.874991427504629, // 1:60.000
@@ -36,11 +37,11 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: false,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false
+            legend: true
         },
         gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
