@@ -58,7 +58,6 @@ define([
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);
             this.set('styleField', wfsconfig.styleField);
-
             // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
                 format: new ol.format.WFS({
@@ -80,14 +79,20 @@ define([
                 async: false,
                 context: this,
                 success: function (data, textStatus, jqXHR) {
-                    pServerVector.addFeatures(pServerVector.readFeatures(data));
-                    // hinzufügen der LayerId für MouseHover und wfsFeatureFilter
-                    pServerVector.forEachFeature(function (ele) {
-                        ele.layerId = this.get('id');
-                    }, this);
+                    var docEle = data.documentElement.nodeName;
+                    if (docEle.indexOf('Exception') != -1) {
+                        alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
+                    }
+                    else {
+                        pServerVector.addFeatures(pServerVector.readFeatures(data));
+                        // hinzufügen der LayerId für MouseHover und wfsFeatureFilter
+                        pServerVector.forEachFeature(function (ele) {
+                            ele.layerId = this.get('id');
+                        }, this);
+                    }
                 },
                 error: function (data, textStatus, jqXHR) {
-                    console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
+                    alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
                 }
             });
 
@@ -169,13 +174,10 @@ define([
             }
             else {
                 // wenn Stylefield nicht gesetzt ist, werden alle Features identisch behandelt
-                var stylelistmodel;
-                _.each(wfsconfig.style, function (wfsconfigstyle) {
-                    stylelistmodel = _.find(StyleList.models, function (slmodel) {
-                        if (slmodel.id == wfsconfigstyle) {
-                            return slmodel;
-                        }
-                    });
+                var stylelistmodel = _.find(StyleList.models, function (slmodel) {
+                    if (slmodel.id == wfsconfig.style) {
+                        return slmodel;
+                    }
                 });
                 var pStyle = stylelistmodel.get('style');
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
