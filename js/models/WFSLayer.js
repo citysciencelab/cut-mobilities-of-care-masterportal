@@ -168,16 +168,16 @@ define([
                 }
             }
             else {
-                var wfsStyle = new Array();
-                for(var i = 0; i<wfsconfig.style.length;i++){
-                    style=_.find(StyleList.models, function (num) {
-                        if (num.id == wfsconfig.style[i]) {
-                            return num;
+                // wenn Stylefield nicht gesetzt ist, werden alle Features identisch behandelt
+                var stylelistmodel;
+                _.each(wfsconfig.style, function (wfsconfigstyle) {
+                    stylelistmodel = _.find(StyleList.models, function (slmodel) {
+                        if (slmodel.id == wfsconfigstyle) {
+                            return slmodel;
                         }
                     });
-                     wfsStyle.push(style);
-                }
-                var pStyle = wfsStyle[0].attributes.style;
+                });
+                var pStyle = stylelistmodel.get('style');
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
                     this.set('source', pServerVector);
                     this.set('style', pStyle);
@@ -187,14 +187,14 @@ define([
                         source : pServerVector,
                         distance : this.get('clusterDistance')
                     });
-                    styleCache = {};
+                    var styleCache = {};
                     this.set('source', pCluster);
                     this.set('style', function (feature, resolution) {
                         var size = feature.get('features').length;
                         var style = styleCache[size];
                         if (!style) {
                             if (size != '1') {
-                                style = wfsStyle[0].getClusterSymbol(size);
+                                style = stylelistmodel.getClusterSymbol(size);
                             }
                             else {
                                 style = pStyle;

@@ -17,6 +17,9 @@ define([
             circleradius : 10,
             circlefillcolor : [0, 153, 255, 1],
             circlestrokecolor : [0, 0, 0, 1],
+            // für Stroke
+            strokecolor : [150, 150, 150, 1],
+            strokewidth : 5,
             // Für ClusterText
             clusterfont : 'Courier',
             clusterscale : 1,
@@ -88,17 +91,29 @@ define([
                     })
                 });
             }
+            else if (this.get('subclass') == 'Stroke') {
+                var strokecolor = this.returnColor(this.get('strokecolor'));
+                var strokewidth = parseInt(this.get('strokewidth'));
+                var strokestyle = new ol.style.Stroke({
+                    color: strokecolor,
+                    width: strokewidth
+                });
+                console.log(strokestyle);
+            }
             else {
                 consoloe.log('Subclass ' + this.get('subclass') + ' unbekannt.');
                 return;
             }
+            console.log(this.get('subclass'));
             var style = [
                 new ol.style.Style({
                     image: imagestyle,
                     text : clusterText,
-                    zIndex: 'Infinity'
+                    zIndex: 'Infinity',
+                    stroke: strokestyle
                 })
             ];
+            console.log(style);
             return style;
         },
         initialize: function () {

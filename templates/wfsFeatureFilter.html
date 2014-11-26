@@ -16,7 +16,12 @@
         <div class="form-group form-group-sm">
 <% map.getLayers().forEach(function (layer, index, array) {
    if (layer.getProperties().typ === 'WFS') {
+   if (layer.getSource().getFeatures()[0].layerId) {
    var layerId = layer.getSource().getFeatures()[0].layerId;
+   }
+   else if (layer.getSource().getFeatures()[0].getProperties().features) {
+   var layerId = layer.getSource().getFeatures()[0].getProperties().features[0].layerId;
+   }
    if (layerId === wfslayer.layerId) {
    var gfi = layer.getProperties().gfiAttributes;
    var newFieldName = _.values(_.pick(gfi, filter.fieldName))[0];
