@@ -22,8 +22,8 @@ define([
             'click .close': 'toggleFilterTreeWin',
             'change #treeCategory': 'setCategory',
             'click #filterbutton': 'setFilterParams',
-            'click #filterRemoveButton': 'removeFilter',
-            'change #yearMin': 'render' // --> erst noch setzen
+            'click #filterRemoveButton': 'removeFilter'
+//            'change #yearMin': 'render' // --> erst noch setzen
         },
         render: function () {
             var attr = this.model.toJSON();

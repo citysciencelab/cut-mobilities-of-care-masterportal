@@ -8,9 +8,22 @@
         <div class="form-group form-group-sm">
             <label class="control-label col-xs-5">Gattung</label>
             <div class="col-xs-7">
+<!--
+                <div class="input-group">
+            <input id="searchInput" class="form-control" type="text" value="" placeholder="Adresssuche">
+            <div class="input-group-btn">
+            <button class="btn btn-default" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search"></i>
+            </button>
+            </div>
+            </div>
+-->
                 <select class="form-control input-sm" id="treeCategory">
                     <option <% if (treeCategory === "keine Auswahl") print ('selected') %>>keine Auswahl</option>
-                    <option <% if (treeCategory === "Sorbus aria") print ('selected') %>>Sorbus aria</option>
+                    <% var sortTrees = _.sortBy(trees, function (tree) { return tree.displayGattung });
+                    _.each(sortTrees, function (tree, index) { %>
+                        <option value="<%= tree.Gattung %>" <% if (treeCategory === tree.Gattung) print ('selected') %>><%= tree.displayGattung %></option>
+                    <% }); %>
                 </select>
             </div>
         </div>
@@ -19,7 +32,13 @@
             <div class="col-xs-7">
                 <select class="form-control input-sm" id="treeType" <% if (treeCategory === "keine Auswahl") print ('disabled') %>>
                     <option <% if (treeType === "Alle Arten") print ('selected') %>>Alle Arten</option>
-                    <option <% if (treeType === "Echte Mehlbeere") print ('selected') %>>Echte Mehlbeere</option>
+                    <% var treesByCategory = _.where(trees, {Gattung: treeCategory})[0];
+                    if(treesByCategory !== undefined) {
+                        var sortTypes = _.sortBy(treesByCategory.Arten, function(type) { return type.display});
+                        _.each(sortTypes, function (type, index) { ;%>
+                            <option value="<%= type.species %>" <% if (treeType === type.species) print ('selected') %>><%= type.display %></option>
+                        <% }); %>
+                    <% } %>
                 </select>
             </div>
         </div>

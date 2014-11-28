@@ -3,21 +3,18 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
-            resolution: 15.874991427504629,
+            resolution: 5.2916638091682096,
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
+        layerConf: '../../diensteapiFHHNET_19112014.json',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '7777', visible: false},
             {id: '1388', visible: false},
             {id: '1117', visible: false},
             {id: '1166', visible: false},
             {id: '5182', visible: true}
         ],
-        // Layer die Initial sichtbar sein sollen
-        visibleLayer: getVisibleLayer(),
         styleConf: '../../style.json',
         wfsconfig: [
             {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
