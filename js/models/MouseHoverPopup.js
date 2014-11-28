@@ -29,13 +29,18 @@ define([
             this.set('element', this.get('mhpOverlay').getElement());
             EventBus.on('newMouseHover', this.newMouseHover, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            EventBus.on('setMap', this.checkLayer, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
+            EventBus.on('setMap', this.setMap, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
             EventBus.trigger('getMap', this);
+            this.checkLayer();
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
             this.set('GFIPopupVisibility', GFIPopupVisibility);
         },
-        checkLayer: function (map) {
+        setMap: function (map) {
+            this.set('map', map);
+        },
+        checkLayer: function () {
+            var map = this.get('map');
             // Lese Config-Optionen ein und speichere Ergebnisse
             var wfsconfig = Config.wfsconfig;
             var wfsList = new Array();

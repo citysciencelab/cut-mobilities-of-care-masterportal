@@ -14,8 +14,9 @@ define([
         template: _.template(LegendTemplate),
         initialize: function () {
             this.render();
-            EventBus.on('showLegend', this.show, this);
             EventBus.on('toggleLegendWin', this.toggleLegendWin, this);
+            EventBus.on('setMap', this.setMap, this);
+            EventBus.trigger('getMap', this);
         },
         events: {
            'click button': 'onLegendClick'
@@ -36,9 +37,31 @@ define([
         onLegendClick: function(){
         },
         toggleLegendWin: function (){
-            EventBus.trigger('getVisibleLayer', this);
+            var map = this.model.get('map');
+            var layersVisible, gfiParams = [], layers;
+            layers = map.getLayers().getArray();
+            layersVisible = _.filter(layers, function (element) {
+                // NOTE GFI-Filter Nur Sichtbar
+                return element.getVisible() === true;
+            });
+            _.each(layersVisible, function (element) {
+                if (element.getProperties().typ === 'WFS') {
+                    gfiParams.push({
+                        typ: 'WFS',
+                        source: element.getSource(),
+                        name: element.get('name'),
+                        attributes: element.get('gfiAttributes')
+                    });
+                }
+            });
+            this.show(gfiParams);
+        },
+        setMap: function (map) {
+            this.model.set('map', map);
         }
     });
 
     return LegendView;
 });
+
+            //EventBus.trigger('showLegend', gfiParams);

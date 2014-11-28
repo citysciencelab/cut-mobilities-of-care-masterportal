@@ -43,7 +43,6 @@ define([
             EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
             EventBus.on('setPOICenter', this.setPOICenter, this);
-            EventBus.on('getVisibleLayer', this.getVisibleLayer, this);
             EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
             EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geööfnet oder nicht
 
@@ -205,26 +204,6 @@ define([
                 }
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
-        },
-        getVisibleLayer: function(evt){
-            var layersVisible, gfiParams = [], layers;
-            coordinate = evt.coordinate;
-            layers = this.get('map').getLayers().getArray();
-            layersVisible = _.filter(layers, function (element) {
-                // NOTE GFI-Filter Nur Sichtbar
-                return element.getVisible() === true;
-            });
-            _.each(layersVisible, function (element) {
-                if (element.getProperties().typ === 'WFS') {
-                    gfiParams.push({
-                        typ: 'WFS',
-                        source: element.getSource(),
-                        name: element.get('name'),
-                        attributes: element.get('gfiAttributes')
-                    });
-                }
-            });
-            EventBus.trigger('showLegend', gfiParams);
         },
         setCenter: function (value) {
             this.get('map').getView().setCenter(value);
