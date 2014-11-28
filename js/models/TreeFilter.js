@@ -19,12 +19,48 @@ define([
             diameterMax: "50",  // Kronendurchmesser[m] bis
             perimeterMin: "1",  // Stammumfang[cm] von
             perimeterMax: "100" // Stammumfang[cm] bis
-
         },
+        url: '../../tree.json',
         initialize: function () {
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
             this.listenTo(this, 'change:SLDBody', this.getFilterHits);
             this.set('layerID', '5182');
+
+            this.fetch({
+                cache: false,
+                async: false,
+                error: function (model, response) {
+//                    console.log('Service Request failure');
+                }
+            });
+        },
+        parse: function (response) {
+            this.set('trees', response.trees);
+            // macht aus "Ailanthus / Götterbaum" = Götterbaum(Ailanthus) als extra Attribut in this.get('trees') für Gattung und Arten
+            _.each(this.get('trees'), function (tree) {
+                var split = tree.Gattung.split("/");
+                var categorySplit;
+                if (split[1] !== undefined) {
+                    categorySplit = split[1].trim() + "(" + split[0].trim() + ")";
+                }
+                else {
+                    categorySplit = split[0].trim();
+                }
+                tree['displayGattung'] = categorySplit;
+                var treeArray = [];
+                _.each(tree.Arten, function (type) {
+                    var split = type.split("/");
+                    var typeSplit;
+                    if (split[1] !== undefined) {
+                        typeSplit = split[1].trim() + "(" + split[0].trim() + ")";
+                    }
+                    else {
+                        typeSplit = split[0].trim();
+                    }
+                    treeArray.push({species: type, display: typeSplit});
+                });
+                tree['Arten'] = treeArray
+            }, this);
         },
         patterns: {
             digits: "[^0-9]" // any character except the range in brackets
@@ -107,11 +143,31 @@ define([
             filterYear = '<ogc:PropertyIsBetween><ogc:PropertyName>app:pflanzjahr</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("yearMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("yearMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
             filterDiameter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("diameterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("diameterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
             filterPerimeter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:stammumfangzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("perimeterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("perimeterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
+
             var header = "<sld:StyledLayerDescriptor xmlns:sld='http://www.opengis.net/sld' xmlns:se='http://www.opengis.net/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:app='http://www.deegree.org/app' xmlns:ogc='http://www.opengis.net/ogc' xmlns='http://www.opengis.net/sld' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd'><sld:NamedLayer><se:Name>strassenbaum</se:Name><sld:UserStyle><se:FeatureTypeStyle><se:Rule>";
-            var filter = "<ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
-            var symbolizer = "<se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#24ac3b</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#24ac3b</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer>";
-            var footer = "</se:Rule></se:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>";
-            this.set('filter', filter);
+            var scaleDenominator = "<MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
+            var filter = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
+            var symbolizer = "<se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#55c61d</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#36a002</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+
+//            var scaleDenominator2 = "<se:Rule><MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
+//            var filter2 = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:Literal>3</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:Literal>5</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo></ogc:And></ogc:Filter>";
+//            var symbolizer2 = "<se:PointSymbolizer uom='Meter'><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#a5ed81</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#a5ed81</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>5</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+//
+//            var scaleDenominator3 = "<se:Rule><MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
+//            var filter3 = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>6</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>9</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween></ogc:And></ogc:Filter>";
+//            var symbolizer3 = "<se:PointSymbolizer uom='Meter'><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#6be72c</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#6be72c</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>9</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+//
+//            var scaleDenominator4 = "<se:Rule><MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
+//            var filter4 = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>10</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>13</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween></ogc:And></ogc:Filter>";
+//            var symbolizer4 = "<se:PointSymbolizer uom='Meter'><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#4bce0a</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#4bce0a</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+//
+
+            var footer = "</se:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>";
+
+            var filterwfs = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
+
+
+            this.set('filter', filterwfs);
             this.set('SLDBody', header + filter + symbolizer + footer);
         },
         getFilterHits: function () {

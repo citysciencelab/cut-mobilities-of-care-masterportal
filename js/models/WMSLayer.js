@@ -49,6 +49,7 @@ define([
             }
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
+                gutter: this.get('gutter'),
                 params: params,
                 tileGrid: new ol.tilegrid.TileGrid({
                     resolutions: [
