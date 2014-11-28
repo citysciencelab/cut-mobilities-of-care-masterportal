@@ -42,6 +42,31 @@ define([
             }
         },
         /**
+        * diese Funktion liest den übergebenen String gfiAttributes ein und erzeugt daraus
+        * ein Object. Das Object wird an die WMSLayer, WFSLayer zurückgegeben.
+        */
+        convertGFIAttributes: function () {
+            if (this.get('gfiAttributes')) {
+                if (this.get('gfiAttributes').toUpperCase() === "SHOWALL" || this.get('gfiAttributes').toUpperCase() === "IGNORE" ) {
+                    return this.get('gfiAttributes');
+                }
+                else {
+                    var gfiAttributList = this.get('gfiAttributes').split(',');
+                    var gfiAttributes = {};
+                    _.each(gfiAttributList, function (gfiAttributeConfig) {
+                        var gfiAttribute = gfiAttributeConfig.split(':');
+                        var key = new Array();
+                        key.push(gfiAttribute[0].trim());
+                        var value = new Array();
+                        value.push(gfiAttribute[1].trim());
+                        newKey = _.object(key, value);
+                        _.extend(gfiAttributes, newKey);
+                    });
+                    return gfiAttributes;
+                }
+            }
+        },
+        /**
          *
          */
         toggleVisibility: function () {

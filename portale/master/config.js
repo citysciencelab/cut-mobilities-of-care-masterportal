@@ -11,14 +11,14 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '9999', visible: false},
+            {id: '1711', visible: false},
             {id: '1346', visible: true},
             {id: '358', visible: false},
             {id: '359', visible: false}
         ],
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+            {layer: '1711', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
              filterOptions: [
                  {
                      'fieldName': 'geburtsklinik',

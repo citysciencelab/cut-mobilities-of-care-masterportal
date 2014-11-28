@@ -98,13 +98,11 @@ define([
                     color: strokecolor,
                     width: strokewidth
                 });
-                console.log(strokestyle);
             }
             else {
                 consoloe.log('Subclass ' + this.get('subclass') + ' unbekannt.');
                 return;
             }
-            console.log(this.get('subclass'));
             var style = [
                 new ol.style.Style({
                     image: imagestyle,
@@ -113,7 +111,6 @@ define([
                     stroke: strokestyle
                 })
             ];
-            console.log(style);
             return style;
         },
         initialize: function () {

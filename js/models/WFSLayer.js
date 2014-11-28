@@ -51,7 +51,7 @@ define([
                 }
             });
             if (!wfsconfig) {
-                console.log('Layer ' + id + ' nicht konfiguriert.');
+                alert('Layer ' + id + ' nicht konfiguriert.');
                 return;
             }
             this.set('styleId', wfsconfig.style);
@@ -217,7 +217,7 @@ define([
                 name: this.get('name'),
                 typ: this.get('typ'),
                 style: this.get('style'),
-                gfiAttributes: this.get('gfiAttributes')
+                gfiAttributes: this.convertGFIAttributes()
             }));
         }
     });

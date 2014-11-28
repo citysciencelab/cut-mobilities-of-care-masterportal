@@ -61,7 +61,7 @@ define([
                             });
                         }
                         else {
-                            console.log ('LayerID ' + childlayer + ' nicht in JSON gefunden.');
+                            alert('LayerID ' + childlayer + ' nicht in JSON gefunden.');
                         }
                     });
                     if (returnValue.layerdefinitions.length > 0) {
@@ -80,11 +80,11 @@ define([
                         dienstArray.push(returnValue);
                     }
                     else {
-                        console.log (layerdef.id + ' nicht in JSON gefunden');
+                        alert(layerdef.id + ' nicht in JSON gefunden');
                     }
                 }
                 else {
-                    console.log ('Ungültige Layerdefinition in config.js');
+                    alert('Ungültige Layerdefinition in config.js');
                 }
 
             });
@@ -99,7 +99,7 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    console.log('Service Request failure');
+                    alert('Fehler beim Parsen ' + Config.layerConf);
                 },
                 success: function (collection) {
                     //console.log(collection);

@@ -65,7 +65,6 @@ define([
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
             }));
-
             // View listener
             this.get('view').on('change:resolution', function () {
                 // NOTE brauche ich wahrscheinlich nicht mehr (sd)
@@ -180,27 +179,30 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                if (element.getProperties().typ === 'WMS' && element.get('gfiAttributes') !== false) {
-                    var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                        coordinate, resolution, projection,
-                        {'INFO_FORMAT': 'text/xml'}
-                    );
-                    gfiParams.push({
-                        typ: 'WMS',
-                        scale: scale,
-                        url: gfiURL,
-                        name: element.get('name'),
-                        attributes: element.get('gfiAttributes')
-                    });
-                }
-                else if (element.getProperties().typ === 'WFS') {
-                    gfiParams.push({
-                        typ: 'WFS',
-                        scale: scale,
-                        source: element.getSource(),
-                        name: element.get('name'),
-                        attributes: element.get('gfiAttributes')
-                    });
+                var gfiAttributes = element.get('gfiAttributes');
+                if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== 'IGNORE') {
+                    if (element.getProperties().typ === 'WMS') {
+                        var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                            coordinate, resolution, projection,
+                            {'INFO_FORMAT': 'text/xml'}
+                        );
+                        gfiParams.push({
+                            typ: 'WMS',
+                            scale: scale,
+                            url: gfiURL,
+                            name: element.get('name'),
+                            attributes: gfiAttributes
+                        });
+                    }
+                    else if (element.getProperties().typ === 'WFS') {
+                        gfiParams.push({
+                            typ: 'WFS',
+                            scale: scale,
+                            source: element.getSource(),
+                            name: element.get('name'),
+                            attributes: gfiAttributes
+                        });
+                    }
                 }
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);

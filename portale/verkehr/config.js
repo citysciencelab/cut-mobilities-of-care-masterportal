@@ -14,21 +14,18 @@ define(function () {
             {id: ['extern3', 'extern2'], visible: false, name: 'HVV Buslinien'},
             {id: 'extern4', visible: false},
             {id: 'extern5', visible: false},
-            {id: '1682', visible: false},
-            {id: '1358', visible: false},
+            {id: '937', visible: false},
+            {id: '939', visible: false},
             {id: '1357', visible: false},
-            {id: '1688', visible: false},
+            {id: '943', visible: false},
             {id: '1361', visible: false},
-            {id: '1363', visible: false},
-            {id: '1686', visible: false},
+            {id: '1363', visible: true},
+            {id: '1360', visible: false},
             {id: '1359', visible: false},
             {id: '1362'},
-            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: true}
+            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: false}
         ],
         styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '44', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: '', filterOptions: []}
-        ],
         menubar: true,
         mouseHover: false,
         isMenubarVisible: true,

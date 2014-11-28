@@ -102,46 +102,47 @@ define([
                 return;
             }
             else {
-                var pContent;
+                var pQueryFeatures = new Array();
                 if (pFeatures.getProperties().features) {
-                    var contentArray = [];
-                    for (var i = 0; i < pFeatures.getProperties().features.length; i += 1) {
-                        pValues = pFeatures.getProperties().features[i].getProperties();
-                        var pContentArray = new Array;
-                        // NOTE Attributes === 'showAll' vorher abfragen
-                        _.each(pValues, function (value, key, list) {
-                            if (typeof value === 'string') { // Geometrie ist als Objekt in den Properties
-                                if (_.has(attributes, key)) {
-                                    pContentArray.push([attributes[key], value]);
-                                }
-                                else if (attributes === 'showAll') { // showAll
-                                    key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
-                                    pContentArray.push([key, value]);
-                                }
-                            }
-                        });
-                        pContent = _.object(pContentArray);
-                        contentArray.push(pContent);
-                    }
-                    return contentArray;
+                    _.each(pFeatures.getProperties().features, function(element, index, list) {
+                        pQueryFeatures.push(element);
+                    });
                 }
                 else {
-                    pValues = pFeatures.getProperties();
-                    var pContentArray = new Array;
-                    _.each(pValues, function (value, key, list) {
-                        if (typeof value == 'string') {
-                            if (_.has(attributes, key)) {
-                                pContentArray.push([attributes[key], value]);
-                            }
-                            else if (attributes === 'showAll') { // showAll
-                                key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
-                                pContentArray.push([key, value]);
-                            }
-                        }
-                    });
-                    pContent = _.object(pContentArray);
-                    return [pContent];
+                    pQueryFeatures.push(pFeatures);
                 }
+
+                var pgfi = [];
+                _.each(pQueryFeatures, function (element, index, list) {
+                    var gfi = {};
+                    var pAttributes = element.getProperties();
+                    if (attributes === 'showAll') {
+                        _.each(pAttributes, function (value, key, list) {
+                            var keyArray = new Array();
+                            key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
+                            keyArray.push(value);
+                            var valArray = new Array();
+                            valArray.push(key);
+                            var newgfi = _.object(keyArray, valArray);
+                            gfi = _.extend(gfi, newgfi);
+                        });
+                    }
+                    else {
+                        _.each(attributes, function(value, key, list) {
+                            var pAttributeValue = _.values(_.pick(pAttributes, key))[0];
+                            if (pAttributeValue) {
+                                var key = new Array();
+                                key.push(value);
+                                var val = new Array();
+                                val.push(pAttributeValue);
+                                var newgfi = _.object(key, val);
+                                gfi = _.extend(gfi, newgfi);
+                            }
+                        });
+                    }
+                    pgfi.push(gfi);
+                });
+                return pgfi;
             }
         },
         setWMSPopupContent: function (params) {
@@ -153,74 +154,53 @@ define([
                 context: this,  // das model
                 success: function (data, textStatus, jqXHR) {
                     var attr, nodeList, gfi = {};
-                    try {
-                        // ArcGIS
-                        if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                            attr = data.getElementsByTagName('FIELDS')[0].attributes;
-                            _.each(attr, function (element) {
-                                if (params.attributes === 'showAll') {
-                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    gfi[attribute] = element.textContent.trim();
-                                }
-                                else {
-                                    if (_.has(params.attributes, element.localName) === true) {
-                                        gfi[params.attributes[element.localName]] = element.textContent.trim();
-                                    }
+                    // ESRI
+                    if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
+                        nodeList = data.getElementsByTagName('FIELDS')[0].attributes;
+                    }
+                    // deegree
+                    else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
+                        nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
+                        nodeList = _.filter(nodeList, function (element) {
+                            return element.nodeType === 1;
+                        });
+                    }
+                    // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
+                    else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
+                        nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                        nodeList = _.filter(nodeList, function (element) {
+                            return element.nodeType === 1;
+                        });
+                    }
+                    if (nodeList) {
+                        if (params.attributes === 'showAll') {
+                            _.each(nodeList, function (element) {
+                                var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                gfi[attribute] = element.textContent.trim();
+                            });
+                        }
+                        else {
+                            _.each(params.attributes, function(value, key, list) {
+                                var nodevalue = _.find(nodeList, function(node) {
+                                    return node.localName === key;
+                                });
+                                if (nodevalue) {
+                                    nodevalue = nodevalue.textContent.trim();
+                                    var key = new Array();
+                                    key.push(value);
+                                    var val = new Array();
+                                    val.push(nodevalue);
+                                    var newgfi = _.object(key, val);
+                                    gfi = _.extend(gfi, newgfi);
                                 }
                             });
-                            pgfi.push(gfi);
                         }
-                        // deegree
-                        else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
-                            nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
-                            if (params.attributes === 'showAll') {
-                                attr = _.filter(nodeList, function (element) {
-                                    return element.nodeType === 1;
-                                });
-                                _.each(attr, function (element) {
-                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    gfi[attribute] = element.textContent.trim();
-                                });
-                            }
-                            else {
-                                attr = _.filter(nodeList, function (element) {
-                                    return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
-                                });
-                                _.each(attr, function (element) {
-                                    gfi[params.attributes[element.localName]] = element.textContent.trim();
-                                });
-                            }
-                            pgfi.push(gfi);
-                        }
-                        // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
-                        else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
-                            nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
-                            if (params.attributes === 'showAll') {
-                                attr = _.filter(nodeList, function (element) {
-                                    return element.nodeType === 1;
-                                });
-                                _.each(attr, function (element) {
-                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    gfi[attribute] = element.textContent.trim();
-                                });
-                            }
-                            else {
-                                attr = _.filter(nodeList, function (element) {
-                                    return element.nodeType === 1 && _.has(params.attributes, element.localName) === true;
-                                });
-                                _.each(attr, function (element) {
-                                    gfi[params.attributes[element.localName]] = element.textContent.trim();
-                                });
-                            }
-                            pgfi.push(gfi);
-                        }
-                    }
-                    catch (error) {
-                        console.log(error);
+                        pgfi.push(gfi);
+                        console.log(pgfi);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    //console.log('Ajax-Request ' + textStatus);
+                    alert('Ajax-Request ' + textStatus);
                 }
             });
             return pgfi;

@@ -60,7 +60,7 @@ define([
                                 return ele.layerId == layerID
                             });
                             if (wfsListEntry) {
-                                if (layer.getProperties().gfiAttributes) {
+                                if (layer.getProperties().gfiAttributes && _.isObject(layer.getProperties().gfiAttributes)) {
                                     if (layer.getVisible() === true) {
                                         _.extend(wfsListEntry, {
                                             layer: layer
