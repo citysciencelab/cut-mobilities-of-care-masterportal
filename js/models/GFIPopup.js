@@ -212,7 +212,6 @@ define([
                             });
                         }
                         pgfi.push(gfi);
-                        console.log(pgfi);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
