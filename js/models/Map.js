@@ -199,6 +199,7 @@ define([
                             typ: 'WFS',
                             scale: scale,
                             source: element.getSource(),
+                            style: element.getStyle(),
                             name: element.get('name'),
                             attributes: gfiAttributes
                         });

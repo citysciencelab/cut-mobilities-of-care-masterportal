@@ -60,21 +60,12 @@ define([
                                 return ele.layerId == layerID
                             });
                             if (wfsListEntry) {
-                                if (layer.getProperties().gfiAttributes && _.isObject(layer.getProperties().gfiAttributes)) {
-                                    if (layer.getVisible() === true) {
-                                        _.extend(wfsListEntry, {
-                                            layer: layer
-                                        });
-                                    }
-                                    else {
-                                        var shortedList = _.reject(wfsList, function(ele) {
-                                            return ele.layerId == layerID
-                                        });
-                                        wfsList = shortedList;
-                                    }
+                                if (layer.getVisible() === true) {
+                                    _.extend(wfsListEntry, {
+                                        layer: layer
+                                    });
                                 }
                                 else {
-                                    console.error('WFSLayer ohne GFI-Attribute kann nicht gefiltert werden.');
                                     var shortedList = _.reject(wfsList, function(ele) {
                                         return ele.layerId == layerID
                                     });

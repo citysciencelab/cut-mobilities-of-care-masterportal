@@ -57,7 +57,7 @@ define([
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
                 }
                 else if (sortedParams[i].typ === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale, sortedParams[i].attributes);
+                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].attributes);
                 }
                 if (gfiContent !== undefined) {
                     _.each(gfiContent, function (content) {
@@ -87,7 +87,21 @@ define([
         /**
          *
          */
-        setWFSPopupContent: function (pSource, pCoordinate, pScale, attributes) {
+        setWFSPopupContent: function (pSourceAllFeatures, pLayerStyle, pCoordinate, pScale, attributes) {
+            // NOTE: Hier werden die Features auf ihre Sichtbarkeit untersucht, bevor das nächstgelegene Feature zurückgegeben wird
+            var pSource = new ol.source.Vector;
+            if (pLayerStyle) {
+                pSource.addFeatures(pSourceAllFeatures.getFeatures());
+            }
+            else {
+                pSource.addFeatures(_.filter(pSourceAllFeatures.getFeatures(), function (feature) {
+                    if (feature.getStyle()) {
+                        if (feature.getStyle()[0].image_.getSrc() != '../../img/blank.png') {
+                            return feature;
+                        }
+                    }
+                }));
+            }
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
             // 5 mm um Klickpunkt forEachFeatureInExtent
             var pMaxDist = 0.005 * pScale;
