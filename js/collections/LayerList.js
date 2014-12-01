@@ -23,7 +23,6 @@ define([
             }
             newLayer.set('visibility', attrs.defaultVisibility);
             newLayer.get('layer').setVisible(attrs.defaultVisibility);
-            console.log(newLayer);
             return newLayer;
         },
         parse: function (response) {
