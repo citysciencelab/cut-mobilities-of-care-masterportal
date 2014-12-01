@@ -10,7 +10,11 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
-        initialize: function () {
+        initialize: function (dienst, styles) {
+            // Übernehme Styleattribut, falls vorhanden
+            if (_.isString(styles)) {
+                this.set('styles', styles);
+            }
             // Trigger in Searchbar
             EventBus.on('getBackboneLayer', function() {
                 EventBus.trigger('LayerVisibilityChangedForSearchbar', this);

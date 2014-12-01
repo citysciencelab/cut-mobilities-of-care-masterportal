@@ -21,9 +21,8 @@ define([
             var layerdefinitions = this.get('layerdefinitions');
             var layers = new ol.Collection();
             _.each(layerdefinitions, function (layerdefinition, index, list) {
-
                 if (layerdefinition.dienst.typ === 'WMS') {
-                    var newlayer = new WMSLayer(layerdefinition.dienst);
+                    var newlayer = new WMSLayer(layerdefinition.dienst, layerdefinition.styles);
                 }
                 else if (layerdefinition.dienst.typ === 'WFS') {
                     var newlayer = new WFSLayer(layerdefinition.dienst);

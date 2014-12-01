@@ -13,7 +13,7 @@ define([
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
-                newLayer = new WMSLayer(attrs.dienst, options);
+                newLayer = new WMSLayer(attrs.dienst, attrs.styles);
             }
             else if (attrs.typ === 'WFS') {
                 newLayer = new WFSLayer(attrs.dienst, options);
@@ -23,6 +23,7 @@ define([
             }
             newLayer.set('visibility', attrs.defaultVisibility);
             newLayer.get('layer').setVisible(attrs.defaultVisibility);
+            console.log(newLayer);
             return newLayer;
         },
         parse: function (response) {
@@ -46,18 +47,19 @@ define([
                  */
                 if (_.has(layerdef, 'id') && _.isArray(layerdef.id)) {
                      var returnValue = {
-                         id: layerdef.id,
+                         id: _.uniqueId('grouplayer_'),
                          name: layerdef.name,
                          typ: 'GROUP',
                          defaultVisibility: layerdef.visible,
                          layerdefinitions: []
                     };
                     _.each(layerdef.id, function(childlayer, index, list) {
-                        var dienst = _.findWhere(response, {id: childlayer});
+                        var dienst = _.findWhere(response, {id: childlayer.id});
                         if (dienst) {
                             returnValue.layerdefinitions.push({
-                                id: childlayer,
-                                dienst: dienst
+                                id: childlayer.id,
+                                dienst: dienst,
+                                styles: childlayer.styles
                             });
                         }
                         else {
@@ -72,10 +74,11 @@ define([
                     var dienst = _.findWhere(response, {id: layerdef.id});
                     if (dienst) {
                         var returnValue = {
-                            id: layerdef.id,
+                            id: _.uniqueId('singlelayer_'),
                             typ: dienst.typ,
                             defaultVisibility: layerdef.visible,
-                            dienst: dienst
+                            dienst: dienst,
+                            styles: layerdef.styles
                         }
                         dienstArray.push(returnValue);
                     }
