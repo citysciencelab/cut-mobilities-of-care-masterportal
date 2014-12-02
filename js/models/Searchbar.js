@@ -174,12 +174,19 @@ define([
             this.set('wfsFeatures', pList);
         },
         searchStreets: function () {
+            var boolAsync = true;
+            if (_.contains(this.get('streetNames'), this.get('streetName').trim()) === true) {
+                 boolAsync = false;
+            }
+            else {
+                 boolAsync = true;
+            }
             var requestURL, streetNames = [];
             requestURL = this.get('gazetteerURL') + '&count=10&StoredQuery_ID=findeStrasse&strassenname=' + encodeURIComponent(this.get('searchString'));
             $.ajax({
                 url: requestURL,
                 context: this,  // das model
-                async: true,
+                async: boolAsync,
                 type: 'GET',
                 success: function (data) {
                     try {
