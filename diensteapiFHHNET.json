@@ -28450,7 +28450,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "['planrecht','Geltendes Planrecht'],['feststellung'],['staedtebaulichervertrag'],['hotlink','Planrecht'],['hotlink_begr','BegrÃ¼ndung']],gfiStatic:{featureType:'hh_hh_planung_festgestellt'}}),",
+      "gfiAttributes" : "planrecht:Geltendes Planrecht,feststellung:Feststellung,staedtebaulichervertrag: Städtebaulicher Vertrag,hotlink:Planrecht,hotlink_begr:Begründung",
       "cache" : "false",
       "datasets" : []
    },
