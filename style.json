@@ -2,7 +2,7 @@
     {
         "id" : "1",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/krankenhaus.svg",
+        "imagesrc" : "../../img/krankenhaus.png",
         "imagescale" : "1",
         "clusterscale" : "2",
         "clusteroffsety" : "2",

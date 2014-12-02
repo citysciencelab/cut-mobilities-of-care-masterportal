@@ -51,14 +51,13 @@ define([
                 }
             });
             if (!wfsconfig) {
-                console.log('Layer ' + id + ' nicht konfiguriert.');
+                alert('Layer ' + id + ' nicht konfiguriert.');
                 return;
             }
             this.set('styleId', wfsconfig.style);
             this.set('clusterDistance', wfsconfig.clusterDistance);
             this.set('searchField', wfsconfig.searchField);
             this.set('styleField', wfsconfig.styleField);
-
             // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
                 format: new ol.format.WFS({
@@ -80,14 +79,20 @@ define([
                 async: false,
                 context: this,
                 success: function (data, textStatus, jqXHR) {
-                    pServerVector.addFeatures(pServerVector.readFeatures(data));
-                    // hinzufügen der LayerId für MouseHover und wfsFeatureFilter
-                    pServerVector.forEachFeature(function (ele) {
-                        ele.layerId = this.get('id');
-                    }, this);
+                    var docEle = data.documentElement.nodeName;
+                    if (docEle.indexOf('Exception') != -1) {
+                        alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
+                    }
+                    else {
+                        pServerVector.addFeatures(pServerVector.readFeatures(data));
+                        // hinzufügen der LayerId für MouseHover und wfsFeatureFilter
+                        pServerVector.forEachFeature(function (ele) {
+                            ele.layerId = this.get('id');
+                        }, this);
+                    }
                 },
                 error: function (data, textStatus, jqXHR) {
-                    console.log('Fehlermeldung beim Laden von Daten: ' + textStatus);
+                    alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
                 }
             });
 
@@ -168,16 +173,13 @@ define([
                 }
             }
             else {
-                var wfsStyle = new Array();
-                for(var i = 0; i<wfsconfig.style.length;i++){
-                    style=_.find(StyleList.models, function (num) {
-                        if (num.id == wfsconfig.style[i]) {
-                            return num;
-                        }
-                    });
-                     wfsStyle.push(style);
-                }
-                var pStyle = wfsStyle[0].attributes.style;
+                // wenn Stylefield nicht gesetzt ist, werden alle Features identisch behandelt
+                var stylelistmodel = _.find(StyleList.models, function (slmodel) {
+                    if (slmodel.id == wfsconfig.style) {
+                        return slmodel;
+                    }
+                });
+                var pStyle = stylelistmodel.get('style');
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
                     this.set('source', pServerVector);
                     this.set('style', pStyle);
@@ -187,14 +189,14 @@ define([
                         source : pServerVector,
                         distance : this.get('clusterDistance')
                     });
-                    styleCache = {};
+                    var styleCache = {};
                     this.set('source', pCluster);
                     this.set('style', function (feature, resolution) {
                         var size = feature.get('features').length;
                         var style = styleCache[size];
                         if (!style) {
                             if (size != '1') {
-                                style = wfsStyle[0].getClusterSymbol(size);
+                                style = stylelistmodel.getClusterSymbol(size);
                             }
                             else {
                                 style = pStyle;
@@ -215,7 +217,7 @@ define([
                 name: this.get('name'),
                 typ: this.get('typ'),
                 style: this.get('style'),
-                gfiAttributes: this.get('gfiAttributes')
+                gfiAttributes: this.convertGFIAttributes()
             }));
         }
     });

@@ -78,7 +78,7 @@ define([
                 source: this.get('source'),
                 name: this.get('name'),
                 typ: this.get('typ'),
-                gfiAttributes: this.get('gfiAttributes')
+                gfiAttributes: this.convertGFIAttributes()
             }));
         }
     });

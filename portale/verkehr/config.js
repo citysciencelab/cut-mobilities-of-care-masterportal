@@ -7,27 +7,46 @@ define(function () {
             scale: 60000 // für print.js benötigt
         },
         layerConf: '../../diensteapiFHHNET.json',
+        styleConf: '../../style.json',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: 'extern1', visible: false},
-            {id: ['extern3', 'extern2'], visible: false, name: 'HVV Buslinien'},
-            {id: 'extern4', visible: false},
-            {id: 'extern5', visible: false},
-            {id: '1682', visible: false},
-            {id: '1358', visible: false},
+            {id: 'extern1', visible: false, styles: "geofox-bahn"},
+            {id:
+             [
+                {
+                    id: 'extern1',
+                    styles: 'geofox-bus'
+                },
+                {
+                    id: 'extern1',
+                    styles: 'geofox_BusName'
+                }
+             ],
+             visible: false, name: 'HVV Buslinien'
+            },
+            {id: 'extern1', visible: false, styles: 'geofox_Faehre'},
+            {id: 'extern1', visible: false, styles: 'geofox_stations'},
+            {id: '937', visible: false},
+            {id: '939', visible: false},
             {id: '1357', visible: false},
-            {id: '1688', visible: false},
+            {id: '943', visible: false},
             {id: '1361', visible: false},
-            {id: '1363', visible: false},
-            {id: '1686', visible: false},
+            {id: '1363', visible: true},
+            {id: '1360', visible: false},
             {id: '1359', visible: false},
-            {id: '1362'},
-            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: true}
-        ],
-        styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '44', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: '', filterOptions: []}
+            {id: '1362', visible: false},
+            {id:
+             [
+                 {
+                     id: '1364',
+                 },
+                 {
+                     id: '1365'
+                 }
+             ],
+             name: 'Verkehrsbelastung auf Autobahnen', visible: false
+            }
         ],
         menubar: true,
         mouseHover: false,

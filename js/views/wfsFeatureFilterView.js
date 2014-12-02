@@ -63,7 +63,13 @@ var wfsFeatureFilterView = Backbone.View.extend({
                 that.model.get('map').getLayers().forEach(function (layer) {
                     if (layer.getProperties().typ == 'WFS')
                     {
-                        var layerid = layer.getSource().getFeatures()[0].layerId;
+                        var firstFeature = layer.getSource().getFeatures()[0];
+                        if (firstFeature.layerId) {
+                            var layerid = firstFeature.layerId;
+                        }
+                        else if (firstFeature.getProperties().features) {
+                            var layerid = firstFeature.getProperties().features[0].layerId;
+                        }
 
                         // Hier wird der zum Filter zugehörige Layer gefunden
                         if (layerid === layerfilter.layerId) {
@@ -73,7 +79,10 @@ var wfsFeatureFilterView = Backbone.View.extend({
                                     layer.setStyle(layer.defaultStyle);
                                     delete layer.defaultStyle;
                                     layer.getSource().getFeatures().forEach(function (feature) {
-                                        delete feature.defaultStyle;
+                                        if (feature.defaultStyle) {
+                                            feature.setStyle(feature.defaultStyle);
+                                            delete feature.defaultStyle;
+                                        }
                                     });
                                 }
                             }
@@ -94,10 +103,13 @@ var wfsFeatureFilterView = Backbone.View.extend({
                                         var attributvalue = elementfilter.fieldValue;
                                         if (attributvalue != '*') {
                                             var featureattribute = _.pick(feature.getProperties(), attributname);
-                                            if (featureattribute) {
-                                                var featurevalue = _.values(featureattribute)[0];
-                                                if (featurevalue != attributvalue) {
-                                                    featuredarstellen = false;
+                                            if (featureattribute && !_.isNull(featureattribute)) {
+                                                var featurevalue0 = _.values(featureattribute)[0];
+                                                if (featurevalue0) {
+                                                    var featurevalue = featurevalue0.trim();
+                                                    if (featurevalue != attributvalue) {
+                                                        featuredarstellen = false;
+                                                    }
                                                 }
                                             }
                                         }
@@ -117,14 +129,14 @@ var wfsFeatureFilterView = Backbone.View.extend({
                                             feature.setStyle(null);
                                             Resolved vermutlich mit 3.1.0
                                         */
-                                        if (feature.getStyle() && feature.getStyle()[0].image_.getSrc() != '../../img/blank.svg') {
+                                        if (feature.getStyle() && feature.getStyle()[0].image_.getSrc() != '../../img/blank.png') {
                                             feature.defaultStyle = feature.getStyle();
                                         }
                                         if (feature.defaultStyle) {
                                             if (feature.getStyle()) {
                                                 //var newStyle = feature.getStyle();
                                                 var imagestyle = new ol.style.Icon({
-                                                    src: '../../img/blank.svg',
+                                                    src: '../../img/blank.png',
                                                     width: 10,
                                                     height: 10,
                                                     scale: 1

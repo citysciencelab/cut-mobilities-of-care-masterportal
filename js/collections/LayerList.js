@@ -13,7 +13,7 @@ define([
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
-                newLayer = new WMSLayer(attrs.dienst, options);
+                newLayer = new WMSLayer(attrs.dienst, attrs.styles);
             }
             else if (attrs.typ === 'WFS') {
                 newLayer = new WFSLayer(attrs.dienst, options);
@@ -46,22 +46,23 @@ define([
                  */
                 if (_.has(layerdef, 'id') && _.isArray(layerdef.id)) {
                      var returnValue = {
-                         id: layerdef.id,
+                         id: _.uniqueId('grouplayer_'),
                          name: layerdef.name,
                          typ: 'GROUP',
                          defaultVisibility: layerdef.visible,
                          layerdefinitions: []
                     };
                     _.each(layerdef.id, function(childlayer, index, list) {
-                        var dienst = _.findWhere(response, {id: childlayer});
+                        var dienst = _.findWhere(response, {id: childlayer.id});
                         if (dienst) {
                             returnValue.layerdefinitions.push({
-                                id: childlayer,
-                                dienst: dienst
+                                id: childlayer.id,
+                                dienst: dienst,
+                                styles: childlayer.styles
                             });
                         }
                         else {
-                            console.log ('LayerID ' + childlayer + ' nicht in JSON gefunden.');
+                            alert('LayerID ' + childlayer + ' nicht in JSON gefunden.');
                         }
                     });
                     if (returnValue.layerdefinitions.length > 0) {
@@ -72,19 +73,20 @@ define([
                     var dienst = _.findWhere(response, {id: layerdef.id});
                     if (dienst) {
                         var returnValue = {
-                            id: layerdef.id,
+                            id: _.uniqueId('singlelayer_'),
                             typ: dienst.typ,
                             defaultVisibility: layerdef.visible,
-                            dienst: dienst
+                            dienst: dienst,
+                            styles: layerdef.styles
                         }
                         dienstArray.push(returnValue);
                     }
                     else {
-                        console.log (layerdef.id + ' nicht in JSON gefunden');
+                        alert(layerdef.id + ' nicht in JSON gefunden');
                     }
                 }
                 else {
-                    console.log ('Ungültige Layerdefinition in config.js');
+                    alert('Ungültige Layerdefinition in config.js');
                 }
 
             });
@@ -99,7 +101,7 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    console.log('Service Request failure');
+                    alert('Fehler beim Parsen ' + Config.layerConf);
                 },
                 success: function (collection) {
                     //console.log(collection);

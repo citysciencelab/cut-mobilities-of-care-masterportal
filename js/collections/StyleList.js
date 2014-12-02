@@ -14,16 +14,16 @@ define([
             *  Einträgen in der json-Datei
             */
             var idArray = new Array ();
-            for (i in Config.wfsconfig) {
-                if(Config.wfsconfig[i].style.length>1){
-                    for (var j = 0; j<Config.wfsconfig[i].style.length;j++){
-                        idArray.push(Config.wfsconfig[i].style[j])
-                    }
+            _.each(Config.wfsconfig, function (wfsconfelement) {
+                if (_.isArray(wfsconfelement.style)) {
+                    _.each(wfsconfelement.style, function (styleelement) {
+                        idArray.push(styleelement);
+                    });
                 }
-                else{
-                    idArray.push(Config.wfsconfig[i].style[0]);
+                else {
+                    idArray.push(wfsconfelement.style);
                 }
-            }
+            });
             return _.filter(response, function (element) {
                 if (_.contains(idArray, element.id)) {
                     return element;
@@ -36,7 +36,7 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    console.log('Service Request failure');
+                    alert('Fehler beim Laden der ' + Config.styleConf);
                 },
                 success: function (collection) {
                     //console.log(collection);

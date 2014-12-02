@@ -11,20 +11,22 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '9999', visible: true}
+            {id: '1711', visible: true}
         ],
         styleConf: '../../style.json',
         wfsconfig: [
-            {layer: '9999', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+            {layer: '1711', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
              filterOptions: [
                  {
-                     'fieldName': 'geburtsklinik',
+                     'fieldName': 'teilnahme_geburtsklinik',
                      'filterType': 'combo',
-                     'filterString': ['*','Perinatalzentrum Level 1','Perinatalzentrum Level 2','Perinataler Schwerpunkt','Geburtsklinik','nein']
+                     'filterName': 'Geburtsklinik',
+                     'filterString': ['*','nimmt teil','nimmt nicht teil']
                  },
                  {
                      'fieldName': 'teilnahme_notversorgung',
                      'filterType': 'combo',
+                     'filterName': 'Not- und Unfallversorgung',
                      'filterString': ['*','ja','eingeschränkt','nein']
                  }
              ]

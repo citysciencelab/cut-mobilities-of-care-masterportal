@@ -47,12 +47,19 @@ define([
                 if (layer.getProperties().typ === 'WFS') {
                     var firstFeature = layer.getSource().getFeatures()[0];
                     if (firstFeature) {
-                        var layerID = firstFeature.layerId;
-                        var wfsListEntry = _.find(wfsList, function (ele) {
-                            return ele.layerId == layerID
-                        });
-                        if (wfsListEntry) {
-                            if (layer.getProperties().gfiAttributes) {
+                        if (firstFeature.layerId) {
+                            //NOTE: bei nicht geclusterten WFS
+                            var layerID = firstFeature.layerId;
+                        }
+                        else if (firstFeature.getProperties().features) {
+                            //NOTE: bei geclusterten WFS
+                            var layerID = firstFeature.getProperties().features[0].layerId;
+                        }
+                        if (layerID) {
+                            var wfsListEntry = _.find(wfsList, function (ele) {
+                                return ele.layerId == layerID
+                            });
+                            if (wfsListEntry) {
                                 if (layer.getVisible() === true) {
                                     _.extend(wfsListEntry, {
                                         layer: layer
@@ -64,13 +71,6 @@ define([
                                     });
                                     wfsList = shortedList;
                                 }
-                            }
-                            else {
-                                console.error('WFSLayer ohne GFI-Attribute kann nicht gefiltert werden.');
-                                var shortedList = _.reject(wfsList, function(ele) {
-                                    return ele.layerId == layerID
-                                });
-                                wfsList = shortedList;
                             }
                         }
                     }
