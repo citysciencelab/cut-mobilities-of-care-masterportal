@@ -70,6 +70,7 @@ define([
          *
          */
         setLayerToPrint: function (layers) {
+            this.set('layerToPrint', []);
             _.each(layers, function (layer) {
                 this.get('layerToPrint').push({
                     type: layer.get('typ'),
@@ -97,7 +98,7 @@ define([
                         center: this.get('currentMapCenter'),
                         scale:  this.get('currentMapScale'),
                         dpi: 96,
-                        mapTitle: 'test'
+                        mapTitle: Config.printTitle
                     }
                 ]
             });
@@ -106,6 +107,7 @@ define([
                 _.each(_.flatten(this.get('gfiParams')), function (element, index) {
                     this.get('spec').pages[0]["attr_" + index] = element;
                 }, this);
+                this.get('spec').pages[0]["layerName"] = $('#gfiTitle')[0].childNodes[1].textContent;
             }
 
             $.ajax({
