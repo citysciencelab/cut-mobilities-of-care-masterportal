@@ -25,6 +25,7 @@ define([
         },
         togglePrintWin: function () {
             $('#printWin').toggle();
+            $("#scaleField").val(this.model.get('currentMapScale').toString());
             ($('#printWin').css('display') === 'block') ? this.model.set('active', true) : this.model.set('active', false);
         },
         toggleContent: function () {

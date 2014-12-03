@@ -28,13 +28,17 @@ define([
             EventBus.on('layerForPrint', this.setLayerToPrint, this);
             EventBus.on('gfiForPrint', this.setGFIToPrint, this);
             EventBus.on('currentMapCenter', this.setCurrentMapCenter, this);
+            EventBus.on('currentMapScale', this.setCurrentMapScale, this);
         },
         updatePrintPage: function () {
             EventBus.trigger('updatePrintPage', this.get('active'));
             this.set('currentMapScale', $('#scaleField').val());
         },
-        setCurrentMapCenter: function (center) {
-            this.set('currentMapCenter', center);
+        setCurrentMapCenter: function (value) {
+            this.set('currentMapCenter', value);
+        },
+        setCurrentMapScale: function (value) {
+            this.set('currentMapScale', value);
         },
         /**
          *
