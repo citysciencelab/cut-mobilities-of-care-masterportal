@@ -11,17 +11,22 @@ define([
             filter: "",
             filterHits: "", // Filtertreffer
             errors: "",
-            treeCategory: "keine Auswahl",  // Baumgattung
-            treeType: "Alle Arten", // Baumart
+            treeCategory: "",  // Baumgattung
+            treeType: "", // Baumart
             yearMin: "1914",    // Pflanzjahr von
             yearMax: "1985",    // Pflanzjahr bis
             diameterMin: "1",   // Kronendurchmesser[m] von
             diameterMax: "50",  // Kronendurchmesser[m] bis
             perimeterMin: "1",  // Stammumfang[cm] von
-            perimeterMax: "100" // Stammumfang[cm] bis
+            perimeterMax: "100", // Stammumfang[cm] bis
+            searchCategoryString: "",   // Treffer für die Vorschalgsuche der Baumgattung
+            searchTypeString: ""    // Treffer für die Vorschalgsuche der Baumart
         },
         url: '../../tree.json',
         initialize: function () {
+            this.listenTo(this, 'change:searchCategoryString', this.setCategoryArray);
+            this.listenTo(this, 'change:treeCategory', this.setTypeArray);
+            this.listenTo(this, 'change:searchTypeString', this.setTypeArray);
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
             this.listenTo(this, 'change:SLDBody', this.getFilterHits);
             this.set('layerID', '5182');
@@ -31,12 +36,21 @@ define([
                 async: false,
                 error: function (model, response) {
 //                    console.log('Service Request failure');
+                },
+                success: function (model, response) {
+                    // speichert alle Baumgattung in ein Array
+                    var catArray = [];
+                    _.each(model.get('trees'), function(tree, index) {
+                        catArray.push(tree.displayGattung);
+                    }, model);
+                    model.set('categoryArray', catArray);
+                    model.set('typeArray', []);  // speichert später jeweils zur Category die Types
                 }
             });
         },
         parse: function (response) {
             this.set('trees', response.trees);
-            // macht aus "Ailanthus / Götterbaum" = Götterbaum(Ailanthus) als extra Attribut in this.get('trees') für Gattung und Arten
+            // macht aus "Ailanthus / Götterbaum" = Götterbaum(Ailanthus)
             _.each(this.get('trees'), function (tree) {
                 var split = tree.Gattung.split("/");
                 var categorySplit;
@@ -59,8 +73,11 @@ define([
                     }
                     treeArray.push({species: type, display: typeSplit});
                 });
-                tree['Arten'] = treeArray
+                // Arten nach den deutschen Namen sortierien
+                tree['Arten'] = _.sortBy(treeArray, function(type) { return type.display});
             }, this);
+            // Bäume nach Gattung sortieren
+            this.set('trees', _.sortBy(this.get('trees'), function (tree) { return tree.displayGattung }));
         },
         patterns: {
             digits: "[^0-9]" // any character except the range in brackets
@@ -101,11 +118,64 @@ define([
             }
         },
         setCategory: function () {
-            this.set('treeCategory', $('#treeCategory').val());
+            this.set('treeCategory', $('#categoryInput').val());
+        },
+        setSearchCategoryString: function (value) {
+            this.set('searchCategoryString', value);
+            $('#categoryInput').val(this.get('searchCategoryString'));
+        },
+        setCategoryArray: function () {
+            var catArray = [];
+            _.each(this.get('trees'), function(tree, index) {
+                if(tree.displayGattung.indexOf(this.get('searchCategoryString')) !== -1) {
+                    catArray.push(tree.displayGattung);
+                }
+            }, this);
+            if (catArray.length === 0) {
+                catArray.push("Keine Treffer");
+            }
+            this.set('categoryArray', catArray);
+        },
+        setType: function () {
+            this.set('treeType', $('#typeInput').val());
+        },
+        setSearchTypeString: function (value) {
+            this.set('searchTypeString', value);
+            $('#typeInput').val(this.get('searchTypeString'));
+        },
+        setTypeArray: function () {
+            var typeArray = [];
+            var tree = _.where(this.get('trees'), {displayGattung: this.get('treeCategory')});
+            if (tree[0] !== undefined) {
+                _.each(tree[0].Arten, function(type, index) {
+                    if (this.get('searchTypeString').length === 0) {
+                        typeArray.push(type.display);
+                    }
+                    else {
+                        if(type.display.indexOf(this.get('searchTypeString')) !== -1) {
+                            typeArray.push(type.display);
+                        }
+                    }
+                }, this);
+            }
+            this.set('typeArray', typeArray);
         },
         setFilterParams: function () {  // NOTE aufbröseln in einzelMethoden
-            this.set('treeCategory', $('#treeCategory').val());
-            this.set('treeType', $('#treeType').val());
+            var tree = _.where(this.get('trees'), {displayGattung: $('#categoryInput').val()});
+            if (tree[0] === undefined) {
+                this.set('treeFilterCategory', "");
+                this.set('treeFilterType', "");
+            }
+            else {
+                this.set('treeFilterCategory', tree[0].Gattung);
+                var treeType = _.where(tree[0].Arten, {display: $('#typeInput').val()});
+                if (treeType[0] !== undefined) {
+                    this.set('treeFilterType', treeType[0].species);
+                }
+                else {
+                    this.set('treeFilterType', "");
+                }
+            }
             this.set('yearMax', $('#yearMax > input').val());
             this.set('yearMin', $('#yearMin > input').val());
             this.set('diameterMax', $('#diameterMax > input').val());
@@ -121,16 +191,17 @@ define([
             EventBus.trigger('updateStyleByID', [this.get('layerID'), this.get('SLDBody')]);
         },
         removeFilter: function () {
+            this.set('filter', '');
             this.set('SLDBody', '');
         },
         createFilter: function () {
             var filterCategory, filterType, filterYear, filterDiameter, filterPerimeter;
 
             // Filter Gattung und Art
-            if ($('#treeCategory').val() !== "keine Auswahl") {
-                filterCategory = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:botanischer_name</ogc:PropertyName><ogc:Literal>' + this.get('treeCategory') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
-                if ($('#treeType').val() !== "Alle Arten") {
-                    filterType = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:baumart</ogc:PropertyName><ogc:Literal>' + this.get('treeType') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
+            if (this.get('treeFilterCategory').length !== 0) {
+                filterCategory = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:botanischer_name</ogc:PropertyName><ogc:Literal>' + this.get('treeFilterCategory') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
+                if (this.get('treeFilterType').length !== 0) {
+                    filterType = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:baumart</ogc:PropertyName><ogc:Literal>' + this.get('treeFilterType') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
                 } else {
                     filterType = '';
                 }
@@ -146,27 +217,12 @@ define([
 
             var header = "<sld:StyledLayerDescriptor xmlns:sld='http://www.opengis.net/sld' xmlns:se='http://www.opengis.net/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:app='http://www.deegree.org/app' xmlns:ogc='http://www.opengis.net/ogc' xmlns='http://www.opengis.net/sld' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd'><sld:NamedLayer><se:Name>strassenbaum</se:Name><sld:UserStyle><se:FeatureTypeStyle><se:Rule>";
             var scaleDenominator = "<MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
-            var filter = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
+            var filter = "<ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
             var symbolizer = "<se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#55c61d</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#36a002</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
-
-//            var scaleDenominator2 = "<se:Rule><MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
-//            var filter2 = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:Literal>3</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:Literal>5</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo></ogc:And></ogc:Filter>";
-//            var symbolizer2 = "<se:PointSymbolizer uom='Meter'><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#a5ed81</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#a5ed81</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>5</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
-//
-//            var scaleDenominator3 = "<se:Rule><MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
-//            var filter3 = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>6</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>9</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween></ogc:And></ogc:Filter>";
-//            var symbolizer3 = "<se:PointSymbolizer uom='Meter'><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#6be72c</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#6be72c</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>9</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
-//
-//            var scaleDenominator4 = "<se:Rule><MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
-//            var filter4 = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>10</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>13</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween></ogc:And></ogc:Filter>";
-//            var symbolizer4 = "<se:PointSymbolizer uom='Meter'><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#4bce0a</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#4bce0a</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
-//
 
             var footer = "</se:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>";
 
             var filterwfs = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
-
-
             this.set('filter', filterwfs);
             this.set('SLDBody', header + filter + symbolizer + footer);
         },
@@ -192,8 +248,6 @@ define([
                     $('#loader').hide();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(thrownError);
                     $('#loader').hide();
                 }
             });
