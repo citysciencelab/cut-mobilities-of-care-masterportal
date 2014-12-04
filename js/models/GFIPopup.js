@@ -48,6 +48,7 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         setGFIParams: function (params) {
+            $('#loader').show();
             var gfiContent;
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], 'name');
@@ -83,6 +84,7 @@ define([
                 this.set('gfiCounter', pContent.length);
                 this.set('coordinate', params[1]);
             }
+            $('#loader').hide();
         },
         /**
          *
@@ -210,7 +212,6 @@ define([
                             });
                         }
                         pgfi.push(gfi);
-                        console.log(pgfi);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

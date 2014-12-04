@@ -21,13 +21,15 @@ define(function () {
             {layer: '1711', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
              filterOptions: [
                  {
-                     'fieldName': 'geburtsklinik',
+                     'fieldName': 'teilnahme_geburtsklinik',
                      'filterType': 'combo',
-                     'filterString': ['*','Perinatalzentrum Level 1','Perinatalzentrum Level 2','Perinataler Schwerpunkt','Geburtsklinik','nein']
+                     'filterName': 'Geburtsklinik',
+                     'filterString': ['*','nimmt teil','nimmt nicht teil']
                  },
                  {
                      'fieldName': 'teilnahme_notversorgung',
                      'filterType': 'combo',
+                     'filterName': 'Not- und Unfallversorgung',
                      'filterString': ['*','ja','eingeschränkt','nein']
                  }
              ]

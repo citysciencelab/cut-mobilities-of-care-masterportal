@@ -32,6 +32,7 @@ define(function () {
              ]
             }
         ],
+        attributions: false,
         menubar: true,
         mouseHover: true,
         isMenubarVisible: true,

@@ -1,4 +1,5 @@
 define(function () {
+
     var config = {
         allowParametricURL: true,
         view: {
@@ -7,25 +8,55 @@ define(function () {
             scale: 60000 // für print.js benötigt
         },
         layerConf: '../../diensteapiFHHNET.json',
+        styleConf: '../../style.json',
         layerIDs: [
-            {id: '453', visible: true},
+            {id: '453', visible: false},
             {id: '8', visible: false},
-            {id: 'extern1', visible: false},
-            {id: ['extern3', 'extern2'], visible: false, name: 'HVV Buslinien'},
-            {id: 'extern4', visible: false},
-            {id: 'extern5', visible: false},
+            {id: 'extern1', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
+            {id:
+             [
+                {
+                    id: 'extern1',
+                    styles: 'geofox-bus',
+                    name: "Bus1"
+                },
+                {
+                    id: 'extern1',
+                    styles: 'geofox_BusName',
+                    name: "Bus2"
+                }
+             ],
+             visible: false, name: 'HVV Buslinien'
+            },
+            {id: 'extern1', visible: false, styles: 'geofox_Faehre', name: "Fährverbindungen"},
+            {id: 'extern1', visible: false, styles: 'geofox_stations', name: "HVV Stationen"},
             {id: '937', visible: false},
             {id: '939', visible: false},
             {id: '1357', visible: false},
             {id: '943', visible: false},
             {id: '1361', visible: false},
-            {id: '1363', visible: true},
+            {id: '1363', visible: false},
             {id: '1360', visible: false},
-            {id: '1359', visible: false},
-            {id: '1362'},
-            {id: ['1364', '1365'], name: 'Verkehrsbelastung auf Autobahnen', visible: false}
+            {id: '1359', visible: true, attribution: 'Die aktuelle Aktualität ist : 65445345646445'},
+            {id: '1362', visible: true, attribution: 'Hallo Welt'},
+            {id:
+             [
+                 {
+                     id: '1364',
+                     attribution:
+                     {
+                         eventname: 'simple',
+                         timeout: 5000
+                     }
+                 },
+                 {
+                     id: '1365'
+                 }
+             ],
+             name: 'Verkehrsbelastung auf Autobahnen', visible: false
+            }
         ],
-        styleConf: '../../style.json',
+        attributions: true,
         menubar: true,
         mouseHover: false,
         isMenubarVisible: true,

@@ -1,31 +1,19 @@
 define(function () {
     var config = {
-        allowParametricURL: true,
+        allowParametricURL: false,
         view: {
             center: [565874, 5934140],
             resolution: 5.2916638091682096,
-            scale: 60000 // für print.js benötigt
+            scale: 20000 // für print.js benötigt
         },
         layerConf: '../../diensteapiFHHNET_19112014.json',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '1388', visible: false},
-            {id: '1117', visible: false},
-            {id: '1166', visible: false},
-            {id: '5182', visible: true}
+            {id: '5182', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
+            {id: '5182', visible: true, styles: "strassenbaumkataster"}
         ],
         styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '8999', style: ['5','6','7','8','8999_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8998', style: ['32','33','34','35','8998_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8997', style: ['10','8997_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8996', style: ['11','12','13','14','15','16','17','8996_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8995', style: ['9','10','8995_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8994', style: ['18','19','20','21','22','8994_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8993', style: ['23','24','25','26','27','28','8993_cluster'], clusterDistance: 30, attributeField :'Kategorie'},
-            {layer: '8992', style: ['29','30','31','8992_cluster'], clusterDistance: 30, attributeField :'Kategorie'}
-        ],
         menubar: true,
         isMenubarVisible: true,
         menu: {
@@ -49,7 +37,8 @@ define(function () {
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
+        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        printTitle: 'Straßenbaumkataster'
     }
 
     return config;
