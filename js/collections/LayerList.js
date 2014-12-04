@@ -186,10 +186,12 @@ define([
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
+         * SLD_BODY wird hier gesetzt. Wird in Print.js für das Drucken von gefilterten Objekten gebraucht.
          * args[0] = id, args[1] = SLD_Body
          */
         updateStyleByID: function (args) {
             this.get(args[0]).get('source').updateParams({'SLD_BODY': args[1]});
+            this.get(args[0]).set('SLDBody', args[1]);
         }
     });
 
