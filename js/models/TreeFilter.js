@@ -10,6 +10,7 @@ define([
         defaults: {
             filter: "",
             filterHits: "", // Filtertreffer
+            isFilter: false,
             errors: "",
             treeCategory: "",  // Baumgattung
             treeType: "", // Baumart
@@ -29,7 +30,7 @@ define([
             this.listenTo(this, 'change:searchTypeString', this.setTypeArray);
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
             this.listenTo(this, 'change:SLDBody', this.getFilterHits);
-            this.set('layerID', '5182');
+            this.set('layerID', '5182_strassenbaumkataster');
 
             this.fetch({
                 cache: false,
@@ -184,13 +185,16 @@ define([
             this.set('perimeterMin', $('#perimeterMin > input').val());
 
             if (this.isValid() === true) {
+                this.set('isFilter', true);
                 this.createFilter();
             }
         },
         updateStyleByID: function () {
             EventBus.trigger('updateStyleByID', [this.get('layerID'), this.get('SLDBody')]);
+            EventBus.trigger('setVisible', ['5182_strassenbaumkataster_grau', this.get('isFilter')]);
         },
         removeFilter: function () {
+            this.set('isFilter', false);
             this.set('filter', '');
             this.set('SLDBody', '');
         },
@@ -199,9 +203,9 @@ define([
 
             // Filter Gattung und Art
             if (this.get('treeFilterCategory').length !== 0) {
-                filterCategory = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:botanischer_name</ogc:PropertyName><ogc:Literal>' + this.get('treeFilterCategory') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
+                filterCategory = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:gattung</ogc:PropertyName><ogc:Literal>' + this.get('treeFilterCategory') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
                 if (this.get('treeFilterType').length !== 0) {
-                    filterType = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:baumart</ogc:PropertyName><ogc:Literal>' + this.get('treeFilterType') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
+                    filterType = '<ogc:PropertyIsEqualTo><ogc:PropertyName>app:art</ogc:PropertyName><ogc:Literal>' + this.get('treeFilterType') + '</ogc:Literal></ogc:PropertyIsEqualTo>';
                 } else {
                     filterType = '';
                 }
@@ -212,17 +216,20 @@ define([
 
             // Filter Pflanzjahr
             filterYear = '<ogc:PropertyIsBetween><ogc:PropertyName>app:pflanzjahr</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("yearMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("yearMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
-            filterDiameter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendmzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("diameterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("diameterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
-            filterPerimeter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:stammumfangzahl</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("perimeterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("perimeterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
+            filterDiameter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:kronendurchmesser</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("diameterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("diameterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
+            filterPerimeter = '<ogc:PropertyIsBetween><ogc:PropertyName>app:stammumfang</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>' + this.get("perimeterMin") + '</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>' + this.get("perimeterMax") + '</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween>';
 
-            var header = "<sld:StyledLayerDescriptor xmlns:sld='http://www.opengis.net/sld' xmlns:se='http://www.opengis.net/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:app='http://www.deegree.org/app' xmlns:ogc='http://www.opengis.net/ogc' xmlns='http://www.opengis.net/sld' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd'><sld:NamedLayer><se:Name>strassenbaum</se:Name><sld:UserStyle><se:FeatureTypeStyle><se:Rule>";
-            var scaleDenominator = "<MinScaleDenominator>0</MinScaleDenominator><MaxScaleDenominator>8000</MaxScaleDenominator>";
-            var filter = "<ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
+            var header = "<sld:StyledLayerDescriptor xmlns:sld='http://www.opengis.net/sld' xmlns:se='http://www.opengis.net/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:app='http://www.deegree.org/app' xmlns:ogc='http://www.opengis.net/ogc' xmlns='http://www.opengis.net/sld' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd'><sld:NamedLayer><se:Name>strassenbaum</se:Name><sld:UserStyle><se:FeatureTypeStyle>";
+            var filter = "<se:Rule><ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
             var symbolizer = "<se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#55c61d</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#36a002</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+
+            var filter2 = "<se:Rule><se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#cdcdcd</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.4</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#cdcdcd</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>8</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+
+
 
             var footer = "</se:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>";
 
-            var filterwfs = "<ogc:Filter><ogc:And>" + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
+            var filterwfs = "<ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
             this.set('filter', filterwfs);
             this.set('SLDBody', header + filter + symbolizer + footer);
         },
@@ -244,7 +251,7 @@ define([
                     else if (data.getElementsByTagName("FeatureCollection") !== undefined) {
                         hits = data.getElementsByTagName('FeatureCollection')[0].getAttribute('numberOfFeatures');
                     }
-                    this.set('filterHits', hits);
+                    this.set('filterHits', hits / 2);
                     $('#loader').hide();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
