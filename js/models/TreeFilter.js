@@ -161,7 +161,7 @@ define([
             }
             this.set('typeArray', typeArray);
         },
-        setFilterParams: function () {  // NOTE aufbröseln in einzelMethoden
+        setFilterParams: function () {  // NOTE aufbröseln in einzelMethoden...irgendwann
             var tree = _.where(this.get('trees'), {displayGattung: $('#categoryInput').val()});
             if (tree[0] === undefined) {
                 this.set('treeFilterCategory', "");
@@ -244,11 +244,11 @@ define([
                 success: function (data) {
                     var hits;
                      // Firefox, IE
-                    if (data.getElementsByTagName("wfs:FeatureCollection") !== undefined) {
+                    if (data.getElementsByTagName("wfs:FeatureCollection")[0] !== undefined) {
                         hits = data.getElementsByTagName('wfs:FeatureCollection')[0].getAttribute('numberOfFeatures');
                     }
                     // WebKit
-                    else if (data.getElementsByTagName("FeatureCollection") !== undefined) {
+                    else if (data.getElementsByTagName("FeatureCollection")[0] !== undefined) {
                         hits = data.getElementsByTagName('FeatureCollection')[0].getAttribute('numberOfFeatures');
                     }
                     this.set('filterHits', hits / 2);
