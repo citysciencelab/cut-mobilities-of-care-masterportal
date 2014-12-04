@@ -10,14 +10,20 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
-        initialize: function (dienst, styles) {
+        initialize: function (dienst, styles, id, name) {
+            this.set('id', id);
+            this.set('name', name);
+
             // Übernehme Styleattribut, falls vorhanden
             if (_.isString(styles)) {
                 this.set('styles', styles);
             }
             // Trigger in Searchbar
-            EventBus.on('getBackboneLayer', function() {
-                EventBus.trigger('LayerVisibilityChangedForSearchbar', this);
+            EventBus.on('getBackboneLayerForSearchbar', function() {
+                EventBus.trigger('returnBackboneLayerForSearchbar', this);
+            }, this);
+            EventBus.on('getBackboneLayerForAttribution', function() {
+                EventBus.trigger('returnBackboneLayerForAttribution', this);
             }, this);
             this.listenTo(this, 'change:visibility', this.setVisibility);
             this.listenTo(this, 'change:transparence', this.updateOpacity);
@@ -33,6 +39,10 @@ define([
             // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
             this.setAttributions();
             this.unset('datasets');
+
+            // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
+            // TODO dieses ID verfahren überall umsetzen und nicht mehr über GetFeatures[0].getProperties().id
+            this.get('layer').id = id;
         },
         setAttributions: function () {
             var datasets = this.get('datasets');
@@ -80,7 +90,6 @@ define([
             else {
                 this.set({'visibility': true});
             }
-            //EventBus.trigger('checkVisibilityByFolder');
         },
         /**
          *
@@ -112,7 +121,13 @@ define([
         setVisibility: function () {
             var visibility = this.get('visibility');
             this.get('layer').setVisible(visibility);
-            EventBus.trigger('LayerVisibilityChangedForSearchbar', this);
+            //NOTE bei Gruppenlayern auch childLayer umschalten. Wichtig für Attribution
+            if (this.get('typ') === 'GROUP') {
+                this.get('layer').getLayers().forEach(function (childlayer) {
+                    childlayer.setVisible(visibility);
+                });
+            }
+            EventBus.trigger('returnBackboneLayerForSearchbar', this);
         },
         /**
          *

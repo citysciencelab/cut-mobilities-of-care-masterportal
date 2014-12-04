@@ -20,9 +20,9 @@ define([
             WFSLayersToObserve: new Array()
         },
         initialize: function () {
-            EventBus.on('LayerVisibilityChangedForSearchbar', this.controlObservalbe, this);
+            EventBus.on('returnBackboneLayerForSearchbar', this.controlObservalbe, this);
             this.listenTo(this, 'change:coordinate', this.zoomToCoordinate);
-            EventBus.trigger('getBackboneLayer', this); //veranlasse abholen der layer für initiale Füllung
+            EventBus.trigger('getBackboneLayerForSearchbar', this); //veranlasse abholen der layer für initiale Füllung
         },
         setSearchString: function (value) {
             this.set('searchString', value);

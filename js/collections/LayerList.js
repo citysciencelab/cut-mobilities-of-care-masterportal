@@ -13,13 +13,13 @@ define([
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
-                newLayer = new WMSLayer(attrs.dienst, attrs.styles);
+                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name);
             }
             else if (attrs.typ === 'WFS') {
-                newLayer = new WFSLayer(attrs.dienst, options);
+                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name);
             }
             else if (attrs.typ === 'GROUP') {
-                newLayer = new GroupLayer(attrs, options);
+                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name);
             }
             newLayer.set('visibility', attrs.defaultVisibility);
             newLayer.get('layer').setVisible(attrs.defaultVisibility);
@@ -41,22 +41,27 @@ define([
                 if (!_.has(layerdef, 'visible')) {
                     layerdef.visible = false;
                 }
-                /* NOTE
-                 * Prüfung ob Eintrag in config.js einen Gruppenlayer beschreibt (id == Array)
-                 */
+                // GRUPPENLAYER weil Array
                 if (_.has(layerdef, 'id') && _.isArray(layerdef.id)) {
-                     var returnValue = {
-                         id: _.uniqueId('grouplayer_'),
-                         name: layerdef.name,
-                         typ: 'GROUP',
-                         defaultVisibility: layerdef.visible,
-                         layerdefinitions: []
-                    };
+                    var layerdefs = new Array();
                     _.each(layerdef.id, function(childlayer, index, list) {
                         var dienst = _.findWhere(response, {id: childlayer.id});
+                        if (childlayer.styles && childlayer.styles != '') {
+                            var uniqueid = childlayer.id + '_' + childlayer.styles;
+                        }
+                        else {
+                            var uniqueid = childlayer.id;
+                        }
                         if (dienst) {
-                            returnValue.layerdefinitions.push({
-                                id: childlayer.id,
+                            if (childlayer.name && childlayer.name != '' && childlayer.name != 'nicht vorhanden') {
+                                var layername = childlayer.name;
+                            }
+                            else {
+                                var layername = dienst.name;
+                            }
+                            layerdefs.push({
+                                id: uniqueid,
+                                name: layername,
                                 dienst: dienst,
                                 styles: childlayer.styles
                             });
@@ -65,15 +70,43 @@ define([
                             alert('LayerID ' + childlayer + ' nicht in JSON gefunden.');
                         }
                     });
+
+                    if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
+                        var layername = layerdef.name;
+                    }
+                    else {
+                        var layername = dienst.name;
+                    }
+                    var returnValue = {
+                         id: _.uniqueId('grouplayer_'),
+                         name: layername,
+                         typ: 'GROUP',
+                         defaultVisibility: layerdef.visible,
+                         layerdefinitions: layerdefs
+                    };
                     if (returnValue.layerdefinitions.length > 0) {
                         dienstArray.push(returnValue);
                     }
                 }
+                //SINGLELAYER
                 else if (_.has(layerdef, 'id') && _.isString(layerdef.id)) {
                     var dienst = _.findWhere(response, {id: layerdef.id});
+                    if (layerdef.styles && layerdef.styles != '') {
+                        var uniqueid = layerdef.id + '_' + layerdef.styles;
+                    }
+                    else {
+                        var uniqueid = layerdef.id;
+                    }
                     if (dienst) {
+                        if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
+                            var layername = layerdef.name;
+                        }
+                        else {
+                            var layername = dienst.name;
+                        }
                         var returnValue = {
-                            id: _.uniqueId('singlelayer_'),
+                            id: uniqueid,
+                            name: layername,
                             typ: dienst.typ,
                             defaultVisibility: layerdef.visible,
                             dienst: dienst,
