@@ -47,7 +47,6 @@ define([
                 }
             });
             $(document.body).on('hidden.bs.dropdown', '#typeToggle', this, function(evt) {
-                console.log($('#typeInput').val());
                 if (_.contains(evt.data.model.get('typeArray'), $('#typeInput').val()) === false && $('#typeInput').val() !== "") {
                     $('.dropdown-toggle-type').dropdown('toggle');
                     evt.data.focusOnEnd($('#typeInput'));

@@ -10,7 +10,8 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '5182', visible: true}
+            {id: '5182', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
+            {id: '5182', visible: true, styles: "strassenbaumkataster"}
         ],
         styleConf: '../../style.json',
         menubar: true,

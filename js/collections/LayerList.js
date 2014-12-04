@@ -13,7 +13,7 @@ define([
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
-                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name);
+                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree);
             }
             else if (attrs.typ === 'WFS') {
                 newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name);
@@ -98,15 +98,23 @@ define([
                         var uniqueid = layerdef.id;
                     }
                     if (dienst) {
+                        var display;
                         if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
                             var layername = layerdef.name;
                         }
                         else {
                             var layername = dienst.name;
                         }
+                        if (layerdef.displayInTree === undefined || layerdef.displayInTree === true) {
+                            display = true;
+                        }
+                        else {
+                            display = false;
+                        }
                         var returnValue = {
                             id: uniqueid,
                             name: layername,
+                            displayInTree: display,
                             typ: dienst.typ,
                             defaultVisibility: layerdef.visible,
                             dienst: dienst,
@@ -128,6 +136,7 @@ define([
         initialize: function () {
             EventBus.on('getLayersForPrint', this.sendVisibleWMSLayer, this);
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
+            EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
 
             this.fetch({
@@ -156,6 +165,14 @@ define([
             return this.where({visibility: true, typ: "WFS"});
         },
         /**
+         * Aktualisiert den Style vom Layer mit SLD_BODY.
+         * args[0] = id, args[1] = visibility(bool)
+         */
+        setVisibleByID: function (args) {
+            this.get(args[0]).set('visibility', args[1]);
+            this.get(args[0]).get('layer').setVisible(args[1]);
+        },
+        /**
          *
          */
         sendVisibleWFSLayer: function () {
@@ -169,10 +186,12 @@ define([
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
+         * SLD_BODY wird hier gesetzt. Wird in Print.js für das Drucken von gefilterten Objekten gebraucht.
          * args[0] = id, args[1] = SLD_Body
          */
         updateStyleByID: function (args) {
             this.get(args[0]).get('source').updateParams({'SLD_BODY': args[1]});
+            this.get(args[0]).set('SLDBody', args[1]);
         }
     });
 

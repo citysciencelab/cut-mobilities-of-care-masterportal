@@ -217,7 +217,8 @@ define([
                 name: this.get('name'),
                 typ: this.get('typ'),
                 style: this.get('style'),
-                gfiAttributes: this.convertGFIAttributes()
+                gfiAttributes: this.get('gfiAttributes')
+//                gfiAttributes: this.convertGFIAttributes()
             }));
         }
     });
