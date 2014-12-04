@@ -1,5 +1,6 @@
 /*global require*/
 require.config({
+    waitSeconds: 60,
     paths: {
         openlayers: 'http://wscd0096/libs/OpenLayers-3.0.0/build/ol-debug',
         jquery: 'http://wscd0096/libs/jQuery-2.0.3/jquery.min',
