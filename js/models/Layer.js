@@ -10,9 +10,10 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
-        initialize: function (dienst, styles, id, name) {
+        initialize: function (dienst, styles, id, name, displayInTree) {
             this.set('id', id);
             this.set('name', name);
+            this.set('displayInTree', displayInTree);
 
             // Übernehme Styleattribut, falls vorhanden
             if (_.isString(styles)) {
