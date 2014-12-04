@@ -53,7 +53,6 @@ define([
                 this.$el.html(this.template(attr));
                 return this;
             }else {
-//                this.remove();
                 return '';
             }
         }
