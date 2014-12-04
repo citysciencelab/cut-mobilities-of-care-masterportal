@@ -10,7 +10,7 @@ define(function () {
         layerConf: '../../diensteapiFHHNET.json',
         styleConf: '../../style.json',
         layerIDs: [
-            {id: '453', visible: false},
+            {id: '453', visible: true},
             {id: '8', visible: false},
             {id: 'extern1', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
