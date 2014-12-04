@@ -37,8 +37,8 @@ define(function () {
             {id: '1361', visible: false},
             {id: '1363', visible: false},
             {id: '1360', visible: false},
-            {id: '1359', visible: true, attribution: 'Die aktuelle Aktualität ist : 65445345646445'},
-            {id: '1362', visible: true, attribution: 'Hallo Welt'},
+            {id: '1359', visible: false},
+            {id: '1362', visible: false},
             {id:
              [
                  {
@@ -46,14 +46,14 @@ define(function () {
                      attribution:
                      {
                          eventname: 'simple',
-                         timeout: 5000
+                         timeout: 300000 //alle 5 Min.
                      }
                  },
                  {
                      id: '1365'
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: false
+             name: 'Verkehrsbelastung auf Autobahnen', visible: true
             }
         ],
         attributions: true,

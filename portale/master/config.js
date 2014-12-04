@@ -11,7 +11,7 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '1711', visible: false},
+            {id: '1711', visible: false, attribution: 'Krankenhausattributierung in config'},
             {id: '1346', visible: true},
             {id: '358', visible: false},
             {id: '359', visible: false}
@@ -37,6 +37,7 @@ define(function () {
             {layer: '358', style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
             {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
+        attributions: true,
         menubar: true,
         mouseHover: true,
         isMenubarVisible: true,
