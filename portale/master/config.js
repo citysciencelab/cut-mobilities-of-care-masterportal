@@ -21,7 +21,7 @@ define(function () {
                      attribution:
                      {
                          eventname: 'simple',
-                         timeout: 300000 //alle 5 Min.
+                         timeout: (10 * 60000)
                      }
                  },
                  {
