@@ -40,7 +40,7 @@ define(function () {
                      'fieldName': 'teilnahme_geburtsklinik',
                      'filterType': 'combo',
                      'filterName': 'Geburtsklinik',
-                     'filterString': ['*','nimmt teil','nimmt nicht teil']
+                     'filterString': ['*','ja','nein']
                  },
                  {
                      'fieldName': 'teilnahme_notversorgung',
