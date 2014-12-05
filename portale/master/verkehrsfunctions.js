@@ -22,11 +22,11 @@ define([
             postmessage += '</ogc:Filter>';
             postmessage += '</wfs:Query>';
             postmessage += '</wfs:GetFeature>';
-
+            // TODO Implementieren von Intranet und Internet-URLs
             $.ajax({
                 url: Config.proxyURL + "?url=http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
                 type: 'POST',
-                data: postmessage,//JSON.stringify(this.get('spec')),
+                data: postmessage,
                 headers: {
                     "Content-Type": "application/xml; charset=UTF-8"
                 },
