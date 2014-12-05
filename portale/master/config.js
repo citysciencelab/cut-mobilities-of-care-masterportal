@@ -14,7 +14,23 @@ define(function () {
             {id: '1711', visible: false, attribution: 'Krankenhausattributierung in config'},
             {id: '1346', visible: true},
             {id: '358', visible: false},
-            {id: '359', visible: false}
+            {id: '359', visible: false},
+            {id:
+             [
+                 {
+                     id: '1364',
+                     attribution:
+                     {
+                         eventname: 'simple',
+                         timeout: 300000 //alle 5 Min.
+                     }
+                 },
+                 {
+                     id: '1365'
+                 }
+             ],
+             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+            }
         ],
         styleConf: '../../style.json',
         wfsconfig: [

@@ -45,7 +45,8 @@ require([
     });
 
     if (Config.attributions && Config.attributions === true) {
-        require(['views/AttributionView'], function (AttributionView) {
+        require(['verkehrsfunctions', 'views/AttributionView'], function (verkehrsfunctions, AttributionView) {
+            new verkehrsfunctions();
             new AttributionView();
         });
     }
