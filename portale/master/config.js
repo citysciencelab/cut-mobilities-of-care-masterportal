@@ -9,8 +9,8 @@ define(function () {
         },
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
-            {id: '453', visible: true},
             {id: '8', visible: false},
+            {id: '453', visible: true},
             {id: '1346', visible: true},
             {id: '358', visible: false},
             {id: '359', visible: false},
