@@ -11,7 +11,6 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '1711', visible: false, attribution: 'Krankenhausattributierung in config'},
             {id: '1346', visible: true},
             {id: '358', visible: false},
             {id: '359', visible: false},
@@ -30,7 +29,8 @@ define(function () {
                  }
              ],
              name: 'Verkehrsbelastung auf Autobahnen', visible: true
-            }
+            },
+            {id: '1711', visible: false, attribution: 'Krankenhausattributierung in config'}
         ],
         styleConf: '../../style.json',
         wfsconfig: [

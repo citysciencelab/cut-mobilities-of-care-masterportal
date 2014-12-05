@@ -112,6 +112,20 @@ require([
                 });
             }
         });
+
+        if (Config.orientation === true) {
+            require(['views/OrientationView'], function (OrientationView) {
+                new OrientationView();
+        });
+        }
+
+        if (Config.poi === true) {
+            require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
+//                    new PointOfInterestView();
+            new PointOfInterestListView();
+            });
+        }
+
     }
     $(function () {
         $('#loader').hide();
