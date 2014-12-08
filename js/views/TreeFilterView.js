@@ -14,7 +14,7 @@ define([
         template: _.template(TreeFilterTemplate),
         initialize: function () {
             this.render();
-            this.model.on('change:filterHits invalid change:treeType', this.render, this);
+            this.model.on('change:filterHits invalid change:treeType change:errors', this.render, this);
             this.model.on('change:categoryArray', this.render, this);
             this.model.on('change:typeArray', this.render, this);
             EventBus.on('toggleFilterTreeWin', this.toggleFilterTreeWin, this);
