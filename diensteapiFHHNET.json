@@ -36259,14 +36259,14 @@
       "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "name" : "Name",
-         "adresse" : "Adresse",
+         "adresse" : "Straße",
          "ort" : "Ort",
          "anzahl_gesamtbetten" : "Gesamtbetten",
          "anzahl_planbetten" : "Planbetten",
-         "anzahl_teilbehandlung" : "teilstationäre Behandlungsplätze",
+         "anzahl_teilbehandlung" : "Teilstationäre Behandlungsplätze",
          "homepage" : "Homepage",
          "teilnahme_notversorgung" : "Not- und Unfallversorgung",
-         "link_einzelblatt" : "Einzelblatt",
+         "link_einzelblatt" : "Krankenhausverzeichnis",
          "geburtsklinik" : "Geburtsklinik"
       },
       "layerAttribution" : "nicht vorhanden",
