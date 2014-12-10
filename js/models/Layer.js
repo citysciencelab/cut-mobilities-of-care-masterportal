@@ -14,6 +14,10 @@ define([
             this.set('id', id);
             this.set('name', name);
             this.set('displayInTree', displayInTree);
+            // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
+            if (this.get('displayInTree') === false) {
+                this.set('gfiAttributes', false)
+            }
 
             // Übernehme Styleattribut, falls vorhanden
             if (_.isString(styles)) {

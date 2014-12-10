@@ -31,6 +31,7 @@ define([
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
             this.listenTo(this, 'change:SLDBody', this.getFilterHits);
             this.set('layerID', '5182_strassenbaumkataster');
+            this.set('layerCacheID', '5183');
 
             this.fetch({
                 cache: false,
@@ -56,7 +57,7 @@ define([
                 var split = tree.Gattung.split("/");
                 var categorySplit;
                 if (split[1] !== undefined) {
-                    categorySplit = split[1].trim() + "(" + split[0].trim() + ")";
+                    categorySplit = split[1].trim() + " (" + split[0].trim() + ")";
                 }
                 else {
                     categorySplit = split[0].trim();
@@ -67,7 +68,7 @@ define([
                     var split = type.split("/");
                     var typeSplit;
                     if (split[1] !== undefined) {
-                        typeSplit = split[1].trim() + "(" + split[0].trim() + ")";
+                        typeSplit = split[1].trim() + " (" + split[0].trim() + ")";
                     }
                     else {
                         typeSplit = split[0].trim();
@@ -159,7 +160,8 @@ define([
         setCategoryArray: function () {
             var catArray = [];
             _.each(this.get('trees'), function(tree, index) {
-                if(tree.displayGattung.indexOf(this.get('searchCategoryString')) !== -1) {
+                var myRegExp = new RegExp(this.get('searchCategoryString'), 'i');
+                if(tree.displayGattung.search(myRegExp) !== -1) {
                     catArray.push(tree.displayGattung);
                 }
             }, this);
@@ -184,7 +186,8 @@ define([
                         typeArray.push(type.display);
                     }
                     else {
-                        if(type.display.indexOf(this.get('searchTypeString')) !== -1) {
+                        var myRegExp = new RegExp(this.get('searchTypeString'), 'i');
+                        if(type.display.search(myRegExp) !== -1) {
                             typeArray.push(type.display);
                         }
                     }
@@ -223,22 +226,11 @@ define([
         updateStyleByID: function () {
             EventBus.trigger('updateStyleByID', [this.get('layerID'), this.get('SLDBody')]);
             EventBus.trigger('setVisible', ['5182_strassenbaumkataster_grau', this.get('isFilter')]);
-
-            if(this.get('isFilter') === false) {
-                this.set('treeCategory', "");
-                this.set('treeType', "");
-                this.set('yearMax', '2014');
-                this.set('yearMin', '0');
-                this.set('diameterMax', '50');
-                this.set('diameterMin', '0');
-                this.set('perimeterMax', '1000');
-                this.set('perimeterMin', '0');
-                $('#yearMax > input').val("2014");
-                $('#yearMin > input').val("0");
-                $('#diameterMax > input').val("50");
-                $('#diameterMin > input').val("0");
-                $('#perimeterMax > input').val("1000");
-                $('#perimeterMin > input').val("0");
+            if (this.get('isFilter') === true) {
+                EventBus.trigger('setVisible', ['5183', false]);
+            }
+            else {
+                EventBus.trigger('setVisible', ['5183', true]);
             }
         },
         removeFilter: function () {
@@ -246,6 +238,21 @@ define([
             this.set('isFilter', false);
             this.set('filter', '');
             this.unset('SLDBody', '');
+
+            this.set('treeCategory', "");
+            this.set('treeType', "");
+            this.set('yearMax', '2014');
+            this.set('yearMin', '0');
+            this.set('diameterMax', '50');
+            this.set('diameterMin', '0');
+            this.set('perimeterMax', '1000');
+            this.set('perimeterMin', '0');
+            $('#yearMax > input').val("2014");
+            $('#yearMin > input').val("0");
+            $('#diameterMax > input').val("50");
+            $('#diameterMin > input').val("0");
+            $('#perimeterMax > input').val("1000");
+            $('#perimeterMin > input').val("0");
         },
         createFilter: function () {
             var filterCategory, filterType, filterYear, filterDiameter, filterPerimeter;
