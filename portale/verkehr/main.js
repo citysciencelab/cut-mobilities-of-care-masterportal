@@ -1,6 +1,6 @@
 /*global require*/
 require.config({
-    waitSeconds: 60
+    waitSeconds: 60,
     paths: {
         openlayers: 'http://wscd0096/libs/OpenLayers-3.0.0/build/ol-debug',
         jquery: 'http://wscd0096/libs/jQuery-2.0.3/jquery.min',
@@ -77,11 +77,6 @@ require([
                         new MeasurePopupView();
                     });
                 }
-                if (Config.tools.orientation === true) {
-                    require(['views/OrientationView'], function (OrientationView) {
-                        new OrientationView();
-                    });
-                }
                 if (Config.tools.print === true) {
                     require(['views/PrintView'], function (PrintView) {
                         new PrintView();
@@ -106,12 +101,24 @@ require([
                     new wfsFeatureFilterView();
                 });
             }
+            if (Config.orientation === true) {
+                require(['views/OrientationView'], function (OrientationView) {
+                    new OrientationView();
+                });
+            }
+            if (Config.poi === true) {
+                require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
+//                    new PointOfInterestView();
+                new PointOfInterestListView();
+                });
+            }
             if (Config.menu.legend === true) {
                 require(['views/LegendView'], function (LegendView) {
                     new LegendView();
                 });
             }
         });
+
     }
     $(function () {
         $('#loader').hide();

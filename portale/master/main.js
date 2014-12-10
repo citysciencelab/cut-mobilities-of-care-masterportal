@@ -44,6 +44,13 @@ require([
         new Map();
     });
 
+    if (Config.attributions && Config.attributions === true) {
+        require(['verkehrsfunctions', 'views/AttributionView'], function (verkehrsfunctions, AttributionView) {
+            new verkehrsfunctions();
+            new AttributionView();
+        });
+    }
+
     if (Config.mouseHover && Config.mouseHover === true) {
         require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
             new MouseHoverPopupView();

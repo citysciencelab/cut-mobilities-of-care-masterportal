@@ -92,7 +92,7 @@ define([
                     }
                 },
                 error: function (data, textStatus, jqXHR) {
-                    alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
+                    alert('Fehlermeldung beim Laden von Daten: \n' + data.responseText);
                 }
             });
 

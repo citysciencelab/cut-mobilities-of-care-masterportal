@@ -10,7 +10,7 @@ define(function () {
         layerConf: '../../diensteapiFHHNET.json',
         styleConf: '../../style.json',
         layerIDs: [
-            {id: '453', visible: false},
+            {id: '453', visible: true},
             {id: '8', visible: false},
             {id: 'extern1', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
@@ -37,8 +37,8 @@ define(function () {
             {id: '1361', visible: false},
             {id: '1363', visible: false},
             {id: '1360', visible: false},
-            {id: '1359', visible: true, attribution: 'Die aktuelle Aktualität ist : 65445345646445'},
-            {id: '1362', visible: true, attribution: 'Hallo Welt'},
+            {id: '1359', visible: false},
+            {id: '1362', visible: false},
             {id:
              [
                  {
@@ -46,14 +46,14 @@ define(function () {
                      attribution:
                      {
                          eventname: 'simple',
-                         timeout: 5000
+                         timeout: (10 * 60000)
                      }
                  },
                  {
                      id: '1365'
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: false
+             name: 'Verkehrsbelastung auf Autobahnen', visible: true
             }
         ],
         attributions: true,
@@ -81,7 +81,9 @@ define(function () {
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
+        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        orientation: true,
+        poi: true
     }
 
     return config;

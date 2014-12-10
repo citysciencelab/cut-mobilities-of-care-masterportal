@@ -108,14 +108,13 @@ define([
             this.get('element').tooltip('show');
         },
         /**
-        * forEachFeatureAtPixel greift nur bei sichtbaren Features
+        * forEachFeatureAtPixel greift nur bei sichtbaren Features.
         * wenn 2. Parameter (layer) == null, dann kein Layer
         */
         newMouseHover: function (evt, map) {
             var pFeatureArray = new Array();
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
                 oldSelection = this.get('oldSelection');
-                this.set('newSelection', selection);
                 if (layer && oldSelection != selection) {
                     var selProps = selection.getProperties();
                     if (selProps.features) {
@@ -134,11 +133,28 @@ define([
                         });
                     }
                 }
+            }, this, function (layer) {
+                var wfsList = this.get('wfsList');
+                if (wfsList) {
+                    var found = _.find(wfsList, function(layerlist) {
+                        return layerlist.layerId == layer.id;
+                    });
+                    if (found) {
+                        return layer;
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                else {
+                    return null;
+                }
             }, this);
             var wfsList = this.get('wfsList');
             var value = '';
-            var coord = new Array(); //coord wird im Moment nicht benutzt für MouseHover
+            var coord = new Array();
             if (pFeatureArray.length > 0) {
+                this.set('newSelection', pFeatureArray);
                 // für jedes gehoverte Feature...
                 _.each(pFeatureArray, function(element, index, list) {
                     if (value != '') {
