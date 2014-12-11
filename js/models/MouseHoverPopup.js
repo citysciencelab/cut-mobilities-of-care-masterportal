@@ -55,15 +55,12 @@ define([
             // Füge zugehörige Layer der wfsList hinzu
             map.getLayers().forEach(function (layer) {
                 if (layer.getProperties().typ === 'WFS') {
-                    var firstFeature = layer.getSource().getFeatures()[0];
-                    if (firstFeature) {
-                        var layerId = firstFeature.layerId;
-                        var wfslistlayer = _.find(wfsList, function(listlayer) {
-                            return listlayer.layerId === layerId
-                        });
-                        if (wfslistlayer) {
-                            wfslistlayer.layer = layer;
-                        }
+                    var layerId = layer.id;
+                    var wfslistlayer = _.find(wfsList, function(listlayer) {
+                        return listlayer.layerId === layerId
+                    });
+                    if (wfslistlayer) {
+                        wfslistlayer.layer = layer;
                     }
                 }
             }, this);

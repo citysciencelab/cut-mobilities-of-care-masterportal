@@ -63,13 +63,7 @@ var wfsFeatureFilterView = Backbone.View.extend({
                 that.model.get('map').getLayers().forEach(function (layer) {
                     if (layer.getProperties().typ == 'WFS')
                     {
-                        var firstFeature = layer.getSource().getFeatures()[0];
-                        if (firstFeature.layerId) {
-                            var layerid = firstFeature.layerId;
-                        }
-                        else if (firstFeature.getProperties().features) {
-                            var layerid = firstFeature.getProperties().features[0].layerId;
-                        }
+                        var layerid = layer.id;
 
                         // Hier wird der zum Filter zugehörige Layer gefunden
                         if (layerid === layerfilter.layerId) {

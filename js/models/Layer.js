@@ -46,9 +46,9 @@ define([
             this.unset('datasets');
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
-            // TODO dieses ID verfahren überall umsetzen und nicht mehr über GetFeatures[0].getProperties().id
             this.get('layer').id = id;
         },
+        // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
             function reloadLayer(singleLayer) {
                 if (singleLayer.get('typ') === 'WMS') {
