@@ -26,38 +26,22 @@ define([
          *
          */
         setAttributionLayerSource: function () {
-            // Stelle GetRequest zusammen
-            var getrequest = this.get('url')
-                + '?REQUEST=GetFeature'
-                + '&SERVICE=WFS'
-                + '&TYPENAME=' + this.get('featureType');
-            if (this.get('version') && this.get('version') !== '' && this.get('version') !== 'nicht vorhanden') {
-                getrequest += '&VERSION=' + this.get('version');
-            }
-            else {
-                getrequest += '&VERSION=1.1.0';
-            }
-            if (this.get('srsname') && this.get('srsname') !== '' && this.get('srsname') !== 'nicht vorhanden') {
-                getrequest += '&SRSNAME=' + this.get('srsname');
-            }
-            else {
-                getrequest += '&SRSNAME=EPSG:25832';
-            }
-            // Finde wfsconfig zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
+            var getrequest = this.buildGetRequest();
+            // Finde layerIDs zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
             var id = this.get('id');
-            var wfsconfig = _.find(Config.wfsconfig, function(num) {
-                if (num.layer == id) {
+            var layerIDs = _.find(Config.layerIDs, function(num) {
+                if (num.id == id) {
                     return num;
                 }
             });
-            if (!wfsconfig) {
+            if (!layerIDs) {
                 alert('Layer ' + id + ' nicht konfiguriert.');
                 return;
             }
-            this.set('styleId', wfsconfig.style);
-            this.set('clusterDistance', wfsconfig.clusterDistance);
-            this.set('searchField', wfsconfig.searchField);
-            this.set('styleField', wfsconfig.styleField);
+            this.set('styleId', layerIDs.style);
+            this.set('clusterDistance', layerIDs.clusterDistance);
+            this.set('searchField', layerIDs.searchField);
+            this.set('styleField', layerIDs.styleField);
             // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
                 format: new ol.format.WFS({
@@ -95,37 +79,17 @@ define([
                     alert('Fehlermeldung beim Laden von Daten: \n' + data.responseText);
                 }
             });
-
-            // Wenn styleField gesetzt ist, wird anhand des Arrays der möglichen Styles die Zuordnung getroffen
-            if(this.get('styleField')){
-                // Prüfe Symbolisierung nach ClusterDistance
+            // NOTE Hier werden die Styles zugeordnet
+            if(this.get('styleField')) {
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
                     this.set('source', pServerVector);
-                    // Lade Style
                     this.set('style', function (feature, resolution) {
-                        var wfsStyle = new Array();
-                        for(var i = 0; i<wfsconfig.style.length;i++){
-                            style=_.find(StyleList.models, function (num) {
-                                if (num.id == wfsconfig.style[i]) {
-                                    return num;
-                                }
-                            });
-                             wfsStyle.push(style);
-                        }
-                        for(var i = 0; i<wfsStyle.length;i++){
-                            for(var j = 0; j<StyleList.models.length; j++){
-                                if(feature.getProperties().features[0].values_.Kategorie==StyleList.models[j].attributes.name && StyleList.models[j].id==wfsStyle[i].id){
-                                    feature.setStyle(wfsStyle[i].attributes.style[0]);
-                                }
-                                else{
-                                    //alert('No Style found');
-                                };
-                            }
-                        };
+                        var styleFieldValue = _.values(_.pick(feature.getProperties(), layerIDs.styleField))[0];
+                        var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                        return stylelistmodel.getSimpleStyle();
                     });
                 }
                 else {
-                     // Lade Style
                     var pCluster = new ol.source.Cluster({
                         source : pServerVector,
                         distance : this.get('clusterDistance')
@@ -133,58 +97,19 @@ define([
                     var size;
                     this.set('source', pCluster);
                     this.set('style', function (feature, resolution) {
-                        var size;
-                        var size = feature.get('features').length;
-                            if (size != '1') {
-                                var wfsStyle = new Array();
-                                for(var i = 0; i<wfsconfig.style.length;i++){
-                                    wfsStyle=_.find(StyleList.models, function (num) {
-                                        if (num.id == id+"_cluster") {
-                                            return num;
-                                        }
-                                    });
-                                }
-                                style=wfsStyle.getClusterSymbol(size);
-                            }
-                            else {
-                                var wfsStyle = new Array();
-                                for(var i = 0; i<wfsconfig.style.length;i++){
-                                    style=_.find(StyleList.models, function (num) {
-                                        if (num.id == wfsconfig.style[i]) {
-                                            return num;
-                                        }
-                                    });
-                                     wfsStyle.push(style);
-                                }
-                                for(var i = 0; i<wfsStyle.length;i++){
-                                    for(var j = 0; j<StyleList.models.length; j++){
-                                        if(feature.getProperties().features[0].values_.Kategorie==StyleList.models[j].attributes.name && StyleList.models[j].id==wfsStyle[i].id){
-                                            feature.setStyle(wfsStyle[i].attributes.style[0]);
-                                            return wfsStyle[i].attributes.style[0];
-                                        }
-                                        else{
-                                            //alert('No Style found');
-                                        };
-                                    }
-                                };
-                            }
-                        return style;
+                        var styleFieldValue = _.values(_.pick(feature.get('features')[0].getProperties(), layerIDs.styleField))[0];
+                        var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                        return stylelistmodel.returnClusterStyle(feature);
                     });
                 }
             }
             else {
-                // wenn Stylefield nicht gesetzt ist, werden alle Features identisch behandelt
-                var stylelistmodel = _.find(StyleList.models, function (slmodel) {
-                    if (slmodel.id == wfsconfig.style) {
-                        return slmodel;
-                    }
-                });
-                var pStyle = stylelistmodel.get('style');
+                var stylelistmodel = StyleList.returnModelById(layerIDs.style);
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
                     this.set('source', pServerVector);
-                    this.set('style', pStyle);
+                    this.set('style', stylelistmodel.getSimpleStyle());
                 }
-                else{
+                else {
                     var pCluster = new ol.source.Cluster({
                         source : pServerVector,
                         distance : this.get('clusterDistance')
@@ -192,20 +117,10 @@ define([
                     var styleCache = {};
                     this.set('source', pCluster);
                     this.set('style', function (feature, resolution) {
-                        var size = feature.get('features').length;
-                        var style = styleCache[size];
-                        if (!style) {
-                            if (size != '1') {
-                                style = stylelistmodel.getClusterSymbol(size);
-                            }
-                            else {
-                                style = pStyle;
-                            }
-                            styleCache[size] = style;
-                        }
-                        return style;
+                        return stylelistmodel.returnClusterStyle(feature);
                     });
                 }
+//                console.log(stylelistmodel.getLabeledStyle('test'));
             }
         },
         /**
@@ -220,6 +135,26 @@ define([
                 gfiAttributes: this.get('gfiAttributes')
 //                gfiAttributes: this.convertGFIAttributes()
             }));
+        },
+        buildGetRequest : function () {
+            // Stelle GetRequest zusammen
+            var getrequest = this.get('url')
+                + '?REQUEST=GetFeature'
+                + '&SERVICE=WFS'
+                + '&TYPENAME=' + this.get('featureType');
+            if (this.get('version') && this.get('version') !== '' && this.get('version') !== 'nicht vorhanden') {
+                getrequest += '&VERSION=' + this.get('version');
+            }
+            else {
+                getrequest += '&VERSION=1.1.0';
+            }
+            if (this.get('srsname') && this.get('srsname') !== '' && this.get('srsname') !== 'nicht vorhanden') {
+                getrequest += '&SRSNAME=' + this.get('srsname');
+            }
+            else {
+                getrequest += '&SRSNAME=EPSG:25832';
+            }
+            return getrequest;
         }
     });
     return WFSLayer;

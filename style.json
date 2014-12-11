@@ -1,6 +1,6 @@
 [
     {
-        "id" : "1",
+        "id" : "1711",
         "subclass" : "Icon",
         "imagesrc" : "../../img/krankenhaus.png",
         "imagescale" : "1",
@@ -344,5 +344,41 @@
         "clusterfillcolor" : "[255, 255, 255, 1]",
         "clusterstrokecolor" : "[240, 240, 240, 0]",
         "clusterstrokewidth" : "0"
+    },
+    {
+        "id" : "46",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/emobility_icon_gruen_rund.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "20",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[88, 161, 52, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "id" : "49",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/verkehrskam.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "22",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[113, 35, 7, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "id" : "47",
+        "subclass" : "IconWithText",
+        "imagesrc" : "../../img/baustelle_neu.png",
+        "imagescale" : "1.1",
+        "textscale" : 1,
+        "textoffsetx" : "0",
+        "textoffsety" : "20",
+        "textfillcolor" : "[254, 254, 254, 1]",
+        "textstrokecolor" : "[240, 240, 240, 1]",
+        "textstrokewidth" : "0"
     }
 ]

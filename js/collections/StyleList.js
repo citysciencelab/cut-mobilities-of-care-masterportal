@@ -14,14 +14,16 @@ define([
             *  Einträgen in der json-Datei
             */
             var idArray = new Array ();
-            _.each(Config.wfsconfig, function (wfsconfelement) {
-                if (_.isArray(wfsconfelement.style)) {
-                    _.each(wfsconfelement.style, function (styleelement) {
-                        idArray.push(styleelement);
-                    });
-                }
-                else {
-                    idArray.push(wfsconfelement.style);
+            _.each(Config.layerIDs, function (wfsconfelement) {
+                if (_.has(wfsconfelement, 'style')) {
+                    if (_.isArray(wfsconfelement.style)) {
+                        _.each(wfsconfelement.style, function (styleelement) {
+                            idArray.push(styleelement);
+                        });
+                    }
+                    else {
+                        idArray.push(wfsconfelement.style);
+                    }
                 }
             });
             return _.filter(response, function (element) {
@@ -40,6 +42,22 @@ define([
                 },
                 success: function (collection) {
                     //console.log(collection);
+                }
+            });
+        },
+        returnModelById: function(id) {
+            return _.find(this.models, function (slmodel) {
+                if (slmodel.attributes.id === id) {
+                    return slmodel;
+                }
+            });
+        },
+        returnModelByName: function(name) {
+            return _.find(this.models, function (slmodel) {
+                if (_.has(slmodel.attributes, 'name')) {
+                    if (slmodel.attributes.name === name) {
+                        return slmodel;
+                    }
                 }
             });
         }

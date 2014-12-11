@@ -11,11 +11,7 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '1711', visible: true}
-        ],
-        styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '1711', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
              filterOptions: [
                  {
                      'fieldName': 'teilnahme_geburtsklinik',
@@ -32,6 +28,7 @@ define(function () {
              ]
             }
         ],
+        styleConf: '../../style.json',
         attributions: false,
         menubar: true,
         mouseHover: true,

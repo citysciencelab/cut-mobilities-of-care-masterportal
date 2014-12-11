@@ -6,7 +6,7 @@ define([
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
         initialize: function () {
-            EventBus.on('simple', this.setEventValue, this);
+            EventBus.on('aktualisiereverkehrsnetz', this.setEventValue, this);
         },
         setEventValue: function (attributions, layer) {
             if (!layer) {

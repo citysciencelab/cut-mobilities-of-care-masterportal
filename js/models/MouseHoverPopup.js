@@ -42,12 +42,12 @@ define([
         checkLayer: function () {
             var map = this.get('map');
             // Lese Config-Optionen ein und speichere Ergebnisse
-            var wfsconfig = Config.wfsconfig;
+            var layerIDs = Config.layerIDs;
             var wfsList = new Array();
-            _.each(wfsconfig, function(element, key, list) {
+            _.each(layerIDs, function(element, key, list) {
                 if (_.has(element, 'mouseHoverField')) {
                     wfsList.push({
-                        layerId : element.layer,
+                        layerId : element.id,
                         fieldname : element.mouseHoverField
                     });
                 }

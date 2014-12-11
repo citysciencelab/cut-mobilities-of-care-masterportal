@@ -12,8 +12,8 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: '1346', visible: true},
-            {id: '358', visible: false},
-            {id: '359', visible: false},
+            {id: '358', visible: false, style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '359', visible: false, style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'},
             {id:
              [
                  {
@@ -30,29 +30,31 @@ define(function () {
              ],
              name: 'Verkehrsbelastung auf Autobahnen', visible: true
             },
-            {id: '1711', visible: false, attribution: 'Krankenhausattributierung in config'}
+            {
+                id: '1711',
+                visible: false,
+                attribution: 'Krankenhausattributierung in config',
+                style: '1711',
+                clusterDistance: 0,
+                searchField: 'name',
+                mouseHoverField: 'name',
+                filterOptions: [
+                    {
+                        'fieldName': 'teilnahme_geburtsklinik',
+                        'filterType': 'combo',
+                        'filterName': 'Geburtsklinik',
+                        'filterString': ['*','ja','nein']
+                     },
+                     {
+                         'fieldName': 'teilnahme_notversorgung',
+                         'filterType': 'combo',
+                         'filterName': 'Not- und Unfallversorgung',
+                         'filterString': ['*','ja','eingeschränkt','nein']
+                     }
+                ]
+            }
         ],
         styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '1711', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
-             filterOptions: [
-                 {
-                     'fieldName': 'teilnahme_geburtsklinik',
-                     'filterType': 'combo',
-                     'filterName': 'Geburtsklinik',
-                     'filterString': ['*','ja','nein']
-                 },
-                 {
-                     'fieldName': 'teilnahme_notversorgung',
-                     'filterType': 'combo',
-                     'filterName': 'Not- und Unfallversorgung',
-                     'filterString': ['*','ja','eingeschränkt','nein']
-                 }
-             ]
-            },
-            {layer: '358', style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
-        ],
         attributions: true,
         menubar: true,
         mouseHover: true,
