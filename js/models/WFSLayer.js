@@ -69,10 +69,6 @@ define([
                     }
                     else {
                         pServerVector.addFeatures(pServerVector.readFeatures(data));
-                        // hinzufügen der LayerId für MouseHover und wfsFeatureFilter
-                        pServerVector.forEachFeature(function (ele) {
-                            ele.layerId = this.get('id');
-                        }, this);
                     }
                 },
                 error: function (data, textStatus, jqXHR) {

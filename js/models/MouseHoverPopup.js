@@ -119,14 +119,14 @@ define([
                         _.each(list, function (element, index, list) {
                             pFeatureArray.push({
                                 attributes: element.getProperties(),
-                                layerId: element.layerId
+                                layerId: layer.id
                             });
                         });
                     }
                     else {
                         pFeatureArray.push({
                             attributes: selProps,
-                            layerId: selection.layerId
+                            layerId: layer.id
                         });
                     }
                 }
