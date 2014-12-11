@@ -32264,14 +32264,24 @@
    },
    {
       "id" : "46",
-      "name" : "app:hh emobility",
+      "name" : "Elektro-Ladestationen",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "hh_emobility",
       "format" : "image/png",
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+          "Strasse" : "Straße",
+          "Hausnr" : "Hausnummer",
+          "Status" : " Status",
+          "Anz_Ladepkte" : "Anzahl Ladepunkte",
+          "Steckertyp" : "Steckertyp",
+          "Ladestrom" : "Ladestrom",
+          "Zugang" : "Zugang",
+          "Oeffnungszeiten" : "Öffnungszeiten",
+          "Hotline" : "Hotline"
+      },
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
          {
@@ -32292,14 +32302,24 @@
    },
    {
       "id" : "47",
-      "name" : "app:verkehr baustellen prod",
+      "name" : "aktuelle Baustellen",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_baustellen_prod",
       "format" : "image/png",
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+          "id_kost" : "Baustelle Nr.",
+          "strasse" : "Straße",
+          "abschnitt_von" : "Von",
+          "abschnitt_bis" : "Bis",
+          "beginn" : "Beginn",
+          "ende" : "Ende",
+          "dauer" : "Dauer",
+          "art" : "Beschreibung",
+          "hinweis" : "Hinweise"
+      },
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
          {
@@ -32347,14 +32367,20 @@
    },
    {
       "id" : "49",
-      "name" : "app:verkehr kameras",
+      "name" : "Verkehrskameras",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_kameras",
       "format" : "image/png",
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
-      "gfiAttributes" : "showAll",
+       "gfiAttributes" : {
+         "lage" : "Lage",
+         "anmerkung" : "Anmerkung",
+         "kamerabild" : "Kamerabild",
+         "anbieter" : "Anbieter",
+         "anbieter_url" : "URL"
+      },
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
          {
