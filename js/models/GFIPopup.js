@@ -136,11 +136,18 @@ define([
                         _.each(pAttributes, function (value, key, list) {
                             var keyArray = new Array();
                             key = key.substring(0, 1).toUpperCase() + key.substring(1).replace('_', ' ');
-                            keyArray.push(value);
+                            keyArray.push(key);
                             var valArray = new Array();
-                            valArray.push(key);
+                            if (_.isNumber(value) || _.isBoolean(value)) {
+                                value = value.toString();
+                            }
+                            if (!value || !_.isString(value)) {
+                                return;
+                            }
+                            valArray.push(value);
                             var newgfi = _.object(keyArray, valArray);
                             gfi = _.extend(gfi, newgfi);
+                            console.log(gfi);
                         });
                     }
                     else {
