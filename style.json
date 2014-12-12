@@ -346,6 +346,18 @@
         "clusterstrokewidth" : "0"
     },
     {
+        "id" : "45",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/bikeandride.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
         "id" : "46",
         "subclass" : "Icon",
         "imagesrc" : "../../img/emobility_icon_gruen_rund.png",
@@ -354,6 +366,30 @@
         "clusteroffsetx" : "20",
         "clusteroffsety" : "-8",
         "clusterfillcolor" : "[88, 161, 52, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "id" : "47",
+        "subclass" : "IconWithText",
+        "imagesrc" : "../../img/baustelle_neu.png",
+        "imagescale" : "1.1",
+        "textscale" : 1,
+        "textoffsetx" : "0",
+        "textoffsety" : "20",
+        "textfillcolor" : "[254, 254, 254, 1]",
+        "textstrokecolor" : "[240, 240, 240, 1]",
+        "textstrokewidth" : "0"
+    },
+    {
+        "id" : "48",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/behindertenparken.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-10",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
         "clusterstrokecolor" : "[240, 240, 240, 1]",
         "clusterstrokewidth" : "3"
     },
@@ -370,15 +406,39 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "47",
-        "subclass" : "IconWithText",
-        "imagesrc" : "../../img/baustelle_neu.png",
-        "imagescale" : "1.1",
-        "textscale" : 1,
-        "textoffsetx" : "0",
-        "textoffsety" : "20",
-        "textfillcolor" : "[254, 254, 254, 1]",
-        "textstrokecolor" : "[240, 240, 240, 1]",
-        "textstrokewidth" : "0"
+        "id" : "50",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/motorradparken.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-10",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "id" : "51",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/pur.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "id" : "53",
+        "subclass" : "Icon",
+        "imagesrc" : "../../img/bus_parken.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
     }
 ]

@@ -32236,7 +32236,7 @@
    },
    {
       "id" : "45",
-      "name" : "app:bikeandride",
+      "name" : "Bike and Ride Parkplätze",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "bikeandride",
@@ -32339,7 +32339,7 @@
    },
    {
       "id" : "48",
-      "name" : "app:verkehr behindertenparkpl",
+      "name" : "Behindertenparkplätze",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_behindertenparkpl",
@@ -32400,7 +32400,7 @@
    },
    {
       "id" : "50",
-      "name" : "app:verkehr motorradparkpl",
+      "name" : "Motorradparkplätze",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_motorradparkpl",
@@ -32428,7 +32428,7 @@
    },
    {
       "id" : "51",
-      "name" : "app:verkehr parkandride",
+      "name" : "Park And Ride Parkplätze",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_parkandride",
@@ -32456,7 +32456,7 @@
    },
    {
       "id" : "52",
-      "name" : "app:verkehr parkhäuser",
+      "name" : "Parkhäuser",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_parkhaeuser",
@@ -32484,7 +32484,7 @@
    },
    {
       "id" : "53",
-      "name" : "app:verkehr reisebusparkpl",
+      "name" : "Reisebusparkplätze",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_reisebusparkpl",

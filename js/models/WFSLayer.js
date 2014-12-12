@@ -29,19 +29,12 @@ define([
             var getrequest = this.buildGetRequest();
             // Finde layerIDs zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
             var id = this.get('id');
-            var layerIDs = _.find(Config.layerIDs, function(num) {
-                if (num.id == id) {
-                    return num;
-                }
-            });
-            if (!layerIDs) {
-                alert('Layer ' + id + ' nicht konfiguriert.');
-                return;
-            }
+            var layerIDs = _.find(Config.layerIDs, function(num) {return num.id === id});
             this.set('styleId', layerIDs.style);
             this.set('clusterDistance', layerIDs.clusterDistance);
             this.set('searchField', layerIDs.searchField);
             this.set('styleField', layerIDs.styleField);
+            this.set('styleLabelField', layerIDs.styleLabelField);
             // Lade Daten der Datenquelle
             var pServerVector = new ol.source.ServerVector({
                 format: new ol.format.WFS({
@@ -58,66 +51,114 @@ define([
                 })),*/
                 projection: proj25832 //'EPSG:25832'
             });
+            $('#loader').show();
             $.ajax({
-                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(getrequest),
+                url: Config.proxyURL + '?url=' + encodeURIComponent(getrequest),
                 async: false,
                 context: this,
                 success: function (data, textStatus, jqXHR) {
+                    $('#loader').hide();
                     var docEle = data.documentElement.nodeName;
                     if (docEle.indexOf('Exception') != -1) {
                         alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
+                        return;
                     }
-                    else {
-                        pServerVector.addFeatures(pServerVector.readFeatures(data));
-                    }
+                    pServerVector.addFeatures(pServerVector.readFeatures(data));
+                    this.styling(pServerVector, layerIDs);
                 },
                 error: function (data, textStatus, jqXHR) {
+                    $('#loader').hide();
                     alert('Fehlermeldung beim Laden von Daten: \n' + data.responseText);
                 }
             });
+        },
+        styling: function (pServerVector, layerIDs) {
             // NOTE Hier werden die Styles zugeordnet
-            if(this.get('styleField')) {
+            if(this.get('styleField') && this.get('styleField') != '') {
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
-                    this.set('source', pServerVector);
-                    this.set('style', function (feature, resolution) {
-                        var styleFieldValue = _.values(_.pick(feature.getProperties(), layerIDs.styleField))[0];
-                        var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
-                        return stylelistmodel.getSimpleStyle();
-                    });
+                    if (this.get('styleLabelField') && this.get('styleLabelField') != '') {
+                        //TODO
+                    }
+                    else {
+                        this.setSimpleStyleForStyleField(pServerVector, layerIDs);
+                    }
                 }
                 else {
-                    var pCluster = new ol.source.Cluster({
-                        source : pServerVector,
-                        distance : this.get('clusterDistance')
-                    });
-                    var size;
-                    this.set('source', pCluster);
-                    this.set('style', function (feature, resolution) {
-                        var styleFieldValue = _.values(_.pick(feature.get('features')[0].getProperties(), layerIDs.styleField))[0];
-                        var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
-                        return stylelistmodel.returnClusterStyle(feature);
-                    });
+                    if (this.get('styleLabelField') && this.get('styleLabelField') != '') {
+                        //TODO
+                    }
+                    else {
+                        this.setClusterStyleForStyleField(pServerVector, layerIDs);
+                    }
                 }
             }
             else {
-                var stylelistmodel = StyleList.returnModelById(layerIDs.style);
                 if (this.get('clusterDistance') <= 0 || !this.get('clusterDistance')) {
-                    this.set('source', pServerVector);
-                    this.set('style', stylelistmodel.getSimpleStyle());
+                    if (this.get('styleLabelField') && this.get('styleLabelField') != '') {
+                        this.setSimpleCustomLabeledStyle(pServerVector, layerIDs);
+                    }
+                    else {
+                        this.setSimpleStyle(pServerVector, layerIDs);
+                    }
                 }
                 else {
-                    var pCluster = new ol.source.Cluster({
-                        source : pServerVector,
-                        distance : this.get('clusterDistance')
-                    });
-                    var styleCache = {};
-                    this.set('source', pCluster);
-                    this.set('style', function (feature, resolution) {
-                        return stylelistmodel.returnClusterStyle(feature);
-                    });
+                    if (this.get('styleLabelField') && this.get('styleLabelField') != '') {
+                        this.getClusterStyle(pServerVector, layerIDs);
+                    }
+                    else {
+                        this.setClusterStyle(pServerVector, layerIDs);
+                    }
                 }
-//                console.log(stylelistmodel.getLabeledStyle('test'));
             }
+        },
+        setSimpleCustomLabeledStyle: function (pServerVector, layerIDs) {
+            this.set('source', pServerVector);
+            this.set('style', function (feature, resolution) {
+                var stylelistmodel = StyleList.returnModelById(layerIDs.style);
+                try {
+                    var label = _.values(_.pick(feature.getProperties(), layerIDs.styleLabelField))[0].toString();
+                    return stylelistmodel.getCustomLabeledStyle(label);
+                }
+                catch (error) {
+                    this.setSimpleStyle(pServerVector, layerIDs);
+                }
+            });
+        },
+        setSimpleStyleForStyleField: function (pServerVector, layerIDs) {
+            this.set('source', pServerVector);
+            this.set('style', function (feature, resolution) {
+                var styleFieldValue = _.values(_.pick(feature.getProperties(), layerIDs.styleField))[0];
+                var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                return stylelistmodel.getSimpleStyle();
+            });
+        },
+        setClusterStyleForStyleField: function (pServerVector, layerIDs) {
+            var pCluster = new ol.source.Cluster({
+                source : pServerVector,
+                distance : this.get('clusterDistance')
+            });
+            this.set('source', pCluster);
+            this.set('style', function (feature, resolution) {
+                var styleFieldValue = _.values(_.pick(feature.get('features')[0].getProperties(), layerIDs.styleField))[0];
+                var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                return stylelistmodel.getClusterStyle(feature);
+            });
+        },
+        setSimpleStyle: function (pServerVector, layerIDs) {
+            var stylelistmodel = StyleList.returnModelById(layerIDs.style);
+            this.set('source', pServerVector);
+            this.set('style', stylelistmodel.getSimpleStyle());
+        },
+        setClusterStyle: function (pServerVector, layerIDs) {
+            var stylelistmodel = StyleList.returnModelById(layerIDs.style);
+            var pCluster = new ol.source.Cluster({
+                source : pServerVector,
+                distance : this.get('clusterDistance')
+            });
+            this.set('source', pCluster);
+            this.set('style', function (feature, resolution) {
+                return stylelistmodel.getClusterStyle(feature);
+            });
         },
         /**
          *
@@ -129,7 +170,6 @@ define([
                 typ: this.get('typ'),
                 style: this.get('style'),
                 gfiAttributes: this.get('gfiAttributes')
-//                gfiAttributes: this.convertGFIAttributes()
             }));
         },
         buildGetRequest : function () {

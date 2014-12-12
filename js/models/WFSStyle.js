@@ -51,7 +51,7 @@ define([
         /*
         * Fügt dem normalen Symbol ein Symbol für das Cluster hinzu und gibt evtl. den Cache zurück
         */
-        returnClusterStyle : function (feature) {
+        getClusterStyle : function (feature) {
             var size = feature.get('features').length;
             var style = this.get('styleCache')[size];
             if (!style) {
@@ -99,7 +99,7 @@ define([
                 return style;
             }
         },
-        getLabeledStyle : function (label) {
+        getCustomLabeledStyle : function (label) {
             var style = this.getSimpleStyle();
             var text = style[0].getText();
             if (text) {

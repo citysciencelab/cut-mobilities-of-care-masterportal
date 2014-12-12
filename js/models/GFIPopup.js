@@ -147,7 +147,6 @@ define([
                             valArray.push(value);
                             var newgfi = _.object(keyArray, valArray);
                             gfi = _.extend(gfi, newgfi);
-                            console.log(gfi);
                         });
                     }
                     else {
