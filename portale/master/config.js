@@ -20,7 +20,7 @@ define(function () {
                      id: '1364',
                      attribution:
                      {
-                         eventname: 'simple',
+                         eventname: 'aktualisiereverkehrsnetz',
                          timeout: (10 * 60000)
                      }
                  },
