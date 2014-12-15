@@ -7,7 +7,11 @@ define(function () {
             resolution: 15.874991427504629,
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
+        layerConf: locations.master + '/diensteapiFHHNET.json',
+        styleConf: locations.master + '/style.json',
+        printURL: locations.host + ':8680/mapfish_print_2.0/',
+        proxyURL: '/cgi-bin/proxy.cgi',
+        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -54,7 +58,6 @@ define(function () {
                 ]
             }
         ],
-        styleConf: '../../style.json',
         attributions: true,
         menubar: true,
         mouseHover: true,
@@ -75,7 +78,6 @@ define(function () {
 //            styleName: 'treefilter',
 //            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
 //        },
-        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
             measure: true,
@@ -83,8 +85,6 @@ define(function () {
             coord: true,
             active: 'gfi'
         },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
         orientation: true,
         poi: true
     }
