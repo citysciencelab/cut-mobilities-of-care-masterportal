@@ -1,24 +1,27 @@
 /* Extrahieren der Pfade
-* master = portal 2x nach oben
+* master = portal 2x nach oben auf wscd0096
+* geoportal-hamburg = portal 1x nach oben + libs/lgvversion
 */
 if (window.location.host === 'wscd0096') {
-    var portal = window.location.protocol + '//' + window.location.hostname + window.location.pathname;
+    var portal = window.location.href;
     var master = portal.substr(0, portal.lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/'));
 }
-console.log (window.location.host);
-//else if (window.location.host === '
-
+else if(window.location.host === 'geoportal-hamburg.de') {
+    var portal = window.location.href;
+    var master = portal.substr(0, portal.lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest';
+}
+var host = window.location.origin;
 /*global require*/
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: 'http://wscd0096/libs/OpenLayers-3.0.0/build/ol-debug',
-        jquery: 'http://wscd0096/libs/jQuery-2.0.3/jquery.min',
-        underscore: 'http://wscd0096/libs/underscore-1.6.0/underscore.min',
-        backbone: 'http://wscd0096/libs/backbone-1.1.2/backbone.min',
-        text: 'http://wscd0096/libs/require-2.1.11/plugins/text-2.0.10/text',
-        bootstrap: 'http://wscd0096/libs/bootstrap-3.1.1/js/bootstrap.min',
-        proj4: 'http://wscd0096/libs/proj4-2.2.1/dist/proj4',
+        openlayers: host + '/libs/OpenLayers-3.0.0/build/ol-debug',
+        jquery: host + '/libs/jQuery-2.0.3/jquery.min',
+        underscore: host + '/libs/underscore-1.6.0/underscore.min',
+        backbone: host + '/libs/backbone-1.1.2/backbone.min',
+        text: host + '/libs/require-2.1.11/plugins/text-2.0.10/text',
+        bootstrap: host + '/libs/bootstrap-3.1.1/js/bootstrap.min',
+        proj4: host + '/libs/proj4-2.2.1/dist/proj4',
         config: portal + 'config',
         eventbus: master + '/js/EventBus',
         views: master + '/js/views',
