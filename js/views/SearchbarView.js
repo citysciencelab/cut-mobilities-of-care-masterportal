@@ -19,7 +19,8 @@ define([
             'keyup input': 'checkStringForComplete',
             'click .streets': 'searchHouseNumbers',
             'click .numbers': 'setHouseNumber',
-            'click .wfsfeatures': 'setWFSFeature'
+            'click .wfsfeatures': 'setWFSFeature',
+
         },
         initialize: function () {
             this.render();
@@ -27,9 +28,10 @@ define([
             this.listenTo(this.model, 'change:houseNumbers', this.showHouseNumbers);
             this.listenTo(this.model, 'change:wfsFeatures', this.showStreetNames);
 
-            $(window).resize($.proxy(function () {
-                this.render();
-            }, this));
+            // NOTE wird auf Touch-Geräten auch ausgeführt wenn die Tastatur ein-/ausgeblendet wird. Ist nicht immer erwünscht, daher erst einmal auskommentiert.
+            //$(window).resize($.proxy(function () {
+            //    this.render();
+            //}, this));
         },
         render: function () {
             var attr = this.model.toJSON();
