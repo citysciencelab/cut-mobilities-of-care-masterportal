@@ -1,12 +1,21 @@
 define([
     'backbone',
     'eventbus',
-    'config'
-], function (Backbone, EventBus, Config) {
+    'config',
+    'collections/LayerList',
+], function (Backbone, EventBus, Config, LayerList) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
         initialize: function () {
-            EventBus.on('simple', this.setEventValue, this);
+            var url;
+            EventBus.on('aktualisiereverkehrsnetz', this.setEventValue, this);
+            _.each(LayerList.models, function (layerdef) {
+                if (layerdef.id === '45') {
+                    //layer 45 hat gleiche URL
+                    url = layerdef.get('url');
+                }
+            });
+            this.set('url', url);
         },
         setEventValue: function (attributions, layer) {
             if (!layer) {
@@ -24,7 +33,7 @@ define([
             postmessage += '</wfs:GetFeature>';
             // TODO Implementieren von Intranet und Internet-URLs
             $.ajax({
-                url: Config.proxyURL + "?url=http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
+                url: Config.proxyURL + "?url=" + this.get('url'),
                 type: 'POST',
                 data: postmessage,
                 headers: {
