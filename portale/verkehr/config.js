@@ -1,4 +1,5 @@
 define(function () {
+    console.log(locations);
     var config = {
         allowParametricURL: true,
         view: {
