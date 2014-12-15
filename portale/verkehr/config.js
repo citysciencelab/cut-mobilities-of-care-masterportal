@@ -1,5 +1,4 @@
 define(function () {
-
     var config = {
         allowParametricURL: true,
         view: {
@@ -7,8 +6,11 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
-        styleConf: '../../style.json',
+        layerConf: locations.master + '/diensteapiFHHNET.json',
+        styleConf: locations.master + '/style.json',
+        printURL: locations.host + ':8680/mapfish_print_2.0/pdf6/info.json',
+        proxyURL: '/cgi-bin/proxy.cgi',
+        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -57,7 +59,6 @@ define(function () {
             {id: '50', visible: false, style: '50', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
         ],
-        styleConf: '../../style.json',
         attributions: true,
         menubar: true,
         mouseHover: false,
@@ -73,7 +74,6 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true
         },
-        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
             measure: true,
@@ -82,8 +82,6 @@ define(function () {
             orientation: false,
             active: 'gfi'
         },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
         orientation: true,
         poi: true
     }

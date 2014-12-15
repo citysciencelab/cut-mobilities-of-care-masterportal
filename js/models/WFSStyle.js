@@ -7,9 +7,10 @@ define([
 ], function (_, Backbone, ol, EventBus, Config) {
     var WFSStyle = Backbone.Model.extend({
         defaults: {
+            imagepath : locations.master + '/img/',
             subclass : 'Icon',
             // für Icon
-            imagesrc : '../../img/unknown.png',
+            imagename : 'unknown.png',
             imagewidth : 10,
             imageheight : 10,
             imagescale : 1,
@@ -109,7 +110,7 @@ define([
         },
         getSimpleStyle : function () {
             if (this.get('subclass') == 'Icon') {
-                var src = this.get('imagesrc');
+                var src = this.get('imagepath') + this.get('imagename');
                 var width = this.get('imagewidth');
                 var height = this.get('imageheight');
                 var scale = parseFloat(this.get('imagescale'));
@@ -121,7 +122,7 @@ define([
                 });
             }
             else if (this.get('subclass') == 'IconWithText') {
-                var src = this.get('imagesrc');
+                var src = this.get('imagepath') + this.get('imagename');
                 var width = this.get('imagewidth');
                 var height = this.get('imageheight');
                 var scale = parseFloat(this.get('imagescale'));

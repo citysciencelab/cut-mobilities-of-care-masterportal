@@ -2,7 +2,7 @@
     {
         "id" : "1711",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/krankenhaus.png",
+        "imagename" : "krankenhaus.png",
         "imagescale" : "1",
         "clusterscale" : "2",
         "clusteroffsety" : "2",
@@ -11,234 +11,227 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "2",
-        "subclass" : "Icon",
-        "src" : "../../img/unknown.png",
-        "width" : "10",
-        "height" : "10"
-    },
-    {
         "id" : "9",
         "name":"Bergwerk",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/bergwerk_10.png",
+        "imagename" : "bergwerk_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "3",
         "name":"Grube",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/grube_10.png",
+        "imagename" : "grube_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "5",
         "name":"Oberflächenform",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/oberflaechenform_10.png",
+        "imagename" : "oberflaechenform_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "6",
         "name":"Moor",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/moor_10.png",
+        "imagename" : "moor_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "7",
         "name":"Düne",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/duene_50px.png",
+        "imagename" : "duene_50px.png",
         "imagescale" : "0.9"
     },
     {
         "id" : "8",
         "name":"Watt",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/watt_10.png",
+        "imagename" : "watt_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "10",
         "name":"Unsichtbares Objekt",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/unsichtbares-objekt_10.png",
+        "imagename" : "unsichtbares-objekt_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "11",
         "name":"Geologisches Landesamt",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/geologisches_landesamt_10.png",
+        "imagename" : "geologisches_landesamt_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "12",
         "name":"Botanischer Garten",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/botanischer_garten_6-5.png",
+        "imagename" : "botanischer_garten_6-5.png",
         "imagescale" : "0.7"
     },
     {
         "id" : "13",
         "name":"Saurier",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/saurier_10.png",
+        "imagename" : "saurier_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "14",
         "name":"Wrack",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/wrack_10.png",
+        "imagename" : "wrack_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "15",
         "name":"Grotte",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/grotte_10.png",
+        "imagename" : "grotte_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "16",
         "name":"Wurt",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/wurt_10.png",
+        "imagename" : "wurt_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "17",
         "name":"Gebäude",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/gebaeude_10.png",
+        "imagename" : "gebaeude_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "18",
         "name":"Brunnen",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/brunnen_10.png",
+        "imagename" : "brunnen_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "19",
         "name":"Wasserbauobjekt",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/wasserbauobjekt_10.png",
+        "imagename" : "wasserbauobjekt_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "20",
         "name":"Brack",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/brack_10.png",
+        "imagename" : "brack_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "21",
         "name":"See",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/see_10.png",
+        "imagename" : "see_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "22",
         "name":"Gewässer",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/gewaesser_10.png",
+        "imagename" : "gewaesser_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "23",
         "name":"Besonderer Boden",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/besonderer_boden_6-5.png",
+        "imagename" : "besonderer_boden_6-5.png",
         "imagescale" : "0.7"
     },
     {
         "id" : "24",
         "name":"Austernbank",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/austernbank_10.png",
+        "imagename" : "austernbank_10.png",
         "imagescale" : "1.1"
     },
     {
         "id" : "25",
         "name":"Erdfall",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/erdfall_10.png",
+        "imagename" : "erdfall_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "26",
         "name":"Endmoräne",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/endmoraene_10.png",
+        "imagename" : "endmoraene_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "27",
         "name":"Grundmoräne",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/grundmoraene_10.png",
+        "imagename" : "grundmoraene_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "28",
         "name":"Findling",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/findling_10.png",
+        "imagename" : "findling_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "29",
         "name":"Strassenpflaster",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/strassenpflaster_10.png",
+        "imagename" : "strassenpflaster_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "30",
         "name":"Steinwall",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/steinwall_10.png",
+        "imagename" : "steinwall_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "31",
         "name":"Felsen",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/felsen_10.png",
+        "imagename" : "felsen_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "32",
         "name":"Grenzstein",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/grenzstein_10.png",
+        "imagename" : "grenzstein_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "33",
         "name":"Museum",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/museum_10.png",
+        "imagename" : "museum_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "34",
         "name":"Findlingskirche",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/findlingskirche_10.png",
+        "imagename" : "findlingskirche_10.png",
         "imagescale" : "0.5"
     },
     {
         "id" : "35",
         "name":"Denkmal",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/denkmal_10.png",
+        "imagename" : "denkmal_10.png",
         "imagescale" : "0.5"
     },
     {
@@ -348,7 +341,7 @@
     {
         "id" : "45",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/bikeandride.png",
+        "imagename" : "bikeandride.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "10",
@@ -360,7 +353,7 @@
     {
         "id" : "46",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/emobility_icon_gruen_rund.png",
+        "imagename" : "emobility_icon_gruen_rund.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "20",
@@ -372,7 +365,7 @@
     {
         "id" : "47",
         "subclass" : "IconWithText",
-        "imagesrc" : "../../img/baustelle_neu.png",
+        "imagename" : "baustelle_neu.png",
         "imagescale" : "1.1",
         "textscale" : 1,
         "textoffsetx" : "0",
@@ -384,7 +377,7 @@
     {
         "id" : "48",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/behindertenparken.png",
+        "imagename" : "behindertenparken.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "10",
@@ -396,7 +389,7 @@
     {
         "id" : "49",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/verkehrskam.png",
+        "imagename" : "verkehrskam.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "22",
@@ -408,7 +401,7 @@
     {
         "id" : "50",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/motorradparken.png",
+        "imagename" : "motorradparken.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "10",
@@ -420,7 +413,7 @@
     {
         "id" : "51",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/pur.png",
+        "imagename" : "pur.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "10",
@@ -432,7 +425,7 @@
     {
         "id" : "53",
         "subclass" : "Icon",
-        "imagesrc" : "../../img/bus_parken.png",
+        "imagename" : "bus_parken.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "10",
