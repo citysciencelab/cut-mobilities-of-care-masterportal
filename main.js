@@ -3,31 +3,36 @@
 * geoportal-hamburg = portal 1x nach oben + libs/lgvversion
 */
 if (window.location.host === 'wscd0096') {
-    var portal = window.location.href;
-    var master = portal.substr(0, portal.lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/'));
+    var locations = {
+        portal : window.location.href,
+        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/')),
+        host : window.location.origin
+    };
 }
-else if(window.location.host === 'geoportal-hamburg.de') {
-    var portal = window.location.href;
-    var master = portal.substr(0, portal.lastIndexOf('/')).substr(0, portal.substr(0, portal.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest';
+else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.host === 'geoportal-hamburg.de') {
+    var locations = {
+        portal : window.location.href,
+        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest',
+        host : window.location.origin
+    };
 }
-var host = window.location.origin;
 /*global require*/
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: host + '/libs/OpenLayers-3.0.0/build/ol-debug',
-        jquery: host + '/libs/jQuery-2.0.3/jquery.min',
-        underscore: host + '/libs/underscore-1.6.0/underscore.min',
-        backbone: host + '/libs/backbone-1.1.2/backbone.min',
-        text: host + '/libs/require-2.1.11/plugins/text-2.0.10/text',
-        bootstrap: host + '/libs/bootstrap-3.1.1/js/bootstrap.min',
-        proj4: host + '/libs/proj4-2.2.1/dist/proj4',
-        config: portal + 'config',
-        eventbus: master + '/js/EventBus',
-        views: master + '/js/views',
-        models: master + '/js/models',
-        collections: master + '/js/collections',
-        templates: master + '/templates'
+        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
+        jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
+        underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
+        backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
+        text: locations.host + '/libs/require-2.1.11/plugins/text-2.0.10/text',
+        bootstrap: locations.host + '/libs/bootstrap-3.1.1/js/bootstrap.min',
+        proj4: locations.host + '/libs/proj4-2.2.1/dist/proj4',
+        config: locations.portal + 'config',
+        eventbus: locations.master + '/js/EventBus',
+        views: locations.master + '/js/views',
+        models: locations.master + '/js/models',
+        collections: locations.master + '/js/collections',
+        templates: locations.master + '/templates'
     },
     shim: {
         bootstrap: {
