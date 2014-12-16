@@ -52,7 +52,7 @@ define([
             var gfiContent;
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], 'name');
-            var pContent = [], pTitles = [], pURLs = [];
+            var pContent = [], pTitles = [];
             for (var i=0; i < sortedParams.length; i+=1) {
                 if (sortedParams[i].typ === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
@@ -65,19 +65,9 @@ define([
                         pContent.push(content);
                         pTitles.push(sortedParams[i].name);
                     });
-                    if (sortedParams[i].url) {
-                        pURLs.push(sortedParams[i].url);
-                    }
-                    else if (sortedParams[i].source.source_) {
-                        pURLs.push(sortedParams[i].source.source_.format.featureType_);
-                    }
-                    else if (sortedParams[i].source){
-                        pURLs.push(sortedParams[i].source.format.featureType_);
-                    }
                 }
             }
             if (pContent.length > 0) {
-                this.set('gfiURLs', pURLs);
                 this.get('gfiOverlay').setPosition(params[1]);
                 this.set('gfiContent', pContent);
                 this.set('gfiTitles', pTitles);

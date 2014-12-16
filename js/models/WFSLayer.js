@@ -25,36 +25,12 @@ define([
         /**
          *
          */
-        setAttributionLayerSource: function () {
-            var getrequest = this.buildGetRequest();
-            // Finde layerIDs zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
-            var id = this.get('id');
-            var layerIDs = _.find(Config.layerIDs, function(num) {return num.id === id});
-            this.set('styleId', layerIDs.style);
-            this.set('clusterDistance', layerIDs.clusterDistance);
-            this.set('searchField', layerIDs.searchField);
-            this.set('styleField', layerIDs.styleField);
-            this.set('styleLabelField', layerIDs.styleLabelField);
-            // Lade Daten der Datenquelle
-            var pServerVector = new ol.source.ServerVector({
-                format: new ol.format.WFS({
-                    featureNS: this.get('featureNS'),
-                    featureType: this.get('featureType')
-                }),
-                loader: function (extent, resolution, projection) {
-                    // im Loader wird der Ajax-Request nicht bei Cluster aufgerufen, daher ausgelagert.
-                },
-                extractStyles: false,
-                /* experimental in OL3
-                strategy: ol.loadingstrategy.createTile(new ol.tilegrid.XYZ({
-                    maxZoom: 19
-                })),*/
-                projection: proj25832 //'EPSG:25832'
-            });
+        updateData: function () {
             $('#loader').show();
+            var getrequest = this.buildGetRequest();
             $.ajax({
                 url: Config.proxyURL + '?url=' + encodeURIComponent(getrequest),
-                async: false,
+                async: true,
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
@@ -63,14 +39,50 @@ define([
                         alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
                         return;
                     }
-                    pServerVector.addFeatures(pServerVector.readFeatures(data));
-                    this.styling(pServerVector, layerIDs);
+                    var wfsReader = new ol.format.WFS({
+                        featureNS : this.get('featureNS'),
+                        featureType : this.get('featureType')
+                    });
+                    if (this.get('source').distance_) { // Erkennungszeichen für Clustersource
+                        this.get('source').source_.addFeatures(wfsReader.readFeatures(data));
+                    }
+                    else {
+                        this.get('source').addFeatures(wfsReader.readFeatures(data));
+                    }
                 },
                 error: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
                     alert('Fehlermeldung beim Laden von Daten: \n' + data.responseText);
                 }
             });
+        },
+        setAttributionLayerSource: function () {
+            // Finde layerIDs zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
+            var id = this.get('id');
+            var layerIDs = _.find(Config.layerIDs, function(num) {return num.id === id});
+            this.set('styleId', layerIDs.style);
+            this.set('clusterDistance', layerIDs.clusterDistance);
+            this.set('searchField', layerIDs.searchField);
+            this.set('styleField', layerIDs.styleField);
+            this.set('styleLabelField', layerIDs.styleLabelField);
+
+            this.set('source', new ol.source.Vector({
+                projection: proj25832
+            }));
+            this.styling(this.get('source'), layerIDs);
+        },
+        setVisibility: function () {
+            EventBus.trigger('returnBackboneLayerForSearchbar', this);
+            var visibility = this.get('visibility');
+            if (visibility === true) {
+                if (this.get('layer').getSource().getFeatures().length === 0) {
+                    this.updateData();
+                }
+                this.get('layer').setVisible(true);
+            }
+            else {
+                this.get('layer').setVisible(false);
+            }
         },
         styling: function (pServerVector, layerIDs) {
             // NOTE Hier werden die Styles zugeordnet
@@ -115,13 +127,8 @@ define([
             this.set('source', pServerVector);
             this.set('style', function (feature, resolution) {
                 var stylelistmodel = StyleList.returnModelById(layerIDs.style);
-                try {
-                    var label = _.values(_.pick(feature.getProperties(), layerIDs.styleLabelField))[0].toString();
-                    return stylelistmodel.getCustomLabeledStyle(label);
-                }
-                catch (error) {
-                    this.setSimpleStyle(pServerVector, layerIDs);
-                }
+                var label = _.values(_.pick(feature.getProperties(), layerIDs.styleLabelField))[0].toString();
+                return stylelistmodel.getCustomLabeledStyle(label);
             });
         },
         setSimpleStyleForStyleField: function (pServerVector, layerIDs) {
@@ -161,7 +168,7 @@ define([
             });
         },
         /**
-         *
+         * wird von Layer.js aufgerufen
          */
         setAttributionLayer: function () {
             this.set('layer', new ol.layer.Vector({
