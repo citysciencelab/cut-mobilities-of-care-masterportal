@@ -39,7 +39,7 @@ define(function () {
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        proxyURL: '../../../cgi-bin/proxy.cgi',
         printTitle: 'Straßenbaumkataster'
     }
 
