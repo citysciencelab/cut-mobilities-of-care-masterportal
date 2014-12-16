@@ -2,6 +2,9 @@
 * master = portal 2x nach oben auf wscd0096
 * geoportal-hamburg = portal 1x nach oben + libs/lgvversion
 */
+if (window.location.href.charAt(window.location.href.length-1) === '#') {
+    window.location.href = window.location.href.substr(0, window.location.href.length-2);
+}
 if (window.location.host === 'wscd0096') {
     var locations = {
         portal : window.location.href,
