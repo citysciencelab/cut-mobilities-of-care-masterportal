@@ -9,21 +9,21 @@ if (window.location.host === 'wscd0096') {
     var locations = {
         portal : window.location.href,
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/')),
-        host : window.location.origin
+        host : window.location.protocol + '//' + window.location.host
     };
 }
 else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.host === 'geoportal-hamburg.de') {
     var locations = {
         portal : window.location.href,
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest',
-        host : window.location.origin
+        host : window.location.protocol + '//' + window.location.host
     };
 }
 /*global require*/
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
+        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol',
         jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
         underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
         backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
