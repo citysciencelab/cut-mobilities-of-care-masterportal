@@ -23,7 +23,7 @@ else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.h
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol',
+        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
         jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
         underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
         backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
