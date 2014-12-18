@@ -147,7 +147,14 @@ define([
             this.set('source', pCluster);
             this.set('style', function (feature, resolution) {
                 var styleFieldValue = _.values(_.pick(feature.get('features')[0].getProperties(), layerIDs.styleField))[0];
+                var size = feature.get('features').length;
                 var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                if (size>1){
+                	var stylelistmodel = StyleList.returnModelById(layerIDs.id + '_cluster');
+                	if(!stylelistmodel){
+                		var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                	}
+                }
                 return stylelistmodel.getClusterStyle(feature);
             });
         },

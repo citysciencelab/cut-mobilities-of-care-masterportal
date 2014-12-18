@@ -41,6 +41,9 @@ define([
             },this);
            geolocation.on('error', function() {
               alert('Standpunktbestimmung momentan nicht verfügbar!');
+               $(function () {
+                    $('#loader').hide();
+                });
             });
         },
         getPOI: function(distance){
