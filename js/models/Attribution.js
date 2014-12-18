@@ -65,12 +65,14 @@ define([
                             })
                         );
                         layer.get('layer').getSource().setAttributions(layerattributions);
-                        if (this.get('alreadySet') == false) {
-                            this.addAttributionControl();
-                        }
-
+                        layer.reload();
                     }
                 });
+                if (this.get('alreadySet') == false) {
+                    this.addAttributionControl();
+                }
+                EventBus.trigger(config.attribution.eventname, this, layer);
+                layer.reload();
                 if (config.attribution.timeout && config.attribution.timeout > 0){
                     setInterval(function() {
                         if (layer.get('layer').getVisible() === true) {
@@ -78,7 +80,6 @@ define([
                         }
                     }, config.attribution.timeout);
                 }
-                EventBus.trigger(config.attribution.eventname, this);
             }
         },
         addAttributionControl: function () {

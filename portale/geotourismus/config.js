@@ -11,26 +11,16 @@ define(function () {
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
             {id: '94', visible: true},
-            {id: '352', visible: true},
-            {id: '353', visible: true},
-            {id: '354', visible: true},
-            {id: '355', visible: true},
-            {id: '356', visible: true},
-            {id: '357', visible: true},
-            {id: '358', visible: true},
-            {id: '359', visible: true}
+            {id: '352', visible: true, style: ['5','6','7','8','352_cluster'], clusterDistance: 0, styleField :'Kategorie'},
+            {id: '353', visible: true, style: ['32','33','34','35','353_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '354', visible: true, style: ['10','354_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '355', visible: true, style: ['11','12','13','14','15','16','17','355_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '356', visible: true, style: ['3', '9','10','356_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '357', visible: true, style: ['18','19','20','21','22','357_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '358', visible: true, style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '359', visible: true, style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
         ],
         styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '352', style: ['5','6','7','8','352_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '353', style: ['32','33','34','35','353_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '354', style: ['10','354_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '355', style: ['11','12','13','14','15','16','17','355_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '356', style: ['9','10','356_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '357', style: ['18','19','20','21','22','357_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '358', style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {layer: '359', style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
-        ],
         menubar: true,
         isMenubarVisible: false,
         menu: {

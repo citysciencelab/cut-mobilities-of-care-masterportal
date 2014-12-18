@@ -16,10 +16,10 @@ define([
                 newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree);
             }
             else if (attrs.typ === 'WFS') {
-                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name);
+                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree);
             }
             else if (attrs.typ === 'GROUP') {
-                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name);
+                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name, attrs.displayInTree);
             }
             newLayer.set('visibility', attrs.defaultVisibility);
             newLayer.get('layer').setVisible(attrs.defaultVisibility);
@@ -37,49 +37,33 @@ define([
             var idArray = Config.layerIDs;
             var dienstArray = new Array();
             _.each(idArray, function(layerdef, index, list) {
-                // Defaultwert, falls visible nicht gesetzt
-                if (!_.has(layerdef, 'visible')) {
-                    layerdef.visible = false;
-                }
                 // GRUPPENLAYER weil Array
                 if (_.has(layerdef, 'id') && _.isArray(layerdef.id)) {
                     var layerdefs = new Array();
+                    //Childlayerattributierung
                     _.each(layerdef.id, function(childlayer, index, list) {
-                        var dienst = _.findWhere(response, {id: childlayer.id});
-                        if (childlayer.styles && childlayer.styles != '') {
-                            var uniqueid = childlayer.id + '_' + childlayer.styles;
-                        }
-                        else {
-                            var uniqueid = childlayer.id;
-                        }
-                        if (dienst) {
-                            if (childlayer.name && childlayer.name != '' && childlayer.name != 'nicht vorhanden') {
-                                var layername = childlayer.name;
-                            }
-                            else {
-                                var layername = dienst.name;
-                            }
-                            layerdefs.push({
-                                id: uniqueid,
-                                name: layername,
-                                dienst: dienst,
-                                styles: childlayer.styles
-                            });
-                        }
-                        else {
-                            alert('LayerID ' + childlayer + ' nicht in JSON gefunden.');
+                        var returnValue = returndienst(response, childlayer);
+                        if (returnValue) {
+                            layerdefs.push(returnValue);
                         }
                     });
-
+                    // Gruppenlayerattributierung
                     if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
                         var layername = layerdef.name;
                     }
                     else {
-                        var layername = dienst.name;
+                        var layername = returnValue[0].name;
+                    }
+                    if (!_.has(layerdef, 'visible') || layerdef.visible != true) {
+                        layerdef.visible = false;
+                    }
+                    if (!_.has(layerdef, 'displayInTree') || layerdef.displayInTree != false) {
+                        layerdef.displayInTree = true;
                     }
                     var returnValue = {
                          id: _.uniqueId('grouplayer_'),
                          name: layername,
+                         displayInTree: layerdef.displayInTree,
                          typ: 'GROUP',
                          defaultVisibility: layerdef.visible,
                          layerdefinitions: layerdefs
@@ -90,48 +74,50 @@ define([
                 }
                 //SINGLELAYER
                 else if (_.has(layerdef, 'id') && _.isString(layerdef.id)) {
-                    var dienst = _.findWhere(response, {id: layerdef.id});
-                    if (layerdef.styles && layerdef.styles != '') {
-                        var uniqueid = layerdef.id + '_' + layerdef.styles;
-                    }
-                    else {
-                        var uniqueid = layerdef.id;
-                    }
-                    if (dienst) {
-                        var display;
-                        if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
-                            var layername = layerdef.name;
-                        }
-                        else {
-                            var layername = dienst.name;
-                        }
-                        if (layerdef.displayInTree === undefined || layerdef.displayInTree === true) {
-                            display = true;
-                        }
-                        else {
-                            display = false;
-                        }
-                        var returnValue = {
-                            id: uniqueid,
-                            name: layername,
-                            displayInTree: display,
-                            typ: dienst.typ,
-                            defaultVisibility: layerdef.visible,
-                            dienst: dienst,
-                            styles: layerdef.styles
-                        }
+                    var returnValue = returndienst(response, layerdef);
+                    if (returnValue)
                         dienstArray.push(returnValue);
                     }
-                    else {
-                        alert(layerdef.id + ' nicht in JSON gefunden');
-                    }
-                }
-                else {
-                    alert('Ungültige Layerdefinition in config.js');
-                }
-
             });
             return dienstArray;
+
+            function returndienst (response, layerdef) {
+                var dienst = _.findWhere(response, {id: layerdef.id});
+                if (layerdef.styles && layerdef.styles != '') {
+                    var uniqueid = layerdef.id + '_' + layerdef.styles;
+                }
+                else {
+                    var uniqueid = layerdef.id;
+                }
+                if (dienst) {
+                    if (!_.has(layerdef, 'visible') || layerdef.visible != true) {
+                        layerdef.visible = false;
+                    }
+                    if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
+                        var layername = layerdef.name;
+                    }
+                    else {
+                        var layername = dienst.name;
+                    }
+                    if (!_.has(layerdef, 'displayInTree') || layerdef.displayInTree != false) {
+                        layerdef.displayInTree = true;
+                    }
+                    var returnValue = {
+                        id: uniqueid,
+                        name: layername,
+                        displayInTree: layerdef.displayInTree,
+                        typ: dienst.typ,
+                        defaultVisibility: layerdef.visible,
+                        dienst: dienst,
+                        styles: layerdef.styles
+                    };
+                    return returnValue;
+                }
+                else {
+                    alert(layerdef.id + ' nicht in JSON gefunden');
+                    return null
+                }
+            }
         },
         initialize: function () {
             EventBus.on('getLayersForPrint', this.sendVisibleWMSLayer, this);
@@ -186,10 +172,12 @@ define([
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
+         * SLD_BODY wird hier gesetzt. Wird in Print.js für das Drucken von gefilterten Objekten gebraucht.
          * args[0] = id, args[1] = SLD_Body
          */
         updateStyleByID: function (args) {
             this.get(args[0]).get('source').updateParams({'SLD_BODY': args[1]});
+            this.get(args[0]).set('SLDBody', args[1]);
         }
     });
 

@@ -42,12 +42,12 @@ define([
         checkLayer: function () {
             var map = this.get('map');
             // Lese Config-Optionen ein und speichere Ergebnisse
-            var wfsconfig = Config.wfsconfig;
+            var layerIDs = Config.layerIDs;
             var wfsList = new Array();
-            _.each(wfsconfig, function(element, key, list) {
+            _.each(layerIDs, function(element, key, list) {
                 if (_.has(element, 'mouseHoverField')) {
                     wfsList.push({
-                        layerId : element.layer,
+                        layerId : element.id,
                         fieldname : element.mouseHoverField
                     });
                 }
@@ -55,15 +55,12 @@ define([
             // Füge zugehörige Layer der wfsList hinzu
             map.getLayers().forEach(function (layer) {
                 if (layer.getProperties().typ === 'WFS') {
-                    var firstFeature = layer.getSource().getFeatures()[0];
-                    if (firstFeature) {
-                        var layerId = firstFeature.layerId;
-                        var wfslistlayer = _.find(wfsList, function(listlayer) {
-                            return listlayer.layerId === layerId
-                        });
-                        if (wfslistlayer) {
-                            wfslistlayer.layer = layer;
-                        }
+                    var layerId = layer.id;
+                    var wfslistlayer = _.find(wfsList, function(listlayer) {
+                        return listlayer.layerId === layerId
+                    });
+                    if (wfslistlayer) {
+                        wfslistlayer.layer = layer;
                     }
                 }
             }, this);
@@ -108,14 +105,13 @@ define([
             this.get('element').tooltip('show');
         },
         /**
-        * forEachFeatureAtPixel greift nur bei sichtbaren Features
+        * forEachFeatureAtPixel greift nur bei sichtbaren Features.
         * wenn 2. Parameter (layer) == null, dann kein Layer
         */
         newMouseHover: function (evt, map) {
             var pFeatureArray = new Array();
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
                 oldSelection = this.get('oldSelection');
-                this.set('newSelection', selection);
                 if (layer && oldSelection != selection) {
                     var selProps = selection.getProperties();
                     if (selProps.features) {
@@ -123,22 +119,39 @@ define([
                         _.each(list, function (element, index, list) {
                             pFeatureArray.push({
                                 attributes: element.getProperties(),
-                                layerId: element.layerId
+                                layerId: layer.id
                             });
                         });
                     }
                     else {
                         pFeatureArray.push({
                             attributes: selProps,
-                            layerId: selection.layerId
+                            layerId: layer.id
                         });
                     }
+                }
+            }, this, function (layer) {
+                var wfsList = this.get('wfsList');
+                if (wfsList) {
+                    var found = _.find(wfsList, function(layerlist) {
+                        return layerlist.layerId == layer.id;
+                    });
+                    if (found) {
+                        return layer;
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                else {
+                    return null;
                 }
             }, this);
             var wfsList = this.get('wfsList');
             var value = '';
-            var coord = new Array(); //coord wird im Moment nicht benutzt für MouseHover
+            var coord = new Array();
             if (pFeatureArray.length > 0) {
+                this.set('newSelection', pFeatureArray);
                 // für jedes gehoverte Feature...
                 _.each(pFeatureArray, function(element, index, list) {
                     if (value != '') {

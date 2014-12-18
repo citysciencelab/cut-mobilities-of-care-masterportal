@@ -1,44 +1,69 @@
-#gfiHeader {
-    margin: 8px 12px;
-}
-
-#gfiHeader ul {
-    margin: 0 auto;
-}
-
-#gfiTop {
-    float: left;
-    color: #777;
-}
-
 #gfiTitle {
     padding: 10px;
-    font-size: 12px;
+    font-size: 13px;
     background-color: rgba(0, 0, 0, 0.3);
     clear: both;
     color: #fff;
 }
 
 #gfiContent {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .popover {
     max-width: none;
-    min-width: 280px;
+    min-width: 250px;
     padding: 0px;
 }
 
-.close {
-    font-size: 24px;
+@media (max-width: 768px) {
+    .popover {
+        white-space: normal;
+    }
+    .close {
+        color: rgb(119, 119, 119);
+        font-size: 24px;
+        opacity: 1;
+        top: -5px;
+    }
+}
+
+@media (min-width: 768px) {
+    .popover {
+        white-space: nowrap;
+    }
+    .close {
+        color: rgb(119, 119, 119);
+        font-size: 24px;
+        opacity: 1;
+        top: -22px;
+    }
 }
 
 .pager {
-    margin: 0 auto;
+    height: auto;
 }
 
-.pager li > a {
-    padding: 1px 6px;
+.pager li {
+    color: rgb(119, 119, 119);
+    position: absolute;
+    width: 50%;
+    bottom: 0px;
+    font-size: 24px;
+}
+
+.pager li:hover {
+    opacity: 0.7;
+    color: #000;
+}
+
+.vorzurueckdisabled {
+    opacity: 0.2 !important;
+}
+
+.vorzurueck {
+    width:100%;
+    cursor: pointer;
 }
 
 .popover-content {

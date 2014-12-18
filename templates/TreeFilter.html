@@ -76,6 +76,10 @@
             <div id="diameterMax" class="col-xs-3">
                 <input type="text" class="form-control input-sm" value=<%= diameterMax %>>
             </div>
+            <br>
+            <% if (errors.diamterError !== undefined) { %>
+                <span id="diamterError" class="col-xs-7 col-xs-offset-5 treeFilterError"><%= errors.diamterError %></span>
+            <% } %>
         </div>
         <div class="form-group form-group-sm">
             <label class="control-label col-xs-5">Stammumfang[cm]</label>
@@ -88,8 +92,11 @@
             <div id="perimeterMax" class="col-xs-3">
                 <input type="text" class="form-control input-sm" value=<%= perimeterMax %>>
             </div>
+            <br>
+            <% if (errors.perimeterError !== undefined) { %>
+                <span id="perimeterError" class="col-xs-7 col-xs-offset-5 treeFilterError"><%= errors.perimeterError %></span>
+            <% } %>
         </div>
-        <div id="errorPerimeter" class="col-xs-7 col-xs-offset-5" style="float: right; font-size: 11px; color: #a94442;"></div>
         <div class="form-group form-group-sm">
             <div class="col-xs-12">
                 <button id="filterRemoveButton" class="btn btn-panel-submit col-xs-5" type="button">Aufheben</button>

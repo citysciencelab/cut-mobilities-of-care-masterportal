@@ -7,21 +7,21 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
+        layerConf: locations.master + '/diensteapiFHHNET.json',
+        styleConf: locations.master + '/style.json',
+        printURL: locations.host + ':8680/mapfish_print_2.0/',
+        proxyURL: '/cgi-bin/proxy.cgi',
+        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
-            {id: '1711', visible: true}
-        ],
-        styleConf: '../../style.json',
-        wfsconfig: [
-            {layer: '1711', style: '1', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
              filterOptions: [
                  {
                      'fieldName': 'teilnahme_geburtsklinik',
                      'filterType': 'combo',
                      'filterName': 'Geburtsklinik',
-                     'filterString': ['*','nimmt teil','nimmt nicht teil']
+                     'filterString': ['*','ja','nein']
                  },
                  {
                      'fieldName': 'teilnahme_notversorgung',
@@ -47,17 +47,14 @@ define(function () {
             wfsFeatureFilter: true,
             legend: false
         },
-        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         tools: {
             gfi: true,
-            measure: true,
+            measure: false,
             print: false,
-            coord: true,
+            coord: false,
             orientation: false,
             active: 'gfi'
-        },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
+        }
     }
 
     return config;

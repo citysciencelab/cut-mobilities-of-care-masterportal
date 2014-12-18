@@ -10,8 +10,10 @@ define(function () {
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
+            // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich
             {id: '5182', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
-            {id: '5182', visible: true, styles: "strassenbaumkataster"}
+            {id: '5182', visible: true, styles: "strassenbaumkataster"},
+            {id: '5183', visible: false, displayInTree: false},
         ],
         styleConf: '../../style.json',
         menubar: true,
@@ -37,7 +39,7 @@ define(function () {
             active: 'gfi'
         },
         printURL: 'http://wscd0096:8680/mapfish_print_2.0/',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        proxyURL: '../../../cgi-bin/proxy.cgi',
         printTitle: 'Straßenbaumkataster'
     }
 

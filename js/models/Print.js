@@ -76,12 +76,23 @@ define([
         setLayerToPrint: function (layers) {
             this.set('layerToPrint', []);
             _.each(layers, function (layer) {
+                // nur wichtig für treeFilter Zeile 80 - 88
+                var params = {};
+                var style = [];
+                if(layer.has('SLDBody')) {
+                    params.SLD_BODY = layer.get('SLDBody');
+                }
+                if(layer.get('id') === '5182_strassenbaumkataster_grau') {
+                    style.push('strassenbaumkataster_grau');
+                }
                 this.get('layerToPrint').push({
                     type: layer.get('typ'),
                     layers: layer.get('layers').split(),
                     baseURL: layer.get('url'),
                     format: "image/png",
-                    opacity: layer.get('opacity')
+                    opacity: layer.get('opacity'),
+                    customParams: params,
+                    styles: style
                 });
             }, this);
             this.setSpec();
@@ -122,8 +133,8 @@ define([
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 success: function (data) {
-                    window.open(data.getURL);
                     $('#loader').hide();
+                    window.open(data.getURL);
                 },
                 error: function (err) {
                     $('#loader').hide();

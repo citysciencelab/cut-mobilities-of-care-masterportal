@@ -22,7 +22,7 @@ define([
         },
         addTreeNode: function (node) {
             var layerView = new LayerView({model: node});
-            $('#tree').append(layerView.render().el);
+            $('#tree').prepend(layerView.render().el);
         }
     });
 

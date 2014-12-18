@@ -27,12 +27,12 @@ define([
         },
         readConfig: function () {
             // Lese Config-Optionen ein und speichere Ergebnisse
-            var wfsconfig = Config.wfsconfig;
+            var layerIDs = Config.layerIDs;
             var wfsList = new Array();
-            _.each(wfsconfig, function(element, key, list) {
+            _.each(layerIDs, function(element, key, list) {
                 if (_.has(element, 'filterOptions')) {
                     wfsList.push({
-                        layerId : element.layer,
+                        layerId : element.id,
                         filterOptions : element.filterOptions
                     });
                 }
@@ -45,16 +45,7 @@ define([
             var wfsList = this.get('wfsList');
             map.getLayers().forEach(function(layer) {
                 if (layer.getProperties().typ === 'WFS') {
-                    var firstFeature = layer.getSource().getFeatures()[0];
-                    if (firstFeature) {
-                        if (firstFeature.layerId) {
-                            //NOTE: bei nicht geclusterten WFS
-                            var layerID = firstFeature.layerId;
-                        }
-                        else if (firstFeature.getProperties().features) {
-                            //NOTE: bei geclusterten WFS
-                            var layerID = firstFeature.getProperties().features[0].layerId;
-                        }
+                    var layerID = layer.id;
                         if (layerID) {
                             var wfsListEntry = _.find(wfsList, function (ele) {
                                 return ele.layerId == layerID
@@ -73,7 +64,7 @@ define([
                                 }
                             }
                         }
-                    }
+//                    }
                 }
             }, this);
             this.set('wfsList', wfsList);

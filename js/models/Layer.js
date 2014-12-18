@@ -14,6 +14,10 @@ define([
             this.set('id', id);
             this.set('name', name);
             this.set('displayInTree', displayInTree);
+            // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
+            if (this.get('displayInTree') === false) {
+                this.set('gfiAttributes', false)
+            }
 
             // Übernehme Styleattribut, falls vorhanden
             if (_.isString(styles)) {
@@ -42,8 +46,30 @@ define([
             this.unset('datasets');
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
-            // TODO dieses ID verfahren überall umsetzen und nicht mehr über GetFeatures[0].getProperties().id
             this.get('layer').id = id;
+        },
+        // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
+        reload: function () {
+            function reloadLayer(singleLayer) {
+                if (singleLayer.get('typ') === 'WMS') {
+                    var params = singleLayer.get('layer').getSource().getParams();
+                    params.t = new Date().getMilliseconds();
+                    params.zufall = Math.random();
+                    singleLayer.get('layer').getSource().updateParams(params);
+                }
+                else if (singleLayer.get('typ') === 'WFS') {
+                    console.log(singleLayer);
+                    singleLayer.updateData();
+                }
+            }
+            if (this.get('typ') === 'GROUP') {
+                this.get('layer').getLayers().forEach(function (layer) {
+                    reloadLayer(this);
+                });
+            }
+            else {
+                reloadLayer(this);
+            }
         },
         setAttributions: function () {
             var datasets = this.get('datasets');
@@ -117,18 +143,11 @@ define([
             this.set({'opacity': opacity});
         },
         /**
-         *
+         * wird in WFSLayer und GroupLayer überschrieben
          */
         setVisibility: function () {
             var visibility = this.get('visibility');
             this.get('layer').setVisible(visibility);
-            //NOTE bei Gruppenlayern auch childLayer umschalten. Wichtig für Attribution
-            if (this.get('typ') === 'GROUP') {
-                this.get('layer').getLayers().forEach(function (childlayer) {
-                    childlayer.setVisible(visibility);
-                });
-            }
-            EventBus.trigger('returnBackboneLayerForSearchbar', this);
         },
         /**
          *
