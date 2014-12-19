@@ -31,7 +31,7 @@ define([
                     return num.attributes.name == kategorie;
                 });
                 if(distance<=maxDist){
-                    this.add(new PointOfInterest({"name": name, "kategorie": kategorie, "lage": lage, "xCoord": xCoord, "yCoord": yCoord, "distance": distance, "img": img.get('imagesrc')}));
+                    this.add(new PointOfInterest({"name": name, "kategorie": kategorie, "lage": lage, "xCoord": xCoord, "yCoord": yCoord, "distance": distance, "img": img.get('imagepath')+img.get('imagename')}));
                 }
             }, this);
         },
