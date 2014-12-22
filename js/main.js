@@ -78,9 +78,10 @@ require([
     }
 
     if (Config.menubar === true) {
-        require(['views/MenubarView', 'views/ToggleButtonView'], function (MenubarView, ToggleButtonView) {
+        require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
             new MenubarView();
             new ToggleButtonView();
+            new ZoomButtonsView();
             if (Config.menu.tools === true) {
                 if (Config.tools.coord === true) {
                     require(['views/CoordPopupView'], function (CoordPopupView) {
