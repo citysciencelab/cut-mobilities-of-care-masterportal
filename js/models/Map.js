@@ -42,6 +42,8 @@ define([
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
             EventBus.on('zoomToExtent', this.zoomToExtent, this);
+            EventBus.on('setZoomLevelUp', this.setZoomLevelUp, this);
+            EventBus.on('setZoomLevelDown', this.setZoomLevelDown, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
@@ -229,6 +231,14 @@ define([
         },
         zoomToExtent: function (extent) {
             this.get('view').fitExtent(extent, this.get('map').getSize());
+        },
+        setZoomLevelUp: function () {
+            var zoomLevel = this.get('view').getZoom();
+            this.get('view').setZoom(zoomLevel + 1);
+        },
+        setZoomLevelDown: function () {
+            var zoomLevel = this.get('view').getZoom();
+            this.get('view').setZoom(zoomLevel -1);
         },
          setPOICenter: function (center, zoom) {
             this.get('map').getView().setCenter(center);
