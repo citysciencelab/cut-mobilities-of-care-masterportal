@@ -16,6 +16,7 @@ else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.h
         host : window.location.origin
     };
 }
+
 /*global require*/
 require.config({
     waitSeconds: 60,
