@@ -124,6 +124,7 @@ define([
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
             EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
+            this.listenTo(this, 'change:visibility', this.sendVisibleWFSLayer, this);
 
             this.fetch({
                 cache: false,
