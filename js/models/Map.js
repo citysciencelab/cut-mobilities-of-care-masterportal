@@ -35,10 +35,13 @@ define([
          */
         initialize: function () {
             EventBus.on('activateClick', this.activateClick, this);
+            EventBus.on('addLayer', this.addLayer, this);
+            EventBus.on('removeLayer', this.removeLayer, this);
             EventBus.on('addOverlay', this.addOverlay, this);
             EventBus.on('removeOverlay', this.removeOverlay, this);
             EventBus.on('moveLayer', this.moveLayer, this);
             EventBus.on('setCenter', this.setCenter, this);
+            EventBus.on('zoomToExtent', this.zoomToExtent, this);
             EventBus.on('updatePrintPage', this.updatePrintPage, this);
             EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
             EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
@@ -149,6 +152,16 @@ define([
             });
         },
         /**
+        */
+        addLayer: function (layer) {
+            this.get('map').addLayer(layer);
+        },
+        /**
+        */
+        removeLayer: function (layer) {
+            this.get('map').removeLayer(layer);
+        },
+        /**
          */
         moveLayer: function (args) {
             var layers, index, layersCollection;
@@ -208,9 +221,14 @@ define([
             });
             EventBus.trigger('setGFIParams', [gfiParams, coordinate]);
         },
-        setCenter: function (value) {
-            this.get('map').getView().setCenter(value);
-            this.get('map').getView().setZoom(7);
+        setCenter: function (coord, zoomLevel) {
+            this.get('map').getView().setCenter(coord);
+            if (zoomLevel !== undefined) {
+                this.get('map').getView().setZoom(zoomLevel);
+            }
+        },
+        zoomToExtent: function (extent) {
+            this.get('view').fitExtent(extent, this.get('map').getSize());
         },
          setPOICenter: function (center, zoom) {
             this.get('map').getView().setCenter(center);
