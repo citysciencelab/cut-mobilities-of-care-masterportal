@@ -36,6 +36,14 @@ define([
             });
             this.set('layers', layers);
         },
+        setVisibility: function () {
+            var visibility = this.get('visibility');
+            this.get('layer').setVisible(visibility);
+            //NOTE bei Gruppenlayern auch childLayer umschalten. Wichtig für Attribution
+            this.get('layer').getLayers().forEach(function (childlayer) {
+                childlayer.setVisible(visibility);
+            });
+        },
         /**
          *
          */

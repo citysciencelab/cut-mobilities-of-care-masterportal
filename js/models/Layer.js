@@ -57,7 +57,10 @@ define([
                     params.zufall = Math.random();
                     singleLayer.get('layer').getSource().updateParams(params);
                 }
-                // TODO impelementieren eines WFS refresh
+                else if (singleLayer.get('typ') === 'WFS') {
+                    console.log(singleLayer);
+                    singleLayer.updateData();
+                }
             }
             if (this.get('typ') === 'GROUP') {
                 this.get('layer').getLayers().forEach(function (layer) {
@@ -140,18 +143,11 @@ define([
             this.set({'opacity': opacity});
         },
         /**
-         *
+         * wird in WFSLayer und GroupLayer überschrieben
          */
         setVisibility: function () {
             var visibility = this.get('visibility');
             this.get('layer').setVisible(visibility);
-            //NOTE bei Gruppenlayern auch childLayer umschalten. Wichtig für Attribution
-            if (this.get('typ') === 'GROUP') {
-                this.get('layer').getLayers().forEach(function (childlayer) {
-                    childlayer.setVisible(visibility);
-                });
-            }
-            EventBus.trigger('returnBackboneLayerForSearchbar', this);
         },
         /**
          *

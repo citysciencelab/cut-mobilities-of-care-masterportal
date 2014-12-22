@@ -11,7 +11,7 @@ define([
         model: GFIPopup,
         template: _.template(GFIPopupTemplate),
         events: {
-            'click .close': 'destroy',
+            'click .closegfi': 'destroy',
             'click .pager-right': 'renderNext',
             'click .pager-left': 'renderPrevious'
         },

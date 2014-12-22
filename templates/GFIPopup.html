@@ -1,16 +1,6 @@
-<div id="gfiHeader">
-    <span id="gfiTop">Objekt-Information</span>
-    <span class="close">&times;</span>
-    <% if(gfiContent.length > 1) { %>
-        <ul class="pager">
-            <li class="pager-left <% if(gfiCounter-gfiContent.length === 0) { print ('disabled') } %>"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li class="pager-right <% if(gfiContent.length-gfiCounter === gfiContent.length - 1) { print ('disabled') } %>"><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-        </ul>
-    <% } %>
-</div>
-
-<div id="gfiTitle">
+<div class="closegfi" id="gfiTitle">
     <strong><%= gfiTitles[gfiContent.length-gfiCounter] %></strong>
+        <div class="close glyphicon glyphicon-remove"></div>
 </div>
 
 <div id="gfiContent">
@@ -59,3 +49,10 @@
     <% })}; %>
     </table>
 </div>
+
+<% if(gfiContent.length > 1) { %>
+    <ul class="pager">
+        <li class="pager-left <%if(gfiCounter-gfiContent.length === 0) {print (' disabled') }%>" style="left: 0px;"><span class="vorzurueck glyphicon glyphicon-chevron-left<% if(gfiCounter-gfiContent.length === 0) {print (' vorzurueckdisabled ') }%>"></span></li>
+        <li class="pager-right <%if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' disabled') }%>" style="right: 0px;"><span class="vorzurueck glyphicon glyphicon-chevron-right<% if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' vorzurueckdisabled ') }%>"></span></li>
+    </ul>
+<% } %>
