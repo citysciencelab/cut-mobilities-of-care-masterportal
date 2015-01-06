@@ -12,8 +12,8 @@ define(function () {
             {id: '8', visible: false},
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich
             {id: '5182', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
-            {id: '5182', visible: true, styles: "strassenbaumkataster"},
-            {id: '5183', visible: false, displayInTree: false},
+            {id: '5182', visible: false, styles: "strassenbaumkataster"},
+            {id: '5183', visible: false, displayInTree: false}
         ],
         styleConf: '../../style.json',
         menubar: true,
@@ -29,7 +29,8 @@ define(function () {
             wfsFeatureFilter: false,
             legend: false
         },
-        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        bPlanURL: 'http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene?request=GetFeature&service=WFS&version=2.0.0',
         tools: {
             gfi: true,
             measure: false,
@@ -38,8 +39,8 @@ define(function () {
             orientation: false,
             active: 'gfi'
         },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/',
-        proxyURL: '../../../cgi-bin/proxy.cgi',
+        printURL: locations.host + ':8680/mapfish_print_2.0/',
+        proxyURL: '/cgi-bin/proxy.cgi',
         printTitle: 'Straßenbaumkataster'
     }
 

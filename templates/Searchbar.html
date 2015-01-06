@@ -1,12 +1,18 @@
-<form id="searchForm" class="navbar-form" role="search">
+<div id="searchForm" class="navbar-form" role="search">
     <div class="input-group">
-        <input id="searchInput" class="form-control" type="text" placeholder="Adresssuche" value="<%= searchString %>">
+        <input id="searchInput" class="form-control" type="text" name="text" placeholder="Was immer Sie wollen...SUCHEN Sie es!" value="<%= searchString %>">
         <div class="input-group-btn">
-            <button class="btn btn-default" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-search"></i>
-            </button>
+            <% if (searchString.length !== 0) { %>
+                <button type="button" class="btn btn-default btn-deleteSearch">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <% } %>
+                <button class="btn btn-default btn-search" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <ul class="dropdown-menu-search dropdown-menu-right">
+                </ul>
+            </div>
         </div>
     </div>
-    <div id="autoCompleteBody" class="list-group">
-    </div>
-</form>
+    

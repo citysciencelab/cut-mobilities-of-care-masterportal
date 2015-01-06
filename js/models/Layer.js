@@ -23,10 +23,7 @@ define([
             if (_.isString(styles)) {
                 this.set('styles', styles);
             }
-            // Trigger in Searchbar
-            EventBus.on('getBackboneLayerForSearchbar', function() {
-                EventBus.trigger('returnBackboneLayerForSearchbar', this);
-            }, this);
+
             EventBus.on('getBackboneLayerForAttribution', function() {
                 EventBus.trigger('returnBackboneLayerForAttribution', this);
             }, this);
@@ -58,7 +55,6 @@ define([
                     singleLayer.get('layer').getSource().updateParams(params);
                 }
                 else if (singleLayer.get('typ') === 'WFS') {
-                    console.log(singleLayer);
                     singleLayer.updateData();
                 }
             }

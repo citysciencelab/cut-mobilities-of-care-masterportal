@@ -185,6 +185,9 @@ define([
                 style: this.get('style'),
                 gfiAttributes: this.get('gfiAttributes')
             }));
+            this.get('layer').once('render', function() { // triggert einmalig wenn gerendert wird
+                EventBus.trigger('getVisibleWFSLayer');
+            });
         },
         buildGetRequest : function () {
             // Stelle GetRequest zusammen
