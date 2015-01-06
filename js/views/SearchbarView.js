@@ -6,7 +6,7 @@ define([
     "text!templates/Searchbar.html",
     "text!templates/SearchbarRecommendedList.html",
     "text!templates/SearchbarHitList.html",
-    "models/Searchbar_new",
+    "models/Searchbar",
     "eventbus",
     "config"
     ], function ($, _, Backbone, ol, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config) {
