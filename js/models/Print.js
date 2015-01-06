@@ -105,7 +105,8 @@ define([
                 layout: $('#layoutField option:selected').html(),
                 srs: "EPSG:25832",
                 units: "m",
-                outputFilename: "test",
+                // NOTE über config steuern
+                // outputFilename: "test",
                 outputFormat: "pdf",
                 layers: this.get('layerToPrint'),
                 pages: [
