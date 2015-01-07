@@ -82,22 +82,36 @@ define([
             return dienstArray;
 
             function returndienst (response, layerdef) {
-                var dienst = _.findWhere(response, {id: layerdef.id});
+                // NOTE falls die ID aus mehreren Layern besteht
+                var layers = layerdef.id.split(',');
+                var dienst = _.findWhere(response, {id: layers[0]});
                 if (layerdef.styles && layerdef.styles != '') {
-                    var uniqueid = layerdef.id + '_' + layerdef.styles;
+                    // var uniqueid = layerdef.id + '_' + layerdef.styles;
+                    var uniqueid = layers[0] + '_' + layerdef.styles;
                 }
                 else {
-                    var uniqueid = layerdef.id;
+                    // var uniqueid = layerdef.id;
+                    var uniqueid = layers[0];
                 }
                 if (dienst) {
+                    var layername;
                     if (!_.has(layerdef, 'visible') || layerdef.visible != true) {
                         layerdef.visible = false;
                     }
                     if (layerdef.name && layerdef.name != '' && layerdef.name != 'nicht vorhanden') {
-                        var layername = layerdef.name;
+                        layername = layerdef.name;
+                    }
+                    else if (layers.length > 1) {
+                        layername = dienst.datasets[0].md_name;
+                        var layerList = "";
+                        _.each(layers, function (layer) {
+                            var obj = _.findWhere(response, {id: layer});console.log(obj.layers);
+                            layerList += "," + obj.layers;
+                        });
+                        dienst.layers = layerList.slice(1, layerList.length);
                     }
                     else {
-                        var layername = dienst.name;
+                        layername = dienst.name;
                     }
                     if (!_.has(layerdef, 'displayInTree') || layerdef.displayInTree != false) {
                         layerdef.displayInTree = true;

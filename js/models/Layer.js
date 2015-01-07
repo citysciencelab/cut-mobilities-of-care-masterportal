@@ -10,6 +10,7 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
+
         initialize: function (dienst, styles, id, name, displayInTree, opacity) {
             this.set('id', id);
             this.set('name', name);

@@ -8,13 +8,19 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
-        layerIDs: [
-            {id: '8', visible: false},
+        layerConf: '../../diensteapiFHHNET_07012015.json',
+        layerIDs:
+        [
             {id: '453', visible: true},
-            {id: '1346', visible: false},
+            {id: '8', visible: false},
+            {id: '521,522,523,524,525,526,527,528,529,530,531,532,533,534,535,536', visible: false},
+            {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
+            {id: '1152,1153,1154,1155,1156,1157,1158,1159,1160,1161,1162,1163', visible: false},
+            {id: '1409,1410,1411,1412,1413,1414,1415,1416', visible: false},
+            {id: '433,434', visible: false},
+            {id: '1205', visible: false},
             {id: '1347', visible: true},
-            {id: '1205', visible: false}
+            {id: '1346', visible: true}
         ],
         styleConf: '../../style.json',
         menubar: true,
