@@ -10,8 +10,8 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
-        initialize: function (dienst, styles, id, name, displayInTree) {
-            console.log(id);
+
+        initialize: function (dienst, styles, id, name, displayInTree, opacity) {
             this.set('id', id);
             this.set('name', name);
             this.set('displayInTree', displayInTree);
@@ -37,8 +37,8 @@ define([
             this.get('layer').setVisible(false);
             this.set('visibility', false);
             this.set('settings', false);
-            this.set('transparence', 0);
-
+            this.set('transparence', opacity);
+            this.updateOpacity();
             // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
             this.setAttributions();
             this.unset('datasets');

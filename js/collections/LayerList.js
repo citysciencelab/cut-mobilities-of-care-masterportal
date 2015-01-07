@@ -13,7 +13,7 @@ define([
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
-                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree);
+                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             else if (attrs.typ === 'WFS') {
                 newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree);
@@ -74,9 +74,6 @@ define([
                 }
                 //SINGLELAYER
                 else if (_.has(layerdef, 'id') && _.isString(layerdef.id)) {
-                    // console.log(layerdef.id);
-                    // var layers = layerdef.id.split(',');
-                    // console.log(layers);
                     var returnValue = returndienst(response, layerdef);
                     if (returnValue)
                         dienstArray.push(returnValue);
@@ -105,26 +102,22 @@ define([
                         layername = layerdef.name;
                     }
                     else if (layers.length > 1) {
-                        console.log(dienst);
                         layername = dienst.datasets[0].md_name;
                         var layerList = "";
                         _.each(layers, function (layer) {
                             var obj = _.findWhere(response, {id: layer});console.log(obj.layers);
-                            // dienst.layers += ',' + obj.layers ;
                             layerList += "," + obj.layers;
-                            // console.log(obj.layers);
                         });
-                        // console.log(dienst.layers);
-                        console.log(layerList.slice(1, layerList.length));
-                        // console.log(layerdef.id);
                         dienst.layers = layerList.slice(1, layerList.length);
-                        // console.log(dienst.layers);
                     }
                     else {
                         layername = dienst.name;
                     }
                     if (!_.has(layerdef, 'displayInTree') || layerdef.displayInTree != false) {
                         layerdef.displayInTree = true;
+                    }
+                    if (!_.has(layerdef, 'opacity') ) {
+                        layerdef.opacity = 0;
                     }
                     var returnValue = {
                         id: uniqueid,
@@ -133,8 +126,9 @@ define([
                         typ: dienst.typ,
                         defaultVisibility: layerdef.visible,
                         dienst: dienst,
-                        styles: layerdef.styles
-                    };console.log(returnValue);
+                        styles: layerdef.styles,
+                        opacity: layerdef.opacity
+                    };
                     return returnValue;
                 }
                 else {
@@ -148,6 +142,7 @@ define([
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
             EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
+            EventBus.on('getVisibleWFSLayerPOI', this.sendVisibleWFSLayerPOI, this);
             this.listenTo(this, 'change:visibility', this.sendVisibleWFSLayer, this);
 
             this.fetch({
@@ -188,6 +183,9 @@ define([
          */
         sendVisibleWFSLayer: function () {
             EventBus.trigger('sendVisibleWFSLayer', this.getVisibleWFSLayer());
+        },
+        sendVisibleWFSLayerPOI: function () {
+            EventBus.trigger('sendVisibleWFSLayerPOI', this.getVisibleWFSLayer());
         },
         /**
          *

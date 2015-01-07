@@ -38,7 +38,7 @@ define([
         },
         toggleLegendWin: function (){
             var map = this.model.get('map');
-            var layersVisible, gfiParams = [], layers;
+            var layersVisible, legendParams = [], layers;
             layers = map.getLayers().getArray();
             layersVisible = _.filter(layers, function (element) {
                 // NOTE GFI-Filter Nur Sichtbar
@@ -46,15 +46,23 @@ define([
             });
             _.each(layersVisible, function (element) {
                 if (element.getProperties().typ === 'WFS') {
-                    gfiParams.push({
+                    legendParams.push({
                         typ: 'WFS',
                         source: element.getSource(),
                         name: element.get('name'),
                         attributes: element.get('gfiAttributes')
                     });
                 }
+                else if (element.getProperties().typ === 'WMS') {
+                    legendParams.push({
+                        typ:'WMS',
+                        source:element.getSource(),
+                        name: element.get('name'),
+                        attributes: element.get('gfiAttributes')
+                    })
+                }
             });
-            this.show(gfiParams);
+            this.show(legendParams);
         },
         setMap: function (map) {
             this.model.set('map', map);
@@ -64,4 +72,3 @@ define([
     return LegendView;
 });
 
-            //EventBus.trigger('showLegend', gfiParams);

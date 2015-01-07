@@ -1,4 +1,4 @@
-[
+﻿[
    {
       "id" : "8",
       "name" : "Luftbilder DOP 10",
@@ -13,7 +13,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -1394,7 +1394,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -8987,13 +8987,13 @@
    },
    {
       "id" : "433",
-      "name" : "Sozerhvo Inkraft",
+      "name" : "Soziale Erhaltungsverordnungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_SozErhVO/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -9021,13 +9021,13 @@
    },
    {
       "id" : "434",
-      "name" : "Sozerhvo Inaufstellung",
+      "name" : "Soziale Erhaltungsverordnungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_SozErhVO/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "2",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -16031,7 +16031,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -16673,7 +16673,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -27054,7 +27054,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -27873,7 +27873,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -28407,7 +28407,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -28895,13 +28895,13 @@
    },
    {
       "id" : "1205",
-      "name" : "Erhaltungsverordnung",
+      "name" : "Städtebauliche Erhaltungsverodnungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_DIP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "5",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -41538,14 +41538,36 @@
       "datasets" : []
    },
    {
-        "id": "extern1",
-        "name": "HVV Bahnlinien",
-        "url": "http://extmap.hbt.de/geoserver/geofox_workspace/wms",
-        "typ": "WMS",
-        "layers": "geofoxdb_strecken_normal",
-        "format": "image/png",
-        "version": "1.3.0",
-        "datasets" : [],
-        "singleTile": "nicht vorhanden"
-    }
+       "id" : "5183",
+       "name" : "Strassenbaumkataster",
+       "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hh_baumkataster/service/wms",
+       "typ" : "WMS",
+       "layers" : "0",
+       "format" : "nicht vorhanden",
+       "version" : "1.1.1",
+       "gfiAttributes": {
+           "gattung": "Gattung",
+           "art": "Baumart",
+           "pflanzjahr": "Pflanzjahr",
+           "stammumfangzahl": "Stammumfang",
+           "kronendmzahl": "Kronendurchmesser",
+           "strasse": "Straße"
+       },
+       "datasets" : [
+           {
+               "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
+               "rs_id" : "HMDK#C1C61928-C602-4E37-AF31-2D23901E2540",
+               "md_name" : "Straßenbaumkataster Hamburg",
+               "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+               "kategorie_opendata" : [
+                   "Umwelt und Klima"
+               ],
+               "filter" : [
+                   "hmbtg",
+                   "#opendata_hh#"
+               ]
+           }
+       ],
+       "singleTile" : "nicht vorhanden"
+   }
 ]
