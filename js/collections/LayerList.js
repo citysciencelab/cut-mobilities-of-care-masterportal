@@ -128,6 +128,7 @@ define([
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
             EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
+            EventBus.on('getVisibleWFSLayerPOI', this.sendVisibleWFSLayerPOI, this);
             this.listenTo(this, 'change:visibility', this.sendVisibleWFSLayer, this);
 
             this.fetch({
@@ -168,6 +169,9 @@ define([
          */
         sendVisibleWFSLayer: function () {
             EventBus.trigger('sendVisibleWFSLayer', this.getVisibleWFSLayer());
+        },
+        sendVisibleWFSLayerPOI: function () {
+            EventBus.trigger('sendVisibleWFSLayerPOI', this.getVisibleWFSLayer());
         },
         /**
          *
