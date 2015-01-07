@@ -54,7 +54,7 @@ require.config({
 require([
     'config',
     'jquery'
-], function (Config, _){
+], function (Config, $){
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
         require(['models/ParametricURL'], function (ParametricURL) {
             new ParametricURL();
@@ -119,8 +119,8 @@ require([
                 });
             }
             if (Config.menu.wfsFeatureFilter === true) {
-                require(['views/wfsFeatureFilterView'], function (wfsFeatureFilterView) {
-                    new wfsFeatureFilterView();
+                require(['views/wfsFeatureFilterView'], function (WFSFeatureFilterView) {
+                    new WFSFeatureFilterView();
                 });
             }
             if (Config.orientation === true) {

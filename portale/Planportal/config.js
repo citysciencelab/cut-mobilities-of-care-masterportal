@@ -2,6 +2,7 @@
 define(function () {
 
     var config = {
+        allowParametricURL: false,
         view: {
             center: [565874, 5934140], // Rathausmarkt
             resolution: 15.874991427504629, // 1:60.000
@@ -30,7 +31,8 @@ define(function () {
             wfsFeatureFilter: false,
             legend: false
         },
-        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        bPlanURL: 'http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene?request=GetFeature&service=WFS&version=2.0.0',
         tools: {
             gfi: true,
             measure: true,
@@ -39,8 +41,8 @@ define(function () {
             orientation: false,
             active: 'gfi'
         },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi'
+        printURL: locations.host + ':8680/mapfish_print_2.0/',
+        proxyURL: '/cgi-bin/proxy.cgi',
     }
 
     return config;
