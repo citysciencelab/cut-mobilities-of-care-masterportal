@@ -30,27 +30,30 @@ define(function () {
              ],
              name: 'Verkehrsbelastung auf Autobahnen', visible: true
             },
-            {id: 'extern1', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
+            {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
              [
                 {
-                    id: 'extern1',
+                    id: '1935',
                     styles: 'geofox-bus',
                     name: "Bus1"
                 },
                 {
-                    id: 'extern1',
+                    id: '1935',
                     styles: 'geofox_BusName',
                     name: "Bus2"
                 }
              ],
              visible: false, name: 'HVV Buslinien'
             },
-            {id: 'extern1', visible: false, styles: 'geofox_Faehre', name: "Fährverbindungen"},
-            {id: 'extern1', visible: false, styles: 'geofox_stations', name: "HVV Stationen"},
+            {id: '1935', visible: false, styles: 'geofox_Faehre', name: "Fährverbindungen"},
+            {id: '1935', visible: false, styles: 'geofox_stations', name: "HVV Stationen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
             {id: '49', visible: false, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
-            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
+            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost', attribution: {
+                eventname: 'aktualisierebaustellen',
+                timeout: (30 * 60000)
+            }},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
 
