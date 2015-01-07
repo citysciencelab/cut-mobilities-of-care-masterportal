@@ -13,7 +13,7 @@ define([
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
-                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree);
+                newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             else if (attrs.typ === 'WFS') {
                 newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree);
@@ -102,6 +102,9 @@ define([
                     if (!_.has(layerdef, 'displayInTree') || layerdef.displayInTree != false) {
                         layerdef.displayInTree = true;
                     }
+                    if (!_.has(layerdef, 'opacity') ) {
+                        layerdef.opacity = 0;
+                    }
                     var returnValue = {
                         id: uniqueid,
                         name: layername,
@@ -109,7 +112,8 @@ define([
                         typ: dienst.typ,
                         defaultVisibility: layerdef.visible,
                         dienst: dienst,
-                        styles: layerdef.styles
+                        styles: layerdef.styles,
+                        opacity: layerdef.opacity
                     };
                     return returnValue;
                 }

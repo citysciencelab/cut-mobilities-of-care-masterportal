@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!templates/Orientation.html',
-    'models/Orientation'
-], function ($, _, Backbone, OrientationTemplate, Orientation) {
+    'models/Orientation',
+    'config'
+], function ($, _, Backbone, OrientationTemplate, Orientation,Config) {
 
     var OrientationView = Backbone.View.extend({
         model: Orientation,
@@ -21,8 +22,8 @@ define([
             //var attr = this.model.toJSON();
             //this.getOrientation();
             //$('#toggleRow').append(this.$el.html(this.template(attr)));
-
-            $('#toggleRow').append(this.$el.html(this.template));
+            var attr=Config;
+            $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
         getOrientation: function (){
             this.model.setOrientation("stdPkt");
