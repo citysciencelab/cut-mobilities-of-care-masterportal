@@ -41536,5 +41536,16 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : []
-   }
+   },
+   {
+        "id": "extern1",
+        "name": "HVV Bahnlinien",
+        "url": "http://extmap.hbt.de/geoserver/geofox_workspace/wms",
+        "typ": "WMS",
+        "layers": "geofoxdb_strecken_normal",
+        "format": "image/png",
+        "version": "1.3.0",
+        "datasets" : [],
+        "singleTile": "nicht vorhanden"
+    }
 ]

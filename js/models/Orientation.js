@@ -13,7 +13,7 @@ define([
         initialize: function () {
             EventBus.on('setOrientation', this.setOrientation, this);
             EventBus.on('getPOI', this.getPOI, this);
-            EventBus.on('sendVisibleWFSLayer', this.getPOIParams, this);
+            EventBus.on('sendVisibleWFSLayerPOI', this.getPOIParams, this);
         },
         setOrientation: function (btn) {
             proj4326=ol.proj.get('EPSG:4326');
@@ -52,7 +52,7 @@ define([
             var circleExtent=circle.getExtent();
             var circleCoord = circle.getCenter();
             this.set('circleExtent', circleExtent);
-            EventBus.trigger('getVisibleWFSLayer', this);
+            EventBus.trigger('getVisibleWFSLayerPOI', this);
         },
         getPOIParams: function(visibleWFSLayers){
             var featureArray = [];
