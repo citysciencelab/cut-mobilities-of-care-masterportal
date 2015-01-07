@@ -370,12 +370,14 @@ define([
                 this.get("isSearchReady").set("featureSearch", false);
                 var featureArray = [];
                 _.each(layermodels, function (layer) {
-                    var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
-                    if (_.has(layer.attributes, "searchField") === true) {
-                        var features = layer.get("source").getFeatures();
-                        _.each(features, function (feature) {
-                            featureArray.push({"name": feature.get("name"), "type": "Krankenhaus", "coordinate": feature.getGeometry().getCoordinates(), "imageSrc": imageSrc, "id":  feature.get("name").replace(/ /g, "") +  layer.get("name")});
-                        });
+                    if (_.has(layer.attributes, "searchField") === true && layer.get('searchField') != '') {
+                        var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
+                        if (imageSrc) {
+                            var features = layer.get("source").getFeatures();
+                            _.each(features, function (feature) {
+                                featureArray.push({"name": feature.get("name"), "type": "Krankenhaus", "coordinate": feature.getGeometry().getCoordinates(), "imageSrc": imageSrc, "id":  feature.get("name").replace(/ /g, "") +  layer.get("name")});
+                            });
+                        }
                     }
                 });
                 this.pushHits("features", featureArray);
