@@ -11,6 +11,7 @@ define([
      */
     var Layer = Backbone.Model.extend({
         initialize: function (dienst, styles, id, name, displayInTree) {
+            console.log(id);
             this.set('id', id);
             this.set('name', name);
             this.set('displayInTree', displayInTree);
