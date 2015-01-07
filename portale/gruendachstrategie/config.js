@@ -2,11 +2,11 @@
 define(function () {
 
     var config = {
-        allowParametricURL: true,
+        allowParametricURL: false,
         view: {
             center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
-            scale: 60000 // für print.js benötigt
+            resolution: 26.458319045841044, // // 1:100.000
+            scale: 100000 // für print.js benötigt
         },
         layerConf: locations.master + '/diensteapiINTERNET.json',
         styleConf: locations.master + '/style.json',
@@ -21,7 +21,7 @@ define(function () {
         ],
         styleConf: '../../style.json',
         menubar: true,
-        isMenubarVisible: false,
+        isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,

@@ -50,8 +50,7 @@ define([
                         typ: 'WFS',
                         source: element.getSource(),
                         name: element.get('name'),
-                        attributes: element.get('gfiAttributes'),
-                        legendURL:element.get('legendURL')
+                        attributes: element.get('gfiAttributes')
                     });
                 }
                 else if (element.getProperties().typ === 'WMS') {
@@ -59,7 +58,7 @@ define([
                         typ:'WMS',
                         source:element.getSource(),
                         name: element.get('name'),
-                        attributes: element.get('gfiAttributes'),
+                        attributes: element.get('gfiAttributes')
                     })
                 }
             });
