@@ -1,6 +1,6 @@
 <div id="searchForm" class="navbar-form" role="search">
     <div class="input-group">
-        <input id="searchInput" class="form-control" type="text" name="text" placeholder="Was immer Sie wollen...SUCHEN Sie es!" value="<%= searchString %>">
+        <input id="searchInput" class="form-control" type="text" name="text" placeholder="<%= placeholder %>" value="<%= searchString %>">
         <div class="input-group-btn">
             <% if (searchString.length !== 0) { %>
                 <button type="button" class="btn btn-default btn-deleteSearch">
@@ -15,4 +15,3 @@
             </div>
         </div>
     </div>
-    

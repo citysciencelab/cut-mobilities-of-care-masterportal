@@ -46,6 +46,7 @@ define([
             *
             */
             "defaults": {
+                placeholder: Config.searchBar.placeholder,
                 searchString: "",   // der aktuelle String in der Suchmaske
                 hitList: [],
                 isOnlyOneStreet: false, // Wenn true --> Hausnummernsuche startet
