@@ -160,7 +160,7 @@ define([
         setWMSPopupContent: function (params) {
             var pgfi = [];
             $.ajax({
-                url: 'http://wscd0096/cgi-bin/proxy.cgi?url=' + encodeURIComponent(params.url),
+                url: Config.proxyURL + '?url=' + encodeURIComponent(params.url),
                 async: false,
                 type: 'GET',
                 context: this,  // das model
