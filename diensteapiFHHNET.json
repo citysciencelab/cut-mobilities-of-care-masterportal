@@ -1,7 +1,7 @@
 [
    {
       "id" : "8",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 10",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP10/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
@@ -1382,13 +1382,13 @@
    },
    {
       "id" : "94",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 20",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP20/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -2321,7 +2321,7 @@
    },
    {
       "id" : "148",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 10 (belaubt)",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP10_belaubt/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
@@ -9572,7 +9572,7 @@
    },
    {
       "id" : "453",
-      "name" : "Geobasisdaten",
+      "name" : "Stadtplan",
       "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
       "typ" : "WMS",
       "layers" : "geobasisdaten",
@@ -16019,13 +16019,13 @@
    },
    {
       "id" : "756",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 20 (belaubt)",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP20_belaubt/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -27042,13 +27042,13 @@
    },
    {
       "id" : "1107",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 40",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP40/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -28395,13 +28395,13 @@
    },
    {
       "id" : "1169",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 40 (belaubt)",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP40_belaubt/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -33280,6 +33280,278 @@
       ]
    },
    {
+      "id" : "1409",
+      "name" : "Apro Flächen",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1410",
+      "name" : "Apro Symbole",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1411",
+      "name" : "Flächen Mit Klärungsbedarf",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "2",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1412",
+      "name" : "Wertvolle Einzelbiotope",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "3",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1413",
+      "name" : "Verbindungsbiotope",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "4",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1414",
+      "name" : "Eignungsgebiete Für Windenergieanlagen",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "5",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1415",
+      "name" : "Natura 2000",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "6",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1416",
+      "name" : "Aubs Änderungen",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "7",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "rs_id" : "HMDK#B8F6865A-1790-4B9D-987E-AF97B88E84D3",
+            "md_name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
       "id" : "1423",
       "name" : "Kulturbehörde  Kb",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/LIG_Grundbesitz_int/MapServer/WmsServer",
@@ -35210,6 +35482,710 @@
       "datasets" : []
    },
    {
+      "id" : "1926",
+      "name" : "Dynamic Stations",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:dynamic_stations",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1927",
+      "name" : "Geofoxdb Bundr",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_bundr",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1928",
+      "name" : "Geofoxdb Cambio",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_cambio",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1929",
+      "name" : "Geofoxdb Europcar",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_europcar",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1930",
+      "name" : "Geofoxdb Pundr",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_pundr",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1931",
+      "name" : "Geofoxdb Servicestellen",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_servicestellen",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1932",
+      "name" : "Geofoxdb Stadtrad",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_stadtrad",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1933",
+      "name" : "Haltestellen",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_stations",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1934",
+      "name" : "Nachtfahrplan Wochentags",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_strecken_nacht",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1935",
+      "name" : "Normalfahrplan",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_strecken_normal",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1936",
+      "name" : "Sonderfahrplan",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_strecken_sonderfahrplan",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1937",
+      "name" : "Nachtfahrplan Wochenende",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_strecken_we_nacht",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1938",
+      "name" : "Geofoxdb Zahlgrenzen",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1939",
+      "name" : "Geofoxdb Zahlgrenzen Gedehnt",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_gedehnt",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1940",
+      "name" : "Geofoxdb Zahlgrenzen Gedehnt Nacht",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_gedehnt_nacht",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1941",
+      "name" : "Geofoxdb Zahlgrenzen Gedehnt Normal",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_gedehnt_normal",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1942",
+      "name" : "Geofoxdb Zahlgrenzen Gedehnt Sonderfahrplan",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_gedehnt_sonderfahrplan",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1943",
+      "name" : "Geofoxdb Zahlgrenzen Gedehnt We Nacht",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_gedehnt_we_nacht",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1944",
+      "name" : "Geofoxdb Zahlgrenzen Nacht",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_nacht",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1945",
+      "name" : "Geofoxdb Zahlgrenzen Normal",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_normal",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1946",
+      "name" : "Geofoxdb Zahlgrenzen Sonderfahrplan",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_sonderfahrplan",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1947",
+      "name" : "Geofoxdb Zahlgrenzen We Nacht",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hvv",
+      "typ" : "WMS",
+      "layers" : "geofox_workspace:geofoxdb_zahlgrenzen_we_nacht",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
+            "rs_id" : "HMDK#418f6d9e-675c-493c-b56b-ea155db99464",
+            "md_name" : "HVV Streckennetz für Bahn-, Bus- und Fährlinien Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
       "id" : "1948",
       "name" : "Festgestellte Änderungen Berichtigungen Planfeststellungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
@@ -36089,8 +37065,9 @@
       "gfiAttributes" : {
          "name" : "Name",
          "art" : "Art",
+         "einfahrt" : "Einfahrt",
          "einfahrtshoehe_in_meter" : "Einfahrtshöhe m",
-         "gesamt" : "Stellplätze gesamt",
+         "stellplaetze_gesamt" : "Stellplätze gesamt",
          "frei" : "freie Stellplätze",
          "oeffnungszeit" : "Öffnungszeiten",
          "preise" : "Preise"

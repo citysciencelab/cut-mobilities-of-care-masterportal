@@ -98,20 +98,20 @@
    },
    {
       "id" : "94",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 20",
       "url" : "http://geodienste-hamburg.de/HH_WMS_DOP20",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
@@ -8159,7 +8159,7 @@
    },
    {
       "id" : "453",
-      "name" : "Geobasisdaten",
+      "name" : "Stadtplan",
       "url" : "http://map1.hamburg.de/geowebcache/service/wms",
       "typ" : "WMS",
       "layers" : "geobasisdaten",
@@ -14800,20 +14800,20 @@
    },
    {
       "id" : "756",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 20 (belaubt)",
       "url" : "http://geodienste-hamburg.de/HH_WMS_DOP20_belaubt",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
@@ -26097,20 +26097,20 @@
    },
    {
       "id" : "1107",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 40",
       "url" : "http://geodienste-hamburg.de/HH_WMS_DOP40",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
@@ -27493,20 +27493,20 @@
    },
    {
       "id" : "1169",
-      "name" : "Image",
+      "name" : "Luftbilder DOP 40 (belaubt)",
       "url" : "http://geodienste-hamburg.de/HH_WMS_DOP40_belaubt",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
@@ -34665,14 +34665,17 @@
       "layers" : "hh_hh_festgestellt",
       "format" : "image/png",
       "version" : "1.1.1",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "planrecht" : "Geltendes Planrecht",
+         "feststellung" : "Feststellung"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
@@ -39186,7 +39189,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1993",
@@ -39206,7 +39220,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1994",
@@ -39226,7 +39251,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1995",
@@ -39246,7 +39282,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1996",
@@ -39266,7 +39313,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1997",
@@ -39286,7 +39344,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1998",
@@ -39306,7 +39375,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "1999",
@@ -39326,7 +39406,18 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "rs_id" : "HMDK#0F0CBE61-F983-4321-A510-5BBDD3B512D3",
+            "md_name" : "Schutzgebietskataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2008",
@@ -39406,7 +39497,20 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "F06B97D2-F245-4B79-85D1-A3020C405F83",
+            "rs_id" : "HMDK#6246c459-371b-4802-a83a-e5bcff2f3fb7",
+            "md_name" : "Hamburger Gründachförderung - Zuschlag Innere Stadt",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : [
+               "hmbtg"
+            ]
+         }
+      ]
    },
    {
       "id" : "9",
@@ -40096,8 +40200,9 @@
       "gfiAttributes" : {
          "name" : "Name",
          "art" : "Art",
+         "einfahrt" : "Einfahrt",
          "einfahrtshoehe_in_meter" : "Einfahrtshöhe m",
-         "gesamt" : "Stellplätze gesamt",
+         "stellplaetze_gesamt" : "Stellplätze gesamt",
          "frei" : "freie Stellplätze",
          "oeffnungszeit" : "Öffnungszeiten",
          "preise" : "Preise"
