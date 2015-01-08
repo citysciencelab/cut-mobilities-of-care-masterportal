@@ -43,7 +43,11 @@ define(function () {
             coord: false,
             active: 'gfi'
         },
-        printURL: 'http://wscd0096:8680/mapfish_print_2.0/pdf6/info.json',
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Geotourismus',
+            gfi: false
+        },
         proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
         orientation: true,
         poi: true

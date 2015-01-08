@@ -9,7 +9,6 @@ define(function () {
         },
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
-        printURL: locations.host + ':8680/mapfish_print_2.0/',
         proxyURL: '/cgi-bin/proxy.cgi',
         gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
@@ -49,6 +48,11 @@ define(function () {
         },
         searchBar: {
             placeholder: "Adresssuche"
+        },
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Krankenhausportal',
+            gfi: false
         },
         tools: {
             gfi: true,

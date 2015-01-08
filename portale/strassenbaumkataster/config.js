@@ -42,9 +42,12 @@ define(function () {
             orientation: false,
             active: 'gfi'
         },
-        printURL: locations.host + ':8680/mapfish_print_2.0/',
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Straßenbaumkataster',
+            gfi: false
+        },
         proxyURL: '/cgi-bin/proxy.cgi',
-        printTitle: 'Straßenbaumkataster'
     }
 
     return config;

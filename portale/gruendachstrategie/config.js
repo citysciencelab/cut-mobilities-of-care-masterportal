@@ -12,7 +12,6 @@ define(function () {
         styleConf: locations.master + '/style.json',
         printURL: locations.host + ':8680/mapfish_print_2.0/',
         proxyURL: '/cgi-bin/proxy.cgi',
-        printTitle: 'Gründach-Strategie',
         gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
@@ -35,6 +34,11 @@ define(function () {
         },
         searchBar: {
             placeholder: "Adresssuche"
+        },
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Gründachstrategie',
+            gfi: false
         },
         tools: {
             gfi: false,

@@ -8,7 +8,6 @@ define(function () {
         },
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
-        printURL: locations.host + ':8680/mapfish_print_2.0/',
         proxyURL: '/cgi-bin/proxy.cgi',
         gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
@@ -75,6 +74,11 @@ define(function () {
         },
         searchBar: {
             placeholder: "Suche Adresse, B-Plan"
+        },
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Master',
+            gfi: false
         },
 //        treeFilter: {
 //            layer: '7777',

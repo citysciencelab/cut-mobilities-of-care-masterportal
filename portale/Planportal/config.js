@@ -41,7 +41,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, B-Plan"
         },
-        bPlanURL: "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene?request=GetFeature&service=WFS&version=2.0.0",
+        bPlanURL: "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene",
         tools: {
             gfi: true,
             measure: true,
@@ -50,7 +50,11 @@ define(function () {
             orientation: false,
             active: "gfi"
         },
-        printURL: locations.host + ":8680/mapfish_print_2.0/",
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Planportal',
+            gfi: false
+        },
         proxyURL: "/cgi-bin/proxy.cgi",
     }
 
