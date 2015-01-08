@@ -105,7 +105,7 @@ define([
                         layername = dienst.datasets[0].md_name;
                         var layerList = "";
                         _.each(layers, function (layer) {
-                            var obj = _.findWhere(response, {id: layer});console.log(obj.layers);
+                            var obj = _.findWhere(response, {id: layer});
                             layerList += "," + obj.layers;
                         });
                         dienst.layers = layerList.slice(1, layerList.length);

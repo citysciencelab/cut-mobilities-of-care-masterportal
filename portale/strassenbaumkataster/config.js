@@ -30,6 +30,9 @@ define(function () {
             legend: false
         },
         gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        searchBar: {
+            placeholder: "Adresssuche"
+        },
         bPlanURL: 'http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene?request=GetFeature&service=WFS&version=2.0.0',
         tools: {
             gfi: true,

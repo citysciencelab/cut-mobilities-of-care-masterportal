@@ -33,6 +33,9 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true
         },
+        searchBar: {
+            placeholder: "Suche Adresse, B-Plan"
+        },
         tools: {
             gfi: false,
             measure: true,

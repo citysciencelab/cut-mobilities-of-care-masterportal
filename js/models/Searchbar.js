@@ -296,29 +296,38 @@ define([
             },
 
             /**
-            *
+            *    $('#loader').show();
+            $.ajax({
+            url: Config.proxyURL + "?url=http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_strassenbaumkataster",
+            data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" resultType="hits" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:strassenbaumkataster">' + this.get('filter') + '</wfs:Query></wfs:GetFeature>',
+            type: 'POST',
+            context: this,  // model
+            contentType: "text/xml",
+            success: function (data) {
+            var hits;
             */
             "getBPlans": function () {
                 var plans = [];
                 $.ajax({
-                    url: Config.proxyURL,
+                    url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
                     context: this,  // das model
+                    contentType: "text/xml",
                     async: false,
-                    type: "GET",
-                    data: {url: this.get("bPlanURL") + "&Typenames=imverfahren&propertyname=plan"},
+                    type: "POST",
+                    data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:imverfahren"><wfs:PropertyName>app:plan</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
                     success: function (data) {
                         try {
                             // Firefox, IE
-                            if (data.getElementsByTagName("wfs:member").length > 0) {
-                                var hits = data.getElementsByTagName("wfs:member");
+                            if (data.getElementsByTagName("gml:featureMember").length > 0) {
+                                var hits = data.getElementsByTagName("gml:featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("app:plan")[index].textContent;
                                     plans.push({"name": name.trim(), "type": "BPlan im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             // WebKit
-                            else if (data.getElementsByTagName("member") !== undefined) {
-                                var hits = data.getElementsByTagName("member");
+                            else if (data.getElementsByTagName("featureMember") !== undefined) {
+                                var hits = data.getElementsByTagName("featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("plan")[index].textContent;
                                     plans.push({"name": name.trim(), "type": "BPlan im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
@@ -331,24 +340,25 @@ define([
                     }
                 });
                 $.ajax({
-                    url: Config.proxyURL,
+                    url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
                     context: this,  // das model
-                    async: true,
-                    type: "GET",
-                    data: {url: this.get("bPlanURL") + "&Typenames=hh_hh_planung_festgestellt&propertyname=planrecht"},
+                    contentType: "text/xml",
+                    async: false,
+                    type: "POST",
+                    data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:hh_hh_planung_festgestellt"><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
                     success: function (data) {
                         try {
                             // Firefox, IE
-                            if (data.getElementsByTagName("wfs:member").length > 0) {
-                                var hits = data.getElementsByTagName("wfs:member");
+                            if (data.getElementsByTagName("gml:featureMember").length > 0) {
+                                var hits = data.getElementsByTagName("gml:featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("app:planrecht")[index].textContent;
                                     plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             // WebKit
-                            else if (data.getElementsByTagName("member") !== undefined) {
-                                var hits = data.getElementsByTagName("member");
+                            else if (data.getElementsByTagName("featureMember") !== undefined) {
+                                var hits = data.getElementsByTagName("featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("planrecht")[index].textContent;
                                     plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});

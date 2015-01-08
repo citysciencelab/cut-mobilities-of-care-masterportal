@@ -47,6 +47,9 @@ define(function () {
             wfsFeatureFilter: true,
             legend: false
         },
+        searchBar: {
+            placeholder: "Suche Adresse, B-Plan"
+        },
         tools: {
             gfi: true,
             measure: false,

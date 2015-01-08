@@ -73,6 +73,9 @@ define(function () {
             wfsFeatureFilter: true,
             legend: true
         },
+        searchBar: {
+            placeholder: "Suche Adresse, B-Plan"
+        },
 //        treeFilter: {
 //            layer: '7777',
 //            styleName: 'treefilter',
