@@ -48,7 +48,7 @@ define(function () {
             legend: false
         },
         searchBar: {
-            placeholder: "Suche Adresse, B-Plan"
+            placeholder: "Adresssuche"
         },
         tools: {
             gfi: true,
