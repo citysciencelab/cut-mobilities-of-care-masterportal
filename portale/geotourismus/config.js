@@ -11,6 +11,7 @@ define(function () {
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
             {id: '453', visible: true},
+            {id: '682', visible: true},
             {id: '352', visible: true, style: ['5','6','7','8','352_cluster'], clusterDistance: 0, styleField :'Kategorie'},
             {id: '353', visible: true, style: ['32','33','34','35','353_cluster'], clusterDistance: 30, styleField :'Kategorie'},
             {id: '354', visible: true, style: ['10','354_cluster'], clusterDistance: 30, styleField :'Kategorie'},
