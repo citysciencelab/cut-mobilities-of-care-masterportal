@@ -296,15 +296,7 @@ define([
             },
 
             /**
-            *    $('#loader').show();
-            $.ajax({
-            url: Config.proxyURL + "?url=http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_strassenbaumkataster",
-            data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" resultType="hits" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:strassenbaumkataster">' + this.get('filter') + '</wfs:Query></wfs:GetFeature>',
-            type: 'POST',
-            context: this,  // model
-            contentType: "text/xml",
-            success: function (data) {
-            var hits;
+            *
             */
             "getBPlans": function () {
                 var plans = [];
@@ -365,6 +357,9 @@ define([
                                 }, this);
                             }
                             $("#searchInput").prop("disabled", "");
+                            if (Config.searchBar.initString !== undefined) {
+                                this.set("searchString", Config.searchBar.initString);
+                            }
                         }
                         catch (error) {
                             //console.log(error);

@@ -34,6 +34,7 @@ define([
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
+                this.listenTo(this.model, "change:initString", this.zoomTo);
                 this.render();
                 $("#searchInput").prop("disabled", "disabled");
                 $(window).on("orientationchange", function () {
@@ -76,6 +77,9 @@ define([
                 if (this.model.get("isHitListReady") === true) {
                     var attr = this.model.toJSON();
                     $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                }
+                if (Config.searchBar.initString !== undefined) {   // workaround für die initiale Suche von B-Plänen
+                    this.model.set("initString", Config.searchBar.initString);
                 }
             },
 
@@ -163,10 +167,15 @@ define([
             *
             */
             "zoomTo": function (evt) {
+                var zoomLevel, hitID, hit;
+                if (_.has(evt, "cid")) {    // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
+                    hit = this.model.get("hitList")[0];
+                }
+                else {
+                    hitID = evt.currentTarget.id;
+                    hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+                }
                 // NOTE switch case wäre angebracht
-                var zoomLevel;
-                var hitID = evt.currentTarget.id;
-                var hit = _.findWhere(this.model.get("hitList"), {id: hitID});
                 $("#searchInput").val(hit.name);
                 if (hit.type === "Straße") {
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate);
