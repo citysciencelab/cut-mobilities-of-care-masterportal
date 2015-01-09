@@ -343,7 +343,7 @@ define([
                     url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
                     context: this,  // das model
                     contentType: "text/xml",
-                    async: false,
+                    async: true,
                     type: "POST",
                     data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:hh_hh_planung_festgestellt"><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
                     success: function (data) {
@@ -364,6 +364,7 @@ define([
                                     plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
+                            $("#searchInput").prop("disabled", "");
                         }
                         catch (error) {
                             //console.log(error);

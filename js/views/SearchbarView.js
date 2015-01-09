@@ -35,7 +35,7 @@ define([
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.render();
-
+                $("#searchInput").prop("disabled", "disabled");
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
