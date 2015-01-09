@@ -47,9 +47,10 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
-            orientation: false,
             active: "gfi"
         },
+        orientation: true,
+        poi: false,
         print: {
             url: locations.host + ":8680/mapfish_print_2.0/",
             title: 'Planportal',

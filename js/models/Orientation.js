@@ -25,7 +25,7 @@ define([
             geolocation.on('change', function(evt) {
               position = geolocation.getPosition();
               this.set('newCenter',proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position));
-              EventBus.trigger('setCenter', this.get('newCenter'));
+              EventBus.trigger('setCenter', this.get('newCenter'), 6);
               var marker = document.getElementById('geolocation_marker');
               var marker= new ol.Overlay({
                   position:this.get('newCenter'),
