@@ -51,7 +51,7 @@ define([
                 hitList: [],
                 isOnlyOneStreet: false, // Wenn true --> Hausnummernsuche startet
                 onlyOneStreetName: "",  // speichert den Namen der Straße, wenn die Straßensuche nur noch eine Treffer zurückgibt.
-                gazetteerURL: Config.gazetteerURL
+                gazetteerURL: Config.searchBar.gazetteerURL()
             },
 
             /**

@@ -35,7 +35,17 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true
         },
-        gazetteerURL: 'http://wscd0096/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        searchBar: {
+            placeholder: "Adresssuche",
+            gazetteerURL: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
+            }
+        },
         tools: {
             gfi: true,
             measure: false,

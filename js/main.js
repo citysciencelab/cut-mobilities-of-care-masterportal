@@ -19,7 +19,7 @@ else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.h
         host : window.location.protocol + '//' + window.location.host
     };
 }
-else if(window.location.host === '87.106.215.123'){
+else if(window.location.host === '87.106.215.123') {
     var locations = {
         portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgv-1.0.1',

@@ -8,9 +8,12 @@ define(function () {
         },
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
-        printURL: locations.host + ':8680/mapfish_print_2.0/pdf6/info.json',
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Verkehrsportal',
+            gfi: false
+        },
         proxyURL: '/cgi-bin/proxy.cgi',
-        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -78,6 +81,17 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true
+        },
+        searchBar: {
+            placeholder: "Adresssuche",
+            gazetteerURL: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
+            }
         },
         tools: {
             gfi: true,

@@ -9,7 +9,7 @@ define(function () {
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
-        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -73,7 +73,15 @@ define(function () {
             legend: true
         },
         searchBar: {
-            placeholder: "Suche Adresse, B-Plan"
+            placeholder: "Suche Adresse, B-Plan",
+            gazetteerURL: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
+            }
         },
         print: {
             url: locations.host + ":8680/mapfish_print_2.0/",
