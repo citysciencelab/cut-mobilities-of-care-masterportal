@@ -144,6 +144,7 @@ define([
         setVisibility: function () {
             var visibility = this.get('visibility');
             this.get('layer').setVisible(visibility);
+            this.toggleEventAttribution(visibility);
         },
         /**
          *
@@ -154,6 +155,16 @@ define([
             }
             else {
                 this.set({'settings': true});
+            }
+        },
+        toggleEventAttribution: function (value) {
+            if (_.has(this, 'EventAttribution')) {
+                if (value === true) {
+                    EventBus.trigger('startEventAttribution', this);
+                }
+                else {
+                    EventBus.trigger('stopEventAttribution', this);
+                }
             }
         }
     });

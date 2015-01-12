@@ -200,7 +200,6 @@ define([
             var styleCache = new Array();
             this.set('styleCache', styleCache);
         }
-    });
-
+    });    
     return WFSStyle;
 });

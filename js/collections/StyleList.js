@@ -15,22 +15,29 @@ define([
             */
             var idArray = new Array ();
             _.each(Config.layerIDs, function (wfsconfelement) {
-                if (_.has(wfsconfelement, 'style')) {
-                    if (_.isArray(wfsconfelement.style)) {
-                        _.each(wfsconfelement.style, function (styleelement) {
-                            idArray.push(styleelement);
-                        });
-                    }
-                    else {
+                if (_.isArray(wfsconfelement.id)) { //Gruppenlayer
+                    _.each(wfsconfelement.id, function (childlayer) {
+                        if (_.has(childlayer, 'style')) {
+                            idArray.push(childlayer.style);
+                            idArray.push(childlayer.style + '_cluster');
+                        }
+                    });
+                }
+                else {
+                    if (_.has(wfsconfelement, 'style')) {
                         idArray.push(wfsconfelement.style);
-                    }
+                        idArray.push(wfsconfelement.style + '_cluster');
+                    }                    
                 }
             });
             return _.filter(response, function (element) {
-                if (_.contains(idArray, element.id)) {
+                if (_.contains(idArray, element.layerId)) {
+                    _.extend(element, {
+                        id: _.uniqueId('style_')
+                    });
                     return element;
                 }
-            });
+            });            
         },
         url: Config.styleConf,
         initialize: function () {
@@ -40,24 +47,22 @@ define([
                 error: function () {
                     alert('Fehler beim Laden der ' + Config.styleConf);
                 },
-                success: function (collection) {
-                    //console.log(collection);
+                success: function (collection) {                    
+//                    console.log(collection);
                 }
             });
         },
-        returnModelById: function(id) {
+        returnModelById: function(layerId) {
             return _.find(this.models, function (slmodel) {
-                if (slmodel.attributes.id === id) {
+                if (slmodel.attributes.layerId === layerId) {
                     return slmodel;
                 }
             });
         },
-        returnModelByName: function(name) {
+        returnModelByValue: function(layerId, styleFieldValue) {
             return _.find(this.models, function (slmodel) {
-                if (_.has(slmodel.attributes, 'name')) {
-                    if (slmodel.attributes.name === name) {
-                        return slmodel;
-                    }
+                if (slmodel.attributes.layerId === layerId && slmodel.attributes.styleFieldValue === styleFieldValue) {
+                    return slmodel;                
                 }
             });
         }

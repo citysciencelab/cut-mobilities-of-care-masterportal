@@ -20,6 +20,7 @@ define([
             // Erzeuge Layers-Objekt
             var layerdefinitions = this.get('layerdefinitions');
             var layers = new ol.Collection();
+            var backbonelayers = new Array();
             _.each(layerdefinitions, function (layerdefinition, index, list) {
                 if (layerdefinition.dienst.typ === 'WMS') {
                     var newlayer = new WMSLayer(layerdefinition.dienst, layerdefinition.styles, layerdefinition.id, layerdefinition.name);
@@ -29,20 +30,22 @@ define([
                 }
                 // Setze Dafault-Werte für Layer, damit Einstellung des Gruppenlayers sich nicht mit Einstellung des Layers überschneidet
                 newlayer.get('layer').setVisible(true);
+                newlayer.visibility = true;
                 newlayer.get('layer').setOpacity(1);
                 newlayer.get('layer').setSaturation(1);
-
                 layers.push(newlayer.get('layer'));
+                backbonelayers.push(newlayer);
             });
             this.set('layers', layers);
+            this.set('backbonelayers', backbonelayers);
         },
         setVisibility: function () {
-            var visibility = this.get('visibility');
+            var visibility = this.get('visibility');            
             this.get('layer').setVisible(visibility);
             //NOTE bei Gruppenlayern auch childLayer umschalten. Wichtig für Attribution
-            this.get('layer').getLayers().forEach(function (childlayer) {
-                childlayer.setVisible(visibility);
-            });
+            _.each(this.get('backbonelayers'), function (bblayer) {
+                bblayer.set('visibility', visibility);
+            });                  
         },
         /**
          *
