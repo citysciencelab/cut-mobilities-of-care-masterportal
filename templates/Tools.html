@@ -1,0 +1,21 @@
+<% if (coord === true) { %>
+<li id="coordinateMenu" <% if (active === "coords") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;&nbsp;Koordinate abfragen</a>
+</li>
+<% }
+if (measure === true) { %>
+<li id="measureMenu" <% if (active === "measure") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Messen</a>
+</li>
+<% }
+if (gfi === true) { %>
+<li id="gfiMenu" <% if (active === "gfi") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Informationen abfragen</a>
+</li>
+<% }
+if (print === true) { %>
+<li class="divider hidden-xs"></li>
+<li id="printMenu" class="hidden-xs">
+    <a href="#"><span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;Karte drucken</a>
+</li>
+<% } %>

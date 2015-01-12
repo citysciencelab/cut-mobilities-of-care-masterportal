@@ -1,0 +1,58 @@
+<div class="closegfi" id="gfiTitle">
+    <div class="close glyphicon glyphicon-remove"></div>
+    <strong><%= gfiTitles[gfiContent.length-gfiCounter] %></strong>
+</div>
+
+<div id="gfiContent">
+    <table class="table table-condensed table-hover">
+    <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
+       _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {%>
+    <tr>
+        <% if(key!=='Bild'){%>
+        <td>
+            <strong><%= key + ':'%></strong>
+        </td>
+        <td>
+            <% if (value.search('.html') !== -1) { %>
+                <a href="<%= value%>" target="_blank">Link</a>
+            <% } else if (value.substr(0, 7) == 'http://') { %>
+                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                    <img height="150" src="<%= value%>">
+                <% } else { %>
+                    <a href="<%= value%>"><%= value%></a>
+                <% } %>
+            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+            <% } else { %>
+                <%= value %>
+            <% } %>
+        </td>
+        <% } else {%>
+
+         <td colspan="2" >
+           <% if (value.search('.html') !== -1) { %>
+                <a href="<%= value%>" target="_blank">Link</a>
+            <% } else if (value.substr(0, 7) == 'http://') { %>
+                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                    <img height="150" src="<%= value%>">
+                <% } else { %>
+                    <a href="<%= value%>"><%= value%></a>
+                <% } %>
+            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+            <% } else { %>
+                <%= value %>
+            <% } %>
+        </td>
+        <% }%>
+    </tr>
+    <% })}; %>
+    </table>
+</div>
+
+<% if(gfiContent.length > 1) { %>
+    <ul class="pager">
+        <li class="pager-left <%if(gfiCounter-gfiContent.length === 0) {print (' disabled') }%>" style="left: 0px;"><span class="vorzurueck glyphicon glyphicon-chevron-left<% if(gfiCounter-gfiContent.length === 0) {print (' vorzurueckdisabled ') }%>"></span></li>
+        <li class="pager-right <%if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' disabled') }%>" style="right: 0px;"><span class="vorzurueck glyphicon glyphicon-chevron-right<% if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' vorzurueckdisabled ') }%>"></span></li>
+    </ul>
+<% } %>

@@ -1,0 +1,54 @@
+.buttonStandpunkt {
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+    top:0px;
+    margin-top: 5px;
+}
+.buttonPOI {
+    position: absolute;
+    z-index: 100;
+    right:0px;
+    top:50px;
+    margin-top: 5px;
+}
+
+#geolocate{
+    cursor:pointer;
+    color: #F3F3F3;
+    padding: 4px;
+    background: none repeat scroll #D42132;
+    border-radius: 50px !important;
+    font-size: 32px;
+    height: 40px;
+    line-height: 1;
+    width: 40px;
+}
+#centerDiv{
+    position: absolute;
+    right:50%;
+    top:50%;
+    width:15px;
+    height:15px;
+    visibility:hidden;
+}
+.poiRow{
+    cursor:pointer;
+}
+#geolocation_marker{
+    cursor:pointer;
+    color: #F3F3F3;
+    padding: 3px;
+    background: none repeat scroll #D42132;
+    border-radius: 50px !important;
+    font-size: 30px;
+    height: 35px;
+    line-height: 1;
+    width: 35px;
+}
+#toggleDiv {
+    position: relative;
+    top:50px;
+    right: 10px;
+    z-index: 1000;
+}

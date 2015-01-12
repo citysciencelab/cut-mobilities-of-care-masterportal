@@ -1,0 +1,87 @@
+@media (max-width: 768px) {
+    #searchbar {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    #searchForm {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    #searchbar {
+        float: right;
+        margin-right: 20px;
+    }
+}
+
+#autoCompleteBody {
+    border-top: 0 none;
+    display: none;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+}
+
+.btn-deleteSearch {
+    border-left-width: 0;
+    border-right-width: 2px;
+    color: #cdcdcd;
+}
+
+.btn-deleteSearch:hover {
+    background-color: #ffffff;
+}
+
+#searchInput {
+    box-shadow: none;
+}
+
+#searchInput::-ms-clear {
+    display: none;
+}
+
+.dropdown-menu-search {
+    background-clip: padding-box;
+    background-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    float: left;
+    font-size: 13px;
+    list-style: outside none none;
+    margin: 2px 0 0;
+    min-width: 200px;
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+    padding: 0;
+}
+
+.dropdown-menu-search .glyphicon {
+    color: #cdcdcd;
+    padding-right: 12px;
+    padding-left: 3px;
+}
+
+.dropdown-menu-search img {
+    width: 28px;
+    padding-right: 10px;
+    margin-bottom: 4px;
+}
+
+.dropdown-menu-search small {
+    color: #cdcdcd;
+    padding-left: 10px;
+}
+
+.dropdown-menu-search li:hover {
+    cursor: pointer;
+    background-color: #efefef;
+}
+
+#searchMarker {
+    color: #d42132;
+    font-size: 38px;
+    display: none;
+}

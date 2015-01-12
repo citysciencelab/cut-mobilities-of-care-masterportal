@@ -1,0 +1,18 @@
+<div class="<%if (visibility === false) { print('color') }%>">
+    <% if(settings === false) {%>
+        <% if(visibility === true) {%>
+            <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span></button>
+        <% } else { %>
+            <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked"></span></button>
+        <% } %>
+        <small><%= name %></small>
+        <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
+    <% } else { %>
+        <button type="button" class="btn-glyphicon plus"><span class="glyphicon glyphicon-plus-sign"></span></button>
+        <button type="button" class="btn-glyphicon minus"><span class="glyphicon glyphicon-minus-sign"></span></button>
+        <button type="button" class="btn-glyphicon"><span style="margin-left: 10px;"><small>Transparenz</small></span></button>
+        <button type="button" class="btn-glyphicon"><span class="badge" style="margin-left: 10px;"><%= transparence + '%'%></span></button>
+        <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
+        <button type="button" class="btn-glyphicon info pull-right"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
+    <% } %>
+</div>
