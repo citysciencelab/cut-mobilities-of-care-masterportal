@@ -1,15 +1,59 @@
 define(function () {
+    /**
+    * @namespace config
+    * @desc Beschreibung
+    */
     var config = {
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         allowParametricURL: true,
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {Array}  center - Beschreibung.
+        * @property {Number}  resolution - Beschreibung.
+        * @property {Number}  scale - Beschreibung.
+        */
         view: {
             center: [565874, 5934140],
             resolution: 15.874991427504629,
             scale: 60000 // für print.js benötigt
         },
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
         layerConf: locations.master + '/diensteapiFHHNET.json',
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
         styleConf: locations.master + '/style.json',
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
         proxyURL: '/cgi-bin/proxy.cgi',
-        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        /**
+        * @memberof config
+        * @type {Object[]}
+        * @property {String|Array}  id - Beschreibung.
+        * @property {Boolean}  visible - Beschreibung.
+        * @property {String|Array}  style - Beschreibung.
+        * @property {Number}  clusterDistance - Beschreibung.
+        * @property {String}  searchField - Beschreibung.
+        * @property {String}  mouseHoverField - Beschreibung.
+        * @property {Object[]}  filterOptions - Beschreibung.
+        * @property {String}  filterOptions.fieldName - Beschreibung.
+        * @property {String}  styleLabelField - Beschreibung.
+        * @desc Beschreibung.
+        */
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -57,10 +101,37 @@ define(function () {
                 ]
             }
         ],
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         attributions: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         menubar: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         mouseHover: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         isMenubarVisible: true,
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {Boolean}  searchBar - Beschreibung.
+        * @property {Boolean}  layerTree - Beschreibung.
+        * @property {Boolean}  helpButton - Beschreibung.
+        */
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,
@@ -72,6 +143,12 @@ define(function () {
             wfsFeatureFilter: true,
             legend: true
         },
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {String}  placeholder - Beschreibung.
+        * @property {Function}  gazetteerURL - Beschreibung.
+        */
         searchBar: {
             placeholder: "Suche Adresse, B-Plan",
             gazetteerURL: function () {
@@ -83,6 +160,13 @@ define(function () {
                 }
             }
         },
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {String}  url - Beschreibung.
+        * @property {String}  title - Beschreibung.
+        * @property {Boolean}  gfi - Beschreibung.
+        */
         print: {
             url: locations.host + ":8680/mapfish_print_2.0/",
             title: 'Master',
@@ -93,6 +177,12 @@ define(function () {
 //            styleName: 'treefilter',
 //            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
 //        },
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {Boolean}  gfi - Beschreibung.
+        * @property {Boolean}  measure - Beschreibung.
+        */
         tools: {
             gfi: true,
             measure: true,
@@ -100,7 +190,17 @@ define(function () {
             coord: true,
             active: 'gfi'
         },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         orientation: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         poi: true
     }
 
