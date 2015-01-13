@@ -20,7 +20,7 @@ define([
             'click .minus': 'downTransparence',
             'click .info': 'getMetadata',
             'click .check, .unchecked, small': 'toggleVisibility',
-//            'click .upload, .download': 'moveLayer',
+            'click .up, .down': 'moveLayer',
             'click .refresh': 'toggleSettings'
         },
         moveLayer: function (evt) {
