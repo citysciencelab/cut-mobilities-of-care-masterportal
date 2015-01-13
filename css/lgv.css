@@ -18,7 +18,9 @@ html, body {
 }
 
 @media (max-width: 768px) {
-
+    .btn-glyphicon {
+        font-size: 16px !important;
+    }
 }
 
 @media (min-width: 768px) {
@@ -44,6 +46,10 @@ html, body {
 
 #tree {
     border: 0;
+}
+
+#tree small {
+    cursor: pointer;
 }
 
 /*bootstrap überschreiben*/

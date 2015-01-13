@@ -19,7 +19,7 @@ define([
             'click .plus': 'upTransparence',
             'click .minus': 'downTransparence',
             'click .info': 'getMetadata',
-            'click .check, .unchecked': 'toggleVisibility',
+            'click .check, .unchecked, small': 'toggleVisibility',
 //            'click .upload, .download': 'moveLayer',
             'click .refresh': 'toggleSettings'
         },
