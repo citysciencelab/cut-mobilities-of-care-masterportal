@@ -15,6 +15,8 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
+             displayInTree: false,
              filterOptions: [
                  {
                      'fieldName': 'teilnahme_geburtsklinik',
@@ -31,7 +33,7 @@ define(function () {
              ]
             }
         ],
-        attributions: false,
+        attributions: true,
         menubar: true,
         mouseHover: true,
         isMenubarVisible: true,
@@ -47,7 +49,7 @@ define(function () {
             legend: false
         },
         searchBar: {
-            placeholder: "Adresssuche",
+            placeholder: "Suche nach Straße oder Krankenhausname",
             gazetteerURL: function () {
                 if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";

@@ -14,9 +14,9 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: '1346', visible: true},
-            {id: '358', visible: false, style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '358', visible: false, style: '358', clusterDistance: 30, styleField :'Kategorie'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '359', visible: false, style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '359', visible: false, style: '359', clusterDistance: 30, styleField :'Kategorie'},
             {id:
              [
                  {
