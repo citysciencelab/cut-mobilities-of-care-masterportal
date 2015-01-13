@@ -36,7 +36,9 @@ define([
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.zoomTo);
                 this.render();
-                $("#searchInput").prop("disabled", "disabled");
+                if (Config.bPlanURL !== undefined) {
+                    $("#searchInput").prop("disabled", "disabled");
+                }
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);

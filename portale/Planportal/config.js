@@ -1,6 +1,4 @@
-/*global define*/
 define(function () {
-
     var config = {
         allowParametricURL: true,
         view: {
