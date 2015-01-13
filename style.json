@@ -1,6 +1,6 @@
 [
     {
-        "id" : "1711",
+        "layerId" : "1711",
         "subclass" : "Icon",
         "imagename" : "krankenhaus.png",
         "imagescale" : "1",
@@ -11,232 +11,232 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "9",
-        "name":"Bergwerk",
+        "layerId" : "356",
+        "styleFieldValue":"Bergwerk",
         "subclass" : "Icon",
         "imagename" : "bergwerk_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "3",
-        "name":"Grube",
+        "layerId" : "356",
+        "styleFieldValue":"Grube",
         "subclass" : "Icon",
         "imagename" : "grube_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "5",
-        "name":"Oberflächenform",
+        "layerId" : "352",
+        "styleFieldValue":"Oberflächenform",
         "subclass" : "Icon",
         "imagename" : "oberflaechenform_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "6",
-        "name":"Moor",
+        "layerId" : "352",
+        "styleFieldValue":"Moor",
         "subclass" : "Icon",
         "imagename" : "moor_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "7",
-        "name":"Düne",
+        "layerId" : "352",
+        "styleFieldValue":"Düne",
         "subclass" : "Icon",
         "imagename" : "duene_50px.png",
         "imagescale" : "0.9"
     },
     {
-        "id" : "8",
-        "name":"Watt",
+        "layerId" : "352",
+        "styleFieldValue":"Watt",
         "subclass" : "Icon",
         "imagename" : "watt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "10",
-        "name":"Unsichtbares Objekt",
+        "layerId" : "354",
+        "styleFieldValue":"Unsichtbares Objekt",
         "subclass" : "Icon",
         "imagename" : "unsichtbares-objekt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "11",
-        "name":"Geologisches Landesamt",
+        "layerId" : "355",
+        "styleFieldValue":"Geologisches Landesamt",
         "subclass" : "Icon",
         "imagename" : "geologisches_landesamt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "12",
-        "name":"Botanischer Garten",
+        "layerId" : "355",
+        "styleFieldValue":"Botanischer Garten",
         "subclass" : "Icon",
         "imagename" : "botanischer_garten_6-5.png",
         "imagescale" : "0.7"
     },
     {
-        "id" : "13",
-        "name":"Saurier",
+        "layerId" : "355",
+        "styleFieldValue":"Saurier",
         "subclass" : "Icon",
         "imagename" : "saurier_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "14",
-        "name":"Wrack",
+        "layerId" : "355",
+        "styleFieldValue":"Wrack",
         "subclass" : "Icon",
         "imagename" : "wrack_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "15",
-        "name":"Grotte",
+        "layerId" : "355",
+        "styleFieldValue":"Grotte",
         "subclass" : "Icon",
         "imagename" : "grotte_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "16",
-        "name":"Wurt",
+        "layerId" : "355",
+        "styleFieldValue":"Wurt",
         "subclass" : "Icon",
         "imagename" : "wurt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "17",
-        "name":"Gebäude",
+        "layerId" : "355",
+        "styleFieldValue":"Gebäude",
         "subclass" : "Icon",
         "imagename" : "gebaeude_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "18",
-        "name":"Brunnen",
+        "layerId" : "357",
+        "styleFieldValue":"Brunnen",
         "subclass" : "Icon",
         "imagename" : "brunnen_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "19",
-        "name":"Wasserbauobjekt",
+        "layerId" : "357",
+        "styleFieldValue":"Wasserbauobjekt",
         "subclass" : "Icon",
         "imagename" : "wasserbauobjekt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "20",
-        "name":"Brack",
+        "layerId" : "357",
+        "styleFieldValue":"Brack",
         "subclass" : "Icon",
         "imagename" : "brack_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "21",
-        "name":"See",
+        "layerId" : "357",
+        "styleFieldValue":"See",
         "subclass" : "Icon",
         "imagename" : "see_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "22",
-        "name":"Gewässer",
+        "layerId" : "357",
+        "styleFieldValue":"Gewässer",
         "subclass" : "Icon",
         "imagename" : "gewaesser_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "23",
-        "name":"Besonderer Boden",
+        "layerId" : "358",
+        "styleFieldValue":"Besonderer Boden",
         "subclass" : "Icon",
         "imagename" : "besonderer_boden_6-5.png",
         "imagescale" : "0.7"
     },
     {
-        "id" : "24",
-        "name":"Austernbank",
+        "layerId" : "358",
+        "styleFieldValue":"Austernbank",
         "subclass" : "Icon",
         "imagename" : "austernbank_10.png",
         "imagescale" : "1.1"
     },
     {
-        "id" : "25",
-        "name":"Erdfall",
+        "layerId" : "358",
+        "styleFieldValue":"Erdfall",
         "subclass" : "Icon",
         "imagename" : "erdfall_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "26",
-        "name":"Endmoräne",
+        "layerId" : "358",
+        "styleFieldValue":"Endmoräne",
         "subclass" : "Icon",
         "imagename" : "endmoraene_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "27",
-        "name":"Grundmoräne",
+        "layerId" : "358",
+        "styleFieldValue":"Grundmoräne",
         "subclass" : "Icon",
         "imagename" : "grundmoraene_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "28",
-        "name":"Findling",
+        "layerId" : "358",
+        "styleFieldValue":"Findling",
         "subclass" : "Icon",
         "imagename" : "findling_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "29",
-        "name":"Strassenpflaster",
+        "layerId" : "359",
+        "styleFieldValue":"Strassenpflaster",
         "subclass" : "Icon",
         "imagename" : "strassenpflaster_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "30",
-        "name":"Steinwall",
+        "layerId" : "359",
+        "styleFieldValue":"Steinwall",
         "subclass" : "Icon",
         "imagename" : "steinwall_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "31",
-        "name":"Felsen",
+        "layerId" : "359",
+        "styleFieldValue":"Felsen",
         "subclass" : "Icon",
         "imagename" : "felsen_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "32",
-        "name":"Grenzstein",
+        "layerId" : "353",
+        "styleFieldValue":"Grenzstein",
         "subclass" : "Icon",
         "imagename" : "grenzstein_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "33",
-        "name":"Museum",
+        "layerId" : "353",
+        "styleFieldValue":"Museum",
         "subclass" : "Icon",
         "imagename" : "museum_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "34",
-        "name":"Findlingskirche",
+        "layerId" : "353",
+        "styleFieldValue":"Findlingskirche",
         "subclass" : "Icon",
         "imagename" : "findlingskirche_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "35",
-        "name":"Denkmal",
+        "layerId" : "353",
+        "styleFieldValue":"Denkmal",
         "subclass" : "Icon",
         "imagename" : "denkmal_10.png",
         "imagescale" : "0.5"
     },
     {
-        "id" : "359_cluster",
-        "name":"Stein und Fels",
+        "layerId" : "359_cluster",
+        "styleFieldValue":"Stein und Fels",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -248,8 +248,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "358_cluster",
-        "name":"Geologische Objekte",
+        "layerId" : "358_cluster",
+        "styleFieldValue":"Geologische Objekte",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -261,8 +261,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "357_cluster",
-        "name":"Wasser und Wasserbau",
+        "layerId" : "357_cluster",
+        "styleFieldValue":"Wasser und Wasserbau",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -274,8 +274,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "356_cluster",
-        "name":"Bergbau",
+        "layerId" : "356_cluster",
+        "styleFieldValue":"Bergbau",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -287,8 +287,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "355_cluster",
-        "name":"Sehenswerte Objekte",
+        "layerId" : "355_cluster",
+        "styleFieldValue":"Sehenswerte Objekte",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -300,8 +300,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "354_cluster",
-        "name":"Unsichtbares Objekt",
+        "layerId" : "354_cluster",
+        "styleFieldValue":"Unsichtbares Objekt",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -313,8 +313,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "353_cluster",
-        "name":"Bauwerke",
+        "layerId" : "353_cluster",
+        "styleFieldValue":"Bauwerke",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -326,8 +326,8 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "352_cluster",
-        "name":"Landschaftsform",
+        "layerId" : "352_cluster",
+        "styleFieldValue":"Landschaftsform",
         "subclass" : "Circle",
         "imagescale" : "0.5",
         "circleradius" : 15,
@@ -339,7 +339,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "id" : "45",
+        "layerId" : "45",
         "subclass" : "Icon",
         "imagename" : "bikeandride.png",
         "imagescale" : "0.7",
@@ -351,7 +351,7 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "46",
+        "layerId" : "46",
         "subclass" : "Icon",
         "imagename" : "emobility_icon_gruen_rund.png",
         "imagescale" : "0.7",
@@ -363,7 +363,7 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "47",
+        "layerId" : "47",
         "subclass" : "IconWithText",
         "imagename" : "baustelle_neu.png",
         "imagescale" : "1.1",
@@ -375,7 +375,7 @@
         "textstrokewidth" : "0"
     },
     {
-        "id" : "48",
+        "layerId" : "48",
         "subclass" : "Icon",
         "imagename" : "behindertenparken.png",
         "imagescale" : "0.7",
@@ -387,7 +387,7 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "49",
+        "layerId" : "49",
         "subclass" : "Icon",
         "imagename" : "verkehrskam.png",
         "imagescale" : "0.7",
@@ -399,7 +399,7 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "50",
+        "layerId" : "50",
         "subclass" : "Icon",
         "imagename" : "motorradparken.png",
         "imagescale" : "0.7",
@@ -411,7 +411,7 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "51",
+        "layerId" : "51",
         "subclass" : "Icon",
         "imagename" : "pur.png",
         "imagescale" : "0.7",
@@ -423,9 +423,86 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "id" : "53",
+        "layerId" : "53",
         "subclass" : "Icon",
         "imagename" : "bus_parken.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "52",
+        "styleFieldValue" : "frei",
+        "subclass" : "Icon",
+        "imagename" : "parkhaus_gruen.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "52",
+        "styleFieldValue" : "nahezu belegt",
+        "subclass" : "Icon",
+        "imagename" : "parkhaus_gelb.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "52",
+        "styleFieldValue" : "belegt",
+        "subclass" : "Icon",
+        "imagename" : "parkhaus_rot.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "52",
+        "styleFieldValue" : "geschlossen",
+        "subclass" : "Icon",
+        "imagename" : "parkhaus_grau.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "52",
+        "styleFieldValue" : "keine Auslastungsdaten",
+        "subclass" : "Icon",
+        "imagename" : "parkhaus.png",
+        "imagescale" : "0.7",
+        "clusterscale" : "2",
+        "clusteroffsetx" : "10",
+        "clusteroffsety" : "-8",
+        "clusterfillcolor" : "[69, 96, 166, 1]",
+        "clusterstrokecolor" : "[240, 240, 240, 1]",
+        "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "52_cluster",
+        "subclass" : "Icon",
+        "imagename" : "parkhaus.png",
         "imagescale" : "0.7",
         "clusterscale" : "2",
         "clusteroffsetx" : "10",

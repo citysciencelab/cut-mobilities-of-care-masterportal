@@ -15,6 +15,8 @@ define([
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
             EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
+            EventBus.on('startEventAttribution', this.startEventAttribution, this); //Beim erneuten sichtbar schalten des Layers wird die Funktion wieder ausgeführt
+            EventBus.on('stopEventAttribution', this.stopEventAttribution, this); //Beim ausschalten des Layers wird die Funktion ausgeführt
         },
         setMap: function (map) {
             this.set('map', map);
@@ -44,7 +46,7 @@ define([
         /*
         * Diese Funktion triggert das der config definierte Event im
         * definierten Abstand. Damit das Event bekannt ist, muss es über die Main
-        * geladen werden. Als Speicherort bietet sich eine .js im Prtalverzeichnis an.
+        * geladen werden. Als Speicherort bietet sich eine .js im Portalverzeichnis an.
         */
         checkConfigForEventAttribution: function (layer) {
             var config = this.returnConfig(layer);
@@ -71,16 +73,31 @@ define([
                 if (this.get('alreadySet') == false) {
                     this.addAttributionControl();
                 }
-                EventBus.trigger(config.attribution.eventname, this, layer);
-                layer.reload();
-                if (config.attribution.timeout && config.attribution.timeout > 0){
-                    setInterval(function() {
-                        if (layer.get('layer').getVisible() === true) {
-                            EventBus.trigger(config.attribution.eventname, this, layer);
-                        }
-                    }, config.attribution.timeout);
+                if (config.attribution.timeout && config.attribution.timeout > 0 && config.attribution.eventname){
+                    layer.EventAttribution = {
+                        name: config.attribution.eventname,
+                        timeout: config.attribution.timeout
+                    }
+                    if (layer.get('layer').getVisible() === true) {
+                        EventBus.trigger('startEventAttribution', layer);
+                    }
                 }
             }
+        },
+        startEventAttribution: function (layer) {
+            var eventname = layer.EventAttribution.name;
+            var timeout = layer.EventAttribution.timeout;
+            layer.EventAttribution.Event = setInterval (function() {
+                if (layer.get('layer').getVisible() === true) {
+                    EventBus.trigger(eventname, this, layer);
+                }
+            }, timeout);
+            EventBus.trigger(eventname, this, layer);
+        },
+        stopEventAttribution: function (layer) {
+            var event = layer.EventAttribution.Event;
+            clearInterval(event);
+            layer.EventAttribution.Event = '';
         },
         addAttributionControl: function () {
             var attribution = new ol.control.Attribution({

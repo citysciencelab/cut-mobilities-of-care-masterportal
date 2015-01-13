@@ -201,6 +201,5 @@ define([
             this.set('styleCache', styleCache);
         }
     });
-
     return WFSStyle;
 });

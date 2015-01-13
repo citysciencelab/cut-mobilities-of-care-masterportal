@@ -11,15 +11,14 @@ define(function () {
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
             {id: '453', visible: true},
-            {id: '682', visible: true},
-            {id: '352', visible: true, style: ['5','6','7','8','352_cluster'], clusterDistance: 0, styleField :'Kategorie'},
-            {id: '353', visible: true, style: ['32','33','34','35','353_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {id: '354', visible: true, style: ['10','354_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {id: '355', visible: true, style: ['11','12','13','14','15','16','17','355_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {id: '356', visible: true, style: ['3', '9','356_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {id: '357', visible: true, style: ['18','19','20','21','22','357_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {id: '358', visible: true, style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
-            {id: '359', visible: true, style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'}
+            {id: '352', visible: true, style: '352', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '354', visible: true, style: '354', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '355', visible: true, style: '355', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '356', visible: true, style: '356', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '357', visible: true, style: '357', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '358', visible: true, style: '358', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '359', visible: true, style: '359', clusterDistance: 30, styleField :'Kategorie'}
         ],
         styleConf: '../../style.json',
         menubar: true,
