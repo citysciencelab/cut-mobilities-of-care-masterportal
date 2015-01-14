@@ -29,7 +29,8 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true
+            legend: true,
+            routing: true
         },
         searchBar: {
             placeholder: "Adresssuche",

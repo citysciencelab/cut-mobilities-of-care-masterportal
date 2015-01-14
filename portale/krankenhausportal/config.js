@@ -46,7 +46,8 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: true,
-            legend: false
+            legend: false,
+            routing: true
         },
         searchBar: {
             placeholder: "Suche nach Straße oder Krankenhausname",

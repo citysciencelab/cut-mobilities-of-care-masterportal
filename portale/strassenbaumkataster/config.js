@@ -27,7 +27,8 @@ define(function () {
             tools: true,
             treeFilter: true,
             wfsFeatureFilter: false,
-            legend: false
+            legend: false,
+            routing: true
         },
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
