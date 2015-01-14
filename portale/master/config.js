@@ -168,7 +168,14 @@ define(function () {
         * @property {Boolean}  gfi - Beschreibung.
         */
         print: {
-            url: locations.host + ":8680/mapfish_print_2.0/",
+            url: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + ":8680/mapfish_print_2.0/";
+                }
+                else {
+                    return locations.host + "/mapfish_print_2.0/";
+                }
+            },
             title: 'Master',
             gfi: false
         },

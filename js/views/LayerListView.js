@@ -14,6 +14,7 @@ define([
         initialize: function () {
             this.listenTo(this.collection, 'change:isChecked', this.render);
             this.listenTo(this.collection, 'change:isExpanded', this.render);
+            this.listenTo(this.collection, 'add', this.render);
             this.render();
         },
         render: function () {

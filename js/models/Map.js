@@ -166,12 +166,17 @@ define([
         /**
          */
         moveLayer: function (args) {
-            var layers, index, layersCollection;
+            var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
             index = layers.indexOf(args[1]);
-            layersCollection = this.get('map').getLayers();
-            layersCollection.removeAt(index);
-            layersCollection.insertAt(index + args[0], args[1]);
+            if (index + args[0] < LayerList.length && index + args[0] >= 0) {
+                layersCollection = this.get('map').getLayers();
+                layersCollection.removeAt(index);
+                layersCollection.insertAt(index + args[0], args[1]);
+                model = LayerList.at(index);
+                LayerList.remove(model);
+                LayerList.add(model, {at: index + args[0]});
+            }
         },
         /**
          *

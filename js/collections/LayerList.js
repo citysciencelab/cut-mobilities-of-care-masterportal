@@ -10,16 +10,17 @@ define([
 
     var LayerList = Backbone.Collection.extend({
         url: Config.layerConf,
+        comparator: "index",
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
                 newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             else if (attrs.typ === 'WFS') {
-                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree);
+                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             else if (attrs.typ === 'GROUP') {
-                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name, attrs.displayInTree);
+                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             newLayer.set('visibility', attrs.defaultVisibility);
             newLayer.get('layer').setVisible(attrs.defaultVisibility);
@@ -74,14 +75,14 @@ define([
                 }
                 //SINGLELAYER
                 else if (_.has(layerdef, 'id') && _.isString(layerdef.id)) {
-                    var returnValue = returndienst(response, layerdef);
+                    var returnValue = returndienst(response, layerdef, index);
                     if (returnValue)
                         dienstArray.push(returnValue);
                     }
             });
             return dienstArray;
 
-            function returndienst (response, layerdef) {
+            function returndienst (response, layerdef, index) {
                 // NOTE falls die ID aus mehreren Layern besteht
                 var layers = layerdef.id.split(',');
                 var dienst = _.findWhere(response, {id: layers[0]});
