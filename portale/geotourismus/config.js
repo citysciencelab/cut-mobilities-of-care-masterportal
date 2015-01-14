@@ -33,7 +33,7 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: true
+            routing: false
         },
         searchBar: {
             placeholder: "Adresssuche",
