@@ -3,7 +3,8 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config'
+    'config',
+    'models/map'
 ], function (_, Backbone, ol, EventBus, Config) {
 
     var Attribution = Backbone.Model.extend({
@@ -14,13 +15,13 @@ define([
         initialize: function () {
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
-            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
             EventBus.on('startEventAttribution', this.startEventAttribution, this); //Beim erneuten sichtbar schalten des Layers wird die Funktion wieder ausgeführt
             EventBus.on('stopEventAttribution', this.stopEventAttribution, this); //Beim ausschalten des Layers wird die Funktion ausgeführt
+            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
+            EventBus.trigger('getBackboneLayerForAttribution', this);
         },
         setMap: function (map) {
             this.set('map', map);
-            EventBus.trigger('getBackboneLayerForAttribution', this);
         },
         /*
         * Diese Funktion wird für jeden Backbone-Layer ausgeführt und startet
@@ -109,6 +110,13 @@ define([
             this.get('map').addControl(attribution);
             this.set('attribution', attribution);
             this.set('alreadySet', true);
+            var scaleLine = new ol.control.ScaleLine({
+                className: 'ol-scale-line',
+//                target: document.getElementById('scale-line'),
+                units: 'metric'
+            });
+            this.get('map').addControl(scaleLine);
+            console.log(this.get('map'));
         },
         checkAPIforAttribution: function (layer) {
             if (layer.get('layerAttribution') && layer.get('layerAttribution') != '' && layer.get('layerAttribution') != 'nicht vorhanden') {
