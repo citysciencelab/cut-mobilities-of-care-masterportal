@@ -31,7 +31,7 @@ define(function () {
                      id: '1365'
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+             name: 'aktuelle Meldungen der TBZ', visible: true
             },
             {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
@@ -53,10 +53,7 @@ define(function () {
             {id: '1935', visible: false, styles: 'geofox_stations', name: "HVV Stationen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
             {id: '49', visible: false, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
-            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost', attribution: {
-                eventname: 'aktualisierebaustellen',
-                timeout: (1 * 60000)
-            }},
+            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '52', visible: false, style: '52', clusterDistance: 30, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'situation'},
@@ -77,7 +74,8 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true
+            legend: true,
+            routing: true
         },
         searchBar: {
             placeholder: "Adresssuche",
