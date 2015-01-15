@@ -74,6 +74,7 @@ define([
         setVisibility: function () {
             EventBus.trigger('returnBackboneLayerForSearchbar', this);
             var visibility = this.get('visibility');
+            this.toggleEventAttribution(visibility);
             if (visibility === true) {
                 if (this.get('layer').getSource().getFeatures().length === 0) {
                     this.updateData();
@@ -135,7 +136,7 @@ define([
             this.set('source', pServerVector);
             this.set('style', function (feature, resolution) {
                 var styleFieldValue = _.values(_.pick(feature.getProperties(), layerIDs.styleField))[0];
-                var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
+                var stylelistmodel = StyleList.returnModelByValue(layerIDs.style, styleFieldValue);
                 return stylelistmodel.getSimpleStyle();
             });
         },
@@ -148,12 +149,11 @@ define([
             this.set('style', function (feature, resolution) {
                 var styleFieldValue = _.values(_.pick(feature.get('features')[0].getProperties(), layerIDs.styleField))[0];
                 var size = feature.get('features').length;
-                var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
-                if (size>1){
-                	var stylelistmodel = StyleList.returnModelById(layerIDs.id + '_cluster');
-                	if(!stylelistmodel){
-                		var stylelistmodel = StyleList.returnModelByName(styleFieldValue);
-                	}
+                if (size > 1){
+                	var stylelistmodel = StyleList.returnModelById(layerIDs.style + '_cluster');
+                }
+                if (!stylelistmodel) {
+                    var stylelistmodel = StyleList.returnModelByValue(layerIDs.style, styleFieldValue);
                 }
                 return stylelistmodel.getClusterStyle(feature);
             });

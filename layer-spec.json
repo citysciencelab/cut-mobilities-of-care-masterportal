@@ -40,32 +40,32 @@
     {
         "id": "parkhaus", -->  offen
         "name": "Parkhäuser", --> hmdk: Titel aus Daten-Metadatensatz / Layer-Titel aus Caps / Zusatzinfo pro id
-        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata", --> hmdk: darstellenderDienst/Dienst-Metadatensatz / hmdk: 'Verweise im WWW' von Typ WMS 
+        "url": "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_bwvi_opendata", --> hmdk: darstellenderDienst/Dienst-Metadatensatz / hmdk: 'Verweise im WWW' von Typ WMS
         "title": "parkhaeuser", --> Layer-Elemente in WMSCapabilities über uuid / kaum gepflegt!! / Übergang: Zusatzinfo pro id
         "format": "image/png", --> WMSCaps
-        "visibility": false,  
+        "visibility": false,
         "version": "1.1.1", --> WMSCaps
         "uuid" : " 0EEE1494-36DD-410C-B5A3-7531DC457014" --> hmdk (der ausgangspunkt)
 		"opendatakategorie" : [string] --> hmdk
 		"inspirekategorie" : [string] --> hmdk
 		"andereKategorien" : [string] --> zusatzinfo pro uuid, z.B. FHH-Atlas Kategorien
 		"subkategorien" : [string] --> zusatzinfo pro id
-		
+
 		- wms-mdid, layername, rs_id, md_id, was noch? @st, tabelle füllen
 
 		- tabelle pflegen
 		- oberfläche für tabellen pflege
 		- geoonline erweitern, dass layerbaum sich aus konfig erstellt
-		
+
 		- generator-skript erzeugt einzel- als auch sammellayer zu jedem datensatz (z.B. Landesgrundbesitzverzeichnis)
-		
-		offen: 
+
+		offen:
 		 - intranet-urls? über proxy lösen? oder fassaden-infos/geoproxy auslesen
 		 - ("hambtg" : true --> hmdk: Metadatensatz ) oder Portal-Konfig zusätzlich aus hmdk über schlagwort 'hambtg' generieren z.B. für geoonline layers: [id, id, id]
 		- ("portal" : [portal-ids] --> zusatzinfo an id), s.o.
 		- wie id vergeben?
 		- alles in GeoOnline, gibt es Datensätze in GeoOnline, die nicht hmbtg sind? ja saga, denkmal, ..
-		
+
     },
     {
         "id": "kita",

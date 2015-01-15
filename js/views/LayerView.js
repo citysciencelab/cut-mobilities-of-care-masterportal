@@ -19,8 +19,8 @@ define([
             'click .plus': 'upTransparence',
             'click .minus': 'downTransparence',
             'click .info': 'getMetadata',
-            'click .check, .unchecked': 'toggleVisibility',
-//            'click .upload, .download': 'moveLayer',
+            'click .check, .unchecked, small': 'toggleVisibility',
+            'click .up, .down': 'moveLayer',
             'click .refresh': 'toggleSettings'
         },
         moveLayer: function (evt) {

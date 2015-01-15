@@ -8,9 +8,12 @@ define(function () {
         },
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
-        printURL: locations.host + ':8680/mapfish_print_2.0/pdf6/info.json',
+        print: {
+            url: locations.host + ":8680/mapfish_print_2.0/",
+            title: 'Verkehrsportal',
+            gfi: false
+        },
         proxyURL: '/cgi-bin/proxy.cgi',
-        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -28,7 +31,7 @@ define(function () {
                      id: '1365'
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+             name: 'aktuelle Meldungen der TBZ', visible: true
             },
             {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
@@ -50,16 +53,10 @@ define(function () {
             {id: '1935', visible: false, styles: 'geofox_stations', name: "HVV Stationen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
             {id: '49', visible: false, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
-            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost', attribution: {
-                eventname: 'aktualisierebaustellen',
-                timeout: (30 * 60000)
-            }},
+            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-
-            {id: '52', visible: false, style: '52', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'auslastung'},
-            {id: '1363', visible: false},
-
+            {id: '52', visible: false, style: '52', clusterDistance: 30, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'situation'},
             {id: '48', visible: false, style: '48', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '50', visible: false, style: '50', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
@@ -77,7 +74,19 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true
+            legend: true,
+            routing: true
+        },
+        searchBar: {
+            placeholder: "Adresssuche",
+            gazetteerURL: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
+            }
         },
         tools: {
             gfi: true,

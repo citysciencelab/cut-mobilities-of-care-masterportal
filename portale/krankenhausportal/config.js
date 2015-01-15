@@ -9,13 +9,14 @@ define(function () {
         },
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
-        printURL: locations.host + ':8680/mapfish_print_2.0/',
         proxyURL: '/cgi-bin/proxy.cgi',
-        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
+             displayInTree: false,
              filterOptions: [
                  {
                      'fieldName': 'teilnahme_geburtsklinik',
@@ -32,7 +33,7 @@ define(function () {
              ]
             }
         ],
-        attributions: false,
+        attributions: true,
         menubar: true,
         mouseHover: true,
         isMenubarVisible: true,
@@ -45,7 +46,31 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: true,
-            legend: false
+            legend: false,
+            routing: false
+        },
+        searchBar: {
+            placeholder: "Suche nach Straße oder Krankenhausname",
+            gazetteerURL: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
+            }
+        },
+        print: {
+            url: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + ":8680/mapfish_print_2.0/";
+                }
+                else {
+                    return locations.host + "/mapfish_print_2.0/";
+                }
+            },
+            title: 'Krankenhausportal',
+            gfi: false
         },
         tools: {
             gfi: true,

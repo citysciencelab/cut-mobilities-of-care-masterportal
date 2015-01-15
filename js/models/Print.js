@@ -16,7 +16,7 @@ define([
             currentMapScale: Config.view.scale, // akuteller Maßstab
             currentMapCenter: Config.view.center    // aktuelle Zentrumkoordinate
         },
-        url: Config.proxyURL + "?url=" + Config.printURL + 'master/info.json',
+        url: Config.proxyURL + "?url=" + Config.print.url() + 'master/info.json',
         initialize: function () {
 
             // get print config
@@ -53,21 +53,21 @@ define([
         setGFIToPrint: function (values) {
             this.set('gfiParams', _.pairs(values[0]));
             this.set('hasPrintGFIParams', values[1]);
-            if (this.get('hasPrintGFIParams') === true) {
+            if (this.get('hasPrintGFIParams') === true && Config.print.gfi === true) {
                 switch (this.get('gfiParams').length) {
                     case 4:
-                        this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master_gfi_4/create.json');
+                        this.set('createURL', Config.print.url() + '/master_gfi_4/create.json');
                         break;
                     case 5:
-                        this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master_gfi_5/create.json');
+                        this.set('createURL', Config.print.url() + '/master_gfi_5/create.json');
                         break;
                     case 6:
-                        this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master_gfi_6/create.json');
+                        this.set('createURL', Config.print.url() + '/master_gfi_6/create.json');
                         break;
                 }
             }
             else {
-                this.set('createURL', 'http://wscd0096:8680/mapfish_print_2.0/master/create.json');
+                this.set('createURL', Config.print.url() + '/master/create.json');
             }
         },
         /**
@@ -114,7 +114,7 @@ define([
                         center: this.get('currentMapCenter'),
                         scale:  this.get('currentMapScale'),
                         dpi: 96,
-                        mapTitle: Config.printTitle
+                        mapTitle: Config.print.title
                     }
                 ]
             });

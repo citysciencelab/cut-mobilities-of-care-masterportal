@@ -10,6 +10,7 @@ define([
 
     var LayerList = Backbone.Collection.extend({
         url: Config.layerConf,
+        comparator: "index",
         model: function (attrs, options) {
             var newLayer;
             if (attrs.typ === 'WMS') {
@@ -74,14 +75,14 @@ define([
                 }
                 //SINGLELAYER
                 else if (_.has(layerdef, 'id') && _.isString(layerdef.id)) {
-                    var returnValue = returndienst(response, layerdef);
+                    var returnValue = returndienst(response, layerdef, index);
                     if (returnValue)
                         dienstArray.push(returnValue);
                     }
             });
             return dienstArray;
 
-            function returndienst (response, layerdef) {
+            function returndienst (response, layerdef, index) {
                 // NOTE falls die ID aus mehreren Layern besteht
                 var layers = layerdef.id.split(',');
                 var dienst = _.findWhere(response, {id: layers[0]});
@@ -105,7 +106,7 @@ define([
                         layername = dienst.datasets[0].md_name;
                         var layerList = "";
                         _.each(layers, function (layer) {
-                            var obj = _.findWhere(response, {id: layer});console.log(obj.layers);
+                            var obj = _.findWhere(response, {id: layer});
                             layerList += "," + obj.layers;
                         });
                         dienst.layers = layerList.slice(1, layerList.length);

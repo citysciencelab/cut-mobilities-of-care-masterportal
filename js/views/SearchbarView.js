@@ -34,7 +34,14 @@ define([
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
+                this.listenTo(this.model, "change:initString", this.zoomTo);
                 this.render();
+                if (Config.bPlanURL !== undefined) {
+                    $("#searchInput").prop("disabled", "disabled");
+                }
+                $(window).on("orientationchange", function () {
+                    this.render();
+                }, this);
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -72,6 +79,9 @@ define([
                 if (this.model.get("isHitListReady") === true) {
                     var attr = this.model.toJSON();
                     $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                }
+                if (Config.searchBar.initString !== undefined) {   // workaround für die initiale Suche von B-Plänen
+                    this.model.set("initString", Config.searchBar.initString);
                 }
             },
 
@@ -159,10 +169,15 @@ define([
             *
             */
             "zoomTo": function (evt) {
+                var zoomLevel, hitID, hit;
+                if (_.has(evt, "cid")) {    // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
+                    hit = this.model.get("hitList")[0];
+                }
+                else {
+                    hitID = evt.currentTarget.id;
+                    hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+                }
                 // NOTE switch case wäre angebracht
-                var zoomLevel;
-                var hitID = evt.currentTarget.id;
-                var hit = _.findWhere(this.model.get("hitList"), {id: hitID});
                 $("#searchInput").val(hit.name);
                 if (hit.type === "Straße") {
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate);
@@ -190,7 +205,7 @@ define([
                     var typeName = (hit.type === "BPlan festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
                     var propertyName = (hit.type === "BPlan festgestellt") ? "planrecht" : "plan";
                     $.ajax({
-                        url: Config.proxyURL + "?url=http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        url: Config.proxyURL + "?url=" + this.model.get("bPlanURL"),
                         data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + hit.name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>",
                         type: "POST",
                         context: this,  // model

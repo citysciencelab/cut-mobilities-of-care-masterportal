@@ -18,7 +18,6 @@ define([
             /**
              * Gibt die initiale Zentrumskoordinate zurück.
              * Ist der Parameter 'center' vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
-             * @returns {Array} -- Die Zentrumskoordinate
              */
             if (_.has(result, 'center')) {
                 var values = _.values(_.pick(result, 'center'))[0].split(',');
@@ -32,7 +31,6 @@ define([
             /**
              * Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
              * Ist der Parameter 'layerIDs' vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
-             * @returns {Array} -- Die LayerIDs kommasepariert als String
              */
             if (_.has(result, 'layerIDs')) {
                 var values = _.values(_.pick(result, 'layerIDs'))[0].split(',');
@@ -51,7 +49,6 @@ define([
             /**
              * Gibt die initiale Resolution (Zoomlevel) zurück.
              * Ist der Parameter 'zoomLevel' vorhanden wird die passende Resolution zurückgegeben, ansonsten der Standardwert.
-             * @returns {Number} -- Die Resolution
              */
             if (_.has(result, 'zoomLevel')) {
                 var value = _.values(_.pick(result, 'zoomLevel'))[0];
@@ -72,7 +69,6 @@ define([
             /**
             * Gibt den Wert für die config-Option isMenubarVisible zurück.
             * Ist der Parameter 'isMenubarVisible' vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
-            * @returns {Boolean}
             *
             */
             if (_.has(result, 'isMenubarVisible')) {
@@ -83,6 +79,14 @@ define([
                 else {
                     Config.isMenubarVisible = false;
                 }
+            }
+
+            /**
+            *
+            */
+            if (_.has(result, 'bplanfest')) {
+                var value = _.values(_.pick(result, 'bplanfest'))[0];
+                Config.searchBar.initString = value;
             }
         }
     });

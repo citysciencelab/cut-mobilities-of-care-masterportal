@@ -7,21 +7,21 @@ if (window.location.href.charAt(window.location.href.length-1) === '#') {
 }
 if (window.location.host === 'wscd0096') {
     var locations = {
-        portal : window.location.href,
+        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/')),
         host : window.location.protocol + '//' + window.location.host
     };
 }
 else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.host === 'geoportal-hamburg.de') {
     var locations = {
-        portal : window.location.href,
+        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest',
         host : window.location.protocol + '//' + window.location.host
     };
 }
-else if(window.location.host === '87.106.215.123'){
+else if(window.location.host === '87.106.215.123') {
     var locations = {
-        portal : window.location.href,
+        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgv-1.0.1',
         host : window.location.protocol + '//' + window.location.host
     };
@@ -143,6 +143,11 @@ require([
             if (Config.menu.legend === true) {
                 require(['views/LegendView'], function (LegendView) {
                     new LegendView();
+                });
+            }
+            if (Config.menu.routing === true) {
+                require(['views/RoutingView'], function (RoutingView) {
+                    new RoutingView();
                 });
             }
         });

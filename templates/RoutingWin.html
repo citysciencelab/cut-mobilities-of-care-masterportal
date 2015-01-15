@@ -1,0 +1,47 @@
+<div class="panel-heading">
+    <h3 class="panel-title" style="font-size: 14px; float: left; padding: 10px 0px;"><span class="glyphicon glyphicon-road"></span>&nbsp;&nbsp;Routenplaner</h3>
+    <span class="close" style="padding: 8px;">×</span>
+</div>
+
+<div class="panel-body">
+    <div class="input-group">
+        <span class="input-group-addon start-square" id="basic-addon1"></span>
+        <input type="text" class="form-control" placeholder="Von:" aria-describedby="basic-addon1">
+    </div>
+    <br>
+    <div class="input-group">
+        <span class="input-group-addon ziel-square" id="basic-addon1"></span>
+        <input type="text" class="form-control" placeholder="Nach:" aria-describedby="basic-addon1">
+    </div>
+    <br>
+    <button type="button" class="toggleRoutingOptions btn btn-default" aria-label="Left Align">
+        <span class="" aria-hidden="true">Optionen</span>
+        <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+        <span class="" aria-hidden="true">Route berechnen</span>
+    </button>
+</div>
+
+<div class="panel-body panel-options">
+    <h3 class="panel-title">Zeitpunkt vorgeben:</h3>
+    <br>
+    <div class="input-group">
+        <span class="input-group-addon glyphicon glyphicon-calendar" id="basic-addon1"></span>
+        <button type="button" id="dayOfWeekButton" class="btn btn-default dropdown-toggle fixedwidth" data-toggle="dropdown" aria-expanded="false"></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dayOfWeekButton">
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Montag</a></li>
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Dienstag</a></li>
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Mittwoch</a></li>
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Donnerstag</a></li>
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Freitag</a></li>
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Samstag</a></li>
+            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sonntag</a></li>
+            </ul>
+    </div>
+    <br>
+    <div class="input-group">
+        <span class="input-group-addon glyphicon glyphicon-time" id="basic-addon2"></span>
+        <input type="time" id="timeButton" class="form-control fixedwidth changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" >
+    </div>
+</div>

@@ -10,10 +10,8 @@ define(function () {
         },
         layerConf: locations.master + '/diensteapiINTERNET.json',
         styleConf: locations.master + '/style.json',
-        printURL: locations.host + ':8680/mapfish_print_2.0/',
         proxyURL: '/cgi-bin/proxy.cgi',
-        printTitle: 'Gründach-Strategie',
-        gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
             {id: '94', visible: false},
@@ -31,7 +29,31 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true
+            legend: true,
+            routing: false
+        },
+        searchBar: {
+            placeholder: "Adresssuche",
+            gazetteerURL: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
+            }
+        },
+        print: {
+            url: function () {
+                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                    return locations.host + ":8680/mapfish_print_2.0/";
+                }
+                else {
+                    return locations.host + "/mapfish_print_2.0/";
+                }
+            },
+            title: 'Gründachstrategie',
+            gfi: false
         },
         tools: {
             gfi: false,
