@@ -60,7 +60,6 @@ define([
                 resolution: Config.view.resolution,
                 resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
             }));
-
             this.set('map', new ol.Map({
                 layers: LayerList.pluck('layer'),
                 logo: null,
@@ -70,6 +69,12 @@ define([
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
             }));
+            if (Config.scaleLine === true) {
+                var scaleLine = new ol.control.ScaleLine({
+                    minWidth: 80
+                });
+                this.get('map').addControl(scaleLine);
+            }
             // View listener
             this.get('view').on('change:resolution', function () {
                 // NOTE brauche ich wahrscheinlich nicht mehr (sd)

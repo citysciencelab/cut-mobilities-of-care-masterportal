@@ -10,31 +10,31 @@ define(function () {
         layerConf: locations.master + '/diensteapiFHHNET.json',
         styleConf: locations.master + '/style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
-        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
-            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
-             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
-             displayInTree: false,
-             filterOptions: [
-                 {
-                     'fieldName': 'teilnahme_geburtsklinik',
-                     'filterType': 'combo',
-                     'filterName': 'Geburtsklinik',
-                     'filterString': ['*','ja','nein']
-                 },
-                 {
-                     'fieldName': 'teilnahme_notversorgung',
-                     'filterType': 'combo',
-                     'filterName': 'Not- und Unfallversorgung',
-                     'filterString': ['*','ja','eingeschränkt','nein']
-                 }
-             ]
-            }
+            {id: '8', visible: false}
+//            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+//             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
+//             displayInTree: false,
+//             filterOptions: [
+//                 {
+//                     'fieldName': 'teilnahme_geburtsklinik',
+//                     'filterType': 'combo',
+//                     'filterName': 'Geburtsklinik',
+//                     'filterString': ['*','ja','nein']
+//                 },
+//                 {
+//                     'fieldName': 'teilnahme_notversorgung',
+//                     'filterType': 'combo',
+//                     'filterName': 'Not- und Unfallversorgung',
+//                     'filterString': ['*','ja','eingeschränkt','nein']
+//                 }
+//             ]
+//            }
         ],
         attributions: true,
         menubar: true,
+        scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         menu: {

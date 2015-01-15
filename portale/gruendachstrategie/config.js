@@ -19,6 +19,7 @@ define(function () {
         ],
         styleConf: '../../style.json',
         menubar: true,
+        scaleLine: false,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',

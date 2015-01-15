@@ -13,6 +13,19 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
+.ol-scale-line {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+    border-radius: 5px !important;
+}
+
+.ol-scale-line-inner{
+    color: #777;
+    font-weight: bold;
+    font-size: 12 !important;
+    border-color: #777;
+    border-width: 2px;
+}
+
 .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh {
     cursor: pointer;
 }

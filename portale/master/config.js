@@ -118,6 +118,12 @@ define(function () {
         * @type {Boolean}
         * @desc Beschreibung.
         */
+        scaleLine: false,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         mouseHover: true,
         /**
         * @memberof config
