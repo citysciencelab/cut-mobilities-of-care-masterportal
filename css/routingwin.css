@@ -13,3 +13,9 @@
 .errortime {
     background-color: #FE2E2E;
 }
+.routinglocator {
+    background-color: #fff;
+}
+.routinglocator:hover {
+    background-color: #ebebeb;
+}

@@ -71,7 +71,7 @@ define([
                 },
                 context: layer,
                 error: function (err) {
-                    console.log(err);
+                    alert('Dienst zur Darstellung der Aktualität derzeit gestört.');
                 }
             });
         }/*,

@@ -7,6 +7,7 @@
     <div class="input-group">
         <span class="input-group-addon start-square" id="basic-addon1"></span>
         <input type="text" class="form-control" placeholder="Von:" aria-describedby="basic-addon1">
+        <span class="input-group-addon glyphicon glyphicon-map-marker routinglocator" aria-hidden="true"></span>
     </div>
     <br>
     <div class="input-group">
@@ -14,13 +15,15 @@
         <input type="text" class="form-control" placeholder="Nach:" aria-describedby="basic-addon1">
     </div>
     <br>
-    <button type="button" class="toggleRoutingOptions btn btn-default" aria-label="Left Align">
-        <span class="" aria-hidden="true">Optionen</span>
-        <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-    </button>
-    <button type="button" class="btn btn-default" aria-label="Left Align">
-        <span class="" aria-hidden="true">Route berechnen</span>
-    </button>
+    <div style="width: 100%;" class="btn-group" role="group" aria-label="...">
+        <button style="width: 50%;" type="button" class="btn btn-default toggleRoutingOptions">
+            <span class="" aria-hidden="true">Optionen</span>
+            <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+        </button>
+        <button style="width: 50%;" type="button" class="btn btn-primary">
+            <span class="" aria-hidden="true">Route berechnen</span>
+        </button>
+    </div>
 </div>
 
 <div class="panel-body panel-options">
