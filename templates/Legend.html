@@ -1,35 +1,94 @@
-  <div class="modal-dialog">
+<div class="modal-dialog" >
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Schließen</span></button>
-        <h4 class="modal-title" id="legendModalLabel">Legende</h4>
-      </div>
-      <div class="modal-body">
-          <%  if(img.length >0) {
-            _.each(img, function(element, index) {%>
-<!--
-                var featureCluster=feature.getProperties();
-                _.each(featureCluster.features, function(value,key) {
-                var name=value.getProperties().Name;
-                var kategorie=value.getProperties().Kategorie;
-                var coord=value.getGeometry().getCoordinates();
-                var img;
-                _.find(StyleList.models, function (num) {
-                    if (num.attributes.name == kategorie) {
-                        img= num.attributes.imagesrc;
-                        return;
-                    }
-                });
--->
-            <tr class= "legendRow" >
-                <td>
-                <p><img src=<%=img[index]%> >  </p>
-                </td>
-            </tr>
-            <% })};%>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-      </div>
+    <div id="gfiTitle" class="closelegend" style="cursor:pointer;" data-dismiss="modal" >
+    <div class="close glyphicon glyphicon-remove"></div>
+    <strong>Legende</strong>
     </div>
-  </div>
+      <div id='legendbody' class="modal-body legendbody">
+          <%  if(img.length >0) {
+            _.each(img, function(element, index) {
+              var legendurl,group;
+              if(element instanceof Array){
+                  group=element;
+                  legendurl=group[0];
+              }
+              else{
+                legendurl=element;
+              }
+
+              if(document.getElementById('base-modal-legend')&&visibLegend!=''&&visibLegend[0]){
+              if(visibLegend[0].src===img[index]||visibLegend[0].src===img[index][0]){
+                      %>
+                      <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= layername[index] %></strong></li>
+
+                        <div class="legenddiv" style="display: visible;">
+
+                      <%if(typeof img[index]=== 'string'){
+                      %>
+                    <li class="list-group-item hit" ><img src=<%= img[index] %>></li>
+                   <% }
+                        else if( img[index] instanceof Array){%>
+                            <li class="list-group-item hit">
+                            <%
+                            _.each(img[index], function(groupelement, groupindex){%>
+                                <p><img src=<%= img[index][groupindex] %>> </p>
+                            <%
+                            });
+                        };%>
+                        </li>
+                            </div>
+                            <p style="display:none"><%=index %></p>
+                                <%
+                    }
+                    else{%>
+                        <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= layername[index] %></strong></li>
+
+                            <div class="legenddiv" style="display: none;">
+
+                          <%if(typeof img[index]=== 'string'){
+                          %>
+                        <li class="list-group-item hit" ><img src=<%= img[index] %>></li>
+                       <% }
+                            else if( img[index] instanceof Array){%>
+                                <li class="list-group-item hit">
+                                <%
+                                _.each(img[index], function(groupelement, groupindex){%>
+                                    <p><img src=<%= img[index][groupindex] %>> </p>
+                                <%
+                                });
+                            };%>
+                        </li>
+                            </div>
+                            <p style="display:none"><%=index %></p>
+                    <%}
+                }
+            else {%>
+            <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= layername[index] %></strong></li>
+                <%
+                   if(index===0) {%>
+                <div class="legenddiv" style="display: visible;">
+                <% }
+                else{ %>
+                <div class="legenddiv" style="display: none;">
+                <%}%>
+              <%if(typeof img[index]=== 'string'){
+              %>
+            <li class="list-group-item hit" ><img src=<%= img[index] %>></li>
+           <% }
+                else if( img[index] instanceof Array){%>
+                    <li class="list-group-item hit">
+                    <%
+                    _.each(img[index], function(groupelement, groupindex){%>
+                        <p><img src=<%= img[index][groupindex] %>> </p>
+                    <%
+                    });
+                };%>
+                </li>
+                    </div>
+                        <p style="display:none"><%=index %></p>
+                        <%
+                           }
+            })
+        }%>
+    </div>
+</div>

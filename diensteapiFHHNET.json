@@ -9587,6 +9587,7 @@
       "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
+      "legendURL" : "ignore",
       "datasets" : [
          {
             "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",

@@ -16,10 +16,10 @@ define([
                 newLayer = new WMSLayer(attrs.dienst, attrs.styles, attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             else if (attrs.typ === 'WFS') {
-                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree);
+                newLayer = new WFSLayer(attrs.dienst, '', attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             else if (attrs.typ === 'GROUP') {
-                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name, attrs.displayInTree);
+                newLayer = new GroupLayer(attrs, '', attrs.id, attrs.name, attrs.displayInTree, attrs.opacity);
             }
             newLayer.set('visibility', attrs.defaultVisibility);
             newLayer.get('layer').setVisible(attrs.defaultVisibility);
@@ -143,7 +143,9 @@ define([
             EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
             EventBus.on('getVisibleWFSLayerPOI', this.sendVisibleWFSLayerPOI, this);
+            EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
             this.listenTo(this, 'change:visibility', this.sendVisibleWFSLayer, this);
+            this.listenTo(this, 'change:visibility', this.sendAllVisibleLayer, this);
 
             this.fetch({
                 cache: false,
@@ -171,6 +173,13 @@ define([
             return this.where({visibility: true, typ: "WFS"});
         },
         /**
+         * Gibt alle Sichtbaren Layer zurück.
+         *
+         */
+        getAllVisibleLayer: function () {
+            return this.where({visibility: true});
+        },
+        /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
          * args[0] = id, args[1] = visibility(bool)
          */
@@ -192,6 +201,12 @@ define([
          */
         sendVisibleWMSLayer: function () {
             EventBus.trigger('layerForPrint', this.getVisibleWMSLayer());
+        },
+        /**
+         *
+         */
+        sendAllVisibleLayer: function () {
+            EventBus.trigger('sendAllVisibleLayer', this.getAllVisibleLayer());
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.

@@ -13,17 +13,19 @@ define([
         setModel: function (clusterFeature, styleList, maxDist, newCenter) {
             // NOTE bisher nur Cluster-WFS
             _.each(clusterFeature.getProperties().features, function (feature) {
-                var name = feature.getProperties().Name;;
+                var name = feature.getProperties().Name;
                 var kategorie = feature.getProperties().Kategorie;
                 var lage = feature.getProperties().Lage;
-                var xCoord = feature.getProperties().X_Wert;
-                var yCoord = feature.getProperties().Y_Wert;
+                //var xCoord = feature.getProperties().X_Wert;
+                //var yCoord = feature.getProperties().Y_Wert;
                 var lineStringArray = [];
                 lineStringArray.push(newCenter)
                 poiObject=feature.getGeometry().flatCoordinates;
                 if(poiObject.length==3){
                     poiObject.pop();
                 }
+                var xCoord=poiObject[0];
+                var yCoord=poiObject[1];
                 lineStringArray.push(poiObject);
                 lineString= new ol.geom.LineString(lineStringArray);
                 var distance = Math.round(lineString.getLength());

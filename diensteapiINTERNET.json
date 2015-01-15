@@ -8174,7 +8174,7 @@
       "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "",
+      "legendURL" : "ignore",
       "datasets" : [
          {
             "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
@@ -39481,7 +39481,7 @@
    },
    {
       "id" : "2013",
-      "name" : "Gründach-Fördergebiete",
+      "name" : "Hamburger Gründachfoerderung-Zuschlag Innere Stadt",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gruendach_Foerdergebiete",
       "typ" : "WMS",
       "layers" : "0",
