@@ -166,8 +166,8 @@ define([
                             if (_.has(element.attributes, mouseHoverField)) {
                                 value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
                                 if (coord.length == 0) {
-                                    coord.push(element.attributes.geom.getFlatCoordinates()[0]);
-                                    coord.push(element.attributes.geom.getFlatCoordinates()[1]);
+                                    coord.push(element.attributes.geom.getFirstCoordinate()[0]);
+                                    coord.push(element.attributes.geom.getFirstCoordinate()[1]);
                                 }
                             }
                         }
