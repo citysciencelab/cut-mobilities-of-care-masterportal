@@ -6,7 +6,7 @@ define(function () {
             resolution: 5.2916638091682096,
             scale: 20000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET_19112014.json',
+        layerConf: '../../diensteapiFHHNET_16012015.json',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},

@@ -75,7 +75,7 @@ require([
             new ScaleLineView();
         });
     }
-    
+
     if (Config.attributions && Config.attributions === true) {
         require(['views/AttributionView'], function (AttributionView) {
             new AttributionView();

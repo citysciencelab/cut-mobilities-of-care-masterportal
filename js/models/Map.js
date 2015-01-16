@@ -5,15 +5,15 @@ define([
     'collections/LayerList',
     'config',
     'eventbus',
-    'proj4'    
+    'proj4'
 ], function (_, Backbone, ol, LayerList, Config, EventBus, proj4) {
 
-    var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen    
+    var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
     $('#dpidiv').remove();
 //    var POINTS_PER_INCH = 72; //PostScript points 1/72"  --> = dpi nicht ppi
     var MM_PER_INCHES = 25.4;
 
-    // Definition der Projektion EPSG:25832    
+    // Definition der Projektion EPSG:25832
 //    ol.proj.addProjection(new ol.proj.Projection({
 //        code: 'EPSG:25832',
 //        units: 'm',
@@ -52,7 +52,7 @@ define([
             EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
             EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geööfnet oder nicht
 
-            this.set('projection', proj25832);            
+            this.set('projection', proj25832);
 
             this.set('view', new ol.View({
                 projection: this.get('projection'),
@@ -64,7 +64,7 @@ define([
             this.set('map', new ol.Map({
                 layers: LayerList.pluck('layer'),
                 logo: null,
-                renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
+                renderer: 'canvas',    // 'dom', 'webgl' oder 'canvas'
                 target: 'map',
                 view: this.get('view'),
                 controls: [],
