@@ -42,6 +42,7 @@ define([
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
+                $("#searchInput").focusout();
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -66,7 +67,6 @@ define([
                 } else {
                     $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
                 }
-                this.focusOnEnd($("#searchInput"));
                 if (this.model.get("searchString").length !== 0) {
                     $("#searchInput:focus").css("border-right-width", "0");
                 }
