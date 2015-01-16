@@ -64,7 +64,7 @@ define([
             this.set('map', new ol.Map({
                 layers: LayerList.pluck('layer'),
                 logo: null,
-                renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
+                renderer: 'canvas',    // 'dom', 'webgl' oder 'canvas'
                 target: 'map',
                 view: this.get('view'),
                 controls: [],
