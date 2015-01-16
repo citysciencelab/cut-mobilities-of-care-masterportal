@@ -116,9 +116,9 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
         */
-        scaleLine: false,
+        scaleLine: true,
         /**
         * @memberof config
         * @type {Boolean}

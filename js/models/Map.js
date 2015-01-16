@@ -4,25 +4,26 @@ define([
     'openlayers',
     'collections/LayerList',
     'config',
-    'eventbus'
-], function (_, Backbone, ol, LayerList, Config, EventBus) {
+    'eventbus',
+    'proj4'    
+], function (_, Backbone, ol, LayerList, Config, EventBus, proj4) {
 
-    var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
+    var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen    
     $('#dpidiv').remove();
 //    var POINTS_PER_INCH = 72; //PostScript points 1/72"  --> = dpi nicht ppi
     var MM_PER_INCHES = 25.4;
 
-    // Definition der Projektion EPSG:25832
-    ol.proj.addProjection(new ol.proj.Projection({
-        code: 'EPSG:25832',
-        units: 'm',
-        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-        axisOrientation: 'enu', // default
-        global: false  // default
-    }));
+    // Definition der Projektion EPSG:25832    
+//    ol.proj.addProjection(new ol.proj.Projection({
+//        code: 'EPSG:25832',
+//        units: 'm',
+//        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
+//        axisOrientation: 'enu', // default
+//        global: false  // default
+//    }));
+    proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
     var proj25832 = ol.proj.get('EPSG:25832');
     proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
-
     /**
      * @exports Map
      * @requires LayerList
@@ -51,7 +52,7 @@ define([
             EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
             EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geööfnet oder nicht
 
-            this.set('projection', proj25832);
+            this.set('projection', proj25832);            
 
             this.set('view', new ol.View({
                 projection: this.get('projection'),
@@ -69,12 +70,8 @@ define([
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
             }));
-            if (Config.scaleLine === true) {
-                var scaleLine = new ol.control.ScaleLine({
-                    minWidth: 80
-                });
-                this.get('map').addControl(scaleLine);
-            }
+            // Speichere DOTS_PER_INCH für ScaleBar
+            this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
             // View listener
             this.get('view').on('change:resolution', function () {
                 // NOTE brauche ich wahrscheinlich nicht mehr (sd)

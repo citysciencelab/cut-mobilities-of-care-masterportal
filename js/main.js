@@ -30,7 +30,7 @@ else if(window.location.host === '87.106.215.123') {
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol',
+        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
         jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
         underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
         backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
@@ -70,7 +70,12 @@ require([
     require(['models/map'], function (Map) {
         new Map();
     });
-
+    if (Config.scaleLine && Config.scaleLine === true) {
+        require(['views/ScaleLineView'], function (ScaleLineView) {
+            new ScaleLineView();
+        });
+    }
+    
     if (Config.attributions && Config.attributions === true) {
         require(['views/AttributionView'], function (AttributionView) {
             new AttributionView();
