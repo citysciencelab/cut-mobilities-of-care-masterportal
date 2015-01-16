@@ -147,7 +147,8 @@ define(function () {
             tools: true,
             treeFilter: true,
             wfsFeatureFilter: true,
-            legend: true
+            legend: true,
+            routing: true
         },
         /**
         * @memberof config
