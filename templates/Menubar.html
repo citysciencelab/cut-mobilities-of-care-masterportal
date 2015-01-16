@@ -29,6 +29,13 @@
                     </ul>
                 </li>
             <% } %>
+            <% if (routing === true) { %>
+                <li>
+                    <a href="#" class="routingModul">
+                        <span class="glyphicon glyphicon-road"></span>&nbsp;Routenplaner
+                    </a>
+                </li>
+            <% } %>
             <% if (wfsFeatureFilter === true) { %>
                 <li>
                     <a href="#" class="filterWfsFeature">

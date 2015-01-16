@@ -70,6 +70,11 @@ require([
     require(['models/map'], function (Map) {
         new Map();
     });
+    if (Config.scaleLine && Config.scaleLine === true) {
+        require(['views/ScaleLineView'], function (ScaleLineView) {
+            new ScaleLineView();
+        });
+    }
 
     if (Config.attributions && Config.attributions === true) {
         require(['views/AttributionView'], function (AttributionView) {
@@ -143,6 +148,11 @@ require([
             if (Config.menu.legend === true) {
                 require(['views/LegendView'], function (LegendView) {
                     new LegendView();
+                });
+            }
+            if (Config.menu.routing === true) {
+                require(['views/RoutingView'], function (RoutingView) {
+                    new RoutingView();
                 });
             }
         });

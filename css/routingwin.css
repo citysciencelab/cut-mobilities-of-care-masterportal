@@ -1,0 +1,21 @@
+.start-square {
+    width: 35px;
+    background-color: #81BEF7;
+}
+.ziel-square {
+    width: 35px;
+    background-color: #FE2E2E;
+}
+.fixedwidth {
+    width:100%;
+    text-align: center;
+}
+.errortime {
+    background-color: #FE2E2E;
+}
+.routinglocator {
+    background-color: #fff;
+}
+.routinglocator:hover {
+    background-color: #ebebeb;
+}

@@ -22,6 +22,7 @@ define(function () {
         ],
         styleConf: "../../style.json",
         menubar: true,
+        scaleLine: false,
         mouseHover: false,
         isMenubarVisible: true,
         menu: {
@@ -33,7 +34,8 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false
+            legend: false,
+            routing: false
         },
         // gazetteerURL: locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
         searchBar: {

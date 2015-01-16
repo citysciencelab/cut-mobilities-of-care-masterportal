@@ -4,8 +4,9 @@ define([
     'openlayers',
     'collections/LayerList',
     'config',
-    'eventbus'
-], function (_, Backbone, ol, LayerList, Config, EventBus) {
+    'eventbus',
+    'proj4'
+], function (_, Backbone, ol, LayerList, Config, EventBus, proj4) {
 
     var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
     $('#dpidiv').remove();
@@ -13,16 +14,16 @@ define([
     var MM_PER_INCHES = 25.4;
 
     // Definition der Projektion EPSG:25832
-    ol.proj.addProjection(new ol.proj.Projection({
-        code: 'EPSG:25832',
-        units: 'm',
-        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-        axisOrientation: 'enu', // default
-        global: false  // default
-    }));
+//    ol.proj.addProjection(new ol.proj.Projection({
+//        code: 'EPSG:25832',
+//        units: 'm',
+//        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
+//        axisOrientation: 'enu', // default
+//        global: false  // default
+//    }));
+    proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
     var proj25832 = ol.proj.get('EPSG:25832');
     proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
-
     /**
      * @exports Map
      * @requires LayerList
@@ -60,7 +61,6 @@ define([
                 resolution: Config.view.resolution,
                 resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
             }));
-
             this.set('map', new ol.Map({
                 layers: LayerList.pluck('layer'),
                 logo: null,
@@ -70,6 +70,8 @@ define([
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
             }));
+            // Speichere DOTS_PER_INCH für ScaleBar
+            this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
             // View listener
             this.get('view').on('change:resolution', function () {
                 // NOTE brauche ich wahrscheinlich nicht mehr (sd)

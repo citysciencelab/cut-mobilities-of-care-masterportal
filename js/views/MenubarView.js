@@ -26,7 +26,8 @@ define([
         events: {
             'click .filterTree': 'activateFilterTree',
             'click .filterWfsFeature': 'activateWfsFilter',
-            'click .legend': 'activateLegend'
+            'click .legend': 'activateLegend',
+            'click .routingModul': 'activateRoutingModul'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -44,6 +45,9 @@ define([
         },
         activateLegend: function () {
             EventBus.trigger('toggleLegendWin');
+        },
+        activateRoutingModul: function () {
+            EventBus.trigger('toggleRoutingWin');
         }
     });
 

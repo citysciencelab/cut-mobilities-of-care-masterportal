@@ -19,6 +19,7 @@ define(function () {
         ],
         styleConf: '../../style.json',
         menubar: true,
+        scaleLine: false,
         isMenubarVisible: true,
         menu: {
             viewerName: 'GeoViewer',
@@ -29,7 +30,8 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true
+            legend: true,
+            routing: false
         },
         searchBar: {
             placeholder: "Adresssuche",

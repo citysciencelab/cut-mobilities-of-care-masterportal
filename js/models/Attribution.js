@@ -3,7 +3,8 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config'
+    'config',
+    'models/map'
 ], function (_, Backbone, ol, EventBus, Config) {
 
     var Attribution = Backbone.Model.extend({
@@ -14,13 +15,13 @@ define([
         initialize: function () {
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
-            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
             EventBus.on('startEventAttribution', this.startEventAttribution, this); //Beim erneuten sichtbar schalten des Layers wird die Funktion wieder ausgeführt
             EventBus.on('stopEventAttribution', this.stopEventAttribution, this); //Beim ausschalten des Layers wird die Funktion ausgeführt
+            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
+            EventBus.trigger('getBackboneLayerForAttribution', this);
         },
         setMap: function (map) {
             this.set('map', map);
-            EventBus.trigger('getBackboneLayerForAttribution', this);
         },
         /*
         * Diese Funktion wird für jeden Backbone-Layer ausgeführt und startet
@@ -35,7 +36,11 @@ define([
                     return arr === undefined;
                 });
                 if (_.isArray(layerattributions) && layerattributions.length > 0) {
-                    layer.get('layer').getSource().setAttributions(layerattributions);
+                    /* TODO:
+                    Mit ol3-debug kann setAttributions() verwendet werden, mit ol3 nur .attributions =
+                    */
+                    layer.get('layer').getSource().attribution_ = layerattributions;
+                    console.log(layer.get('layer').getSource().getAttributions());
                     if (this.get('alreadySet') == false) {
                         this.addAttributionControl();
                     }
@@ -66,7 +71,7 @@ define([
                                 html: eventValue
                             })
                         );
-                        layer.get('layer').getSource().setAttributions(layerattributions);
+                        layer.get('layer').getSource().attributions_ = layerattributions;
                         layer.reload();
                     }
                 });
