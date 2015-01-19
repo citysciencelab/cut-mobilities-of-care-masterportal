@@ -2,26 +2,35 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'config'
-], function (_, Backbone, ol, Config) {
+    'config',
+    'collections/stylelist'
+], function (_, Backbone, ol, Config, StyleList) {
 
 
     var Legend = Backbone.Model.extend({
         defaults:{
+            legendArray:[],
             visibLegend:'',
+            layerid:[],
             layername:[],
-            img:[]
+            stylename:[],
+            img:[],
+            typ:''
         },
         setAttributions: function(params){
-            this.set('img', []);
-            this.set('layername',[]);
+
+            this.set('legendArray', []);
             _.each(params, function(element, index) {
+                this.set('img', []);
+                this.set('layername',[]);
+                this.set('layerid',[]);
+                this.set('stylename',[]);
                 if(element.typ=='WMS'){
                     layers =element.layers.split(',');
-
+                    this.get('layerid').push(element.layerID);
+                    this.set('typ',element.typ);
                     if(element.legendURL!='ignore'&&layers.length==1){
-
-                            this.get('layername').push(element.name);
+                        this.get('layername').push(element.name);
                         if(element.legendURL===""||!element.legendURL){
                             var url=element.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+element.layers;
                             this.get('img').push(url);
@@ -37,31 +46,63 @@ define([
                         _.each(layers, function(layersgroup, layersindex){
                             url.push(element.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+layers[layersindex]);
                         },this);
-                        this.get('img').push(url);
+                        this.set('img',url);
                     }
                 }
                 else if (element.typ==='GROUP'){
                     this.get('layername').push(element.name);
-                    var url=[];
+                    var url=[], grouplayerid=[];
                     _.each(element.layers, function(groupelement, groupindex){
-                        if(groupelement.legendURL!="ignore"&&(groupelement.legendURL!=""||!groupelement.legendURL)){
+                        this.set('typ',groupelement.typ);
+                        if(groupelement.legendURL!="ignore"&&groupelement.legendURL!=""&&!groupelement.legendURL&&groupelement.legendURL!=undefined){
+                            grouplayerid.push(groupelement.layerID);
                             url.push(groupelement.legendURL);
                         }
                         else{
+                            grouplayerid.push(groupelement.layerID);
                             url.push(groupelement.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+groupelement.layers);
                         }
                     },this);
-                    this.get('img').push(url);
+                    this.get('layerid').push(grouplayerid);
+                    this.set('img',url);
 
                 }
                 else if (element.typ=='WFS'){
+                    this.get('layerid').push(element.layerID);
+                    this.set('typ',element.typ);
                     this.get('layername').push(element.name);
-                    var name= element.name.replace(/ /g, "_");
-                    this.get('img').push("http://wscd0096/master_cv/img/"+name+".png");
+                    if(element.styleField){
+                        var style=[], stylename=[];
+                        _.find(StyleList.models, function(list){
+                            if(list.attributes.layerId===element.layerID){
+                                //||list.attributes.layerId===element.layerID+'_cluster'
+
+                            style.push(list.get('imagepath')+list.get('imagename'));
+                            stylename.push(list.get('styleFieldValue'));
+                            }
+                        });
+                        this.set('img',style);
+                        this.set('stylename',stylename);
+                    }
+                    else{
+                        console.log(StyleList.returnModelById(element.layerID));
+                        this.get('img').push(StyleList.returnModelById(element.layerID));
+                    }
+                    //var name= element.name.replace(/ /g, "_");
+                    //this.get('img').push("http://wscd0096/master_cv/img/"+name+".png");
+                }
+                if(this.get('layername')!=undefined&&element.legendURL!='ignore'){
+                    this.get('legendArray').push({
+                        name:this.get('layername'),
+                        img:this.get('img'),
+                        layerid:this.get('layerid'),
+                        style:'',
+                        stylename:this.get('stylename'),
+                        typ:this.get('typ')
+                    });
                 }
             },this);
         }
-
 
     });
 

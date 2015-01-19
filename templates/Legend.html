@@ -5,65 +5,76 @@
     <strong>Legende</strong>
     </div>
       <div id='legendbody' class="modal-body legendbody">
-          <%  if(img.length >0) {
-            _.each(img, function(element, index) {
-              var legendurl,group;
-              if(element instanceof Array){
-                  group=element;
-                  legendurl=group[0];
-              }
-              else{
-                legendurl=element;
-              }
-
-              if(document.getElementById('base-modal-legend')&&visibLegend!=''&&visibLegend[0]){
-              if(visibLegend[0].src===img[index]||visibLegend[0].src===img[index][0]){
+          <%  if(legendArray.length >0) {
+            _.each(legendArray, function(element, index) {
+                if(document.getElementById('base-modal-legend')&&visibLegend!=''&&visibLegend[0]){
+                  if(visibLegend[0].src===element.img[0]){
                       %>
-                      <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= layername[index] %></strong></li>
+                      <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
 
                         <div class="legenddiv" style="display: visible;">
-
-                      <%if(typeof img[index]=== 'string'){
-                      %>
-                    <li class="list-group-item hit" ><img src=<%= img[index] %>></li>
-                   <% }
-                        else if( img[index] instanceof Array){%>
                             <li class="list-group-item hit">
-                            <%
-                            _.each(img[index], function(groupelement, groupindex){%>
-                                <p><img src=<%= img[index][groupindex] %>> </p>
+                        <%
+                        if(element.typ!='WFS'){
+                            _.each(element.img, function(img, imgindex){%>
+                                <p><img src=<%= img %>> </p>
                             <%
                             });
-                        };%>
+                        }
+                         else{%><table>
+                            <%_.each(element.img, function(img, imgindex){%>
+                                <tr>
+                                    <td>
+                                        <img style='float:left;margin: 10px;width:30px;' src=<%= img %>>
+                                    </td>
+                                    <td>
+                                        <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
+                                    </td>
+                                </tr>
+                            <%
+                            });
+                            %>
+                            </table>
+                        <%}%>
                         </li>
                             </div>
                             <p style="display:none"><%=index %></p>
                                 <%
                     }
                     else{%>
-                        <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= layername[index] %></strong></li>
+                        <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
 
                             <div class="legenddiv" style="display: none;">
-
-                          <%if(typeof img[index]=== 'string'){
-                          %>
-                        <li class="list-group-item hit" ><img src=<%= img[index] %>></li>
-                       <% }
-                            else if( img[index] instanceof Array){%>
                                 <li class="list-group-item hit">
-                                <%
-                                _.each(img[index], function(groupelement, groupindex){%>
-                                    <p><img src=<%= img[index][groupindex] %>> </p>
+                            <%
+                            if(element.typ!='WFS'){
+                                _.each(element.img, function(img, imgindex){%>
+                                    <p><img src=<%= img %>> </p>
                                 <%
                                 });
-                            };%>
+                            }
+                            else{%><table>
+                                <%_.each(element.img, function(img, imgindex){%>
+                                    <tr>
+                                        <td>
+                                            <img style='float:left;margin: 10px;width:30px;' src=<%= img %>>
+                                        </td>
+                                        <td>
+                                            <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
+                                        </td>
+                                    </tr>
+                                <%
+                                });
+                                %>
+                                </table>
+                            <%}%>
                         </li>
                             </div>
                             <p style="display:none"><%=index %></p>
                     <%}
                 }
             else {%>
-            <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= layername[index] %></strong></li>
+            <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
                 <%
                    if(index===0) {%>
                 <div class="legenddiv" style="display: visible;">
@@ -71,18 +82,29 @@
                 else{ %>
                 <div class="legenddiv" style="display: none;">
                 <%}%>
-              <%if(typeof img[index]=== 'string'){
-              %>
-            <li class="list-group-item hit" ><img src=<%= img[index] %>></li>
-           <% }
-                else if( img[index] instanceof Array){%>
                     <li class="list-group-item hit">
                     <%
-                    _.each(img[index], function(groupelement, groupindex){%>
-                        <p><img src=<%= img[index][groupindex] %>> </p>
-                    <%
-                    });
-                };%>
+                        if(element.typ!='WFS'){
+                            _.each(element.img, function(img, imgindex){%>
+                                <p><img src=<%= img %>> </p>
+                            <%
+                            });
+                        }
+                        else{%><table>
+                            <%_.each(element.img, function(img, imgindex){%>
+                                <tr>
+                                    <td>
+                                        <img style='float:left;margin: 10px;width:30px;' src=<%= img %>>
+                                    </td>
+                                    <td >
+                                        <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
+                                    </td>
+                                </tr>
+                            <%
+                            });
+                            %>
+                            </table>
+                        <%}%>
                 </li>
                     </div>
                         <p style="display:none"><%=index %></p>

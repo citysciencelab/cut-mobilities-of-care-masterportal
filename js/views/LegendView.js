@@ -48,14 +48,16 @@ define([
                 if (element.get('typ') === 'WFS') {
                     legendParams.push({
                         typ: 'WFS',
-                        layerID:element.id,
+                        layerID:element.get('id'),
                         source: element.get('url'),
-                        name: element.get('name')
+                        name: element.get('name'),
+                        styleField: element.get('styleField')
                     });
                 }
                 else if (element.get('typ') === 'WMS') {
                     legendParams.push({
                         typ:'WMS',
+                        layerID:element.get('id'),
                         source:element.get('url'),
                         name: element.get('name'),
                         legendURL: element.get('legendURL'),
@@ -66,6 +68,7 @@ define([
                     _.each(element.get('layer').values_.layers.array_, function (layerarray, indexarray){
                         groupArray.push({
                             typ:'GROUP',
+                            layerID:layerarray.id,
                             source:layerarray.source_.urls_[0],
                             name: layerarray.get('name'),
                             legendURL: layerarray.values_.legendURL,
@@ -121,6 +124,7 @@ define([
             else{
             scrollHeight=(legendObject.layernameLi*legendObject.currentTargetLi)/(heightlegendbody/(heightlegendbody+$(legendObject.heightDIVLi[0]).css('height').split('p')[0]*1));
             }
+            console.log(scrollHeight);
             $('#legendbody').scrollTop(scrollHeight);
         },
         changeView: function(){
