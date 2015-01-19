@@ -65,6 +65,7 @@ define([
                     })
                 }
                 else if (element.get('typ') === 'GROUP') {
+                    groupArray=[];
                     _.each(element.get('layer').values_.layers.array_, function (layerarray, indexarray){
                         groupArray.push({
                             typ:'GROUP',

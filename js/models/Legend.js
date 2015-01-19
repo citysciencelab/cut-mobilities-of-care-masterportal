@@ -85,8 +85,9 @@ define([
                         this.set('stylename',stylename);
                     }
                     else{
-                        console.log(StyleList.returnModelById(element.layerID));
-                        this.get('img').push(StyleList.returnModelById(element.layerID));
+                        var style=StyleList.returnModelById(element.layerID).get('imagepath')+StyleList.returnModelById(element.layerID).get('imagename');
+                        this.get('img').push(style);
+                        this.get('stylename').push(element.name);
                     }
                     //var name= element.name.replace(/ /g, "_");
                     //this.get('img').push("http://wscd0096/master_cv/img/"+name+".png");
