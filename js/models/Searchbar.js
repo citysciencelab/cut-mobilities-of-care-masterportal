@@ -362,6 +362,7 @@ define([
                             }
                         }
                         catch (error) {
+                            $("#searchInput").prop("disabled", "");
                             //console.log(error);
                         }
                         this.pushHits("bPlans", plans);

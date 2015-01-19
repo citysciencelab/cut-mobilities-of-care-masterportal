@@ -42,7 +42,7 @@ define([
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
-                $("#searchInput").focusout();
+                // $("#searchInput").focusout();
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -67,6 +67,7 @@ define([
                 } else {
                     $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
                 }
+                this.focusOnEnd($("#searchInput"));
                 if (this.model.get("searchString").length !== 0) {
                     $("#searchInput:focus").css("border-right-width", "0");
                 }
@@ -111,7 +112,7 @@ define([
             /**
             *
             */
-            "setSearchString": function (evt) { //console.log(evt.target);
+            "setSearchString": function (evt) {
                 this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length <= 2) {
