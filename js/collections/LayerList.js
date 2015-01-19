@@ -139,7 +139,7 @@ define([
             }
         },
         initialize: function () {
-            EventBus.on('getLayersForPrint', this.sendVisibleWMSLayer, this);
+            EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
             EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);

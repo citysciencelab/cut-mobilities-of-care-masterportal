@@ -70,6 +70,11 @@ require([
     require(['models/map'], function (Map) {
         new Map();
     });
+    if (Config.scaleLine && Config.scaleLine === true) {
+        require(['views/ScaleLineView'], function (ScaleLineView) {
+            new ScaleLineView();
+        });
+    }
 
     if (Config.attributions && Config.attributions === true) {
         require(['views/AttributionView'], function (AttributionView) {

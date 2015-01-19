@@ -116,6 +116,12 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
+        * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
+        */
+        scaleLine: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
         * @desc Beschreibung.
         */
         mouseHover: true,
@@ -141,7 +147,8 @@ define(function () {
             tools: true,
             treeFilter: true,
             wfsFeatureFilter: true,
-            legend: true
+            legend: true,
+            routing: true
         },
         /**
         * @memberof config

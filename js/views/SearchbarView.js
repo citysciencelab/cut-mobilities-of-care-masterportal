@@ -42,6 +42,7 @@ define([
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
+                $("#searchInput").focusout();
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -66,7 +67,6 @@ define([
                 } else {
                     $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
                 }
-                this.focusOnEnd($("#searchInput"));
                 if (this.model.get("searchString").length !== 0) {
                     $("#searchInput:focus").css("border-right-width", "0");
                 }
@@ -201,7 +201,7 @@ define([
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
                 }
-                else if (hit.type === "BPlan festgestellt" || hit.type === "BPlan im Verfahren") {
+                else if (hit.type === "BPlan festgestellt" || hit.type === "BPlan im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
                     var typeName = (hit.type === "BPlan festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
                     var propertyName = (hit.type === "BPlan festgestellt") ? "planrecht" : "plan";
                     $.ajax({
@@ -211,25 +211,51 @@ define([
                         context: this,  // model
                         contentType: "text/xml",
                         success: function (data) {
-                            var hits;
+                            var wkt;
                             // Firefox, IE
-                            if (data.getElementsByTagName("gml:posList")[0] !== undefined) {
-                                var hits = data.getElementsByTagName("gml:posList")[0].textContent;
-                                var wkt = this.getWKTFromString("POLYGON", hits);
-                                var format = new ol.format.WKT();
-                                var feature = format.readFeature(wkt);
-                                searchVector.getSource().clear();
-                                searchVector.getSource().addFeature(feature);
-                                searchVector.setVisible(true);
-                                // console.log(feature.getGeometry().getExtent());
-                                var extent = feature.getGeometry().getExtent();
-                                EventBus.trigger("zoomToExtent", extent);
-                                $(".dropdown-menu-search").hide();
+                            if (data.getElementsByTagName("gml:Polygon")[0] !== undefined) {
+                                var hits = data.getElementsByTagName("gml:Polygon");
+                                var wktArray = [], wkt, geom;
+                                if (hits.length > 1) {
+                                    _.each(hits, function (hit, index) {
+                                        if (hit.getElementsByTagName("gml:interior")[0] !== undefined) {
+                                            geom = hit.getElementsByTagName("gml:posList")[0].textContent + " )?(";
+                                            geom += hit.getElementsByTagName("gml:posList")[1].textContent;
+                                        }
+                                        else {
+                                            geom = hit.getElementsByTagName("gml:posList")[0].textContent;
+                                        }
+                                        wktArray.push(geom);
+                                    });
+                                    wkt = this.getWKTFromString("MULTIPOLYGON", wktArray);
+                                }
+                                else {
+                                    var geom = data.getElementsByTagName("gml:posList")[0].textContent;
+                                    wkt = this.getWKTFromString("POLYGON", geom);
+                                }
                             }
                             // WebKit
-                            else if (data.getElementsByTagName("posList")[0] !== undefined) {
-                                var hits = data.getElementsByTagName("posList")[0].textContent;
-                                var wkt = this.getWKTFromString("POLYGON", hits);
+                            else if (data.getElementsByTagName("Polygon")[0] !== undefined) {
+                                var hits = data.getElementsByTagName("Polygon");
+                                var wktArray = [], geom;
+                                if (hits.length > 1) {
+                                    _.each(hits, function (hit, index) {
+                                        if (hit.getElementsByTagName("interior")[0] !== undefined) {
+                                            geom = hit.getElementsByTagName("posList")[0].textContent + " )?(";
+                                            geom += hit.getElementsByTagName("posList")[1].textContent;
+                                        }
+                                        else {
+                                            geom = hit.getElementsByTagName("posList")[0].textContent;
+                                        }
+                                        wktArray.push(geom);
+                                    });
+                                    wkt = this.getWKTFromString("MULTIPOLYGON", wktArray);
+                                }
+                                else {
+                                    var geom = data.getElementsByTagName("posList")[0].textContent;
+                                    wkt = this.getWKTFromString("POLYGON", geom);
+                                }
+                            }
                                 var format = new ol.format.WKT();
                                 var feature = format.readFeature(wkt);
                                 searchVector.getSource().clear();
@@ -239,7 +265,6 @@ define([
                                 var extent = feature.getGeometry().getExtent();
                                 EventBus.trigger("zoomToExtent", extent);
                                 $(".dropdown-menu-search").hide();
-                            }
                         },
                         error: function () {
                             // $('#loader').hide();
@@ -282,9 +307,11 @@ define([
             /**
             *
             */
-            "getWKTFromString": function (type, string) {
-                var split = string.split(" ");
-                var wkt = type + "((";
+            "getWKTFromString": function (type, geom) {
+                var wkt;
+                if (type === "POLYGON") {
+                    var split = geom.split(" ");
+                    wkt = type + "((";
                 _.each(split, function (element, index, list) {
                     if (index % 2 === 0) {
                         wkt += element + " ";
@@ -297,6 +324,31 @@ define([
                     }
 
                 });
+                }
+                else if (type === "MULTIPOLYGON"){
+                    wkt = type + "(((";
+                    _.each(geom, function (element, index) {
+                        var split = geom[index].split(" ");
+                        _.each(split, function (element, index, list) {
+                            if (index % 2 === 0) {
+                                wkt += element + " ";
+                            }
+                            else if (index === list.length - 1) {
+                                wkt += element + "))";
+                            }
+                            else {
+                                wkt += element + ", ";
+                            }
+                        });
+                        if (index === geom.length - 1) {
+                            wkt += ")";
+                        }
+                        else {
+                            wkt += ",((";
+                        }
+                    });
+                    wkt = wkt.replace(", )?(", "),(");
+                }
                 return wkt;
             },
 

@@ -63,6 +63,7 @@ define(function () {
         ],
         attributions: true,
         menubar: true,
+        scaleLine: false,
         mouseHover: false,
         isMenubarVisible: true,
         menu: {

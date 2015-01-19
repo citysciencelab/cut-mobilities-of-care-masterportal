@@ -36,7 +36,11 @@ define([
                     return arr === undefined;
                 });
                 if (_.isArray(layerattributions) && layerattributions.length > 0) {
-                    layer.get('layer').getSource().setAttributions(layerattributions);
+                    /* TODO:
+                    Mit ol3-debug kann setAttributions() verwendet werden, mit ol3 nur .attributions =
+                    */
+                    layer.get('layer').getSource().attribution_ = layerattributions;
+                    console.log(layer.get('layer').getSource().getAttributions());
                     if (this.get('alreadySet') == false) {
                         this.addAttributionControl();
                     }
@@ -67,7 +71,7 @@ define([
                                 html: eventValue
                             })
                         );
-                        layer.get('layer').getSource().setAttributions(layerattributions);
+                        layer.get('layer').getSource().attributions_ = layerattributions;
                         layer.reload();
                     }
                 });
@@ -110,13 +114,6 @@ define([
             this.get('map').addControl(attribution);
             this.set('attribution', attribution);
             this.set('alreadySet', true);
-            var scaleLine = new ol.control.ScaleLine({
-                className: 'ol-scale-line',
-//                target: document.getElementById('scale-line'),
-                units: 'metric'
-            });
-            this.get('map').addControl(scaleLine);
-            console.log(this.get('map'));
         },
         checkAPIforAttribution: function (layer) {
             if (layer.get('layerAttribution') && layer.get('layerAttribution') != '' && layer.get('layerAttribution') != 'nicht vorhanden') {
