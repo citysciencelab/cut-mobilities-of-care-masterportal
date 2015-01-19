@@ -42,6 +42,7 @@ define([
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
+                $("#searchInput").focusout();
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -66,7 +67,6 @@ define([
                 } else {
                     $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
                 }
-                this.focusOnEnd($("#searchInput"));
                 if (this.model.get("searchString").length !== 0) {
                     $("#searchInput:focus").css("border-right-width", "0");
                 }
@@ -256,15 +256,15 @@ define([
                                     wkt = this.getWKTFromString("POLYGON", geom);
                                 }
                             }
-                            var format = new ol.format.WKT();
-                            var feature = format.readFeature(wkt);
-                            searchVector.getSource().clear();
-                            searchVector.getSource().addFeature(feature);
-                            searchVector.setVisible(true);
-                            // console.log(feature.getGeometry().getExtent());
-                            var extent = feature.getGeometry().getExtent();
-                            EventBus.trigger("zoomToExtent", extent);
-                            $(".dropdown-menu-search").hide();
+                                var format = new ol.format.WKT();
+                                var feature = format.readFeature(wkt);
+                                searchVector.getSource().clear();
+                                searchVector.getSource().addFeature(feature);
+                                searchVector.setVisible(true);
+                                // console.log(feature.getGeometry().getExtent());
+                                var extent = feature.getGeometry().getExtent();
+                                EventBus.trigger("zoomToExtent", extent);
+                                $(".dropdown-menu-search").hide();
                         },
                         error: function () {
                             // $('#loader').hide();
@@ -312,18 +312,18 @@ define([
                 if (type === "POLYGON") {
                     var split = geom.split(" ");
                     wkt = type + "((";
-                    _.each(split, function (element, index, list) {
-                        if (index % 2 === 0) {
-                            wkt += element + " ";
-                        }
-                        else if (index === list.length - 1) {
-                            wkt += element + "))";
-                        }
-                        else {
-                            wkt += element + ", ";
-                        }
+                _.each(split, function (element, index, list) {
+                    if (index % 2 === 0) {
+                        wkt += element + " ";
+                    }
+                    else if (index === list.length - 1) {
+                        wkt += element + "))";
+                    }
+                    else {
+                        wkt += element + ", ";
+                    }
 
-                    });
+                });
                 }
                 else if (type === "MULTIPOLYGON"){
                     wkt = type + "(((";

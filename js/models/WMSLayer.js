@@ -47,6 +47,12 @@ define([
                     "STYLES": this.get('styles')
                 });
             }
+            if (this.get('legendURL') && this.get('legendURL') != '' && this.get('legendURL') != 'nicht vorhanden') {
+                var legendURL = this.get('legendURL');
+            }
+            else{
+                var legendURL = 'ignore';
+            }
             this.set('source', new ol.source.TileWMS({
                 url: this.get('url'),
                 gutter: this.get('gutter'),
@@ -78,7 +84,8 @@ define([
                 source: this.get('source'),
                 name: this.get('name'),
                 typ: this.get('typ'),
-                gfiAttributes: this.get('gfiAttributes')
+                gfiAttributes: this.get('gfiAttributes'),
+                legendURL: this.get('legendURL')
 //                gfiAttributes: this.convertGFIAttributes()
             }));
         }
