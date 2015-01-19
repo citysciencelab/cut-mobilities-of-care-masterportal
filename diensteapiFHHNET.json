@@ -32701,6 +32701,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
+      "legendURL" : "ignore",
       "datasets" : []
    },
    {
@@ -35787,6 +35788,12 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
+      "legendURL": {
+          "geofox-bus":"http://wscd0096/master_cv/img/hvv-bus.gif",
+          "geofox_Faehre":"http://wscd0096/master_cv/img/hvv-faehre.gif",
+          "geofox-bahn":"http://wscd0096/master_cv/img/hvv-bahn.gif",
+          "geofox_BusName":"http://wscd0096/master_cv/img/hvv-bus.gif"
+      },
       "datasets" : [
          {
             "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
@@ -37681,7 +37688,8 @@
                "#opendata_hh#"
             ]
          }
-      ]
+      ],
+      "legendURL": "http://wscd0096/master_cv/img/Stein_und_Fels.png"
    },
    {
       "id" : "360",
@@ -41540,6 +41548,7 @@
    },
    {
         "id": "extern1",
+        "name": "HVV Bahnlinien",
         "name": "HVV Bahnlinien",
         "url": "http://extmap.hbt.de/geoserver/geofox_workspace/wms",
         "typ": "WMS",

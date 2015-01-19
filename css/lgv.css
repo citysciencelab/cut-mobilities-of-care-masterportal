@@ -79,15 +79,20 @@ html, body {
     .legendbody{
         max-height:100px;
     }
+    .legenddiv{
+        max-height:100px;
+    }
 
 }
-<<<<<<< HEAD
 @media (min-height:200px){
     #tree {
         max-height:160px;
     }
     .legendbody{
         max-height:120px;
+    }
+    .legenddiv{
+        max-height:100px;
     }
 }
 @media (min-height:300px){
@@ -97,6 +102,9 @@ html, body {
     .legendbody{
         max-height:220px;
     }
+    .legenddiv{
+        max-height:120px;
+    }
 }
 @media (min-height:480px){
     #tree {
@@ -105,6 +113,9 @@ html, body {
     .legendbody{
         max-height:400px;
     }
+    .legenddiv{
+        max-height:300px;
+    }
 }
 @media (min-height: 768px) {
     #tree {
@@ -112,6 +123,9 @@ html, body {
     }
     .legendbody{
         max-height:700px;
+    }
+    .legenddiv{
+        max-height:540px;
     }
 }
 #tree{
@@ -128,13 +142,9 @@ html, body {
     overflow-y: auto;
     cursor: pointer;
 }
-=======
-
 #tree small {
     cursor: pointer;
 }
-
->>>>>>> origin/master
 /*bootstrap überschreiben*/
 .tree-panel {
     margin-bottom: 0 !important;

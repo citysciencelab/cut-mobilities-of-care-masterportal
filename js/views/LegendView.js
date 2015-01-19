@@ -51,7 +51,8 @@ define([
                         layerID:element.get('id'),
                         source: element.get('url'),
                         name: element.get('name'),
-                        styleField: element.get('styleField')
+                        styleField: element.get('styleField'),
+                        legendURL: element.get('legendURL'),
                     });
                 }
                 else if (element.get('typ') === 'WMS') {
@@ -61,8 +62,10 @@ define([
                         source:element.get('url'),
                         name: element.get('name'),
                         legendURL: element.get('legendURL'),
-                        layers: element.get('layers')
+                        layers: element.get('layers'),
+                        styles:element.get('styles')
                     })
+                    console.log(element.get('styles'));
                 }
                 else if (element.get('typ') === 'GROUP') {
                     groupArray=[];
@@ -73,8 +76,10 @@ define([
                             source:layerarray.source_.urls_[0],
                             name: layerarray.get('name'),
                             legendURL: layerarray.values_.legendURL,
-                            layers: layerarray.source_.params_.LAYERS
+                            layers: layerarray.source_.params_.LAYERS,
+                            styles:layerarray.source_.params_.STYLES
                         });
+                        console.log(layerarray.source_.params_.STYLES);
                     })
                     legendParams.push({
                         typ:'GROUP',
@@ -125,7 +130,6 @@ define([
             else{
             scrollHeight=(legendObject.layernameLi*legendObject.currentTargetLi)/(heightlegendbody/(heightlegendbody+$(legendObject.heightDIVLi[0]).css('height').split('p')[0]*1));
             }
-            console.log(scrollHeight);
             $('#legendbody').scrollTop(scrollHeight);
         },
         changeView: function(){
