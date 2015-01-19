@@ -38,7 +38,7 @@ define([
             new LayerListView();
         },
         activateFilterTree: function () {
-            EventBus.trigger('toggleFilterTreeWin');
+            EventBus.trigger('toggleWin', ['treefilter', 'Filtereinstellungen', 'glyphicon-filter']);
         },
         activateWfsFilter: function () {
             EventBus.trigger('toggleFilterWfsWin');

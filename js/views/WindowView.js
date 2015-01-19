@@ -13,7 +13,7 @@ define([
             model: Window,
             template: _.template(WindowTemplate),
             initialize: function () {
-                this.model.on("change:isVisible change:isCollapsed", this.render, this);
+                this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             },
             events: {
                 "click .win-minimize": "minimize",
