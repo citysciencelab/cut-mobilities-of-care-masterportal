@@ -128,7 +128,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Steuert, ob die Menubar initial ausgeklappt ist oder nicht.
         */
         isMenubarVisible: true,
         /**
