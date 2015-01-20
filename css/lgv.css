@@ -54,7 +54,7 @@ html, body {
 
 @media (min-width: 768px) {
     .navbar, .connav, .navbar-collapse, #navbarRow {
-        max-height: 50px;
+        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
     }
 }
 
@@ -72,15 +72,69 @@ html, body {
 .color {
     color: #cdcdcd;
 }
+@media (min-height:0px){
+    #tree {
+        max-height:100px;
+    }
+    .legendbody{
+        max-height:100px;
+    }
 
-#tree {
-    border: 0;
 }
+<<<<<<< HEAD
+@media (min-height:200px){
+    #tree {
+        max-height:160px;
+    }
+    .legendbody{
+        max-height:120px;
+    }
+}
+@media (min-height:300px){
+    #tree {
+        max-height:260px;
+    }
+    .legendbody{
+        max-height:220px;
+    }
+}
+@media (min-height:480px){
+    #tree {
+        max-height:440px;
+    }
+    .legendbody{
+        max-height:400px;
+    }
+}
+@media (min-height: 768px) {
+    #tree {
+        max-height:768px;
+    }
+    .legendbody{
+        max-height:700px;
+    }
+}
+#tree{
+    border:0;
+    overflow:auto;
+}
+.legendbody{
+    overflow:auto;
+}
+#legend{
+    overflow:hidden;
+}
+.legenddiv{
+    overflow-y: auto;
+    cursor: pointer;
+}
+=======
 
 #tree small {
     cursor: pointer;
 }
 
+>>>>>>> origin/master
 /*bootstrap überschreiben*/
 .tree-panel {
     margin-bottom: 0 !important;
@@ -95,7 +149,7 @@ html, body {
 
 .dropdown-menu {
     padding:  0 !important;
-    min-width: 320px !important;
+    min-width: 340px !important;
 }
 
 .nav > li {

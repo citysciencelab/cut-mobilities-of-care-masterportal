@@ -204,7 +204,7 @@ define([
                                     if (element.getElementsByTagName("dog:hausnummernzusatz")[0] !== undefined) {
                                         affix = element.getElementsByTagName("dog:hausnummernzusatz")[0].textContent;
                                         // Join die Adresse
-                                        var addressJoin = this.get("onlyOneStreetName").replace(/ /g, "") + number +affix;
+                                        var addressJoin = this.get("onlyOneStreetName").replace(/ /g, "") + number + affix;
                                         // Prüft ob der Suchstring ein Teilstring der Adresse ist
                                         if (addressJoin.search(searchStringRegExp) !== -1) {
                                             houseNumbers.push({"name": this.get("onlyOneStreetName") + " " + number + affix, "type": "Adresse", "coordinate": coord, "glyphicon": "glyphicon-map-marker", "id": addressJoin + "Adresse"});
@@ -244,7 +244,7 @@ define([
                                         }
                                     }
                                 }, this);
-                            }
+                            }console.log(houseNumbers);
                             this.pushHits("hitList", houseNumbers); // Fügt die Treffer zur hitList hinzu
                         }
                         catch (error) {

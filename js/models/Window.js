@@ -25,12 +25,8 @@ define([
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {
-                switch (this.get("winType")) {
-                    case "print":
-                        EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed")]);
-                        break;
-                }
-            },
+                EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
+            }
         });
 
         return new Window();

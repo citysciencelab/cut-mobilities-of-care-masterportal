@@ -19,6 +19,7 @@
 .win-body {
     background-color: #fff;
     padding: 15px;
+    max-width: 420px;
 }
 
 /* Das Glyphicon für das Minimieren */
@@ -61,7 +62,7 @@
     position: absolute;
     padding-top: 0;
     left: 63px;
-    top: 49px;
+    top: 51px;
     box-shadow: 2px 2px 2px 0px #666666;
     color: #fff;
     background-color: #d42132;

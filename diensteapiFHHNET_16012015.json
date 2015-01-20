@@ -29,6 +29,47 @@
          }
       ]
    },
+     {
+       "id" : "1948",
+       "name" : "Festgestellte Änderungen Berichtigungen Planfeststellungen",
+       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP_Aend/MapServer/WmsServer",
+       "typ" : "WMS",
+       "layers" : "0",
+       "format" : "image/png",
+       "version" : "1.3.0",
+       "singleTile" : "nicht vorhanden",
+       "transparent" : "true",
+       "tilesize" : "512",
+       "gutter" : "0",
+       "minScale" : "nicht vorhanden",
+       "maxScale" : "nicht vorhanden",
+       "gfiAttributes": {
+           "Typ": "Typ",
+           "Bezirk": "Bezirk",
+           "Name": "Name",
+           "Datum": "Datum",
+           "Link_Änderung": "Änderung"
+       },
+       "layerAttribution" : "",
+       "cache" : "",
+       "legendURL" : "",
+       "datasets" : [
+           {
+               "md_id" : "DFDA2969-A041-433B-BD65-4CDA9F830A55",
+               "rs_id" : "HMDK#DFDA2969-A041-433B-BD65-4CDA9F830A55",
+               "md_name" : "Flächennutzungsplan Hamburg",
+               "bbox" : "541991.14,5916243.3,592004.48,5956232.48",
+               "kategorie_opendata" : [
+                   "Infrastruktur, Bauen und Wohnen"
+               ],
+               "filter" : [
+                   "hmbtg",
+                   "#opendata_hh#",
+                   "inspireidentifiziert"
+               ]
+           }
+       ]
+    },
    {
       "id" : "36",
       "name" : "Stadtteile",
