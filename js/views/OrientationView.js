@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!templates/Orientation.html',
     'models/Orientation',
-    'config'
-], function ($, _, Backbone, OrientationTemplate, Orientation,Config) {
+    'config',
+    'eventbus'
+], function ($, _, Backbone, OrientationTemplate, Orientation,Config, EventBus) {
 
     var OrientationView = Backbone.View.extend({
         model: Orientation,
@@ -17,6 +18,14 @@ define([
         },
         initialize: function () {
             this.render();
+            EventBus.on('showGeolocationMarker', this.showGeolocationMarker, this);
+            EventBus.on('clearGeolocationMarker', this.clearGeolocationMarker, this);
+        },
+        showGeolocationMarker: function () {
+            $('#geolocation_marker').addClass('glyphicon glyphicon-map-marker geolocation_marker');
+        },
+        clearGeolocationMarker: function () {
+            $('#geolocation_marker').removeClass('geolocation_marker glyphicon glyphicon-map-marker');
         },
         render: function () {
             //var attr = this.model.toJSON();
