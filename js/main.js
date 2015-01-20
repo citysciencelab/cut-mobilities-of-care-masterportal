@@ -148,6 +148,11 @@ require([
                         new LegendView();
                     });
                 }
+                if (Config.menu.routing === true) {
+                    require(['views/RoutingView'], function (RoutingView) {
+                        new RoutingView();
+                    });
+                }
             });
 
         }
