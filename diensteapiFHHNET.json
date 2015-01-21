@@ -12748,6 +12748,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
+      "legendURL":"http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/F_Plan_Legende_Internet_Februar2014.pdf",
       "datasets" : [
          {
             "md_id" : "DFDA2969-A041-433B-BD65-4CDA9F830A55",

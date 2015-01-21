@@ -231,3 +231,9 @@ html, body {
     color: #fff;
     font-weight: bold;
 }
+.cluster{
+    font-size:25px;
+    border-radius:30px!important;
+    float:left;
+    margin:10px;
+}
