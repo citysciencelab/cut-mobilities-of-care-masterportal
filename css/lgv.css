@@ -95,6 +95,17 @@ html, body {
         max-height:100px;
     }
 }
+@media (min-height:250px){
+    #tree {
+        max-height:230px;
+    }
+    .legendbody{
+        max-height:200px;
+    }
+    .legenddiv{
+        max-height:120px;
+    }
+}
 @media (min-height:300px){
     #tree {
         max-height:260px;
@@ -138,9 +149,11 @@ html, body {
 #legend{
     overflow:hidden;
 }
+.legend{
+    overflow:hidden;
+}
 .legenddiv{
     overflow-y: auto;
-    cursor: pointer;
 }
 #tree small {
     cursor: pointer;

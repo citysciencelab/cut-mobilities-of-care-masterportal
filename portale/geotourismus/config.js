@@ -30,7 +30,7 @@ define(function () {
                      id: '1365'
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+             name: 'Verkehrsbelastung auf Autobahnen', visible: false
             },
             {id: '352', visible: true, style: '352', clusterDistance: 30, styleField :'Kategorie'},
             {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'Kategorie'},

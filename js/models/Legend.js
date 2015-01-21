@@ -3,8 +3,9 @@ define([
     'backbone',
     'openlayers',
     'config',
-    'collections/stylelist'
-], function (_, Backbone, ol, Config, StyleList) {
+    'collections/stylelist',
+    'collections/LayerList'
+], function (_, Backbone, ol, Config, StyleList, Layerlist) {
 
 
     var Legend = Backbone.Model.extend({
@@ -17,82 +18,21 @@ define([
             img:[],
             typ:'',
             scrollHeight:'',
-            oldLayeridArray:[],
-            layeridArray:[],
-            addLayer:'',
-            delLayer:[],
             params:'',
-            position:'',
-            afterElementid:''
+            grouplayer:[]
+
+        },
+        initialize: function (){
+            this.set('layerlist',Layerlist.getAllLayer());
         },
         setAttributions: function(){
-//            if(this.get('visibLegend')!=''&&this.get('oldLayeridArray')!=''&&this.get('layeridArray').length>this.get('oldLayeridArray').length){
-//                console.log('add');
-//                    var newLayer=[], position;
-//                    var afterElement,afterElementid;
-//                    var params=this.get('params');
-//                    var dif=_.difference(this.get('layeridArray'),this.get('oldLayeridArray'))
-//                    _.each(dif, function (difelement){
-//                        _.each (params, function (element,index){
-//                                if(element.layerID===difelement){
-//                                    newLayer.push(element);
-//                                    position=((index+1)*3);
-//                                    afterElementid=params[index+1].layerID;
-//                                }
-//                        });
-//                    });
-//                this.set('position', position);
-//                this.set('afterElementid',afterElementid);
-//                this.set('addLayer',newLayer);
-//
-//            if(this.get('addLayer').length>0){
-//                console.log(this.get('addLayer'));
-//                console.log(this.get('position'));
-//                var newLI= document.createElement('LI');
-//                newLI.className="list-group-item type";
-//                newLI.style.minWidth="200px";
-//                newLI.style.cursor="pointer";
-//                var strong=document.createElement('strong');
-//                strong.innerHTML=addLayer[0].name;
-//                newLI.appendChild(strong);
-//                var newDIV= document.createElement('DIV');
-//                newDIV.className="legenddiv";
-//                var li=document.createElement('li');
-//                li.className="list-group-item hit";
-//                if(addLayer[0].legendURL===""||addLayer.legendURL!="ignore"){
-//                    var p=document.createElement('p');
-//                    var img= document.createElement('img');
-//                    img.src=addLayer[0].source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+addLayer[0].layers;
-//                    p.appendChild(img);
-//                    li.appendChild(p);
-//                }
-//                newDIV.appendChild(li);
-//                afterElement=document.getElementById("legendid_"+afterElementid);
-//                //var textnode = document.createTextNode(this.get('addLayer')[0].name);
-//                var legendbody=document.getElementById('legendbody');
-//                legendbody.insertBefore(newLI, afterElement);
-//                legendbody.insertBefore(newDIV, afterElement);
-
-
-//            }
-//            else if(this.get('visibLegend')!=''&&this.get('oldLayeridArray')!=''&&this.get('layeridArray').length<this.get('oldLayeridArray').length){
-//                console.log('del');
-//                var params= this.get('params');
-//                var dif=_.difference(this.get('oldLayeridArray'),this.get('layeridArray'))[0]
-//                this.get('delLayer').push(_.find (params, function (num){
-//                        return num.layerID===dif;
-//                }));
-//                console.log(this.get('addLayer'));
-//                console.log(dif);
-//                this.set('oldLayeridArray', this.get('layeridArray'));
-//            }
-            //else if(this.get('visibLegend')===''&&this.get('oldLayeridArray').length===0){
                 this.set('legendArray', []);
                 _.each(this.get('params'), function(element, index) {
                     this.set('img', []);
                     this.set('layername',[]);
                     this.set('layerid',[]);
                     this.set('stylename',[]);
+                    this.set('grouplayer',[]);
                     if(element.typ=='WMS'){
                         layers =element.layers.split(',');
                         this.get('layerid').push(element.layerID);
@@ -116,14 +56,20 @@ define([
                         else if(element.legendURL!='ignore'&&layers.length>1){
                             this.get('layername').push(element.name);
                             var url=[];
-                            _.each(layers, function(layersgroup, layersindex){
-                                url.push(element.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+layers[layersindex]);
-                            },this);
+                            if(element.legendURL){
+                                url.push(element.legendURL);
+                            }
+                            else{
+                                _.each(layers, function(layersgroup, layersindex){
+                                    url.push(element.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+layers[layersindex]);
+                                },this);
+                            }
                             this.set('img',url);
                         }
                     }
                     else if (element.typ==='GROUP'){
                         this.get('layername').push(element.name);
+                        this.get('grouplayer').push(element.layerID);
                         var url=[], grouplayerid=[];
                         _.each(element.layers, function(groupelement, groupindex){
                             this.set('typ',groupelement.typ);
@@ -207,13 +153,12 @@ define([
                             layerid:this.get('layerid'),
                             style:'',
                             stylename:this.get('stylename'),
-                            typ:this.get('typ')
+                            typ:this.get('typ'),
+                            grouplayer: this.get('grouplayer')
                         });
                     }
                 },this);
-                this.set('oldLayeridArray', this.get('layeridArray'));
-
-            //}
+                this.get('legendArray').reverse();
         }
 
     });

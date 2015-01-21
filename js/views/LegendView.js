@@ -13,12 +13,13 @@ define([
         className: 'modal bs-example-modal-sm legend',
         template: _.template(LegendTemplate),
         initialize: function () {
+            this.getVisibleLayer();
             this.render();
             EventBus.on('toggleLegendWin', this.toggleLegendWin, this);
             EventBus.on('changeView', this.changeView, this);
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
-            EventBus.on('sendAllVisibleLayer', this.getVisibleLayer, this);
+            //EventBus.on('sendAllVisibleLayer', this.getVisibleLayer, this);
             EventBus.on('aftercollapse', this.aftercollapse, this);
             $(document.body).on('hide.bs.modal', '#base-modal-legend', this, function(evt) {
                 EventBus.trigger('changeView', this);
@@ -39,8 +40,16 @@ define([
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         },
+        getAllVisibleLayer: function () {
+            var visibleLayer=[];
+            _.each(this.model.get('layerlist'), function(element){
+                 visibleLayer.push(element);
+            });
+            return visibleLayer;
+        },
         getVisibleLayer: function(evt){
-            layers = evt.reverse();
+
+            layers = this.getAllVisibleLayer();
             var legendParams=[], groupArray=[],layeridarray=[];
 
             _.each(layers, function (element) {
@@ -83,18 +92,19 @@ define([
                     })
                     legendParams.push({
                         typ:'GROUP',
+                        layerID:element.get('id'),
                         name: element.get('name'),
                         layers:groupArray})
                 }
             });
             this.model.set('layeridArray',layeridarray);
             this.model.set('params',legendParams);
+            this.model.setAttributions();
         },
         toggleLegendWin: function (){
             if(this.model.get('visibLegend')===''){
                 EventBus.trigger('getAllVisibleLayer', this);
             }
-            this.model.setAttributions();
             this.show();
         },
         setMap: function (map) {
