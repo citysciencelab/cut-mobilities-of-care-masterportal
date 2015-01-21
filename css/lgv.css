@@ -54,7 +54,7 @@ html, body {
 
 @media (min-width: 768px) {
     .navbar, .connav, .navbar-collapse, #navbarRow {
-        max-height: 50px;
+        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
     }
 }
 

@@ -10,40 +10,40 @@ define([
     proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
     var Orientation = Backbone.Model.extend({
+        defaults: {
+            'marker' :  new ol.Overlay({positioning: 'center-center', stopEvent: false}),
+            'newCenter' : ''
+        },
         initialize: function () {
             EventBus.on('setOrientation', this.setOrientation, this);
             EventBus.on('getPOI', this.getPOI, this);
             EventBus.on('sendVisibleWFSLayerPOI', this.getPOIParams, this);
         },
         setOrientation: function (btn) {
-            proj4326=ol.proj.get('EPSG:4326');
-            var geolocation = new ol.Geolocation(/** @type {olx.GeolocationOptions} */ ({
-              projection: proj4326,
-              tracking: true
-            }));
-            var position;
+            var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get('EPSG:4326')});
             geolocation.on('change', function(evt) {
-              position = geolocation.getPosition();
-              this.set('newCenter',proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position));
-              EventBus.trigger('setCenter', this.get('newCenter'), 6);
-              var marker = document.getElementById('geolocation_marker');
-              var marker= new ol.Overlay({
-                  position:this.get('newCenter'),
-                  positioning: 'center-center',
-                  element: marker,
-                  stopEvent: false
-              });
-            EventBus.trigger('addOverlay', marker);
-            geolocation.setTracking(false);
-            if (btn=="poi"){
-                this.getPOI(500);
-            }
+                var position = geolocation.getPosition();
+                this.set('newCenter',proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position));
+                EventBus.trigger('setCenter', this.get('newCenter'), 6);
+                EventBus.trigger('setGeolocation', [this.get('newCenter'), position]);
+                var marker = this.get('marker');
+                marker.setElement(document.getElementById('geolocation_marker'));
+                marker.setPosition(this.get('newCenter'));
+                this.set('marker', marker);
+                EventBus.trigger('addOverlay', marker);
+                geolocation.setTracking(false);
+                if (btn=="poi"){
+                    this.getPOI(500);
+                }
+                EventBus.trigger('showGeolocationMarker', this);
             },this);
-           geolocation.on('error', function() {
-              alert('Standpunktbestimmung momentan nicht verfügbar!');
-               $(function () {
+            geolocation.on('error', function(err) {
+                alert('Standpunktbestimmung momentan nicht verfügbar!');
+                $(function () {
                     $('#loader').hide();
                 });
+                EventBus.trigger('setGeolocation', err);
+                EventBus.trigger('clearGeolocationMarker', this);
             });
         },
         getPOI: function(distance){

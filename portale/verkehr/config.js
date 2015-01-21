@@ -94,7 +94,6 @@ define(function () {
             measure: true,
             print: false,
             coord: true,
-            orientation: false,
             active: 'gfi'
         },
         orientation: true,

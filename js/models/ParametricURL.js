@@ -88,6 +88,14 @@ define([
                 var value = _.values(_.pick(result, 'bplanfest'))[0];
                 Config.searchBar.initString = value;
             }
+
+            /**
+            *
+            */
+            if (_.has(result, 'bplaniv')) {
+                var value = _.values(_.pick(result, 'bplaniv'))[0];
+                Config.searchBar.initString = value;
+            }
         }
     });
 

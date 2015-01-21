@@ -9,11 +9,12 @@ define([
 
     var TreeFilterView = Backbone.View.extend({
         model: TreeFilter,
-        id: 'treeFilterWin',
-        className: 'panel panel-master',
+        // id: 'treeFilterWin',
+        className: 'win-body',
         template: _.template(TreeFilterTemplate),
         initialize: function () {
-            this.render();
+            // this.render();
+            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
             this.model.on('change:filterHits invalid change:treeType change:errors', this.render, this);
             this.model.on('change:categoryArray', this.render, this);
             this.model.on('change:typeArray', this.render, this);
@@ -62,8 +63,15 @@ define([
             'keyup #typeInput': 'setSearchTypeString'
         },
         render: function () {
-            var attr = this.model.toJSON();
-             $('#toggleRow').append(this.$el.html(this.template(attr)));
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+                var attr = this.model.toJSON();
+                this.$el.html("");
+                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.delegateEvents();
+            }
+            else {
+                this.undelegateEvents();
+            }
         },
         setSearchCategoryString: function (evt) {
             this.model.setSearchCategoryString($('#categoryInput').val());

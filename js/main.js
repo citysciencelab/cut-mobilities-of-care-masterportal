@@ -11,6 +11,7 @@ if (window.location.host === 'wscd0096') {
         master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/')),
         host : window.location.protocol + '//' + window.location.host
     };
+
 }
 else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.host === 'geoportal-hamburg.de') {
     var locations = {
@@ -19,10 +20,10 @@ else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.h
         host : window.location.protocol + '//' + window.location.host
     };
 }
-else if(window.location.host === '87.106.215.123') {
+else if(window.location.host === '87.106.67.159') {
     var locations = {
         portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgv-1.0.1',
+        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgv-dev',
         host : window.location.protocol + '//' + window.location.host
     };
 }
@@ -30,7 +31,7 @@ else if(window.location.host === '87.106.215.123') {
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
+        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol',
         jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
         underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
         backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
@@ -60,105 +61,103 @@ require.config({
 require([
     'config',
     'jquery'
-], function (Config, $){
-    if (Config.allowParametricURL && Config.allowParametricURL === true) {
-        require(['models/ParametricURL'], function (ParametricURL) {
-            new ParametricURL();
-        });
-    }
+    ], function (Config, $){
+        if (Config.allowParametricURL && Config.allowParametricURL === true) {
+            require(['models/ParametricURL'], function (ParametricURL) {
+                new ParametricURL();
+            });
+        }
 
-    require(['models/map'], function (Map) {
-        new Map();
+        require(['models/map'], function (Map) {
+            new Map();
+        });
+
+        if (Config.attributions && Config.attributions === true) {
+            require(['views/AttributionView'], function (AttributionView) {
+                new AttributionView();
+            });
+        }
+
+        if (Config.mouseHover && Config.mouseHover === true) {
+            require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
+                new MouseHoverPopupView();
+            });
+        }
+
+        if (Config.menubar === true) {
+            require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
+                new MenubarView();
+                new ToggleButtonView();
+                new ZoomButtonsView();
+                require(['views/WindowView'], function (WindowView) {
+                    new WindowView();
+                });
+                if (Config.menu.tools === true) {
+                    if (Config.tools.coord === true) {
+                        require(['views/CoordPopupView'], function (CoordPopupView) {
+                            new CoordPopupView();
+                        });
+                    }
+                    if (Config.tools.gfi === true) {
+                        require(['views/GFIPopupView'], function (GFIPopupView) {
+                            new GFIPopupView();
+                        });
+                    }
+                    if (Config.tools.measure === true) {
+                        require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
+                            new MeasureModalView();
+                            new MeasurePopupView();
+                        });
+                    }
+                    if (Config.tools.print === true) {
+                        require(['views/PrintView'], function (PrintView) {
+                            new PrintView();
+                        });
+                    }
+                    require(['views/ToolsView'], function (ToolsView) {
+                        new ToolsView();
+                    });
+                }
+                if (Config.menu.treeFilter === true) {
+                    require(['views/TreeFilterView'], function (TreeFilterView) {
+                        new TreeFilterView();
+                    });
+                }
+                if (Config.menu.searchBar === true) {
+                    require(['views/SearchbarView'], function (SearchbarView) {
+                        new SearchbarView();
+                    });
+                }
+                if (Config.menu.wfsFeatureFilter === true) {
+                    require(['views/wfsFeatureFilterView'], function (WFSFeatureFilterView) {
+                        new WFSFeatureFilterView();
+                    });
+                }
+                if (Config.orientation === true) {
+                    require(['views/OrientationView'], function (OrientationView) {
+                        new OrientationView();
+                    });
+                }
+                if (Config.poi === true) {
+                    require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
+                        //                    new PointOfInterestView();
+                        new PointOfInterestListView();
+                    });
+                }
+                if (Config.menu.legend === true) {
+                    require(['views/LegendView'], function (LegendView) {
+                        new LegendView();
+                    });
+                }
+                if (Config.menu.routing === true) {
+                    require(['views/RoutingView'], function (RoutingView) {
+                        new RoutingView();
+                    });
+                }
+            });
+
+        }
+        $(function () {
+            $('#loader').hide();
+        });
     });
-    if (Config.scaleLine && Config.scaleLine === true) {
-        require(['views/ScaleLineView'], function (ScaleLineView) {
-            new ScaleLineView();
-        });
-    }
-
-    if (Config.attributions && Config.attributions === true) {
-        require(['views/AttributionView'], function (AttributionView) {
-            new AttributionView();
-        });
-    }
-
-    if (Config.mouseHover && Config.mouseHover === true) {
-        require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
-            new MouseHoverPopupView();
-        });
-    }
-
-    if (Config.menubar === true) {
-        require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
-            new MenubarView();
-            new ToggleButtonView();
-            new ZoomButtonsView();
-            if (Config.menu.tools === true) {
-                if (Config.tools.coord === true) {
-                    require(['views/CoordPopupView'], function (CoordPopupView) {
-                        new CoordPopupView();
-                    });
-                }
-                if (Config.tools.gfi === true) {
-                    require(['views/GFIPopupView'], function (GFIPopupView) {
-                        new GFIPopupView();
-                    });
-                }
-                if (Config.tools.measure === true) {
-                    require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
-                        new MeasureModalView();
-                        new MeasurePopupView();
-                    });
-                }
-                if (Config.tools.print === true) {
-                    require(['views/PrintView'], function (PrintView) {
-                        new PrintView();
-                    });
-                }
-                require(['views/ToolsView'], function (ToolsView) {
-                    new ToolsView();
-                });
-            }
-            if (Config.menu.treeFilter === true) {
-                require(['views/TreeFilterView'], function (TreeFilterView) {
-                    new TreeFilterView();
-                });
-            }
-            if (Config.menu.searchBar === true) {
-                require(['views/SearchbarView'], function (SearchbarView) {
-                    new SearchbarView();
-                });
-            }
-            if (Config.menu.wfsFeatureFilter === true) {
-                require(['views/wfsFeatureFilterView'], function (WFSFeatureFilterView) {
-                    new WFSFeatureFilterView();
-                });
-            }
-            if (Config.orientation === true) {
-                require(['views/OrientationView'], function (OrientationView) {
-                    new OrientationView();
-                });
-            }
-            if (Config.poi === true) {
-                require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
-//                    new PointOfInterestView();
-                new PointOfInterestListView();
-                });
-            }
-            if (Config.menu.legend === true) {
-                require(['views/LegendView'], function (LegendView) {
-                    new LegendView();
-                });
-            }
-            if (Config.menu.routing === true) {
-                require(['views/RoutingView'], function (RoutingView) {
-                    new RoutingView();
-                });
-            }
-        });
-
-    }
-    $(function () {
-        $('#loader').hide();
-    });
-});
