@@ -97,17 +97,14 @@ html, body {
     .legendbody{
         max-height:100px;
     }
-<<<<<<< HEAD
+
 
 }
-<<<<<<< HEAD
-=======
-    .legenddiv{
-        max-height:100px;
-    }
+
+
 
 }
->>>>>>> origin/master
+
 @media (min-height:200px){
     #tree {
         max-height:160px;
@@ -115,8 +112,7 @@ html, body {
     .legendbody{
         max-height:120px;
     }
-<<<<<<< HEAD
-=======
+
     .legenddiv{
         max-height:100px;
     }
@@ -131,7 +127,7 @@ html, body {
     .legenddiv{
         max-height:120px;
     }
->>>>>>> origin/master
+
 }
 @media (min-height:300px){
     #tree {
@@ -140,12 +136,11 @@ html, body {
     .legendbody{
         max-height:220px;
     }
-<<<<<<< HEAD
-=======
+
     .legenddiv{
         max-height:120px;
     }
->>>>>>> origin/master
+
 }
 @media (min-height:480px){
     #tree {
@@ -154,12 +149,11 @@ html, body {
     .legendbody{
         max-height:400px;
     }
-<<<<<<< HEAD
-=======
+
     .legenddiv{
         max-height:300px;
     }
->>>>>>> origin/master
+
 }
 @media (min-height: 768px) {
     #tree {
@@ -168,12 +162,11 @@ html, body {
     .legendbody{
         max-height:700px;
     }
-<<<<<<< HEAD
-=======
+
     .legenddiv{
         max-height:540px;
     }
->>>>>>> origin/master
+
 }
 #tree{
     border:0;
@@ -185,18 +178,13 @@ html, body {
 #legend{
     overflow:hidden;
 }
-<<<<<<< HEAD
-.legenddiv{
-    overflow-y: auto;
-    cursor: pointer;
-}
-=======
+
 
 #tree small {
     cursor: pointer;
 }
 
-<<<<<<< HEAD
+
 .layername{
     margin-left: 5px;
 }
@@ -206,10 +194,9 @@ html, body {
     font-size: 14px;
 }
 
-=======
->>>>>>> origin/master
->>>>>>> origin/master
-=======
+
+
+
 .legend{
     overflow:hidden;
 }
@@ -219,7 +206,7 @@ html, body {
 #tree small {
     cursor: pointer;
 }
->>>>>>> origin/master
+
 /*bootstrap überschreiben*/
 .tree-panel {
     margin-bottom: 0 !important;
