@@ -61,7 +61,8 @@ require.config({
 require([
     'config',
     'jquery'
-    ], function (Config, $){
+    ], function (Config, $) {
+
         if (Config.allowParametricURL && Config.allowParametricURL === true) {
             require(['models/ParametricURL'], function (ParametricURL) {
                 new ParametricURL();
@@ -78,11 +79,16 @@ require([
             });
         }
 
+
         if (Config.mouseHover && Config.mouseHover === true) {
             require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
         }
+
+
+
+
 
         if (Config.menubar === true) {
             require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {

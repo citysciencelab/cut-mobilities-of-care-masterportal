@@ -36290,9 +36290,9 @@
    {
       "id" : "1948",
       "name" : "Festgestellte Änderungen Berichtigungen Planfeststellungen",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_FNP",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_FNP_Aend",
       "typ" : "WMS",
-      "layers" : "13",
+      "layers" : "0",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",

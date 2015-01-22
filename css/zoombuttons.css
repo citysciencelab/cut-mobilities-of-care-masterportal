@@ -15,8 +15,8 @@
     margin: 2px;
     font-size: 18px;
     color: #fff;
-    top: 12px;
-    box-shadow: 2px 2px 2px #666666;
+    top: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 }
 
 #zoomButtons span:hover {

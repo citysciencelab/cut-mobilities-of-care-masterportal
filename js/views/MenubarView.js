@@ -35,7 +35,14 @@ define([
             if(Config.isMenubarVisible === false) {
                 $('#navbarRow').css('display', 'none');
             }
-            new LayerListView();
+            if (_.has(Config, "tree") === true) {
+                require(['views/TreeListView'], function (TreeListView) {
+                    new TreeListView();
+                });
+            } else {
+                new LayerListView();
+            }
+            // new OpenDataTreeList();
         },
         activateFilterTree: function () {
             EventBus.trigger('toggleWin', ['treefilter', 'Filtereinstellungen', 'glyphicon-filter']);

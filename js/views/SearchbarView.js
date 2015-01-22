@@ -43,6 +43,7 @@ define([
                     this.render();
                 }, this);
                 $("#searchInput").blur();
+
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -112,7 +113,7 @@ define([
             /**
             *
             */
-            "setSearchString": function (evt) { //console.log(evt.target);
+            "setSearchString": function (evt) {
                 this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length <= 2) {

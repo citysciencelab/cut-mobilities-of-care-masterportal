@@ -29955,7 +29955,8 @@
          "staedtebaulichervertrag" : "Vertragsform",
          "gop" : "Gop vorhanden",
          "hotlink" : "Planrecht",
-         "hotlink_begr" : "Begründung"
+         "hotlink_begr" : "Begründung",
+         "baustufenplan_hotlink": "Baustufenplan"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",

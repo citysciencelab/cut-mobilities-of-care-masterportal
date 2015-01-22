@@ -3,9 +3,11 @@ define([
     'backbone',
     'openlayers',
     'config',
+
     'collections/stylelist',
     'collections/LayerList'
 ], function (_, Backbone, ol, Config, StyleList, Layerlist) {
+
 
 
     var Legend = Backbone.Model.extend({
@@ -159,6 +161,7 @@ define([
                     }
                 },this);
                 this.get('legendArray').reverse();
+
         }
 
     });
