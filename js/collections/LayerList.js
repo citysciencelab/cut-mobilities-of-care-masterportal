@@ -139,12 +139,14 @@ define([
             }
         },
         initialize: function () {
-            EventBus.on('getLayersForPrint', this.sendVisibleWMSLayer, this);
+            EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
             EventBus.on('setVisible', this.setVisibleByID, this);
             EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
             EventBus.on('getVisibleWFSLayerPOI', this.sendVisibleWFSLayerPOI, this);
+            EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
             this.listenTo(this, 'change:visibility', this.sendVisibleWFSLayer, this);
+            this.listenTo(this, 'change:visibility', this.sendAllVisibleLayer, this);
 
             this.fetch({
                 cache: false,
@@ -172,6 +174,13 @@ define([
             return this.where({visibility: true, typ: "WFS"});
         },
         /**
+         * Gibt alle Sichtbaren Layer zurück.
+         *
+         */
+        getAllVisibleLayer: function () {
+            return this.where({visibility: true});
+        },
+        /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
          * args[0] = id, args[1] = visibility(bool)
          */
@@ -193,6 +202,12 @@ define([
          */
         sendVisibleWMSLayer: function () {
             EventBus.trigger('layerForPrint', this.getVisibleWMSLayer());
+        },
+        /**
+         *
+         */
+        sendAllVisibleLayer: function () {
+            EventBus.trigger('sendAllVisibleLayer', this.getAllVisibleLayer());
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.

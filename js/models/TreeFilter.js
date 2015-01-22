@@ -25,6 +25,7 @@ define([
         },
         url: '../../tree.json',
         initialize: function () {
+            EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
             this.listenTo(this, 'change:searchCategoryString', this.setCategoryArray);
             this.listenTo(this, 'change:treeCategory', this.setTypeArray);
             this.listenTo(this, 'change:searchTypeString', this.setTypeArray);
@@ -49,6 +50,15 @@ define([
                     model.set('typeArray', []);  // speichert später jeweils zur Category die Types
                 }
             });
+        },
+        setStatus: function (args) {   // Fenstermanagement
+            if (args[2] === "treefilter") {
+                this.set("isCollapsed", args[1]);
+                this.set("isCurrentWin", args[0]);
+            }
+            else {
+                this.set("isCurrentWin", false);
+            }
         },
         parse: function (response) {
             this.set('trees', response.trees);

@@ -14,7 +14,7 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
-//             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
+             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
              displayInTree: true,
              filterOptions: [
                  {

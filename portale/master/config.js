@@ -58,9 +58,9 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             {id: '1346', visible: true},
-            {id: '358', visible: false, style: '358', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '358', visible: false, style: '358', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '359', visible: false, style: '359', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '359', visible: false, style: '359', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
             {id:
              [
                  {
@@ -116,9 +116,9 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
         */
-        scaleLine: false,
+        scaleLine: true,
         /**
         * @memberof config
         * @type {Boolean}
@@ -128,7 +128,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Steuert, ob die Menubar initial ausgeklappt ist oder nicht.
         */
         isMenubarVisible: true,
         /**
@@ -147,7 +147,8 @@ define(function () {
             tools: true,
             treeFilter: true,
             wfsFeatureFilter: true,
-            legend: true
+            legend: true,
+            routing: true
         },
         /**
         * @memberof config

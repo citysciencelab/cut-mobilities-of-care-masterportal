@@ -35,7 +35,7 @@
 .poiRow{
     cursor:pointer;
 }
-#geolocation_marker{
+.geolocation_marker{
     cursor:pointer;
     color: #F3F3F3;
     padding: 3px;

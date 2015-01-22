@@ -11,6 +11,27 @@ define(function () {
         layerConf: '../../diensteapiFHHNET.json',
         layerIDs: [
             {id: '453', visible: true},
+            {id: '682', visible: true},
+            {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
+            {id: '1210', visible: true},
+            {id: '433,434', visible: true},
+            {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
+            {id:
+             [
+                 {
+                     id: '1364',
+                     attribution:
+                     {
+                         eventname: 'aktualisiereverkehrsnetz',
+                         timeout: (10 * 60000)
+                     }
+                 },
+                 {
+                     id: '1365'
+                 }
+             ],
+             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+            },
             {id: '352', visible: true, style: '352', clusterDistance: 30, styleField :'Kategorie'},
             {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'Kategorie'},
             {id: '354', visible: true, style: '354', clusterDistance: 30, styleField :'Kategorie'},
