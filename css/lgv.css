@@ -47,8 +47,17 @@ html, body {
 }
 
 @media (max-width: 768px) {
-    .btn-glyphicon {
-        font-size: 16px !important;
+    .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .menuitem{
+        font-size: 18px !important;
+    }
+    html, body {
+    font-size: 16px;
+    }
+    .menuitem{
+    font-size: 16px;
+    }
+    .dropdown-menu {
+      font-size: 18px;
     }
 }
 
@@ -69,6 +78,15 @@ html, body {
     border-top: 1px solid #e5e5e5;
 }
 
+
+
+#toggleDiv {
+    position: relative;
+    top:50px;
+    right: 17px;
+    z-index: 1000;
+}
+
 .color {
     color: #cdcdcd;
 }
@@ -80,8 +98,13 @@ html, body {
         max-height:100px;
     }
 
+
 }
-<<<<<<< HEAD
+
+
+
+}
+
 @media (min-height:200px){
     #tree {
         max-height:160px;
@@ -89,6 +112,22 @@ html, body {
     .legendbody{
         max-height:120px;
     }
+
+    .legenddiv{
+        max-height:100px;
+    }
+}
+@media (min-height:250px){
+    #tree {
+        max-height:230px;
+    }
+    .legendbody{
+        max-height:200px;
+    }
+    .legenddiv{
+        max-height:120px;
+    }
+
 }
 @media (min-height:300px){
     #tree {
@@ -97,6 +136,11 @@ html, body {
     .legendbody{
         max-height:220px;
     }
+
+    .legenddiv{
+        max-height:120px;
+    }
+
 }
 @media (min-height:480px){
     #tree {
@@ -105,6 +149,11 @@ html, body {
     .legendbody{
         max-height:400px;
     }
+
+    .legenddiv{
+        max-height:300px;
+    }
+
 }
 @media (min-height: 768px) {
     #tree {
@@ -113,6 +162,11 @@ html, body {
     .legendbody{
         max-height:700px;
     }
+
+    .legenddiv{
+        max-height:540px;
+    }
+
 }
 #tree{
     border:0;
@@ -124,17 +178,35 @@ html, body {
 #legend{
     overflow:hidden;
 }
-.legenddiv{
-    overflow-y: auto;
-    cursor: pointer;
-}
-=======
+
 
 #tree small {
     cursor: pointer;
 }
 
->>>>>>> origin/master
+
+.layername{
+    margin-left: 5px;
+}
+
+.menuitem{
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+
+
+
+.legend{
+    overflow:hidden;
+}
+.legenddiv{
+    overflow-y: auto;
+}
+#tree small {
+    cursor: pointer;
+}
+
 /*bootstrap überschreiben*/
 .tree-panel {
     margin-bottom: 0 !important;
@@ -159,6 +231,11 @@ html, body {
 
 .nav > li:hover {
     background-color: white;
+}
+
+.glyphicon {
+    vertical-align: sub;
+    top: 0px;
 }
 /*
 .list-group-item {
@@ -220,4 +297,10 @@ html, body {
     background-color: rgba(150, 150, 150, 1);
     color: #fff;
     font-weight: bold;
+}
+.cluster{
+    font-size:25px;
+    border-radius:30px!important;
+    float:left;
+    margin:10px;
 }

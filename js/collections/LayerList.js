@@ -181,6 +181,11 @@ define([
         getAllVisibleLayer: function () {
             return this.where({visibility: true});
         },
+
+        getAllLayer: function () {
+            return this.models;
+        },
+
         /**
          * [getLayerByProperty description]
          * @param {[type]} key   [description]

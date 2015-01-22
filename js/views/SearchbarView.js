@@ -42,7 +42,8 @@ define([
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
-                // $("#searchInput").focusout();
+                $("#searchInput").blur();
+
             },
             "events": {
                 "keyup input": "setSearchString",

@@ -1,28 +1,57 @@
 <div class="modal-dialog" >
     <div class="modal-content">
-    <div id="gfiTitle" class="closelegend" style="cursor:pointer;" data-dismiss="modal" >
-    <div class="close glyphicon glyphicon-remove"></div>
+    <div  class="closelegend panel-heading" style="cursor:pointer;" data-dismiss="modal" >
+        <span class="glyphicon glyphicon-book"></span>
+        <span class="close" style="font-size: 20px;">×</span>
     <strong>Legende</strong>
     </div>
       <div id='legendbody' class="modal-body legendbody">
-          <%  if(legendArray.length >0) {
+          <% var count=0;
+             if(legendArray.length >0) {
             _.each(legendArray, function(element, index) {
+              var layerid=element.layerid;
+              var layer=_.where(layerlist, {id:layerid[0]});
+              if(layer[0]===undefined){
+                var layername=element.layerid
+                layer=_.where(layerlist,{id:element.grouplayer[0]});
+              }
+              if(layer[0].get('visibility')===true){
+              console.log(element);
                 if(document.getElementById('base-modal-legend')&&visibLegend!=''&&visibLegend[0]){
                   if(visibLegend[0].src===element.img[0]){
                       %>
-                      <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
+                      <li id=<%="legendid_"+element.layerid%> class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
+
 
                         <div class="legenddiv" style="display: visible;">
                             <li class="list-group-item hit">
                         <%
                         if(element.typ!='WFS'){
-                            _.each(element.img, function(img, imgindex){%>
-                                <p><img src=<%= img %>> </p>
-                            <%
+
+                            _.each(element.img, function(img, imgindex){
+                                if(img.search('.pdf')!==-1){%>
+                                    <a href=<%= img%> target="_blank">weitere Informationen</a>
+
+                                <%}else{
+                                %>
+                                    <p><img src=<%= img %>> </p>
+                                <%}
                             });
                         }
                          else{%><table>
-                            <%_.each(element.img, function(img, imgindex){%>
+                            <%_.each(element.img, function(img, imgindex){
+                                if(element.stylename[imgindex]==="Clustersymbol"){%>
+                                 <tr>
+                                    <td>
+                                        <span style=<%= "color:rgb("+element.img[imgindex].circlefillcolor+");background:rgb("+element.img[imgindex].circlefillcolor+");"%> class="glyphicon glyphicon-plus-sign cluster" />
+                                    </td>
+                                    <td>
+                                        <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
+                                    </td>
+                                </tr>
+                                    <%
+                                }else{%>
+
                                 <tr>
                                     <td>
                                         <img style='float:left;margin: 10px;width:30px;' src=<%= img %>>
@@ -32,7 +61,9 @@
                                     </td>
                                 </tr>
                             <%
-                            });
+
+                            }});
+
                             %>
                             </table>
                         <%}%>
@@ -42,19 +73,39 @@
                                 <%
                     }
                     else{%>
-                        <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
+
+                        <li id=<%="legendid_"+element.layerid%> class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
+
 
                             <div class="legenddiv" style="display: none;">
                                 <li class="list-group-item hit">
                             <%
                             if(element.typ!='WFS'){
-                                _.each(element.img, function(img, imgindex){%>
+
+                                _.each(element.img, function(img, imgindex){
+                                   if(img.search('.pdf')!==-1){%>
+                                    <a href=<%= img%> target="_blank">weitere Informationen</a>
+
+                                <%}else{
+                                %>
                                     <p><img src=<%= img %>> </p>
-                                <%
+                                <%}
                                 });
                             }
                             else{%><table>
-                                <%_.each(element.img, function(img, imgindex){%>
+                                <%_.each(element.img, function(img, imgindex){
+                                    if(element.stylename[imgindex]==="Clustersymbol"){%>
+                                     <tr>
+                                        <td>
+                                            <span style=<%= "color:rgb("+element.img[imgindex].circlefillcolor+");background:rgb("+element.img[imgindex].circlefillcolor+");"%> class="glyphicon glyphicon-plus-sign cluster" />
+                                        </td>
+                                        <td>
+                                            <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
+                                        </td>
+                                    </tr>
+                                        <%
+                                    }else{%>
+
                                     <tr>
                                         <td>
                                             <img style='float:left;margin: 10px;width:30px;' src=<%= img %>>
@@ -64,7 +115,9 @@
                                         </td>
                                     </tr>
                                 <%
-                                });
+
+                                }});
+
                                 %>
                                 </table>
                             <%}%>
@@ -74,34 +127,59 @@
                     <%}
                 }
             else {%>
-            <li class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
+
+            <li id=<%="legendid_"+element.layerid%> class="list-group-item type" style="min-width: 200px;cursor:pointer;"><strong><%= element.name[0] %></strong></li>
                 <%
-                   if(index===0) {%>
+                   if(count===0) {%>
                 <div class="legenddiv" style="display: visible;">
-                <% }
+                <%
+                   count=1;}
+
                 else{ %>
                 <div class="legenddiv" style="display: none;">
                 <%}%>
                     <li class="list-group-item hit">
                     <%
                         if(element.typ!='WFS'){
-                            _.each(element.img, function(img, imgindex){%>
-                                <p><img src=<%= img %>> </p>
-                            <%
+
+                            _.each(element.img, function(img, imgindex){
+                                if(img.search('.pdf')!==-1){%>
+                                    <a href=<%= img%> target="_blank">weitere Informationen</a>
+
+                                <%}else{
+                                %>
+                                    <p><img src=<%= img %>> </p>
+                                <%}
                             });
                         }
                         else{%><table>
-                            <%_.each(element.img, function(img, imgindex){%>
+                            <%_.each(element.img, function(img, imgindex){
+                                if(element.stylename[imgindex]==="Clustersymbol"){%>
+                                 <tr>
+                                    <td>
+                                        <span style=<%= "color:rgb("+element.img[imgindex].circlefillcolor+");background:rgb("+element.img[imgindex].circlefillcolor+");"%> class="glyphicon glyphicon-plus-sign cluster" />
+                                    </td>
+                                    <td>
+                                        <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
+                                    </td>
+                                </tr>
+                                    <%
+                                }else{%>
+
                                 <tr>
                                     <td>
                                         <img style='float:left;margin: 10px;width:30px;' src=<%= img %>>
                                     </td>
-                                    <td >
+
+                                    <td>
+
                                         <p style='float:left;height: auto; width:auto;'><%= element.stylename[imgindex]%></p>
                                     </td>
                                 </tr>
                             <%
-                            });
+
+                            }});
+
                             %>
                             </table>
                         <%}%>
@@ -109,8 +187,10 @@
                     </div>
                         <p style="display:none"><%=index %></p>
                         <%
-                           }
-            })
+
+                }
+            }})
+
         }%>
     </div>
 </div>
