@@ -180,6 +180,11 @@ define([
         getAllVisibleLayer: function () {
             return this.where({visibility: true});
         },
+
+        getAllLayer: function () {
+            return this.models;
+        },
+
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.
          * args[0] = id, args[1] = visibility(bool)

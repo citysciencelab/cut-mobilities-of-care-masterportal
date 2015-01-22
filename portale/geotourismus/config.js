@@ -13,7 +13,9 @@ define(function () {
             {id: '453', visible: true},
             {id: '682', visible: true},
             {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
-            {id: '1210', visible: true},
+
+            {id: '1210', visible: false},
+
             {id: '433,434', visible: true},
             {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
@@ -30,7 +32,9 @@ define(function () {
                      id: '1365'
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+
+             name: 'Verkehrsbelastung auf Autobahnen', visible: false
+
             },
             {id: '352', visible: true, style: '352', clusterDistance: 30, styleField :'Kategorie'},
             {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'Kategorie'},
@@ -39,11 +43,12 @@ define(function () {
             {id: '356', visible: true, style: '356', clusterDistance: 30, styleField :'Kategorie'},
             {id: '357', visible: true, style: '357', clusterDistance: 30, styleField :'Kategorie'},
             {id: '358', visible: true, style: '358', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '359', visible: true, style: '359', clusterDistance: 30, styleField :'Kategorie'}
+            {id: '359', visible: true, style: '359', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '566', visible: true}
         ],
         styleConf: '../../style.json',
         menubar: true,
-        scaleLine: false,
+        scaleLine: true,
         isMenubarVisible: false,
         menu: {
             viewerName: 'GeoViewer',
