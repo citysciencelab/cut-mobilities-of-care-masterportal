@@ -60,7 +60,8 @@ require.config({
 require([
     'config',
     'jquery'
-    ], function (Config, $){
+    ], function (Config, $) {
+
         if (Config.allowParametricURL && Config.allowParametricURL === true) {
             require(['models/ParametricURL'], function (ParametricURL) {
                 new ParametricURL();

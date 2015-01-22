@@ -139,6 +139,7 @@ define([
             }
         },
         initialize: function () {
+            EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
             EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
             EventBus.on('updateStyleByID', this.updateStyleByID, this);
             EventBus.on('setVisible', this.setVisibleByID, this);
@@ -179,6 +180,25 @@ define([
          */
         getAllVisibleLayer: function () {
             return this.where({visibility: true});
+        },
+        /**
+         * [getLayerByProperty description]
+         * @param {[type]} key   [description]
+         * @param {[type]} value [description]
+         */
+        getLayerByProperty: function (key, value) {
+            return this.filter(function (model) {
+                if (typeof model.get(key) === "object") {
+                    return _.contains(model.get(key), value);
+                }
+                else {
+                    // else noch nicht getestet
+                    return model.get(key) === value;
+                }
+            });
+        },
+        sendLayerByProperty: function (key, value) {
+            EventBus.trigger("sendLayerByProperty", this.getLayerByProperty(key, value));
         },
         /**
          * Aktualisiert den Style vom Layer mit SLD_BODY.

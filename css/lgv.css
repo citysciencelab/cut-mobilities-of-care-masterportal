@@ -171,7 +171,7 @@ html, body {
 }
 
 .list-group-item:last-child {
-    border-bottom: 1px solid #ddd !important;
+    /*border-bottom: 1px solid #ddd !important;*/
 }
 
 .form-group:last-child {

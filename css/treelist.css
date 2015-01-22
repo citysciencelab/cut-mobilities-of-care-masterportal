@@ -1,0 +1,62 @@
+#tree > li {
+    padding: 0;
+}
+
+.tree-node-parent < li {
+padding: 0;
+}
+
+.tree-node-parent {
+    padding: 10px;
+}
+
+.folder-icons span {
+    padding-right: 5px;
+}
+
+.folder-arrow {
+    position: relative;
+    right: -10px;
+    top: -11px;
+}
+
+.folder-arrow span {
+    color: #ffffff;
+    background-color: #d42132;
+    opacity: 0.5;
+    padding: 4px 6px 5px;
+    font-size: 12px;
+}
+
+.folder-arrow span:hover {
+    cursor: pointer;
+    opacity: 1.0;
+}
+
+.folder-name {
+    padding-left: 4em;
+    padding-right: 5em;
+    width: 340px;
+    font-size: 12px;
+}
+
+.tree-node-children {
+    padding-left: 0;
+    /*background-color: rgba(212, 33, 50, 0.5);*/
+    background-color: rgba(0, 91, 172, 0.5);
+}
+
+.tree-node-children > li {
+    margin-left: 12px;
+    border-right: 0;
+}
+
+.tree-node-children > li:last-child {
+    border-bottom: 0;
+}
+
+
+.activColor {
+/*background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);*/
+    background-color: #eee;
+}
