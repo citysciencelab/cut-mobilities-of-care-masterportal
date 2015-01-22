@@ -4,24 +4,78 @@ define([
     'backbone',
     'text!templates/RoutingWin.html',
     'models/Routing',
-    'eventbus'
+    'eventbus',
+    'models/Orientation'
 ], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus) {
 
-var RoutingView = Backbone.View.extend({
+    var RoutingView = Backbone.View.extend({
         model: RoutingModel,
         id: 'RoutingWin',
         className: 'panel panel-master',
         template: _.template(RoutingWin),
         initialize: function () {
             this.render();
+            this.listenTo(this.model, 'change:fromCoord', this.setCenterforFromValue);
+            this.listenTo(this.model, 'change:toCoord', this.setCenterforToValue);
             EventBus.on('toggleRoutingWin', this.toggleRoutingWin, this);
+            EventBus.on('setGeolocation', this.setGeolocation, this);
         },
         events: {
             'click .toggleRoutingOptions': 'toggleRoutingOptions',
             'click .close': 'toggleRoutingWin',
             'click #filterbutton': 'getFilterInfos',
             'click .changedWochentag': 'changedWochentag',
-            'change .changedUhrzeit' : 'changedUhrzeit'
+            'change .changedUhrzeit' : 'changedUhrzeit',
+            'keyup .startAdresseChanged' : 'startAdresseChanged',
+            'keyup .zielAdresseChanged' : 'zielAdresseChanged',
+            'click .startAdressePosition' : 'startAdressePosition',
+            'click .startAdresseChanged' : 'startAdresseChanged',
+            'click .startAdresseSelected' : 'startAdresseSelected',
+            'click .zielAdresseSelected' : 'zielAdresseSelected'
+        },
+        setCenterforFromValue: function (newValue) {
+            if (newValue.changed.fromCoord != '') {
+                EventBus.trigger('setCenter', newValue.changed.fromCoord, 5);
+            }
+        },
+        setCenterforToValue: function (newValue) {
+            if (newValue.changed.toCoord != '') {
+                EventBus.trigger('setCenter', newValue.changed.toCoord, 5);
+            }
+        },
+        zielAdresseSelected: function (evt) {
+            var value = evt.currentTarget.id;
+            this.model.search(value, 'ziel');
+        },
+        startAdresseSelected: function (evt) {
+            var value = evt.currentTarget.id;
+            this.model.search(value, 'start');
+        },
+        startAdresseChanged: function (evt) {
+            EventBus.trigger('clearGeolocationMarker', this);
+            var value = evt.target.value;
+            if (value == 'aktueller Standpunkt') {
+                $('#startAdresse').val('');
+            }
+            else {
+                this.model.search(value, 'start');
+            }
+        },
+        zielAdresseChanged: function (evt) {
+            var value = evt.target.value;
+            this.model.search(value, 'ziel');
+        },
+        setGeolocation: function (geoloc) {
+            if (_.isArray(geoloc) && geoloc.length == 2) {
+                this.model.set('fromAdresse', 'aktueller Standpunkt');
+                this.model.set('fromCoord', geoloc[0]);
+                $('#startAdresse').val('aktueller Standpunkt');
+                EventBus.trigger('showGeolocationMarker', this);
+            }
+        },
+        startAdressePosition: function (evt) {
+            EventBus.trigger('setOrientation', this);
+            EventBus.trigger('showGeolocationMarker', this);
         },
         changedUhrzeit: function (evt) {
             var timeread = evt.target.value;
@@ -48,18 +102,16 @@ var RoutingView = Backbone.View.extend({
         changedWochentag: function (evt) {
             if (evt.target.textContent === 'keinen Zeitpunkt vorgeben') {
                 this.model.set('routingday', '');
-                $('#dayOfWeekButton').val("Wochentag wählen");
                 $('#dayOfWeekButton').text("Wochentag wählen");
             }
             else {
                 this.model.set('routingday', evt.target.textContent);
-                $('#dayOfWeekButton').val(evt.target.textContent);
                 $('#dayOfWeekButton').text(evt.target.textContent);
             }
         },
         render: function () {
             var attr = this.model.toJSON();
-             $('#toggleRow').append(this.$el.html(this.template(attr)));
+            $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
         toggleRoutingOptions: function () {
             if ($('#RoutingWin > .panel-options').is(":visible") == false) {
@@ -68,17 +120,14 @@ var RoutingView = Backbone.View.extend({
                 var oldWeekday = this.model.get('routingday');
                 if (oldHour && oldHour >= 0) {
                     $('#timeButton').val(oldHour + ':' + oldMinute);
-                    $('#timeButton').text(oldHour + ':' + oldMinute);
                 }
                 else {
                     var time = new Date();
                     var hour = time.getHours();
                     var minute = (time.getMinutes()<10?'0':'') + time.getMinutes()
                     $('#timeButton').val(hour + ':' + minute);
-                    $('#timeButton').text(hour + ':' + minute);
                 }
                 if (oldWeekday != '') {
-                    $('#dayOfWeekButton').val(oldWeekday);
                     $('#dayOfWeekButton').text(oldWeekday);
                 }
                 else {
@@ -91,7 +140,6 @@ var RoutingView = Backbone.View.extend({
                     weekday[4] = "Donnerstag";
                     weekday[5] = "Freitag";
                     weekday[6] = "Samstag";
-                    $('#dayOfWeekButton').val(weekday[time.getDay()]);
                     $('#dayOfWeekButton').text(weekday[time.getDay()]);
                 }
             }
@@ -104,10 +152,12 @@ var RoutingView = Backbone.View.extend({
             }
             else {
                 $('#RoutingWin > .panel-options').toggle('slow');
-                $('#RoutingWin').show();
+                var that = this;
+                $('#RoutingWin').show(1000, function () {
+                    that.startAdressePosition();
+                });
             }
         }
     });
-
     return RoutingView;
 });

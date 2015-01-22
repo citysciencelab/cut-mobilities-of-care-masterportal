@@ -40,7 +40,6 @@ define([
                     Mit ol3-debug kann setAttributions() verwendet werden, mit ol3 nur .attributions =
                     */
                     layer.get('layer').getSource().attribution_ = layerattributions;
-                    console.log(layer.get('layer').getSource().getAttributions());
                     if (this.get('alreadySet') == false) {
                         this.addAttributionControl();
                     }
