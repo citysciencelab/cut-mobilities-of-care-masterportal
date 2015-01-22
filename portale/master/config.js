@@ -27,13 +27,13 @@ define(function () {
         * @type {String}
         * @desc Beschreibung.
         */
-        layerConf: locations.master + '/diensteapiFHHNET.json',
+        layerConf: locations.baseUrl + '../diensteapiFHHNET.json',
         /**
         * @memberof config
         * @type {String}
         * @desc Beschreibung.
         */
-        styleConf: locations.master + '/style.json',
+        styleConf: locations.baseUrl  + '../style.json',
         /**
         * @memberof config
         * @type {String}

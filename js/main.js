@@ -5,28 +5,13 @@
 if (window.location.href.charAt(window.location.href.length-1) === '#') {
     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 }
-if (window.location.host === 'wscd0096') {
-    var locations = {
-        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/')),
-        host : window.location.protocol + '//' + window.location.host
-    };
 
-}
-else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.host === 'geoportal-hamburg.de') {
-    var locations = {
-        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest',
-        host : window.location.protocol + '//' + window.location.host
-    };
-}
-else if(window.location.host === '87.106.67.159') {
-    var locations = {
-        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgv-dev',
-        host : window.location.protocol + '//' + window.location.host
-    };
-}
+var locations = {
+    portal : window.location.protocol + '//' + window.location.host + window.location.pathname,      
+    baseUrl : require.toUrl(''),
+    host : window.location.protocol + '//' + window.location.host
+};
+
 /*global require*/
 require.config({
     waitSeconds: 60,
@@ -39,11 +24,11 @@ require.config({
         bootstrap: locations.host + '/libs/bootstrap-3.1.1/js/bootstrap.min',
         proj4: locations.host + '/libs/proj4-2.2.1/dist/proj4',
         config: locations.portal + 'config',
-        eventbus: locations.master + '/js/EventBus',
-        views: locations.master + '/js/views',
-        models: locations.master + '/js/models',
-        collections: locations.master + '/js/collections',
-        templates: locations.master + '/templates'
+        eventbus: 'EventBus',
+        views: 'views',
+        models: 'models',
+        collections: 'collections',
+        templates: '../templates'
     },
     shim: {
         bootstrap: {
