@@ -86,19 +86,17 @@ define([
                 }
                 else if (element.get('typ') === 'GROUP') {
                     groupArray=[];
-                    _.each(element.get('layer').values_.layers.array_, function (layerarray, indexarray){
 
+                    _.each(element.get("layer").getLayers().getArray(), function (layerarray, indexarray){
                         layeridarray.push(layerarray.id);
-
                         groupArray.push({
                             typ:'GROUP',
                             layerID:layerarray.id,
-                            source:layerarray.source_.urls_[0],
+                            source:layerarray.getSource().getUrls()[0],
                             name: layerarray.get('name'),
-                            legendURL: layerarray.values_.legendURL,
-
-                            layers: layerarray.source_.params_.LAYERS,
-                            styles:layerarray.source_.params_.STYLES
+                            legendURL: layerarray.getProperties().legendURL,
+                            layers: layerarray.getSource().getParams().LAYERS,
+                            styles:layerarray.getSource().getParams().STYLES
 
                         });
                     })
@@ -168,4 +166,3 @@ define([
 
     return LegendView;
 });
-
