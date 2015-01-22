@@ -125,7 +125,8 @@ define([
                     requestStreetName = this.get("searchString");
                 }
                 $.ajax({
-                    url: this.get("gazetteerURL") + "&StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName),
+                    url: Config.proxyURL,
+                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName)},
                     context: this,  // das model
                     async: true,
                     type: "GET",
@@ -185,7 +186,8 @@ define([
                 // this.set("numberSearch", false);
                 this.get("isSearchReady").set("numberSearch", false);
                 $.ajax({
-                    url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")),
+                    url: Config.proxyURL,
+                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName"))},
                     context: this,  // das model
                     async: true,
                     type: "GET",
@@ -244,7 +246,7 @@ define([
                                         }
                                     }
                                 }, this);
-                            }console.log(houseNumbers);
+                            }
                             this.pushHits("hitList", houseNumbers); // Fügt die Treffer zur hitList hinzu
                         }
                         catch (error) {
