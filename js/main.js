@@ -31,7 +31,7 @@ else if(window.location.host === '87.106.67.159') {
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol',
+        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
         jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
         underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
         backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
@@ -61,7 +61,8 @@ require.config({
 require([
     'config',
     'jquery'
-    ], function (Config, $){
+    ], function (Config, $) {
+
         if (Config.allowParametricURL && Config.allowParametricURL === true) {
             require(['models/ParametricURL'], function (ParametricURL) {
                 new ParametricURL();
@@ -78,11 +79,16 @@ require([
             });
         }
 
+
         if (Config.mouseHover && Config.mouseHover === true) {
             require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
         }
+
+
+
+
 
         if (Config.menubar === true) {
             require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {

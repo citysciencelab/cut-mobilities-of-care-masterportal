@@ -47,8 +47,17 @@ html, body {
 }
 
 @media (max-width: 768px) {
-    .btn-glyphicon {
-        font-size: 16px !important;
+    .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .menuitem{
+        font-size: 18px !important;
+    }
+    html, body {
+    font-size: 16px;
+    }
+    .menuitem{
+    font-size: 16px;
+    }
+    .dropdown-menu {
+      font-size: 18px;
     }
 }
 
@@ -69,6 +78,15 @@ html, body {
     border-top: 1px solid #e5e5e5;
 }
 
+
+
+#toggleDiv {
+    position: relative;
+    top:50px;
+    right: 17px;
+    z-index: 1000;
+}
+
 .color {
     color: #cdcdcd;
 }
@@ -79,11 +97,14 @@ html, body {
     .legendbody{
         max-height:100px;
     }
-    .legenddiv{
-        max-height:100px;
-    }
+
 
 }
+
+
+
+}
+
 @media (min-height:200px){
     #tree {
         max-height:160px;
@@ -91,6 +112,7 @@ html, body {
     .legendbody{
         max-height:120px;
     }
+
     .legenddiv{
         max-height:100px;
     }
@@ -105,6 +127,7 @@ html, body {
     .legenddiv{
         max-height:120px;
     }
+
 }
 @media (min-height:300px){
     #tree {
@@ -113,9 +136,11 @@ html, body {
     .legendbody{
         max-height:220px;
     }
+
     .legenddiv{
         max-height:120px;
     }
+
 }
 @media (min-height:480px){
     #tree {
@@ -124,9 +149,11 @@ html, body {
     .legendbody{
         max-height:400px;
     }
+
     .legenddiv{
         max-height:300px;
     }
+
 }
 @media (min-height: 768px) {
     #tree {
@@ -135,9 +162,11 @@ html, body {
     .legendbody{
         max-height:700px;
     }
+
     .legenddiv{
         max-height:540px;
     }
+
 }
 #tree{
     border:0;
@@ -149,6 +178,25 @@ html, body {
 #legend{
     overflow:hidden;
 }
+
+
+#tree small {
+    cursor: pointer;
+}
+
+
+.layername{
+    margin-left: 5px;
+}
+
+.menuitem{
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+
+
+
 .legend{
     overflow:hidden;
 }
@@ -158,6 +206,7 @@ html, body {
 #tree small {
     cursor: pointer;
 }
+
 /*bootstrap überschreiben*/
 .tree-panel {
     margin-bottom: 0 !important;
@@ -183,6 +232,11 @@ html, body {
 .nav > li:hover {
     background-color: white;
 }
+
+.glyphicon {
+    vertical-align: sub;
+    top: 0px;
+}
 /*
 .list-group-item {
     padding-top:  6px !important;
@@ -194,7 +248,7 @@ html, body {
 }
 
 .list-group-item:last-child {
-    border-bottom: 1px solid #ddd !important;
+    /*border-bottom: 1px solid #ddd !important;*/
 }
 
 .form-group:last-child {

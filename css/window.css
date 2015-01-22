@@ -43,7 +43,7 @@
     position: absolute;
     left: 63px;
     top: 63px;
-    box-shadow: 2px 2px 2px 0px #666666;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     min-width: 250px;
 }
 

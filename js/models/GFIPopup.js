@@ -57,6 +57,7 @@ define([
             for (var i=0; i < sortedParams.length; i+=1) {
                 if (sortedParams[i].typ === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
+                    // console.log(gfiContent);
                 }
                 else if (sortedParams[i].typ === "WFS") {
                     gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].attributes);
@@ -159,56 +160,71 @@ define([
             }
         },
         setWMSPopupContent: function (params) {
+            var request;
+            // Für B-Pläne wird Feature_Count auf 3 gesetzt
+            if (params.name === "Festgestellte Bebauungspläne") {
+                request = params.url + "&FEATURE_COUNT=3";
+            }
+            else {
+                request =  params.url
+            }
             var pgfi = [];
             $.ajax({
-                url: Config.proxyURL + '?url=' + encodeURIComponent(params.url),
+                url: Config.proxyURL + '?url=' + encodeURIComponent(request),
                 async: false,
                 type: 'GET',
                 context: this,  // das model
                 success: function (data, textStatus, jqXHR) {
-                    var attr, nodeList, gfi = {};
+                    var attr, gfiList = [];
                     // ESRI
                     if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                        nodeList = data.getElementsByTagName('FIELDS')[0].attributes;
+                        gfiList.push(data.getElementsByTagName('FIELDS')[0].attributes);
                     }
                     // deegree
                     else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
-                        nodeList = data.getElementsByTagName('gml:featureMember')[0].childNodes[0].nextSibling.childNodes;
-                        nodeList = _.filter(nodeList, function (element) {
-                            return element.nodeType === 1;
+                        _.each(data.getElementsByTagName('gml:featureMember'), function (element) {
+                            var nodeList = element.childNodes[0].nextSibling.childNodes;
+                            gfiList.push(_.filter(nodeList, function (element) {
+                                return element.nodeType === 1;
+                            }));
                         });
                     }
                     // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
                     else if (data.getElementsByTagName('featureMember')[0] !== undefined) {
-                        nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
-                        nodeList = _.filter(nodeList, function (element) {
-                            return element.nodeType === 1;
+                        _.each(data.getElementsByTagName('featureMember'), function (element) {
+                            var nodeList = element.childNodes[0].nextSibling.childNodes;
+                            gfiList.push(_.filter(nodeList, function (element) {
+                                return element.nodeType === 1;
+                            }));
                         });
                     }
-                    if (nodeList) {
-                        if (params.attributes === 'showAll') {
-                            _.each(nodeList, function (element) {
-                                var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                gfi[attribute] = element.textContent.trim();
-                            });
-                        }
-                        else {
-                            _.each(params.attributes, function(value, key, list) {
-                                var nodevalue = _.find(nodeList, function(node) {
-                                    return node.localName === key;
+                    if (gfiList) {
+                        _.each(gfiList, function (element) {
+                            var gfi = {}
+                            if (params.attributes === 'showAll') {
+                                _.each(element, function (element) {
+                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
+                                    gfi[attribute] = element.textContent.trim();
                                 });
-                                if (nodevalue) {
-                                    nodevalue = nodevalue.textContent.trim();
-                                    var key = new Array();
-                                    key.push(value);
-                                    var val = new Array();
-                                    val.push(nodevalue);
-                                    var newgfi = _.object(key, val);
-                                    gfi = _.extend(gfi, newgfi);
-                                }
-                            });
-                        }
-                        pgfi.push(gfi);
+                            }
+                            else {
+                                _.each(params.attributes, function(value, key, list) {
+                                    var nodevalue = _.find(element, function(node) {
+                                        return node.localName === key;
+                                    });
+                                    if (nodevalue) {
+                                        nodevalue = nodevalue.textContent.trim();
+                                        var key = [];
+                                        key.push(value);
+                                        var val = [];
+                                        val.push(nodevalue);
+                                        var newgfi = _.object(key, val);
+                                        gfi = _.extend(gfi, newgfi);
+                                    }
+                                });
+                            }
+                            pgfi.push(gfi);
+                        });
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
