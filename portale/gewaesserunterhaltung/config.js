@@ -56,7 +56,7 @@ define(function () {
         */
         layerIDs: [
 			{id: '453', visible: true},
-            {id: '8', visible: false},
+            {id: '452', visible: false},
             {id: '2028', visible: true},
             {id: '2029', visible: false},
             {id: '2030', visible: false},
