@@ -12,10 +12,10 @@ define(function () {
         allowParametricURL: true,
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {Array}  center - Beschreibung.
-        * @property {Number}  resolution - Beschreibung.
-        * @property {Number}  scale - Beschreibung.
+        * @desc Die initiale Zentrums-Koordinate und die Resolution
+        * @property {Array}  center - Die initiale Zentrumskoordinate.
+        * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
+        * @property {Number}  scale - Der initiale Maßstab.
         */
         view: {
             center: [565874, 5934140],
@@ -25,13 +25,13 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Beschreibung.
+        * @desc Pfad zur DienstAPI.
         */
         layerConf: locations.baseUrl  + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         /**
         * @memberof config
         * @type {String}
-        * @desc Beschreibung.
+        * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
         styleConf: locations.baseUrl  + '../style.json',
         /**
@@ -110,7 +110,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Steuert, ob das Porta eine Menüleiste(Navigationsleiste) haben soll oder nicht.
         */
         menubar: true,
         /**
@@ -133,10 +133,16 @@ define(function () {
         isMenubarVisible: true,
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {Boolean}  searchBar - Beschreibung.
-        * @property {Boolean}  layerTree - Beschreibung.
-        * @property {Boolean}  helpButton - Beschreibung.
+        * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste aktivieren/deaktivieren.
+        * @property {Boolean}  searchBar - Die Suchfunktion.
+        * @property {Boolean}  layerTree - Der Themenbaum
+        * @property {Boolean}  helpButton - Der Hilfe-Button.
+        * @property {Boolean}  contactButton - Der Kontakt-Button.
+        * @property {Boolean}  tools - Die Werkzeuge
+        * @property {Boolean}  treeFilter - Der Filter für die Straßenbäume.
+        * @property {Boolean}  wfsFeatureFilter -
+        * @property {Boolean}  legend - Die Legende
+        * @property {Boolean}  routing - Die Routingfunktion
         */
         menu: {
             viewerName: 'GeoViewer',
@@ -152,9 +158,9 @@ define(function () {
         },
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {String}  placeholder - Beschreibung.
-        * @property {Function}  gazetteerURL - Beschreibung.
+        * @desc Konfiguration für die Suchfunktion.
+        * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
+        * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
             placeholder: "Suche Adresse, B-Plan",
@@ -169,10 +175,10 @@ define(function () {
         },
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {String}  url - Beschreibung.
-        * @property {String}  title - Beschreibung.
-        * @property {Boolean}  gfi - Beschreibung.
+        * @desc Konfiguration für den Druckdienst.
+        * @property {String}  url - Die Druckdienst-URL
+        * @property {String}  title - Der Titel erscheint auf dem Ausdruck der Karte.
+        * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
             url: function () {
@@ -186,16 +192,14 @@ define(function () {
             title: 'Master',
             gfi: false
         },
-//        treeFilter: {
-//            layer: '7777',
-//            styleName: 'treefilter',
-//            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
-//        },
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {Boolean}  gfi - Beschreibung.
-        * @property {Boolean}  measure - Beschreibung.
+        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
+        * @property {Boolean}  gfi - GetFeatureInfo-Abfrage.
+        * @property {Boolean}  measure - Messen.
+        * @property {Boolean}  print - Drucken.
+        * @property {Boolean}  coord - Koordinaten-Abfrage.
+        * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
             gfi: true,

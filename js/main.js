@@ -1,7 +1,6 @@
 if (window.location.href.charAt(window.location.href.length-1) === '#') {
     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 }
-
 var locations = {
     portal : window.location.protocol + '//' + window.location.host + window.location.pathname,      
     baseUrl : require.toUrl(''),
@@ -75,9 +74,11 @@ require([
             });
         }
 
-
-
-
+        if (Config.scaleLine && Config.scaleLine === true) {
+            require(['views/ScaleLineView'], function (ScaleLineView) {
+                new ScaleLineView();
+            });
+        }
 
         if (Config.menubar === true) {
             require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {

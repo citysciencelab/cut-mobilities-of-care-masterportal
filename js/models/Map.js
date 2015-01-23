@@ -59,8 +59,8 @@ define([
                     extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
                     resolution: Config.view.resolution,
                     resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
-                }));
-
+                }));                
+                
                 this.set('map', new ol.Map({
                     layers: LayerList.pluck('layer'),
                     logo: null,
@@ -70,6 +70,8 @@ define([
                     controls: [],
                     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
                 }));
+                // Speichere DOTS_PER für ScaleLine
+                this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
                 // View listener
                 this.get('view').on('change:resolution', function () {
                     // NOTE brauche ich wahrscheinlich nicht mehr (sd)
