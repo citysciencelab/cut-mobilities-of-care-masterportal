@@ -27,7 +27,7 @@ define(function () {
         * @type {String}
         * @desc Beschreibung.
         */
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
+        layerConf: (locations.fhhnet ? 'diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         /**
         * @memberof config
         * @type {String}
@@ -58,7 +58,7 @@ define(function () {
             {id: '453', visible: true},
             {id: '452', visible: false},
             {id: '1346', visible: true},
-            {id: '2047', visible: false, style: '358', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
+            {id: '2047', visible: true, style: '2047', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '2051', visible: false, style: '359', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
             {id:

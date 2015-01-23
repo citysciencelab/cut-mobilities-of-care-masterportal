@@ -6,10 +6,17 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.master + '/diensteapiFHHNET.json',
-        styleConf: locations.master + '/style.json',
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
+        styleConf: locations.baseUrl + '../style.json',
         print: {
-            url: locations.host + ":8680/mapfish_print_2.0/",
+            url: function () {
+                if (locations.fhhnet) {
+                    return locations.host + ":8680/mapfish_print_2.0/";
+                }
+                else {
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
+                }
+            },
             title: 'Verkehrsportal',
             gfi: false
         },
@@ -81,7 +88,7 @@ define(function () {
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
