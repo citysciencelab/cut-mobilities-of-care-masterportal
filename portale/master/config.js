@@ -56,7 +56,7 @@ define(function () {
         */
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
+            {id: '452', visible: false},
             {id: '1346', visible: true},
             {id: '2047', visible: false, style: '358', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
