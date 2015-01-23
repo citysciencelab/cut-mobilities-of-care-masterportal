@@ -79,7 +79,6 @@ require([
             });
         }
 
-
         if (Config.mouseHover && Config.mouseHover === true) {
             require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
@@ -148,7 +147,7 @@ require([
                 }
                 if (Config.poi === true) {
                     require(['views/PointOfInterestView', 'views/PointOfInterestListView'], function (PointOfInterestView, PointOfInterestListView) {
-                        //                    new PointOfInterestView();
+                        //new PointOfInterestView();
                         new PointOfInterestListView();
                     });
                 }
