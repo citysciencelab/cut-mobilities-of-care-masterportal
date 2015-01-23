@@ -27,13 +27,13 @@ define(function () {
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: locations.master + '/diensteapiFHHNET.json',
+        layerConf: locations.baseUrl  + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
-        styleConf: locations.master + '/style.json',
+        styleConf: locations.baseUrl  + '../style.json',
         /**
         * @memberof config
         * @type {String}
@@ -56,11 +56,11 @@ define(function () {
         */
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
+            {id: '452', visible: false},
             {id: '1346', visible: true},
-            {id: '358', visible: false, style: '358', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
+            {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '359', visible: false, style: '359', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
+            {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id:
              [
                  {
@@ -165,7 +165,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, B-Plan",
             gazetteerURL: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
@@ -182,11 +182,11 @@ define(function () {
         */
         print: {
             url: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + ":8680/mapfish_print_2.0/";
                 }
                 else {
-                    return locations.host + "/mapfish_print_2.0/";
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
             title: 'Master',

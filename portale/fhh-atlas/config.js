@@ -10,7 +10,7 @@ define(function () {
             resolution: 5.2916638091682096,
             scale: 20000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET_16012015.json',
+        layerConf: locations.baseUrl + '../diensteapiFHHNET_16012015.json',
         layerIDs: [
     {id: '453', visible: true},
 {id: '8', visible: false},
@@ -19,7 +19,7 @@ define(function () {
 {id: '5182', visible: false, styles: "strassenbaumkataster"},
 {id: '5183', visible: false, displayInTree: false}
 ],
-styleConf: '../../style.json',
+styleConf: locations.baseUrl + '../style.json',
 menubar: true,
 scaleLine: false,
 isMenubarVisible: true,
@@ -39,7 +39,7 @@ menu: {
 searchBar: {
     placeholder: "Adresssuche",
     gazetteerURL: function () {
-        if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+        if (locations.fhhnet) {
             return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
         }
         else {
@@ -57,7 +57,7 @@ tools: {
 },
 print: {
     url: function () {
-        if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+        if (locations.fhhnet) {
             return locations.host + ":8680/mapfish_print_2.0/";
         }
         else {

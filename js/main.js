@@ -1,49 +1,37 @@
-/* Extrahieren der Pfade
-* master = portal 2x nach oben auf wscd0096
-* geoportal-hamburg = portal 1x nach oben + libs/lgvversion
-*/
 if (window.location.href.charAt(window.location.href.length-1) === '#') {
     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 }
-if (window.location.host === 'wscd0096') {
     var locations = {
         portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')).lastIndexOf('/')),
-        host : window.location.protocol + '//' + window.location.host
+    baseUrl : require.toUrl(''),
+    host : window.location.protocol + '//' + window.location.host,
+    fhhnet : false
     };
 
+var fhhnetHosts = ["wscd0096","wscd0096.fhhnet.stadt.hamburg.de","wscd0095","wscd0095.fhhnet.stadt.hamburg.de","geofos","geofos.fhhnet.stadt.hamburg.de"];
+for (var i = 0; i < fhhnetHosts.length; i++){
+    if (location.host === fhhnetHosts[i]){
+        locations.fhhnet = true;
 }
-else if(window.location.host === 'www.geoportal-hamburg.de' || window.location.host === 'geoportal-hamburg.de') {
-    var locations = {
-        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgvtest',
-        host : window.location.protocol + '//' + window.location.host
-    };
 }
-else if(window.location.host === '87.106.67.159') {
-    var locations = {
-        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        master : window.location.href.substr(0, window.location.href.lastIndexOf('/')).substr(0, window.location.href.substr(0, window.location.href.lastIndexOf('/')).lastIndexOf('/')) + '/libs/lgv-dev',
-        host : window.location.protocol + '//' + window.location.host
-    };
-}
+
 /*global require*/
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: locations.host + '/libs/OpenLayers-3.0.0/build/ol-debug',
-        jquery: locations.host + '/libs/jQuery-2.0.3/jquery.min',
-        underscore: locations.host + '/libs/underscore-1.6.0/underscore.min',
-        backbone: locations.host + '/libs/backbone-1.1.2/backbone.min',
-        text: locations.host + '/libs/require-2.1.11/plugins/text-2.0.10/text',
-        bootstrap: locations.host + '/libs/bootstrap-3.1.1/js/bootstrap.min',
-        proj4: locations.host + '/libs/proj4-2.2.1/dist/proj4',
+        openlayers: '/libs/OpenLayers-3.0.0/build/ol-debug',
+        jquery: '/libs/jQuery-2.0.3/jquery.min',
+        underscore: '/libs/underscore-1.6.0/underscore.min',
+        backbone: '/libs/backbone-1.1.2/backbone.min',
+        text: '/libs/require-2.1.11/plugins/text-2.0.10/text',
+        bootstrap: '/libs/bootstrap-3.1.1/js/bootstrap.min',
+        proj4: '/libs/proj4-2.2.1/dist/proj4',
         config: locations.portal + 'config',
-        eventbus: locations.master + '/js/EventBus',
-        views: locations.master + '/js/views',
-        models: locations.master + '/js/models',
-        collections: locations.master + '/js/collections',
-        templates: locations.master + '/templates'
+        eventbus: 'EventBus',
+        views: 'views',
+        models: 'models',
+        collections: 'collections',
+        templates: '../templates'
     },
     shim: {
         bootstrap: {
