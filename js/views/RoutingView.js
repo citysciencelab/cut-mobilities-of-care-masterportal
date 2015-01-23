@@ -6,7 +6,7 @@ define([
     'models/Routing',
     'eventbus',
     'models/Orientation'
-], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus) {
+], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus, map) {
 
     var RoutingView = Backbone.View.extend({
         model: RoutingModel,
@@ -15,8 +15,8 @@ define([
         template: _.template(RoutingWin),
         initialize: function () {
             this.render();
-            this.listenTo(this.model, 'change:fromCoord', this.setCenterforFromValue);
-            this.listenTo(this.model, 'change:toCoord', this.setCenterforToValue);
+            this.listenTo(this.model, 'change:fromCoord', this.setCenter);
+            this.listenTo(this.model, 'change:toCoord', this.setCenter);
             EventBus.on('toggleRoutingWin', this.toggleRoutingWin, this);
             EventBus.on('setGeolocation', this.setGeolocation, this);
         },
@@ -26,44 +26,55 @@ define([
             'click #filterbutton': 'getFilterInfos',
             'click .changedWochentag': 'changedWochentag',
             'change .changedUhrzeit' : 'changedUhrzeit',
-            'keyup .startAdresseChanged' : 'startAdresseChanged',
-            'keyup .zielAdresseChanged' : 'zielAdresseChanged',
+            
+            'click .startAdresseChanged' : 'deleteDefaultString',
+            'keyup .startAdresseChanged' : 'adresseChanged_keyup',
+            'keyup .zielAdresseChanged' : 'adresseChanged_keyup',
             'click .startAdressePosition' : 'startAdressePosition',
-            'click .startAdresseChanged' : 'startAdresseChanged',
             'click .startAdresseSelected' : 'startAdresseSelected',
             'click .zielAdresseSelected' : 'zielAdresseSelected'
         },
-        setCenterforFromValue: function (newValue) {
-            if (newValue.changed.fromCoord != '') {
-                EventBus.trigger('setCenter', newValue.changed.fromCoord, 5);
+        deleteDefaultString: function (evt) {
+            var value = evt.target.value;
+            if (evt.target.value == 'aktueller Standpunkt' && evt.target.id == 'startAdresse') {
+                $('#startAdresse').val('');
+                EventBus.trigger('clearGeolocationMarker', this);
             }
         },
-        setCenterforToValue: function (newValue) {
-            if (newValue.changed.toCoord != '') {
-                EventBus.trigger('setCenter', newValue.changed.toCoord, 5);
+        setCenter: function (newValue) {
+            if (newValue.changed.fromCoord) {
+                var newCoord = newValue.changed.fromCoord;
+            }
+            else if (newValue.changed.toCoord) {
+                var newCoord = newValue.changed.toCoord;
+            }
+            if (newCoord && newCoord.length == 2) {
+                EventBus.trigger('setCenter', newCoord, 10);
             }
         },
         zielAdresseSelected: function (evt) {
             var value = evt.currentTarget.id;
-            this.model.search(value, 'ziel');
+            this.model.search(value, 'ziel', false);
         },
         startAdresseSelected: function (evt) {
             var value = evt.currentTarget.id;
-            this.model.search(value, 'start');
+            this.model.search(value, 'start', false);
         },
-        startAdresseChanged: function (evt) {
-            EventBus.trigger('clearGeolocationMarker', this);
+        adresseChanged_keyup: function (evt) {
             var value = evt.target.value;
-            if (value == 'aktueller Standpunkt') {
-                $('#startAdresse').val('');
+            if (evt.keyCode === 13) {
+                var openList = false;
             }
             else {
-                this.model.search(value, 'start');
+                var openList = true;
             }
-        },
-        zielAdresseChanged: function (evt) {
-            var value = evt.target.value;
-            this.model.search(value, 'ziel');
+            if (evt.target.id == 'startAdresse') {
+                var target = 'start';
+            }
+            else {
+                var target = 'ziel';
+            }
+            this.model.search(value, target, openList);
         },
         setGeolocation: function (geoloc) {
             if (_.isArray(geoloc) && geoloc.length == 2) {

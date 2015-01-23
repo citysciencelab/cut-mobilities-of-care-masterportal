@@ -86,9 +86,11 @@ require([
             });
         }
 
-
-
-
+        if (Config.scaleLine && Config.scaleLine === true) {
+            require(['views/ScaleLineView'], function (ScaleLineView) {
+                new ScaleLineView();
+            });
+        }
 
         if (Config.menubar === true) {
             require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
