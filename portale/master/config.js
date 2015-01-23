@@ -58,9 +58,9 @@ define(function () {
             {id: '453', visible: true},
             {id: '452', visible: false},
             {id: '1346', visible: true},
-            {id: '2047', visible: true, style: '2047', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
+            {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2051', visible: false, style: '359', clusterDistance: 30, searchField: '', styleField :'Kategorie'},
+            {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id:
              [
                  {
