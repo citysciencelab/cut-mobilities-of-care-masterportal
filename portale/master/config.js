@@ -180,7 +180,7 @@ define(function () {
                     return locations.host + ":8680/mapfish_print_2.0/";
                 }
                 else {
-                    return locations.host + "/mapfish_print_2.0/";
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
             title: 'Master',
