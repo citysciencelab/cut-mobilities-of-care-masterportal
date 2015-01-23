@@ -19,29 +19,54 @@ define([
             toStrassenname: '',
             toHausnummer: '',
             toCoord: '',
-
             searchString: "",   // der aktuelle String in der Suchmaske
-            hitList: [],
-            gazetteerURL: Config.searchBar.gazetteerURL()
+            gazetteerURL: Config.searchBar.gazetteerURL(),
+            proxyPrefix: Config.proxyURL + '?url='
         },
         initialize: function () {
             if (Config.orientation === true) {
                 this.set('configOrientation', true);
             }
         },
+        requestRoute: function () {
+            var request = 'http://wscd0096/viom_v05?PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=' + this.get('fromCoord')[0] + '&START-Y=' + this.get('fromCoord')[1] + '&DEST-X=' + this.get('toCoord')[0] + '&DEST-Y=' + this.get('fromCoord')[1];
+            $('#loader').show();
+            $.ajax({
+                url: this.get('proxyPrefix') + encodeURIComponent(request),
+                async: true,
+                context: this,
+                success: function (data, textStatus, jqXHR) {
+                    $('#loader').hide();
+                    var answer = new ol.format.GeoJSON();
+                    answer.readFeature(data, {
+                        dataProjection: 'EPSG:25832',
+                        featureProjection: 'EPSG:25832'
+                    });                    
+                    console.log(answer);
+                },
+                error: function (data, textStatus, jqXHR) {
+                    $('#loader').hide();
+                    alert('Fehlermeldung beim Laden der Route: \n' + data.responseText);
+                }
+            });
+        },
         search: function (searchString, target, openList) {
             if (searchString.length < 4) {
-                // resete alles
-                this.set('toStrassenname', '');
-                this.set('fromStrassenname', '');
-                this.set('toCoord', '');
-                this.set('fromCoord', '');
-                this.set('toHausnummer', '');
-                this.set('fromHausnummer', '');
-                $("#input-group-start ul").empty();
-                $("#input-group-ziel ul").empty();
-                $("#input-group-start ul").hide();
-                $("#input-group-ziel ul").hide();
+                // resete
+                if (target == 'start') {
+                    this.set('fromStrassenname', '');
+                    this.set('fromCoord', '');
+                    this.set('fromHausnummer', '');
+                    $("#input-group-start ul").empty();
+                    $("#input-group-start ul").hide();
+                }
+                else {
+                    this.set('toStrassenname', '');
+                    this.set('toCoord', '');
+                    this.set('toHausnummer', '');
+                    $("#input-group-ziel ul").empty();
+                    $("#input-group-ziel ul").hide();
+                }                
             }
             else {
                 if (target == 'start') {
@@ -145,11 +170,13 @@ define([
                                 this.set('fromStrassenname', streetNames[0].name);
                                 this.set('fromCoord', '');
                                 $('#startAdresse').val(streetNames[0].name);
+                                $('#startAdresse').focus();
                             }
                             else {
                                 this.set('toStrassenname', streetNames[0].name);
                                 this.set('toCoord', '');
                                 $('#zielAdresse').val(streetNames[0].name);
+                                $('#zielAdresse').focus();
                             }
                         }
                         else {
@@ -157,11 +184,13 @@ define([
                                 this.set('fromStrassenname', '');
                                 this.set('fromCoord', '');
                                 this.set('fromHausnummer', '');
+                                $('#startAdresse').focus();
                             }
                             else {
                                 this.set('toStrassenname', '');
                                 this.set('toCoord', '');
                                 this.set('toHausnummer', '');
+                                $('#zielAdresse').focus();
                             }
                             _.each(streetNames, function (strasse, index, list) {
                                 if (target == 'start') {
@@ -173,7 +202,7 @@ define([
                                     $("#input-group-ziel ul").show();
                                 }
                             });
-                        }
+                        }                        
                     }
                     catch (error) {
                         //console.log(error);
@@ -251,30 +280,34 @@ define([
                         var houseNumber = _.find(houseNumbers, function (number) {
                             return number.name == streetName + ' ' + hausnummer;
                         });
-                        if (houseNumber) {                            
+                        if (houseNumber) {      
                             if (target == 'start') {
-                                this.set('fromHausnummer', houseNumbers[0].name);
-                                this.set('fromCoord', houseNumbers[0].coordinate);
-                                $('#startAdresse').val(houseNumbers[0].name);
+                                this.set('fromHausnummer', houseNumber.name);
+                                this.set('fromCoord', houseNumber.coordinate);
+                                $('#startAdresse').val(houseNumber.name);
                                 $("#input-group-start ul").empty();
                                 $("#input-group-start ul").hide();
+                                $('#startAdresse').focus();
                             }
                             else {
-                                this.set('toHausnummer', houseNumbers[0].name);
-                                this.set('toCoord', houseNumbers[0].coordinate);
-                                $('#zielAdresse').val(houseNumbers[0].name);
+                                this.set('toHausnummer', houseNumber.name);
+                                this.set('toCoord', houseNumber.coordinate);
+                                $('#zielAdresse').val(houseNumber.name);
                                 $("#input-group-ziel ul").empty();
                                 $("#input-group-ziel ul").hide();
+                                $('#zielAdresse').focus();
                             }
                         }
                         else {
                             if (target == 'start') {
                                 this.set('fromHausnummer', '');
                                 this.set('fromCoord', '');
+                                $('#startAdresse').focus();
                             }
                             else {
                                 this.set('toHausnummer', '');
                                 this.set('toCoord', '');
+                                $('#zielAdresse').focus();
                             }
                         }
                         if (openList === true) {

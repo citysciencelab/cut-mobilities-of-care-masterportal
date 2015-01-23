@@ -24,6 +24,7 @@ define([
             'click .toggleRoutingOptions': 'toggleRoutingOptions',
             'click .close': 'toggleRoutingWin',
             'click #filterbutton': 'getFilterInfos',
+            'click #RouteBerechnenButton': 'routeBerechnen',
             'click .changedWochentag': 'changedWochentag',
             'change .changedUhrzeit' : 'changedUhrzeit',
             
@@ -34,6 +35,12 @@ define([
             'click .startAdresseSelected' : 'startAdresseSelected',
             'click .zielAdresseSelected' : 'zielAdresseSelected'
         },
+        routeBerechnen: function () {
+            // alte Route löschen
+            // Detailfenster schließen
+            this.model.requestRoute();
+            // neue Route darstellen
+        },
         deleteDefaultString: function (evt) {
             var value = evt.target.value;
             if (evt.target.value == 'aktueller Standpunkt' && evt.target.id == 'startAdresse') {
@@ -42,6 +49,7 @@ define([
             }
         },
         setCenter: function (newValue) {
+            // steuere Center der View
             if (newValue.changed.fromCoord) {
                 var newCoord = newValue.changed.fromCoord;
             }
@@ -50,6 +58,13 @@ define([
             }
             if (newCoord && newCoord.length == 2) {
                 EventBus.trigger('setCenter', newCoord, 10);
+            }
+            // steuere Route berechnen Button
+            if (this.model.get('fromCoord') != '' && this.model.get('toCoord') != '') {
+                document.getElementById("RouteBerechnenButton").disabled = false;
+            }
+            else {
+                document.getElementById("RouteBerechnenButton").disabled = true;
             }
         },
         zielAdresseSelected: function (evt) {

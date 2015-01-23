@@ -16,6 +16,7 @@
 }
 .routinglocator {
     background-color: #fff;
+    vertical-align: middle !important;
 }
 .routinglocator:hover {
     background-color: #ebebeb;
