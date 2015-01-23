@@ -27,7 +27,7 @@ define(function () {
         * @type {String}
         * @desc Beschreibung.
         */
-        layerConf: (locations.fhhnet ? 'diensteapiFHHNET.json' : '../diensteapiInternet.json'),
+        layerConf: locations.baseUrl  + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         /**
         * @memberof config
         * @type {String}
