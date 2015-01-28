@@ -48,7 +48,7 @@ define([
             this.model.toggleSettings();
         },
         render: function () {
-            if (this.model.get('displayInTree') === true) {
+            if (this.model.get('displayInTree') !== false) {
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
                 return this;

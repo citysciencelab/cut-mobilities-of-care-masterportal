@@ -71,7 +71,7 @@ define(function () {
 			{id: '2039', visible: false},
 			{id: '2040', visible: false},
 			{id: '2041', visible: false}
-			
+
         ],
         /**
         * @memberof config
@@ -84,7 +84,7 @@ define(function () {
         * @type {Boolean}
         * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
         */
-        scaleLine: true,        
+        scaleLine: true,
         /**
         * @memberof config
         * @type {Boolean}

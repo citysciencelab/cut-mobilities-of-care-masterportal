@@ -165,7 +165,7 @@ define([
                         if ($('#searchInput').val() == '') {
                             $('#searchInput').val(this.model.get('placeholder'));
                         }
-                    }                
+                    }
                     $(".btn-deleteSearch").css("border-color", "#cccccc");
                 }
             },
