@@ -6,7 +6,7 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: "../../diensteapiFHHNET_16012015.json",
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET_16012015.json' : '../diensteapiINTERNET_16012015.json'),
         layerIDs:
         [
         {id: "453", visible: true},
@@ -21,7 +21,7 @@ define(function () {
         {id: "1347", visible: true},
         {id: "1346", visible: true}
         ],
-styleConf: "../../style.json",
+styleConf: locations.baseUrl + "../style.json",
 menubar: true,
 mouseHover: false,
 isMenubarVisible: true,
@@ -41,7 +41,7 @@ menu: {
 searchBar: {
     placeholder: "Suche Adresse, B-Plan",
     gazetteerURL: function () {
-        if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+        if (locations.fhhnet) {
             return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
         }
         else {
@@ -61,11 +61,11 @@ orientation: true,
 poi: false,
 print: {
     url: function () {
-        if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+        if (locations.fhhnet) {
             return locations.host + ":8680/mapfish_print_2.0/";
         }
         else {
-            return locations.host + "/mapfish_print_2.0/";
+            return "http://geoportal-hamburg.de/mapfish_print_2.0/";
         }
     },
     title: 'Planportal',

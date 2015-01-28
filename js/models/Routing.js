@@ -9,9 +9,10 @@ define([
     var RoutingModel = Backbone.Model.extend({
         defaults: {
             configOrientation: false,
-            routingday: '',
-            routinghour: '',
-            routingminute: '',
+            description: '',
+            endDescription: '',
+            routingtime: '',
+            routingdate: '',
             fromStrassenname: '',
             fromHausnummer: '',
             fromCoord: '',
@@ -19,29 +20,96 @@ define([
             toStrassenname: '',
             toHausnummer: '',
             toCoord: '',
-
             searchString: "",   // der aktuelle String in der Suchmaske
-            hitList: [],
-            gazetteerURL: Config.searchBar.gazetteerURL()
+            gazetteerURL: Config.searchBar.gazetteerURL(),
+            proxyPrefix: Config.proxyURL + '?url='
         },
         initialize: function () {
             if (Config.orientation === true) {
                 this.set('configOrientation', true);
             }
+            EventBus.on('setMap', this.setMap, this);
+            EventBus.trigger('getMap', this);
         },
-        search: function (searchString, target) {
+        setMap: function (map) {
+            this.set('map', map);
+        },
+        deleteRoute: function () {
+            var map = this.get('map');
+            _.each(map.getLayers(), function (layer) {
+                if (_.isArray(layer)) {
+                    _.each(layer, function (childlayer) {
+                        if (childlayer.id && childlayer.id == 'route') {
+                             map.removeLayer(childlayer);
+                        }
+                    });
+                }
+            });
+        },
+        requestRoute: function () {
+            var request = 'http://wscd0096/viom_v05?PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=' + this.get('fromCoord')[0] + '&START-Y=' + this.get('fromCoord')[1] + '&DEST-X=' + this.get('toCoord')[0] + '&DEST-Y=' + this.get('toCoord')[1] + '&USETRAFFIC=TRUE';
+            /* Erwartete Übergabeparameter:
+            *  routingtime [hh:mm]
+            *  routingdate [yyyy-mm-dd]
+            */
+            if (this.get('routingtime') != '' && this.get('routingdate')!= '') {
+                var timeoffset = (new Date().getTimezoneOffset()/60).toString().substr(0, 1) + '0' + (new Date().getTimezoneOffset()/60).toString().substr(1, 1);
+                var splitter = this.get('routingtime').split(':');
+                var utcHour = (parseFloat(splitter[0]) + new Date().getTimezoneOffset()/60).toString();
+                var utcMinute = parseFloat(splitter[1]);
+                request = request + '&STARTTIME=' + this.get('routingdate') + ' ' + utcHour + ':' + utcMinute + ' ' + timeoffset + '00';
+            }
+            $('#loader').show();
+            $.ajax({
+                url: this.get('proxyPrefix') + encodeURIComponent(request),
+                async: true,
+                context: this,
+                success: function (data, textStatus, jqXHR) {
+                    $('#loader').hide();
+                    var geoJsonFormat = new ol.format.GeoJSON();
+                    var olFeature = geoJsonFormat.readFeature(data);
+                    var vectorlayer = new ol.layer.Vector({
+                        source: new ol.source.Vector({
+                            features: [olFeature]
+                        }),
+                        style: new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: 'blue',
+                                width: 5
+                            })
+                        })
+                    });
+                    vectorlayer.id = 'route';
+                    this.get('map').addLayer(vectorlayer);
+                    this.set('endDescription', olFeature.get('EndDescription'));
+                    this.set('description', olFeature.get('RouteDescription'));
+                    EventBus.trigger('zoomToExtent', olFeature.getGeometry().getExtent());
+                },
+                error: function (data, textStatus, jqXHR) {
+                    $('#loader').hide();
+                    this.set('description', '');
+                    this.set('endDescription', '');
+                    alert('Fehlermeldung beim Laden der Route: \n' + data.responseText);
+                }
+            });
+        },
+        search: function (searchString, target, openList) {
             if (searchString.length < 4) {
-                // resete alles
-                this.set('toStrassenname', '');
-                this.set('fromStrassenname', '');
-                this.set('toCoord', '');
-                this.set('fromCoord', '');
-                this.set('toHausnummer', '');
-                this.set('fromHausnummer', '');
-                $("#input-group-start ul").empty();
-                $("#input-group-ziel ul").empty();
-                $("#input-group-start ul").hide();
-                $("#input-group-ziel ul").hide();
+                // resete
+                if (target == 'start') {
+                    this.set('fromStrassenname', '');
+                    this.set('fromCoord', '');
+                    this.set('fromHausnummer', '');
+                    $("#input-group-start ul").empty();
+                    $("#input-group-start ul").hide();
+                }
+                else {
+                    this.set('toStrassenname', '');
+                    this.set('toCoord', '');
+                    this.set('toHausnummer', '');
+                    $("#input-group-ziel ul").empty();
+                    $("#input-group-ziel ul").hide();
+                }
             }
             else {
                 if (target == 'start') {
@@ -52,47 +120,57 @@ define([
                         // zurücksetzen, wenn Straßenname tlw. gelöscht
                         if (searchString.indexOf(this.get('fromStrassenname')) == -1) {
                             this.set('fromStrassenname', '');
-                            this.search(searchString, target);
-                        }
-                        if (this.get('fromHausnummer') == '') {
-                            var hausnummer = searchString.substring(this.get('fromStrassenname').length).trim();
-                            if (hausnummer) {
-                                this.hausnummernsuche(this.get('fromStrassenname'), hausnummer, target);
-                            }
+                            this.search(searchString, target, openList);
+
                         }
                         else {
-                            // zurücksetzen, wenn Hausnummer tlw. gelöscht
-                            if (searchString.indexOf(this.get('fromHausnummer')) == -1) {
-                                this.set('fromHausnummer', '');
-                                this.search(searchString, target);
+                            if (this.get('fromHausnummer') == '') {
+                                var hausnummer = searchString.substring(this.get('fromStrassenname').length).trim();
+                                this.hausnummernsuche(this.get('fromStrassenname'), hausnummer, target, openList);
                             }
-                            //suche Zusatz
+                            else {
+                                // zurücksetzen, wenn Hausnummer tlw. gelöscht
+                                var hausnummer = searchString.substring(this.get('fromStrassenname').length).trim();
+                                if (hausnummer != this.get('fromHausnummer')) {
+                                    this.set('fromHausnummer', '');
+                                    this.search(searchString, target, openList);
+                                }
+                                else {
+                                    $("#input-group-start ul").empty();
+                                    $("#input-group-start ul").hide();
+                                }
+                            }
                         }
                     }
                 }
                 else { //target == ziel
                     if (this.get('toStrassenname') == '') {
-                         this.strassensuche(searchString, target);
+                        this.strassensuche(searchString, target);
                     }
                     else {
                         // zurücksetzen, wenn Straßenname tlw. gelöscht
                         if (searchString.indexOf(this.get('toStrassenname')) == -1) {
                             this.set('toStrassenname', '');
-                            this.search(searchString, target);
-                        }
-                        if (this.get('toHausnummer') == '') {
-                            var hausnummer = searchString.substring(this.get('toStrassenname').length).trim();
-                            if (hausnummer) {
-                                this.hausnummernsuche(this.get('toStrassenname'), hausnummer, target);
-                            }
+                            this.search(searchString, target, openList);
+
                         }
                         else {
-                            // zurücksetzen, wenn Hausnummer tlw. gelöscht
-                            if (searchString.indexOf(this.get('toHausnummer')) == -1) {
-                                this.set('toHausnummer', '');
-                                this.search(searchString, target);
+                            if (this.get('toHausnummer') == '') {
+                                var hausnummer = searchString.substring(this.get('toStrassenname').length).trim();
+                                this.hausnummernsuche(this.get('toStrassenname'), hausnummer, target, openList);
                             }
-                            //suche Zusatz
+                            else {
+                                // zurücksetzen, wenn Hausnummer tlw. gelöscht
+                                var hausnummer = searchString.substring(this.get('toStrassenname').length).trim();
+                                if (hausnummer != this.get('toHausnummer')) {
+                                    this.set('toHausnummer', '');
+                                    this.search(searchString, target, openList);
+                                }
+                                else {
+                                    $("#input-group-ziel ul").empty();
+                                    $("#input-group-ziel ul").hide();
+                                }
+                            }
                         }
                     }
                 }
@@ -131,39 +209,40 @@ define([
                         $("#input-group-start ul").hide();
                         $("#input-group-ziel ul").hide();
                         if (streetNames.length === 1 && requestStreetName == streetNames[0].name) {
-                            var coordinates = streetNames[0].coordinate.split(' ');
-                            var center = new Array();
-                            center.push(parseFloat(coordinates[2] + (coordinates[2] - coordinates[0])));
-                            center.push(parseFloat(coordinates[1] + (coordinates[5] - coordinates[1])));
-
                             if (target == 'start') {
                                 this.set('fromStrassenname', streetNames[0].name);
-                                this.set('fromCoord', center);
+                                this.set('fromCoord', '');
                                 $('#startAdresse').val(streetNames[0].name);
+                                $('#startAdresse').focus();
                             }
                             else {
                                 this.set('toStrassenname', streetNames[0].name);
-                                this.set('toCoord', center);
+                                this.set('toCoord', '');
                                 $('#zielAdresse').val(streetNames[0].name);
+                                $('#zielAdresse').focus();
                             }
                         }
                         else {
-                            this.set('toStrassenname', '');
-                            this.set('fromStrassenname', '');
-                            this.set('toCoord', '');
-                            this.set('fromCoord', '');
-                            this.set('toHausnummer', '');
-                            this.set('fromHausnummer', '');
-                            _.each(streetNames, function (strasse, index, list) {
-                                if (target == 'start') {
+                            if (target == 'start') {
+                                this.set('fromStrassenname', '');
+                                this.set('fromCoord', '');
+                                this.set('fromHausnummer', '');
+                                $('#startAdresse').focus();
+                                _.each(streetNames, function (strasse, index, list) {
                                     $("#input-group-start ul").append('<li id="' + strasse.name + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + strasse.glyphicon + '"></span><span>' +  strasse.name + '</span><small>' + strasse.type + '</small></li>');
-                                    $("#input-group-start ul").show();
-                                }
-                                else {
+                                });
+                                $("#input-group-start ul").show();
+                            }
+                            else {
+                                this.set('toStrassenname', '');
+                                this.set('toCoord', '');
+                                this.set('toHausnummer', '');
+                                $('#zielAdresse').focus();
+                                _.each(streetNames, function (strasse, index, list) {
                                     $("#input-group-ziel ul").append('<li id="' + strasse.name + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + strasse.glyphicon + '"></span><span>' +  strasse.name + '</span><small>' + strasse.type + '</small></li>');
-                                    $("#input-group-ziel ul").show();
-                                }
-                            });
+                                });
+                                $("#input-group-ziel ul").show();
+                            }
                         }
                     }
                     catch (error) {
@@ -172,7 +251,7 @@ define([
                 }
             });
         },
-        hausnummernsuche: function (streetName, hausnummer, target) {
+        hausnummernsuche: function (streetName, hausnummer, target, openList) {
             $.ajax({
                 url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(streetName),
                 context: this,  // das model
@@ -239,39 +318,52 @@ define([
                         $("#input-group-ziel ul").empty();
                         $("#input-group-start ul").hide();
                         $("#input-group-ziel ul").hide();
-                        if (houseNumbers.length === 1 && houseNumbers[0].id === streetName + hausnummer + 'Adresse') {
-                            console.log(housenumber.id);
+                        var houseNumber = _.find(houseNumbers, function (number) {
+                            return number.name == streetName + ' ' + hausnummer;
+                        });
+                        if (houseNumber) {
                             if (target == 'start') {
-                                this.set('fromHausnummer', houseNumbers[0].name);
-                                this.set('fromCoord', houseNumbers[0].coordinate);
-                                $('#startAdresse').val(houseNumbers[0].name);
+                                this.set('fromHausnummer', houseNumber.name);
+                                this.set('fromCoord', houseNumber.coordinate);
+                                $('#startAdresse').val(houseNumber.name);
+                                $("#input-group-start ul").empty();
+                                $("#input-group-start ul").hide();
+                                $('#startAdresse').focus();
                             }
                             else {
-                                this.set('toHausnummer', houseNumbers[0].name);
-                                this.set('toCoord', houseNumbers[0].coordinate);
-                                $('#zielAdresse').val(houseNumbers[0].name);
+                                this.set('toHausnummer', houseNumber.name);
+                                this.set('toCoord', houseNumber.coordinate);
+                                $('#zielAdresse').val(houseNumber.name);
+                                $("#input-group-ziel ul").empty();
+                                $("#input-group-ziel ul").hide();
+                                $('#zielAdresse').focus();
                             }
                         }
                         else {
                             if (target == 'start') {
                                 this.set('fromHausnummer', '');
                                 this.set('fromCoord', '');
+                                $('#startAdresse').focus();
                             }
                             else {
                                 this.set('toHausnummer', '');
                                 this.set('toCoord', '');
+                                $('#zielAdresse').focus();
                             }
-                            _.each(houseNumbers, function (housenumber, index, list) {
-                                console.log(housenumber.id);
-                                if (target == 'start') {
-                                    $("#input-group-start ul").append('<li id="' + housenumber.id + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');
-                                    $("#input-group-start ul").show();
-                                }
-                                else {
-                                    $("#input-group-ziel ul").append('<li id="' + housenumber.id + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');
-                                    $("#input-group-ziel ul").show();
-                                }
-                            });
+                        }
+                        if (openList === true) {
+                            if (target == 'start') {
+                                _.each(houseNumbers, function (housenumber, index, list) {
+                                    $("#input-group-start ul").append('<li id="' + housenumber.name + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');
+                                });
+                                $("#input-group-start ul").show();
+                            }
+                            else {
+                                _.each(houseNumbers, function (housenumber, index, list) {
+                                    $("#input-group-ziel ul").append('<li id="' + housenumber.name + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');
+                                });
+                                $("#input-group-ziel ul").show();
+                            }
                         }
                     }
                     catch (error) {

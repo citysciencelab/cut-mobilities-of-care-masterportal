@@ -8,8 +8,9 @@ define(function () {
             resolution: 26.458319045841044, // // 1:100.000
             scale: 100000 // für print.js benötigt
         },
-        layerConf: locations.master + '/diensteapiINTERNET.json',
-        styleConf: locations.master + '/style.json',
+        //layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
+        layerConf: locations.baseUrl + '../diensteapiINTERNET.json',
+        styleConf: locations.baseUrl + '../style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         layerIDs: [
@@ -17,7 +18,6 @@ define(function () {
             {id: '94', visible: false},
             {id: '2013', visible: true, opacity: 50}
         ],
-        styleConf: '../../style.json',
         menubar: true,
         scaleLine: false,
         isMenubarVisible: true,
@@ -36,7 +36,7 @@ define(function () {
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
@@ -46,11 +46,11 @@ define(function () {
         },
         print: {
             url: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + ":8680/mapfish_print_2.0/";
                 }
                 else {
-                    return locations.host + "/mapfish_print_2.0/";
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
             title: 'Gründachstrategie',

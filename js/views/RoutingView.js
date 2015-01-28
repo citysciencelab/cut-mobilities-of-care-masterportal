@@ -6,7 +6,7 @@ define([
     'models/Routing',
     'eventbus',
     'models/Orientation'
-], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus) {
+], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus, map) {
 
     var RoutingView = Backbone.View.extend({
         model: RoutingModel,
@@ -15,55 +15,125 @@ define([
         template: _.template(RoutingWin),
         initialize: function () {
             this.render();
-            this.listenTo(this.model, 'change:fromCoord', this.setCenterforFromValue);
-            this.listenTo(this.model, 'change:toCoord', this.setCenterforToValue);
+            this.listenTo(this.model, 'change:fromCoord', this.setCenter);
+            this.listenTo(this.model, 'change:toCoord', this.setCenter);
+            this.listenTo(this.model, 'change:description', this.toggleSwitcher);
             EventBus.on('toggleRoutingWin', this.toggleRoutingWin, this);
             EventBus.on('setGeolocation', this.setGeolocation, this);
         },
         events: {
             'click .toggleRoutingOptions': 'toggleRoutingOptions',
-            'click .close': 'toggleRoutingWin',
-            'click #filterbutton': 'getFilterInfos',
-            'click .changedWochentag': 'changedWochentag',
-            'change .changedUhrzeit' : 'changedUhrzeit',
-            'keyup .startAdresseChanged' : 'startAdresseChanged',
-            'keyup .zielAdresseChanged' : 'zielAdresseChanged',
+            'click .closeroutenplaner': 'toggleRoutingWin',
+            'click #RouteBerechnenButton': 'routeBerechnen',
+            'change .changedWochentag': 'changedRoutingTime',
+            'change .changedUhrzeit' : 'changedRoutingTime',
+
+            'click .startAdresseChanged' : 'deleteDefaultString',
+            'keyup .startAdresseChanged' : 'adresseChanged_keyup',
+            'keyup .zielAdresseChanged' : 'adresseChanged_keyup',
             'click .startAdressePosition' : 'startAdressePosition',
-            'click .startAdresseChanged' : 'startAdresseChanged',
             'click .startAdresseSelected' : 'startAdresseSelected',
-            'click .zielAdresseSelected' : 'zielAdresseSelected'
+            'click .zielAdresseSelected' : 'zielAdresseSelected',
+
+            'click .toggleLayout' : 'toggleLayout',
+            'click .deleteroute' : 'deleteRoute'
         },
-        setCenterforFromValue: function (newValue) {
-            if (newValue.changed.fromCoord != '') {
-                EventBus.trigger('setCenter', newValue.changed.fromCoord, 5);
+        deleteRoute: function () {
+            this.model.deleteRoute();
+            this.model.set('description', '');
+            this.model.set('endDescription', '');
+        },
+        toggleSwitcher: function () {
+            var description = this.model.get('description');
+            var endDescription = this.model.get('endDescription');
+            if (description && description != '' && endDescription && endDescription != '') {
+                console.log(description);
+                _.each(description, function (item, index, list) {
+                    $("#input-group-description ul").append('<li id="teil' + index.toString() + '" class="list-group-item"><span class="">' + item.Description + '</span></br><small>Dauer: ' + item.Duration + ' s</small></li>');
+                });
+//                $('#RoutingWin > .panel-description').text(endDescription);
+                $('#RoutingWin > .panel-switcher').show('slow');
+            }
+            else {
+                $('#RoutingWin > .panel-switcher').hide('slow');
+            }
+            this.toggleLayout();
+        },
+        toggleLayout: function () {
+            if ($('#RoutingWin > .panel-description').is(":visible") == true) {
+                $('#toggleLayoutSpan').text('Beschreibung ');
+                $('#RoutingWin > .panel-route').show('slow');
+                $('#RoutingWin > .panel-description').hide('slow');
+            }
+            else {
+                $('#toggleLayoutSpan').text('Start / Ziel ');
+                $('#RoutingWin > .panel-route').hide('slow');
+                $('#RoutingWin > .panel-options').hide('slow');
+                $('#RoutingWin > .panel-description').show('slow');
             }
         },
-        setCenterforToValue: function (newValue) {
-            if (newValue.changed.toCoord != '') {
-                EventBus.trigger('setCenter', newValue.changed.toCoord, 5);
+        toggleDescription: function () {
+            $('#RoutingWin > .panel-description').toggle('slow');
+        },
+        routeBerechnen: function () {
+            this.model.deleteRoute();
+            if ($('#RoutingWin > .panel-options').is(":visible") == true) {
+                this.toggleRoutingOptions();
+            }
+            if ($('#RoutingWin > .panel-description').is(":visible") == true) {
+                this.toggleDescription();
+            }
+            this.model.requestRoute();
+        },
+        deleteDefaultString: function (evt) {
+            var value = evt.target.value;
+            if (evt.target.value == 'aktueller Standpunkt' && evt.target.id == 'startAdresse') {
+                $('#startAdresse').val('');
+                EventBus.trigger('clearGeolocationMarker', this);
+            }
+        },
+        setCenter: function (newValue) {
+            // steuere Center der View
+            if (newValue.changed.fromCoord) {
+                var newCoord = newValue.changed.fromCoord;
+            }
+            else if (newValue.changed.toCoord) {
+                var newCoord = newValue.changed.toCoord;
+            }
+            if (newCoord && newCoord.length == 2) {
+                EventBus.trigger('setCenter', newCoord, 10);
+            }
+            // steuere Route berechnen Button
+            if (this.model.get('fromCoord') != '' && this.model.get('toCoord') != '') {
+                document.getElementById("RouteBerechnenButton").disabled = false;
+            }
+            else {
+                document.getElementById("RouteBerechnenButton").disabled = true;
             }
         },
         zielAdresseSelected: function (evt) {
             var value = evt.currentTarget.id;
-            this.model.search(value, 'ziel');
+            this.model.search(value, 'ziel', false);
         },
         startAdresseSelected: function (evt) {
             var value = evt.currentTarget.id;
-            this.model.search(value, 'start');
+            this.model.search(value, 'start', false);
         },
-        startAdresseChanged: function (evt) {
-            EventBus.trigger('clearGeolocationMarker', this);
+        adresseChanged_keyup: function (evt) {
             var value = evt.target.value;
-            if (value == 'aktueller Standpunkt') {
-                $('#startAdresse').val('');
+            if (evt.keyCode === 13) {
+                var openList = false;
             }
             else {
-                this.model.search(value, 'start');
+                var openList = true;
             }
-        },
-        zielAdresseChanged: function (evt) {
-            var value = evt.target.value;
-            this.model.search(value, 'ziel');
+            if (evt.target.id == 'startAdresse') {
+                var target = 'start';
+            }
+            else {
+                var target = 'ziel';
+            }
+            this.model.search(value, target, openList);
         },
         setGeolocation: function (geoloc) {
             if (_.isArray(geoloc) && geoloc.length == 2) {
@@ -77,36 +147,16 @@ define([
             EventBus.trigger('setOrientation', this);
             EventBus.trigger('showGeolocationMarker', this);
         },
-        changedUhrzeit: function (evt) {
-            var timeread = evt.target.value;
-            var timearray = timeread.split(':');
-            var success = false;
-            if (timearray.length == 2) {
-                var hour = timearray[0];
-                var minute = timearray[1];
-                if ($.isNumeric(hour) && $.isNumeric(minute)){
-                    if (hour >= 0 && hour <=23 && minute >= 0 && minute <= 59) {
-                        this.model.set('routinghour', hour);
-                        this.model.set('routingminute', minute);
-                        success = true;
-                    }
-                }
-            }
-            if (success == false) {
-                $('#timeButton').addClass('errortime');
+        changedRoutingTime: function (evt) {
+            var rt = $('#timeButton').val();
+            var rd = $('#dayOfWeekButton').val();
+            if (rt && rt != '' && rd && rd != '') {
+                this.model.set('routingtime', rt);
+                this.model.set('routingdate', rd);
             }
             else {
-                $('#timeButton').removeClass('errortime');
-            }
-        },
-        changedWochentag: function (evt) {
-            if (evt.target.textContent === 'keinen Zeitpunkt vorgeben') {
-                this.model.set('routingday', '');
-                $('#dayOfWeekButton').text("Wochentag wählen");
-            }
-            else {
-                this.model.set('routingday', evt.target.textContent);
-                $('#dayOfWeekButton').text(evt.target.textContent);
+                this.model.set('routingtime', '');
+                this.model.set('routingdate', '');
             }
         },
         render: function () {
@@ -115,47 +165,42 @@ define([
         },
         toggleRoutingOptions: function () {
             if ($('#RoutingWin > .panel-options').is(":visible") == false) {
-                var oldHour = this.model.get('routinghour');
-                var oldMinute = this.model.get('routingminute');
-                var oldWeekday = this.model.get('routingday');
-                if (oldHour && oldHour >= 0) {
-                    $('#timeButton').val(oldHour + ':' + oldMinute);
+                var date = new Date();
+                var oldTime = this.model.get('routingtime');
+                if (oldTime && oldTime != '') {
+                    $('#timeButton').val(oldTime);
                 }
                 else {
-                    var time = new Date();
-                    var hour = time.getHours();
-                    var minute = (time.getMinutes()<10?'0':'') + time.getMinutes()
+                    var localtime = date.toLocaleTimeString().split(':');
+                    var hour = ((parseFloat(localtime[0])<10?'0':'') + parseFloat(localtime[0])).toString();
+                    var minute = ((parseFloat(localtime[1])<10?'0':'') + parseFloat(localtime[1])).toString();
                     $('#timeButton').val(hour + ':' + minute);
                 }
-                if (oldWeekday != '') {
-                    $('#dayOfWeekButton').text(oldWeekday);
+
+                var oldDate = this.model.get('routingdate');
+                if (oldDate && oldDate != '') {
+                    $('#dayOfWeekButton').val(oldDate);
                 }
                 else {
-                    var time = new Date();
-                    var weekday = new Array(7);
-                    weekday[0]=  "Sontag";
-                    weekday[1] = "Montag";
-                    weekday[2] = "Dienstag";
-                    weekday[3] = "Mittwoch";
-                    weekday[4] = "Donnerstag";
-                    weekday[5] = "Freitag";
-                    weekday[6] = "Samstag";
-                    $('#dayOfWeekButton').text(weekday[time.getDay()]);
+                    var year = date.toISOString().substr(0,4);
+                    var month = date.toISOString().substr(5,2);
+                    var day = date.toISOString().substr(8,2);
+                    $('#dayOfWeekButton').val(year + '-' + month + '-' + day);
                 }
             }
             $('#RoutingWin > .panel-options').toggle('slow');
-            $('#RoutingWin > .panel-body > .toggleRoutingOptions > .glyphicon').toggleClass('glyphicon-chevron-up glyphicon-chevron-down');
+            $('#RoutingWin > .panel-body > .btn-group > .toggleRoutingOptions > .glyphicon').toggleClass('glyphicon-chevron-up glyphicon-chevron-down');
         },
         toggleRoutingWin: function () {
             if ($('#RoutingWin').is(":visible")){
                 $('#RoutingWin').hide();
             }
             else {
-                $('#RoutingWin > .panel-options').toggle('slow');
                 var that = this;
-                $('#RoutingWin').show(1000, function () {
+                $('#RoutingWin').show(1000);
+                if (this.model.get('fromCoord') == '') {
                     that.startAdressePosition();
-                });
+                }
             }
         }
     });

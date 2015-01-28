@@ -7,12 +7,12 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.master + '/diensteapiFHHNET.json',
-        styleConf: locations.master + '/style.json',
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
+        styleConf: locations.baseUrl + '../style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
+            {id: '452', visible: false},
             {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
              attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
              displayInTree: true,
@@ -52,7 +52,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Straße oder Krankenhausname",
             gazetteerURL: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
@@ -62,11 +62,11 @@ define(function () {
         },
         print: {
             url: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + ":8680/mapfish_print_2.0/";
                 }
                 else {
-                    return locations.host + "/mapfish_print_2.0/";
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
             title: 'Krankenhausportal',

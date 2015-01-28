@@ -8,7 +8,7 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../../diensteapiFHHNET.json',
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         layerIDs: [
             {id: '453', visible: true},
             {id: '682', visible: true},
@@ -34,17 +34,17 @@ define(function () {
              name: 'Verkehrsbelastung auf Autobahnen', visible: false
 
             },
-            {id: '352', visible: true, style: '352', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '354', visible: true, style: '354', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '355', visible: true, style: '355', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '356', visible: true, style: '356', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '357', visible: true, style: '357', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '358', visible: true, style: '358', clusterDistance: 30, styleField :'Kategorie'},
-            {id: '359', visible: true, style: '359', clusterDistance: 30, styleField :'Kategorie'},
+            {id: '2056', visible: true, style: '2056', clusterDistance: 30, styleField :'kategorie'},
+            {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2059', visible: true, style: '2059', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2057', visible: true, style: '2057', clusterDistance: 30, styleField :'kategorie'},
+            {id: '356', visible: true, style: '356', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2060', visible: true, style: '2060', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2054', visible: true, style: '2054', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie'},
             {id: '566', visible: true}
         ],
-        styleConf: '../../style.json',
+        styleConf: locations.baseUrl  + '../style.json',
         menubar: true,
         scaleLine: true,
         isMenubarVisible: false,
@@ -63,7 +63,7 @@ define(function () {
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
@@ -80,17 +80,17 @@ define(function () {
         },
         print: {
             url: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + ":8680/mapfish_print_2.0/";
                 }
                 else {
-                    return locations.host + "/mapfish_print_2.0/";
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
             title: 'Geotourismus',
             gfi: false
         },
-        proxyURL: 'http://wscd0096/cgi-bin/proxy.cgi',
+        proxyURL: '/cgi-bin/proxy.cgi',
         orientation: true,
         poi: true
     }

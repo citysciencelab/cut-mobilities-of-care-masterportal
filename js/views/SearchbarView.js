@@ -42,6 +42,9 @@ define([
                 $(window).on("orientationchange", function () {
                     this.render();
                 }, this);
+                if (navigator.appVersion.indexOf("MSIE 9.")!=-1) {
+                    $("#searchInput").val(this.model.get('placeholder'));
+                }
                 $("#searchInput").blur();
 
             },
@@ -150,9 +153,19 @@ define([
             */
             "toggleStyleForRemoveIcon": function (evt) {
                 if (evt.type === "focusin") {
+                    if (navigator.appVersion.indexOf("MSIE 9.")!=-1) {
+                        if ($('#searchInput').val() == this.model.get('placeholder')) {
+                            $('#searchInput').val('');
+                        }
+                    }
                     $(".btn-deleteSearch").css("border-color", "#66afe9");
                 }
                 else if (evt.type === "focusout") {
+                    if (navigator.appVersion.indexOf("MSIE 9.")!=-1) {
+                        if ($('#searchInput').val() == '') {
+                            $('#searchInput').val(this.model.get('placeholder'));
+                        }
+                    }
                     $(".btn-deleteSearch").css("border-color", "#cccccc");
                 }
             },

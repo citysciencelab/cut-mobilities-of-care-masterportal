@@ -1,5 +1,6 @@
 .start-square {
     width: 35px;
+    height: 35px;
     background-color: #81BEF7;
 }
 .ziel-square {
@@ -15,7 +16,52 @@
 }
 .routinglocator {
     background-color: #fff;
+    vertical-align: middle !important;
 }
 .routinglocator:hover {
     background-color: #ebebeb;
+}
+.panel-description {
+    overflow: auto;
+    max-height: 1280px;
+}
+@media (min-height:200px){
+    .panel-description {
+        max-height:50px;
+    }
+}
+@media (min-height:250px){
+    .panel-description {
+        max-height:70px;
+    }
+}
+@media (min-height:300px){
+    .panel-description {
+        max-height:120px;
+    }
+}
+@media (min-height:480px){
+    .panel-description {
+        max-height:300px;
+    }
+}
+@media (min-height:640px){
+    .panel-description {
+        max-height:460px;
+    }
+}
+@media (min-height: 768px) {
+    .panel-description {
+        max-height:580px;
+    }
+}
+@media (min-height: 940px) {
+    .panel-description {
+        max-height:750px;
+    }
+}
+@media (min-height: 1100px) {
+    .panel-description {
+        max-height:950px;
+    }
 }

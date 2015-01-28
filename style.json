@@ -25,182 +25,182 @@
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "352",
+        "layerId" : "2056",
         "styleFieldValue":"Oberflächenform",
         "subclass" : "Icon",
         "imagename" : "oberflaechenform_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "352",
+        "layerId" : "2056",
         "styleFieldValue":"Moor",
         "subclass" : "Icon",
         "imagename" : "moor_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "352",
+        "layerId" : "2056",
         "styleFieldValue":"Düne",
         "subclass" : "Icon",
         "imagename" : "duene_50px.png",
         "imagescale" : "0.9"
     },
     {
-        "layerId" : "352",
+        "layerId" : "2056",
         "styleFieldValue":"Watt",
         "subclass" : "Icon",
         "imagename" : "watt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "354",
+        "layerId" : "2059",
         "styleFieldValue":"Unsichtbares Objekt",
         "subclass" : "Icon",
         "imagename" : "unsichtbares-objekt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Geologisches Landesamt",
         "subclass" : "Icon",
         "imagename" : "geologisches_landesamt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Botanischer Garten",
         "subclass" : "Icon",
         "imagename" : "botanischer_garten_6-5.png",
         "imagescale" : "0.7"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Saurier",
         "subclass" : "Icon",
         "imagename" : "saurier_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Wrack",
         "subclass" : "Icon",
         "imagename" : "wrack_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Grotte",
         "subclass" : "Icon",
         "imagename" : "grotte_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Wurt",
         "subclass" : "Icon",
         "imagename" : "wurt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "355",
+        "layerId" : "2057",
         "styleFieldValue":"Gebäude",
         "subclass" : "Icon",
         "imagename" : "gebaeude_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "357",
+        "layerId" : "2060",
         "styleFieldValue":"Brunnen",
         "subclass" : "Icon",
         "imagename" : "brunnen_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "357",
+        "layerId" : "2060",
         "styleFieldValue":"Wasserbauobjekt",
         "subclass" : "Icon",
         "imagename" : "wasserbauobjekt_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "357",
+        "layerId" : "2060",
         "styleFieldValue":"Brack",
         "subclass" : "Icon",
         "imagename" : "brack_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "357",
+        "layerId" : "2060",
         "styleFieldValue":"See",
         "subclass" : "Icon",
         "imagename" : "see_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "357",
+        "layerId" : "2060",
         "styleFieldValue":"Gewässer",
         "subclass" : "Icon",
         "imagename" : "gewaesser_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "358",
+        "layerId" : "2054",
         "styleFieldValue":"Besonderer Boden",
         "subclass" : "Icon",
         "imagename" : "besonderer_boden_6-5.png",
         "imagescale" : "0.7"
     },
     {
-        "layerId" : "358",
+        "layerId" : "2054",
         "styleFieldValue":"Austernbank",
         "subclass" : "Icon",
         "imagename" : "austernbank_10.png",
         "imagescale" : "1.1"
     },
     {
-        "layerId" : "358",
+        "layerId" : "2054",
         "styleFieldValue":"Erdfall",
         "subclass" : "Icon",
         "imagename" : "erdfall_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "358",
+        "layerId" : "2054",
         "styleFieldValue":"Endmoräne",
         "subclass" : "Icon",
         "imagename" : "endmoraene_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "358",
+        "layerId" : "2054",
         "styleFieldValue":"Grundmoräne",
         "subclass" : "Icon",
         "imagename" : "grundmoraene_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "358",
+        "layerId" : "2054",
         "styleFieldValue":"Findling",
         "subclass" : "Icon",
         "imagename" : "findling_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "359",
+        "layerId" : "2058",
         "styleFieldValue":"Strassenpflaster",
         "subclass" : "Icon",
         "imagename" : "strassenpflaster_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "359",
+        "layerId" : "2058",
         "styleFieldValue":"Steinwall",
         "subclass" : "Icon",
         "imagename" : "steinwall_10.png",
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "359",
+        "layerId" : "2058",
         "styleFieldValue":"Felsen",
         "subclass" : "Icon",
         "imagename" : "felsen_10.png",
@@ -235,7 +235,7 @@
         "imagescale" : "0.5"
     },
     {
-        "layerId" : "359_cluster",
+        "layerId" : "2058_cluster",
         "styleFieldValue":"Stein und Fels",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -248,7 +248,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "layerId" : "358_cluster",
+        "layerId" : "2054_cluster",
         "styleFieldValue":"Geologische Objekte",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -261,7 +261,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "layerId" : "357_cluster",
+        "layerId" : "2060_cluster",
         "styleFieldValue":"Wasser und Wasserbau",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -287,7 +287,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "layerId" : "355_cluster",
+        "layerId" : "2057_cluster",
         "styleFieldValue":"Sehenswerte Objekte",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -300,7 +300,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "layerId" : "354_cluster",
+        "layerId" : "2059_cluster",
         "styleFieldValue":"Unsichtbares Objekt",
         "subclass" : "Circle",
         "imagescale" : "0.5",
@@ -326,7 +326,7 @@
         "clusterstrokewidth" : "0"
     },
     {
-        "layerId" : "352_cluster",
+        "layerId" : "2056_cluster",
         "styleFieldValue":"Landschaftsform",
         "subclass" : "Circle",
         "imagescale" : "0.5",

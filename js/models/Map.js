@@ -66,7 +66,7 @@ define([
                     // layers: LayerList.pluck('layer'),
                     // layers: [],
                     logo: null,
-                    renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
+                    renderer: 'canvas',    // 'dom', 'webgl' oder 'canvas'
                     target: 'map',
                     view: this.get('view'),
                     controls: [],

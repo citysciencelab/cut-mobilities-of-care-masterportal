@@ -13,7 +13,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -1394,7 +1394,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -3537,12 +3537,12 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : {
-         "BOTANISCHE" : " Gattung",
-         "BAUMART" : " Baumart",
-         "PFLANZJAHR" : " Pflanzjahr",
-         "           KRONE_DM" : " Kronendurchmesser",
-         "STANDORT" : " Standort",
-         "STAMMUMFAN" : " Stammumfang"
+         "gattung" : " Gattung",
+         "art" : " Baumart",
+         "pflanzjahr" : " Pflanzjahr",
+         "stammumfangzahl" : " Stammumfang",
+         "kronendmzahl" : " Kronendurchmesser",
+         "strasse" : " Straße"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
@@ -4387,2517 +4387,9 @@
       ]
    },
    {
-      "id" : "220",
-      "name" : "Gewässer",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "2",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "221",
-      "name" : "See",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "3",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "222",
-      "name" : "Brack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "4",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "223",
-      "name" : "Wasserbauprojekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "5",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "224",
-      "name" : "Brunnen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "6",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "225",
-      "name" : "Gebäude",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "8",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "226",
-      "name" : "Wurt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "9",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "227",
-      "name" : "Grotte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "10",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "228",
-      "name" : "Wrack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "11",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "229",
-      "name" : "Saurier",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "12",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "230",
-      "name" : "Botanischer Garten",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "13",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "231",
-      "name" : "Geologisches Landesamt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "14",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "232",
-      "name" : "Unsichtbares Objekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "15",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "233",
-      "name" : "Felsen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "17",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "234",
-      "name" : "Steinwall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "18",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "235",
-      "name" : "Strassenpflaster",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "19",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "236",
-      "name" : "Watt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "21",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "237",
-      "name" : "Düne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "22",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "238",
-      "name" : "Moor",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "23",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "239",
-      "name" : "Oberflächenform",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "24",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "240",
-      "name" : "Findling",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "26",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "241",
-      "name" : "Grundmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "27",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "242",
-      "name" : "Endmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "28",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "243",
-      "name" : "Erdfall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "29",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "244",
-      "name" : "Austernbank",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "30",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "245",
-      "name" : "Besonderer Boden",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "31",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "246",
-      "name" : "Grube",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "33",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "247",
-      "name" : "Bergwerk",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "34",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "248",
-      "name" : "Denkmal",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "36",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "249",
-      "name" : "Findlingskirche",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "37",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "250",
-      "name" : "Museum",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "38",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "251",
-      "name" : "Grenzstein",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "39",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "252",
-      "name" : "Geotope",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "40",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "944.940476",
-      "maxScale" : "13229.166667",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "253",
-      "name" : "Gewässer",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "43",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "254",
-      "name" : "See",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "44",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "255",
-      "name" : "Brack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "45",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "256",
-      "name" : "Wasserbauprojekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "46",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "257",
-      "name" : "Brunnen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "47",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "258",
-      "name" : "Gebäude",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "49",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "259",
-      "name" : "Wurt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "50",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "260",
-      "name" : "Grotte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "51",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "261",
-      "name" : "Wrack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "52",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "262",
-      "name" : "Saurier",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "53",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "263",
-      "name" : "Botanischer Garten",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "54",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "264",
-      "name" : "Geologisches Landesamt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "55",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "265",
-      "name" : "Unsichtbares Objekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "56",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "266",
-      "name" : "Felsen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "58",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "267",
-      "name" : "Steinwall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "59",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "268",
-      "name" : "Strassenpflaster",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "60",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "269",
-      "name" : "Watt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "62",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "270",
-      "name" : "Düne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "63",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "271",
-      "name" : "Moor",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "64",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "272",
-      "name" : "Oberflächenform",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "65",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "273",
-      "name" : "Findling",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "67",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "274",
-      "name" : "Grundmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "68",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "275",
-      "name" : "Endmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "69",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "276",
-      "name" : "Erdfall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "70",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "277",
-      "name" : "Austernbank",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "71",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "278",
-      "name" : "Besonderer Boden",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "72",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "279",
-      "name" : "Grube",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "74",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "280",
-      "name" : "Bergwerk",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "75",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "281",
-      "name" : "Denkmal",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "77",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "282",
-      "name" : "Findlingskirche",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "78",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "283",
-      "name" : "Museum",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "79",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "284",
-      "name" : "Grenzstein",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "80",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "285",
-      "name" : "Geotope",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "81",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "14174.107143",
-      "maxScale" : "27403.273810",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "286",
-      "name" : "Gewässer",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "84",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "287",
-      "name" : "See",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "85",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "288",
-      "name" : "Brack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "86",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "289",
-      "name" : "Wasserbauprojekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "87",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "290",
-      "name" : "Brunnen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "88",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "291",
-      "name" : "Gebäude",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "90",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "292",
-      "name" : "Wurt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "91",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "293",
-      "name" : "Grotte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "92",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "294",
-      "name" : "Wrack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "93",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "295",
-      "name" : "Saurier",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "94",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "296",
-      "name" : "Botanischer Garten",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "95",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "297",
-      "name" : "Geologisches Landesamt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "96",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "298",
-      "name" : "Unsichtbares Objekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "97",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "28348.214286",
-      "maxScale" : "55751.488095",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "299",
-      "name" : "Felsen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "99",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "300",
-      "name" : "Steinwall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "100",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "301",
-      "name" : "Strassenpflaster",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "101",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "302",
-      "name" : "Watt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "103",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "303",
-      "name" : "Düne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "104",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "304",
-      "name" : "Moor",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "105",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "305",
-      "name" : "Oberflächenform",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "106",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "306",
-      "name" : "Findling",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "108",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "307",
-      "name" : "Grundmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "109",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "308",
-      "name" : "Endmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "110",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "309",
-      "name" : "Erdfall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "111",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "310",
-      "name" : "Austernbank",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "112",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "311",
-      "name" : "Besonderer Boden",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "113",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "312",
-      "name" : "Grube",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "115",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "313",
-      "name" : "Bergwerk",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "116",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "314",
-      "name" : "Denkmal",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "118",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "315",
-      "name" : "Findlingskirche",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "119",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "316",
-      "name" : "Museum",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "120",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "317",
-      "name" : "Grenzstein",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "121",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "318",
-      "name" : "Geotope",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "122",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "28348.214286",
-      "maxScale" : "55751.488095",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "319",
-      "name" : "Gewässer",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "125",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "320",
-      "name" : "See",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "126",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "321",
-      "name" : "Brack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "127",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "322",
-      "name" : "Wasserbauprojekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "128",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "323",
-      "name" : "Brunnen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "129",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "324",
-      "name" : "Gebäude",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "131",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "325",
-      "name" : "Wurt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "132",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "326",
-      "name" : "Grotte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "133",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "327",
-      "name" : "Wrack",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "134",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "328",
-      "name" : "Saurier",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "135",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "329",
-      "name" : "Botanischer Garten",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "136",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "330",
-      "name" : "Geologisches Landesamt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "137",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "331",
-      "name" : "Unsichtbares Objekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "138",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "332",
-      "name" : "Felsen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "140",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "333",
-      "name" : "Steinwall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "141",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "334",
-      "name" : "Strassenpflaster",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "142",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "335",
-      "name" : "Watt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "144",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "336",
-      "name" : "Düne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "145",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "337",
-      "name" : "Moor",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "146",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "338",
-      "name" : "Oberflächenform",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "147",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "339",
-      "name" : "Findling",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "149",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "340",
-      "name" : "Grundmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "150",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "341",
-      "name" : "Endmoräne",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "151",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "342",
-      "name" : "Erdfall",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "152",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "343",
-      "name" : "Austernbank",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "153",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "344",
-      "name" : "Besonderer Boden",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "154",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "345",
-      "name" : "Grube",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "156",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "346",
-      "name" : "Bergwerk",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "157",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "347",
-      "name" : "Denkmal",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "159",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "348",
-      "name" : "Findlingskirche",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "160",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "349",
-      "name" : "Museum",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "161",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "350",
-      "name" : "Grenzstein",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "162",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
-      "id" : "351",
-      "name" : "Geotope",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geotourismus/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "163",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "56696.428571",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "datasets" : []
-   },
-   {
       "id" : "361",
       "name" : "Postleitzahlen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "0",
       "format" : "image/png",
@@ -6931,7 +4423,7 @@
    {
       "id" : "362",
       "name" : "Gemarkungen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
@@ -6965,7 +4457,7 @@
    {
       "id" : "363",
       "name" : "Ortsteile",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "2",
       "format" : "image/png",
@@ -6999,7 +4491,7 @@
    {
       "id" : "364",
       "name" : "Stadtteile",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "3",
       "format" : "image/png",
@@ -7033,7 +4525,7 @@
    {
       "id" : "365",
       "name" : "Bezirke",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "4",
       "format" : "image/png",
@@ -7067,7 +4559,7 @@
    {
       "id" : "366",
       "name" : "Landesgrenze",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/ALKIS_Verwaltungsgrenzen/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Verwaltungsgrenzen/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "5",
       "format" : "image/png",
@@ -7737,6 +5229,21 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
+         },
+         {
+            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
          }
       ]
    },
@@ -7809,6 +5316,21 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
+         },
+         {
+            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
          }
       ]
    },
@@ -7880,6 +5402,21 @@
                "hmbtg",
                "#opendata_hh#",
                "inspireidentifiziert"
+            ]
+         },
+         {
+            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
             ]
          }
       ]
@@ -8025,6 +5562,21 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
+         },
+         {
+            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
          }
       ]
    },
@@ -8168,6 +5720,21 @@
                "hmbtg",
                "#opendata_hh#",
                "inspireidentifiziert"
+            ]
+         },
+         {
+            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
             ]
          }
       ]
@@ -8987,13 +6554,13 @@
    },
    {
       "id" : "433",
-      "name" : "Sozerhvo Inkraft",
+      "name" : "Soziale Erhaltungsverordnungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_SozErhVO/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -9021,13 +6588,13 @@
    },
    {
       "id" : "434",
-      "name" : "Sozerhvo Inaufstellung",
+      "name" : "Soziale Erhaltungsverordnungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_SozErhVO/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "2",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -9542,19 +7109,19 @@
    },
    {
       "id" : "452",
-      "name" : "Dop",
+      "name" : "Luftbilder DOP 20",
       "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
       "typ" : "WMS",
       "layers" : "dop",
       "format" : "image/png",
       "version" : "1.1.1",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -9587,7 +7154,6 @@
       "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "ignore",
       "datasets" : [
          {
             "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
@@ -12204,7 +9770,6 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL":"http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/F_Plan_Legende_Internet_Februar2014.pdf",
       "datasets" : [
          {
             "md_id" : "DFDA2969-A041-433B-BD65-4CDA9F830A55",
@@ -12224,7 +9789,7 @@
    },
    {
       "id" : "551",
-      "name" : "Nutzung Hh",
+      "name" : "Nutzung",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "2",
@@ -12258,7 +9823,7 @@
    },
    {
       "id" : "552",
-      "name" : "Nutzungsüberlagerung Hh",
+      "name" : "Nutzungsüberlagerung",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "3",
@@ -12292,7 +9857,7 @@
    },
    {
       "id" : "553",
-      "name" : "Hafengebietsgrenze Hh",
+      "name" : "Hafengebietsgrenze",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "4",
@@ -12326,7 +9891,7 @@
    },
    {
       "id" : "554",
-      "name" : "Bahnlinien Hh",
+      "name" : "Bahnlinien",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "5",
@@ -12394,7 +9959,7 @@
    },
    {
       "id" : "556",
-      "name" : "Darstellung Linien Hh",
+      "name" : "Darstellung Linien",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "7",
@@ -12428,7 +9993,7 @@
    },
    {
       "id" : "557",
-      "name" : "Darstellung Punkte Hh",
+      "name" : "Darstellung Punkte",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "8",
@@ -12462,7 +10027,7 @@
    },
    {
       "id" : "558",
-      "name" : "Symbole Hh",
+      "name" : "Symbole",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "9",
@@ -12530,7 +10095,7 @@
    },
    {
       "id" : "560",
-      "name" : "Standard",
+      "name" : "Standard Fnp",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "12",
@@ -12567,7 +10132,7 @@
       "name" : "Gitternetz 1km",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "15",
+      "layers" : "14",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12601,7 +10166,7 @@
       "name" : "Disk Linien",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "16",
+      "layers" : "15",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12635,7 +10200,7 @@
       "name" : "Bezirksgrenzen 2008",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "17",
+      "layers" : "16",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12669,7 +10234,7 @@
       "name" : "Disk Punkte",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "18",
+      "layers" : "17",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12703,7 +10268,7 @@
       "name" : "Bab",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "20",
+      "layers" : "19",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12734,10 +10299,10 @@
    },
    {
       "id" : "566",
-      "name" : "Standard ",
+      "name" : "Standard Disk",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "21",
+      "layers" : "20",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12749,7 +10314,6 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL":"http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/F_Plan_Legende_Internet_Februar2014.pdf",
       "datasets" : [
          {
             "md_id" : "DFDA2969-A041-433B-BD65-4CDA9F830A55",
@@ -12772,7 +10336,7 @@
       "name" : "Petra",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "23",
+      "layers" : "22",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -12803,10 +10367,10 @@
    },
    {
       "id" : "568",
-      "name" : "Annotation-Klasse 1",
+      "name" : "Annotation Klasse 1",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "24",
+      "layers" : "23",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : "nicht vorhanden",
@@ -16034,7 +13598,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -16676,7 +14240,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -26910,7 +24474,7 @@
    {
       "id" : "1101",
       "name" : "Blattschnitte Neu",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Ueberschwemmungsgebiete/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_UESG/MapServer/WMSServer",
       "typ" : "WMS",
       "layers" : "0",
       "format" : "image/png",
@@ -26935,8 +24499,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -26944,7 +24507,7 @@
    {
       "id" : "1102",
       "name" : "Blattschnitte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Ueberschwemmungsgebiete/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_UESG/MapServer/WMSServer",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
@@ -26978,7 +24541,7 @@
    {
       "id" : "1103",
       "name" : "Festgesetzte Uesg",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Ueberschwemmungsgebiete/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_UESG/MapServer/WMSServer",
       "typ" : "WMS",
       "layers" : "2",
       "format" : "image/png",
@@ -27012,7 +24575,7 @@
    {
       "id" : "1104",
       "name" : "Vorläufig Gesicherte Uesg",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Ueberschwemmungsgebiete/MapServer/WmsServer",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_UESG/MapServer/WMSServer",
       "typ" : "WMS",
       "layers" : "3",
       "format" : "image/png",
@@ -27037,8 +24600,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -27057,7 +24619,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -27876,7 +25438,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -28410,7 +25972,7 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
@@ -28898,13 +26460,13 @@
    },
    {
       "id" : "1205",
-      "name" : "Erhaltungsverordnung",
+      "name" : "Städtebauliche Erhaltungsverodnungen",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_DIP/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "5",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
@@ -32339,7 +29901,17 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "planrecht" : "Geltendes Planrecht",
+         "feststellung" : "Feststellung",
+         "aenderung1" : "1. Änderung",
+         "aenderung2" : "2. Änderung",
+         "staedtebaulichervertrag" : "Vertragsform",
+         "gop" : "Gop vorhanden",
+         "hotlink" : "Planrecht",
+         "hotlink_begr" : "Begründung",
+         "baustufenplan_hotlink" : "Baustufenplan"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : []
@@ -32352,13 +29924,17 @@
       "layers" : "hh_lgv_imverfahren",
       "format" : "image/png",
       "version" : "1.1.1",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "plan" : "Planbezeichnung",
+         "feststellung" : "Feststellung",
+         "hotlink_iv" : "Weitere Informationen"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : []
@@ -32703,7 +30279,6 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "ignore",
       "datasets" : []
    },
    {
@@ -34396,6 +31971,39 @@
       ]
    },
    {
+      "id" : "1530",
+      "name" : "Projekte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_wohnungsbauproj",
+      "typ" : "WMS",
+      "layers" : "projekte",
+      "format" : "image/png",
+      "version" : "1.1.1",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "3.9199999999999995",
+      "maxScale" : "560.0",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "2E74D411-814C-4E65-9C9F-861517B5F393",
+            "rs_id" : "HMDK#97617529-2f22-4f85-a776-468bbaaf6b75",
+            "md_name" : "Wohnungsbauprojekte",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
       "id" : "1531",
       "name" : "Digitaler Grünplan",
       "url" : "http://bsu-ims:8080/wmsconnector/com.esri.wms.Esrimap/dgp_wms",
@@ -34714,6 +32322,73 @@
             "md_id" : "2B60A0F7-DAC9-11D2-9A86-080000507261",
             "rs_id" : "HMDK#470063f9-95ba-4693-ab4b-f21c402f9d65",
             "md_name" : "Badegewässer (Daten) Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1702",
+      "name" : "Bodenkunde Profil",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Bodenkunde/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "115D8927-A72E-49AE-AA14-10EB634A4101",
+            "rs_id" : "HMDK#9f7bdb42-c0a0-4306-96fc-d2940aa567af",
+            "md_name" : "Bodenkunde-Profile",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1703",
+      "name" : "Bodenkunde Horizont",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Bodenkunde/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "false",
+      "datasets" : [
+         {
+            "md_id" : "F9A55177-B0DC-460B-91E8-DACC206EAA79",
+            "rs_id" : "HMDK#9a8c0797-f37b-44b5-aae0-0634ddfd6c4b",
+            "md_name" : "Bodenkunde-Horizonte",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -35511,9 +33186,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35543,9 +33216,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35575,9 +33246,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35607,9 +33276,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35639,9 +33306,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35671,9 +33336,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35703,9 +33366,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35735,9 +33396,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35767,9 +33426,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35790,12 +33447,6 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "legendURL": {
-          "geofox-bus":"http://wscd0096/master_cv/img/hvv-bus.gif",
-          "geofox_Faehre":"http://wscd0096/master_cv/img/hvv-faehre.gif",
-          "geofox-bahn":"http://wscd0096/master_cv/img/hvv-bahn.gif",
-          "geofox_BusName":"http://wscd0096/master_cv/img/hvv-bus.gif"
-      },
       "datasets" : [
          {
             "md_id" : "7A77D5EA-C3B4-44D9-8004-36D5D324485D",
@@ -35805,9 +33456,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35837,9 +33486,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35869,9 +33516,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35901,9 +33546,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35933,9 +33576,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35965,9 +33606,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -35997,9 +33636,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36029,9 +33666,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36061,9 +33696,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36093,9 +33726,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36125,9 +33756,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36157,9 +33786,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36189,9 +33816,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -36369,11 +33994,1147 @@
       "datasets" : []
    },
    {
+      "id" : "1992",
+      "name" : "Naturschutzgebiet",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "8761AF79-641F-4E64-AE4D-280FAAEF4EC2",
+            "rs_id" : "HMDK#d0361a3c-27ed-4c5a-bcbe-08a4a3793f29",
+            "md_name" : "Naturschutzgebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1993",
+      "name" : "Ffh-Gebiet",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "8DAF4008-EFB4-46E7-BCB6-2750BF8BC30D",
+            "rs_id" : "HMDK#3a4f2867-2d6e-4377-a891-0d16461adf8f",
+            "md_name" : "Fauna-Flora-Habitat-Gebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1994",
+      "name" : "Eg-Vogelschutzgebiet",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "2",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "9649E685-6517-4FA2-A7E5-6CE330316D3A",
+            "rs_id" : "HMDK#773cd904-42cf-46cd-b228-464151ef15c1",
+            "md_name" : "Vogelschutzgebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1995",
+      "name" : "Ramsargebiet",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "3",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "A779C820-317E-4C95-B57A-81EBF53D7A5C",
+            "rs_id" : "HMDK#9ed43df3-1e53-4d5e-a791-c4abe9ef6a6f",
+            "md_name" : "Ramsargebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1996",
+      "name" : "Nationalpark",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "4",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "DF29C78E-0058-447F-B9DA-16416FDC7080",
+            "rs_id" : "HMDK#0872b14c-7efb-4d92-b879-d7f21f6b5eba",
+            "md_name" : "Schutzgebiet Nationalpark Hamburgisches Wattenmeer",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1997",
+      "name" : "Biosphärenreservat",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "5",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "A88ACF70-9173-4E43-8146-3BD5C2449658",
+            "rs_id" : "HMDK#3a4f2867-2d6e-4377-a891-0d16461adf8f",
+            "md_name" : "Biosphärenreservate in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1998",
+      "name" : "Landschaftsschutzgebiet",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "6",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "301ED065-D98B-449C-A15F-FD4846F55366",
+            "rs_id" : "HMDK#0e86b011-39d8-4998-8ba8-eb0bd0aad49d",
+            "md_name" : "Landschaftsschutzgebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1999",
+      "name" : "Naturdenkmal",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Schutzgebiete/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "7",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "C8018F25-E028-4910-AB91-D55720175045",
+            "rs_id" : "HMDK#bddb58ef-4ca5-4898-bf18-90fd04e70fc4",
+            "md_name" : "Naturdenkmale in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
       "id" : "2008",
       "name" : "Naturerlebnisse",
       "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
       "typ" : "WMS",
       "layers" : "mrh_naturerlebnisse",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2010",
+      "name" : "Bodendenkmal",
+      "url" : "nicht vorhanden",
+      "typ" : "WMS",
+      "layers" : "Bodendenkmal",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0.0",
+      "maxScale" : "1.7976931348623157E308",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2011",
+      "name" : "Bodendenkmal Public",
+      "url" : "nicht vorhanden",
+      "typ" : "WMS",
+      "layers" : "DenkmaelerPublic",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0.0",
+      "maxScale" : "1.7976931348623157E308",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2028",
+      "name" : "Bezirke",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2029",
+      "name" : "Wasser- Und Bodenverbände",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "2",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2030",
+      "name" : "Naturschutzgebiete",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "4",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2031",
+      "name" : "Eg-Vogelschutzgebiete",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "5",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2032",
+      "name" : "Fauna-Flora-Habitat Gebiete",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "6",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2033",
+      "name" : "Flächenhafte §30 Biotope (Vollständig Geschützt)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "8",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2034",
+      "name" : "Flächenhafte §30 Biotope (Teilweise Geschützt)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "9",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2035",
+      "name" : "Linienhafte §30 Biotope (Vollständig Geschützt)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "10",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2036",
+      "name" : "Linienhafte §30 Biotope (Teilweise Geschützt)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "11",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2037",
+      "name" : "Punktförmige §30 Biotope",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "12",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2038",
+      "name" : "Einzelbiotope Artenschutzprogramm",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "13",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2039",
+      "name" : "Gewässerflächen",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "15",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2040",
+      "name" : "Gewässernetz",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "16",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2041",
+      "name" : "Berichtspflichtiges Gewässernetz Gemäss Eg-Wrrl",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
+      "typ" : "WMS",
+      "layers" : "17",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
+            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
+            "md_name" : "Gewässerunterhaltung",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2042",
+      "name" : "Änderungsübersicht zum Flächennutzungsplan",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP_Aend/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : {
+         "Typ" : "Typ",
+         "Bezirk" : "Bezrik",
+         "Name" : "Name",
+         "Datum" : "Datum",
+         "Link_Änderung" : "Änderung"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "FDE79B82-201C-4A1A-A1E5-5A10E01E3701",
+            "rs_id" : "HMDK#28a5c06e-efc7-4d25-8f44-e9fe1d06f437",
+            "md_name" : "Änderungsübersicht zum Flächennutzungsplan Hamburg",
+            "bbox" : "541991.14,5916243.3,592004.48,5956232.48",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2045",
+      "name" : "Bauwerke",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "bauwerke",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2046",
+      "name" : "Bergbau",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "bergbau",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2047",
+      "name" : "Geologische Objekte",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "geologische_objekte",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2048",
+      "name" : "Landschaftsform",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "landschaftsform",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2049",
+      "name" : "Geotope",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "geotope",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2050",
+      "name" : "Sehenswerte Objekte",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "sehenswerte_objekte",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2051",
+      "name" : "Stein Und Fels",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "steinufelsen",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2052",
+      "name" : "Unsichtbares Objekt",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "unsichtbares_objekt",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2053",
+      "name" : "Wasser Und Wasserbau",
+      "url" : "http://geofos/fachdaten_public/services/wms_hh_geotourismus",
+      "typ" : "WMS",
+      "layers" : "wasseruwasserbau",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2061",
+      "name" : "Geobasisdaten",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+      "typ" : "WMS",
+      "layers" : "geobasisdaten_temp",
       "format" : "nicht vorhanden",
       "version" : "1.1.1",
       "singleTile" : "false",
@@ -36829,7 +35590,7 @@
    },
    {
       "id" : "44",
-      "name" : "App:bab Vkl",
+      "name" : "aktuelle Meldungen der TBZ",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "bab_vkl",
@@ -37390,44 +36151,6 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "352",
-      "name" : "Landschaftsform",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "Landschaftsform",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : {
-         "LINK_Bild" : "Bild",
-         "Name" : "Name",
-         "Kategorie" : "Kategorie",
-         "Lage" : "Lage",
-         "Bezirk" : "Bezirk",
-         "Objekt_Geotouren" : "Objekt Geotouren",
-         "URL_Geologie" : "weitere Informationen",
-         "Geotope" : "Geotope"
-      },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -37436,86 +36159,12 @@
    {
       "id" : "353",
       "name" : "Bauwerke",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
       "typ" : "WFS",
-      "featureType" : "Bauwerke",
+      "featureType" : "bauwerke",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : {
-         "LINK_Bild" : "Bild",
-         "Name" : "Name",
-         "Kategorie" : "Kategorie",
-         "Lage" : "Lage",
-         "Bezirk" : "Bezirk",
-         "Objekt_Geotouren" : "Objekt Geotouren",
-         "URL_Geologie" : "weitere Informationen",
-         "Geotope" : "Geotope"
-      },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "354",
-      "name" : "Unsichtbares Objekt",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "Unsichtbares_Objekt",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : {
-         "LINK_Bild" : "Bild",
-         "Name" : "Name",
-         "Kategorie" : "Kategorie",
-         "Lage" : "Lage",
-         "Bezirk" : "Bezirk",
-         "Objekt_Geotouren" : "Objekt Geotouren",
-         "URL_Geologie" : "weitere Informationen",
-         "Geotope" : "Geotope"
-      },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "355",
-      "name" : "Sehenswerte Objekte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "Sehenswerte_Objekte",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "LINK_Bild" : "Bild",
          "Name" : "Name",
@@ -37547,12 +36196,12 @@
    {
       "id" : "356",
       "name" : "Bergbau",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
       "typ" : "WFS",
-      "featureType" : "Bergbau",
+      "featureType" : "bergbau",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "LINK_Bild" : "Bild",
          "Name" : "Name",
@@ -37563,146 +36212,6 @@
          "URL_Geologie" : "weitere Informationen",
          "Geotope" : "Geotope"
       },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "357",
-      "name" : "Wasser und Wasserbau",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "Wasser_und_Wasserbau",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : {
-         "LINK_Bild" : "Bild",
-         "Name" : "Name",
-         "Kategorie" : "Kategorie",
-         "Lage" : "Lage",
-         "Bezirk" : "Bezirk",
-         "Objekt_Geotouren" : "Objekt Geotouren",
-         "URL_Geologie" : "weitere Informationen",
-         "Geotope" : "Geotope"
-      },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "358",
-      "name" : "Geologische Objekte",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "GeologischeObjekte",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : {
-         "LINK_Bild" : "Bild",
-         "Name" : "Name",
-         "Kategorie" : "Kategorie",
-         "Lage" : "Lage",
-         "Bezirk" : "Bezirk",
-         "Objekt_Geotouren" : "Objekt Geotouren",
-         "URL_Geologie" : "weitere Informationen",
-         "Geotope" : "Geotope"
-      },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "359",
-      "name" : "Stein und Fels",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "Stein_und_Fels",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : {
-         "LINK_Bild" : "Bild",
-         "Name" : "Name",
-         "Kategorie" : "Kategorie",
-         "Lage" : "Lage",
-         "Bezirk" : "Bezirk",
-         "Objekt_Geotouren" : "Objekt Geotouren",
-         "URL_Geologie" : "weitere Informationen",
-         "Geotope" : "Geotope"
-      },
-      "layerAttribution" : "nicht vorhanden",
-      "datasets" : [
-         {
-            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
-            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
-            "md_name" : "Geotourismus-Karte 1:60 000",
-            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
-            "kategorie_opendata" : [
-               "Kultur, Freizeit, Sport und Tourismus",
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ],
-      "legendURL": "http://wscd0096/master_cv/img/Stein_und_Fels.png"
-   },
-   {
-      "id" : "360",
-      "name" : "Geotope",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "typ" : "WFS",
-      "featureType" : "Geotope",
-      "format" : "image/png",
-      "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map_WFS/BSU_U_Geotourismus/MapServer/WFSServer",
-      "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
          {
@@ -38029,7 +36538,7 @@
       "featureType" : "Geest-_Marsch",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38056,7 +36565,7 @@
       "featureType" : "Maximaler_Grundwasser-_Flurabstand_1996__ab_1_10.000_",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38083,7 +36592,7 @@
       "featureType" : "Grundwassergleichen_Mittel",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38110,7 +36619,7 @@
       "featureType" : "Grundwassergleichen_Min",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38137,7 +36646,7 @@
       "featureType" : "Grundwassergleichen_Max",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38164,7 +36673,7 @@
       "featureType" : "Einbau_Ersatzbaustoffe",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38191,7 +36700,7 @@
       "featureType" : "Minimaler_Grundwasser-_Flurabstand_2008__ab_1_10.000_",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38218,7 +36727,7 @@
       "featureType" : "Wasserschutzgebietszonen",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_Z_Grundwasserschutz/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38567,23 +37076,37 @@
    },
    {
       "id" : "671",
-      "name" : "Grundwasser-Messstellen",
+      "name" : "Grundwasser-Wasserkörper",
       "url" : "http://hmbtg.geronimus.info/geoserver/ows",
       "typ" : "WFS",
-      "featureType" : "HmbTG_Grundwasser_Messstellen",
+      "featureType" : "HmbTG_Grundwasser_Wasserkoerper",
       "format" : "image/png",
       "version" : "1.1.0",
       "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "08752170-01CF-4056-A85B-721B6C3BF32B",
+            "rs_id" : "HMDK#c2ca3fc9-9da1-4925-ab86-05e31dcd8cae",
+            "md_name" : "Grundwasser-Wasserkörper mit Erhebungen gemäß Wasserrahmenrichtlinie",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "672",
-      "name" : "Oberflächengewässer Pegel",
+      "name" : "Oberflächen-Wasserkörper",
       "url" : "http://hmbtg.geronimus.info/geoserver/ows",
       "typ" : "WFS",
-      "featureType" : "HmbTG_Oberflaechengewaesser_Pegel",
+      "featureType" : "HmbTG_Oberflaechen_Wasserkoerper",
       "format" : "image/png",
       "version" : "1.1.0",
       "featureNS" : "nicht vorhanden",
@@ -40592,6 +39115,33 @@
       "datasets" : []
    },
    {
+      "id" : "1567",
+      "name" : "App:projekte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_wohnungsbauproj",
+      "typ" : "WFS",
+      "featureType" : "projekte",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "2E74D411-814C-4E65-9C9F-861517B5F393",
+            "rs_id" : "HMDK#97617529-2f22-4f85-a776-468bbaaf6b75",
+            "md_name" : "Wohnungsbauprojekte",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
       "id" : "1628",
       "name" : "Dog:bundesländer",
       "url" : "http://geofos.fhhnet.stadt.hamburg.de/gages_hh/services/wfs",
@@ -40749,7 +39299,7 @@
    },
    {
       "id" : "1658",
-      "name" : "Hmbtg Basis Gewässernetz Fhh",
+      "name" : "Basis-Gewässernetz-Fhh",
       "url" : "http://hmbtg.geronimus.info/geoserver/ows",
       "typ" : "WFS",
       "featureType" : "HmbTG_Basis_Gewaessernetz_FHH",
@@ -40769,8 +39319,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -41117,8 +39666,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -41173,8 +39721,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -41549,15 +40096,275 @@
       "datasets" : []
    },
    {
-        "id": "extern1",
-        "name": "HVV Bahnlinien",
-        "name": "HVV Bahnlinien",
-        "url": "http://extmap.hbt.de/geoserver/geofox_workspace/wms",
-        "typ": "WMS",
-        "layers": "geofoxdb_strecken_normal",
-        "format": "image/png",
-        "version": "1.3.0",
-        "datasets" : [],
-        "singleTile": "nicht vorhanden"
-    }
+      "id" : "2044",
+      "name" : "Oberflächengewässer Pegel",
+      "url" : "http://hmbtg.geronimus.info/geoserver/ows",
+      "typ" : "WFS",
+      "featureType" : "HmbTG_Oberflaechengewaesser_Pegel",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.0",
+      "featureNS" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : []
+   },
+   {
+      "id" : "2054",
+      "name" : "Geologische Objekte",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "geologische_objekte",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : "Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2055",
+      "name" : "Geotope",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "geotope",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : " Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2056",
+      "name" : "Landschaftsform",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "landschaftsform",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : "Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2057",
+      "name" : "Sehenswerte Objekte",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "sehenswerte_objekte",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : "Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2058",
+      "name" : "Stein und Fels",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "steinundfels",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : "Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2059",
+      "name" : "Unsichtbares Objekt",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "unsichtbares_objekt",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : "Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2060",
+      "name" : "Wasser und Wasserbau",
+      "url" : "http://geofos/fachdaten_public/services/wfs_hh_geotourismus",
+      "typ" : "WFS",
+      "featureType" : "wasserundwasserbau",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "LINK_Bild" : "Bild",
+         "Name" : "Name",
+         "Kategorie" : "Kategorie",
+         "Lage" : "Lage",
+         "Bezirk" : "Bezirk",
+         "Objekt_Geotouren" : "Objekt Geotouren",
+         "URL_Geologie" : "weitere Informationen",
+         "Geotope" : "Geotope"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "545527FE-2776-4B9B-95B6-477348BE8F3A",
+            "rs_id" : "HMDK#b4c0f17a-fa41-4bf8-a116-be91d67012bb",
+            "md_name" : "Geotourismus-Karte 1:60 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Kultur, Freizeit, Sport und Tourismus",
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   }
 ]
