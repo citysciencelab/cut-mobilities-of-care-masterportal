@@ -7,7 +7,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
         allowParametricURL: true,
         /**
@@ -37,21 +37,30 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Beschreibung.
+        * @desc Pfad zur Proxy-CGI
         */
         proxyURL: '/cgi-bin/proxy.cgi',
         /**
         * @memberof config
         * @type {Object[]}
-        * @property {String|Array}  id - Beschreibung.
-        * @property {Boolean}  visible - Beschreibung.
-        * @property {String|Array}  style - Beschreibung.
-        * @property {Number}  clusterDistance - Beschreibung.
-        * @property {String}  searchField - Beschreibung.
-        * @property {String}  mouseHoverField - Beschreibung.
-        * @property {Object[]}  filterOptions - Beschreibung.
-        * @property {String}  filterOptions.fieldName - Beschreibung.
-        * @property {String}  styleLabelField - Beschreibung.
+        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
+        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
+        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
+        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
+        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering. 
+        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
+        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
+        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
+        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
+        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter. 
+        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
+        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
+        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
+        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
+        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
+        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value 'eventValue' am Layer setzen, um ihn zu übernehmen.
+        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird. 
+        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval
         * @desc Beschreibung.
         */
         layerIDs: [
@@ -104,7 +113,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
         */
         attributions: true,
         /**
@@ -116,13 +125,13 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
+        * @desc Wenn TRUE, wird in main.js views/ScaleLineView.js geladen. Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
         */
         scaleLine: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Wenn TRUE, wird in main.js views/MouseHoverPopupView.js geladen. Dieses Modul steuert die Darstellung des MouseHovers entsprechend layerIDs{mouseHoverField}
         */
         mouseHover: true,
         /**
@@ -140,9 +149,9 @@ define(function () {
         * @property {Boolean}  contactButton - Der Kontakt-Button.
         * @property {Boolean}  tools - Die Werkzeuge
         * @property {Boolean}  treeFilter - Der Filter für die Straßenbäume.
-        * @property {Boolean}  wfsFeatureFilter -
+        * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
         * @property {Boolean}  legend - Die Legende
-        * @property {Boolean}  routing - Die Routingfunktion
+        * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung. 
         */
         menu: {
             viewerName: 'GeoViewer',
@@ -158,7 +167,7 @@ define(function () {
         },
         /**
         * @memberof config
-        * @desc Konfiguration für die Suchfunktion.
+        * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
         * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
