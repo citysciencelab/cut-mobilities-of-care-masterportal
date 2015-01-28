@@ -25,37 +25,27 @@
     overflow: auto;
     max-height: 1280px;
 }
-@media (min-height:200px){
-    .panel-description {
-        max-height:50px;
-    }
-}
-@media (min-height:250px){
-    .panel-description {
-        max-height:70px;
-    }
-}
-@media (min-height:300px){
+@media (min-height:360px){
     .panel-description {
         max-height:120px;
     }
 }
-@media (min-height:480px){
+@media (min-height:540px){
     .panel-description {
         max-height:300px;
     }
 }
-@media (min-height:640px){
+@media (min-height:700px){
     .panel-description {
         max-height:460px;
     }
 }
-@media (min-height: 768px) {
+@media (min-height: 820px) {
     .panel-description {
         max-height:580px;
     }
 }
-@media (min-height: 940px) {
+@media (min-height: 1000px) {
     .panel-description {
         max-height:750px;
     }

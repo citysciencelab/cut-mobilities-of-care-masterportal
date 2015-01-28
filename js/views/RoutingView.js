@@ -46,15 +46,16 @@ define([
         toggleSwitcher: function () {
             var description = this.model.get('description');
             var endDescription = this.model.get('endDescription');
+            $("#input-group-description ul").empty();
             if (description && description != '' && endDescription && endDescription != '') {
-                console.log(description);
                 _.each(description, function (item, index, list) {
-                    $("#input-group-description ul").append('<li id="teil' + index.toString() + '" class="list-group-item"><span class="">' + item.Description + '</span></br><small>Dauer: ' + item.Duration + ' s</small></li>');
+                    $("#input-group-description ul").append('<li id="teil' + index.toString() + '" class="list-group-item"><span class="">' + item.Description + '</span></li>');
                 });
-//                $('#RoutingWin > .panel-description').text(endDescription);
+                $('#endeDescription').text(endDescription);
                 $('#RoutingWin > .panel-switcher').show('slow');
             }
             else {
+                $('#endeDescription').text('');
                 $('#RoutingWin > .panel-switcher').hide('slow');
             }
             this.toggleLayout();
