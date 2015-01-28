@@ -11,7 +11,7 @@ define(function () {
             {id: '453', visible: true},
             {id: '8', visible: false},
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich
-            {id: '5182', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
+            {id: '5181', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
             {id: '5182', visible: false, styles: "strassenbaumkataster"},
             {id: '5183', visible: false, displayInTree: false}
         ],

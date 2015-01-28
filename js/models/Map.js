@@ -2,10 +2,11 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'collections/LayerList',
+    'eventbus',
+    'collections/LayerList_new',
     'config',
-    'eventbus'
-    ], function (_, Backbone, ol, LayerList, Config, EventBus) {
+    'collections/TreeList'
+    ], function (_, Backbone, ol, EventBus, LayerList, Config, TreeList) {
 
         var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
         $('#dpidiv').remove();
@@ -62,7 +63,8 @@ define([
                 }));
 
                 this.set('map', new ol.Map({
-                    layers: LayerList.pluck('layer'),
+                    // layers: LayerList.pluck('layer'),
+                    // layers: [],
                     logo: null,
                     renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
                     target: 'map',
@@ -70,6 +72,24 @@ define([
                     controls: [],
                     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
                 }));
+                // für den Layerbaum (FHH-Atlas)
+                // switch (Config.tree.orderBy) {
+                if (_.has(Config, "tree")) {
+                _.each(TreeList.pluck("layerList").reverse(), function (layer) {
+
+                    _.each(layer, function (element) {//console.log(element);
+                        // console.log(element.get("name"));
+                        // console.log(element.get("kategorieOpendata")[0]);
+                        this.get("map").addLayer(element.get("layer"));
+                    }, this);
+                },this);
+                }
+                else {
+                    _.each(LayerList.pluck("layer"), function (layer) {
+                        this.get("map").addLayer(layer);
+                    }, this);
+                }
+
                 // View listener
                 this.get('view').on('change:resolution', function () {
                     // NOTE brauche ich wahrscheinlich nicht mehr (sd)
@@ -165,9 +185,10 @@ define([
         },
         /**
         */
-        moveLayer: function (args) {
+        moveLayer: function (args) { //console.log(args);
             var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
+            console.log(layers);
             index = layers.indexOf(args[1]);
             if (index + args[0] < LayerList.length && index + args[0] >= 0) {
                 layersCollection = this.get('map').getLayers();
@@ -177,6 +198,7 @@ define([
                 LayerList.remove(model);
                 LayerList.add(model, {at: index + args[0]});
             }
+
         },
         /**
         *

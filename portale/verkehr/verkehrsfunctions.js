@@ -2,7 +2,7 @@ define([
     'backbone',
     'eventbus',
     'config',
-    'collections/LayerList',
+    'collections/LayerList_new',
 ], function (Backbone, EventBus, Config, LayerList) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({

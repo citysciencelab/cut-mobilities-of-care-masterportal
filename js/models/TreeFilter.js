@@ -31,7 +31,7 @@ define([
             this.listenTo(this, 'change:searchTypeString', this.setTypeArray);
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
             this.listenTo(this, 'change:SLDBody', this.getFilterHits);
-            this.set('layerID', '5182_strassenbaumkataster');
+            this.set('layerID', '5182');
             this.set('layerCacheID', '5183');
 
             this.fetch({
@@ -235,7 +235,7 @@ define([
         },
         updateStyleByID: function () {
             EventBus.trigger('updateStyleByID', [this.get('layerID'), this.get('SLDBody')]);
-            EventBus.trigger('setVisible', ['5182_strassenbaumkataster_grau', this.get('isFilter')]);
+            EventBus.trigger('setVisible', ['5181', this.get('isFilter')]);
             if (this.get('isFilter') === true) {
                 EventBus.trigger('setVisible', ['5183', false]);
             }

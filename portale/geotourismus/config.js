@@ -13,9 +13,7 @@ define(function () {
             {id: '453', visible: true},
             {id: '682', visible: true},
             {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
-
             {id: '1210', visible: false},
-
             {id: '433,434', visible: true},
             {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:

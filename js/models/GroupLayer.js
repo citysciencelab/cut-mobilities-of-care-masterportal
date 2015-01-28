@@ -6,7 +6,7 @@ define([
     'config',
     'models/Layer',
     'models/wmslayer',
-    'models/wfslayer',
+    'models/wfslayer'
 ], function (_, Backbone, ol, EventBus, Config, Layer, WMSLayer, WFSLayer) {
 
     /**
@@ -20,13 +20,13 @@ define([
             // Erzeuge Layers-Objekt
             var layerdefinitions = this.get('layerdefinitions');
             var layers = new ol.Collection();
-            var backbonelayers = new Array();
+            var backbonelayers = [];
             _.each(layerdefinitions, function (layerdefinition, index, list) {
-                if (layerdefinition.dienst.typ === 'WMS') {
-                    var newlayer = new WMSLayer(layerdefinition.dienst, layerdefinition.styles, layerdefinition.id, layerdefinition.name);
+                if (layerdefinition.typ === 'WMS') {
+                    var newlayer = new WMSLayer(layerdefinition);
                 }
-                else if (layerdefinition.dienst.typ === 'WFS') {
-                    var newlayer = new WFSLayer(layerdefinition.dienst, '', layerdefinition.id, layerdefinition.name);
+                else if (layerdefinition.typ === 'WFS') {
+                    var newlayer = new WFSLayer(layerdefinition);
                 }
                 // Setze Dafault-Werte für Layer, damit Einstellung des Gruppenlayers sich nicht mit Einstellung des Layers überschneidet
                 newlayer.get('layer').setVisible(true);
