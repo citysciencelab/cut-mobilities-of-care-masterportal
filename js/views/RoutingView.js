@@ -39,7 +39,7 @@ define([
             'click .deleteroute' : 'deleteRoute'
         },
         deleteRoute: function () {
-            this.model.deleteRoute();
+            this.model.deleteRouteFromMap();
             this.model.set('description', '');
             this.model.set('endDescription', '');
         },
@@ -57,6 +57,7 @@ define([
             else {
                 $('#endeDescription').text('');
                 $('#RoutingWin > .panel-switcher').hide('slow');
+                $('#RoutingWin > .panel-route').show('slow');
             }
             this.toggleLayout();
         },
@@ -77,7 +78,7 @@ define([
             $('#RoutingWin > .panel-description').toggle('slow');
         },
         routeBerechnen: function () {
-            this.model.deleteRoute();
+            this.model.deleteRouteFromMap();
             if ($('#RoutingWin > .panel-options').is(":visible") == true) {
                 this.toggleRoutingOptions();
             }
