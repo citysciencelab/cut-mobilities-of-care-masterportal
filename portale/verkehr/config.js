@@ -82,7 +82,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: true
         },
         searchBar: {

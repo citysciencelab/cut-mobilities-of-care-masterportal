@@ -27,14 +27,14 @@ define([
             'click #RouteBerechnenButton': 'routeBerechnen',
             'change .changedWochentag': 'changedRoutingTime',
             'change .changedUhrzeit' : 'changedRoutingTime',
-
+            
             'click .startAdresseChanged' : 'deleteDefaultString',
             'keyup .startAdresseChanged' : 'adresseChanged_keyup',
             'keyup .zielAdresseChanged' : 'adresseChanged_keyup',
             'click .startAdressePosition' : 'startAdressePosition',
             'click .startAdresseSelected' : 'startAdresseSelected',
             'click .zielAdresseSelected' : 'zielAdresseSelected',
-
+            
             'click .toggleLayout' : 'toggleLayout',
             'click .deleteroute' : 'deleteRoute'
         },
@@ -46,15 +46,16 @@ define([
         toggleSwitcher: function () {
             var description = this.model.get('description');
             var endDescription = this.model.get('endDescription');
+            $("#input-group-description ul").empty();
             if (description && description != '' && endDescription && endDescription != '') {
-                console.log(description);
                 _.each(description, function (item, index, list) {
-                    $("#input-group-description ul").append('<li id="teil' + index.toString() + '" class="list-group-item"><span class="">' + item.Description + '</span></br><small>Dauer: ' + item.Duration + ' s</small></li>');
+                    $("#input-group-description ul").append('<li id="teil' + index.toString() + '" class="list-group-item"><span class="">' + item.Description + '</span></li>');
                 });
-//                $('#RoutingWin > .panel-description').text(endDescription);
+                $('#endeDescription').text(endDescription);
                 $('#RoutingWin > .panel-switcher').show('slow');
             }
             else {
+                $('#endeDescription').text('');
                 $('#RoutingWin > .panel-switcher').hide('slow');
             }
             this.toggleLayout();
@@ -163,7 +164,7 @@ define([
             var attr = this.model.toJSON();
             $('#toggleRow').append(this.$el.html(this.template(attr)));
         },
-        toggleRoutingOptions: function () {
+        toggleRoutingOptions: function () {            
             if ($('#RoutingWin > .panel-options').is(":visible") == false) {
                 var date = new Date();
                 var oldTime = this.model.get('routingtime');
@@ -171,17 +172,17 @@ define([
                     $('#timeButton').val(oldTime);
                 }
                 else {
-                    var localtime = date.toLocaleTimeString().split(':');
+                    var localtime = date.toLocaleTimeString().split(':');                    
                     var hour = ((parseFloat(localtime[0])<10?'0':'') + parseFloat(localtime[0])).toString();
                     var minute = ((parseFloat(localtime[1])<10?'0':'') + parseFloat(localtime[1])).toString();
                     $('#timeButton').val(hour + ':' + minute);
                 }
-
+                
                 var oldDate = this.model.get('routingdate');
                 if (oldDate && oldDate != '') {
                     $('#dayOfWeekButton').val(oldDate);
                 }
-                else {
+                else {                    
                     var year = date.toISOString().substr(0,4);
                     var month = date.toISOString().substr(5,2);
                     var day = date.toISOString().substr(8,2);
