@@ -110,7 +110,7 @@ define([
             EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
-            this.listenTo(this, 'change:visibility', this.sendAllVisibleLayer, this);
+            this.on("change:visibility", this.sendAllVisibleLayer, this);
 
 
             this.fetch({
@@ -126,7 +126,7 @@ define([
                     }
                 }
             });
-            // console.log(this);
+            console.log(this);
         },
         /**
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.

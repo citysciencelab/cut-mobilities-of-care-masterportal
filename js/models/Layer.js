@@ -19,7 +19,7 @@ define([
             }
 
             // Wenn Visibility nicht gesetzt ist (FHH-Atlas), werden alle Layer standardmäßig ausgeblendet.
-            if (this.get("visibilty") === undefined) {
+            if (this.get("visibility") === undefined) {
                 this.set('visibility', false);
             }
 

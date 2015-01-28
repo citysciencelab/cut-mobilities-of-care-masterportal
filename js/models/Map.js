@@ -2,11 +2,11 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'eventbus',
-    'collections/LayerList_new',
     'config',
-    'collections/TreeList'
-    ], function (_, Backbone, ol, EventBus, LayerList, Config, TreeList) {
+    'collections/LayerList_new',
+    // 'collections/TreeList'
+    'eventbus'
+    ], function (_, Backbone, ol, Config, LayerList, EventBus) {
 
         var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
         $('#dpidiv').remove();
@@ -72,12 +72,13 @@ define([
                     controls: [],
                     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
                 }));
+
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
-                if (_.has(Config, "tree")) {
+                if (_.has(Config, "tree")) {console.log(LayerList);
                 _.each(TreeList.pluck("layerList").reverse(), function (layer) {
 
-                    _.each(layer, function (element) {//console.log(element);
+                    _.each(layer, function (element) {
                         // console.log(element.get("name"));
                         // console.log(element.get("kategorieOpendata")[0]);
                         this.get("map").addLayer(element.get("layer"));
@@ -85,6 +86,7 @@ define([
                 },this);
                 }
                 else {
+                    console.log(LayerList);
                     _.each(LayerList.pluck("layer"), function (layer) {
                         this.get("map").addLayer(layer);
                     }, this);
