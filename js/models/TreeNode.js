@@ -3,19 +3,18 @@ define([
     'backbone',
     'eventbus',
     'config',
-    'collections/LayerList'
-    ], function (_, Backbone, EventBus, Config, LayerList) {
+    'collections/LayerList_new',
+    'EventBus'
+    ], function (_, Backbone, EventBus, Config, LayerList, EventBus) {
 
         var TreeNode = Backbone.Model.extend({
             "defaults": {
                 isExpanded: false
             },
             "initialize": function () {
-                // console.log("initialize TreeNode");
                 this.set("id", this.cid);
                 this.setOrderTreeBy();
                 this.setLayerList();
-                console.log(this);
             },
             "setOrderTreeBy": function () {
                 switch (Config.tree.orderBy) {
@@ -28,6 +27,7 @@ define([
                 // console.log("setLayerList");
                 var layerList = LayerList.getLayerByProperty(this.get("orderTreeByProperty"), this.get("name"));
                 this.set("layerList", layerList);
+                // console.log(layerList);
             },
             "setExpand": function (value) {
                 // console.log("setExpand");

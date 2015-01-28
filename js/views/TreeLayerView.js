@@ -48,13 +48,13 @@ define([
                 this.model.toggleSettings();
             },
             render: function () {
-                if (this.model.get('displayInTree') === true) {
+                // if (this.model.get('displayInTree') === true) {
                     var attr = this.model.toJSON();
                     this.$el.html(this.template(attr));
                     return this;
-                }else {
-                    return '';
-                }
+                // }else {
+                    // return '';
+                // }
             }
         });
 

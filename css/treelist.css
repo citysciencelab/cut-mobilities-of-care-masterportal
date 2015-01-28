@@ -1,13 +1,14 @@
-#tree > li {
-    /*padding: 0;*/
-}
-
-.tree-node-parent < li {
-padding: 0;
+.tree-node {
+    padding: 0;
 }
 
 .tree-node-parent {
-    padding: 10px;
+    padding: 15px 8px;
+}
+
+.folder-icons {
+    position: relative;
+    top: -4px;
 }
 
 .folder-icons span {
@@ -16,15 +17,15 @@ padding: 0;
 
 .folder-arrow {
     position: relative;
-    right: -10px;
-    top: -11px;
+    right: -8px;
+    top: -18px;
 }
 
 .folder-arrow span {
     color: #ffffff;
     background-color: #d42132;
     opacity: 0.5;
-    padding: 4px 6px 5px;
+    padding: 3px 5px 4px;
     font-size: 12px;
 }
 
@@ -47,7 +48,7 @@ padding: 0;
 }
 
 .tree-node-children > li {
-    margin-left: 12px;
+    margin-left: 8px;
     border-right: 0;
 }
 

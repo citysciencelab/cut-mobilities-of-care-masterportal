@@ -7,7 +7,7 @@ define([
     ], function ($, _, Backbone, TreeNodeTemplate, TreeLayerView) {
 
         var TreeNodeView = Backbone.View.extend({
-            className : 'list-group-item',
+            className : 'list-group-item tree-node',
             tagName: 'li',
             template: _.template(TreeNodeTemplate),
             events: {
@@ -23,9 +23,8 @@ define([
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
 
-                if (this.model.get("isExpanded") === true) {console.log(8);
+                if (this.model.get("isExpanded") === true) {
                     _.each(this.model.get("layerList"), function (layer) {
-                        // console.log(layer);
                         var treeLayerView = new TreeLayerView({model: layer});
                         // console.log($("#"+this.model.get("id")));
                         this.$("ul").append(treeLayerView.render().el);
@@ -40,11 +39,11 @@ define([
                 return this;
             },
             setExpandToTrue: function () {
-                console.log("setExpandToTrue");
+                // console.log("setExpandToTrue");
                 this.model.setExpand(true);
             },
             setExpandToFalse: function () {
-                console.log("setExpandToFalse");
+                // console.log("setExpandToFalse");
                 this.model.setExpand(false);
             },
             moveUpInList: function () {
