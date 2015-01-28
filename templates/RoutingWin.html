@@ -1,9 +1,9 @@
 <div class="panel-heading">
-    <h3 class="panel-title" style="font-size: 14px; float: left; padding: 10px 0px; width: 300px;"><span class="glyphicon glyphicon-road"></span>&nbsp;&nbsp;Routenplaner</h3>
-    <span class="close" style="padding: 8px;">×</span>
+    <h3 class="panel-title closeroutenplaner" style="font-size: 14px; float: left; padding: 10px 0px; width: 300px;"><span class="glyphicon glyphicon-road"></span>&nbsp;&nbsp;Routenplaner</h3>
+    <span class="close closeroutenplaner" style="padding: 8px;">×</span>
 </div>
 
-<div class="panel-body">
+<div class="panel-body panel-route">
     <div class="input-group" id="input-group-start" style="width: 100%;">
         <span class="input-group-addon start-square"></span>
         <input type="text" class="form-control startAdresseChanged" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1">
@@ -17,8 +17,7 @@
     <div class="input-group" id="input-group-ziel" style="width: 100%;">
         <span class="input-group-addon ziel-square"></span>
         <input type="text" class="form-control zielAdresseChanged" id="zielAdresse" placeholder="Nach:" aria-describedby="basic-addon1">
-        <ul class="dropdown-menu-search dropdown-menu-right" aria-labelledby="zielAdresse" style="max-height: 220px; overflow-y: auto; overflow-x: hidden;">
-        <ul class="dropdown-menu zielAdresseSelected" role="menu" aria-labelledby="zielAdresse" style="max-height: 220px; overflow-y: auto; overflow-x: hidden;">
+        <ul class="dropdown-menu-search dropdown-menu-right zielAdresseSelected" role="menu" aria-labelledby="zielAdresse" style="max-height: 220px; overflow-y: auto; overflow-x: hidden;">
         </ul>
     </div>
     <br>
@@ -29,29 +28,41 @@
         </button>
         <button id="RouteBerechnenButton" style="width: 50%;" type="button" disabled class="btn btn-primary">
             <span class="" aria-hidden="true">Route berechnen</span>
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
         </button>
     </div>
 </div>
 
-<div class="panel-body panel-options">
-    <h3 class="panel-title">Zeitpunkt vorgeben:</h3>
+<div class="panel-body panel-options" style="display: none;">
+    <h3 class="panel-title ">Startzeitpunkt vorgeben:</h3>
     <br>
     <div class="input-group">
-        <span class="input-group-addon glyphicon glyphicon-calendar" id="basic-addon1"></span>
-        <button type="button" id="dayOfWeekButton" class="btn btn-default dropdown-toggle fixedwidth" data-toggle="dropdown" aria-expanded="false"></button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dayOfWeekButton">
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Montag</a></li>
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Dienstag</a></li>
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Mittwoch</a></li>
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Donnerstag</a></li>
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Freitag</a></li>
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Samstag</a></li>
-            <li class="changedWochentag" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sonntag</a></li>
-            </ul>
+        <span class="input-group-addon glyphicon glyphicon-calendar" id="basic-addon1" style="vertical-align: middle !important;"></span>
+        <input type="date" id="dayOfWeekButton" class="form-control fixedwidth changedWochentag" aria-describedby="basic-addon2" min="2015-01-25">
     </div>
     <br>
     <div class="input-group">
-        <span class="input-group-addon glyphicon glyphicon-time" id="basic-addon2"></span>
+        <span class="input-group-addon glyphicon glyphicon-time" id="basic-addon2" style="vertical-align: middle !important;"></span>
         <input type="time" id="timeButton" class="form-control fixedwidth changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" >
     </div>
+</div>
+
+<div class="panel-body panel-switcher" style="display: none;">
+    <div style="width: 100%;" class="btn-group" role="group" aria-label="...">
+        <button style="width: 50%;" type="button" class="btn btn-success toggleLayout">
+            <span id="toggleLayoutSpan" class="" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+        </button>
+        <button style="width: 50%;" type="button" class="btn btn-danger deleteroute">
+            <span class="" aria-hidden="true">Route löschen </span>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+    </div>
+</div>
+            
+<div class="panel-body panel-description" id="input-group-description" style="display: none;">
+    <h3 class="panel-title ">Ihre verkehrsbeeinflusste und schnellste Route:</h3>
+    <br>
+    <ul class="list-group">
+    </ul>
 </div>

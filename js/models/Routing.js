@@ -9,9 +9,10 @@ define([
     var RoutingModel = Backbone.Model.extend({
         defaults: {
             configOrientation: false,
-            routingday: '',
-            routinghour: '',
-            routingminute: '',
+            description: '',
+            endDescription: '',
+            routingtime: '',
+            routingdate: '',
             fromStrassenname: '',
             fromHausnummer: '',
             fromCoord: '',
@@ -27,9 +28,37 @@ define([
             if (Config.orientation === true) {
                 this.set('configOrientation', true);
             }
+            EventBus.on('setMap', this.setMap, this);
+            EventBus.trigger('getMap', this);
+        },
+        setMap: function (map) {
+            this.set('map', map);
+        },
+        deleteRoute: function () {
+            var map = this.get('map');
+            _.each(map.getLayers(), function (layer) {                
+                if (_.isArray(layer)) {
+                    _.each(layer, function (childlayer) {
+                        if (childlayer.id && childlayer.id == 'route') {
+                             map.removeLayer(childlayer);
+                        }
+                    });                    
+                }               
+            });
         },
         requestRoute: function () {
-            var request = 'http://wscd0096/viom_v05?PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=' + this.get('fromCoord')[0] + '&START-Y=' + this.get('fromCoord')[1] + '&DEST-X=' + this.get('toCoord')[0] + '&DEST-Y=' + this.get('fromCoord')[1];
+            var request = 'http://wscd0096/viom_v05?PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=' + this.get('fromCoord')[0] + '&START-Y=' + this.get('fromCoord')[1] + '&DEST-X=' + this.get('toCoord')[0] + '&DEST-Y=' + this.get('toCoord')[1] + '&USETRAFFIC=TRUE';
+            /* Erwartete Übergabeparameter: 
+            *  routingtime [hh:mm]
+            *  routingdate [yyyy-mm-dd]
+            */
+            if (this.get('routingtime') != '' && this.get('routingdate')!= '') {
+                var timeoffset = (new Date().getTimezoneOffset()/60).toString().substr(0, 1) + '0' + (new Date().getTimezoneOffset()/60).toString().substr(1, 1);
+                var splitter = this.get('routingtime').split(':');
+                var utcHour = (parseFloat(splitter[0]) + new Date().getTimezoneOffset()/60).toString();
+                var utcMinute = parseFloat(splitter[1]);
+                request = request + '&STARTTIME=' + this.get('routingdate') + ' ' + utcHour + ':' + utcMinute + ' ' + timeoffset + '00';
+            }
             $('#loader').show();
             $.ajax({
                 url: this.get('proxyPrefix') + encodeURIComponent(request),
@@ -37,16 +66,30 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
-                    var answer = new ol.format.GeoJSON();
-                    answer.readFeature(data, {
-                        dataProjection: 'EPSG:25832',
-                        featureProjection: 'EPSG:25832'
-                    });                    
-                    console.log(answer);
+                    var geoJsonFormat = new ol.format.GeoJSON();
+                    var olFeature = geoJsonFormat.readFeature(data);
+                    var vectorlayer = new ol.layer.Vector({
+                        source: new ol.source.Vector({                            
+                            features: [olFeature]
+                        }),
+                        style: new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: 'blue',
+                                width: 5
+                            })
+                        })
+                    });
+                    vectorlayer.id = 'route';
+                    this.get('map').addLayer(vectorlayer);
+                    this.set('endDescription', olFeature.get('EndDescription'));
+                    this.set('description', olFeature.get('RouteDescription'));                    
+                    EventBus.trigger('zoomToExtent', olFeature.getGeometry().getExtent());
                 },
                 error: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
-                    alert('Fehlermeldung beim Laden der Route: \n' + data.responseText);
+                    this.set('description', '');
+                    this.set('endDescription', '');
+                    alert('Fehlermeldung beim Laden der Route: \n' + data.responseText);                    
                 }
             });
         },
@@ -185,23 +228,21 @@ define([
                                 this.set('fromCoord', '');
                                 this.set('fromHausnummer', '');
                                 $('#startAdresse').focus();
+                                _.each(streetNames, function (strasse, index, list) {
+                                    $("#input-group-start ul").append('<li id="' + strasse.name + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + strasse.glyphicon + '"></span><span>' +  strasse.name + '</span><small>' + strasse.type + '</small></li>');                                    
+                                });
+                                $("#input-group-start ul").show();
                             }
                             else {
                                 this.set('toStrassenname', '');
                                 this.set('toCoord', '');
                                 this.set('toHausnummer', '');
                                 $('#zielAdresse').focus();
-                            }
-                            _.each(streetNames, function (strasse, index, list) {
-                                if (target == 'start') {
-                                    $("#input-group-start ul").append('<li id="' + strasse.name + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + strasse.glyphicon + '"></span><span>' +  strasse.name + '</span><small>' + strasse.type + '</small></li>');
-                                    $("#input-group-start ul").show();
-                                }
-                                else {
-                                    $("#input-group-ziel ul").append('<li id="' + strasse.name + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + strasse.glyphicon + '"></span><span>' +  strasse.name + '</span><small>' + strasse.type + '</small></li>');
-                                    $("#input-group-ziel ul").show();
-                                }
-                            });
+                                _.each(streetNames, function (strasse, index, list) {
+                                    $("#input-group-ziel ul").append('<li id="' + strasse.name + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + strasse.glyphicon + '"></span><span>' +  strasse.name + '</span><small>' + strasse.type + '</small></li>');                                        
+                                });
+                                $("#input-group-ziel ul").show();
+                            }                            
                         }                        
                     }
                     catch (error) {
@@ -280,7 +321,7 @@ define([
                         var houseNumber = _.find(houseNumbers, function (number) {
                             return number.name == streetName + ' ' + hausnummer;
                         });
-                        if (houseNumber) {      
+                        if (houseNumber) {
                             if (target == 'start') {
                                 this.set('fromHausnummer', houseNumber.name);
                                 this.set('fromCoord', houseNumber.coordinate);
@@ -311,16 +352,18 @@ define([
                             }
                         }
                         if (openList === true) {
-                            _.each(houseNumbers, function (housenumber, index, list) {
-                                if (target == 'start') {
-                                    $("#input-group-start ul").append('<li id="' + housenumber.name + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');
-                                    $("#input-group-start ul").show();
-                                }
-                                else {
-                                    $("#input-group-ziel ul").append('<li id="' + housenumber.name + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');
-                                    $("#input-group-ziel ul").show();
-                                }
-                            });
+                            if (target == 'start') {
+                                _.each(houseNumbers, function (housenumber, index, list) {
+                                    $("#input-group-start ul").append('<li id="' + housenumber.name + '" class="list-group-item startAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');                                    
+                                });
+                                $("#input-group-start ul").show();
+                            }
+                            else {
+                                _.each(houseNumbers, function (housenumber, index, list) {
+                                    $("#input-group-ziel ul").append('<li id="' + housenumber.name + '" class="list-group-item zielAdresseSelected"><span class="glyphicon ' + housenumber.glyphicon + '"></span><span>' +  housenumber.name + '</span><small>' + housenumber.type + '</small></li>');                                    
+                                });
+                                $("#input-group-ziel ul").show();
+                            }
                         }
                     }
                     catch (error) {
