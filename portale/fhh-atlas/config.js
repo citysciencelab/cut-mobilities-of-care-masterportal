@@ -10,7 +10,7 @@ define(function () {
             resolution: 5.2916638091682096,
             scale: 20000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + '../diensteapiFHHNET_16012015.json',
+        layerConf: locations.baseUrl + '../diensteapiFHHNET_07012015.json',
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},

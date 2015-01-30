@@ -171,6 +171,7 @@ html, body {
 #tree{
     border:0;
     overflow:auto;
+    overflow-x: hidden;
 }
 .legendbody{
     overflow:auto;

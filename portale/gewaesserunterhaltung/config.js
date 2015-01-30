@@ -57,21 +57,21 @@ define(function () {
         layerIDs: [
 			{id: '453', visible: true},
             {id: '452', visible: false},
+            {id: '1119', visible: false},
             {id: '2028', visible: true},
             {id: '2029', visible: false},
             {id: '2030', visible: false},
             {id: '2031', visible: false},
             {id: '2032', visible: false},
-			{id: '2033', visible: false},
-			{id: '2034', visible: false},
-			{id: '2035', visible: false},
-			{id: '2036', visible: false},
-			{id: '2037', visible: false},
+			// {id: '2033', visible: false},
+			// {id: '2034', visible: false},
+			// {id: '2035', visible: false},
+			// {id: '2036', visible: false},
+			// {id: '2037', visible: false},
 			{id: '2038', visible: false},
 			{id: '2039', visible: false},
 			{id: '2040', visible: false},
 			{id: '2041', visible: false}
-
         ],
         /**
         * @memberof config
@@ -175,7 +175,7 @@ define(function () {
         * @type {Boolean}
         * @desc Beschreibung.
         */
-        poi: true
+        poi: false
     }
 
     return config;

@@ -7124,6 +7124,7 @@
       "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
+      "legendURL": "ignore",
       "datasets" : [
          {
             "md_id" : "D6082285-6CAC-49C5-B7ED-B5A72BC17DEC",
@@ -7154,6 +7155,7 @@
       "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
+      "legendURL": "ignore",
       "datasets" : [
          {
             "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
@@ -25008,7 +25010,7 @@
    },
    {
       "id" : "1119",
-      "name" : "Image",
+      "name" : "DK5 Hamburg",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DK5/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
@@ -25023,6 +25025,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
+      "legendURL": "ignore",
       "datasets" : [
          {
             "md_id" : "2AE6D23E-48A5-4D85-BC0A-160737E0C8D2",

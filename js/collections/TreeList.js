@@ -49,8 +49,6 @@ define([
                     this.remove(model, {silent: true});
                     this.add(model, {at: index + 1});
                 }
-                console.log(this.at(index).get("layerList"));
-                console.log(this);
                 _.each(model.get("layerList"), function (element) {
                     EventBus.trigger("moveLayer", [-this.at(index).get("layerList").length, element.get("layer")]);
                 }, this);
