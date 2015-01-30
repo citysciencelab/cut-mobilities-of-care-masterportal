@@ -77,7 +77,12 @@ define([
                     var dataset = this.get('datasets')[0];
                     this.set('metaID', dataset.md_id);
                     this.set('metaName', dataset.md_name);
-                    this.set('kategorieOpendata', dataset.kategorie_opendata);
+                    if (dataset.kategorie_opendata.length > 1) {
+                        this.set('kategorieOpendata', dataset.kategorie_opendata);
+                    }
+                    else {
+                        this.set('kategorieOpendata', dataset.kategorie_opendata[0]);
+                    }
                 }
             }
         },

@@ -132,15 +132,15 @@ define([
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.
          * Das "alte" Model das alle Kategorien enthält wird gelöscht. Damit ist jedes Model einer bestimmten Kategorie zugeordnet.
          */
-        resetModels: function () {
+        resetModels: function () {console.log("reset");
             var modelsByCategory, categoryAttribute;
             switch (Config.tree.orderBy) {
                 case "opendata":
                     // Name für das Model-Attribut für die entsprechende Kategorie
                     categoryAttribute = "kategorieOpendata";
-                    // Alle Models die mehreren Kategorien zugeordnet sind.
+                    // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
                     modelsByCategory = this.filter(function (element) {
-                        return element.get(categoryAttribute).length > 1;
+                        return (typeof element.get(categoryAttribute) === "object");
                     });
             }
             // Iteriert über die Models

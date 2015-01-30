@@ -4,9 +4,9 @@ define([
     'openlayers',
     'config',
     'collections/LayerList_new',
-    // 'collections/TreeList'
+    'collections/TreeList',
     'eventbus'
-    ], function (_, Backbone, ol, Config, LayerList, EventBus) {
+    ], function (_, Backbone, ol, Config, LayerList, TreeList, EventBus) {
 
         var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
         $('#dpidiv').remove();
@@ -75,18 +75,14 @@ define([
 
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
-                if (_.has(Config, "tree")) {console.log(LayerList);
-                _.each(TreeList.pluck("layerList").reverse(), function (layer) {
-
-                    _.each(layer, function (element) {
-                        // console.log(element.get("name"));
-                        // console.log(element.get("kategorieOpendata")[0]);
-                        this.get("map").addLayer(element.get("layer"));
-                    }, this);
-                },this);
+                if (_.has(Config, "tree")) {
+                    _.each(TreeList.pluck("layerList").reverse(), function (layer) {
+                        _.each(layer, function (element) {
+                            this.get("map").addLayer(element.get("layer"));
+                        }, this);
+                    },this);
                 }
                 else {
-                    console.log(LayerList);
                     _.each(LayerList.pluck("layer"), function (layer) {
                         this.get("map").addLayer(layer);
                     }, this);
@@ -187,10 +183,9 @@ define([
         },
         /**
         */
-        moveLayer: function (args) { //console.log(args);
+        moveLayer: function (args) {
             var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
-            console.log(layers);
             index = layers.indexOf(args[1]);
             if (index + args[0] < LayerList.length && index + args[0] >= 0) {
                 layersCollection = this.get('map').getLayers();

@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!templates/TreeNode.html',
-    'views/TreeLayerView'
-    ], function ($, _, Backbone, TreeNodeTemplate, TreeLayerView) {
+    'views/TreeLayerView',
+    'views/TreeChildNodeView',
+    'models/TreeChildNode'
+    ], function ($, _, Backbone, TreeNodeTemplate, TreeLayerView, TreeChildNodeView, TreeChildNode) {
 
         var TreeNodeView = Backbone.View.extend({
             className : 'list-group-item tree-node',
@@ -24,26 +26,27 @@ define([
                 this.$el.html(this.template(attr));
 
                 if (this.model.get("isExpanded") === true) {
-                    _.each(this.model.get("layerList"), function (layer) {
+                    // ChildNodes
+                    _.each(this.model.get("childNodes"), function (childNode) {
+                        var treeChildNodeView = new TreeChildNodeView({model: new TreeChildNode(childNode)});
+                        this.$("ul").append(treeChildNodeView.render().el);
+                    }, this);
+                    // Layer ohne Unterordner
+                    _.each(this.model.get("layerListByTreeNode"), function (layer) {
                         var treeLayerView = new TreeLayerView({model: layer});
-                        // console.log($("#"+this.model.get("id")));
                         this.$("ul").append(treeLayerView.render().el);
-                        // this.$el.addClass("activColor");
                         this.$(".tree-node-parent").addClass("activColor");
                     }, this);
                 }
                 else {
                     this.$(".tree-node-parent").removeClass("activColor");
-                    // this.$el.removeClass("activColor");
                 }
                 return this;
             },
             setExpandToTrue: function () {
-                // console.log("setExpandToTrue");
                 this.model.setExpand(true);
             },
             setExpandToFalse: function () {
-                // console.log("setExpandToFalse");
                 this.model.setExpand(false);
             },
             moveUpInList: function () {
