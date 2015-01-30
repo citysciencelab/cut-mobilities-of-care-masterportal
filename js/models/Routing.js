@@ -34,7 +34,7 @@ define([
         setMap: function (map) {
             this.set('map', map);
         },
-        deleteRoute: function () {
+        deleteRouteFromMap: function () {
             var map = this.get('map');
             _.each(map.getLayers(), function (layer) {
                 if (_.isArray(layer)) {
