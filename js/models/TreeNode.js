@@ -4,8 +4,11 @@ define([
     'eventbus',
     'config',
     'collections/LayerList_new',
+    'views/TreeChildNodeView',
+    'models/TreeChildNode',
+    'views/TreeLayerView',
     'eventbus'
-    ], function (_, Backbone, EventBus, Config, LayerList, EventBus) {
+    ], function (_, Backbone, EventBus, Config, LayerList, TreeChildNodeView, TreeChildNode, TreeLayerView, EventBus) {
 
         var TreeNode = Backbone.Model.extend({
             "defaults": {
@@ -44,12 +47,19 @@ define([
                 var childNodes = [];
                 _.each(moreOftenOneIDs, function (element, index) {
                     var layerModel = _.findWhere(_.pluck(this.get("layerList"), "attributes"), { "metaID": element});
-                    childNodes.push({name: layerModel.metaName, id: element, parentName: this.get("name")});
+                    childNodes.push({name: layerModel.metaName, metaID: element, parentName: this.get("name")});
                 }, this);
                 this.set("childNodes", _.sortBy(childNodes, function (obj) {
                         return obj.name;
                     })
                 );
+
+                var childViews = [];
+                _.each(this.get("childNodes"), function (childNode) {
+                    var treeChildNodeView = new TreeChildNodeView({model: new TreeChildNode(childNode)});
+                    childViews.push(treeChildNodeView);
+                });
+                this.set("childViews", childViews);
             },
             "getLayerListByTreeNode": function () {
                 // Alle Layer die nicht zu einem Unterordner gehören, sprich der Metadaten-ID ist nur einmal vorhanden
@@ -57,9 +67,22 @@ define([
                     return _.contains(this.get("idsForChildNodes"), model.get("metaID"));
                 }, this);
                 this.set("layerListByTreeNode", layerModel);
+
+                var layerViews = [];
+                _.each(this.get("layerListByTreeNode"), function (layerNode) {
+                    layerNode.set("className", "layerByNode");
+                    var treeLayerView = new TreeLayerView({model: layerNode});
+                    layerViews.push(treeLayerView);
+                });
+                this.set("layerViews", layerViews);
             },
-            "setExpand": function (value) {
-                this.set("isExpanded", value);
+            "toggleExpand": function () {
+                if (this.get('isExpanded') === true) {
+                    this.set({'isExpanded': false});
+                }
+                else {
+                    this.set({'isExpanded': true});
+                }
             },
             "moveUpInList": function () {
                 this.collection.moveNodeUp(this);

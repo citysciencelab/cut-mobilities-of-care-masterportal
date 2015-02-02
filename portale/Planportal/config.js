@@ -6,7 +6,7 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET_16012015.json' : '../diensteapiINTERNET_16012015.json'),
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
         layerIDs:
         [
         {id: "453", visible: true},

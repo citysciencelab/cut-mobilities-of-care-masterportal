@@ -7,51 +7,45 @@ define([
     ], function ($, _, Backbone, TreeChildNodeTemplate, TreeLayerView) {
 
         var TreeChildNodeView = Backbone.View.extend({
-            className : 'list-group-item tree-node',
+            className : 'list-group-item node-child',
             tagName: 'li',
             template: _.template(TreeChildNodeTemplate),
             events: {
-                "click .glyphicon-plus-sign, .glyphicon-folder-close": "setExpandToTrue",
-                "click .glyphicon-minus-sign, .glyphicon-folder-open": "setExpandToFalse"
-                // "click .glyphicon-arrow-up": "moveUpInList",
-                // "click .glyphicon-arrow-down": "moveDownInList",
+                "click div > .glyphicon-plus-sign, div > .glyphicon-folder-close, div > .glyphicon-minus-sign, div > .glyphicon-folder-open": "toggleExpand",
+                "click .node-child-content > .folder-name, .folder-icons > .glyphicon-unchecked, .folder-icons > .glyphicon-check": "toggleVisibility"
             },
             initialize: function () {
-                this.listenTo(this.model, "change:isExpanded", this.render);
+                // this.listenTo(this.model, "change:isExpanded change:isVisible", this.render);
             },
             render: function () {
+                this.stopListening();
+                this.listenToOnce(this.model, "change:isExpanded change:isVisible", this.render);
+                this.listenToOnce(this.model, "change:isExpanded change:isVisible", this.rendertwo);
+                this.delegateEvents();
+
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
 
+                return this;
+            },
+            rendertwo: function () {
                 if (this.model.get("isExpanded") === true) {
-var test = [];
-                    _.each(this.model.get("layerList"), function (layer) {
-                        var treeLayerView = new TreeLayerView({model: layer});
-                        this.$el.after(treeLayerView.render().el);
-                        test.push(treeLayerView);
-                        // this.$(".tree-node-parent-test").addClass("activColor");
+                    _.each(this.model.get("layerView"), function (layer) {
+                        this.$el.after(layer.render().el);
                     }, this);
-                    this.model.set("test", test);
                 }
                 else {
-                    _.each(this.model.get("test"), function (layer) {
-                        console.log(layer);
+                    _.each(this.model.get("layerView"), function (layer) {
                         layer.remove();
-                        // var treeLayerView = new TreeLayerView({model: layer});
-                        // this.$el.after(treeLayerView.render().el);
-                        // this.$(".tree-node-parent-test").addClass("activColor");
                     }, this);
                 }
                 return this;
             },
-            test: function (evt) {
-                console.log(evt);
+            toggleVisibility: function () {
+                this.model.toggleVisibility();
             },
-            setExpandToTrue: function () {
-                this.model.setExpand(true);
-            },
-            setExpandToFalse: function () {
-                this.model.setExpand(false);
+            toggleExpand: function () {
+                this.model.toggleExpand();
             }
         });
 
