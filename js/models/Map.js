@@ -72,15 +72,16 @@ define([
                     controls: [],
                     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
                 }));
-
+                // Dieses Attribut brauche ich wirklich für die ScaleLine
+                this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
                 if (_.has(Config, "tree")) {
-                    _.each(TreeList.pluck("layerList").reverse(), function (layer) {
-                        _.each(layer, function (element) {
-                            this.get("map").addLayer(element.get("layer"));
-                        }, this);
-                    },this);
+                _.each(TreeList.pluck("layerList").reverse(), function (layer) {
+                    _.each(layer, function (element) {
+                        this.get("map").addLayer(element.get("layer"));
+                    }, this);
+                },this);
                 }
                 else {
                     _.each(LayerList.pluck("layer"), function (layer) {
