@@ -37845,11 +37845,11 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : {
-          "ROUTE_ID": "ROUTE_ID",
-          "OWK": "OWK",
-          "NAME": "NAME",
-          "GKZ": "GKZ",
-          "WRRL_RELEVANT": "WRRL_RELEVANT"
+         "ROUTE_ID" : "ROUTE_ID",
+         "OWK" : "OWK",
+         "NAME" : "NAME",
+         "GKZ" : "GKZ",
+         "WRRL_RELEVANT" : "WRRL_RELEVANT"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
@@ -37881,11 +37881,11 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : {
-          "ROUTE_ID": "ROUTE_ID",
-          "OWK": "OWK",
-          "NAME": "NAME",
-          "GKZ": "GKZ",
-          "WRRL_RELEVANT": "WRRL_RELEVANT"
+         "ROUTE_ID" : "ROUTE_ID",
+         "OWK" : "OWK",
+         "NAME" : "NAME",
+         "GKZ" : "GKZ",
+         "WRRL_RELEVANT" : "WRRL_RELEVANT"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
@@ -45481,14 +45481,28 @@
    },
    {
       "id" : "2090",
-      "name" : "App:verkehr Dira Zeiten",
+      "name" : "Reisezeiten",
       "url" : "http://geofos/fachdaten_public/services/wfs_bwvi_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_dira_zeiten",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : {
+         "standort" : "Standort",
+         "anzeige1" : "Flughafen Hamburg",
+         "route1" : "Route1",
+         "anzeige2" : "Arenen AS HH-Volkspark",
+         "route2" : "Route2",
+         "anzeige3" : "Hafen AS HH-Waltershof",
+         "route3" : "Route3",
+         "anzeige4" : "AD HH-Nordwest",
+         "route4" : "Route4",
+         "anzeige5" : "AD Buchholzer Dreieck",
+         "route5" : "Route5",
+         "anzeige6" : "AD Horster Dreieck",
+         "route6" : "Route6"
+      },
       "layerAttribution" : "nicht vorhanden",
       "datasets" : []
    }

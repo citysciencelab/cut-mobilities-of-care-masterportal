@@ -10,8 +10,8 @@ define(function () {
         },
         layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         layerIDs: [
-            {id: '453', visible: true},
-            {id: '682', visible: true},
+            {id: '453', visible: false},
+            {id: '682', visible: false},
             {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
             {id: '1210', visible: false},
             {id: '433,434', visible: true},
@@ -34,15 +34,34 @@ define(function () {
              name: 'Verkehrsbelastung auf Autobahnen', visible: false
 
             },
-            {id: '2056', visible: true, style: '2056', clusterDistance: 30, styleField :'kategorie'},
-            {id: '353', visible: true, style: '353', clusterDistance: 30, styleField :'kategorie'},
-            {id: '2059', visible: true, style: '2059', clusterDistance: 30, styleField :'kategorie'},
-            {id: '2057', visible: true, style: '2057', clusterDistance: 30, styleField :'kategorie'},
-            {id: '356', visible: true, style: '356', clusterDistance: 30, styleField :'kategorie'},
-            {id: '2060', visible: true, style: '2060', clusterDistance: 30, styleField :'kategorie'},
-            {id: '2054', visible: true, style: '2054', clusterDistance: 30, styleField :'kategorie'},
-            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie'},
-            {id: '566', visible: true}
+            {id:
+             [
+                 {
+                     id: '729'
+                 },
+                 {
+                     id: '2008'
+                 },
+                 {
+                     id: '552'
+                 },
+                 {
+                     id: '1830'
+                 }
+             ],
+
+             name: 'Mehrere Dienste', visible: true, opacity:"50"
+
+            },
+            {id: '2056', visible: false, style: '2056', clusterDistance: 30, styleField :'kategorie'},
+            {id: '353', visible: false, style: '353', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2059', visible: false, style: '2059', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2057', visible: false, style: '2057', clusterDistance: 30, styleField :'kategorie'},
+            {id: '356', visible: false, style: '356', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2060', visible: false, style: '2060', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2054', visible: false, style: '2054', clusterDistance: 30, styleField :'kategorie'},
+            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', opacity:"70"},
+            {id: '566', visible: false}
         ],
         styleConf: locations.baseUrl  + '../style.json',
         menubar: true,

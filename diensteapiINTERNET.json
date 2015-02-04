@@ -3940,21 +3940,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
          }
       ]
    },
@@ -4029,21 +4014,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
          }
       ]
    },
@@ -4117,21 +4087,6 @@
                "hmbtg",
                "#opendata_hh#",
                "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
             ]
          }
       ]
@@ -4281,21 +4236,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
          }
       ]
    },
@@ -4407,6 +4347,22 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
+         },
+         {
+            "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
          }
       ]
    },
@@ -4446,9 +4402,9 @@
             ]
          },
          {
-            "md_id" : "863BDF95-4F9D-438C-B972-4D7106B0ED3D",
+            "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
             "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg - Flurstücke",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Geographie, Geologie und Geobasisdaten",
@@ -4457,7 +4413,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -4481,6 +4438,22 @@
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
+         {
+            "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten",
+               "Infrastruktur, Bauen und Wohnen",
+               "Transport und Verkehr"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         },
          {
             "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
             "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
@@ -5412,8 +5385,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -5447,8 +5419,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -11301,8 +11272,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -12866,22 +12836,7 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "DDABB1F8-C90D-4849-95EE-18E9F8D6D0FA",
-            "rs_id" : "HMDK#C5FE747D-F3AF-4136-AED7-BBC1237B719D",
-            "md_name" : "ATKIS Digitales Basis Landschaftsmodell Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "797",
@@ -18596,7 +18551,7 @@
    {
       "id" : "948",
       "name" : "Flächen Außerhalb Metropolregion",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "0",
       "format" : "image/png",
@@ -18627,7 +18582,7 @@
    {
       "id" : "949",
       "name" : "Verwaltung Kreise",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
@@ -18658,7 +18613,7 @@
    {
       "id" : "950",
       "name" : "Gewässer",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "2",
       "format" : "image/png",
@@ -18689,7 +18644,7 @@
    {
       "id" : "951",
       "name" : "Verwaltung Kreise Li",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "4",
       "format" : "image/png",
@@ -18720,7 +18675,7 @@
    {
       "id" : "952",
       "name" : "Verwaltung Länder Li",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "5",
       "format" : "image/png",
@@ -18751,7 +18706,7 @@
    {
       "id" : "953",
       "name" : "Ver Bab Neu",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "7",
       "format" : "image/png",
@@ -18782,7 +18737,7 @@
    {
       "id" : "954",
       "name" : "Verkehr Bahn Neu",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "8",
       "format" : "image/png",
@@ -18813,7 +18768,7 @@
    {
       "id" : "955",
       "name" : "Ort G100k",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "10",
       "format" : "image/png",
@@ -18844,7 +18799,7 @@
    {
       "id" : "956",
       "name" : "Ort 50k 100k Kreis",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "11",
       "format" : "image/png",
@@ -18875,7 +18830,7 @@
    {
       "id" : "957",
       "name" : "Ort 50k 100k",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "12",
       "format" : "image/png",
@@ -18906,7 +18861,7 @@
    {
       "id" : "958",
       "name" : "Ort 10k 50k Kreis",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "13",
       "format" : "image/png",
@@ -18937,7 +18892,7 @@
    {
       "id" : "959",
       "name" : "Ort 10k 50k",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Metrokarte.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_MetroKarte",
       "typ" : "WMS",
       "layers" : "14",
       "format" : "image/png",
@@ -21630,9 +21585,7 @@
             "kategorie_opendata" : [
                "Sonstiges"
             ],
-            "filter" : [
-               "inspireidentifiziert"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -23419,7 +23372,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -23523,7 +23477,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -23928,7 +23883,7 @@
          {
             "md_id" : "0C8764FB-12EA-4217-BC54-31252F383FF7",
             "rs_id" : "HMDK#0C8764FB-12EA-4217-BC54-31252F383FF7",
-            "md_name" : "Artenkataster Tiere",
+            "md_name" : "Artenkataster Tiere Hamburg",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -23943,7 +23898,7 @@
    },
    {
       "id" : "1119",
-      "name" : "Image",
+      "name" : "DK5 Hamburg",
       "url" : "http://geodienste-hamburg.de/HH_WMS_DK5",
       "typ" : "WMS",
       "layers" : "1",
@@ -23956,7 +23911,7 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
       "datasets" : [
@@ -24414,16 +24369,16 @@
       "layers" : "0",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24431,8 +24386,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24450,16 +24405,16 @@
       "layers" : "1",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "47247.023810",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24467,8 +24422,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24486,16 +24441,16 @@
       "layers" : "2",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "47247.023810",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24503,8 +24458,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24522,16 +24477,16 @@
       "layers" : "3",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24539,8 +24494,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24558,16 +24513,16 @@
       "layers" : "4",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "47247.023810",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24575,8 +24530,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24594,16 +24549,16 @@
       "layers" : "5",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24611,8 +24566,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24630,16 +24585,16 @@
       "layers" : "6",
       "format" : "image/png",
       "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
+      "singleTile" : "false",
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -24647,8 +24602,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -24787,138 +24742,6 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "1165",
-      "name" : "HH Bundestagswahlkreise",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
-      "typ" : "WMS",
-      "layers" : "1",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
-            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Hamburger Wahlkreise (Bundestags-, Landtags- und Bürgerschaftswahl)",
-            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
-            "kategorie_opendata" : [
-               "Politik und Wahlen"
-            ],
-            "filter" : [
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "1166",
-      "name" : "SH Bundestagswahlkreise",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
-      "typ" : "WMS",
-      "layers" : "2",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
-            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Hamburger Wahlkreise (Bundestags-, Landtags- und Bürgerschaftswahl)",
-            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
-            "kategorie_opendata" : [
-               "Politik und Wahlen"
-            ],
-            "filter" : [
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "1167",
-      "name" : "HH Bürgerschaftswahlkreise",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
-      "typ" : "WMS",
-      "layers" : "4",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
-            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Hamburger Wahlkreise (Bundestags-, Landtags- und Bürgerschaftswahl)",
-            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
-            "kategorie_opendata" : [
-               "Politik und Wahlen"
-            ],
-            "filter" : [
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "1168",
-      "name" : "SH Landtagswahlkreise",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
-      "typ" : "WMS",
-      "layers" : "6",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "false",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
-            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Hamburger Wahlkreise (Bundestags-, Landtags- und Bürgerschaftswahl)",
-            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
-            "kategorie_opendata" : [
-               "Politik und Wahlen"
-            ],
-            "filter" : [
                "#opendata_hh#"
             ]
          }
@@ -29829,7 +29652,7 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Hamburger Wahlkreise (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
@@ -29862,7 +29685,7 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Hamburger Wahlkreise (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
@@ -32375,8 +32198,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -32410,8 +32232,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -32445,8 +32266,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -33830,9 +33650,9 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "true",
-      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende A4.pdf",
+      "legendURL" : "http://www.geoportal-hamburg.de/Geoportal/geo-online/img/Legenden/Lapro_Legende.pdf",
       "datasets" : [
          {
             "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
@@ -33840,8 +33660,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -34184,8 +34004,8 @@
       "transparent" : "true",
       "tilesize" : "512",
       "gutter" : "20",
-      "minScale" : "",
-      "maxScale" : "",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "cache" : "",
@@ -34201,7 +34021,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -35270,8 +35091,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -35305,8 +35125,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -35340,8 +35159,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -35375,8 +35193,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -35410,8 +35227,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -35445,8 +35261,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -36521,7 +36336,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -36973,7 +36789,7 @@
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "1",
-      "format" : "",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -36981,8 +36797,11 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "BEZIRK_NR" : "BEZIRK_NR",
+         "BEZIRK" : "BEZIRK"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -36992,12 +36811,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37007,7 +36823,7 @@
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "2",
-      "format" : "",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37015,8 +36831,14 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "WBV_NR" : "WBV_NR",
+         "WBV_NAME" : "WBV_NAME",
+         "INFO" : "INFO",
+         "RECHTSGRUNDLAGE" : "RECHTSGRUNDLAGE",
+         "STAND" : "STAND"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37026,12 +36848,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37041,7 +36860,7 @@
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "4",
-      "format" : "",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37049,8 +36868,28 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "ID_SCHUTZGEBIET_TF" : "ID_SCHUTZGEBIET_TF",
+         "INT_GEBIETSNUMMER" : "INT_GEBIETSNUMMER",
+         "GEBIETSNUMMER" : "GEBIETSNUMMER",
+         "SCHUTZZONE" : "SCHUTZZONE",
+         "SCHUTZSTATUS" : "SCHUTZSTATUS",
+         "RECHTSGRUNDLAGE" : "RECHTSGRUNDLAGE",
+         "VERORDNUNG" : "VERORDNUNG",
+         "HEKTAR" : "HEKTAR",
+         "RECHTSWERT" : "RECHTSWERT",
+         "HOCHWERT" : "HOCHWERT",
+         "GEBIETSNAME" : "GEBIETSNAME",
+         "ERFASSUNGSGRUNDLAGE" : "ERFASSUNGSGRUNDLAGE",
+         "INFO_KONTAKT" : "INFO_KONTAKT",
+         "URL_RECHTSGRUNDLAGE" : "URL_RECHTSGRUNDLAGE",
+         "FOTOGRAF" : "FOTOGRAF",
+         "LINK_BILD" : "LINK_BILD",
+         "LINK_INFO" : "LINK_INFO",
+         "FEATURE_TEXT" : "FEATURE_TEXT",
+         "STAND_BEARBEITUNG" : "STAND_BEARBEITUNG"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37060,12 +36899,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37075,7 +36911,7 @@
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "5",
-      "format" : "",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37083,8 +36919,22 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "GEBIETSNAME" : "GEBIETSNAME",
+         "GEBIETSNUMMER" : "GEBIETSNUMMER",
+         "RECHTSGRUNDLAGE" : "RECHTSGRUNDLAGE",
+         "SCHUTZZONE" : "SCHUTZZONE",
+         "ERFASSUNGSGRUNDLAGE" : "ERFASSUNGSGRUNDLAGE",
+         "INFO_KONTAKT" : "INFO_KONTAKT",
+         "FOTOGRAF" : "FOTOGRAF",
+         "LINK_BILD" : "LINK_BILD",
+         "LINK_INFO" : "LINK_INFO",
+         "FEATURE_TEXT" : "FEATURE_TEXT",
+         "HEKTAR" : "HEKTAR",
+         "WRRL_RELEVANT" : "WRRL_RELEVANT",
+         "AUSWEISUNG_SEIT" : "AUSWEISUNG_SEIT"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37094,12 +36944,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37109,7 +36956,7 @@
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "6",
-      "format" : "",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37117,8 +36964,22 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "GEBIETSNAME" : "GEBIETSNAME",
+         "GEBIETSNUMMER" : "GEBIETSNUMMER",
+         "RECHTSGRUNDLAGE" : "RECHTSGRUNDLAGE",
+         "SCHUTZZONE" : "SCHUTZZONE",
+         "ERFASSUNGSGRUNDLAGE" : "ERFASSUNGSGRUNDLAGE",
+         "INFO_KONTAKT" : "INFO_KONTAKT",
+         "FOTOGRAF" : "FOTOGRAF",
+         "LINK_BILD" : "LINK_BILD",
+         "LINK_INFO" : "LINK_INFO",
+         "FEATURE_TEXT" : "FEATURE_TEXT",
+         "HEKTAR" : "HEKTAR",
+         "WRRL_RELEVANT" : "WRRL_RELEVANT",
+         "AUSWEISUNG_SEIT" : "AUSWEISUNG_SEIT"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37128,182 +36989,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "2033",
-      "name" : "Flächenhafte §30 Biotope (Vollständig Geschützt)",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
-      "typ" : "WMS",
-      "layers" : "8",
-      "format" : "",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
-      "cache" : "",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
-            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
-            "md_name" : "Gewässerunterhaltung",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "2034",
-      "name" : "Flächenhafte §30 Biotope (Teilweise Geschützt)",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
-      "typ" : "WMS",
-      "layers" : "9",
-      "format" : "",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
-      "cache" : "",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
-            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
-            "md_name" : "Gewässerunterhaltung",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "2035",
-      "name" : "Linienhafte §30 Biotope (Vollständig Geschützt)",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
-      "typ" : "WMS",
-      "layers" : "10",
-      "format" : "",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
-      "cache" : "",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
-            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
-            "md_name" : "Gewässerunterhaltung",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "2036",
-      "name" : "Linienhafte §30 Biotope (Teilweise Geschützt)",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
-      "typ" : "WMS",
-      "layers" : "11",
-      "format" : "",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
-      "cache" : "",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
-            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
-            "md_name" : "Gewässerunterhaltung",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
-         }
-      ]
-   },
-   {
-      "id" : "2037",
-      "name" : "Punktförmige §30 Biotope",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
-      "typ" : "WMS",
-      "layers" : "12",
-      "format" : "",
-      "version" : "1.3.0",
-      "singleTile" : "false",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
-      "cache" : "",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "72C3C8A3-6F6B-48A1-A5C2-2191D4D13196",
-            "rs_id" : "HMDK#36a26ff7-e2fe-4d3e-9853-666b5b6726ca",
-            "md_name" : "Gewässerunterhaltung",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37312,8 +37000,8 @@
       "name" : "Einzelbiotope Artenschutzprogramm",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
-      "layers" : "13",
-      "format" : "",
+      "layers" : "7",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37321,8 +37009,12 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "OS" : "OS",
+         "BEZEICHNUNG" : "BEZEICHNUNG",
+         "STAND_BEARBEITUNG" : "STAND_BEARBEITUNG"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37332,12 +37024,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37346,8 +37035,8 @@
       "name" : "Gewässerflächen",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
-      "layers" : "15",
-      "format" : "",
+      "layers" : "9",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37355,8 +37044,11 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "GKZ" : "GKZ",
+         "Gewässer_Typ" : "Gewaesser_Typ"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37366,12 +37058,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37380,8 +37069,8 @@
       "name" : "Gewässernetz",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
-      "layers" : "16",
-      "format" : "",
+      "layers" : "10",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37389,8 +37078,14 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "ROUTE_ID" : "ROUTE_ID",
+         "OWK" : "OWK",
+         "NAME" : "NAME",
+         "GKZ" : "GKZ",
+         "WRRL_RELEVANT" : "WRRL_RELEVANT"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37400,12 +37095,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37414,8 +37106,8 @@
       "name" : "Berichtspflichtiges Gewässernetz Gemäss Eg-Wrrl",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
-      "layers" : "17",
-      "format" : "",
+      "layers" : "11",
+      "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : "false",
       "transparent" : "true",
@@ -37423,8 +37115,14 @@
       "gutter" : "0",
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "ROUTE_ID" : "ROUTE_ID",
+         "OWK" : "OWK",
+         "NAME" : "NAME",
+         "GKZ" : "GKZ",
+         "WRRL_RELEVANT" : "WRRL_RELEVANT"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "cache" : "",
       "legendURL" : "",
       "datasets" : [
@@ -37434,12 +37132,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -37817,6 +37512,272 @@
       "cache" : "",
       "legendURL" : "",
       "datasets" : []
+   },
+   {
+      "id" : "2069",
+      "name" : "Hamburg Wahllokale",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2070",
+      "name" : "Hamburg Wahlbezirke",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "283482.142857",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2071",
+      "name" : "Hamburg Bundestagswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "3",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2072",
+      "name" : "Schleswig-Holstein Bundestagswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "4",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2073",
+      "name" : "Hamburg Bezirksversammlungswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "6",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2074",
+      "name" : "Hamburg Bürgerschaftswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "7",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2075",
+      "name" : "Schleswig-Holstein Landtagswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_Wahlkreise",
+      "typ" : "WMS",
+      "layers" : "9",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : "nicht vorhanden",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2084",
+      "name" : "Grundwasser-Messstellen",
+      "url" : "http://hmbtg.geronimus.info/geoserver/ows",
+      "typ" : "WMS",
+      "layers" : "bsu:HmbTG_Grundwasser_Messstellen",
+      "format" : "",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : [
+         {
+            "md_id" : "05375E04-1DC2-4ADA-A08E-B92FC54542BD",
+            "rs_id" : "HMDK#8f91586d-154e-44f7-8eb2-3efcd08d2c20",
+            "md_name" : "Grundwassermessstellen",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "9",
@@ -38266,7 +38227,7 @@
       "featureType" : "bab_vkl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38293,7 +38254,7 @@
       "featureType" : "bikeandride",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38321,7 +38282,7 @@
       "featureType" : "hh_emobility",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : {
          "Strasse" : "Straße",
          "Hausnr" : "Hausnummer",
@@ -38358,7 +38319,7 @@
       "featureType" : "verkehr_baustellen_prod",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38385,7 +38346,7 @@
       "featureType" : "verkehr_behindertenparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38413,7 +38374,7 @@
       "featureType" : "verkehr_kameras",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : {
          "lage" : "Lage",
          "anmerkung" : "Anmerkung",
@@ -38446,7 +38407,7 @@
       "featureType" : "verkehr_motorradparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38474,7 +38435,7 @@
       "featureType" : "verkehr_parkandride",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38502,7 +38463,7 @@
       "featureType" : "verkehr_parkhaeuser",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : {
          "name" : "Name",
          "art" : "Art",
@@ -38539,7 +38500,7 @@
       "featureType" : "verkehr_reisebusparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -39363,8 +39324,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -39745,7 +39705,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -42155,8 +42116,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -42183,8 +42143,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -42211,8 +42170,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -43342,7 +43300,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -43571,8 +43530,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43600,8 +43559,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43629,8 +43588,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43658,8 +43617,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43687,8 +43646,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43716,8 +43675,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43745,8 +43704,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -43774,8 +43733,8 @@
             "md_name" : "Landschaftsprogramm Hamburg",
             "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
             "kategorie_opendata" : [
-               "Umwelt und Klima",
-               "Stadtentwicklung"
+               "Stadtentwicklung",
+               "Umwelt und Klima"
             ],
             "filter" : [
                "hmbtg",
@@ -44629,7 +44588,7 @@
       "featureType" : "vkl_hinweis",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://www.deegree.org/app",
+      "featureNS" : "nicht vorhanden",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : []
@@ -45956,7 +45915,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -46011,7 +45971,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -46066,8 +46027,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46094,8 +46054,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46135,8 +46094,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46202,8 +46160,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46230,8 +46187,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46284,8 +46240,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46312,8 +46267,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46340,8 +46294,7 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46713,12 +46666,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46740,12 +46690,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46767,12 +46714,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46794,12 +46738,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46821,12 +46762,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46848,12 +46786,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46875,12 +46810,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46902,12 +46834,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46929,12 +46858,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46956,12 +46882,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -46983,12 +46906,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -47010,12 +46930,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -47037,12 +46954,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -47064,12 +46978,9 @@
             "md_name" : "Gewässerunterhaltung",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
-               "Umwelt und Klima"
+               "Sonstiges"
             ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#"
-            ]
+            "filter" : []
          }
       ]
    },
@@ -47357,5 +47268,292 @@
             ]
          }
       ]
+   },
+   {
+      "id" : "2076",
+      "name" : "Hamburg Bürgerschaftswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Hamburg_Buergerschaftswahlkreise",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2077",
+      "name" : "Hamburg Wahlbezirke",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Hamburg_Wahlbezirke",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2078",
+      "name" : "Hamburg Wahllokale",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Hamburg_Wahllokale",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2079",
+      "name" : "Schleswig-Holstein Landtagswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Schleswig-Holstein_Landtagswahlkreise",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2080",
+      "name" : "Hamburg Bundestagswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Hamburg_Bundestagswahlkreise",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2081",
+      "name" : "Schleswig-Holstein Bundestagswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Schleswig-Holstein_Bundestagswahlkreise",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2082",
+      "name" : "Hamburg Bezirksversammlungswahlkreise",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "typ" : "WFS",
+      "featureType" : "Hamburg_Bezirksversammlungswahlkreise",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Wahlkreise",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : [
+         {
+            "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
+            "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
+            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
+            "kategorie_opendata" : [
+               "Politik und Wahlen"
+            ],
+            "filter" : [
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2083",
+      "name" : "Grundwasser-Messstellen",
+      "url" : "http://hmbtg.geronimus.info/geoserver/ows",
+      "typ" : "WFS",
+      "featureType" : "HmbTG_Grundwasser_Messstellen",
+      "format" : "",
+      "version" : "1.1.0",
+      "featureNS" : "bsu",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2085",
+      "name" : "Administrative Und Soziale Staatliche Dienste",
+      "url" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A3_6_Versorgungswirtschaft.aspx",
+      "typ" : "WFS",
+      "featureType" : "Administrative_und_soziale_staatliche_Dienste",
+      "format" : "",
+      "version" : "1.1.0",
+      "featureNS" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A3_6_Versorgungswirtschaft.aspx",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2086",
+      "name" : "Hafengebietsgrenzen",
+      "url" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "typ" : "WFS",
+      "featureType" : "Hafengebietsgrenzen",
+      "format" : "",
+      "version" : "1.1.0",
+      "featureNS" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2087",
+      "name" : "Stadtteile",
+      "url" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "typ" : "WFS",
+      "featureType" : "Stadtteile",
+      "format" : "",
+      "version" : "1.1.0",
+      "featureNS" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2088",
+      "name" : "Bezirk",
+      "url" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "typ" : "WFS",
+      "featureType" : "Bezirk",
+      "format" : "",
+      "version" : "1.1.0",
+      "featureNS" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2089",
+      "name" : "Ortsteile",
+      "url" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "typ" : "WFS",
+      "featureType" : "Ortsteile",
+      "format" : "",
+      "version" : "1.1.0",
+      "featureNS" : "http://gateway.hamburg.de/OGCFassade/DE_HH_WFS_INSPIRE_A1_4_Verwaltungseinheiten.aspx",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2090",
+      "name" : "Reisezeiten",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_BWVI_opendata",
+      "typ" : "WFS",
+      "featureType" : "verkehr_dira_zeiten",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.0",
+      "featureNS" : "nicht vorhanden",
+      "gfiAttributes" : {
+         "standort" : "Standort",
+         "anzeige1" : "Flughafen Hamburg",
+         "route1" : "Route1",
+         "anzeige2" : "Arenen AS HH-Volkspark",
+         "route2" : "Route2",
+         "anzeige3" : "Hafen AS HH-Waltershof",
+         "route3" : "Route3",
+         "anzeige4" : "AD HH-Nordwest",
+         "route4" : "Route4",
+         "anzeige5" : "AD Buchholzer Dreieck",
+         "route5" : "Route5",
+         "anzeige6" : "AD Horster Dreieck",
+         "route6" : "Route6"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : []
    }
 ]

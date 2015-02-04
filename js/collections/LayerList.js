@@ -68,7 +68,8 @@ define([
                          displayInTree: layerdef.displayInTree,
                          typ: 'GROUP',
                          defaultVisibility: layerdef.visible,
-                         layerdefinitions: layerdefs
+                         layerdefinitions: layerdefs,
+                         opacity:layerdef.opacity
                     };
                     if (returnValue.layerdefinitions.length > 0) {
                         dienstArray.push(returnValue);

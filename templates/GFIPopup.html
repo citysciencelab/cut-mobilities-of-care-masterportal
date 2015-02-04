@@ -1,12 +1,19 @@
-<div class="closegfi" id="gfiTitle">
-    <div class="close glyphicon glyphicon-remove"></div>
-    <strong><%= gfiTitles[gfiContent.length-gfiCounter] %></strong>
+<div id="gfiTitle">
+    <span class="gfi-title"><%= gfiTitles[gfiContent.length-gfiCounter] %></span>
+    <div style="width=70px; float:right;">
+        <span class="glyphicon glyphicon-minus gfi-toggle"></span>
+        <span class="glyphicon glyphicon-remove gfi-close"></span>
+    </div>
 </div>
 
 <div id="gfiContent">
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
-       _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {%>
+       _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
+            if (_.isObject(value)) {
+                return;
+            }
+    %>
     <tr>
         <% if(key!=='Bild'){%>
         <td>

@@ -24,6 +24,7 @@ define([
             this.set('active', 'gfi');
         },
         activateTool: function () {
+            EventBus.trigger('closeGFIParams', this);
             if (this.get('active') === 'measure') {
                 EventBus.trigger('showMeasureModal');
             }
@@ -32,6 +33,5 @@ define([
             }
         }
     });
-
     return new Tools();
 });

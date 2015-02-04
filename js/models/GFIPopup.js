@@ -18,7 +18,9 @@ define([
             gfiContent: [],
             gfiTitles : [],
             gfiURLs : [],
-            gfiCounter: 0
+            gfiCounter: 0,
+            isCollapsed: false,
+            isVisible: false
         },
         /**
          * Wird aufgerufen wenn das Model erzeugt wird.
@@ -235,7 +237,60 @@ define([
         },
         sendGFIForPrint: function () {
             EventBus.trigger('gfiForPrint', [this.get('gfiContent')[0], this.get('isPopupVisible')]);
-        }
+        },
+        /**
+         * Löscht die Route aus der Karte
+         */
+        clearRoute: function () {
+            var map = this.get('map');
+            if (!map) return;
+            _.each(map.getLayers(), function (layer) {
+                if (_.isArray(layer)) {
+                    _.each(layer, function (childlayer) {
+                        if (childlayer.id && childlayer.id == 'route') {
+                             map.removeLayer(childlayer);
+                        }
+                    });
+                }
+            });
+        },
+        /**
+         * zeigt die Route, die der Button im Feld Value benennt.
+         */
+        showRoute: function (gesuchteRoute) {
+            // erzeuge neue Route
+            var route = _.find(this.get('gfiContent')[0], function (value, key) {
+                if (key == gesuchteRoute) {
+                    return value;
+                }
+            });
+            var newCoord = new Array();
+            for (i=0; i < route.flatCoordinates.length; i = i + 3) {
+                newCoord.push([
+                    route.flatCoordinates[i],
+                    route.flatCoordinates[i+1],
+                    route.flatCoordinates[i+2]
+                ]);
+            }
+            var olFeature = new ol.Feature({
+                geometry : new ol.geom.LineString(newCoord, 'XYZ'),
+                name : gesuchteRoute
+            });
+            var vectorlayer = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [olFeature]
+                }),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'blue',
+                        width: 5
+                    })
+                })
+            });
+            vectorlayer.id = 'route';
+            this.get('map').addLayer(vectorlayer);
+            EventBus.trigger('zoomToExtent', olFeature.getGeometry().getExtent());
+        },
     });
 
     return new GFIPopup();
