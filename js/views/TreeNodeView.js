@@ -2,19 +2,15 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/TreeNode.html',
-    'views/TreeLayerView',
-    'views/TreeChildNodeView',
-    'models/TreeChildNode'
-    ], function ($, _, Backbone, TreeNodeTemplate, TreeLayerView, TreeChildNodeView, TreeChildNode) {
+    'text!templates/TreeNode.html'
+    ], function ($, _, Backbone, TreeNodeTemplate) {
 
         var TreeNodeView = Backbone.View.extend({
-            className : 'list-group-item tree-node',
+            className : 'list-group-item node',
             tagName: 'li',
             template: _.template(TreeNodeTemplate),
             events: {
-                "click .glyphicon-plus-sign, .glyphicon-folder-close": "setExpandToTrue",
-                "click .glyphicon-minus-sign, .glyphicon-folder-open": "setExpandToFalse",
+                "click .node-content > .folder-icons, .node-content > .folder-name": "toggleExpand",
                 "click .glyphicon-arrow-up": "moveUpInList",
                 "click .glyphicon-arrow-down": "moveDownInList"
             },
@@ -27,27 +23,29 @@ define([
 
                 if (this.model.get("isExpanded") === true) {
                     // ChildNodes
-                    _.each(this.model.get("childNodes"), function (childNode) {
-                        var treeChildNodeView = new TreeChildNodeView({model: new TreeChildNode(childNode)});
-                        this.$("ul").append(treeChildNodeView.render().el);
+                    _.each(this.model.get("childViews"), function (childNode) {
+                        this.$(".tree-node-children").append(childNode.render().el);
+                        childNode.$el.append(childNode.rendertwo().el);
                     }, this);
                     // Layer ohne Unterordner
-                    _.each(this.model.get("layerListByTreeNode"), function (layer) {
-                        var treeLayerView = new TreeLayerView({model: layer});
-                        this.$("ul").append(treeLayerView.render().el);
-                        this.$(".tree-node-parent").addClass("activColor");
+                    _.each(this.model.get("layerViews"), function (layer) {
+                        // Ich bin ein Layer direkt unter der Kategorie, also ohne Unterordner
+                        // wird für das Styling gebraucht.
+                        this.$(".tree-node-children").append(layer.render().el);
                     }, this);
                 }
                 else {
-                    this.$(".tree-node-parent").removeClass("activColor");
+                    _.each(this.model.get("childViews"), function (layer) {
+                        layer.remove();
+                    }, this);
+                    _.each(this.model.get("layerViews"), function (layer) {
+                        layer.remove();
+                    });
                 }
                 return this;
             },
-            setExpandToTrue: function () {
-                this.model.setExpand(true);
-            },
-            setExpandToFalse: function () {
-                this.model.setExpand(false);
+            toggleExpand: function () {
+                this.model.toggleExpand();
             },
             moveUpInList: function () {
                 this.model.moveUpInList();
