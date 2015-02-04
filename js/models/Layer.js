@@ -34,7 +34,13 @@ define([
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
             this.get('layer').setVisible(this.get("visibility"));
             this.set('settings', false);
-            this.set('transparence', 0);
+            console.log(this.get('opacity'));
+            if(this.get('opacity')){
+                this.set('transparence', this.get('opacity'));
+            }
+            else{
+                 this.set('transparence', 0);
+            }
             this.updateOpacity();
             // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
             this.setAttributions();
