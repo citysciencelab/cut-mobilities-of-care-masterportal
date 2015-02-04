@@ -47,27 +47,28 @@ define(function () {
         * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
         * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
         * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering. 
+        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
         * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
         * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
         * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
         * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter. 
+        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
         * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
         * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
         * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
         * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
         * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
         * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value 'eventValue' am Layer setzen, um ihn zu übernehmen.
-        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird. 
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval
+        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
+        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
+        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
         * @desc Beschreibung.
         */
         layerIDs: [
             {id: '453', visible: true},
             {id: '452', visible: false},
             {id: '1346', visible: true},
-            {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
+            {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie', opacity:"50"},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id:
@@ -151,7 +152,7 @@ define(function () {
         * @property {Boolean}  treeFilter - Der Filter für die Straßenbäume.
         * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
         * @property {Boolean}  legend - Die Legende
-        * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung. 
+        * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
         */
         menu: {
             viewerName: 'GeoViewer',
@@ -220,13 +221,13 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
         */
         orientation: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
         */
         poi: true
     }
