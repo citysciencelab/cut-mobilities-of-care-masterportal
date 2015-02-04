@@ -27,6 +27,7 @@ define([
             return newLayer;
         },
         parse: function (response) {
+
             /* NOTE
              * die Response beinhaltet die Konfigurationen aus der json.
              * Die config.layerID werden durchlaufen und die passende Konfiguration
@@ -77,6 +78,7 @@ define([
                 //SINGLELAYER
                 else if (_.has(layerdef, 'id') && _.isString(layerdef.id)) {
                     var returnValue = returndienst(response, layerdef, index);
+                    // console.log(returnValue);
                     if (returnValue)
                         dienstArray.push(returnValue);
                     }
@@ -84,9 +86,11 @@ define([
             return dienstArray;
 
             function returndienst (response, layerdef, index) {
+
                 // NOTE falls die ID aus mehreren Layern besteht
                 var layers = layerdef.id.split(',');
                 var dienst = _.findWhere(response, {id: layers[0]});
+                // console.log(dienst.datasets[0].kategorie_opendata);
                 if (layerdef.styles && layerdef.styles != '') {
                     // var uniqueid = layerdef.id + '_' + layerdef.styles;
                     var uniqueid = layers[0] + '_' + layerdef.styles;
@@ -95,6 +99,7 @@ define([
                     // var uniqueid = layerdef.id;
                     var uniqueid = layers[0];
                 }
+                // _.each(dienst.datasets[0].kategorie_opendata)
                 if (dienst) {
                     var layername;
                     if (!_.has(layerdef, 'visible') || layerdef.visible != true) {
@@ -155,11 +160,9 @@ define([
                 async: false,
                 error: function () {
                     alert('Fehler beim Parsen ' + Config.layerConf);
-                },
-                success: function (collection) {
-                    //console.log(collection);
                 }
             });
+            console.log(this);
         },
         /**
          * Gibt alle Sichtbaren Layer zurück.

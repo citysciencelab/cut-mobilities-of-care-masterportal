@@ -510,5 +510,11 @@
         "clusterfillcolor" : "[69, 96, 166, 1]",
         "clusterstrokecolor" : "[240, 240, 240, 1]",
         "clusterstrokewidth" : "3"
+    },
+    {
+        "layerId" : "2090",
+        "subclass" : "Icon",
+        "imagename" : "dira.png",
+        "imagescale" : "0.3"
     }
 ]

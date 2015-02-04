@@ -3,9 +3,8 @@ define([
     'backbone',
     'openlayers',
     'config',
-
     'collections/stylelist',
-    'collections/LayerList'
+    'collections/LayerList_new'
 ], function (_, Backbone, ol, Config, StyleList, Layerlist) {
 
 

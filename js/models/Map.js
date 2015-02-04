@@ -2,10 +2,11 @@ define([
     'underscore',
     'backbone',
     'openlayers',
-    'collections/LayerList',
     'config',
+    'collections/LayerList_new',
+    'collections/TreeList',
     'eventbus'
-    ], function (_, Backbone, ol, LayerList, Config, EventBus) {
+    ], function (_, Backbone, ol, Config, LayerList, TreeList, EventBus) {
 
         var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
         $('#dpidiv').remove();
@@ -59,19 +60,35 @@ define([
                     extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
                     resolution: Config.view.resolution,
                     resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
-                }));                
-                
+                }));
+
                 this.set('map', new ol.Map({
-                    layers: LayerList.pluck('layer'),
+                    // layers: LayerList.pluck('layer'),
+                    // layers: [],
                     logo: null,
-                    renderer: 'canvas',	// 'dom', 'webgl' oder 'canvas'
+                    renderer: 'canvas',    // 'dom', 'webgl' oder 'canvas'
                     target: 'map',
                     view: this.get('view'),
                     controls: [],
                     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
                 }));
-                // Speichere DOTS_PER für ScaleLine
+                // Dieses Attribut brauche ich wirklich für die ScaleLine
                 this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
+                // für den Layerbaum (FHH-Atlas)
+                // switch (Config.tree.orderBy) {
+                if (_.has(Config, "tree")) {
+                _.each(TreeList.pluck("layerList").reverse(), function (layer) {
+                    _.each(layer, function (element) {
+                        this.get("map").addLayer(element.get("layer"));
+                    }, this);
+                },this);
+                }
+                else {
+                    _.each(LayerList.pluck("layer"), function (layer) {
+                        this.get("map").addLayer(layer);
+                    }, this);
+                }
+
                 // View listener
                 this.get('view').on('change:resolution', function () {
                     // NOTE brauche ich wahrscheinlich nicht mehr (sd)
@@ -179,6 +196,7 @@ define([
                 LayerList.remove(model);
                 LayerList.add(model, {at: index + args[0]});
             }
+
         },
         /**
         *

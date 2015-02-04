@@ -8,15 +8,18 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),        
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         layerIDs: [
             {id: '453', visible: false},
             {id: '682', visible: false},
             {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
-
             {id: '1210', visible: false},
+<<<<<<< HEAD
 
             {id: '433,434', visible: false},
+=======
+            {id: '433,434', visible: true},
+>>>>>>> origin/master
             {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
              [

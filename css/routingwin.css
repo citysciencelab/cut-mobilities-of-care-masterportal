@@ -21,3 +21,37 @@
 .routinglocator:hover {
     background-color: #ebebeb;
 }
+.panel-description {
+    overflow: auto;
+    max-height: 1280px;
+}
+@media (min-height:360px){
+    .panel-description {
+        max-height:120px;
+    }
+}
+@media (min-height:540px){
+    .panel-description {
+        max-height:300px;
+    }
+}
+@media (min-height:700px){
+    .panel-description {
+        max-height:460px;
+    }
+}
+@media (min-height: 820px) {
+    .panel-description {
+        max-height:580px;
+    }
+}
+@media (min-height: 1000px) {
+    .panel-description {
+        max-height:750px;
+    }
+}
+@media (min-height: 1100px) {
+    .panel-description {
+        max-height:950px;
+    }
+}

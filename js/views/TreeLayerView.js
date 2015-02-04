@@ -11,9 +11,9 @@ define([
             tagName: 'li',
             template: _.template(TreeLayerTemplate),
             initialize: function () {
-                this.listenTo(this.model, 'change:visibility', this.render);
-                this.listenTo(this.model, 'change:transparence', this.render);
-                this.listenTo(this.model, 'change:settings', this.render);
+                // this.listenTo(this.model, 'change:visibility', this.render);
+                // this.listenTo(this.model, 'change:transparence', this.render);
+                // this.listenTo(this.model, 'change:settings', this.render);
             },
             events: {
                 'click .plus': 'upTransparence',
@@ -48,13 +48,15 @@ define([
                 this.model.toggleSettings();
             },
             render: function () {
-                if (this.model.get('displayInTree') === true) {
-                    var attr = this.model.toJSON();
-                    this.$el.html(this.template(attr));
-                    return this;
-                }else {
-                    return '';
-                }
+                this.stopListening();
+                this.listenToOnce(this.model, 'change:visibility', this.render);
+                this.listenToOnce(this.model, 'change:transparence', this.render);
+                this.listenToOnce(this.model, 'change:settings', this.render);
+                this.delegateEvents();
+                var attr = this.model.toJSON();
+
+                this.$el.html(this.template(attr));
+                return this;
             }
         });
 

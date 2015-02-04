@@ -2,7 +2,7 @@ define([
     'backbone',
     'eventbus',
     'config',
-    'collections/LayerList',
+    'collections/LayerList_new',
 ], function (Backbone, EventBus, Config, LayerList) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
@@ -71,7 +71,7 @@ define([
                 },
                 context: layer,
                 error: function (err) {
-                    alert('Dienst zur Darstellung der Aktualität derzeit gestört.');
+//                    alert('Dienst zur Darstellung der Aktualität derzeit gestört.');
                 }
             });
         }/*,

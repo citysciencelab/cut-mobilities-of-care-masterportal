@@ -2,9 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'collections/LayerList',
+    'collections/LayerList_new',
     'views/LayerView',
-    'eventbus',
     'bootstrap'
 ], function ($, _, Backbone, LayerList, LayerView) {
 

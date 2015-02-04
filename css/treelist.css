@@ -1,13 +1,24 @@
-#tree > li {
-    /*padding: 0;*/
+.node {
+    padding: 0;
 }
 
-.tree-node-parent < li {
-padding: 0;
+.node > div {
+    padding: 15px 8px;
 }
 
-.tree-node-parent {
-    padding: 10px;
+.node-child {
+    border-right: 0;
+    padding: 12px 24px;
+}
+
+.node-child > div {
+    padding-left: 16px;
+    border-left: 1px dashed #232323;
+}
+
+.folder-icons {
+    position: relative;
+    top: -3px;
 }
 
 .folder-icons span {
@@ -16,15 +27,15 @@ padding: 0;
 
 .folder-arrow {
     position: relative;
-    right: -10px;
-    top: -11px;
+    right: -8px;
+    top: -18px;
 }
 
 .folder-arrow span {
     color: #ffffff;
     background-color: #d42132;
     opacity: 0.5;
-    padding: 4px 6px 5px;
+    padding: 3px 5px 4px;
     font-size: 12px;
 }
 
@@ -36,27 +47,46 @@ padding: 0;
 .folder-name {
     padding-left: 4em;
     padding-right: 5em;
-    width: 340px;
+    width: 350px;
     font-size: 12px;
+    cursor: pointer;
 }
 
-.tree-node-children {
+#tree ul {
     padding-left: 0;
-    /*background-color: rgba(212, 33, 50, 0.5);*/
-    background-color: rgba(0, 91, 172, 0.5);
 }
 
-.tree-node-children > li {
-    margin-left: 12px;
-    border-right: 0;
-}
-
-.tree-node-children > li:last-child {
+/*.tree-node-children > li:last-child {
     border-bottom: 0;
+}*/
+
+.children {
+    font-size: 12px;
+    padding-left: 23px;
+}
+
+.layerByNode {
+    font-size: 12px;
+    padding-left: 26px;
+    margin-left: 10px;
+    border-left: 1px dashed #232323;
+}
+
+.layerByChildNode {
+    padding-left: 30px;
+    margin-left: 32px;
+    font-size: 12px;
+    border-left: 1px dashed #cdcdcd;
 }
 
 
-.activColor {
-/*background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);*/
-    background-color: #eee;
+.test2 {
+    border-left: 1px dashed #232323;
+    margin-left: 10px;
+}
+
+.layer-name {
+    padding-left: 2em;
+    padding-right: 4em;
+    width: 300px;
 }

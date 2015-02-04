@@ -11,18 +11,16 @@ define([
      */
     var Layer = Backbone.Model.extend({
 
-        initialize: function (dienst, styles, id, name, displayInTree, opacity) {
-            this.set('id', id);
-            this.set('name', name);
-            this.set('displayInTree', displayInTree);
+        initialize: function () {
+
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             if (this.get('displayInTree') === false) {
                 this.set('gfiAttributes', false)
             }
 
-            // Übernehme Styleattribut, falls vorhanden
-            if (_.isString(styles)) {
-                this.set('styles', styles);
+            // Wenn Visibility nicht gesetzt ist (FHH-Atlas), werden alle Layer standardmäßig ausgeblendet.
+            if (this.get("visibility") === undefined) {
+                this.set('visibility', false);
             }
 
             EventBus.on('getBackboneLayerForAttribution', function() {
@@ -34,17 +32,21 @@ define([
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
-            this.get('layer').setVisible(false);
-            this.set('visibility', false);
+            this.get('layer').setVisible(this.get("visibility"));
             this.set('settings', false);
-            this.set('transparence', opacity);
+            this.set('transparence', 0);
             this.updateOpacity();
             // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
             this.setAttributions();
             this.unset('datasets');
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
-            this.get('layer').id = id;
+            this.get('layer').id = this.get("id");
+
+            if(this.get("typ") === "WFS" && this.get("visibility") === true) {
+                this.updateData();
+            }
+
         },
         // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -75,7 +77,12 @@ define([
                     var dataset = this.get('datasets')[0];
                     this.set('metaID', dataset.md_id);
                     this.set('metaName', dataset.md_name);
-                    this.set('kategorieOpendata', dataset.kategorie_opendata);
+                    if (dataset.kategorie_opendata.length > 1) {
+                        this.set('kategorieOpendata', dataset.kategorie_opendata);
+                    }
+                    else {
+                        this.set('kategorieOpendata', dataset.kategorie_opendata[0]);
+                    }
                 }
             }
         },

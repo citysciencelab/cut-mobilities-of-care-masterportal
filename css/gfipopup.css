@@ -1,9 +1,11 @@
 #gfiTitle {
-    padding: 10px;
-    font-size: 13px;
-    background-color: rgba(0, 0, 0, 0.3);
-    clear: both;
-    color: #fff;
+    padding: 3px;
+    font-size: 14px;
+    background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    height: 34px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    min-width: 270px;
 }
 
 #gfiContent {
@@ -20,23 +22,11 @@
     .popover {
         white-space: normal;
     }
-    .close {
-        color: rgb(119, 119, 119);
-        font-size: 24px;
-        opacity: 1;
-        top: -2px;
-    }
 }
 
 @media (min-width: 768px) {
     .popover {
         white-space: nowrap;
-    }
-    .close {
-        color: rgb(119, 119, 119);
-        font-size: 24px;
-        opacity: 1;
-        top: -2px;
     }
 }
 
@@ -72,4 +62,52 @@
 
 .table {
     margin-bottom: 4px !important;
+}
+
+.popover-min {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    position: fixed;
+    left: 63px;
+    top: 100px;
+    box-shadow: 2px 2px 2px 0px #666666;
+    color: #fff;
+    background-color: #d42132;
+    cursor: pointer;
+    border-radius: 8px !important;
+    height: 30px;
+    width: 140px;
+}
+
+/* Die Überschrift für das Fenster */
+.gfi-title {
+    float: left;
+    padding: 5px;
+}
+
+/* Das Glyphicon für das Minimieren */
+.gfi-toggle {
+    float: left;
+    padding: 10px 12px;
+    width: 50%;
+    cursor: pointer;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+/* Das Glyphicon für das Schließen*/
+.gfi-close {
+    float: right;
+    width: 50%;
+    padding: 10px 12px;
+    cursor: pointer;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.gfi-icon-min {
+    float: left;
+    font-size: 16px;
+    padding: 7px;
+}
+
+.popovermintext{
+    vertical-align: -moz-middle-with-baseline;
 }
