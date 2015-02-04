@@ -39,7 +39,7 @@ define([
                     /* TODO:
                     Mit ol3-debug kann setAttributions() verwendet werden, mit ol3 nur .attributions =
                     */
-                    layer.get('layer').getSource().attribution_ = layerattributions;
+                    layer.get('layer').getSource().attributions_ = layerattributions;
                     if (this.get('alreadySet') == false) {
                         this.addAttributionControl();
                     }

@@ -48,7 +48,7 @@ define([
                             return element.localName === "received";
                         });
                         if (node[0]) {
-                            newEventValue = '<strong>Aktualität Verkehrslage:</strong></br><p>' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</p>';
+                            newEventValue = '<strong>Verkehrslage der TBZ:</strong></br><p>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</p>';
                         }
                     }
                     $.ajax({
