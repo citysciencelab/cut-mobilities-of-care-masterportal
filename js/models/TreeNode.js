@@ -56,6 +56,7 @@ define([
 
                 var childViews = [];
                 _.each(this.get("childNodes"), function (childNode) {
+                    // Hier die LayerList setzen für childNode??
                     var treeChildNodeView = new TreeChildNodeView({model: new TreeChildNode(childNode)});
                     childViews.push(treeChildNodeView);
                 });

@@ -43,7 +43,7 @@ define([
                     this.set("isCollapsed", args[1]);
                     this.set("isCurrentWin", args[0]);
                 }
-                else {console.log(false);
+                else {
                     this.set("isCurrentWin", false);
                 }
             },
@@ -138,7 +138,7 @@ define([
                                 pages: [
                             {
                                 center: this.get('currentMapCenter'),
-                                scale:  this.get('currentMapScale'),
+                                scale:  this.get('currentScale'),
                                 dpi: 96,
                                 mapTitle: Config.print.title
                             }

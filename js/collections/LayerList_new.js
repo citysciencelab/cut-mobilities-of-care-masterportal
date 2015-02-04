@@ -50,6 +50,10 @@ define([
                         if (_.has(element, "styles")) {
                             modelsArray[index].styles = element.styles;
                         }
+                        // Transparenz
+                        if (_.has(element, "opacity")) {
+                            modelsArray[index].opacity = element.opacity;
+                        }
                         // default: Layer ist nicht sichtbar
                         if (_.has(element, "visible")) {
                             modelsArray[index].visibility = element.visible;
@@ -126,13 +130,12 @@ define([
                     }
                 }
             });
-            console.log(this);
         },
         /**
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.
          * Das "alte" Model das alle Kategorien enthält wird gelöscht. Damit ist jedes Model einer bestimmten Kategorie zugeordnet.
          */
-        resetModels: function () {console.log("reset");
+        resetModels: function () {
             var modelsByCategory, categoryAttribute;
             switch (Config.tree.orderBy) {
                 case "opendata":

@@ -20,7 +20,6 @@ define([
             render: function () {
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
-
                 if (this.model.get("isExpanded") === true) {
                     // ChildNodes
                     _.each(this.model.get("childViews"), function (childNode) {
@@ -47,7 +46,7 @@ define([
             toggleExpand: function () {
                 this.model.toggleExpand();
             },
-            moveUpInList: function () {
+            moveUpInList: function (evt) {
                 this.model.moveUpInList();
             },
             moveDownInList: function () {
