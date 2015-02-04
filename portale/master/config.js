@@ -43,18 +43,6 @@ define(function () {
         /**
         * @memberof config
         * @type {Object[]}
-<<<<<<< HEAD
-        * @property {String|Array}  id - Beschreibung.
-        * @property {Boolean}  visible - Beschreibung.
-        * @property {String|Array}  style - Beschreibung.
-        * @property {Number}  clusterDistance - Beschreibung.
-        * @property {String}  searchField - Beschreibung.
-        * @property {String}  mouseHoverField - Beschreibung.
-        * @property {Object[]}  filterOptions - Beschreibung.
-        * @property {String}  filterOptions.fieldName - Beschreibung.
-        * @property {String}  styleLabelField - Beschreibung.
-        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-=======
         * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
         * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
         * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
@@ -72,8 +60,8 @@ define(function () {
         * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
         * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value 'eventValue' am Layer setzen, um ihn zu übernehmen.
         * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval
->>>>>>> origin/master
+        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
+        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
         * @desc Beschreibung.
         */
         layerIDs: [
