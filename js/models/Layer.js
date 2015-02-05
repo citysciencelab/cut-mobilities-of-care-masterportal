@@ -36,7 +36,7 @@ define([
             this.set('settings', false);
 
             if(this.get('opacity')){
-                this.set('transparence', this.get('opacity'));
+                this.set('transparence', parseInt(this.get('opacity'), 10));
             }
             else{
                  this.set('transparence', 0);
