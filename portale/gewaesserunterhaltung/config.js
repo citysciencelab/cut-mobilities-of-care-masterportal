@@ -9,7 +9,7 @@ define(function () {
         * @type {Boolean}
         * @desc Beschreibung.
         */
-        allowParametricURL: true,
+        allowParametricURL: false,
         /**
         * @memberof config
         * @desc Beschreibung
@@ -58,9 +58,9 @@ define(function () {
 			{id: '453', visible: true},
             {id: '94', visible: false},
             {id: '1119', visible: false},
-            {id: '2028', visible: false, opacity: "50"},
-            {id: '2029', visible: false, opacity: "75"},
-            {id: '2039', visible: false, opacity: "50"},
+            {id: '2028', visible: false, opacity: "40"},
+            {id: '2029', visible: false, opacity: "30"},
+            {id: '2039', visible: false, opacity: "40"},
             {id: '2030', visible: false, opacity: "10"},
             {id: '2031', visible: false, opacity: "10"},
             {id: '2032', visible: false, opacity: "10"},
