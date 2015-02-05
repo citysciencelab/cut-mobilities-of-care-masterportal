@@ -13,35 +13,6 @@ html, body {
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-.scale-line {
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
-    border-radius: 0 5px 0 0 !important;
-    bottom: 0;
-    color: #777;
-    font-weight: bold;
-    left: 0;
-    position: absolute;
-    text-align: center;
-    width: 2.3cm;
-    font-size: 10px;
-    height: 0.7cm;
-}
-
-.scale-line-inner {
-    width: 2cm;
-    height: 0.4cm;
-    margin-left: 0.15cm;
-    margin-top: 0.2cm;
-    border-width: thin;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-}
-
-.scale-line-inner:hover {
-    color: #333;
-}
-
 .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open {
     cursor: pointer;
 }
@@ -69,11 +40,11 @@ html, body {
 
 .navbar {
     min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
-    background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -webkit-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -o-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -ms-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     border-top: 1px solid #e5e5e5;
 }
@@ -235,8 +206,8 @@ html, body {
 }
 
 .glyphicon {
-    vertical-align: sub;
-    top: 0px;
+    vertical-align: baseline;
+    /*top: 0px;*/
 }
 /*
 .list-group-item {

@@ -162,7 +162,6 @@ define([
                     alert('Fehler beim Parsen ' + Config.layerConf);
                 }
             });
-            console.log(this);
         },
         /**
          * Gibt alle Sichtbaren Layer zurück.

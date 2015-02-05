@@ -3,11 +3,14 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'models/ScaleLine'
-], function ($, _, Backbone, EventBus, ScaleLine) {
+    'models/ScaleLine',
+    'text!templates/ScaleLine.html'
+], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate) {
 
     var ScaleLineView = Backbone.View.extend({
         model: ScaleLine,
+        className: 'scale-line',
+        template: _.template(ScaleLineTemplate),
         initialize: function () {
             this.listenTo(this.model, 'change:reflength', this.render);
             EventBus.on('setMap', this.setMap, this);
@@ -18,8 +21,9 @@ define([
             this.model.calculateScale();
         },
         render: function () {
-            this.$el.html('<span title="' + this.model.get('scale') + '">' + this.model.get('reflength') + '</span>');
-            $('#scaleLineInner').html(this.$el);
+            var attr = this.model.toJSON();
+            this.$el.html(this.template(attr));
+            $('body').append(this.$el);
         }
     });
 

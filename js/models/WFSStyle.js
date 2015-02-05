@@ -181,7 +181,7 @@ define([
                 });
             }
             else {
-                console.log('Subclass ' + this.get('subclass') + ' unbekannt.');
+                // console.log('Subclass ' + this.get('subclass') + ' unbekannt.');
                 return;
             }
             var style = [

@@ -1,29 +1,7 @@
-<!-- <div class="<%if (visibility === false) { print('color') }%>">
-    <% if(settings === false) { %>
-        <% if(visibility === true) { %>
-            <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span><small class="layername"><%= name %></small></button>
-        <% } else { %>
-            <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked"></span><small class="layername"><%= name %></small></button>
-        <% } %>
-            <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
-            <button type="button" class="btn-glyphicon info pull-right"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
-    <% } else { %>
-        <button type="button" class="btn-glyphicon"><span><small>Transparenz:</small></span></button>
-        <button type="button" class="btn-glyphicon plus"><span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px"></span></button>
-        <button type="button" class="btn-glyphicon"><span class="badge" style="margin-left: 5px; margin-right: 5px;"><%= transparence + '%'%></span></button>
-        <button type="button" class="btn-glyphicon minus"><span class="glyphicon glyphicon-minus-sign"></span></button>
-        <button type="button" class="btn-glyphicon down"><span style="margin-left: 25px;" class="glyphicon glyphicon-arrow-down"></span></button>
-        <button type="button" class="btn-glyphicon up"><span class="glyphicon glyphicon-arrow-up"></span></button>
-        <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
-    <% } %>
-</div>
-
- -->
-<% if (className === "layerByChildNode") { console.log(className);%>
+<% if (className === "layerByChildNode") { %>
     <div class="test2">
         <% } %>
 <div class="<%= className %> <%if (visibility === false) { print('color') }%>">
-    <% if(settings === false) { %>
         <div class="folder-icons pull-left">
             <% if(visibility === true) { %>
             <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span></button>
@@ -32,19 +10,10 @@
             <% } %>
         </div>
         <div class="pull-right">
-            <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
+            <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog" style="margin-right: 10px;"></span></button>
             <button type="button" class="btn-glyphicon info pull-right"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
         </div>
         <div class="layer-name"><%= name %></div>
-    <% } else { %>
-        <button type="button" class="btn-glyphicon"><span><small>Transparenz:</small></span></button>
-        <button type="button" class="btn-glyphicon plus"><span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px"></span></button>
-        <button type="button" class="btn-glyphicon"><span class="badge" style="margin-left: 5px; margin-right: 5px;"><%= transparence + '%'%></span></button>
-        <button type="button" class="btn-glyphicon minus"><span class="glyphicon glyphicon-minus-sign"></span></button>
-        <button type="button" class="btn-glyphicon down"><span style="margin-left: 25px;" class="glyphicon glyphicon-arrow-down"></span></button>
-        <button type="button" class="btn-glyphicon up"><span class="glyphicon glyphicon-arrow-up"></span></button>
-        <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
-    <% } %>
 </div>
 <% if (className === "layerByChildNode") { %>
 </div>

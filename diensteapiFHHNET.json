@@ -37469,8 +37469,13 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : {
+<<<<<<< HEAD
          "Bezirk_Name" : "Bezirk_Name",
          "Bezirk" : "Bezirk"
+=======
+          "Bezirk_Name": "Bezirk_Name",
+          "Bezirk": "Bezirk"
+>>>>>>> origin/master
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
@@ -37538,25 +37543,25 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : {
-         "ID_SCHUTZGEBIET_TF" : "ID_SCHUTZGEBIET_TF",
-         "INT_GEBIETSNUMMER" : "INT_GEBIETSNUMMER",
-         "GEBIETSNUMMER" : "GEBIETSNUMMER",
-         "SCHUTZZONE" : "SCHUTZZONE",
-         "SCHUTZSTATUS" : "SCHUTZSTATUS",
-         "RECHTSGRUNDLAGE" : "RECHTSGRUNDLAGE",
-         "VERORDNUNG" : "VERORDNUNG",
-         "HEKTAR" : "HEKTAR",
-         "RECHTSWERT" : "RECHTSWERT",
-         "HOCHWERT" : "HOCHWERT",
-         "GEBIETSNAME" : "GEBIETSNAME",
-         "ERFASSUNGSGRUNDLAGE" : "ERFASSUNGSGRUNDLAGE",
-         "INFO_KONTAKT" : "INFO_KONTAKT",
-         "URL_RECHTSGRUNDLAGE" : "URL_RECHTSGRUNDLAGE",
-         "FOTOGRAF" : "FOTOGRAF",
-         "LINK_BILD" : "LINK_BILD",
-         "LINK_INFO" : "LINK_INFO",
-         "FEATURE_TEXT" : "FEATURE_TEXT",
-         "STAND_BEARBEITUNG" : "STAND_BEARBEITUNG"
+          "ID_SCHUTZGEBIET_TF": "ID_SCHUTZGEBIET_TF",
+          "INT_GEBIETSNUMMER": "INT_GEBIETSNUMMER",
+          "GEBIETSNUMMER": "GEBIETSNUMMER",
+          "SCHUTZZONE": "SCHUTZZONE",
+          "SCHUTZSTATUS": "SCHUTZSTATUS",
+          "RECHTSGRUNDLAGE": "RECHTSGRUNDLAGE",
+          "VERORDNUNG": "VERORDNUNG",
+          "HEKTAR": "HEKTAR",
+          "RECHTSWERT": "RECHTSWERT",
+          "HOCHWERT": "HOCHWERT",
+          "GEBIETSNAME": "GEBIETSNAME",
+          "ERFASSUNGSGRUNDLAGE": "ERFASSUNGSGRUNDLAGE",
+          "INFO_KONTAKT": "INFO_KONTAKT",
+          "URL_RECHTSGRUNDLAGE": "URL_RECHTSGRUNDLAGE",
+          "FOTOGRAF": "FOTOGRAF",
+          "LINK_BILD": "LINK_BILD",
+          "LINK_INFO": "LINK_INFO",
+          "FEATURE_TEXT": "FEATURE_TEXT",
+          "STAND_BEARBEITUNG": "STAND_BEARBEITUNG"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
