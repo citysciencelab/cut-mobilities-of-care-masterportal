@@ -126,7 +126,6 @@ define([
                     }
                 }
             });
-            console.log(this);
         },
         /**
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.

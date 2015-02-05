@@ -50,7 +50,9 @@ define([
             var overlay = this.model.get('gfiOverlay');
             if (overlay.getPosition() == undefined) {
                 overlay.setPosition(this.model.get('coordinate'));
-                $('#popovermin').remove();
+                $('#popovermin').fadeOut(500, function() {
+                    $('#popovermin').remove();
+                });
             }
             else {
                 overlay.setPosition(undefined);
@@ -59,6 +61,7 @@ define([
                 html += '<span class="popovermintext">Abfrageergebnisse</span>';
                 html += '</div>';
                 $('#map').append(html);
+                $('#popovermin').fadeIn(500);
                 $('#popovermin').click(function () {
                     EventBus.trigger('showGFIParams', this);
                 });

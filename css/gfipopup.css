@@ -76,6 +76,7 @@
     border-radius: 8px !important;
     height: 30px;
     width: 140px;
+    display: none;
 }
 
 /* Die Überschrift für das Fenster */

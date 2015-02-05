@@ -5625,22 +5625,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -5677,22 +5661,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -5714,22 +5682,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
-         {
-            "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
-            "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
-            "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Infrastruktur, Bauen und Wohnen",
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
             "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
@@ -6577,20 +6529,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
-         {
-            "md_id" : "A97BB2BD-52D3-49D6-A2FA-7664350C0E5B",
-            "rs_id" : "HMDK#A97BB2BD-52D3-49D6-A2FA-7664350C0E5B",
-            "md_name" : "Soziale Erhaltungsverordnungen - Gebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "A97BB2BD-52D3-49D6-A2FA-7664350C0E5B",
             "rs_id" : "HMDK#A97BB2BD-52D3-49D6-A2FA-7664350C0E5B",
@@ -20811,20 +20749,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "67611D79-37ED-40DD-B7A2-A54080DB7563",
-            "rs_id" : "HMDK#618950ed-5b69-4ef8-afb1-c55052a84d3f",
-            "md_name" : "Velo- und Freizeitrouten Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -21777,20 +21701,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "67611D79-37ED-40DD-B7A2-A54080DB7563",
-            "rs_id" : "HMDK#618950ed-5b69-4ef8-afb1-c55052a84d3f",
-            "md_name" : "Velo- und Freizeitrouten Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -22220,20 +22130,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "datasets" : [
-         {
-            "md_id" : "67611D79-37ED-40DD-B7A2-A54080DB7563",
-            "rs_id" : "HMDK#618950ed-5b69-4ef8-afb1-c55052a84d3f",
-            "md_name" : "Velo- und Freizeitrouten Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Transport und Verkehr"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "67611D79-37ED-40DD-B7A2-A54080DB7563",
             "rs_id" : "HMDK#618950ed-5b69-4ef8-afb1-c55052a84d3f",
@@ -30642,12 +30538,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -30674,12 +30571,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -37571,8 +37469,8 @@
       "minScale" : "nicht vorhanden",
       "maxScale" : "nicht vorhanden",
       "gfiAttributes" : {
-         "BEZIRK_NR" : "BEZIRK_NR",
-         "BEZIRK" : "BEZIRK"
+         "Bezirk_Name" : "Bezirk_Name",
+         "Bezirk" : "Bezirk"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
@@ -38287,12 +38185,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38319,12 +38218,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38351,12 +38251,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38383,12 +38284,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38415,12 +38317,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38447,12 +38350,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38479,12 +38383,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -38938,7 +38843,7 @@
       "featureType" : "bab_vkl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38965,7 +38870,7 @@
       "featureType" : "bikeandride",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38993,7 +38898,7 @@
       "featureType" : "hh_emobility",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "Strasse" : "Straße",
          "Hausnr" : "Hausnummer",
@@ -39030,7 +38935,7 @@
       "featureType" : "verkehr_baustellen_prod",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -39057,7 +38962,7 @@
       "featureType" : "verkehr_behindertenparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -39085,7 +38990,7 @@
       "featureType" : "verkehr_kameras",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "lage" : "Lage",
          "anmerkung" : "Anmerkung",
@@ -39118,7 +39023,7 @@
       "featureType" : "verkehr_motorradparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -39146,7 +39051,7 @@
       "featureType" : "verkehr_parkandride",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -39174,7 +39079,7 @@
       "featureType" : "verkehr_parkhaeuser",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "name" : "Name",
          "art" : "Art",
@@ -39211,7 +39116,7 @@
       "featureType" : "verkehr_reisebusparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44684,7 +44589,7 @@
       "featureType" : "Gewaesserflaechen",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44732,7 +44637,7 @@
       "featureType" : "berichtspflichtiges_Gewaessernetz_gemaess_EG-WRRL_",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44756,7 +44661,7 @@
       "featureType" : "Bezirke",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44780,7 +44685,7 @@
       "featureType" : "Einzelbiotope_Artenschutzprogramm",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44828,7 +44733,7 @@
       "featureType" : "Fauna-Flora-Habitat_Gebiete",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44876,7 +44781,7 @@
       "featureType" : "Naturschutzgebiete",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44900,7 +44805,7 @@
       "featureType" : "Gewaessernetz",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44924,7 +44829,7 @@
       "featureType" : "EG-Vogelschutzgebiete",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44996,7 +44901,7 @@
       "featureType" : "Wasser-_und_Bodenverbaende",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -45299,12 +45204,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45325,12 +45231,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45351,12 +45258,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45377,12 +45285,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45403,12 +45312,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45429,12 +45339,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45455,12 +45366,13 @@
          {
             "md_id" : "C15E8890-5A9D-4D0B-A502-45780CAE4F02",
             "rs_id" : "HMDK#0d8c5270-f01f-4308-acf4-54c6606ff502",
-            "md_name" : "Wahlkreise von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
+            "md_name" : "Geodaten zu Wahlen von Hamburg und Schleswig-Holstein (Bundestags-, Landtags- und Bürgerschaftswahl)",
             "bbox" : "424737.73,5912895.9,647753.47,6103638.49",
             "kategorie_opendata" : [
                "Politik und Wahlen"
             ],
             "filter" : [
+               "hmbtg",
                "#opendata_hh#"
             ]
          }
@@ -45504,6 +45416,17 @@
          "route6" : "Route6"
       },
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "2E2763A8-E516-47F4-B759-08E20C127EBF",
+            "rs_id" : "HMDK#7e232e90-6ce1-4c9c-a14e-5c706fc0f633",
+            "md_name" : "Aktuelle Reisezeiten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
    }
 ]
