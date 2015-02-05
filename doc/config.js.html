@@ -25,7 +25,7 @@
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-34154461-2']);
       _gaq.push(['_trackPageview']);
-
+    
       (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -44,77 +44,79 @@
   </div>
 </div>
 <div id="wrap" class="clearfix">
-
+    
 <div class="navigation">
 
     <div class="search">
         <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
     </div>
     <ul class="list">
-
+    
         <li class="item" data-name="config">
             <span class="title">
                 <a href="config.html">config</a>
-
+                
                 <span class="static">static</span>
-
+                
             </span>
             <ul class="members itemMembers">
-
+            
             <span class="subtitle">Members</span>
-
+            
                 <li data-name="config.allowParametricURL"><a href="config.html#allowParametricURL">allowParametricURL</a></li>
-
+            
                 <li data-name="config.attributions"><a href="config.html#attributions">attributions</a></li>
-
+            
                 <li data-name="config.isMenubarVisible"><a href="config.html#isMenubarVisible">isMenubarVisible</a></li>
-
+            
                 <li data-name="config.layerConf"><a href="config.html#layerConf">layerConf</a></li>
-
+            
                 <li data-name="config.layerIDs"><a href="config.html#layerIDs">layerIDs</a></li>
-
+            
                 <li data-name="config.menu"><a href="config.html#menu">menu</a></li>
-
+            
                 <li data-name="config.menubar"><a href="config.html#menubar">menubar</a></li>
-
+            
                 <li data-name="config.mouseHover"><a href="config.html#mouseHover">mouseHover</a></li>
-
+            
                 <li data-name="config.orientation"><a href="config.html#orientation">orientation</a></li>
-
+            
                 <li data-name="config.poi"><a href="config.html#poi">poi</a></li>
-
+            
                 <li data-name="config.print"><a href="config.html#print">print</a></li>
-
+            
                 <li data-name="config.proxyURL"><a href="config.html#proxyURL">proxyURL</a></li>
-
+            
+                <li data-name="config.scaleLine"><a href="config.html#scaleLine">scaleLine</a></li>
+            
                 <li data-name="config.searchBar"><a href="config.html#searchBar">searchBar</a></li>
-
+            
                 <li data-name="config.styleConf"><a href="config.html#styleConf">styleConf</a></li>
-
+            
                 <li data-name="config.tools"><a href="config.html#tools">tools</a></li>
-
+            
                 <li data-name="config.view"><a href="config.html#view">view</a></li>
-
+            
             </ul>
             <ul class="typedefs itemMembers">
-
+            
             </ul>
             <ul class="methods itemMembers">
-
+            
             </ul>
             <ul class="events itemMembers">
-
+            
             </ul>
         </li>
-
+    
     </ul>
 </div>
     <div class="main">
         <h1 class="page-title" data-filename="config.js.html">Source: z:/Programme/Apache24/htdocs/master_sd/portale/master/config.js</h1>
+        
 
 
-
-
+    
     <section>
         <article>
             <pre class="prettyprint source"><code>define(function () {
@@ -126,15 +128,15 @@
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
         allowParametricURL: true,
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {Array}  center - Beschreibung.
-        * @property {Number}  resolution - Beschreibung.
-        * @property {Number}  scale - Beschreibung.
+        * @desc Die initiale Zentrums-Koordinate und die Resolution
+        * @property {Array}  center - Die initiale Zentrumskoordinate.
+        * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
+        * @property {Number}  scale - Der initiale Maßstab.
         */
         view: {
             center: [565874, 5934140],
@@ -144,42 +146,53 @@
         /**
         * @memberof config
         * @type {String}
-        * @desc Beschreibung.
+        * @desc Pfad zur DienstAPI.
         */
-        layerConf: locations.master + '/diensteapiFHHNET.json',
+        layerConf: locations.baseUrl  + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
         /**
         * @memberof config
         * @type {String}
-        * @desc Beschreibung.
+        * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
-        styleConf: locations.master + '/style.json',
+        styleConf: locations.baseUrl  + '../style.json',
         /**
         * @memberof config
         * @type {String}
-        * @desc Beschreibung.
+        * @desc Pfad zur Proxy-CGI
         */
         proxyURL: '/cgi-bin/proxy.cgi',
         /**
         * @memberof config
         * @type {Object[]}
-        * @property {String|Array}  id - Beschreibung.
-        * @property {Boolean}  visible - Beschreibung.
-        * @property {String|Array}  style - Beschreibung.
-        * @property {Number}  clusterDistance - Beschreibung.
-        * @property {String}  searchField - Beschreibung.
-        * @property {String}  mouseHoverField - Beschreibung.
-        * @property {Object[]}  filterOptions - Beschreibung.
-        * @property {String}  filterOptions.fieldName - Beschreibung.
-        * @property {String}  styleLabelField - Beschreibung.
+        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
+        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
+        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
+        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
+        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
+        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
+        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
+        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
+        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
+        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
+        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
+        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
+        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
+        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
+        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
+        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value 'eventValue' am Layer setzen, um ihn zu übernehmen.
+        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
+        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
+        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
         * @desc Beschreibung.
         */
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
+            {id: '452', visible: false},
             {id: '1346', visible: true},
-            {id: '358', visible: false, style: ['23','24','25','26','27','28','358_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
+            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', opacity:"40"},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '359', visible: false, style: ['29','30','31','359_cluster'], clusterDistance: 30, styleField :'Kategorie'},
+            {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id:
              [
                  {
@@ -223,33 +236,45 @@
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
         */
         attributions: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Steuert, ob das Porta eine Menüleiste(Navigationsleiste) haben soll oder nicht.
         */
         menubar: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Wenn TRUE, wird in main.js views/ScaleLineView.js geladen. Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze &lt;div id="scaleLine" und &lt;div id="scaleLineInner">&lt;/div>
+        */
+        scaleLine: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Wenn TRUE, wird in main.js views/MouseHoverPopupView.js geladen. Dieses Modul steuert die Darstellung des MouseHovers entsprechend layerIDs{mouseHoverField}
         */
         mouseHover: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Steuert, ob die Menubar initial ausgeklappt ist oder nicht.
         */
         isMenubarVisible: true,
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {Boolean}  searchBar - Beschreibung.
-        * @property {Boolean}  layerTree - Beschreibung.
-        * @property {Boolean}  helpButton - Beschreibung.
+        * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste aktivieren/deaktivieren.
+        * @property {Boolean}  searchBar - Die Suchfunktion.
+        * @property {Boolean}  layerTree - Der Themenbaum
+        * @property {Boolean}  helpButton - Der Hilfe-Button.
+        * @property {Boolean}  contactButton - Der Kontakt-Button.
+        * @property {Boolean}  tools - Die Werkzeuge
+        * @property {Boolean}  treeFilter - Der Filter für die Straßenbäume.
+        * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
+        * @property {Boolean}  legend - Die Legende
+        * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
         */
         menu: {
             viewerName: 'GeoViewer',
@@ -260,18 +285,19 @@
             tools: true,
             treeFilter: true,
             wfsFeatureFilter: true,
-            legend: true
+            legend: true,
+            routing: true
         },
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {String}  placeholder - Beschreibung.
-        * @property {Function}  gazetteerURL - Beschreibung.
+        * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
+        * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
+        * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
             placeholder: "Suche Adresse, B-Plan",
             gazetteerURL: function () {
-                if (window.location.host === "wscd0096" || window.location.host === "wscd0095") {
+                if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&amp;request=GetFeature&amp;version=2.0.0";
                 }
                 else {
@@ -281,26 +307,31 @@
         },
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {String}  url - Beschreibung.
-        * @property {String}  title - Beschreibung.
-        * @property {Boolean}  gfi - Beschreibung.
+        * @desc Konfiguration für den Druckdienst.
+        * @property {String}  url - Die Druckdienst-URL
+        * @property {String}  title - Der Titel erscheint auf dem Ausdruck der Karte.
+        * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: locations.host + ":8680/mapfish_print_2.0/",
+            url: function () {
+                if (locations.fhhnet) {
+                    return locations.host + ":8680/mapfish_print_2.0/";
+                }
+                else {
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
+                }
+            },
             title: 'Master',
             gfi: false
         },
-//        treeFilter: {
-//            layer: '7777',
-//            styleName: 'treefilter',
-//            pathToSLD: 'http://wscd0096/master_sd/xml/treeFilterSLD.xml'
-//        },
         /**
         * @memberof config
-        * @desc Beschreibung
-        * @property {Boolean}  gfi - Beschreibung.
-        * @property {Boolean}  measure - Beschreibung.
+        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
+        * @property {Boolean}  gfi - GetFeatureInfo-Abfrage.
+        * @property {Boolean}  measure - Messen.
+        * @property {Boolean}  print - Drucken.
+        * @property {Boolean}  coord - Koordinaten-Abfrage.
+        * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
             gfi: true,
@@ -312,13 +343,13 @@
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
         */
         orientation: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Beschreibung.
+        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
         */
         poi: true
     }
@@ -340,7 +371,7 @@
         <!-- // disqus code -->
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a> on Mon Jan 12 2015 12:02:43 GMT+0100 (Mitteleuropäische Zeit)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a> on Thu Feb 05 2015 09:47:19 GMT+0100 (Mitteleuropäische Zeit)
         </footer>
     </div>
 </div>
