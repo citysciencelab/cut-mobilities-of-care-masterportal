@@ -31,7 +31,9 @@ define([
             'click .startAdresseChanged' : 'deleteDefaultString',
             'keyup .startAdresseChanged' : 'adresseChanged_keyup',
             'keyup .zielAdresseChanged' : 'adresseChanged_keyup',
-            'click .startAdressePosition' : 'startAdressePosition',
+
+            'click .startAdressePosition' : 'startAdressePosition', //eigene Positionsbestimmung auf aktueller Standpunkt
+
             'click .startAdresseSelected' : 'startAdresseSelected',
             'click .zielAdresseSelected' : 'zielAdresseSelected',
 
@@ -57,9 +59,9 @@ define([
             else {
                 $('#endeDescription').text('');
                 $('#RoutingWin > .panel-switcher').hide('slow');
+                $('#input-group-description').hide('slow');
                 $('#RoutingWin > .panel-route').show('slow');
             }
-            this.toggleLayout();
         },
         toggleLayout: function () {
             if ($('#RoutingWin > .panel-description').is(":visible") == true) {
@@ -123,8 +125,13 @@ define([
         },
         adresseChanged_keyup: function (evt) {
             var value = evt.target.value;
-            if (evt.keyCode === 13) {
+            if (evt.keyCode === 13) { //Enter
                 var openList = false;
+            }
+            else if (evt.keyCode === 40) { //Down
+
+            }
+            else if (evt.keyCode === 38) { //Up
             }
             else {
                 var openList = true;
@@ -174,8 +181,10 @@ define([
                 }
                 else {
                     var localtime = date.toLocaleTimeString().split(':');
-                    var hour = ((parseFloat(localtime[0])<10?'0':'') + parseFloat(localtime[0])).toString();
-                    var minute = ((parseFloat(localtime[1])<10?'0':'') + parseFloat(localtime[1])).toString();
+                    var hourAsFloat = parseFloat(localtime[0].slice(1, localtime[0].length-1));
+                    var minAsFloat = parseFloat(localtime[1].slice(1, localtime[1].length-1));
+                    var hour = ((hourAsFloat<10?'0':'') + hourAsFloat).toString();
+                    var minute = ((minAsFloat<10?'0':'') + minAsFloat).toString();
                     $('#timeButton').val(hour + ':' + minute);
                 }
 

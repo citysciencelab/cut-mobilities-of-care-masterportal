@@ -221,6 +221,7 @@ define([
                                 $('#zielAdresse').val(streetNames[0].name);
                                 $('#zielAdresse').focus();
                             }
+                            this.hausnummernsuche(streetNames[0].name, '', target, true);
                         }
                         else {
                             if (target == 'start') {
