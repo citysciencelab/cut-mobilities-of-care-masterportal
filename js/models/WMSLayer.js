@@ -30,7 +30,8 @@ define([
             var params = {
                 'LAYERS': this.get('layers'),
                 'FORMAT': format,
-                'VERSION': version
+                'VERSION': version,
+                'TRANSPARENT': this.get('transparent')
             }
             if (version === '1.1.1' || version === '1.1.0' || version === '1.0.0') {
                 params = _.extend(params, {

@@ -24859,7 +24859,7 @@
    },
    {
       "id" : "1119",
-      "name" : "DK5 Hamburg",
+      "name" : "Digitale Karte 1: 5000",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DK5/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
