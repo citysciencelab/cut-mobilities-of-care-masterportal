@@ -32,8 +32,7 @@ define([
                 var scale = 'Maßstab = 1: ' + scaleval;
             }
             this.set('scale', scale);
-            console.log(this.get('scale').toString().substr(10));
-            this.set("scaleval", "1: " + scaleval);
+            this.set("scaleval", this.get('scale').toString().substr(10));
             // reflength beziehtr sich auf 2cm lange Linie
             var reflengthval = Math.round(0.02 * scaleval);
             if (reflengthval >= 1000) {
