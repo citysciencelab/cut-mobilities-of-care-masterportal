@@ -64,21 +64,6 @@
     margin-bottom: 4px !important;
 }
 
-.popover-min {
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    position: fixed;
-    left: 63px;
-    top: 100px;
-    box-shadow: 2px 2px 2px 0px #666666;
-    color: #fff;
-    background-color: #d42132;
-    cursor: pointer;
-    border-radius: 8px !important;
-    height: 30px;
-    width: 140px;
-    display: none;
-}
-
 /* Die Überschrift für das Fenster */
 .gfi-title {
     float: left;
@@ -103,12 +88,54 @@
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
 }
 
-.gfi-icon-min {
-    float: left;
-    font-size: 16px;
-    padding: 7px;
+@media (max-width: 768px) {
+    .popovermintext{
+        display: none;
+    }
+    .popover-min {
+        font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+        position: fixed;
+        left: 10px;
+        top: 60px;
+        box-shadow: 2px 2px 2px 0px #666666;
+        color: #fff;
+        background-color: #d42132;
+        cursor: pointer;
+        border-radius: 8px !important;
+        height: 40px;
+        width: 40px;
+        display: none;
+    }
+    .gfi-icon-min {
+        font-size: 16px;
+        padding: 10px;
+    }
 }
 
-.popovermintext{
-    vertical-align: -moz-middle-with-baseline;
+@media (min-width: 768px) {
+    .popovermintext{
+        vertical-align: baseline;
+        float: right;
+        padding: 5px;
+        display: block;
+    }
+    .popover-min {
+        font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+        position: fixed;
+        left: 63px;
+        top: 100px;
+        box-shadow: 2px 2px 2px 0px #666666;
+        color: #fff;
+        background-color: #d42132;
+        cursor: pointer;
+        border-radius: 8px !important;
+        height: 30px;
+        width: 140px;
+        display: none;
+    }
+    .gfi-icon-min {
+        float: left;
+        font-size: 16px;
+        padding: 5px;
+    }
 }
