@@ -33,6 +33,7 @@ define(function () {
             legend: true,
             routing: false
         },
+        startUpModul: '',
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {

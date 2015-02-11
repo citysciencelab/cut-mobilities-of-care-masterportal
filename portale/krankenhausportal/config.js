@@ -49,6 +49,7 @@ define(function () {
             legend: false,
             routing: false
         },
+        startUpModul: '',
         searchBar: {
             placeholder: "Suche nach Straße oder Krankenhausname",
             gazetteerURL: function () {

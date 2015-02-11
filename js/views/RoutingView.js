@@ -5,8 +5,9 @@ define([
     'text!templates/RoutingWin.html',
     'models/Routing',
     'eventbus',
+    'config',
     'models/Orientation'
-], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus, map) {
+], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus, Config) {
 
     var RoutingView = Backbone.View.extend({
         model: RoutingModel,
@@ -20,6 +21,9 @@ define([
             this.listenTo(this.model, 'change:description', this.toggleSwitcher);
             EventBus.on('toggleRoutingWin', this.toggleRoutingWin, this);
             EventBus.on('setGeolocation', this.setGeolocation, this);
+            if (Config.startUpModul.toUpperCase() === 'ROUTING') {
+                this.toggleRoutingWin();
+            }
         },
         events: {
             'click .toggleRoutingOptions': 'toggleRoutingOptions',

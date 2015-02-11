@@ -82,6 +82,16 @@ define([
             }
 
             /**
+            * Gibt den Wert für die config-Option isMenubarVisible zurück.
+            * Ist der Parameter 'isMenubarVisible' vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+            *
+            */
+            if (_.has(result, 'startUpModul')) {
+                var value = _.values(_.pick(result, 'startUpModul'))[0].toUpperCase();
+                Config.startUpModul = value;
+            }
+
+            /**
             *
             */
             if (_.has(result, 'bplanfest')) {

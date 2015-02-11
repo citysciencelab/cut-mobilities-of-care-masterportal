@@ -35,6 +35,7 @@ define(function () {
             legend: false,
             routing: false
         },
+        startUpModul: '',
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
             placeholder: "Adresssuche",
