@@ -166,8 +166,19 @@ define([
                             if (_.has(element.attributes, mouseHoverField)) {
                                 value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
                                 if (coord.length == 0) {
-                                    coord.push(element.attributes.geom.getFirstCoordinate()[0]);
-                                    coord.push(element.attributes.geom.getFirstCoordinate()[1]);
+                                    var resolution = this.get('map').getView().getResolution();
+                                    var delta = Math.round(resolution * 39.37 * this.get('map').DOTS_PER_INCH) * 0.002;
+                                    if (element.attributes.geom) {
+                                        coord.push(element.attributes.geom.getFirstCoordinate()[0] + delta);
+                                        coord.push(element.attributes.geom.getFirstCoordinate()[1] - delta);
+                                    }
+                                    else if (element.attributes.the_geom) {
+                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[0] + delta);
+                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[1] - delta);
+                                    }
+                                    else {
+                                        console.error('Unbekanntes Geometrieformat');
+                                    }
                                 }
                             }
                         }

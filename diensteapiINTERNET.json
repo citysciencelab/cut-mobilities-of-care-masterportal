@@ -4492,7 +4492,7 @@
    {
       "id" : "412",
       "name" : "Tn Ax Luftverkehr",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
@@ -4527,7 +4527,7 @@
    {
       "id" : "413",
       "name" : "Bauschutzbereich Paragraph 12 Abs3 S1 Nr1b Luftvg",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "3",
       "format" : "image/png",
@@ -4562,7 +4562,7 @@
    {
       "id" : "414",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "5",
       "format" : "image/png",
@@ -4597,7 +4597,7 @@
    {
       "id" : "415",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "8",
       "format" : "image/png",
@@ -4632,7 +4632,7 @@
    {
       "id" : "416",
       "name" : "Bauschutzbereich Paragraph 12 Abs3 S1 Nr1a Luftvg",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "9",
       "format" : "image/png",
@@ -4667,7 +4667,7 @@
    {
       "id" : "417",
       "name" : "Bauschutzbereich Paragraph 12 Abs2 Luftvg",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "10",
       "format" : "image/png",
@@ -4702,7 +4702,7 @@
    {
       "id" : "418",
       "name" : "Anflugsektoren 8500m Nebenlandeflächen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "12",
       "format" : "image/png",
@@ -4737,7 +4737,7 @@
    {
       "id" : "419",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "14",
       "format" : "image/png",
@@ -4772,7 +4772,7 @@
    {
       "id" : "420",
       "name" : "Anflugsektoren 15km Hauptlandeflächen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "16",
       "format" : "image/png",
@@ -4807,7 +4807,7 @@
    {
       "id" : "421",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "18",
       "format" : "image/png",
@@ -4842,7 +4842,7 @@
    {
       "id" : "422",
       "name" : "Anflugsektoren 10km Hauptlandeflächen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "20",
       "format" : "image/png",
@@ -4877,7 +4877,7 @@
    {
       "id" : "423",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "22",
       "format" : "image/png",
@@ -4912,7 +4912,7 @@
    {
       "id" : "424",
       "name" : "Sicherheitsflächen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "23",
       "format" : "image/png",
@@ -4947,7 +4947,7 @@
    {
       "id" : "425",
       "name" : "Schutzstreifen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "24",
       "format" : "image/png",
@@ -4982,7 +4982,7 @@
    {
       "id" : "426",
       "name" : "Landebahnachsen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "25",
       "format" : "image/png",
@@ -5017,7 +5017,7 @@
    {
       "id" : "427",
       "name" : "Start Landebahnen",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "26",
       "format" : "image/png",
@@ -5052,7 +5052,7 @@
    {
       "id" : "428",
       "name" : "Flughafenpunkte",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "28",
       "format" : "image/png",
@@ -5087,7 +5087,7 @@
    {
       "id" : "429",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "30",
       "format" : "image/png",
@@ -5122,7 +5122,7 @@
    {
       "id" : "430",
       "name" : "Flughafenbezugspunkt",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "32",
       "format" : "image/png",
@@ -5157,7 +5157,7 @@
    {
       "id" : "431",
       "name" : "Annotations",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WMS",
       "layers" : "34",
       "format" : "image/png",
@@ -7914,22 +7914,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "8761AF79-641F-4E64-AE4D-280FAAEF4EC2",
-            "rs_id" : "HMDK#d0361a3c-27ed-4c5a-bcbe-08a4a3793f29",
-            "md_name" : "Naturschutzgebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "543",
@@ -7949,22 +7934,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "8DAF4008-EFB4-46E7-BCB6-2750BF8BC30D",
-            "rs_id" : "HMDK#3a4f2867-2d6e-4377-a891-0d16461adf8f",
-            "md_name" : "Fauna-Flora-Habitat-Gebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "544",
@@ -7984,22 +7954,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "9649E685-6517-4FA2-A7E5-6CE330316D3A",
-            "rs_id" : "HMDK#773cd904-42cf-46cd-b228-464151ef15c1",
-            "md_name" : "Vogelschutzgebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "545",
@@ -8019,22 +7974,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "A779C820-317E-4C95-B57A-81EBF53D7A5C",
-            "rs_id" : "HMDK#9ed43df3-1e53-4d5e-a791-c4abe9ef6a6f",
-            "md_name" : "Ramsargebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "546",
@@ -8054,22 +7994,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "DF29C78E-0058-447F-B9DA-16416FDC7080",
-            "rs_id" : "HMDK#0872b14c-7efb-4d92-b879-d7f21f6b5eba",
-            "md_name" : "Schutzgebiet Nationalpark Hamburgisches Wattenmeer",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "547",
@@ -8089,22 +8014,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "A88ACF70-9173-4E43-8146-3BD5C2449658",
-            "rs_id" : "HMDK#3a4f2867-2d6e-4377-a891-0d16461adf8f",
-            "md_name" : "Biosphärenreservate in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "548",
@@ -8124,22 +8034,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "301ED065-D98B-449C-A15F-FD4846F55366",
-            "rs_id" : "HMDK#0e86b011-39d8-4998-8ba8-eb0bd0aad49d",
-            "md_name" : "Landschaftsschutzgebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "549",
@@ -8159,22 +8054,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "C8018F25-E028-4910-AB91-D55720175045",
-            "rs_id" : "HMDK#bddb58ef-4ca5-4898-bf18-90fd04e70fc4",
-            "md_name" : "Naturdenkmale in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "550",
@@ -8964,22 +8844,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "585",
@@ -8999,22 +8864,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "586",
@@ -9034,22 +8884,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "587",
@@ -9069,22 +8904,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "588",
@@ -9104,22 +8924,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "589",
@@ -9139,22 +8944,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "590",
@@ -9174,22 +8964,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "591",
@@ -9209,22 +8984,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "592",
@@ -9244,22 +9004,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "593",
@@ -9279,22 +9024,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "594",
@@ -9349,22 +9079,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "596",
@@ -9384,22 +9099,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "597",
@@ -9419,22 +9119,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "598",
@@ -9454,22 +9139,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "599",
@@ -9489,22 +9159,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "600",
@@ -9524,22 +9179,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "601",
@@ -11001,7 +10641,7 @@
    {
       "id" : "677",
       "name" : "Rrop Row 2005",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_REGIO.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_REGIO",
       "typ" : "WMS",
       "layers" : "0",
       "format" : "image/png",
@@ -11032,7 +10672,7 @@
    {
       "id" : "678",
       "name" : "Rrop Stade",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_REGIO.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_REGIO",
       "typ" : "WMS",
       "layers" : "1",
       "format" : "image/png",
@@ -11063,7 +10703,7 @@
    {
       "id" : "679",
       "name" : "Rrop Lüneburg",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WMS_REGIO.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WMS_REGIO",
       "typ" : "WMS",
       "layers" : "2",
       "format" : "image/png",
@@ -12089,22 +11729,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "115D8927-A72E-49AE-AA14-10EB634A4101",
-            "rs_id" : "HMDK#9f7bdb42-c0a0-4306-96fc-d2940aa567af",
-            "md_name" : "Bodenkunde-Profile",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "755",
@@ -12124,22 +11749,7 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "F9A55177-B0DC-460B-91E8-DACC206EAA79",
-            "rs_id" : "HMDK#9a8c0797-f37b-44b5-aae0-0634ddfd6c4b",
-            "md_name" : "Bodenkunde-Horizonte",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "756",
@@ -12774,7 +12384,21 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
+            "rs_id" : "HMDK#D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
+            "md_name" : "Digitale Stadtkarte Hamburg",
+            "bbox" : "541991.14,5916243.3,594005.93,5956232.54",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "797",
@@ -18114,7 +17738,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -24527,7 +24152,23 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1160",
@@ -24547,7 +24188,23 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1161",
@@ -24567,7 +24224,23 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1162",
@@ -24587,7 +24260,23 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1163",
@@ -24607,7 +24296,23 @@
       "layerAttribution" : "",
       "cache" : "false",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1164",
@@ -35182,7 +34887,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1919",
@@ -35202,7 +34921,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1920",
@@ -35222,7 +34955,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1921",
@@ -35242,7 +34989,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1922",
@@ -35262,7 +35023,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1923",
@@ -35282,7 +35057,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1924",
@@ -35302,7 +35091,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1925",
@@ -35322,7 +35125,21 @@
       "layerAttribution" : "",
       "cache" : "",
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1926",
@@ -36007,41 +35824,6 @@
       ]
    },
    {
-      "id" : "1948",
-      "name" : "Festgestellte Änderungen Berichtigungen Planfeststellungen",
-      "url" : "http://geodienste-hamburg.de/HH_WMS_FNP",
-      "typ" : "WMS",
-      "layers" : "13",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
-      "cache" : "",
-      "legendURL" : "",
-      "datasets" : [
-         {
-            "md_id" : "DFDA2969-A041-433B-BD65-4CDA9F830A55",
-            "rs_id" : "HMDK#DFDA2969-A041-433B-BD65-4CDA9F830A55",
-            "md_name" : "Flächennutzungsplan Hamburg",
-            "bbox" : "541991.14,5916243.3,592004.48,5956232.48",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
-   },
-   {
       "id" : "1949",
       "name" : "Strassennetz",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Strassennetz",
@@ -36717,7 +36499,7 @@
    },
    {
       "id" : "2029",
-      "name" : "Wasser- Und Bodenverbände",
+      "name" : "Wasser- und Bodenverbände",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "2",
@@ -37001,7 +36783,7 @@
    },
    {
       "id" : "2041",
-      "name" : "Berichtspflichtiges Gewässernetz Gemäss Eg-Wrrl",
+      "name" : "Berichtspflichtiges Gewässernetz gemäss Eg-Wrrl",
       "url" : "http://geodienste-hamburg.de/HH_WMS_Gewaesserunterhaltung",
       "typ" : "WMS",
       "layers" : "11",
@@ -37685,6 +37467,26 @@
       ]
    },
    {
+      "id" : "2092",
+      "name" : "Echtzeitverkehrslage Norddeutschland",
+      "url" : "http://v08.viom-system.de/BWVI_Hamburg_TrafficFlow/BWVI_Hamburg_TrafficFlow.dll",
+      "typ" : "WMS",
+      "layers" : "TrafficFlow",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "ignore",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "legendURL" : "",
+      "datasets" : []
+   },
+   {
       "id" : "9",
       "name" : "App:mrh Ld Energie Windvorrangsfläche",
       "url" : "http://geodienste-hamburg.de/MRH_WFS_Energie",
@@ -38132,7 +37934,7 @@
       "featureType" : "bab_vkl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38159,7 +37961,7 @@
       "featureType" : "bikeandride",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38187,7 +37989,7 @@
       "featureType" : "hh_emobility",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "Strasse" : "Straße",
          "Hausnr" : "Hausnummer",
@@ -38211,7 +38013,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -38224,7 +38027,7 @@
       "featureType" : "verkehr_baustellen_prod",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38251,7 +38054,7 @@
       "featureType" : "verkehr_behindertenparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38279,7 +38082,7 @@
       "featureType" : "verkehr_kameras",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "lage" : "Lage",
          "anmerkung" : "Anmerkung",
@@ -38312,7 +38115,7 @@
       "featureType" : "verkehr_motorradparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38340,7 +38143,7 @@
       "featureType" : "verkehr_parkandride",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -38368,7 +38171,7 @@
       "featureType" : "verkehr_parkhaeuser",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "name" : "Name",
          "art" : "Art",
@@ -38405,7 +38208,7 @@
       "featureType" : "verkehr_reisebusparkpl",
       "format" : "image/png",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44133,7 +43936,8 @@
          "anzahl_planbetten" : "Planbetten",
          "anzahl_teilbehandlung" : "Teilstationäre Behandlungsplätze",
          "teilnahme_notversorgung" : "Not- und Unfallversorgung",
-         "geburtsklinik" : "Geburtsklinik"
+         "geburtsklinik" : "Geburtsklinik",
+         "stand" : "Stand"
       },
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44493,7 +44297,7 @@
       "featureType" : "vkl_hinweis",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : []
@@ -44514,12 +44318,12 @@
    {
       "id" : "1850",
       "name" : "Tsz1 Area",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "TSZ1_area",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44542,12 +44346,12 @@
    {
       "id" : "1851",
       "name" : "Day73 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day73_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44570,12 +44374,12 @@
    {
       "id" : "1852",
       "name" : "Night54 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night54_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44598,12 +44402,12 @@
    {
       "id" : "1853",
       "name" : "Night59 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night59_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44626,12 +44430,12 @@
    {
       "id" : "1854",
       "name" : "Day62 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day62_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44654,12 +44458,12 @@
    {
       "id" : "1855",
       "name" : "Day70 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day70_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44682,12 +44486,12 @@
    {
       "id" : "1856",
       "name" : "Night60 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night60_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44710,12 +44514,12 @@
    {
       "id" : "1857",
       "name" : "Day69 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day69_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44738,12 +44542,12 @@
    {
       "id" : "1858",
       "name" : "Night58 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night58_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44766,12 +44570,12 @@
    {
       "id" : "1859",
       "name" : "Nsz Area",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "NSZ_area",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44794,12 +44598,12 @@
    {
       "id" : "1860",
       "name" : "Day66 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day66_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44822,12 +44626,12 @@
    {
       "id" : "1861",
       "name" : "Night53 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night53_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44850,12 +44654,12 @@
    {
       "id" : "1862",
       "name" : "Day63 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day63_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44878,12 +44682,12 @@
    {
       "id" : "1863",
       "name" : "Day71 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day71_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44906,12 +44710,12 @@
    {
       "id" : "1864",
       "name" : "Night52 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night52_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44934,12 +44738,12 @@
    {
       "id" : "1865",
       "name" : "Night57 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night57_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44962,12 +44766,12 @@
    {
       "id" : "1866",
       "name" : "Day60 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day60_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -44990,12 +44794,12 @@
    {
       "id" : "1867",
       "name" : "Day67 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day67_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45018,12 +44822,12 @@
    {
       "id" : "1868",
       "name" : "Night63 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night63_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45046,12 +44850,12 @@
    {
       "id" : "1869",
       "name" : "Night56 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night56_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45074,12 +44878,12 @@
    {
       "id" : "1870",
       "name" : "Day64 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day64_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45102,12 +44906,12 @@
    {
       "id" : "1871",
       "name" : "Night51 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night51_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45130,12 +44934,12 @@
    {
       "id" : "1872",
       "name" : "Day72 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day72_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45158,12 +44962,12 @@
    {
       "id" : "1873",
       "name" : "Night62 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night62_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45186,12 +44990,12 @@
    {
       "id" : "1874",
       "name" : "Night49 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night49_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45214,12 +45018,12 @@
    {
       "id" : "1875",
       "name" : "Day61 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day61_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45242,12 +45046,12 @@
    {
       "id" : "1876",
       "name" : "Night50 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night50_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45270,12 +45074,12 @@
    {
       "id" : "1877",
       "name" : "Night55 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night55_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45298,12 +45102,12 @@
    {
       "id" : "1878",
       "name" : "Day68 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day68_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45326,12 +45130,12 @@
    {
       "id" : "1879",
       "name" : "Tsz2 Area",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "TSZ2_area",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45354,12 +45158,12 @@
    {
       "id" : "1880",
       "name" : "Day65 Line 6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "day65_line_6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45382,12 +45186,12 @@
    {
       "id" : "1881",
       "name" : "Night61 Line6st",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "typ" : "WFS",
       "featureType" : "night61_line6st",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Fluglaermschutzzonen.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Fluglaermschutzzonen",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -45410,12 +45214,12 @@
    {
       "id" : "1882",
       "name" : "Flughafenbezugspunkt",
-      "url" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Bauschutzbereich_12_LuftVG.aspx",
+      "url" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "typ" : "WFS",
       "featureType" : "Flughafenbezugspunkt",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://gateway.hamburg.de/OGCFassade/HH_WFS_Bauschutzbereich_12_LuftVG.aspx",
+      "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Bauschutzbereich_12_LuftVG",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -47449,7 +47253,7 @@
       "featureType" : "verkehr_dira_zeiten",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "nicht vorhanden",
+      "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : {
          "standort" : "Standort",
          "anzeige1" : "Flughafen Hamburg",

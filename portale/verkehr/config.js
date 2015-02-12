@@ -67,7 +67,8 @@ define(function () {
             {id: '48', visible: false, style: '48', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '50', visible: false, style: '50', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2090', visible: false, style: '2090', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
+            {id: '2090', visible: false, style: '2090', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
+            {id: '2092', visible: false}
         ],
         attributions: true,
         menubar: true,
@@ -86,6 +87,7 @@ define(function () {
             legend: false,
             routing: true
         },
+        startUpModul: '',
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {

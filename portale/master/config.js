@@ -169,6 +169,12 @@ define(function () {
         },
         /**
         * @memberof config
+        * @desc Konfiguration des beim Starten zu ladenden Moduls. Funktioniert derzeit mit wfsFeatureFilter und Routing. Wird auch im parametrisierten Aufruf erkannt.
+        * @property {String}  Name des Moduls.
+        */
+        startUpModul: '',
+        /**
+        * @memberof config
         * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
         * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.

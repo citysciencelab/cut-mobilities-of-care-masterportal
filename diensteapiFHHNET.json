@@ -9407,22 +9407,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "8761AF79-641F-4E64-AE4D-280FAAEF4EC2",
-            "rs_id" : "HMDK#d0361a3c-27ed-4c5a-bcbe-08a4a3793f29",
-            "md_name" : "Naturschutzgebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "543",
@@ -9441,22 +9426,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "8DAF4008-EFB4-46E7-BCB6-2750BF8BC30D",
-            "rs_id" : "HMDK#3a4f2867-2d6e-4377-a891-0d16461adf8f",
-            "md_name" : "Fauna-Flora-Habitat-Gebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "544",
@@ -9475,22 +9445,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "9649E685-6517-4FA2-A7E5-6CE330316D3A",
-            "rs_id" : "HMDK#773cd904-42cf-46cd-b228-464151ef15c1",
-            "md_name" : "Vogelschutzgebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "545",
@@ -9509,22 +9464,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "A779C820-317E-4C95-B57A-81EBF53D7A5C",
-            "rs_id" : "HMDK#9ed43df3-1e53-4d5e-a791-c4abe9ef6a6f",
-            "md_name" : "Ramsargebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "546",
@@ -9543,22 +9483,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "DF29C78E-0058-447F-B9DA-16416FDC7080",
-            "rs_id" : "HMDK#0872b14c-7efb-4d92-b879-d7f21f6b5eba",
-            "md_name" : "Schutzgebiet Nationalpark Hamburgisches Wattenmeer",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "547",
@@ -9577,22 +9502,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "A88ACF70-9173-4E43-8146-3BD5C2449658",
-            "rs_id" : "HMDK#3a4f2867-2d6e-4377-a891-0d16461adf8f",
-            "md_name" : "Biosphärenreservate in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "548",
@@ -9611,22 +9521,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "301ED065-D98B-449C-A15F-FD4846F55366",
-            "rs_id" : "HMDK#0e86b011-39d8-4998-8ba8-eb0bd0aad49d",
-            "md_name" : "Landschaftsschutzgebiete in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "549",
@@ -9645,22 +9540,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "C8018F25-E028-4910-AB91-D55720175045",
-            "rs_id" : "HMDK#bddb58ef-4ca5-4898-bf18-90fd04e70fc4",
-            "md_name" : "Naturdenkmale in Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "550",
@@ -10427,22 +10307,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "585",
@@ -10461,22 +10326,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "586",
@@ -10495,22 +10345,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "587",
@@ -10529,22 +10364,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "588",
@@ -10563,22 +10383,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "589",
@@ -10597,22 +10402,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "590",
@@ -10631,22 +10421,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "591",
@@ -10665,22 +10440,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "592",
@@ -10699,22 +10459,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "593",
@@ -10733,22 +10478,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "594",
@@ -10801,22 +10531,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "596",
@@ -10835,22 +10550,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "597",
@@ -10869,22 +10569,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "598",
@@ -10903,22 +10588,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "599",
@@ -10937,22 +10607,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "600",
@@ -10971,22 +10626,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
-            "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
-            "md_name" : "Straßen HH-SIB",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "601",
@@ -13441,22 +13081,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "115D8927-A72E-49AE-AA14-10EB634A4101",
-            "rs_id" : "HMDK#9f7bdb42-c0a0-4306-96fc-d2940aa567af",
-            "md_name" : "Bodenkunde-Profile",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "755",
@@ -13475,22 +13100,7 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : [
-         {
-            "md_id" : "F9A55177-B0DC-460B-91E8-DACC206EAA79",
-            "rs_id" : "HMDK#9a8c0797-f37b-44b5-aae0-0634ddfd6c4b",
-            "md_name" : "Bodenkunde-Horizonte",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Umwelt und Klima"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
+      "datasets" : []
    },
    {
       "id" : "756",
@@ -14151,7 +13761,21 @@
       "gfiAttributes" : "ignore",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
+            "rs_id" : "HMDK#D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
+            "md_name" : "Digitale Stadtkarte Hamburg",
+            "bbox" : "541991.14,5916243.3,594005.93,5956232.54",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "797",
@@ -19350,7 +18974,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -24859,7 +24484,7 @@
    },
    {
       "id" : "1119",
-      "name" : "Digitale Karte 1: 5000",
+      "name" : "DK5 Hamburg",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DK5/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
@@ -25570,7 +25195,23 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1160",
@@ -25589,7 +25230,23 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1161",
@@ -25608,7 +25265,23 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1162",
@@ -25627,7 +25300,23 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1163",
@@ -25646,7 +25335,23 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "false",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7B8442C9-001F-11D6-814F-00500445A596",
+            "rs_id" : "HMDK#7B8442C9-001F-11D6-814F-00500445A596",
+            "md_name" : "Landschaftsprogramm Hamburg",
+            "bbox" : "543535.01,5905429.39,610512.73,5958190.16",
+            "kategorie_opendata" : [
+               "Stadtentwicklung",
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "1164",
@@ -36106,7 +35811,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1919",
@@ -36125,7 +35844,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1920",
@@ -36144,7 +35877,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1921",
@@ -36163,7 +35910,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1922",
@@ -36182,7 +35943,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1923",
@@ -36201,7 +35976,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1924",
@@ -36220,7 +36009,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1925",
@@ -36239,7 +36042,21 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
+            "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
+            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "1926",
@@ -38362,6 +38179,115 @@
       ]
    },
    {
+      "id" : "2092",
+      "name" : "Echtzeitverkehrslage Norddeutschland",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/BWVI_Hamburg_TrafficFlow",
+      "typ" : "WMS",
+      "layers" : "TrafficFlow",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "ignore",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "2096",
+      "name" : "Sozialmonitoring 2014 (Ganze Statistische Gebiete)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "0",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "2097",
+      "name" : "Sozialmonitoring 2014 (Nur Bewohnte Bereiche)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "2098",
+      "name" : "Statistische Gebiete 2011 (Grenzen)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "2",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : "false",
+      "transparent" : "true",
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "nicht vorhanden",
+      "maxScale" : "nicht vorhanden",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : "",
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
+   },
+   {
       "id" : "9",
       "name" : "App:mrh Ld Energie Windvorrangsfläche",
       "url" : "http://geofos/fachdaten_public/services/wfs_mrh_energie",
@@ -38888,7 +38814,8 @@
             ],
             "filter" : [
                "hmbtg",
-               "#opendata_hh#"
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -43669,7 +43596,8 @@
          "anzahl_planbetten" : "Planbetten",
          "anzahl_teilbehandlung" : "Teilstationäre Behandlungsplätze",
          "teilnahme_notversorgung" : "Not- und Unfallversorgung",
-         "geburtsklinik" : "Geburtsklinik"
+         "geburtsklinik" : "Geburtsklinik",
+         "stand" : "Stand"
       },
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -44861,7 +44789,7 @@
    },
    {
       "id" : "2027",
-      "name" : "Wasser- und Bodenverbände",
+      "name" : "Wasser- Und Bodenverbände",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "typ" : "WFS",
       "featureType" : "Wasser-_und_Bodenverbaende",
@@ -45387,6 +45315,78 @@
             "md_id" : "2E2763A8-E516-47F4-B759-08E20C127EBF",
             "rs_id" : "HMDK#7e232e90-6ce1-4c9c-a14e-5c706fc0f633",
             "md_name" : "Aktuelle Reisezeiten Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "2102",
+      "name" : "Sozialmonitoring 2014  Ganze Statistische Gebiete ",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WFSServer",
+      "typ" : "WFS",
+      "featureType" : "Sozialmonitoring_2014__ganze_Statistische_Gebiete_",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.0",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WFSServer",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "2103",
+      "name" : "Sozialmonitoring 2014  Nur Bewohnte Bereiche ",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WFSServer",
+      "typ" : "WFS",
+      "featureType" : "Sozialmonitoring_2014__nur_bewohnte_Bereiche_",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.0",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WFSServer",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "2104",
+      "name" : "Statistische Gebiete 2011  Grenzen ",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WFSServer",
+      "typ" : "WFS",
+      "featureType" : "Statistische_Gebiete_2011__Grenzen_",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.0",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WFSServer",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Sonstiges"

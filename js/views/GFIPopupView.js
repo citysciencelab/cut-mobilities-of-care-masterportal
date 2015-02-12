@@ -101,6 +101,7 @@ define([
                 'content': this.$el
             });
             this.model.showPopup();
+            EventBus.trigger('closeMouseHoverPopup', this);
             EventBus.trigger('GFIPopupVisibility', true);
         },
         /**

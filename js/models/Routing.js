@@ -35,6 +35,7 @@ define([
             this.set('map', map);
         },
         deleteRouteFromMap: function () {
+            this.removeOverlay();
             var map = this.get('map');
             _.each(map.getLayers(), function (layer) {
                 if (_.isArray(layer)) {
@@ -84,6 +85,7 @@ define([
                     this.set('endDescription', olFeature.get('EndDescription'));
                     this.set('description', olFeature.get('RouteDescription'));
                     EventBus.trigger('zoomToExtent', olFeature.getGeometry().getExtent());
+                    this.addOverlay(olFeature);
                 },
                 error: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
@@ -92,6 +94,22 @@ define([
                     alert('Fehlermeldung beim Laden der Route: \n' + data.responseText);
                 }
             });
+        },
+        removeOverlay: function () {
+            if (this.get('mhpOverlay')) {
+                EventBus.trigger('removeOverlay', this.get('mhpOverlay'));
+            }
+        },
+        addOverlay: function (olFeature) {
+            var html = '<div id="routingoverlay" class="">';
+            html += '<span class="glyphicon glyphicon-flag"></span>'
+            html += '<span>' + olFeature.get('EndDescription').substr(olFeature.get('EndDescription').indexOf('. ') + 1) + '</span>';
+            html += '</div>';
+            $('#map').append(html);
+            this.set('mhpOverlay', new ol.Overlay({ element: $('#routingoverlay')}));
+            var position = olFeature.getGeometry().getLastCoordinate();
+            this.get('mhpOverlay').setPosition([position[0] + 7, position[1] - 7]);
+            EventBus.trigger('addOverlay', this.get('mhpOverlay'));
         },
         search: function (searchString, target, openList) {
             if (searchString.length < 4) {
@@ -221,6 +239,7 @@ define([
                                 $('#zielAdresse').val(streetNames[0].name);
                                 $('#zielAdresse').focus();
                             }
+                            this.hausnummernsuche(streetNames[0].name, '', target, true);
                         }
                         else {
                             if (target == 'start') {

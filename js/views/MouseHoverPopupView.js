@@ -11,6 +11,7 @@ define([
         id: 'mousehoverpopup',
         initialize: function () {
             this.listenTo(this.model, 'change:mhpresult', this.render);
+            EventBus.on('closeMouseHoverPopup', this.destroy, this);
         },
         /**
         * Render merkt sich zunächst den neuen Wert newText, weil this.model mit this.destroy() zerstört wird.
