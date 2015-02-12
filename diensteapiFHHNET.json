@@ -36902,40 +36902,6 @@
       ]
    },
    {
-      "id" : "1948",
-      "name" : "Festgestellte Änderungen Berichtigungen Planfeststellungen",
-      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP/MapServer/WmsServer",
-      "typ" : "WMS",
-      "layers" : "13",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : "nicht vorhanden",
-      "transparent" : "true",
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "nicht vorhanden",
-      "maxScale" : "nicht vorhanden",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : "",
-      "datasets" : [
-         {
-            "md_id" : "DFDA2969-A041-433B-BD65-4CDA9F830A55",
-            "rs_id" : "HMDK#DFDA2969-A041-433B-BD65-4CDA9F830A55",
-            "md_name" : "Flächennutzungsplan Hamburg",
-            "bbox" : "541991.14,5916243.3,592004.48,5956232.48",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
-   },
-   {
       "id" : "1949",
       "name" : "Strassennetz",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strassennetz/MapServer/WmsServer",
@@ -37489,7 +37455,7 @@
    },
    {
       "id" : "2029",
-      "name" : "Wasser- Und Bodenverbände",
+      "name" : "Wasser- und Bodenverbände",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
       "typ" : "WMS",
       "layers" : "2",
@@ -37766,7 +37732,7 @@
    },
    {
       "id" : "2041",
-      "name" : "Berichtspflichtiges Gewässernetz Gemäss Eg-Wrrl",
+      "name" : "Berichtspflichtiges Gewässernetz gemäss Eg-Wrrl",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WMSServer",
       "typ" : "WMS",
       "layers" : "11",
@@ -44895,7 +44861,7 @@
    },
    {
       "id" : "2027",
-      "name" : "Wasser- Und Bodenverbände",
+      "name" : "Wasser- und Bodenverbände",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Gewaesserunterhaltung/MapServer/WFSServer",
       "typ" : "WFS",
       "featureType" : "Wasser-_und_Bodenverbaende",

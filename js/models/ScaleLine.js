@@ -21,7 +21,7 @@ define([
         },
         calculateScale: function () {
             var map = this.get('map');
-            var view = map.getView(); ;
+            var view = map.getView();
             var resolution = view.getResolution();
             var units = map.getView().getProjection().getUnits();
             var scaleval = Math.round(resolution * 39.37 * this.get('map').DOTS_PER_INCH).toString();

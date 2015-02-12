@@ -91,12 +91,14 @@ define([
 
                 // View listener
                 this.get('view').on('change:resolution', function () {
-                    // NOTE brauche ich wahrscheinlich nicht mehr (sd)
+                    EventBus.trigger("currentResolution", this.get('view').getResolution());
                     EventBus.trigger('currentMapScale', Math.round(this.getCurrentScale()));
                 },this);
                 this.get('view').on('change:center', function () {
                     EventBus.trigger('currentMapCenter', this.get('view').getCenter());
                 },this);
+
+                EventBus.trigger('getMap');
             },
 
             GFIPopupVisibility: function(value) {
@@ -184,7 +186,7 @@ define([
         },
         /**
         */
-        moveLayer: function (args) {
+        moveLayer: function (args) {console.log(args);
             var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
             index = layers.indexOf(args[1]);

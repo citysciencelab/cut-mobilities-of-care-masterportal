@@ -6,17 +6,21 @@ define([
     'views/TreeNodeView',
     'eventbus',
     'bootstrap'
-    ], function ($, _, Backbone, TreeList, TreeNodeView) {
+    ], function ($, _, Backbone, TreeList, TreeNodeView, EventBus) {
 
         var TreeListView = Backbone.View.extend({
             collection: TreeList,
             el: '#tree',
             initialize: function () {
+                EventBus.on("currentResolution", this.render, this);
                 this.collection.on("add", this.render, this);
                 this.render();
             },
+            test: function (scale) {
+                console.log(scale);
+                this.render();
+            },
             render: function () {
-                console.log("render liste");
                 this.$el.html('');
                 this.collection.forEach(this.addTreeNode, this);
             },
