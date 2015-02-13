@@ -58,8 +58,8 @@ define([
             var featureArray = [];
             _.each(visibleWFSLayers, function (layer) {
                 layer.get('source').forEachFeatureInExtent(this.get('circleExtent'), function (feature) {
-                    featureArray.push(feature);
-                    EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'));
+                    //featureArray.push(feature);
+                    EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'),layer);
                 }, this);
             }, this);
             EventBus.trigger('showPOIModal');

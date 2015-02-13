@@ -83,7 +83,9 @@ html, body {
     .legendbody{
         max-height:120px;
     }
-
+    #poibody{
+        max-height:120px;
+    }
     .legenddiv{
         max-height:100px;
     }
@@ -93,6 +95,9 @@ html, body {
         max-height:230px;
     }
     .legendbody{
+        max-height:200px;
+    }
+    #poibody{
         max-height:200px;
     }
     .legenddiv{
@@ -107,7 +112,9 @@ html, body {
     .legendbody{
         max-height:220px;
     }
-
+    #poibody{
+        max-height:220px;
+    }
     .legenddiv{
         max-height:120px;
     }
@@ -120,7 +127,9 @@ html, body {
     .legendbody{
         max-height:400px;
     }
-
+    #poibody{
+        max-height:400px;
+    }
     .legenddiv{
         max-height:300px;
     }
@@ -133,7 +142,9 @@ html, body {
     .legendbody{
         max-height:700px;
     }
-
+    #poibody{
+        max-height:700px;
+    }
     .legenddiv{
         max-height:540px;
     }
@@ -143,6 +154,9 @@ html, body {
     border:0;
     overflow:auto;
     overflow-x: hidden;
+}
+#poibody{
+    overflow:auto;
 }
 .legendbody{
     overflow:auto;
