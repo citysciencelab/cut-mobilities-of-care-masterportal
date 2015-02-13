@@ -39,27 +39,24 @@ define(function () {
                  }
              ],
              name: 'aktuelle Meldungen der TBZ', visible: false
-            },
-            {id: '1935', visible: false, styles: ["geofox-bahn", "geofox_Faehre"], name: ["HVV Bahnlinien", "Fährverbindung"]},
+            },            
             {id:
              [
                 {
                     id: '1935',
-                    // styles: ['geofox-bus'],
                     name: "Bus1"
                 },
                 {
                     id: '1935',
-                    // styles: ['geofox_BusName'],
                     name: "Bus2"
                 }
              ],
              visible: false, name: 'HVV Buslinien', styles: ['geofox-bus', 'geofox_BusName']
             },
-            {id: '1935', visible: false, styles: 'geofox_Faehre', name: "Fährverbindungen"},
+            {id: '1935', visible: false, styles: 'geofox_Faehre', name: "HVV Fährverbindungen"},            
+            {id: '1935', visible: false, styles: 'geofox-bahn', name: "HVV Bahnlinien"},   
+            {id: '1933', visible: false, styles: 'geofox_stations', name: "HVV Haltestellen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: [], routable: true},
-            // {id: '1935', visible: false, styles: 'geofox_Faehre', name: "Fährverbindungen"},
-            {id: '1933', visible: false, styles: 'geofox_stations', name: "HVV Stationen"},
             {id: '49', visible: false, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
             {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
@@ -85,7 +82,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: true
         },
         startUpModul: '',
