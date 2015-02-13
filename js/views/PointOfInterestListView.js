@@ -41,7 +41,7 @@ define([
         },
         show: function () {
             this.$el.modal({
-                backdrop: 'static',
+                backdrop: true,
                 show: true
             });
             $(function () {
