@@ -48,7 +48,13 @@ define([
             });
         },
         requestRoute: function () {
-            var request = 'http://wscd0096/viom_v05?PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=' + this.get('fromCoord')[0] + '&START-Y=' + this.get('fromCoord')[1] + '&DEST-X=' + this.get('toCoord')[0] + '&DEST-Y=' + this.get('toCoord')[1] + '&USETRAFFIC=TRUE';
+            if (locations.fhhnet) {
+                var server= 'http://wscd0096/viom_v05';
+            }
+            else {
+                var server= 'http://v05.viom-system.de/vi_route_new/vi_route.dll/hhjson';
+            }
+            var request = server + '?PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=' + this.get('fromCoord')[0] + '&START-Y=' + this.get('fromCoord')[1] + '&DEST-X=' + this.get('toCoord')[0] + '&DEST-Y=' + this.get('toCoord')[1] + '&USETRAFFIC=TRUE';
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]
             *  routingdate [yyyy-mm-dd]
@@ -196,7 +202,8 @@ define([
         },
         strassensuche: function (requestStreetName, target) {
             $.ajax({
-                url: this.get("gazetteerURL") + "&StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName),
+                url: Config.proxyURL,
+                data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName)},
                 context: this,  // das model
                 async: true,
                 type: "GET",
@@ -272,7 +279,8 @@ define([
         },
         hausnummernsuche: function (streetName, hausnummer, target, openList) {
             $.ajax({
-                url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(streetName),
+                url: Config.proxyURL,
+                data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(streetName)},
                 context: this,  // das model
                 async: true,
                 type: "GET",
