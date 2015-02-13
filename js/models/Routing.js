@@ -16,7 +16,6 @@ define([
             fromStrassenname: '',
             fromHausnummer: '',
             fromCoord: '',
-            toAdresse: '',
             toStrassenname: '',
             toHausnummer: '',
             toCoord: '',

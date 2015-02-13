@@ -39,6 +39,13 @@ define([
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(',');
                         modelsArray.push(_.findWhere(response, {id: layers[0]}));
+                        // default: Layer ist nicht routable, Punktabfrage kann nicht fürs Routing benutzt werden
+                        if (_.has(element, "routable")) {
+                            modelsArray[index].routable = element.routable;
+                        }
+                        else {
+                            modelsArray[index].routable = false;
+                        }
                         // default: Layer wird im Themenbaum angezeigt
                         if (_.has(element, "displayInTree")) {
                             modelsArray[index].displayInTree = element.displayInTree;

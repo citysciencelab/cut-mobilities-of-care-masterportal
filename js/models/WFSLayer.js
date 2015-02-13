@@ -183,7 +183,8 @@ define([
                 name: this.get('name'),
                 typ: this.get('typ'),
                 style: this.get('style'),
-                gfiAttributes: this.get('gfiAttributes')
+                gfiAttributes: this.get('gfiAttributes'),
+                routable: this.get('routable')
             }));
             this.get('layer').once('render', function() { // triggert einmalig wenn gerendert wird
                 EventBus.trigger('getVisibleWFSLayer');

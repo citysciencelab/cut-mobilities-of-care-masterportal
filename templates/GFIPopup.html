@@ -55,6 +55,15 @@
     </tr>
     <% })}; %>
     </table>
+    <% console.log(gfiRoutables);%>
+    <% if (gfiRoutables && gfiRoutables[gfiContent.length-gfiCounter] === true) { %>
+        <div class="dropdown" style="width=100%;">
+            <button id="setRoutingDestination" style="width: 100%;" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                <span class="" aria-hidden="true">als Ziel übernehmen</span>
+            </button>
+        </div>
+    <% } %>
 </div>
 
 <% if(gfiContent.length > 1) { %>

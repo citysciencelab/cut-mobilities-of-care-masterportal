@@ -204,6 +204,12 @@ define([
         setPositionCoordPopup: function (evt) {
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
+        /**
+         * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
+         * scale ist zur Definition der BoundingBox um den Klickpunkt - nur bei WFS
+         * routable legt fest, ob das Feature als RoutingDestination gesetzt werden darf.
+         * style Anfrage bei WFS, ob Style auf unsichtbar.
+         */
         setGFIParams: function (evt) {
             if (this.get('GFIPopupVisibility') === true) {
                 EventBus.trigger('closeGFIParams', this);
@@ -231,7 +237,8 @@ define([
                             scale: scale,
                             url: gfiURL,
                             name: element.get('name'),
-                            attributes: gfiAttributes
+                            attributes: gfiAttributes,
+                            routable: element.get('routable')
                         });
                     }
                     else if (element.getProperties().typ === 'WFS') {
@@ -241,7 +248,8 @@ define([
                             source: element.getSource(),
                             style: element.getStyle(),
                             name: element.get('name'),
-                            attributes: gfiAttributes
+                            attributes: gfiAttributes,
+                            routable: element.get('routable')
                         });
                     }
                 }

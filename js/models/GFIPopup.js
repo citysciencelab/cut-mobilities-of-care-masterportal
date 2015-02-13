@@ -27,7 +27,6 @@ define([
          */
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
-
             this.listenTo(this, 'change:isPopupVisible', this.sendGFIForPrint);
             EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
             EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
@@ -55,7 +54,7 @@ define([
             var gfiContent;
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], 'name');
-            var pContent = [], pTitles = [];
+            var pContent = [], pTitles = [], pRoutables = [];
             for (var i=0; i < sortedParams.length; i+=1) {
                 if (sortedParams[i].typ === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
@@ -68,6 +67,10 @@ define([
                     _.each(gfiContent, function (content) {
                         pContent.push(content);
                         pTitles.push(sortedParams[i].name);
+                        // Nur wenn Config.menu.routing==true, werden die einzelnen Routable-Informationen ausgewertet und im Template abgefragt
+                        if (Config.menu.routing && Config.menu.routing === true) {
+                            pRoutables.push(sortedParams[i].routable);
+                        }
                     });
                 }
             }
@@ -75,6 +78,7 @@ define([
                 this.get('gfiOverlay').setPosition(params[1]);
                 this.set('gfiContent', pContent);
                 this.set('gfiTitles', pTitles);
+                this.set('gfiRoutables', pRoutables);
                 this.set('gfiCounter', pContent.length);
                 this.set('coordinate', params[1]);
             }
