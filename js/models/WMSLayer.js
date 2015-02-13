@@ -32,7 +32,7 @@ define([
                 'FORMAT': format,
                 'VERSION': version,
                 'TRANSPARENT': this.get('transparent')
-            }
+            };
             if (version === '1.1.1' || version === '1.1.0' || version === '1.0.0') {
                 params = _.extend(params, {
                     "SRS": 'EPSG:25832'

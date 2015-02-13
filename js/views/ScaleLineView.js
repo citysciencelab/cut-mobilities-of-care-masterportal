@@ -14,7 +14,6 @@ define([
         initialize: function () {
             this.listenTo(this.model, 'change:reflength', this.render);
             EventBus.on('setMap', this.setMap, this);
-            EventBus.trigger('getMap', this);
         },
         setMap: function (map) {
             this.model.set('map', map);

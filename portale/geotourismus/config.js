@@ -14,7 +14,7 @@ define(function () {
             {id: '682', visible: false},
             {id: '550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567', visible: false},
             {id: '1210', visible: false},
-            {id: '433,434', visible: true},
+            {id: '433,434', visible: false},
             {id: '1935', visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id:
              [
@@ -50,7 +50,7 @@ define(function () {
                  }
              ],
 
-             name: 'Mehrere Dienste', visible: true, opacity:"50"
+             name: 'Mehrere Dienste', visible: false, opacity:"50"
 
             },
             {id: '2056', visible: false, style: '2056', clusterDistance: 30, styleField :'kategorie'},
@@ -61,7 +61,30 @@ define(function () {
             {id: '2060', visible: false, style: '2060', clusterDistance: 30, styleField :'kategorie'},
             {id: '2054', visible: false, style: '2054', clusterDistance: 30, styleField :'kategorie'},
             {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', opacity:"70"},
-            {id: '566', visible: false}
+            {id: '566', visible: false},
+            {
+                id: '1711',
+                visible: true,
+                attribution: 'Krankenhausattributierung in config',
+                style: '1711',
+                clusterDistance: 0,
+                searchField: 'name',
+                mouseHoverField: 'name',
+                filterOptions: [
+                    {
+                        'fieldName': 'teilnahme_geburtsklinik',
+                        'filterType': 'combo',
+                        'filterName': 'Geburtsklinik',
+                        'filterString': ['*','ja','nein']
+                     },
+                     {
+                         'fieldName': 'teilnahme_notversorgung',
+                         'filterType': 'combo',
+                         'filterName': 'Not- und Unfallversorgung',
+                         'filterString': ['*','ja','eingeschränkt','nein']
+                     }
+                ]
+            }
         ],
         styleConf: locations.baseUrl  + '../style.json',
         menubar: true,

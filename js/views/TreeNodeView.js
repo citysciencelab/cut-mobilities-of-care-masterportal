@@ -10,32 +10,31 @@ define([
             tagName: 'li',
             template: _.template(TreeNodeTemplate),
             events: {
-                "click .node-content > .folder-icons, .node-content > .folder-name": "toggleExpand",
-                "click .glyphicon-arrow-up": "moveUpInList",
-                "click .glyphicon-arrow-down": "moveDownInList"
+                "click .node-content": "toggleExpand",
+                "click .node-button > .glyphicon": "moveInList"
             },
             initialize: function () {
                 this.listenTo(this.model, "change:isExpanded", this.render);
+                this.listenTo(this.model, "change:viewList", this.render);
             },
             render: function () {
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
                 if (this.model.get("isExpanded") === true) {
-                    // ChildNodes
-                    _.each(this.model.get("childViews"), function (childNode) {
-                        this.$(".tree-node-children").append(childNode.render().el);
-                        childNode.$el.append(childNode.rendertwo().el);
-                    }, this);
-                    // Layer ohne Unterordner
-                    _.each(this.model.get("layerViews"), function (layer) {
-                        // Ich bin ein Layer direkt unter der Kategorie, also ohne Unterordner
-                        // wird für das Styling gebraucht.
-                        this.$(".tree-node-children").append(layer.render().el);
+                    _.each(this.model.get("viewList"), function (view) {
+                        this.$el.after(view.render().el);
+                        if (view.model.get("type") === "childNode" && view.model.get("isExpanded") === true) {
+                            view.renderChildren().el;
+                        }
                     }, this);
                 }
                 else {
                     _.each(this.model.get("childViews"), function (layer) {
+                        _.each(layer.model.get("layerView"), function (view) {
+                            view.remove();
+                        });
                         layer.remove();
+
                     }, this);
                     _.each(this.model.get("layerViews"), function (layer) {
                         layer.remove();
@@ -46,11 +45,13 @@ define([
             toggleExpand: function () {
                 this.model.toggleExpand();
             },
-            moveUpInList: function (evt) {
-                this.model.moveUpInList();
-            },
-            moveDownInList: function () {
-                this.model.moveDownInList();
+            moveInList: function (evt) {
+                if (evt.target.classList[1] === "glyphicon-arrow-up") {
+                    this.model.moveUpInList();
+                }
+                else if (evt.target.classList[1] === "glyphicon-arrow-down") {
+                    this.model.moveDownInList();
+                }
             }
         });
 
