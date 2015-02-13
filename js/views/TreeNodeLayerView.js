@@ -2,23 +2,26 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/TreeLayer.html',
-    'text!templates/TreeLayerSetting.html',
+    'text!templates/TreeNodeLayer.html',
+    'text!templates/TreeNodeLayerSetting.html',
     'eventbus'
-    ], function ($, _, Backbone, TreeLayerTemplate, TreeLayerSettingTemplate, EventBus) {
+    ], function ($, _, Backbone, TreeNodeLayerTemplate, TreeNodeLayerSettingTemplate, EventBus) {
 
-        var TreeLayerView = Backbone.View.extend({
-            className : 'list-group-item',
+        var TreeNodeLayerView = Backbone.View.extend({
+            className : 'list-group-item node-layer',
             tagName: 'li',
-            template: _.template(TreeLayerTemplate),
-            templateSetting: _.template(TreeLayerSettingTemplate),
+            template: _.template(TreeNodeLayerTemplate),
+            templateSetting: _.template(TreeNodeLayerSettingTemplate),
+            templateButton: _.template("<div class='node-layer-button pull-right'><span class='glyphicon glyphicon-cog rotate'></span></div>"),
             events: {
-                'click .plus': 'upTransparence',
-                'click .minus': 'downTransparence',
-                'click .info': 'getMetadata',
-                'click .check, .unchecked, small': 'toggleVisibility',
-                'click .up, .down': 'moveLayer',
-                'click .refresh': 'toggleSettings'
+                'click .glyphicon-plus-sign': 'upTransparence',
+                'click .glyphicon-minus-sign': 'downTransparence',
+                'click .glyphicon-info-sign': 'getMetadata',
+                'click .check, .unchecked, .layer-name': 'toggleVisibility',
+                "click .node-layer-button": "toggleSettings"
+            },
+            initialize: function () {
+                this.$el.append(this.templateButton);
             },
             render: function (model) {
                 this.stopListening();
@@ -26,33 +29,32 @@ define([
                 this.listenToOnce(this.model, 'change:transparence', this.render);
                 this.listenToOnce(this.model, 'change:settings', this.render);
                 this.delegateEvents();
+
+                this.$(".node-layer-content").remove();
+                this.$(".node-layer-settings").remove();
+
                 var attr = this.model.toJSON();
 
                 if (this.model.hasChanged("settings") === true && model !== undefined) {
                     if (this.model.get("settings") === true) {
-                        this.animateView(this.templateSetting(attr));
+                        this.$el.find(".node-layer-button").after(this.templateSetting(attr));
                     }
                     else {
-                        this.animateView(this.template(attr));
+                        this.$el.find(".node-layer-button").after(this.template(attr));
                     }
                 }
                 else if (this.model.hasChanged("transparence") === true && model !== undefined) {
-                    this.$el.html(this.templateSetting(attr));
+                    this.$el.find(".node-layer-button").after(this.templateSetting(attr));
                 }
                 else {
                     if (this.model.get("settings") === true) {
-                        this.$el.html(this.templateSetting(attr));
+                        this.$el.find(".node-layer-button").after(this.templateSetting(attr));
                     }
                     else {
-                        this.$el.html(this.template(attr));
+                        this.$el.find(".node-layer-button").after(this.template(attr));
                     }
                 }
                 return this;
-            },
-            animateView: function (template) {
-                this.$el.animate({width: '10%'}, 500, function () {
-                    $(this).html(template).animate({width: '100%'}, 500);
-                });
             },
             moveLayer: function (evt) {
                 var className = evt.currentTarget.className;
@@ -77,8 +79,10 @@ define([
             },
             toggleSettings: function () {
                 this.model.toggleSettings();
+                this.$('.glyphicon-cog').toggleClass('rotate2');
+                this.$('.glyphicon-cog').toggleClass('rotate');
             }
         });
 
-        return TreeLayerView;
+        return TreeNodeLayerView;
     });

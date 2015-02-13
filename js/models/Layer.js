@@ -23,17 +23,23 @@ define([
                 this.set('visibility', false);
             }
 
+            // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
+            this.set("resolution", Config.view.resolution);
+            this.setResolutionRange();
+
+            this.set("settings", false);
+
             EventBus.on('getBackboneLayerForAttribution', function() {
                 EventBus.trigger('returnBackboneLayerForAttribution', this);
             }, this);
             this.listenTo(this, 'change:visibility', this.setVisibility);
             this.listenTo(this, 'change:transparence', this.updateOpacity);
+            this.listenTo(this, 'change:resolution', this.setResolutionRange);
 
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
             this.get('layer').setVisible(this.get("visibility"));
-            this.set('settings', false);
 
             if(this.get('opacity')){
                 this.set('transparence', parseInt(this.get('opacity'), 10));
@@ -117,6 +123,19 @@ define([
                 }
             }
         },
+        setResolutionRange: function () {
+            if (this.get("maxScale") === "nicht vorhanden" || this.get("minScale") === "nicht vorhanden") {
+                this.set("isInResolutionRange", true);
+            }
+            else {
+                if (this.get("resolution") <= this.get("maxScale") && this.get("resolution") >= this.get("minScale")) {
+                    this.set("isInResolutionRange", true);
+                }
+                else {
+                    this.set("isInResolutionRange", false);
+                }
+            }
+        },
         /**
          *
          */
@@ -126,6 +145,9 @@ define([
             }
             else {
                 this.set({'visibility': true});
+            }
+            if (this.get("layerType") === "layerByChildNode") {
+                this.get("parentNode").checkVisibilityOfAllChildren();
             }
         },
         /**
