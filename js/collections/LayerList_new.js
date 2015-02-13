@@ -46,9 +46,10 @@ define([
                         else {
                             modelsArray[index].displayInTree = true;
                         }
-                        // WMS-Styles, speziell für Straßenbaum-Online
+                        // WMS-Styles
                         if (_.has(element, "styles")) {
                             modelsArray[index].styles = element.styles;
+                            modelsArray[index].name = element.name;
                         }
                         // Transparenz für WMS/WFS
                         if (_.has(element, "opacity")) {
@@ -82,7 +83,8 @@ define([
                         var groupModel = {
                             id: _.uniqueId("grouplayer_"),
                             name: element.name,
-                            typ: "GROUP"
+                            typ: "GROUP",
+                            styles: element.styles  // Styles der Childlayer
                         };
                         // Transparenz für Group-Model
                         if (_.has(element, "opacity")) {
@@ -139,6 +141,8 @@ define([
                         collection.mergeByMetaID();
                         collection.resetModels();
                     }
+                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
+                    collection.cloneByStyle();
                 }
             });
         },
@@ -215,7 +219,47 @@ define([
                 this.remove(element);
             }, this);
         },
+        /**
+         * Hier werden Layer verarbeitet für die es nur eine ID gibt, aber mehrere Styles. Zum Beipsiel der HVV-Dienst.
+         * Wenn ein Model mehr als einen Style hat, wird pro Style ein neues Model erzeugt. Die ID setzt sich aus dem Style und der ID des "alten" Models zusammen.
+         * Das "alte" Model wird danach, wenn es sich dabei um ein "Singel-Model" handelt, gelöscht. "Gruppen-Models" werden lediglich aktualisiert.
+         */
+        cloneByStyle: function () {
+            // "Single" - Layer die mehrere Styles haben
+            var modelsByStyle = this.filter(function (model) {
+                return typeof model.get("styles") === "object" && model.get("typ") === "WMS";
+            });
+            // Iteriert über die Models
+            _.each(modelsByStyle, function (model) {
+                // Iteriert über die Styles
+                _.each(model.get("styles"), function (style, index) {
+                    // Model wird kopiert
+                    var cloneModel = model.clone();
+                    // Die Attribute name und die ID werden für das kopierte Model gesetzt
+                    cloneModel.set("name", model.get("name")[index]);
+                    cloneModel.set("id", model.get("id") + model.get("styles")[index]);
+                    // Die Source vom Model/Layer bekommt ein Update(neuen Style)
+                    cloneModel.get("source").updateParams({STYLES: model.get("styles")[index]});
+                    // Model wird der Collection hinzugefügt
+                    this.add(cloneModel, {merge: true, at: this.indexOf(model)});
+                }, this);
+            }, this);
+            // Die ursprüngliche Models werden gelöscht
+            this.remove(modelsByStyle);
 
+            // Groupen-Layer deren Childlayer sich nur im Style unterscheiden
+            var modelsByStyle = this.filter(function (model) {
+                return typeof model.get("styles") === "object" && model.get("typ") === "GROUP";
+            });
+            // Iteriert über die Models
+            _.each(modelsByStyle, function (model) {
+                // Iteriert über die Childlayer
+                model.get("layer").getLayers().forEach(function (layer, index) {
+                    // Das STYLES-Attribut der Source wird überschrieben
+                    layer.getSource().updateParams({STYLES: model.get("styles")[index]});
+                });
+            });
+        },
         /**
         * [getLayerByProperty description]
         * @param {[type]} key   [description]

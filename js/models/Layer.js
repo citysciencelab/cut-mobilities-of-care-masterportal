@@ -12,7 +12,6 @@ define([
     var Layer = Backbone.Model.extend({
 
         initialize: function () {
-
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             if (this.get('displayInTree') === false) {
                 this.set('gfiAttributes', false)
