@@ -26,7 +26,7 @@ define([
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config, "tree") && Config.tree.active === true) {
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
-                return _.filter(_.where(response, {typ: "WMS"}), function (element) {
+                return _.filter(_.where(response, {typ: "WMS", cache: "false"}), function (element) {
                     return element.datasets.length > 0;
                 });
             }
@@ -53,9 +53,10 @@ define([
                         else {
                             modelsArray[index].displayInTree = true;
                         }
-                        // WMS-Styles, speziell für Straßenbaum-Online
+                        // WMS-Styles
                         if (_.has(element, "styles")) {
                             modelsArray[index].styles = element.styles;
+                            modelsArray[index].name = element.name;
                         }
                         // Transparenz für WMS/WFS
                         if (_.has(element, "opacity")) {
@@ -76,6 +77,12 @@ define([
                                 layerList += "," + obj.layers;
                             });
                             modelsArray[index].layers = layerList.slice(1, layerList.length);
+                            if (!_.has(element, "name")) {
+                                modelsArray[index].name = modelsArray[index].datasets[0].md_name;
+                            }
+                            else {
+                                modelsArray[index].name = element.name;
+                            }
                         }
                     }
                     // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: '1364' }, { id: '1365' }], visible: false }
@@ -83,7 +90,8 @@ define([
                         var groupModel = {
                             id: _.uniqueId("grouplayer_"),
                             name: element.name,
-                            typ: "GROUP"
+                            typ: "GROUP",
+                            styles: element.styles  // Styles der Childlayer
                         };
                         // Transparenz für Group-Model
                         if (_.has(element, "opacity")) {
@@ -123,10 +131,10 @@ define([
             EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
             EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
             EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
+            EventBus.on('currentResolution', this.setResolutionForAll, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
-
 
             this.fetch({
                 cache: false,
@@ -137,10 +145,54 @@ define([
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
                     if (_.has(Config, "tree") && Config.tree.active === true) {
+                        collection.mergeByMetaID();
                         collection.resetModels();
                     }
+                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
+                    collection.cloneByStyle();
                 }
             });
+        },
+        /**
+         * FNP, LAPRO und etc. werden zu einem Model zusammengefasst. Layer die gruppiert werden sollen, werden über Config.tree.groupLayer gesteuert.
+         */
+        mergeByMetaID: function () {
+            // Iteriert über die Metadaten-ID's aus der Config
+            _.each(Config.tree.groupLayerByID, function (id) {
+                // Alle Models mit der Metadaten-ID
+                var modelsByID = this.where({"metaID": id, "cache": "false"});
+                // Der Parameter "layers" aus allen Models wird in einer Variable als String gespeichert.
+                var layerList = "";
+                _.each(modelsByID, function (model) {
+                    layerList +=  "," + model.get("layers");
+                });
+                // Layer aus einem Dienst können unterschiedliche Scales haben (z.B. ALKIS).
+                // Daher wird das Model mit dem niedrigsten und das mit dem höchsten Wert gesucht.
+                // var minScaleModel = _.min(modelsByID, function (model) {
+                //     if (model.get("minScale") === "nicht vorhanden") {
+                //         model.set("minScale", "0")
+                //     }
+                //     return model.get("minScale");
+                // });
+                // var maxScaleModel = _.max(modelsByID, function (model) {
+                //     if (model.get("maxScale") === "nicht vorhanden") {
+                //         model.set("maxScale", "500")
+                //     }
+                //     return model.get("maxScale");
+                // });
+                // Die Parameter "maxScale", "minScale", "layers" und "name" werden beim ersten Model aus der Liste überschrieben.
+                modelsByID[0].set("layers", layerList.slice(1, layerList.length));
+                modelsByID[0].set("name", modelsByID[0].get("metaName"));
+                // modelsByID[0].set("maxScale", maxScaleModel.get("maxScale"));
+                // modelsByID[0].set("minScale", minScaleModel.get("minScale"));
+
+                // Das erste Model aus der Liste wird kopiert.
+                var firstModel = modelsByID[0].clone();
+                // Die Liste der Models wird aus der Collection gelöscht.
+                this.remove(modelsByID);
+                // Das kopierte Model wird zur Collection hinzugefügt.
+                this.add(firstModel);
+            }, this);
         },
         /**
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.
@@ -174,7 +226,47 @@ define([
                 this.remove(element);
             }, this);
         },
+        /**
+         * Hier werden Layer verarbeitet für die es nur eine ID gibt, aber mehrere Styles. Zum Beipsiel der HVV-Dienst.
+         * Wenn ein Model mehr als einen Style hat, wird pro Style ein neues Model erzeugt. Die ID setzt sich aus dem Style und der ID des "alten" Models zusammen.
+         * Das "alte" Model wird danach, wenn es sich dabei um ein "Singel-Model" handelt, gelöscht. "Gruppen-Models" werden lediglich aktualisiert.
+         */
+        cloneByStyle: function () {
+            // "Single" - Layer die mehrere Styles haben
+            var modelsByStyle = this.filter(function (model) {
+                return typeof model.get("styles") === "object" && model.get("typ") === "WMS";
+            });
+            // Iteriert über die Models
+            _.each(modelsByStyle, function (model) {
+                // Iteriert über die Styles
+                _.each(model.get("styles"), function (style, index) {
+                    // Model wird kopiert
+                    var cloneModel = model.clone();
+                    // Die Attribute name und die ID werden für das kopierte Model gesetzt
+                    cloneModel.set("name", model.get("name")[index]);
+                    cloneModel.set("id", model.get("id") + model.get("styles")[index]);
+                    // Die Source vom Model/Layer bekommt ein Update(neuen Style)
+                    cloneModel.get("source").updateParams({STYLES: model.get("styles")[index]});
+                    // Model wird der Collection hinzugefügt
+                    this.add(cloneModel, {merge: true, at: this.indexOf(model)});
+                }, this);
+            }, this);
+            // Die ursprüngliche Models werden gelöscht
+            this.remove(modelsByStyle);
 
+            // Groupen-Layer deren Childlayer sich nur im Style unterscheiden
+            var modelsByStyle = this.filter(function (model) {
+                return typeof model.get("styles") === "object" && model.get("typ") === "GROUP";
+            });
+            // Iteriert über die Models
+            _.each(modelsByStyle, function (model) {
+                // Iteriert über die Childlayer
+                model.get("layer").getLayers().forEach(function (layer, index) {
+                    // Das STYLES-Attribut der Source wird überschrieben
+                    layer.getSource().updateParams({STYLES: model.get("styles")[index]});
+                });
+            });
+        },
         /**
         * [getLayerByProperty description]
         * @param {[type]} key   [description]
@@ -258,6 +350,14 @@ define([
          */
         getAllLayer: function () {
             return this.models;
+        },
+        /**
+         *
+         */
+         setResolutionForAll: function (resolution) {
+             this.forEach(function (model) {
+                 model.set("resolution", resolution);
+             })
         }
     });
 
