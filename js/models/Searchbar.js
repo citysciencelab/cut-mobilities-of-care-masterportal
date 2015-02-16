@@ -3,9 +3,10 @@ define([
     "underscore",
     "backbone",
     "openlayers",
+    "collections/LayerList_new",
     "eventbus",
     "config"
-    ], function ($, _, Backbone, ol, EventBus, Config) {
+    ], function ($, _, Backbone, ol, LayerList, EventBus, Config) {
 
         /**
         * Dieses Model ist ein Attribut der Searchbar.
@@ -19,7 +20,7 @@ define([
             */
             "initialize": function () {
                 this.set("streetSearch", false);
-                this.set("numberSearch", false);
+                this.set("numberSearch", true);
                 this.on("change", this.checkAttributes);
             },
 
@@ -62,6 +63,7 @@ define([
                 EventBus.on("sendVisibleWFSLayer", this.getFeaturesForSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
                 this.set("isSearchReady", new SearchReady());
+                this.getLayerForSearch();
 
                 // Prüfen ob BPlan-Suche konfiguriert ist. Wenn ja --> B-Pläne laden(bzw. die Namen der B-Pläne) und notwendige Attrbiute setzen
                 if (Config.bPlanURL !== undefined) {
@@ -170,6 +172,7 @@ define([
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
                             this.searchInBPlans();
                             this.searchInFeatures();
+                            this.searchInLayers();
                         }
                         catch (error) {
                             //console.log(error);
@@ -300,6 +303,27 @@ define([
             /**
             *
             */
+            "searchInLayers": function () {
+                this.get("isSearchReady").set("layerSearch", false);
+                var layers = [];
+                // Join den Suchstring
+                var searchStringJoin = this.get("searchString").replace(/ /g, "");
+                var searchStringRegExp = new RegExp(searchStringJoin, "i");
+                _.each(this.get("layers"), function (layer) {
+                    var layerName = layer.name.replace(/ /g, "");
+                    var metaName = layer.metaName.replace(/ /g, "");
+                    // Prüft ob der Suchstring ein Teilstring vom Feature ist
+                    if (layerName.search(searchStringRegExp) !== -1 || metaName.search(searchStringRegExp) !== -1) {
+                        layers.push(layer);
+                    }
+                }, this);
+                this.pushHits("hitList", layers);
+                this.get("isSearchReady").set("layerSearch", true);
+            },
+
+            /**
+            *
+            */
             "getBPlans": function () {
                 var plans = [];
                 $.ajax({
@@ -373,14 +397,26 @@ define([
             },
 
             /**
+             *
+             *
+             */
+            "getLayerForSearch": function () {
+                this.set("layers", []);
+                var layerModels = LayerList.getAllLayer();
+                var layerArray = [];
+                _.each(layerModels, function (model) {
+                    layerArray.push({"name": model.get("name"), "metaName": model.get("metaName"), "type": "Layer", "glyphicon": "glyphicon-picture", "id": model.get("id"), "model": model});
+                });
+                this.pushHits("layers", layerArray);
+            },
+            /**
             *
             */
             "getFeaturesForSearch": function (layermodels) {
                 this.set("features", []);
-                this.get("isSearchReady").set("featureSearch", false);
                 var featureArray = [];
                 _.each(layermodels, function (layer) {
-                    if (_.has(layer.attributes, "searchField") === true && layer.get('searchField') != '') {
+                    if (_.has(layer.attributes, "searchField") === true && layer.get('searchField') !== '') {
                         var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
                         if (imageSrc) {
                             var features = layer.get("source").getFeatures();

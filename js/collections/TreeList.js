@@ -10,6 +10,7 @@ define([
             "url": "../../category.json",
             "model": TreeNode,
             "initialize": function () {
+                EventBus.on("showLayerInTree", this.showLayerInTree, this);
                 this.fetch({
                     cache: false,
                     async: false,
@@ -52,6 +53,30 @@ define([
                 _.each(model.get("layerList"), function (element) {
                     EventBus.trigger("moveLayer", [-this.at(index).get("layerList").length, element.get("layer")]);
                 }, this);
+            },
+            "showLayerInTree": function (model) {
+                // öffnet den Tree
+                $(".nav li:first-child").addClass("open");
+                this.forEach(function (element) {
+                    if (model.get("kategorieOpendata") === element.get("name")) {
+                        element.set("isExpanded", true);
+                        if (model.get("layerType") === "layerByChildNode") {
+                            _.each(element.get("childViews"), function (view) {
+                                if (view.model.get("name") === model.get("metaName")) {
+                                    view.model.set("isExpanded", true);
+                                }
+                                else {
+                                    view.model.set("isExpanded", false);
+                                }
+                            });
+                        }
+                        model.set("visibility", true);
+                    }
+                    else {
+                        element.set("isExpanded", false);
+                    }
+                });
+                // this.models[0].set("isExpanded", true);
             }
         });
 

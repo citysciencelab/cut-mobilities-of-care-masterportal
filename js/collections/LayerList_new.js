@@ -125,6 +125,7 @@ define([
             EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
             EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
             EventBus.on('currentResolution', this.setResolutionForAll, this);
+            // EventBus.on("showLayerInTree", this.showLayerInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
@@ -351,6 +352,15 @@ define([
              this.forEach(function (model) {
                  model.set("resolution", resolution);
              })
+         },
+         /**
+          *
+          */
+         showLayerInTree: function (id) {
+            //  var model = this.get(id);
+            //  var parentNode = model.get("parentNode");
+            //  console.log(model);
+            //  console.log(parentNode);
          }
     });
 
