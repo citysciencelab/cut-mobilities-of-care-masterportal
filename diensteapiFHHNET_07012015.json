@@ -41538,12 +41538,47 @@
       "datasets" : []
    },
    {
-       "id" : "5183",
+       "id" : "5181",
        "name" : "Strassenbaumkataster",
-       "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hh_baumkataster/service/wms",
+       "url" : "http://wscd0096/fachdaten_public/services/wms_hh_strassenbaumkataster",
        "typ" : "WMS",
-       "layers" : "0",
+       "layers" : "strassenbaum",
        "format" : "nicht vorhanden",
+       "transparent" : "true",
+       "version" : "1.1.1",
+       "gfiAttributes": {
+           "gattung": "Gattung",
+           "art": "Baumart",
+           "pflanzjahr": "Pflanzjahr",
+           "stammumfangzahl": "Stammumfang",
+           "kronendmzahl": "Kronendurchmesser",
+           "strasse": "Straße"
+       },
+       "datasets" : [
+           {
+               "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
+               "rs_id" : "HMDK#C1C61928-C602-4E37-AF31-2D23901E2540",
+               "md_name" : "Straßenbaumkataster Hamburg",
+               "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+               "kategorie_opendata" : [
+                   "Umwelt und Klima"
+               ],
+               "filter" : [
+                   "hmbtg",
+                   "#opendata_hh#"
+               ]
+           }
+       ],
+       "singleTile" : "nicht vorhanden"
+   },
+   {
+       "id" : "5182",
+       "name" : "Strassenbaumkataster",
+       "url" : "http://wscd0096/fachdaten_public/services/wms_hh_strassenbaumkataster",
+       "typ" : "WMS",
+       "layers" : "strassenbaum",
+       "format" : "nicht vorhanden",
+       "transparent" : "true",
        "version" : "1.1.1",
        "gfiAttributes": {
            "gattung": "Gattung",
