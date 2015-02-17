@@ -59,7 +59,7 @@ define([
                 $(".nav li:first-child").addClass("open");
                 this.forEach(function (element) {
                     if (model.get("kategorieOpendata") === element.get("name")) {
-                        element.set("isExpanded", true);
+                        element.set("isExpanded", true);console.log(model.get("layerType"));
                         if (model.get("layerType") === "layerByChildNode") {
                             _.each(element.get("childViews"), function (view) {
                                 if (view.model.get("name") === model.get("metaName")) {

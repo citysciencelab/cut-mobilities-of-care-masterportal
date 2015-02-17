@@ -216,7 +216,7 @@ define([
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
                 }
-                else if (hit.type === "Layer") {
+                else if (hit.type === "Thema") {
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("showLayerInTree", hit.model);
                 }

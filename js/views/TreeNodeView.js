@@ -21,24 +21,22 @@ define([
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
                 if (this.model.get("isExpanded") === true) {
-                    _.each(this.model.get("viewList"), function (view) {
-                        this.$el.after(view.render().el);
-                        if (view.model.get("type") === "childNode" && view.model.get("isExpanded") === true) {
-                            view.renderChildren().el;
+                    _.each(this.model.get("childViews"), function (child) {
+                        this.$el.after(child.render().el);
+                        if (child.model.get("type") === "node" && child.model.get("isExpanded") === true) {
+                            child.renderChildren().el;
                         }
                     }, this);
                 }
                 else {
-                    _.each(this.model.get("childViews"), function (layer) {
-                        _.each(layer.model.get("layerView"), function (view) {
-                            view.remove();
-                        });
-                        layer.remove();
-
+                    _.each(this.model.get("childViews"), function (child) {
+                        child.remove();
+                        if (child.model.get("type") === "node") {
+                            _.each(child.model.get("layerView"), function (view) {
+                                view.remove();
+                            });
+                        }
                     }, this);
-                    _.each(this.model.get("layerViews"), function (layer) {
-                        layer.remove();
-                    });
                 }
                 return this;
             },

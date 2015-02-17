@@ -139,7 +139,7 @@ define(function () {
                     return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
-            title: 'Master',
+            title: 'Gewässerunterhaltung',
             gfi: false
         },
 //        treeFilter: {

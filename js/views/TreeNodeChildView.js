@@ -42,6 +42,7 @@ define([
             },
             renderChildren: function () {
                 if (this.model.get("isExpanded") === true) {
+                    console.log(this.model);
                     _.each(this.model.get("layerView"), function (layer) {
                         layer.model.set("parentNode", this.model);
                         this.$el.after(layer.render().el);

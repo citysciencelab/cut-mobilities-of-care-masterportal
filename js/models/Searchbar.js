@@ -405,7 +405,7 @@ define([
                 var layerModels = LayerList.getAllLayer();
                 var layerArray = [];
                 _.each(layerModels, function (model) {
-                    layerArray.push({"name": model.get("name"), "metaName": model.get("metaName"), "type": "Layer", "glyphicon": "glyphicon-picture", "id": model.get("id"), "model": model});
+                    layerArray.push({"name": model.get("name"), "metaName": model.get("metaName"), "type": "Thema", "glyphicon": "glyphicon-list", "id": model.get("id"), "model": model});
                 });
                 this.pushHits("layers", layerArray);
             },
