@@ -21,6 +21,7 @@ define([
             this.listenTo(this.model, 'change:description', this.toggleSwitcher);
             EventBus.on('toggleRoutingWin', this.toggleRoutingWin, this);
             EventBus.on('setGeolocation', this.setGeolocation, this);
+            EventBus.on('setRoutingDestination', this.setRoutingDestination, this);
             if (Config.startUpModul.toUpperCase() === 'ROUTING') {
                 this.toggleRoutingWin();
             }
@@ -43,6 +44,15 @@ define([
 
             'click .toggleLayout' : 'toggleLayout',
             'click .deleteroute' : 'deleteRoute'
+        },
+        setRoutingDestination: function (coordinate) {
+            EventBus.trigger('closeGFIParams', this);
+            this.model.set('toStrassenname', coordinate.toString());
+            this.model.set('toCoord', coordinate);
+            $('#zielAdresse').val(coordinate.toString());
+            if ($('#RoutingWin').is(":hidden")){
+                this.toggleRoutingWin();
+            }
         },
         deleteRoute: function () {
             this.model.deleteRouteFromMap();

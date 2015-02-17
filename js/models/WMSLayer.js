@@ -86,7 +86,8 @@ define([
                 name: this.get('name'),
                 typ: this.get('typ'),
                 gfiAttributes: this.get('gfiAttributes'),
-                legendURL: this.get('legendURL')
+                legendURL: this.get('legendURL'),
+                routable: this.get('routable')
 //                gfiAttributes: this.convertGFIAttributes()
             }));
         }

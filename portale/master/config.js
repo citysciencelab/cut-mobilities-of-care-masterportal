@@ -62,6 +62,7 @@ define(function () {
         * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
         * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
         * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
+        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
         * @desc Beschreibung.
         */
         layerIDs: [
@@ -70,7 +71,7 @@ define(function () {
             {id: '1346', visible: true},
             {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', opacity:"40"},
-            {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
+            {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id:
              [
@@ -88,28 +89,24 @@ define(function () {
              ],
              name: 'Verkehrsbelastung auf Autobahnen', visible: true
             },
-            {
-                id: '1711',
-                visible: false,
-                attribution: 'Krankenhausattributierung in config',
-                style: '1711',
-                clusterDistance: 0,
-                searchField: 'name',
-                mouseHoverField: 'name',
-                filterOptions: [
-                    {
-                        'fieldName': 'teilnahme_geburtsklinik',
-                        'filterType': 'combo',
-                        'filterName': 'Geburtsklinik',
-                        'filterString': ['*','ja','nein']
-                     },
-                     {
-                         'fieldName': 'teilnahme_notversorgung',
-                         'filterType': 'combo',
-                         'filterName': 'Not- und Unfallversorgung',
-                         'filterString': ['*','ja','eingeschränkt','nein']
-                     }
-                ]
+            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
+             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Krankenhausattributierung in config</a></strong>',
+             displayInTree: true,
+             filterOptions: [
+                 {
+                     'fieldName': 'teilnahme_geburtsklinik',
+                     'filterType': 'combo',
+                     'filterName': 'Geburtsklinik',
+                     'filterString': ['*','ja','nein']
+                 },
+                 {
+                     'fieldName': 'teilnahme_notversorgung',
+                     'filterType': 'combo',
+                     'filterName': 'Not- und Unfallversorgung',
+                     'filterString': ['*','ja','eingeschränkt','nein']
+                 }
+             ],
+             routable: true
             }
         ],
         /**

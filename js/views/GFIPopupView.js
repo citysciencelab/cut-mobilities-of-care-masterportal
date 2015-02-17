@@ -15,7 +15,8 @@ define([
             'click .gfi-toggle': 'minMaximizePop',
             'click .pager-right': 'renderNext',
             'click .pager-left': 'renderPrevious',
-            'click #RouteZeigenButton' : 'startShowingRoute'
+            'click #RouteZeigenButton' : 'startShowingRoute',
+            'click #setRoutingDestination' : 'setRoutingDestination'
         },
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
@@ -33,6 +34,9 @@ define([
          */
         setMap: function (map) {
             this.model.set('map', map);
+        },
+        setRoutingDestination: function (evt) {
+            EventBus.trigger('setRoutingDestination', this.model.get('coordinate'));
         },
         startShowingRoute: function (evt) {
             // hole Map nur, wenn Route angezeigt werden soll
