@@ -24,12 +24,17 @@ define([
             },
             "setLayerListView": function () {
                 var layerView = [];
-                _.each(this.get("layerList"), function (layer) {
-                    // Ich bin ein Layer eines Unterordner. Wird für das Styling gebraucht.
-                    layer.set("layerType", "layerByChildNode");
-                    var layerByChildNode = new TreeLayerView({model: layer});
+                _.each(this.get("children"), function (child) {
+                    child.set("layerType", "layerByChildNode");
+                    var layerByChildNode = new TreeLayerView({model: child});
                     layerView.push(layerByChildNode);
                 });
+                // _.each(this.get("layerList"), function (layer) {
+                //     // Ich bin ein Layer eines Unterordner. Wird für das Styling gebraucht.
+                //     layer.set("layerType", "layerByChildNode");
+                //     var layerByChildNode = new TreeLayerView({model: layer});
+                //     layerView.push(layerByChildNode);
+                // });
                 this.set("layerView", layerView);
             },
             "toggleExpand": function () {
@@ -49,12 +54,12 @@ define([
                 }
             },
             "toggleVisibilityChildren": function () {
-                _.each(this.get("layerList"), function (layer) {
+                _.each(this.get("children"), function (layer) {
                     layer.set("visibility", this.get("isVisible"));
                 }, this);
             },
             "checkVisibilityOfAllChildren": function () {
-                var everyTrue = _.every(this.get("layerList"), function (model) {
+                var everyTrue = _.every(this.get("children"), function (model) {
                     return model.get("visibility") === true;
                 });
                 // Wenn alle Child-Layer sichtbar sind

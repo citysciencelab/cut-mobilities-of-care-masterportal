@@ -6,14 +6,15 @@ define(function () {
             resolution: 5.2916638091682096,
             scale: 20000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET_16012015.json' : '../diensteapiINTERNET_16012015.json'),
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET_07012015.json' : '../diensteapiINTERNET_16012015.json'),
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich
             {id: '5181', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
-            {id: '5182', visible: false, styles: "strassenbaumkataster"},
-            {id: '5183', visible: false, displayInTree: false}
+        {id: '5182', visible: true, styles: "strassenbaumkataster", name: "Straßenbäume"}
+            // ,
+            // {id: '5183', visible: false, displayInTree: false}
         ],
         styleConf: locations.baseUrl + '../style.json',
         menubar: true,

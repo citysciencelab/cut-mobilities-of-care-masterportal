@@ -15,69 +15,87 @@ define([
                 isExpanded: false
             },
             "initialize": function () {
-                // this.set("id", this.cid);
-                this.setOrderTreeBy();
-                this.getLayerList();
-                this.getChildNodes();
-                this.getLayerListByTreeNode();
-                this.set("viewList", _.union(this.get("layerViews"), this.get("childViews")));
+                this.setLayerList();
+                this.setChildren();
+                this.getSortedLayerList();
+                this.setViews();
+                
+                
+                // this.getChildNodes();
+                // this.getLayerListByTreeNode();
+                // this.set("viewList", _.union(this.get("layerViews"), this.get("childViews")));
             },
-            "setOrderTreeBy": function () {
-                switch (Config.tree.orderBy) {
-                    case "opendata":
-                        this.set("orderTreeByProperty", "kategorieOpendata");
-                        break;
-                    }
-            },
-            "getLayerList": function () {
-                var layerList = LayerList.getLayerByProperty(this.get("orderTreeByProperty"), this.get("name"));
+            /**
+             * Alle Layer die zu dieser Node gehören.
+             * Config.tree.layerAttribute = Das Layer-Model-Attribut in dem die jeweilige Kategorie gesetzt ist.
+             */
+            "setLayerList": function () {
+                var layerList = LayerList.getLayerByProperty(Config.tree.layerAttribute, this.get("name"));
                 this.set("layerList", layerList);
             },
-            "getChildNodes": function () {
-                // welche ID(vom Metadatensatz) kommt wie oft in der Layerlist vor
+            /**
+             *
+             */
+            "setChildren": function () {
+                // zählt wie oft die jeweiligen Metadaten-Id's in der LayerList vorkommen.
                 var countIDs = _.countBy(_.pluck(this.get("layerList"), "attributes"), "metaID");
-                // öfter als 1
-                var moreOftenOneIDs = [];
-                this.set("idsForChildNodes", moreOftenOneIDs);
+                var nodeChildren = [];
+                var layerChildren = [];
                 _.each(countIDs, function (value, key, list) {
+                    // öfter als 1
                     if (value > 1) {
-                        moreOftenOneIDs.push(key);
+                        var layerListByChildNode = _.filter(this.get("layerList"), function (layer) {
+                            return layer.attributes.metaID === key;
+                        }, this);
+                        nodeChildren.push({"type": "node", "id": key, "name": layerListByChildNode[0].get("metaName"), "children": _.sortBy(layerListByChildNode, function (child) {
+                                return child.get("name");
+                            }).reverse()
+                        });
+                    }
+                    else {
+                        var layerByNode = _.filter(this.get("layerList"), function (layer) {
+                            return layer.attributes.metaID === key;
+                        }, this);
+                        layerChildren.push({"type": "layer", "id": key, "name": layerByNode[0].get("name"), "layer": layerByNode[0]});
+                    }
+                }, this);
+                this.set("children", _.union(_.sortBy(layerChildren, "name").reverse(), _.sortBy(nodeChildren, "name").reverse()));
+            },
+            /**
+             * sortierte Liste für die Map. Damit die Layer in der Karte die gleiche Reihenfolge wie im baum haben
+             * @return {[type]} [description]
+             */
+            "getSortedLayerList": function () {
+                var sortedList = [];
+                _.each(this.get("children"), function (child) {
+                    if (child.type === "layer") {
+                        sortedList.push(child.layer);
+                    }
+                    else if (child.type === "node") {
+                        _.each(child.children, function (chi) {
+                            sortedList.push(chi);
+                        });
                     }
                 });
-                // finde zu den IDs die dazugehörigen Namen (entspricht den ChildNodes)
-                var childNodes = [];
-                _.each(moreOftenOneIDs, function (element, index) {
-                    var layerModel = _.findWhere(_.pluck(this.get("layerList"), "attributes"), { "metaID": element});
-                    childNodes.push({name: layerModel.metaName, metaID: element, parentName: this.get("name"), parentNode: this, type: "childNode"});
-                }, this);
-                this.set("childNodes", _.sortBy(childNodes, function (obj) {
-                        return obj.name;
-                    })
-                );
-
+                this.set("sortedLayerList", sortedList);
+            },
+            "setViews": function () {
                 var childViews = [];
-                _.each(this.get("childNodes"), function (childNode) {
-                    var treeNodeChildView = new TreeNodeChildView({model: new TreeChildNode(childNode)});
-                    childViews.push(treeNodeChildView);
+                _.each(this.get("children"), function (child) {
+                    if (child.type === "layer") {
+                        // console.log(child.layer);
+                        child.layer.set("parentNode", this.model);
+                        child.layer.set("type", "layer");
+                        child.layer.set("layerType", "layerByNode");
+                        var treeLayerView = new TreeLayerView({model: child.layer});
+                        childViews.push(treeLayerView);
+                    }
+                    else if (child.type === "node") {
+                        var treeNodeChildView = new TreeNodeChildView({model: new TreeChildNode(child)});
+                        childViews.push(treeNodeChildView);
+                    }
                 }, this);
                 this.set("childViews", childViews);
-            },
-            "getLayerListByTreeNode": function () {
-                // Alle Layer die nicht zu einem Unterordner gehören, sprich die Metadaten-ID ist nur einmal vorhanden
-                var layerModel = _.reject(this.get("layerList"), function (model) {
-                    model.set("type", "layerByNode");
-                    return _.contains(this.get("idsForChildNodes"), model.get("metaID"));
-                }, this);
-                this.set("layerListByTreeNode", layerModel);
-
-                var layerViews = [];
-                _.each(this.get("layerListByTreeNode"), function (layerNode) {
-                    layerNode.set("layerType", "layerByNode");
-                    layerNode.set("parentNode", this.model);
-                    var treeLayerView = new TreeLayerView({model: layerNode});
-                    layerViews.push(treeLayerView);
-                });
-                this.set("layerViews", layerViews);
             },
             "toggleExpand": function () {
                 if (this.get('isExpanded') === true) {

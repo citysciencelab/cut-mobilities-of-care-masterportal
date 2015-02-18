@@ -16,9 +16,11 @@ define([
         template: _.template(RoutingWin),
         initialize: function () {
             this.render();
-            this.listenTo(this.model, 'change:fromCoord', this.setCenter);
-            this.listenTo(this.model, 'change:toCoord', this.setCenter);
+            this.listenTo(this.model, 'change:fromCoord', this.coord_change);
+            this.listenTo(this.model, 'change:toCoord', this.coord_change);
             this.listenTo(this.model, 'change:description', this.toggleSwitcher);
+            this.listenTo(this.model, 'change:fromList', this.fromListChanged);
+            this.listenTo(this.model, 'change:toList', this.toListChanged);
             EventBus.on('toggleRoutingWin', this.toggleRoutingWin, this);
             EventBus.on('setGeolocation', this.setGeolocation, this);
             EventBus.on('setRoutingDestination', this.setRoutingDestination, this);
@@ -32,18 +34,48 @@ define([
             'click #RouteBerechnenButton': 'routeBerechnen',
             'change .changedWochentag': 'changedRoutingTime',
             'change .changedUhrzeit' : 'changedRoutingTime',
-            
-            'click .startAdresseChanged' : 'deleteDefaultString',
+            'click .startAdressePosition' : 'startAdressePosition', //eigene Positionsbestimmung auf aktueller Standpunkt
+            'click .startAdresseChanged' : 'adresse_click',
+            'click .zielAdresseChanged' : 'adresse_click',
+
             'keyup .startAdresseChanged' : 'adresseChanged_keyup',
             'keyup .zielAdresseChanged' : 'adresseChanged_keyup',
-
-            'click .startAdressePosition' : 'startAdressePosition', //eigene Positionsbestimmung auf aktueller Standpunkt
 
             'click .startAdresseSelected' : 'startAdresseSelected',
             'click .zielAdresseSelected' : 'zielAdresseSelected',
 
             'click .toggleLayout' : 'toggleLayout',
             'click .deleteroute' : 'deleteRoute'
+        },
+        fromListChanged: function () {
+            var fromList = this.model.get('fromList');
+            if (fromList.length > 0) {
+                $("#input-group-start ul").empty();
+                _.each(fromList, function (value) {
+                    $("#input-group-start ul").append('<li ' + value + '</li>');
+                });
+                $("#input-group-start ul").show();
+                $('#startAdresse').focus();
+            }
+            else {
+                $("#input-group-start ul").empty();
+                $("#input-group-start ul").hide();
+            }
+        },
+        toListChanged: function (value) {
+            var toList = this.model.get('toList');
+            if (toList.length > 0) {
+                $("#input-group-ziel ul").empty();
+                _.each(toList, function (value) {
+                    $("#input-group-ziel ul").append('<li ' + value + '</li>');
+                });
+                $("#input-group-ziel ul").show();
+                $('#zielAdresse').focus();
+            }
+            else {
+                $("#input-group-ziel ul").empty();
+                $("#input-group-ziel ul").hide();
+            }
         },
         setRoutingDestination: function (coordinate) {
             EventBus.trigger('closeGFIParams', this);
@@ -103,14 +135,17 @@ define([
             }
             this.model.requestRoute();
         },
-        deleteDefaultString: function (evt) {
+        adresse_click: function (evt) {
             var value = evt.target.value;
             if (evt.target.value == 'aktueller Standpunkt' && evt.target.id == 'startAdresse') {
                 $('#startAdresse').val('');
                 EventBus.trigger('clearGeolocationMarker', this);
             }
+            else {
+                evt.target.select();
+            }
         },
-        setCenter: function (newValue) {
+        coord_change: function (newValue) {
             // steuere Center der View
             if (newValue.changed.fromCoord) {
                 var newCoord = newValue.changed.fromCoord;
@@ -131,32 +166,39 @@ define([
         },
         zielAdresseSelected: function (evt) {
             var value = evt.currentTarget.id;
-            this.model.search(value, 'ziel', false);
+            this.model.geosearchByBKG(value, 'ziel');
         },
         startAdresseSelected: function (evt) {
             var value = evt.currentTarget.id;
-            this.model.search(value, 'start', false);
+            this.model.geosearchByBKG(value, 'start');
         },
         adresseChanged_keyup: function (evt) {
             var value = evt.target.value;
-            if (evt.keyCode === 13) { //Enter
-                var openList = false;
-            }
-            else if (evt.keyCode === 40) { //Down
-
-            }
-            else if (evt.keyCode === 38) { //Up
-            }
-            else {
-                var openList = true;
-            }
             if (evt.target.id == 'startAdresse') {
                 var target = 'start';
             }
             else {
                 var target = 'ziel';
             }
-            this.model.search(value, target, openList);
+            if (evt.keyCode === 40) { //Down
+            }
+            else if (evt.keyCode === 38) { //Up
+            }
+            else if (evt.keyCode === 27 || evt.keyCode === 13) { //Esc oder Enter
+                this.model.set('fromList', '');
+                this.model.set('toList', '');
+            }
+            else {
+                if (evt.target.id == 'startAdresse') {
+                    this.model.set('fromCoord', '');
+                    this.model.set('fromAdresse', '');
+                }
+                else {
+                    this.model.set('toCoord', '');
+                    this.model.set('toAdresse', '');
+                }
+                this.model.suggestByBKG(value, target);
+            }
         },
         setGeolocation: function (geoloc) {
             if (_.isArray(geoloc) && geoloc.length == 2) {
@@ -221,9 +263,15 @@ define([
                 $('#RoutingWin').hide();
             }
             else {
+                if ($("#geolocate").length > 0) {
+                    $("#startAdressePositionSpan").show();
+                }
+                else {
+                    $("#startAdressePositionSpan").hide();
+                }
                 var that = this;
                 $('#RoutingWin').show(1000);
-                if (this.model.get('fromCoord') == '') {
+                if (this.model.get('fromCoord') == '' && $("#geolocate").length > 0) {
                     that.startAdressePosition();
                 }
             }
