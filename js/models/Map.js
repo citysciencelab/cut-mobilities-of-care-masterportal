@@ -77,11 +77,11 @@ define([
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
                 if (_.has(Config, "tree")) {
-                _.each(TreeList.pluck("layerList").reverse(), function (layer) {
-                    _.each(layer, function (element) {
-                        this.get("map").addLayer(element.get("layer"));
-                    }, this);
-                },this);
+                    _.each(TreeList.pluck("sortedLayerList").reverse(), function (layer) {
+                        _.each(layer, function (element) {
+                            this.get("map").addLayer(element.get("layer"));
+                        }, this);
+                    },this);
                 }
                 else {
                     _.each(LayerList.pluck("layer"), function (layer) {

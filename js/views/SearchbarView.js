@@ -216,6 +216,10 @@ define([
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
                 }
+                else if (hit.type === "Thema") {
+                    $(".dropdown-menu-search").hide();
+                    EventBus.trigger("showLayerInTree", hit.model);
+                }
                 else if (hit.type === "BPlan festgestellt" || hit.type === "BPlan im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
                     var typeName = (hit.type === "BPlan festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
                     var propertyName = (hit.type === "BPlan festgestellt") ? "planrecht" : "plan";

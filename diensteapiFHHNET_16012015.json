@@ -4409,5 +4409,35 @@
                 ]
             }
         ]
+    },
+    {
+        "id" : "453",
+        "name" : "Stadtplan",
+        "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+        "typ" : "WMS",
+        "layers" : "geobasisdaten",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "false",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "ignore",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
+                "rs_id" : "HMDK#932c8a6b-31f7-40e0-aade-c29c5c631c4f",
+                "md_name" : "Internetstadtplan Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
     }
 ]

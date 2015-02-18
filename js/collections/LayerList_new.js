@@ -132,6 +132,7 @@ define([
             EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
             EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
             EventBus.on('currentResolution', this.setResolutionForAll, this);
+            // EventBus.on("showLayerInTree", this.showLayerInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
