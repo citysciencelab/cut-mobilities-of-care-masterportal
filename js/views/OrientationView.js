@@ -9,7 +9,7 @@ define([
 ], function ($, _, Backbone, OrientationTemplate, Orientation,Config, EventBus) {
 
     var OrientationView = Backbone.View.extend({
-        model: Orientation,
+//        model: Orientation,
         id:'toggleDiv',
         template: _.template(OrientationTemplate),
         events: {
@@ -17,9 +17,21 @@ define([
             'click .buttonPOI': 'getPOI'
         },
         initialize: function () {
-            this.render();
-            EventBus.on('showGeolocationMarker', this.showGeolocationMarker, this);
-            EventBus.on('clearGeolocationMarker', this.clearGeolocationMarker, this);
+            if (!navigator.geolocation) {
+                return;
+            }
+            else {
+                var that = this;
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    this.model = Orientation;
+                    that.render();
+                    EventBus.on('showGeolocationMarker', this.showGeolocationMarker, this);
+                    EventBus.on('clearGeolocationMarker', this.clearGeolocationMarker, this);
+                }, function (error) {
+//                    alert ('Standortbestimmung nicht verfügbar: ' + error.message);
+                    return;
+                });
+            }
         },
         showGeolocationMarker: function () {
             $('#geolocation_marker').addClass('glyphicon glyphicon-map-marker geolocation_marker');
