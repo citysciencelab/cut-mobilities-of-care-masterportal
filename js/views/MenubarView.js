@@ -54,7 +54,8 @@ define([
             EventBus.trigger('toggleLegendWin');
         },
         activateRoutingModul: function () {
-            EventBus.trigger('toggleRoutingWin');
+//            EventBus.trigger('toggleRoutingWin');
+            EventBus.trigger('toggleWin', ['routing', 'Routenplaner', 'glyphicon-road']);
         }
     });
 

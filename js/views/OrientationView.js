@@ -23,18 +23,18 @@ define([
             else {
                 var that = this;
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    that.setModel();
-                    that.render();
-                    EventBus.on('showGeolocationMarker', this.showGeolocationMarker, this);
-                    EventBus.on('clearGeolocationMarker', this.clearGeolocationMarker, this);
+                    that.finalize();
                 }, function (error) {
 //                    alert ('Standortbestimmung nicht verfügbar: ' + error.message);
                     return;
                 });
             }
         },
-        setModel: function () {
+        finalize: function () {
+            EventBus.on('showGeolocationMarker', this.showGeolocationMarker, this);
+            EventBus.on('clearGeolocationMarker', this.clearGeolocationMarker, this);
             this.model = Orientation;
+            this.render();
         },
         showGeolocationMarker: function () {
             $('#geolocation_marker').addClass('glyphicon glyphicon-map-marker geolocation_marker');

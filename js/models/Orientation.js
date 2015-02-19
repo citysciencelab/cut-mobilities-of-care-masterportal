@@ -42,7 +42,6 @@ define([
                 $(function () {
                     $('#loader').hide();
                 });
-                EventBus.trigger('setGeolocation', err);
                 EventBus.trigger('clearGeolocationMarker', this);
             }, this);
         },

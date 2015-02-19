@@ -12,18 +12,28 @@ define([
             endDescription: '',
             routingtime: '',
             routingdate: '',
-            fromAdresse: '',
             fromCoord: '',
-            toAdresse: '',
             toCoord: '',
             fromList: [],
-            toList: []
+            toList: [],
+            startAdresse: '',
+            zielAdresse: ''
 //            gazetteerURL: Config.searchBar.gazetteerURL(),
 //            proxyPrefix: Config.proxyURL + '?url='
         },
         initialize: function () {
+            EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
+        },
+        setStatus: function (args) {   // Fenstermanagement
+            if (args[2] === "routing") {
+                this.set("isCollapsed", args[1]);
+                this.set("isCurrentWin", args[0]);
+            }
+            else {
+                this.set("isCurrentWin", false);
+            }
         },
         setMap: function (map) {
             this.set('map', map);
@@ -64,16 +74,12 @@ define([
                     try {
                         var treffer = new Array();
                         if (target == 'start') {
-//                            this.set('fromCoord', '');
-//                            this.set('fromAdresse', '');
                             _.each(data, function (strasse, index, list) {
                                 treffer.push('id="' + strasse.suggestion + '" class="list-group-item startAdresseSelected"><span>' +  strasse.highlighted + '</span>');
                             });
                             this.set('fromList', treffer);
                         }
                         else {
-//                            this.set('toCoord', '');
-//                            this.set('toAdresse', '');
                             _.each(data, function (strasse, index, list) {
                                 treffer.push('id="' + strasse.suggestion + '" class="list-group-item zielAdresseSelected"><span>' +  strasse.highlighted + '</span>');
                             });
@@ -93,8 +99,7 @@ define([
         geosearchByBKG: function (value, target) {
             $.ajax({
                 url: locations.host + '/bkg_geosearch',
-                data: 'srsName=EPSG:25832&count=1&outputformat=json&query=' + encodeURIComponent(value),//Config.proxyURL,
-                //data: {url: 'http://sg.geodatenzentrum.de/gdz_geokodierung__e4ba1dcf-304c-9709-3dc0-ed111caab5c3/suggest?query=' + encodeURIComponent(value)},
+                data: 'srsName=EPSG:25832&count=1&outputformat=json&query=' + value,//Config.proxyURL,
                 context: this,  // das model
                 async: true,
                 type: "GET",
@@ -103,17 +108,13 @@ define([
                         if (data.features[0] && data.features[0].geometry) {
                             if (target == 'start') {
                                 this.set('fromCoord', data.features[0].geometry.coordinates);
-                                this.set('fromAdresse', data.features[0].properties.text);
                                 this.set('fromList', '');
-                                $('#startAdresse').val(data.features[0].properties.text);
-                                $('#startAdresse').focus();
+                                this.set('startAdresse', data.features[0].properties.text);
                             }
                             else {
                                 this.set('toCoord', data.features[0].geometry.coordinates);
-                                this.set('toAdresse', data.features[0].properties.text);
                                 this.set('toList', '');
-                                $('#zielAdresse').val(data.features[0].properties.text);
-                                $('#zielAdresse').focus();
+                                this.set('zielAdresse', data.features[0].properties.text);
                             }
                             if (data.features[0].properties.typ != 'Haus'){
                                 this.suggestByBKG(data.features[0].properties.text, target);
@@ -123,7 +124,11 @@ define([
                     catch (error) {
                         //console.log(error);
                     }
-                }
+                },
+                error: function (error) {
+                    alert ('Adressabfrage fehlgeschlagen: ' + error.statusText);
+                },
+                timeout: 3000
             });
         },
         requestRoute: function () {

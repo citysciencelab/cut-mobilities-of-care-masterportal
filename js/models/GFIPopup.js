@@ -17,6 +17,7 @@ define([
             gfiOverlay: new ol.Overlay({ element: $('#gfipopup') }), // ol.Overlay
             gfiContent: [],
             gfiTitles : [],
+            wfsCoordinate: [],
             gfiURLs : [],
             gfiCounter: 0,
             isCollapsed: false,
@@ -52,6 +53,7 @@ define([
         setGFIParams: function (params) {
             $('#loader').show();
             var gfiContent;
+            this.set('wfsCoordinate', []);
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], 'name');
             var pContent = [], pTitles = [], pRoutables = [];
@@ -75,12 +77,18 @@ define([
                 }
             }
             if (pContent.length > 0) {
-                this.get('gfiOverlay').setPosition(params[1]);
+                if (this.get('wfsCoordinate').length > 0) {
+                    var position = this.get('wfsCoordinate');
+                }
+                else {
+                    var position = params[1];
+                }
+                this.get('gfiOverlay').setPosition(position);
                 this.set('gfiContent', pContent);
                 this.set('gfiTitles', pTitles);
                 this.set('gfiRoutables', pRoutables);
                 this.set('gfiCounter', pContent.length);
-                this.set('coordinate', params[1]);
+                this.set('coordinate', position);
             }
             $('#loader').hide();
         },
@@ -103,11 +111,12 @@ define([
                 }));
             }
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
-            // 5 mm um Klickpunkt forEachFeatureInExtent
-            var pMaxDist = 0.005 * pScale;
+            // 1 cm um Klickpunkt forEachFeatureInExtent
+            var pMaxDist = 0.01 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
             var pX = pCoordinate[0];
             var pY = pCoordinate[1];
+            this.set('wfsCoordinate', pFeatures.getGeometry().getFirstCoordinate());
             var pMinX = pExtent[0] - pMaxDist;
             var pMaxX = pExtent[2] + pMaxDist;
             var pMinY = pExtent[1] - pMaxDist;
