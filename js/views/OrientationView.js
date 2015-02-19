@@ -23,7 +23,7 @@ define([
             else {
                 var that = this;
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    this.model = Orientation;
+                    that.setModel();
                     that.render();
                     EventBus.on('showGeolocationMarker', this.showGeolocationMarker, this);
                     EventBus.on('clearGeolocationMarker', this.clearGeolocationMarker, this);
@@ -32,6 +32,9 @@ define([
                     return;
                 });
             }
+        },
+        setModel: function () {
+            this.model = Orientation;
         },
         showGeolocationMarker: function () {
             $('#geolocation_marker').addClass('glyphicon glyphicon-map-marker geolocation_marker');
