@@ -116,7 +116,7 @@ define([
                 $('#RoutingWin > .panel-route').show('slow');
             }
         },
-        toggleLayout: function () {
+        toggleLayout: function () {            
             if ($('#RoutingWin > .panel-description').is(":visible") == true) {
                 $('#toggleLayoutSpan').text('Beschreibung ');
                 $('#RoutingWin > .panel-route').show('slow');
@@ -145,18 +145,15 @@ define([
         adresse_click: function (evt) {
             var value = evt.target.value;
             var target = evt.target.id;
-            if (target === 'startAdresse') {
-                this.model.set('fromList', '');
+            if (target === 'startAdresse') {                
                 if (value === 'aktueller Standpunkt') {
-//                    $('#startAdresse').val('');
                     this.model.set('startAdresse', '');
                     this.model.set('fromCoord', '');
                     EventBus.trigger('clearGeolocationMarker', this);
                 }
             }
-            else {
-                this.model.set('toList', '');
-            }
+            this.model.set('toList', '');
+            this.model.set('fromList', '');
             evt.target.select();
         },
         coord_change: function (newValue) {
@@ -266,6 +263,9 @@ define([
                 else {
                     document.getElementById("RouteBerechnenButton").disabled = true;
                 }
+                if (this.model.get('description') != '') {
+                    this.toggleSwitcher();
+                }                
             }
             else {
                 this.undelegateEvents();
@@ -280,20 +280,10 @@ define([
                 }
                 else {
                     var localtime = date.toLocaleTimeString().split(':');
-                    var hourAsFloat = parseFloat(localtime[0].slice(1, localtime[0].length-1));
-                    if (hourAsFloat === NaN) {
-                        hourAsFloat = parseFloat(localtime[0]);
-                    }
-                    var minAsFloat = parseFloat(localtime[1].slice(1, localtime[1].length-1));
-                    console.log(minAsFloat);
-                    if (minAsFloat === NaN) {
-                        minAsFloat = parseFloat(localtime[1]);
-                    }
-                    var hour = ((hourAsFloat<10?'0':'') + hourAsFloat).toString();
-                    var minute = ((minAsFloat<10?'0':'') + minAsFloat).toString();
+                    var hour = localtime[0].length == 1 ? '0' + localtime[0] : localtime[0];
+                    var minute = localtime[1].length == 1 ? '0' + localtime[1] : localtime[1];                    
                     $('#timeButton').val(hour + ':' + minute);
                 }
-
                 var oldDate = this.model.get('routingdate');
                 if (oldDate && oldDate != '') {
                     $('#dayOfWeekButton').val(oldDate);

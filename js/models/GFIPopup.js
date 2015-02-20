@@ -21,7 +21,18 @@ define([
             gfiURLs : [],
             gfiCounter: 0,
             isCollapsed: false,
-            isVisible: false
+            isVisible: false,
+            isStreamingLibLoaded: false
+        },
+        /**
+         * Diese Funktion lädt die erforderlichen Scripte und CSS nur im Bedarfsfall, wenn ein Video
+         * wiedergegeben werden soll.
+         */
+        loadStreamingLibs: function () {
+            $("head").append($("<link rel='stylesheet' href='../../../libs/video-js/video-js.css' type='text/css' media='screen' />"));
+            $.getScript( "../../../libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
+                videojs.options.flash.swf = "../../../libs/video-js/video-js.swf"
+            });
         },
         /**
          * Wird aufgerufen wenn das Model erzeugt wird.
@@ -29,6 +40,7 @@ define([
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
             this.listenTo(this, 'change:isPopupVisible', this.sendGFIForPrint);
+            this.listenTo(this, 'change:isStreamingLibLoaded', this.loadStreamingLibs);
             EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
             EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
 //            EventBus.on('getGFIForPrint', this.sendGFIForPrint, this);
@@ -115,8 +127,7 @@ define([
             var pMaxDist = 0.01 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
             var pX = pCoordinate[0];
-            var pY = pCoordinate[1];
-            this.set('wfsCoordinate', pFeatures.getGeometry().getFirstCoordinate());
+            var pY = pCoordinate[1];            
             var pMinX = pExtent[0] - pMaxDist;
             var pMaxX = pExtent[2] + pMaxDist;
             var pMinY = pExtent[1] - pMaxDist;
@@ -125,6 +136,7 @@ define([
                 return;
             }
             else {
+                this.set('wfsCoordinate', pFeatures.getGeometry().getFirstCoordinate());
                 var pQueryFeatures = new Array();
                 if (pFeatures.getProperties().features) {
                     _.each(pFeatures.getProperties().features, function(element, index, list) {

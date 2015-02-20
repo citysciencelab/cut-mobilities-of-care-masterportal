@@ -512,9 +512,15 @@
         "clusterstrokewidth" : "3"
     },
     {
-        "layerId" : "2090",
+        "layerId" : "2119",
         "subclass" : "Icon",
         "imagename" : "dira.png",
+        "imagescale" : "0.3"
+    },
+    {
+        "layerId" : "2128",
+        "subclass" : "Icon",
+        "imagename" : "kamera.png",
         "imagescale" : "0.3"
     }
 ]

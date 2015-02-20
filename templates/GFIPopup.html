@@ -15,43 +15,46 @@
             }
     %>
     <tr>
-        <% if(key!=='Bild'){%>
-        <td>
-            <strong><%= key + ':'%></strong>
-        </td>
-        <td>
-            <% if (value.search('.html') !== -1) { %>
-                <a href="<%= value%>" target="_blank">Link</a>
-            <% } else if (value.substr(0, 7) == 'http://') { %>
-                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                    <img height="150" src="<%= value%>">
-                <% } else { %>
+        <% if(key === 'video'){ %>            
+            <td colspan="2" >
+               <video class="video-js vjs-default-skin" width="500" height="300" data-setup='{ "autoplay" : true, "preload":"auto", "children": {"controlBar": false}}'>
+                   <source src="<%=value%>"/>
+               </video>
+            </td>        
+        <% } else if(key === 'Bild'){%>
+            <td colspan="2" >
+               <% if (value.search('.html') !== -1) { %>
                     <a href="<%= value%>" target="_blank">Link</a>
+                <% } else if (value.substr(0, 7) == 'http://') { %>
+                    <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                        <img height="150" src="<%= value%>">
+                    <% } else { %>
+                        <a href="<%= value%>" target="_blank">Link</a>
+                    <% } %>
+                <% } else { %>
+                    <%= value %>
                 <% } %>
-            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-            <% } else { %>
-                <%= value %>
-            <% } %>
-        </td>
+            </td>
         <% } else {%>
-
-         <td colspan="2" >
-           <% if (value.search('.html') !== -1) { %>
-                <a href="<%= value%>" target="_blank">Link</a>
-            <% } else if (value.substr(0, 7) == 'http://') { %>
-                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                    <img height="150" src="<%= value%>">
-                <% } else { %>
+            <td>
+                <strong><%= key + ':'%></strong>
+            </td>
+            <td>
+                <% if (value.search('.html') !== -1) { %>
                     <a href="<%= value%>" target="_blank">Link</a>
+                <% } else if (value.substr(0, 7) == 'http://') { %>
+                    <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                        <img height="150" src="<%= value%>">
+                    <% } else { %>
+                        <a href="<%= value%>" target="_blank">Link</a>
+                    <% } %>
+                <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+                    <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+                <% } else { %>
+                    <%= value %>
                 <% } %>
-            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-            <% } else { %>
-                <%= value %>
-            <% } %>
-        </td>
-        <% }%>
+            </td>
+        <% } %>
     </tr>
     <% })}; %>
     </table>

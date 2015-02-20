@@ -18,8 +18,6 @@ define([
             toList: [],
             startAdresse: '',
             zielAdresse: ''
-//            gazetteerURL: Config.searchBar.gazetteerURL(),
-//            proxyPrefix: Config.proxyURL + '?url='
         },
         initialize: function () {
             EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
@@ -44,7 +42,7 @@ define([
             _.each(map.getLayers(), function (layer) {
                 if (_.isArray(layer)) {
                     _.each(layer, function (childlayer) {
-                        if (childlayer.id && childlayer.id == 'route') {
+                        if (childlayer.id && childlayer.id == 'routenplanerroute') {
                              map.removeLayer(childlayer);
                         }
                     });
@@ -138,11 +136,11 @@ define([
             *  routingdate [yyyy-mm-dd]
             */
             if (this.get('routingtime') != '' && this.get('routingdate')!= '') {
-                var timeoffset = (new Date().getTimezoneOffset()/60).toString().substr(0, 1) + '0' + (new Date().getTimezoneOffset()/60).toString().substr(1, 1);
+//                var timeoffset = (new Date().getTimezoneOffset()/60).toString().substr(0, 1) + '0' + (new Date().getTimezoneOffset()/60).toString().substr(1, 1);
                 var splitter = this.get('routingtime').split(':');
                 var utcHour = (parseFloat(splitter[0]) + new Date().getTimezoneOffset()/60).toString();
                 var utcMinute = parseFloat(splitter[1]);
-                request = request + '&STARTTIME=' + this.get('routingdate') + ' ' + utcHour + ':' + utcMinute + ' ' + timeoffset + '00';
+                request = request + '&STARTTIME=' + this.get('routingdate') + 'T' + utcHour + ':' + utcMinute + ':00.000Z';
             }
             $('#loader').show();
             $.ajax({
@@ -165,7 +163,7 @@ define([
                             })
                         })
                     });
-                    vectorlayer.id = 'route';
+                    vectorlayer.id = 'routenplanerroute';
                     this.get('map').addLayer(vectorlayer);
                     this.set('endDescription', olFeature.get('EndDescription'));
                     this.set('description', olFeature.get('RouteDescription'));
