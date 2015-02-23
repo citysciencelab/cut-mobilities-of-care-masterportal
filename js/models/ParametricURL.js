@@ -19,7 +19,7 @@ define([
              * Ist der Parameter 'center' vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
              */
             if (_.has(result, 'CENTER')) {
-                var values = _.values(_.pick(result, 'center'))[0].split(',');
+                var values = _.values(_.pick(result, 'CENTER'))[0].split(',');
                 _.each(values, function(value, index, list) {
                     value = parseInt(value);
                     values[index] = value;
