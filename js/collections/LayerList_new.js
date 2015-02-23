@@ -20,7 +20,7 @@ define([
             }
             else if (attrs.typ === 'GROUP') {
                 return new GroupLayer(attrs, options);
-            }
+            }            
         },
         parse: function (response) {
             // Layerbaum mit Ordnerstruktur
@@ -87,8 +87,12 @@ define([
                     }
                     // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: '1364' }, { id: '1365' }], visible: false }
                     else if (_.has(element, "id") && _.isArray(element.id)) {
+                        var idlist = '';
+                        _.each(element.id, function (ele, index, list) {
+                            idlist = idlist + '_' + ele.id;
+                        });
                         var groupModel = {
-                            id: _.uniqueId("grouplayer_"),
+                            id: idlist.substr(1),
                             name: element.name,
                             typ: "GROUP",
                             styles: element.styles  // Styles der Childlayer

@@ -38,6 +38,19 @@ define([
                     if (_.find(values, function (value) {return value == layerID.id})) {
                         layerID.visible = true;
                     }
+                    else if (_.isArray(layerID.id)) {
+                        var idlist = '';
+                        _.each(layerID.id, function (ele, index, list) {
+                            idlist = idlist + '_' + ele.id;
+                        });
+                        idlist = idlist.substr(1);
+                        if (_.find(values, function (value) {return value == idlist})) {
+                            layerID.visible = true;
+                        }
+                        else {
+                            layerID.visible = false;
+                        }
+                    }
                     else {
                         layerID.visible = false;
                     }
