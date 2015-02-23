@@ -29,9 +29,9 @@ define([
          * wiedergegeben werden soll.
          */
         loadStreamingLibs: function () {
-            $("head").append($("<link rel='stylesheet' href='../../../libs/video-js/video-js.css' type='text/css' media='screen' />"));
-            $.getScript( "../../../libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
-                videojs.options.flash.swf = "../../../libs/video-js/video-js.swf"
+            $("head").append($("<link rel='stylesheet' href='" + locations.host + "/libs/video-js/video-js.css' type='text/css' media='screen' />"));
+            $.getScript(locations.host + "/libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
+                videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf"
             });
         },
         /**
