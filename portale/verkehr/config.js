@@ -53,8 +53,9 @@ define(function () {
              ],
              visible: false, name: 'HVV Buslinien', styles: ['geofox-bus', 'geofox_BusName']
             },
-            {id: '1935', visible: false, styles: 'geofox_Faehre', name: "HVV Fährverbindungen"},            
-            {id: '1935', visible: false, styles: 'geofox-bahn', name: "HVV Bahnlinien"},   
+            {id: '1935', visible: false, styles: ['geofox_Faehre', 'geofox-bahn'], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
+//            {id: '1935', visible: false, styles: 'geofox_Faehre', name: "HVV Fährverbindungen"},
+//            {id: '1935', visible: false, styles: 'geofox-bahn', name: "HVV Bahnlinien"},
             {id: '1933', visible: false, styles: 'geofox_stations', name: "HVV Haltestellen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: [], routable: true},
 //            {id: '49', visible: true, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
