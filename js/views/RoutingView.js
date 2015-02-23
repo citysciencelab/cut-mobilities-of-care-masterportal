@@ -116,7 +116,7 @@ define([
                 $('#RoutingWin > .panel-route').show('slow');
             }
         },
-        toggleLayout: function () {            
+        toggleLayout: function () {
             if ($('#RoutingWin > .panel-description').is(":visible") == true) {
                 $('#toggleLayoutSpan').text('Beschreibung ');
                 $('#RoutingWin > .panel-route').show('slow');
@@ -145,7 +145,7 @@ define([
         adresse_click: function (evt) {
             var value = evt.target.value;
             var target = evt.target.id;
-            if (target === 'startAdresse') {                
+            if (target === 'startAdresse') {
                 if (value === 'aktueller Standpunkt') {
                     this.model.set('startAdresse', '');
                     this.model.set('fromCoord', '');
@@ -265,7 +265,7 @@ define([
                 }
                 if (this.model.get('description') != '') {
                     this.toggleSwitcher();
-                }                
+                }
             }
             else {
                 this.undelegateEvents();
@@ -281,7 +281,7 @@ define([
                 else {
                     var localtime = date.toLocaleTimeString().split(':');
                     var hour = localtime[0].length == 1 ? '0' + localtime[0] : localtime[0];
-                    var minute = localtime[1].length == 1 ? '0' + localtime[1] : localtime[1];                    
+                    var minute = localtime[1].length == 1 ? '0' + localtime[1] : localtime[1];
                     $('#timeButton').val(hour + ':' + minute);
                 }
                 var oldDate = this.model.get('routingdate');

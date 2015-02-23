@@ -88,7 +88,7 @@
 .node-child-arrows {
     font-size: 10px;
     color: #cdcdcd;
-    padding: 0 6px;
+    /*padding: 0 6px;*/
     margin-right: 2em;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .node-child-arrows > span {
-    padding: 12px 4px;
+    padding: 12px 6px;
 }
 
 .node-child-arrows > span:hover {

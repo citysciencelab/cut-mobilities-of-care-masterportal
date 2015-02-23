@@ -1,16 +1,16 @@
 {
     "opendata": [
-        {"name": "Bevölkerung"},
-        {"name": "Geographie, Geologie und Geobasisdaten"},
-        {"name": "Gesundheit"},
-        {"name": "Infrastruktur, Bauen und Wohnen"},
-        {"name": "Kultur, Freizeit, Sport und Tourismus"},
-        {"name": "Politik und Wahlen"},
-        {"name": "Sonstiges"},
-        {"name": "Soziales"},
-        {"name": "Stadtentwicklung"},
-        {"name": "Transport und Verkehr"},
-        {"name": "Umwelt und Klima"},
-        {"name": "Öffentliche Verwaltung, Haushalt und Steuern"}
+        {"kategorie": "Bevölkerung"},
+        {"kategorie": "Geographie, Geologie und Geobasisdaten"},
+        {"kategorie": "Gesundheit"},
+        {"kategorie": "Infrastruktur, Bauen und Wohnen"},
+        {"kategorie": "Kultur, Freizeit, Sport und Tourismus"},
+        {"kategorie": "Politik und Wahlen"},
+        {"kategorie": "Sonstiges"},
+        {"kategorie": "Soziales"},
+        {"kategorie": "Stadtentwicklung"},
+        {"kategorie": "Transport und Verkehr"},
+        {"kategorie": "Umwelt und Klima"},
+        {"kategorie": "Öffentliche Verwaltung, Haushalt und Steuern"}
     ]
 }

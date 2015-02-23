@@ -145,8 +145,8 @@ define([
             else {
                 this.set({'visibility': true});
             }
-            if (this.get("layerType") === "layerByChildNode") {
-                this.get("parentNode").checkVisibilityOfAllChildren();
+            if (this.get("layerType") === "nodeChildLayer") {
+                this.get("parentView").checkVisibilityOfAllChildren();
             }
         },
         /**

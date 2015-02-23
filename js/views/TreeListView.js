@@ -16,10 +16,6 @@ define([
                 this.collection.on("add", this.render, this);
                 this.render();
             },
-            test: function (scale) {
-                console.log(scale);
-                this.render();
-            },
             render: function () {
                 this.$el.html('');
                 this.collection.forEach(this.addTreeNode, this);

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'collections/LayerList_new',
+    'collections/LayerList',
     'views/LayerView',
     'bootstrap'
 ], function ($, _, Backbone, LayerList, LayerView) {

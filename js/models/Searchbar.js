@@ -3,7 +3,7 @@ define([
     "underscore",
     "backbone",
     "openlayers",
-    "collections/LayerList_new",
+    "collections/LayerList",
     "eventbus",
     "config"
     ], function ($, _, Backbone, ol, LayerList, EventBus, Config) {
@@ -172,7 +172,9 @@ define([
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
                             this.searchInBPlans();
                             this.searchInFeatures();
-                            this.searchInLayers();
+                            if (_.has(Config, "tree") && Config.tree.active === true) {
+                                this.searchInLayers();
+                            }
                         }
                         catch (error) {
                             //console.log(error);

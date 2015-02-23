@@ -13,7 +13,11 @@
 @media (min-width: 768px) {
     #searchbar {
         float: right;
-        margin-right: 20px;
+        /*margin-right: 20px;*/
+        /*width: 100%;*/
+    }
+    #searchForm {
+        float: right;
     }
 }
 
@@ -37,6 +41,7 @@
 
 #searchInput {
     box-shadow: none;
+    min-width: 300px;
 }
 
 #searchInput::-ms-clear {
@@ -54,7 +59,7 @@
     min-width: 200px;
     position: absolute;
     top: 100%;
-    z-index: 1000;
+    z-index: 1001;
     padding: 0;
 }
 

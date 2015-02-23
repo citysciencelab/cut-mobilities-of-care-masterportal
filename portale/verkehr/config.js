@@ -39,7 +39,7 @@ define(function () {
                  }
              ],
              name: 'aktuelle Meldungen der TBZ', visible: false
-            },            
+            },
             {id:
              [
                 {

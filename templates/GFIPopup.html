@@ -15,12 +15,12 @@
             }
     %>
     <tr>
-        <% if(key === 'video'){ %>            
+        <% if(key === 'video'){ %>
             <td colspan="2" >
                <video class="video-js vjs-default-skin" width="500" height="300" data-setup='{ "autoplay" : true, "preload":"auto", "children": {"controlBar": false}}'>
                    <source src="<%=value%>"/>
                </video>
-            </td>        
+            </td>
         <% } else if(key === 'Bild'){%>
             <td colspan="2" >
                <% if (value.search('.html') !== -1) { %>

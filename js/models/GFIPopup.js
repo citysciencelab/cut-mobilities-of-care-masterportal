@@ -127,7 +127,7 @@ define([
             var pMaxDist = 0.01 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
             var pX = pCoordinate[0];
-            var pY = pCoordinate[1];            
+            var pY = pCoordinate[1];
             var pMinX = pExtent[0] - pMaxDist;
             var pMaxX = pExtent[2] + pMaxDist;
             var pMinY = pExtent[1] - pMaxDist;

@@ -3,7 +3,7 @@ define([
     'backbone',
     'openlayers',
     'config',
-    'collections/LayerList_new',
+    'collections/LayerList',
     'collections/TreeList',
     'eventbus'
     ], function (_, Backbone, ol, Config, LayerList, TreeList, EventBus) {
@@ -210,8 +210,9 @@ define([
             this.get('map').removeLayer(layer);
         },
         /**
-        */
-        moveLayer: function (args) {console.log(args);
+         *
+         */
+        moveLayer: function (args) {
             var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
             index = layers.indexOf(args[1]);
