@@ -29,7 +29,7 @@ define([
         var SearchbarView = Backbone.View.extend({
             "model": Searchbar,
             "id": "searchbar",
-            "className": "col-md-5 col-sm-4 col-xs-9",
+            "className": "col-md-5 col-sm-6 col-xs-9",
             "template": _.template(SearchbarTemplate),
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);
