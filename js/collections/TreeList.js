@@ -32,35 +32,60 @@ define([
                         }
                 }
             },
+
+            /**
+             * Die Node(Model) wird im Layerbaum eine Ebene nach oben verschoben.
+             */
             "moveNodeUp": function (model) {
-                var index = this.indexOf(model);
-                if (index > 0) {
-                    this.remove(model, {silent: true});
-                    this.add(model, {at: index - 1});
-                }
-                if (index > 0) {
-                    _.each(model.get("layerList"), function (element) {
-                        EventBus.trigger("moveLayer", [this.at(index).get("layerList").length, element.get("layer")]);
-                    }, this);
+                // Der aktuelle Index des Models innerhalb der Collection
+                var fromIndex = this.indexOf(model);
+                // Der neue Index für dieses Model
+                var toIndex = fromIndex - 1;
+                // Wenn die Node noch nicht ganz oben ist = An Position 0 in der Collection
+                if (fromIndex > 0) {
+                    // Die Anzahl der Layer dieser Node und der oberhalb liegenden Node in sortierter Reihenfolge
+                    var countLayer = this.at(fromIndex).get("sortedLayerList").length + this.at(toIndex).get("sortedLayerList").length - 1;
+                    // bewegt die Layer auf der Karte nach oben --> Map.js
+                    _.each(this.at(fromIndex).get("sortedLayerList"), function (element) {
+                        EventBus.trigger('moveLayer', [countLayer, element.get('layer')]);
+                    });
+                    // Entfernt das Model aus der Collection
+                    this.remove(model);
+                    // Fügt das Model an neuer Position der Collection wieder hinzu
+                    this.add(model, {at: toIndex});
                 }
             },
+
+            /**
+             * Die Node(Model) wird im Layerbaum eine Ebene nach unten verschoben.
+             */
             "moveNodeDown": function (model) {
-                var index = this.indexOf(model);
-                if (index < this.models.length) {
-                    this.remove(model, {silent: true});
-                    this.add(model, {at: index + 1});
+                // Der aktuelle Index des Models innerhalb der Collection
+                var fromIndex = this.indexOf(model);
+                // Der neue Index für dieses Model
+                var toIndex = fromIndex + 1;
+                // Wenn die Node noch nicht ganz unten ist = An letzter Position in der Collection
+                if (fromIndex < this.models.length - 1) {
+                    // Die Anzahl der layer der unterhalb liegenden Node in sortierter Reihenfolge
+                    var countLayer = this.at(toIndex).get("sortedLayerList").length;
+                    // bewegt die Layer auf der Karte nach unten --> Map.js
+                    _.each(this.at(fromIndex).get("sortedLayerList"), function (element) {
+                        EventBus.trigger('moveLayer', [-countLayer, element.get('layer')]);
+                    });
+                    // Entfernt das Model aus der Collection
+                    this.remove(model);
+                    // Fügt das Model an neuer Position der Collection wieder hinzu
+                    this.add(model, {at: toIndex});
                 }
-                _.each(model.get("layerList"), function (element) {
-                    EventBus.trigger("moveLayer", [-this.at(index).get("layerList").length, element.get("layer")]);
-                }, this);
             },
+
             "showLayerInTree": function (model) {
                 // öffnet den Tree
                 $(".nav li:first-child").addClass("open");
                 this.forEach(function (element) {
-                    if (model.get("kategorieOpendata") === element.get("name")) {
-                        element.set("isExpanded", true);console.log(model.get("layerType"));
-                        if (model.get("layerType") === "layerByChildNode") {
+                    if (model.get("kategorieOpendata") === element.get("kategorie")) {
+                        element.set("isExpanded", true);
+                        if (model.get("layerType") === "nodeChildLayer") {
                             _.each(element.get("childViews"), function (view) {
                                 if (view.model.get("name") === model.get("metaName")) {
                                     view.model.set("isExpanded", true);
@@ -76,7 +101,6 @@ define([
                         element.set("isExpanded", false);
                     }
                 });
-                // this.models[0].set("isExpanded", true);
             }
         });
 

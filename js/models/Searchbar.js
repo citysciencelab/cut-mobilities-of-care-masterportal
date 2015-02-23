@@ -3,7 +3,7 @@ define([
     "underscore",
     "backbone",
     "openlayers",
-    "collections/LayerList_new",
+    "collections/LayerList",
     "eventbus",
     "config"
     ], function ($, _, Backbone, ol, LayerList, EventBus, Config) {

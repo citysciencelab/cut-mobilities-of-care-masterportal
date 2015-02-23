@@ -14,6 +14,7 @@ define([
                 "click .node-button > .glyphicon": "moveInList"
             },
             initialize: function () {
+                this.listenToOnce(this.model, "change:isExpanded", this.setParentView);
                 this.listenTo(this.model, "change:isExpanded", this.render);
                 this.listenTo(this.model, "change:viewList", this.render);
             },
@@ -21,24 +22,29 @@ define([
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
                 if (this.model.get("isExpanded") === true) {
-                    _.each(this.model.get("childViews"), function (child) {
-                        this.$el.after(child.render().el);
-                        if (child.model.get("type") === "node" && child.model.get("isExpanded") === true) {
-                            child.renderChildren().el;
+                    _.each(this.model.get("childViews"), function (view) {
+                        this.$el.after(view.render().el);
+                        if (view.model.get("type") === "nodeChild" && view.model.get("isExpanded") === true) {
+                            view.renderChildren().el;
                         }
                     }, this);
                 }
                 else {
-                    _.each(this.model.get("childViews"), function (child) {
-                        child.remove();
-                        if (child.model.get("type") === "node") {
-                            _.each(child.model.get("layerView"), function (view) {
-                                view.remove();
+                    _.each(this.model.get("childViews"), function (view) {
+                        view.remove();
+                        if (view.model.get("type") === "nodeChild") {
+                            _.each(view.model.get("childViews"), function (viewChild) {
+                                viewChild.remove();
                             });
                         }
                     }, this);
                 }
                 return this;
+            },
+            setParentView: function () {
+                _.each(this.model.get("childViews"), function (view) {
+                    view.model.set("parentView", this);
+                }, this);
             },
             toggleExpand: function () {
                 this.model.toggleExpand();

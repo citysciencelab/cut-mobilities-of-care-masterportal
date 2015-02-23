@@ -4,7 +4,7 @@ define([
     'openlayers',
     'config',
     'collections/stylelist',
-    'collections/LayerList_new'
+    'collections/LayerList'
 ], function (_, Backbone, ol, Config, StyleList, Layerlist) {
 
 

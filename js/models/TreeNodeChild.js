@@ -3,39 +3,36 @@ define([
     'backbone',
     'eventbus',
     'config',
-    'collections/LayerList_new',
+    'collections/LayerList',
     'views/TreeNodeChildLayerView',
     'eventbus'
-    ], function (_, Backbone, EventBus, Config, LayerList, TreeLayerView, EventBus) {
+    ], function (_, Backbone, EventBus, Config, LayerList, TreeNodeChildLayerView, EventBus) {
 
-        var TreeChildNode = Backbone.Model.extend({
+        var TreeNodeChild = Backbone.Model.extend({
+
             "defaults": {
                 isExpanded: false,
                 isVisible: false,
                 settings: false,
-                transparence: 0,
-                parentName: "", // Der Name vom übergeordneten TreeNode(Kategorie)
-                metaID: ""  // ID vom Metadatensatz
+                transparence: 0
             },
+
             "initialize": function () {
-                // Aller Layer die zu diesem Unterordner gehören
-                this.set("layerList", LayerList.where({metaID: this.get("metaID"), kategorieOpendata: this.get("parentName")}));
-                this.setLayerListView();
+                this.setNestedViews();
             },
-            "setLayerListView": function () {
-                var layerView = [];
+
+            /**
+             * Erzeugt aus "children" pro Eintrag eine Model/View Komponente und schreibt diese gesammelt in das Attribut "childViews".
+             */
+            "setNestedViews": function () {
+                var nestedViews = [];
                 _.each(this.get("children"), function (child) {
-                    child.set("layerType", "layerByChildNode");
-                    var layerByChildNode = new TreeLayerView({model: child});
-                    layerView.push(layerByChildNode);
-                });
-                // _.each(this.get("layerList"), function (layer) {
-                //     // Ich bin ein Layer eines Unterordner. Wird für das Styling gebraucht.
-                //     layer.set("layerType", "layerByChildNode");
-                //     var layerByChildNode = new TreeLayerView({model: layer});
-                //     layerView.push(layerByChildNode);
-                // });
-                this.set("layerView", layerView);
+                    child.set("layerType", "nodeChildLayer");
+                    // child.set("parentNode", this);
+                    var treeNodeChildLayer = new TreeNodeChildLayerView({model: child});
+                    nestedViews.push(treeNodeChildLayer);
+                }, this);
+                this.set("childViews", nestedViews);
             },
             "toggleExpand": function () {
                 if (this.get("isExpanded") === true) {
@@ -82,7 +79,7 @@ define([
                 if (this.get('transparence') < 90) {
                     this.set('transparence', this.get('transparence') + value);
                 }
-                _.each(this.get("layerList"), function (layer) {
+                _.each(this.get("children"), function (layer) {
                     layer.set("transparence", this.get("transparence"));
                 }, this);
             },
@@ -90,7 +87,7 @@ define([
                 if (this.get('transparence') > 0) {
                     this.set('transparence', this.get('transparence') - value);
                 }
-                _.each(this.get("layerList"), function (layer) {
+                _.each(this.get("children"), function (layer) {
                     layer.set("transparence", this.get("transparence"));
                 }, this);
             },
@@ -102,5 +99,5 @@ define([
             }
         });
 
-        return TreeChildNode;
+        return TreeNodeChild;
     });

@@ -42,7 +42,7 @@ define(function () {
         startUpModul: '',
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
-            placeholder: "Adresssuche",
+            placeholder: "Straße, Adresse, Thema",
             gazetteerURL: function () {
                 if (locations.fhhnet) {
                     return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
