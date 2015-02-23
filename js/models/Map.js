@@ -50,7 +50,7 @@ define([
                 EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
                 EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
-                EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geööfnet oder nicht
+                EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geöffnet oder nicht
 
                 this.set('projection', proj25832);
 

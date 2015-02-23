@@ -16,11 +16,11 @@ define([
                 this.collection.on("add", this.render, this);
                 this.render();
             },
-            render: function () {console.log(this);
+            render: function () {
                 this.$el.html('');
                 this.collection.forEach(this.addTreeNode, this);
             },
-            addTreeNode: function (node) {console.log(node);
+            addTreeNode: function (node) {
                 if (node.get("layerList").length > 0) {
                     var treeNodeView = new TreeNodeView({model: node});
                     $('#tree').append(treeNodeView.render().el);

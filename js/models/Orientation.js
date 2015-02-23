@@ -37,14 +37,13 @@ define([
                 }
                 EventBus.trigger('showGeolocationMarker', this);
             },this);
-            geolocation.on('error', function(err) {
+            geolocation.once('error', function(err) {
                 alert('Standpunktbestimmung momentan nicht verfügbar!');
                 $(function () {
                     $('#loader').hide();
                 });
-                EventBus.trigger('setGeolocation', err);
                 EventBus.trigger('clearGeolocationMarker', this);
-            });
+            }, this);
         },
         getPOI: function(distance){
             this.set('distance', distance);

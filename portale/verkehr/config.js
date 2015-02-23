@@ -23,7 +23,7 @@ define(function () {
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
+            {id: '452', visible: false},
             {id:
              [
                  {
@@ -54,23 +54,23 @@ define(function () {
              visible: false, name: 'HVV Buslinien', styles: ['geofox-bus', 'geofox_BusName']
             },
             {id: '1935', visible: false, styles: ['geofox_Faehre', 'geofox-bahn'], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
-            // {id: '1935', visible: false, styles: 'geofox-bahn', name: "HVV Bahnlinien"},
             {id: '1933', visible: false, styles: 'geofox_stations', name: "HVV Haltestellen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: [], routable: true},
-            {id: '49', visible: false, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
+//            {id: '49', visible: true, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
             {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '52', visible: false, style: '52', clusterDistance: 30, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'situation', routable: true},
             {id: '48', visible: false, style: '48', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '50', visible: false, style: '50', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
-            {id: '53', visible: true, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
-            {id: '2090', visible: false, style: '2090', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2092', visible: false}
+            {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
+            {id: '2119', visible: false, style: '2119', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
+            {id: '2092', visible: false},
+            {id: '2128', visible: true, style: '2128', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
         ],
         attributions: true,
         menubar: true,
-        scaleLine: false,
+        scaleLine: true,
         mouseHover: false,
         isMenubarVisible: true,
         menu: {
@@ -82,7 +82,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: true
         },
         startUpModul: '',

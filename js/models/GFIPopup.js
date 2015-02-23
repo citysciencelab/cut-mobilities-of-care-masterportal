@@ -17,10 +17,22 @@ define([
             gfiOverlay: new ol.Overlay({ element: $('#gfipopup') }), // ol.Overlay
             gfiContent: [],
             gfiTitles : [],
+            wfsCoordinate: [],
             gfiURLs : [],
             gfiCounter: 0,
             isCollapsed: false,
-            isVisible: false
+            isVisible: false,
+            isStreamingLibLoaded: false
+        },
+        /**
+         * Diese Funktion lädt die erforderlichen Scripte und CSS nur im Bedarfsfall, wenn ein Video
+         * wiedergegeben werden soll.
+         */
+        loadStreamingLibs: function () {
+            $("head").append($("<link rel='stylesheet' href='" + locations.host + "/libs/video-js/video-js.css' type='text/css' media='screen' />"));
+            $.getScript(locations.host + "/libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
+                videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf"
+            });
         },
         /**
          * Wird aufgerufen wenn das Model erzeugt wird.
@@ -28,6 +40,7 @@ define([
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
             this.listenTo(this, 'change:isPopupVisible', this.sendGFIForPrint);
+            this.listenTo(this, 'change:isStreamingLibLoaded', this.loadStreamingLibs);
             EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
             EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
 //            EventBus.on('getGFIForPrint', this.sendGFIForPrint, this);
@@ -52,6 +65,7 @@ define([
         setGFIParams: function (params) {
             $('#loader').show();
             var gfiContent;
+            this.set('wfsCoordinate', []);
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], 'name');
             var pContent = [], pTitles = [], pRoutables = [];
@@ -75,12 +89,18 @@ define([
                 }
             }
             if (pContent.length > 0) {
-                this.get('gfiOverlay').setPosition(params[1]);
+                if (this.get('wfsCoordinate').length > 0) {
+                    var position = this.get('wfsCoordinate');
+                }
+                else {
+                    var position = params[1];
+                }
+                this.get('gfiOverlay').setPosition(position);
                 this.set('gfiContent', pContent);
                 this.set('gfiTitles', pTitles);
                 this.set('gfiRoutables', pRoutables);
                 this.set('gfiCounter', pContent.length);
-                this.set('coordinate', params[1]);
+                this.set('coordinate', position);
             }
             $('#loader').hide();
         },
@@ -103,8 +123,8 @@ define([
                 }));
             }
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
-            // 5 mm um Klickpunkt forEachFeatureInExtent
-            var pMaxDist = 0.005 * pScale;
+            // 1 cm um Klickpunkt forEachFeatureInExtent
+            var pMaxDist = 0.01 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
             var pX = pCoordinate[0];
             var pY = pCoordinate[1];
@@ -116,6 +136,7 @@ define([
                 return;
             }
             else {
+                this.set('wfsCoordinate', pFeatures.getGeometry().getFirstCoordinate());
                 var pQueryFeatures = new Array();
                 if (pFeatures.getProperties().features) {
                     _.each(pFeatures.getProperties().features, function(element, index, list) {

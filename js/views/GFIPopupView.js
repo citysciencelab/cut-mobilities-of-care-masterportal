@@ -96,8 +96,10 @@ define([
          *
          */
         render: function () {
+            if (_.has(this.model.get('gfiContent')[0], 'video')) {
+                this.model.set('isStreamingLibLoaded', true); //lädt Bibliotheken
+            }
             var attr = this.model.toJSON();
-            var that = this;
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
                 'placement': 'auto',
