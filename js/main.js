@@ -24,7 +24,7 @@ require.config({
         underscore: '/libs/underscore-1.6.0/underscore.min',
         backbone: '/libs/backbone-1.1.2/backbone.min',
         text: '/libs/require-2.1.11/plugins/text-2.0.10/text',
-        bootstrap: '/libs/bootstrap-3.1.1/js/bootstrap.min',
+        bootstrap: '/libs/bootstrap-3.3.2/js/bootstrap.min',
         proj4: '/libs/proj4-2.2.1/dist/proj4',
         config: locations.portal + 'config',
         eventbus: 'EventBus',

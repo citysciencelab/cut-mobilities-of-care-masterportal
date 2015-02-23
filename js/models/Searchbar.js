@@ -172,7 +172,9 @@ define([
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
                             this.searchInBPlans();
                             this.searchInFeatures();
-                            this.searchInLayers();
+                            if (_.has(Config, "tree") && Config.tree.active === true) {
+                                this.searchInLayers();
+                            }
                         }
                         catch (error) {
                             //console.log(error);

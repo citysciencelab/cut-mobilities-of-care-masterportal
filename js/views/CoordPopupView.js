@@ -20,9 +20,17 @@ define([
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
-                'placement': 'auto',
+                'placement': function () {
+                    if (this.getPosition().y > window.innerWidth / 2) {
+                        return 'top'
+                    }
+                    else {
+                        return 'bottom'
+                    }
+                },
                 'html': true,
-                'content': this.$el
+                'content': this.$el,
+                'viewport': 'canvas'
             });
             this.model.showPopup();
         },

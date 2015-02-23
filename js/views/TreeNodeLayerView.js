@@ -35,7 +35,6 @@ define([
                 this.$(".node-layer-settings").remove();
 
                 var attr = this.model.toJSON();
-                console.log(this.model);
                 if (this.model.hasChanged("settings") === true && model !== undefined) {
                     if (this.model.get("settings") === true) {
                         this.$el.find(".node-layer-button").after(this.templateSetting(attr));
