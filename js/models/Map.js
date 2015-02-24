@@ -91,6 +91,7 @@ define([
 							var x = _.values(_.pick(touchobj, 'pageX'))[0];
 							var y = _.values(_.pick(touchobj, 'pageY'))[0];
 							var coordinates = this.get('map').getCoordinateFromPixel([x,y]);
+                            // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
 							this.setGFIParams({coordinate: coordinates});
 						}
 						//e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
