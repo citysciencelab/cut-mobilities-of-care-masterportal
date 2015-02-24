@@ -15,7 +15,7 @@
             }
     %>
     <tr>
-        <% if(key === 'video'){ %>
+        <% if(key === 'video' && navigator.mimeTypes ["application/x-shockwave-flash"] != undefined){ %>
             <td colspan="2" >
                <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="500" height="300">
                    <source src="<%=value%>"/>

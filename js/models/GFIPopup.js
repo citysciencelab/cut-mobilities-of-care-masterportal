@@ -29,12 +29,14 @@ define([
          * wiedergegeben werden soll.
          */
         loadStreamingLibsAndStartStreaming: function () {
-            $("head").append($("<link rel='stylesheet' href='" + locations.host + "/libs/video-js/video-js.css' type='text/css' media='screen' />"));
-            $.getScript(locations.host + "/libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
-                videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf";
-                this.set('isStreamingLibLoaded', true);
-                this.starteStreaming(this.get('uniqueId'));
-            }.bind(this));
+            if (navigator.mimeTypes ["application/x-shockwave-flash"] != undefined) {
+                $("head").append($("<link rel='stylesheet' href='" + locations.host + "/libs/video-js/video-js.css' type='text/css' media='screen' />"));
+                $.getScript(locations.host + "/libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
+                    videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf";
+                    this.set('isStreamingLibLoaded', true);
+                    this.starteStreaming(this.get('uniqueId'));
+                }.bind(this));
+            }
         },
         /**
          * Diese Funktion startet das Video unter der übergebenen id
