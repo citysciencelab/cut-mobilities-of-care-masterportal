@@ -28,11 +28,23 @@ define([
          * Diese Funktion lädt die erforderlichen Scripte und CSS nur im Bedarfsfall, wenn ein Video
          * wiedergegeben werden soll.
          */
-        loadStreamingLibs: function () {
+        loadStreamingLibsAndStartStreaming: function () {
             $("head").append($("<link rel='stylesheet' href='" + locations.host + "/libs/video-js/video-js.css' type='text/css' media='screen' />"));
             $.getScript(locations.host + "/libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
-                videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf"
-            });
+                videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf";
+                this.set('isStreamingLibLoaded', true);
+                this.starteStreaming(this.get('uniqueId'));
+            }.bind(this));
+        },
+        /**
+         * Diese Funktion startet das Video unter der übergebenen id
+         */
+        starteStreaming: function(id) {
+            if (document.getElementById(id)) {
+                vjs(id, {"autoplay" : true, "preload":"auto", "children": {"controlBar": false}}, function(){
+//                    console.log('loaded');
+                });
+            }
         },
         /**
          * Wird aufgerufen wenn das Model erzeugt wird.
@@ -40,7 +52,6 @@ define([
         initialize: function () {
             this.set('element', this.get('gfiOverlay').getElement());
             this.listenTo(this, 'change:isPopupVisible', this.sendGFIForPrint);
-            this.listenTo(this, 'change:isStreamingLibLoaded', this.loadStreamingLibs);
             EventBus.trigger('addOverlay', this.get('gfiOverlay')); // listnener in map.js
             EventBus.on('setGFIParams', this.setGFIParams, this); // trigger in map.js
 //            EventBus.on('getGFIForPrint', this.sendGFIForPrint, this);
