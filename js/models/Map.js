@@ -74,7 +74,7 @@ define([
                 }));
 
                 // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
-				if (ol.has.TOUCH) {
+				if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf('android') != -1) {
 					var startx = 0;
 					var starty = 0;
 					this.get('map').getViewport().addEventListener('touchstart', function(e){
