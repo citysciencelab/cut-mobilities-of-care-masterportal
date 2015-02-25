@@ -66,7 +66,7 @@ define(function () {
             {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '2119', visible: false, style: '2119', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '2092', visible: false},
-            {id: '2128', visible: true, style: '2128', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
+            {id: '2128', visible: false, style: '2128', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
         ],
         attributions: true,
         menubar: true,

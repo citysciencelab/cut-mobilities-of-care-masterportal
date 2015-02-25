@@ -50,7 +50,6 @@ define([
                 EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
                 EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
-                EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geöffnet oder nicht
 
                 this.set('projection', proj25832);
 
@@ -125,15 +124,6 @@ define([
                 },this);
 
                 EventBus.trigger('getMap');
-            },
-
-            GFIPopupVisibility: function(value) {
-                if (value === true) {
-                    this.set('GFIPopupVisibility', true);
-                }
-                else {
-                    this.set('GFIPopupVisibility', false);
-                }
             },
 
             setMeasurePopup: function (ele) {
@@ -240,9 +230,6 @@ define([
          * style Anfrage bei WFS, ob Style auf unsichtbar.
          */
         setGFIParams: function (evt) {
-            if (this.get('GFIPopupVisibility') === true) {
-                EventBus.trigger('closeGFIParams', this);
-            }
             var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();

@@ -116,6 +116,10 @@ define([
                 this.set('gfiCounter', pContent.length);
                 this.set('coordinate', position);
             }
+            else {
+                this.unset('coordinate', {silent:true});
+                EventBus.trigger('closeGFIParams', this);
+            }
             $('#loader').hide();
         },
         /**

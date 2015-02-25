@@ -145,9 +145,9 @@ define([
          */
         destroy: function () {
             $('#popovermin').remove();
-            this.model.clearRoute();
-            EventBus.trigger('GFIPopupVisibility', false);
             this.model.destroyPopup();
+            EventBus.trigger('GFIPopupVisibility', false);
+            this.model.clearRoute();
         }
     });
 
