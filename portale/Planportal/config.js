@@ -45,14 +45,14 @@ searchBar: {
     placeholder: "Suche Adresse, B-Plan",
     gazetteerURL: function () {
         if (locations.fhhnet) {
-            return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
         }
         else {
-            return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+            return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
         }
     }
 },
-bPlanURL: "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_bebauungsplaene",
+bPlanURL: locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene",
 tools: {
     gfi: true,
     measure: true,

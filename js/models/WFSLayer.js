@@ -27,10 +27,12 @@ define([
          */
         updateData: function () {
             $('#loader').show();
-            var getrequest = this.buildGetRequest();
+            this.buildGetRequest();
             $.ajax({
-                url: Config.proxyURL + '?url=' + encodeURIComponent(getrequest),
+                url: this.get('url'),
+                data: this.get('data'),
                 async: true,
+                type: "GET",
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
@@ -191,24 +193,58 @@ define([
             });
         },
         buildGetRequest : function () {
-            // Stelle GetRequest zusammen
-            var getrequest = this.get('url')
-                + '?REQUEST=GetFeature'
+            // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
+            if (this.get('url').indexOf('http://WSCA0620.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://WSCA0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
+            }
+            else if (this.get('url').indexOf('http://bsu-ims.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://bsu-ims.fhhnet.stadt.hamburg.de', locations.host + '/bsu-ims');
+            }
+            else if (this.get('url').indexOf('http://bsu-ims') != -1) {
+                var newURL = this.get('url').replace('http://bsu-ims', locations.host + '/bsu-ims');
+            }
+            else if (this.get('url').indexOf('http://bsu-uio.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://bsu-uio.fhhnet.stadt.hamburg.de', locations.host + '/bsu-uio');
+            }
+            else if (this.get('url').indexOf('http://geofos.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
+            }
+            else if (this.get('url').indexOf('http://geofos') != -1) {
+                var newURL = this.get('url').replace('http://geofos', locations.host + '/geofos');
+            }
+            else if (this.get('url').indexOf('http://wscd0095') != -1) {
+                var newURL = this.get('url').replace('http://wscd0095', locations.host + '/geofos');
+            }
+            else if (this.get('url').indexOf('http://hmbtg.geronimus.info') != -1) {
+                var newURL = this.get('url').replace('http://hmbtg.geronimus.info', locations.host + '/hmbtg');
+            }
+            else if (this.get('url').indexOf('http://lgvfds01.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://lgvfds01.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds01');
+            }
+            else if (this.get('url').indexOf('http://lgvfds02.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://lgvfds02.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds02');
+            }
+            else if (this.get('url').indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
+            }
+
+            this.set('url', newURL);
+            var data = 'REQUEST=GetFeature'
                 + '&SERVICE=WFS'
                 + '&TYPENAME=' + this.get('featureType');
             if (this.get('version') && this.get('version') !== '' && this.get('version') !== 'nicht vorhanden') {
-                getrequest += '&VERSION=' + this.get('version');
+                data += '&VERSION=' + this.get('version');
             }
             else {
-                getrequest += '&VERSION=1.1.0';
+                data += '&VERSION=1.1.0';
             }
             if (this.get('srsname') && this.get('srsname') !== '' && this.get('srsname') !== 'nicht vorhanden') {
-                getrequest += '&SRSNAME=' + this.get('srsname');
+                data += '&SRSNAME=' + this.get('srsname');
             }
             else {
-                getrequest += '&SRSNAME=EPSG:25832';
+                data += '&SRSNAME=EPSG:25832';
             }
-            return getrequest;
+            this.set('data', data);
         }
     });
     return WFSLayer;

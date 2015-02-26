@@ -96,9 +96,11 @@ define([
          *
          */
         render: function () {
-            if (_.has(this.model.get('gfiContent')[0], 'video')) {
-                this.model.set('isStreamingLibLoaded', true); //lädt Bibliotheken
-            }
+            var uniqueId = _.uniqueId('video');
+//            if (_.has(this.model.get('gfiContent')[0], 'video') && this.model.get('isStreamingLibLoaded') === false) {
+//                this.model.loadStreamingLibsAndStartStreaming();
+//            }
+            this.model.set('uniqueId', uniqueId);
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
@@ -114,6 +116,9 @@ define([
                 'content': this.$el
             });
             this.model.showPopup();
+//            if (_.has(this.model.get('gfiContent')[0], 'video') && this.model.get('isStreamingLibLoaded') === true) {
+//                this.model.starteStreaming(uniqueId);
+//            }
             EventBus.trigger('closeMouseHoverPopup', this);
             EventBus.trigger('GFIPopupVisibility', true);
         },
@@ -140,9 +145,9 @@ define([
          */
         destroy: function () {
             $('#popovermin').remove();
-            this.model.clearRoute();
-            EventBus.trigger('GFIPopupVisibility', false);
             this.model.destroyPopup();
+            EventBus.trigger('GFIPopupVisibility', false);
+            this.model.clearRoute();
         }
     });
 

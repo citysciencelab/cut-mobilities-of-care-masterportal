@@ -13,6 +13,7 @@ define([
                 if (layerdef.id === '45') {
                     //layer 45 hat gleiche URL
                     url = layerdef.get('url');
+                    url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
                 }
             });
             this.set('url', url);
@@ -33,7 +34,7 @@ define([
             postmessage += '</wfs:GetFeature>';
             // TODO Implementieren von Intranet und Internet-URLs
             $.ajax({
-                url: Config.proxyURL + "?url=" + this.get('url'),
+                url: this.get('url'),
                 type: 'POST',
                 data: postmessage,
                 headers: {

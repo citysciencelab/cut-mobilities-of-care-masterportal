@@ -52,7 +52,6 @@ define([
                 EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
                 EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
-                EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geöffnet oder nicht
 
                 this.set('projection', proj25832);
 
@@ -93,6 +92,7 @@ define([
 							var x = _.values(_.pick(touchobj, 'pageX'))[0];
 							var y = _.values(_.pick(touchobj, 'pageY'))[0];
 							var coordinates = this.get('map').getCoordinateFromPixel([x,y]);
+                            // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
 							this.setGFIParams({coordinate: coordinates});
 						}
 						//e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
@@ -231,9 +231,6 @@ define([
          * style Anfrage bei WFS, ob Style auf unsichtbar.
          */
         setGFIParams: function (evt) {
-            if (this.get('GFIPopupVisibility') === true) {
-                EventBus.trigger('closeGFIParams', this);
-            }
             var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();

@@ -13,6 +13,7 @@ define([
                 if (layerdef.id === '45') {
                     //layer 45 hat gleiche URL
                     url = layerdef.get('url');
+                    url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
                 }
             });
             this.set('url', url);
@@ -35,7 +36,7 @@ define([
             postmessage += '</wfs:GetFeature>';
             var url = this.get('url');
             $.ajax({
-                url: Config.proxyURL + "?url=" + url,
+                url: url,
                 type: 'POST',
                 data: postmessage,
                 headers: {
@@ -52,7 +53,8 @@ define([
                         }
                     }
                     $.ajax({
-                        url: Config.proxyURL + '?url=' + url + encodeURIComponent('?SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0'),
+                        url: url,
+                        data: 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0',
                         async: true,
                         context: layer,
                         success: function (data, textStatus, jqXHR) {

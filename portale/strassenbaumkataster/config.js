@@ -36,13 +36,12 @@ define(function () {
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
             placeholder: "Adresssuche",
-            gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+        gazetteerURL: function () {
+            if (locations.fhhnet) {
+                return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            }
+            else {
+                return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
