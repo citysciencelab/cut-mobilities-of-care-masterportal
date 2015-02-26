@@ -28,6 +28,7 @@ define([
                 this.model.activateGFI();
             },
             activateMeasure: function () {
+                EventBus.trigger("toggleWin", ["measure", "Messeinstellungen", "glyphicon-edit"]);
                 this.model.activateMeasure();
             },
             activatePrint: function () {

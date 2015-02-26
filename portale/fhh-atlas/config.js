@@ -54,7 +54,7 @@ define(function () {
         },
         tools: {
             gfi: true,
-            measure: false,
+            measure: true,
             print: true,
             coord: true,
             orientation: false,

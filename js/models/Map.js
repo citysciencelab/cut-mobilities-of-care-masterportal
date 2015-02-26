@@ -40,6 +40,8 @@ define([
                 EventBus.on('removeLayer', this.removeLayer, this);
                 EventBus.on('addOverlay', this.addOverlay, this);
                 EventBus.on('removeOverlay', this.removeOverlay, this);
+                EventBus.on("addInteraction", this.addInteraction, this);
+                EventBus.on("removeInteraction", this.removeInteraction, this);
                 EventBus.on('moveLayer', this.moveLayer, this);
                 EventBus.on('setCenter', this.setCenter, this);
                 EventBus.on('zoomToExtent', this.zoomToExtent, this);
@@ -135,10 +137,6 @@ define([
                 }
             },
 
-            setMeasurePopup: function (ele) {
-                this.set('MeasurePopup', ele);
-            },
-
             initWfsFeatureFilter: function () {
                 EventBus.trigger('checkwfsfeaturefilter', this.get('map'));
             },
@@ -158,31 +156,30 @@ define([
             return scale;
         },
         activateClick: function (tool) {
-            var MeasurePopup = this.get('MeasurePopup');
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
-                if (MeasurePopup) {
-                    this.get('map').removeLayer(MeasurePopup.get('layer'));
-                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                    $('#measurePopup').html('');
-                }
+                this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
-                if (MeasurePopup) {
-                    this.get('map').removeLayer(MeasurePopup.get('layer'));
-                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                    $('#measurePopup').html('');
-                }
+                this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === 'measure') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').un('click', this.setGFIParams, this);
-                this.get('map').addLayer(MeasurePopup.get('layer'));
-                this.get('map').addInteraction(MeasurePopup.get('draw'));
+                this.get("map").on("pointermove", this.pointerMoveOnMap);
             }
+        },
+        pointerMoveOnMap: function (evt) {
+            EventBus.trigger("pointerMoveOnMap", evt)
+        },
+        addInteraction: function (interaction) {
+            this.get("map").addInteraction(interaction);
+        },
+        removeInteraction: function (interaction) {
+            this.get("map").removeInteraction(interaction);
         },
         /**
         */
@@ -192,12 +189,7 @@ define([
         /**
         */
         removeOverlay: function (overlay) {
-            var map = this.get('map');
-            map.getOverlays().forEach(function (ol) {
-                if (ol == overlay) {
-                    map.removeOverlay(overlay);
-                }
-            });
+            this.get('map').removeOverlay(overlay);
         },
         /**
         */
