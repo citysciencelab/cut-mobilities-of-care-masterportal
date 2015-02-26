@@ -63,7 +63,7 @@ define([
                 }
             }
             $.ajax({
-                url: locations.host + '/bkg_suggest',//Config.proxyURL,
+                url: locations.host + '/bkg_suggest',
                 data: 'count=15&query=' + value,
                 context: this,  //das Model
                 async: true,
@@ -97,7 +97,7 @@ define([
         geosearchByBKG: function (value, target) {
             $.ajax({
                 url: locations.host + '/bkg_geosearch',
-                data: 'srsName=EPSG:25832&count=1&outputformat=json&query=' + value,//Config.proxyURL,
+                data: 'srsName=EPSG:25832&count=1&outputformat=json&query=' + value,
                 context: this,  // das model
                 async: true,
                 type: "GET",

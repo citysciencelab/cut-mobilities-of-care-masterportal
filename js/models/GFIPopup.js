@@ -205,17 +205,52 @@ define([
             }
         },
         setWMSPopupContent: function (params) {
-            var request;
+            var url, data;
+            // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
+            if (params.url.indexOf('http://WSCA0620.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://WSCA0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
+            }
+            else if (params.url.indexOf('http://bsu-ims.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://bsu-ims.fhhnet.stadt.hamburg.de', locations.host + '/bsu-ims');
+            }
+            else if (params.url.indexOf('http://bsu-ims') != -1) {
+                url = params.url.replace('http://bsu-ims', locations.host + '/bsu-ims');
+            }
+            else if (params.url.indexOf('http://bsu-uio.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://bsu-uio.fhhnet.stadt.hamburg.de', locations.host + '/bsu-uio');
+            }
+            else if (params.url.indexOf('http://geofos.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
+            }
+            else if (params.url.indexOf('http://geofos') != -1) {
+                url = params.url.replace('http://geofos', locations.host + '/geofos');
+            }
+            else if (params.url.indexOf('http://wscd0095') != -1) {
+                url = params.url.replace('http://wscd0095', locations.host + '/geofos');
+            }
+            else if (params.url.indexOf('http://hmbtg.geronimus.info') != -1) {
+                url = params.url.replace('http://hmbtg.geronimus.info', locations.host + '/hmbtg');
+            }
+            else if (params.url.indexOf('http://lgvfds01.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://lgvfds01.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds01');
+            }
+            else if (params.url.indexOf('http://lgvfds02.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://lgvfds02.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds02');
+            }
+            else if (params.url.indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
+                url = params.url.replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
+            }
             // Für B-Pläne wird Feature_Count auf 3 gesetzt
             if (params.name === "Festgestellte Bebauungspläne") {
-                request = params.url + "&FEATURE_COUNT=3";
+                data = "FEATURE_COUNT=3";
             }
             else {
-                request =  params.url
+                data = '';
             }
             var pgfi = [];
             $.ajax({
-                url: Config.proxyURL + '?url=' + encodeURIComponent(request),
+                url: url,
+                data: data,
                 async: false,
                 type: 'GET',
                 context: this,  // das model

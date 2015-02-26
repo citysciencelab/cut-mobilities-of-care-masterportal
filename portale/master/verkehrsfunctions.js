@@ -34,7 +34,7 @@ define([
             postmessage += '</wfs:GetFeature>';
             // TODO Implementieren von Intranet und Internet-URLs
             $.ajax({
-                url: Config.proxyURL + "?url=" + this.get('url'),
+                url: this.get('url'),
                 type: 'POST',
                 data: postmessage,
                 headers: {
