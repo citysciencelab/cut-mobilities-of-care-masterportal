@@ -127,9 +127,9 @@ define([
                     requestStreetName = this.get("searchString");
                 }
                 $.ajax({
-                    url: Config.proxyURL,
-                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName)},
-                    context: this,  // das model
+                    url: this.get("gazetteerURL"),
+                    data: "StoredQuery_ID=findeStrasse&strassenname=" + requestStreetName,
+                    context: this,
                     async: true,
                     type: "GET",
                     success: function (data) {
@@ -191,9 +191,9 @@ define([
                 // this.set("numberSearch", false);
                 this.get("isSearchReady").set("numberSearch", false);
                 $.ajax({
-                    url: Config.proxyURL,
-                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName"))},
-                    context: this,  // das model
+                    url: this.get("gazetteerURL"),
+                    data: "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + this.get("onlyOneStreetName"),
+                    context: this,
                     async: true,
                     type: "GET",
                     success: function (data) {
@@ -329,7 +329,7 @@ define([
             "getBPlans": function () {
                 var plans = [];
                 $.ajax({
-                    url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
+                    url: this.get("bPlanURL"),
                     context: this,  // das model
                     contentType: "text/xml",
                     async: false,
@@ -360,7 +360,7 @@ define([
                     }
                 });
                 $.ajax({
-                    url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
+                    url: this.get("bPlanURL"),
                     context: this,  // das model
                     contentType: "text/xml",
                     async: true,

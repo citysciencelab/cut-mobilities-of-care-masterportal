@@ -13,6 +13,7 @@ define([
                 if (layerdef.id === '45') {
                     //layer 45 hat gleiche URL
                     url = layerdef.get('url');
+                    url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
                 }
             });
             this.set('url', url);

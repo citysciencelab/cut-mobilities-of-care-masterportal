@@ -56,7 +56,6 @@ define(function () {
             {id: '1935', visible: false, styles: ['geofox_Faehre', 'geofox-bahn'], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
             {id: '1933', visible: false, styles: 'geofox_stations', name: "HVV Haltestellen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: [], routable: true},
-//            {id: '49', visible: true, style: '49', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: []},
             {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
@@ -90,10 +89,10 @@ define(function () {
             placeholder: "Adresssuche",
             gazetteerURL: function () {
                 if (locations.fhhnet) {
-                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
-                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
                 }
             }
         },
