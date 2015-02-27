@@ -396,7 +396,7 @@ define([
                                 var hits = data.getElementsByTagName("gml:featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("app:plan")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             // WebKit
@@ -404,7 +404,7 @@ define([
                                 var hits = data.getElementsByTagName("featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("plan")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                         }
@@ -427,7 +427,7 @@ define([
                                 var hits = data.getElementsByTagName("gml:featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("app:planrecht")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             // WebKit
@@ -435,7 +435,7 @@ define([
                                 var hits = data.getElementsByTagName("featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("planrecht")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             $("#searchInput").prop("disabled", "");
