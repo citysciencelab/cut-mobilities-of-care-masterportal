@@ -143,8 +143,16 @@
     color: #333;
 }
 
-.node-layer-button > span {
-    padding: 10px;
+@media (max-width: 768px) {
+    .node-layer-button > span {
+        padding: 8px;
+    }
+}
+
+@media (min-width: 768px) {
+    .node-layer-button > span {
+        padding: 10px;
+    }
 }
 
 .node-layer-settings {
@@ -199,9 +207,18 @@
     color: #333;
 }
 
-.info-button > span {
-    padding: 10px;
+@media (max-width: 768px) {
+    .info-button > span {
+        padding: 8px;
+    }
 }
+
+@media (min-width: 768px) {
+    .info-button > span {
+        padding: 10px;
+    }
+}
+
 
 /***** Node-Child-Layer *****/
 .wrapper-node-child-layer {
