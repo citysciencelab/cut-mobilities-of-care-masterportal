@@ -8,20 +8,23 @@ define([
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
         initialize: function () {
             var url;
-            EventBus.on('aktualisiereverkehrsnetz', this.setEventValue, this);
+            EventBus.on('aktualisiereverkehrsnetz', this.refreshVerkehrssituation, this);
             _.each(LayerList.models, function (layerdef) {
                 if (layerdef.id === '45') {
                     //layer 45 hat gleiche URL
                     url = layerdef.get('url');
                     url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
+                    url = url.replace('http://geofos', locations.host + '/geofos');
                 }
             });
             this.set('url', url);
+//            EventBus.on('aktualisierebaustellen', this.refreshBaustellen, this);
         },
-        setEventValue: function (attributions, layer) {
+        refreshVerkehrssituation: function (attributions, layer) {
             if (!layer) {
                 return
             }
+            var newEventValue= '';
             var postmessage = '<wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" service="WFS" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
             postmessage += '<wfs:Query typeName="feature:bab_vkl" srsName="epsg:25832">';
             postmessage += '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">';
@@ -32,9 +35,9 @@ define([
             postmessage += '</ogc:Filter>';
             postmessage += '</wfs:Query>';
             postmessage += '</wfs:GetFeature>';
-            // TODO Implementieren von Intranet und Internet-URLs
+            var url = this.get('url');
             $.ajax({
-                url: this.get('url'),
+                url: url,
                 type: 'POST',
                 data: postmessage,
                 headers: {
@@ -47,17 +50,40 @@ define([
                             return element.localName === "received";
                         });
                         if (node[0]) {
-                            var value = 'Aktualität Verkehrslage: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3);
-                            this.set('eventValue', value);
+                            newEventValue = '<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</br>';
                         }
                     }
+                    $.ajax({
+                        url: url,
+                        data: 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0',
+                        async: true,
+                        context: layer,
+                        success: function (data, textStatus, jqXHR) {
+                            if (data.getElementsByTagName('wfs:FeatureCollection')[0]) {
+                                var nodeList = data.getElementsByTagName('wfs:FeatureCollection')[0].childNodes[0];//.nextSibling.childNodes;
+                                if (nodeList[0]) {
+                                    newEventValue = '<strong>' + nodeList[0].textContent.trim() + '</strong>' + '</br>' + newEventValue;
+                                }
+                            }
+                            this.set('eventValue', newEventValue);
+                        },
+                        error: function (data, textStatus, jqXHR) {
+                            this.set('eventValue', newEventValue);
+                        }
+                    });
                 },
                 context: layer,
                 error: function (err) {
-                    console.log(err);
+//                    alert('Dienst zur Darstellung der Aktualität derzeit gestört.');
                 }
             });
-        }
+        }/*,
+        refreshBaustellen: function (attributions, layer) {
+            if (!layer) {
+                return
+            }
+            layer.set('eventValue', '<strong>aktuelle Baustellen:</strong></br><p><a href="http://geoportal-hamburg.de/verkehr/static/baustellenliste.htm" target="_blank">Liste anzeigen</a></p>');
+        }*/
     });
     return aktualisiereVerkehrsdaten;
 });

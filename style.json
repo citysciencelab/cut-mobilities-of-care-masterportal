@@ -522,5 +522,11 @@
         "subclass" : "Icon",
         "imagename" : "kamera.png",
         "imagescale" : "0.3"
+    },
+    {
+        "layerId" : "2132",
+        "subclass" : "Icon",
+        "imagename" : "dwista.png",
+        "imagescale" : "0.3"
     }
 ]

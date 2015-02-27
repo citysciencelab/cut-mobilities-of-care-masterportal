@@ -18,13 +18,11 @@
         <% if(key === 'video'){ %>
             <% if( !navigator.userAgent.match(/Android/i) || !navigator.userAgent.match(/webOS/i) || !navigator.userAgent.match(/iPhone/i) || !navigator.userAgent.match(/iPad/i)
                  || !navigator.userAgent.match(/iPod/i) || !navigator.userAgent.match(/BlackBerry/i) || !navigator.userAgent.match(/Windows Phone/i)) { %>
-<!--
                 <td colspan="2" >
                    <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="500" height="300">
                        <source src="<%=value%>"/>
                    </video>
                 </td>
--->
             <% } %>
         <% } else if(key === 'Bild'){%>
             <td colspan="2" >
@@ -32,7 +30,7 @@
                     <a href="<%= value%>" target="_blank">Link</a>
                 <% } else if (value.substr(0, 7) == 'http://') { %>
                     <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                        <img height="150" src="<%= value%>">
+                        <a href="<%= value%>" target="_blank"><img width="300px" src="<%= value%>"/></a>
                     <% } else { %>
                         <a href="<%= value%>" target="_blank">Link</a>
                     <% } %>
