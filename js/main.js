@@ -99,9 +99,8 @@ require([
                         });
                     }
                     if (Config.tools.measure === true) {
-                        require(['views/MeasureModalView', 'views/MeasurePopupView'], function (MeasureModalView, MeasurePopupView) {
-                            new MeasureModalView();
-                            new MeasurePopupView();
+                        require(['views/MeasureView'], function (MeasureView) {
+                            new MeasureView();
                         });
                     }
                     if (Config.tools.print === true) {

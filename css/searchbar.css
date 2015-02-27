@@ -17,8 +17,12 @@
         /*width: 100%;*/
     }
     #searchForm {
-        float: right;
+        /*float: right;*/
     }
+}
+
+#searchForm > .input-group {
+    width: 100%;
 }
 
 #autoCompleteBody {
@@ -41,7 +45,7 @@
 
 #searchInput {
     box-shadow: none;
-    min-width: 300px;
+    /*min-width: 300px;*/
 }
 
 #searchInput::-ms-clear {

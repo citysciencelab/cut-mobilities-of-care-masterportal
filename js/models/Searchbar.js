@@ -107,7 +107,11 @@ define([
             */
             "checkStringAndSearch": function () {
                 this.set("hitList", []);
-                if (this.get("searchString").length >= 3) {
+                // Prüft ob der String aus genau 8 Ziffern besteht oder aus genau 8 Ziffern und an 5. Stelle ein Leerzeichen --> Flurstückssuche
+                if(/^[0-9]{8}$/.test(this.get("searchString")) === true || /^[0-9 ]{9}$/.test(this.get("searchString")) === true && this.get("searchString").charAt(4) === " ") {
+                    this.searchParcel();
+                }
+                else if (this.get("searchString").length >= 3) {
                     this.searchStreets();
                 }
             },
@@ -259,6 +263,56 @@ define([
                         }
                         // this.set("numberSearch", true);
                         this.get("isSearchReady").set("numberSearch", true);
+                    }
+                });
+            },
+
+            /**
+             *
+             */
+            "searchParcel": function () {
+                var gemarkung, flurstuecksnummer;
+                if (this.get("searchString").length === 9) {
+                    var splitSearchString = this.get("searchString").split(" ");
+                    gemarkung = splitSearchString[0];
+                    flurstuecksnummer = splitSearchString[1];
+                }
+                else {
+                    gemarkung = this.get("searchString").slice(0, 4);
+                    flurstuecksnummer = this.get("searchString").slice(4, 8);
+                }
+                $.ajax({
+                    url: Config.proxyURL,
+                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer},
+                    context: this,  // das model
+                    async: true,
+                    type: "GET",
+                    success: function (data) {
+                        var coord, geom, parcel = [];
+                        // Firefox, IE
+                        if (data.getElementsByTagName("wfs:member").length > 0) {
+                            try {
+                                coord = [parseFloat(data.getElementsByTagName("gml:pos")[0].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("gml:pos")[0].textContent.split(" ")[1])];
+                                geom = data.getElementsByTagName("gml:posList")[0].textContent;
+                                parcel.push({"type": "Parcel", "coordinate": coord, "geom": geom});
+                                this.pushHits("hitList", parcel);
+                            }
+                            catch (error) {
+                                // console.log(error);
+                            }
+                        }
+                        // WebKit
+                        else if (data.getElementsByTagName("member") !== undefined) {
+                            try {
+                                coord = [parseFloat(data.getElementsByTagName("pos")[0].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("pos")[0].textContent.split(" ")[1])];
+                                geom = data.getElementsByTagName("posList")[0].textContent;
+                                parcel.push({"type": "Parcel", "coordinate": coord, "geom": geom});
+                                this.pushHits("hitList", parcel);
+                            }
+                            catch (error) {
+                                // console.log(error);
+                            }
+                        }
                     }
                 });
             },

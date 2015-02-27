@@ -120,9 +120,17 @@ define([
                 this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length <= 2) {
+                        // console.log(this.model.get("hitList"));
                         var types = _.pluck(this.model.get("hitList"), "type");
                         if (_.contains(types, "Straße") && _.contains(types, "Adresse")) {
                             var hit = _.findWhere(this.model.get("hitList"), {type: "Adresse"});
+                            this.model.get("marker").setPosition(hit.coordinate);
+                            $("#searchMarker").css("display", "block");
+                            $(".dropdown-menu-search").hide();
+                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                        }
+                        else if (_.contains(types, "Parcel")) {
+                            var hit = _.findWhere(this.model.get("hitList"), {type: "Parcel"});
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
                             $(".dropdown-menu-search").hide();

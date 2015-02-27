@@ -10,6 +10,7 @@ define([
             _.each(Config.tools, this.setAttributes, this);
             this.listenTo(this, 'change:active', this.activateTool);
             EventBus.trigger('activateClick', 'gfi');
+            EventBus.on("activateGFI", this.activateGFI, this);
         },
         setAttributes: function (value, key) {
             this.set(key, value);
@@ -25,12 +26,7 @@ define([
         },
         activateTool: function () {
             EventBus.trigger('closeGFIParams', this);
-            if (this.get('active') === 'measure') {
-                EventBus.trigger('showMeasureModal');
-            }
-            else {
-                EventBus.trigger('activateClick', this.get('active'));
-            }
+            EventBus.trigger('activateClick', this.get('active'));
         }
     });
     return new Tools();
