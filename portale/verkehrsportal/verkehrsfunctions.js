@@ -50,7 +50,7 @@ define([
                             return element.localName === "received";
                         });
                         if (node[0]) {
-                            newEventValue = '<strong>Verkehrslage der TBZ:</strong></br><p>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</p>';
+                            newEventValue = '<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</br>';
                         }
                     }
                     $.ajax({
@@ -62,7 +62,7 @@ define([
                             if (data.getElementsByTagName('wfs:FeatureCollection')[0]) {
                                 var nodeList = data.getElementsByTagName('wfs:FeatureCollection')[0].childNodes[0];//.nextSibling.childNodes;
                                 if (nodeList[0]) {
-                                    newEventValue = newEventValue + '<strong>' + nodeList[0].textContent.trim() + '</strong>';
+                                    newEventValue = '<strong>' + nodeList[0].textContent.trim() + '</strong>' + '</br>' + newEventValue;
                                 }
                             }
                             this.set('eventValue', newEventValue);
