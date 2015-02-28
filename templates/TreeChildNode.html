@@ -1,0 +1,23 @@
+<div class="node-child-content <%if (isVisible === false) { print('color') }%>">
+    <div class="folder-icons pull-left">
+    <% if (isExpanded === false) { %>
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        <span class="glyphicon glyphicon-folder-close"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-minus-sign"></span>
+        <span class="glyphicon glyphicon-folder-open"></span>
+    <% } %>
+    <% if (isVisible === true) { %>
+        <span class="glyphicon glyphicon-check"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked"></span>
+    <% } %>
+    </div>
+    <% if (isVisible === true) { %>
+    <div class="folder-arrow pull-right">
+        <span class="glyphicon glyphicon-arrow-up"></span>
+        <span class="glyphicon glyphicon-arrow-down"></span>
+    </div>
+    <% } %>
+    <div class="folder-name"><%= name %></div>
+</div>

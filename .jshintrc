@@ -1,0 +1,37 @@
+{
+    "bitwise": true,
+    "browser": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "esnext": true,
+    "immed": true,
+    "jquery": true,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "node": true,
+    "regexp": true,
+    "smarttabs": true,
+    "strict": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+
+    "globals": {
+        "_gaq": true,
+        "afterEach": true,
+        "beforeEach": true,
+        "define": true,
+        "describe": true,
+        "expect": true,
+        "it": true,
+        "jasmine": true,
+        "module": true,
+        "require": true,
+        "requirejs": true,
+        "runs": true,
+        "sinon": true,
+        "waitsFor": true
+    }
+}

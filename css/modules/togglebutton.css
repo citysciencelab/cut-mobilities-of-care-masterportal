@@ -1,0 +1,26 @@
+#toggleButton {
+    position: fixed;
+    right: 17px;
+    z-index: 1000;
+}
+
+#toggleButton:hover {
+    cursor: pointer;
+}
+
+.glyphicon-up, .glyphicon-down {
+    font-size: 30px;
+    color: #f3f3f3;
+    background-color: #d42132;
+    border-color: #d42132;
+    border-style: solid;
+    border-radius: 0px 0px 4px 4px;
+}
+
+.glyphicon-up {
+    border-width: 5px 4px 8px 6px;
+}
+
+.glyphicon-down {
+    border-width: 8px 6px 5px 4px;
+}

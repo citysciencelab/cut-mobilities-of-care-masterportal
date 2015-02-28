@@ -1,0 +1,278 @@
+html, body {
+    height: 100%;
+    font-family: "UniversNextW01-Regular",sans-serif;
+}
+
+*:not(.badge) {
+    border-radius: 0 !important;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open {
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .menuitem{
+        font-size: 18px !important;
+    }
+    html, body {
+    font-size: 16px;
+    }
+    .menuitem{
+    font-size: 16px;
+    }
+    .dropdown-menu {
+      font-size: 18px;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar, .connav, .navbar-collapse, #navbarRow {
+        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
+    }
+}
+
+.navbar {
+    min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    border-top: 1px solid #e5e5e5;
+}
+
+
+
+#toggleDiv {
+    position: relative;
+    top:50px;
+    right: 17px;
+    z-index: 1000;
+}
+
+.color {
+    color: #cdcdcd;
+}
+@media (min-height:0px){
+    #tree {
+        max-height:100px;
+    }
+    .legendbody{
+        max-height:100px;
+    }
+
+
+}
+
+
+
+}
+
+@media (min-height:200px){
+    #tree {
+        max-height:160px;
+    }
+    .legendbody{
+        max-height:120px;
+    }
+
+    .legenddiv{
+        max-height:100px;
+    }
+}
+@media (min-height:250px){
+    #tree {
+        max-height:230px;
+    }
+    .legendbody{
+        max-height:200px;
+    }
+    .legenddiv{
+        max-height:120px;
+    }
+
+}
+@media (min-height:300px){
+    #tree {
+        max-height:260px;
+    }
+    .legendbody{
+        max-height:220px;
+    }
+
+    .legenddiv{
+        max-height:120px;
+    }
+
+}
+@media (min-height:480px){
+    #tree {
+        max-height:440px;
+    }
+    .legendbody{
+        max-height:400px;
+    }
+
+    .legenddiv{
+        max-height:300px;
+    }
+
+}
+@media (min-height: 768px) {
+    #tree {
+        max-height:768px;
+    }
+    .legendbody{
+        max-height:700px;
+    }
+
+    .legenddiv{
+        max-height:540px;
+    }
+
+}
+#tree{
+    border:0;
+    overflow:auto;
+    overflow-x: hidden;
+}
+.legendbody{
+    overflow:auto;
+}
+#legend{
+    overflow:hidden;
+}
+
+
+#tree small {
+    cursor: pointer;
+}
+
+
+.layername{
+    margin-left: 5px;
+}
+
+.menuitem{
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+
+
+
+.legend{
+    overflow:hidden;
+}
+.legenddiv{
+    overflow-y: auto;
+}
+#tree small {
+    cursor: pointer;
+}
+
+/*bootstrap überschreiben*/
+.tree-panel {
+    margin-bottom: 0 !important;
+    border: 0 !important;
+    min-width: 290px;
+}
+
+.panel-heading {
+    background-color: #ffffff !important;
+    padding-left: 10px !important;
+}
+
+.dropdown-menu {
+    padding:  0 !important;
+    min-width: 340px !important;
+}
+
+.nav > li {
+    border-left: 1px solid white;
+    border-right: 1px solid #e5e5e5;
+}
+
+.nav > li:hover {
+    background-color: white;
+}
+
+.glyphicon {
+    vertical-align: baseline;
+    /*top: 0px;*/
+}
+/*
+.list-group-item {
+    padding-top:  6px !important;
+    padding-bottom:  6px !important;
+}
+*/
+.list-group {
+    margin-bottom: 0px !important;
+}
+
+.list-group-item:last-child {
+    /*border-bottom: 1px solid #ddd !important;*/
+}
+
+.form-group:last-child {
+    margin-bottom: 0px;
+}
+
+#measurePopup {
+    position: absolute;
+    top: 70px;
+}
+
+/******* Ajax Loader *******/
+#loader
+{
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 2000;
+}
+
+#loader img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+}
+
+#coordPopup {
+    padding: 10px;
+}
+#poiPanel{
+    visibility: hidden;
+}
+
+.treeFilterError {
+    font-size: 10px;
+    color: #a94442;
+/*    display: none;*/
+}
+
+.mouseHover {
+    font-size: 12px;
+    background-color: rgba(150, 150, 150, 1);
+    color: #fff;
+    font-weight: bold;
+}
+.cluster{
+    font-size:25px;
+    border-radius:30px!important;
+    float:left;
+    margin:10px;
+}

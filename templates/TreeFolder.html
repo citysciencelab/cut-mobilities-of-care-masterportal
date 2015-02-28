@@ -1,0 +1,29 @@
+<div class="panel-heading">
+
+<!--    <div class="row">-->
+<!--        <div class="col-md-1 col-xs-1">-->
+        <% if (isExpanded == false) { %>
+            <span class="glyphicon glyphicon-plus-sign"></span>
+        <% } else { %>
+            <span class="glyphicon glyphicon-minus-sign"></span>
+        <% } %>
+<!--        </div>-->
+<!--            <div class="col-md-9 col-xs-9">-->
+        <% if (isChecked == false) { %>
+            <span class="glyphicon glyphicon-unchecked" style="padding-left: 5px;"></span>
+        <% } else { %>
+            <span class="glyphicon glyphicon-check" style="padding-left: 5px;"></span>
+        <% } %>
+            <strong><%= name %></strong>
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+<!-- Listengruppe -->
+<% if (isExpanded == false) { %>
+<ul class="list-group collapse <%= name %>">
+</ul>
+<% } else { %>
+<ul class="list-group collapse.in <%= name %>">
+</ul>
+<% } %>

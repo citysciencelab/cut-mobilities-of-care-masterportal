@@ -1,0 +1,105 @@
+.node {
+    padding: 0;
+}
+
+.node > div {
+    padding: 15px 8px;
+}
+
+.node-child {
+    border-right: 0;
+    padding: 12px 24px;
+}
+
+.node-child > div {
+    padding-left: 16px;
+    border-left: 1px dashed #232323;
+}
+
+.node-child-content > div.folder-arrow {
+    border-right: 1px solid #ddd;
+    top: -12px;
+}
+
+.folder-icons {
+    position: relative;
+    top: -3px;
+}
+
+.folder-icons span {
+    padding-right: 5px;
+}
+
+.folder-arrow {
+    position: relative;
+    right: -8px;
+    top: -15px;
+    background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+
+.folder-arrow span {
+    color: #777;
+    padding: 3px 5px 4px;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.folder-arrow span:hover {
+    cursor: pointer;
+    opacity: 1.0;
+}
+
+.folder-name {
+    padding-left: 4em;
+    padding-right: 5em;
+    width: 350px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#tree ul {
+    padding-left: 0;
+}
+
+/*.tree-node-children > li:last-child {
+    border-bottom: 0;
+}*/
+
+.children {
+    font-size: 12px;
+    padding-left: 23px;
+}
+
+.layerByNode {
+    font-size: 12px;
+    padding-left: 26px;
+    margin-left: 10px;
+    border-left: 1px dashed #232323;
+    max-height: 22px;
+    overflow: hidden;
+    padding-top: 2px;
+}
+
+.layerByChildNode {
+    padding-left: 30px;
+    margin-left: 32px;
+    font-size: 12px;
+    border-left: 1px dashed #cdcdcd;
+    padding-top: 2px;
+}
+
+
+.test2 {
+    border-left: 1px dashed #232323;
+    margin-left: 10px;
+    overflow: hidden;
+    max-height: 22px;
+}
+
+.layer-name {
+    padding-left: 2em;
+    padding-right: 4em;
+    width: 300px;
+}

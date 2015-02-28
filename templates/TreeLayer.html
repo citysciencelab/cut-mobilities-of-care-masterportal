@@ -1,0 +1,20 @@
+<% if (className === "layerByChildNode") { %>
+    <div class="test2">
+        <% } %>
+<div class="<%= className %> <%if (visibility === false) { print('color') }%>">
+        <div class="folder-icons pull-left">
+            <% if(visibility === true) { %>
+            <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span></button>
+            <% } else { %>
+                <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked"></span></button>
+            <% } %>
+        </div>
+        <div class="pull-right">
+            <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog" style="margin-right: 10px;"></span></button>
+            <button type="button" class="btn-glyphicon info pull-right"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
+        </div>
+        <div class="layer-name"><%= name %></div>
+</div>
+<% if (className === "layerByChildNode") { %>
+</div>
+        <% } %>

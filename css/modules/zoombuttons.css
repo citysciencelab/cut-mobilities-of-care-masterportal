@@ -1,0 +1,24 @@
+@media (max-width: 768px) {
+    #zoomButtons {
+        display: none;
+    }
+}
+
+#zoomButtons {
+    position: absolute;
+    left: 15px;
+}
+
+#zoomButtons span {
+    background-color: #d42132;
+    padding: 5px;
+    margin: 2px;
+    font-size: 18px;
+    color: #fff;
+    top: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+}
+
+#zoomButtons span:hover {
+    cursor: pointer;
+}

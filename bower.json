@@ -1,0 +1,25 @@
+{
+  "name": "lgv-main",
+  "version": "0.1.0",
+  "authors": [
+    "Andreas Klein <mail@andreasklein.org>"
+  ],
+  "description": "LGV Hamburg Geo Application",
+  "main": "main.js",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "build-config": "git@bitbucket.org:lgv-team/build-config.git#latest"
+  }
+}
