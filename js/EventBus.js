@@ -2,6 +2,8 @@ define([
     'underscore',
     'backbone'
 ], function (_, Backbone) {
+    'use strict';
+
     /**
      * @exports EventBus
      * @classdesc Dieses Modul gibt ein Objekt vom Typ Backbone.Events zurück. Damit ist es möglich

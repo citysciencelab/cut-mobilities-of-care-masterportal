@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/CoordPopup.html',
+    'text!../../templates/CoordPopup.html',
     'models/CoordPopup'
 ], function ($, _, Backbone, CoordPopupTemplate, CoordPopup) {
 

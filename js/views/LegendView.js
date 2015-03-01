@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Legend.html',
+    'text!../../templates/Legend.html',
     'models/Legend',
     'eventbus'
 ], function ($, _, Backbone, LegendTemplate, Legend, EventBus) {

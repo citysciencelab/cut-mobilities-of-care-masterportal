@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/PointOfInterest.html',
+    'text!../../templates/PointOfInterest.html',
     'models/PointOfInterest',
     'eventbus'
 ], function ($, _, Backbone, PointOfInterestTemplate, PointOfInterest, EventBus) {

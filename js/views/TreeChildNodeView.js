@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/TreeChildNode.html',
+    'text!../../templates/TreeChildNode.html',
     'views/TreeLayerView'
     ], function ($, _, Backbone, TreeChildNodeTemplate, TreeLayerView) {
 

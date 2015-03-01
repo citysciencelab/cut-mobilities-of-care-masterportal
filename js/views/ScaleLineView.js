@@ -4,7 +4,7 @@ define([
     'backbone',
     'eventbus',
     'models/ScaleLine',
-    'text!templates/ScaleLine.html'
+    'text!../../templates/ScaleLine.html'
 ], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate) {
 
     var ScaleLineView = Backbone.View.extend({

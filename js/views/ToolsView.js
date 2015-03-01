@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Tools.html',
+    'text!../../templates/Tools.html',
     'models/Tools',
     'eventbus'
     ], function ($, _, Backbone, ToolsTemplate, Tools, EventBus) {

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/GFIPopup.html',
+    'text!../../templates/GFIPopup.html',
     'models/GFIPopup',
     'eventbus'
 ], function ($, _, Backbone, GFIPopupTemplate, GFIPopup, EventBus) {

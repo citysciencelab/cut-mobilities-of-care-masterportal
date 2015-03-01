@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Orientation.html',
+    'text!../../templates/Orientation.html',
     'models/Orientation',
     'config',
     'eventbus'

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Menubar.html',
+    'text!../../templates/Menubar.html',
     'views/LayerListView',
     'models/Menubar',
     'config',

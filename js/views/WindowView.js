@@ -4,7 +4,7 @@ define([
     "config",
     "eventbus",
     "models/Window",
-    "text!templates/Window.html"
+    "text!../../templates/Window.html"
     ], function (_, Backbone, Config, EventBus, Window, WindowTemplate) {
 
         var WindowView = Backbone.View.extend({

@@ -2,7 +2,7 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!templates/PrintWin.html",
+    "text!../../templates/PrintWin.html",
     "models/Print",
     "eventbus"
     ], function ($, _, Backbone, PrintWinTemplate, Print, EventBus) {

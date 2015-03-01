@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/TreeLayer.html',
-    'text!templates/TreeLayerSetting.html',
+    'text!../../templates/TreeLayer.html',
+    'text!../../templates/TreeLayerSetting.html',
     'eventbus'
     ], function ($, _, Backbone, TreeLayerTemplate, TreeLayerSettingTemplate, EventBus) {
 

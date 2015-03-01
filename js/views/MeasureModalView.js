@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/MeasureModal.html',
+    'text!../../templates/MeasureModal.html',
     'models/MeasureModal',
     'eventbus'
 ], function ($, _, Backbone, MeasureModalTemplate, MeasureModal, EventBus) {

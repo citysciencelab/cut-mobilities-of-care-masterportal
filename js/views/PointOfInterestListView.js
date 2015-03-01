@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/PointOfInterestList.html',
+    'text!../../templates/PointOfInterestList.html',
     'collections/PointOfInterestList',
     'views/PointOfInterestView',
     'eventbus'

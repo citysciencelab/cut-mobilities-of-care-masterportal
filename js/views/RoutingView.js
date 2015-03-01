@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/RoutingWin.html',
+    'text!../../templates/RoutingWin.html',
     'models/Routing',
     'eventbus',
     'models/Orientation'
@@ -27,7 +27,7 @@ define([
             'click #RouteBerechnenButton': 'routeBerechnen',
             'change .changedWochentag': 'changedRoutingTime',
             'change .changedUhrzeit' : 'changedRoutingTime',
-            
+
             'click .startAdresseChanged' : 'deleteDefaultString',
             'keyup .startAdresseChanged' : 'adresseChanged_keyup',
             'keyup .zielAdresseChanged' : 'adresseChanged_keyup',

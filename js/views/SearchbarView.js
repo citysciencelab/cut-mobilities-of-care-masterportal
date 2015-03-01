@@ -3,9 +3,9 @@ define([
     "underscore",
     "backbone",
     "openlayers",
-    "text!templates/Searchbar.html",
-    "text!templates/SearchbarRecommendedList.html",
-    "text!templates/SearchbarHitList.html",
+    "text!../../templates/Searchbar.html",
+    "text!../../templates/SearchbarRecommendedList.html",
+    "text!../../templates/SearchbarHitList.html",
     "models/Searchbar",
     "eventbus",
     "config"

@@ -1,0 +1,4443 @@
+[
+    {
+        "id" : "8",
+        "name" : "Luftbilder DOP 10",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP10/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "false",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "ignore",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
+                "rs_id" : "HMDK#25DB0242-D6A3-48E2-BAE4-359FB28491BA",
+                "md_name" : "Digitale Orthophotos 10cm Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "36",
+        "name" : "Stadtteile",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A3_1_Statistische_Einheiten/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "2668899F-06C9-4A96-9052-FC5A570F5E5B",
+                "rs_id" : "HMDK#2668899F-06C9-4A96-9052-FC5A570F5E5B",
+                "md_name" : "Statistische Einheiten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : [
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "37",
+        "name" : "Statistisches Gebiet",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A3_1_Statistische_Einheiten/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "2668899F-06C9-4A96-9052-FC5A570F5E5B",
+                "rs_id" : "HMDK#2668899F-06C9-4A96-9052-FC5A570F5E5B",
+                "md_name" : "Statistische Einheiten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : [
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "38",
+        "name" : "Stadtteile",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaANord_Stadtteile/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "89D617D4-9BE9-440C-9AE5-043E3CB4BE1E",
+                "rs_id" : "HMDK#6026561c-4ad4-4263-8189-940852b4d426",
+                "md_name" : "Hamburger Stadtteile",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "39",
+        "name" : "Webatlasde",
+        "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_webatlasde",
+        "typ" : "WMS",
+        "layers" : "webatlasde",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "40",
+        "name" : "Rasterplan",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Rasterplan/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "94.494048",
+        "maxScale" : "22678.571429",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "41",
+        "name" : "Dip",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Rasterplan/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "94.494048",
+        "maxScale" : "236235.119048",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "54",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "55",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "3",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "56",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "4",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "57",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "5",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "58",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "8",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "59",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "9",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "60",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "10",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "61",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "11",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "62",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "14",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "63",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "15",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "64",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "16",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "65",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "17",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "66",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "20",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "67",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "21",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "68",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "22",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "69",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "23",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "70",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "26",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "71",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "27",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "72",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "28",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "73",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "29",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "74",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "32",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "75",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "33",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "76",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "34",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "77",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "35",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "78",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "38",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "79",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "39",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "80",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "40",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "81",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "41",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "82",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "44",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "83",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "45",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "84",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "46",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "85",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "47",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "86",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "50",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "87",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "51",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "88",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "52",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "89",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "53",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "90",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "56",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "91",
+        "name" : "Footprint",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "57",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "92",
+        "name" : "Boundary",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "58",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "93",
+        "name" : "Information",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Historische_Karte_1_5000/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "59",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "rs_id" : "HMDK#96C7AE05-7EBD-48C3-B7B4-35EECC7774E8",
+                "md_name" : "Historische Karten 1: 5000",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "94",
+        "name" : "Luftbilder DOP 20",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP20/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "false",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "ignore",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DD10AFD3-5530-4FD4-933D-5FC71D14B8C7",
+                "rs_id" : "HMDK#de662af5-75af-4bb0-82b4-33c7e90d0c14",
+                "md_name" : "Digitale Orthophotos 20cm Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "95",
+        "name" : "Strassenverkehr Lnight 2012",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_IB_Strassenverkehr/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "030A8F47-EBEF-4669-94FC-0299BB7D5C88",
+                "rs_id" : "HMDK#9947729f-0c35-44e5-ae77-9d55063cce41",
+                "md_name" : "Lärmkarten Hamburg (§47c BlmSchG)",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Umwelt und Klima"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "96",
+        "name" : "Strassenverkehr Lden 2012",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_IB_Strassenverkehr/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "030A8F47-EBEF-4669-94FC-0299BB7D5C88",
+                "rs_id" : "HMDK#9947729f-0c35-44e5-ae77-9d55063cce41",
+                "md_name" : "Lärmkarten Hamburg (§47c BlmSchG)",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Umwelt und Klima"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "97",
+        "name" : "Hauptverkehrsstrassen",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "98",
+        "name" : "Bundesstrassen Ortsdurchfahrt",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "99",
+        "name" : "Bundesstrassen Freie Strecke",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "3",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "100",
+        "name" : "Bundesautobahnen",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "4",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "101",
+        "name" : "Umleitungen",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "6",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "102",
+        "name" : "Strassenverdichtung",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "7",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "103",
+        "name" : "Gefahrguttrassen Ergänzungen",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "8",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "104",
+        "name" : "Buslinien",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "9",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "105",
+        "name" : "Netzergänzungen",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BWVI_V_Strategisches_Strassennetz/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "10",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "965E5C08-431B-443E-B636-D67A71E7E133",
+                "rs_id" : "HMDK#fbcec5ce-f46b-45d5-b2ce-5d92374e96cb",
+                "md_name" : "Strategisches Straßennetz Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "120",
+        "name" : "Camping In Cuxhaven",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_cuxhaven_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "121",
+        "name" : "Camping In Hamburg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_hh_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "122",
+        "name" : "Camping Im Herzogtum Laünburg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_lauenburg_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "123",
+        "name" : "Camping In Lüneburg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_lueneburg_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "124",
+        "name" : "Camping In Lüchow-Dannenberg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_ld_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "125",
+        "name" : "Camping In Pinneberg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_pinneberg_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "126",
+        "name" : "Camping In Rotenburg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_row_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "127",
+        "name" : "Camping In Segeberg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_segeberg_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "128",
+        "name" : "Camping In Stade",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_stade_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "129",
+        "name" : "Camping In Steinburg",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_steinburg_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "130",
+        "name" : "Camping In Stormarn",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_stormarn_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "131",
+        "name" : "Camping In Ülzen",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_uelzen_camping",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "132",
+        "name" : "Draussen Im Grünen",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_draussenimgruenen",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "133",
+        "name" : "Kunstoffen In Ludwigslust",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "lwl_kunstoffen",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "134",
+        "name" : "Golfen In Der Mrh",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_mrh_golf",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "135",
+        "name" : "Programmkino In Der Mrh",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_programmkino",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "136",
+        "name" : "Sportboothafen In Der Mrh",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_sportboothafen",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "137",
+        "name" : "100 Orte Am Wasser",
+        "url" : "http://geofos/fachdaten_public/services/wms_mrh_freizeit",
+        "typ" : "WMS",
+        "layers" : "mrh_100ortewasser",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "rs_id" : "HMDK#09DE39AB-A965-45F4-B8F9-0C339A45B154",
+                "md_name" : "MRH Fachdaten",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "148",
+        "name" : "Luftbilder DOP 10 (belaubt)",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP10_belaubt/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "false",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "ignore",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "2BEDFB21-C533-4C67-AF0F-66A5213F9B7B",
+                "rs_id" : "HMDK#2BEDFB21-C533-4C67-AF0F-66A5213F9B7B",
+                "md_name" : "Digitale Orthophotos 10cm (belaubt) Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "149",
+        "name" : "Tn Vegetation",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "11.879790",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "150",
+        "name" : "Tn Siedlung",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "11.879790",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "151",
+        "name" : "Untergeordnetesgewässer Linie",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "152",
+        "name" : "Untergeordnetesgewässer Fläche",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "3",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "11.879790",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "153",
+        "name" : "Tn Gewässer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "4",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "11.879790",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "154",
+        "name" : "Bauwerke Verkehrsbereich Fläche",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "5",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "155",
+        "name" : "Tn Verkehr",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "6",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "11.879790",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "156",
+        "name" : "Bauwerke Siedlungsflächen Fläche",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "7",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "157",
+        "name" : "Bauwerke Verkehr Fläche",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "8",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "158",
+        "name" : "Gebäude",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "9",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "159",
+        "name" : "Böschung Fläche",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "10",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "160",
+        "name" : "Böschung Linie",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "11",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "161",
+        "name" : "Bauwerke Verkehr Linie2",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "12",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "162",
+        "name" : "Bauwerke Siedlungsflächen Linie",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "13",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "163",
+        "name" : "Bauwerke Verkehr Linie1",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "14",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "164",
+        "name" : "Bauwerke Verkehr Punkte",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "15",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "0.990345",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "165",
+        "name" : "Flurstücksumringe",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "16",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "3.999396",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "166",
+        "name" : "Bäume",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "17",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "1.187939",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "167",
+        "name" : "Zuordnungspfeil",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "18",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.0",
+        "maxScale" : "0.989949",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "168",
+        "name" : "Strassenname",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "20",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.693361",
+        "maxScale" : "1.188335",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "169",
+        "name" : "Flurstücksnummer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "21",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.693361",
+        "maxScale" : "1.188335",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "170",
+        "name" : "Geschosse",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "23",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.297381",
+        "maxScale" : "0.692965",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "171",
+        "name" : "Strassenname",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "24",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.297381",
+        "maxScale" : "0.692965",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "172",
+        "name" : "Hausnummer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "25",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.297381",
+        "maxScale" : "0.692965",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "173",
+        "name" : "Flurstücksnummer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "26",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.297381",
+        "maxScale" : "0.692965",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "174",
+        "name" : "Geschosse",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "28",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.003960",
+        "maxScale" : "0.296985",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "175",
+        "name" : "Strassenname",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "29",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.003960",
+        "maxScale" : "0.296985",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "176",
+        "name" : "Hausnummer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "30",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.003960",
+        "maxScale" : "0.296985",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "177",
+        "name" : "Flurstücksnummer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "31",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.003960",
+        "maxScale" : "0.296985",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "178",
+        "name" : "Bezirke",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/ALKIS_Basiskarte_GB/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "32",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "7.919596",
+        "maxScale" : "395.979797",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+                "rs_id" : "HMDK#2bea746e-a41d-4000-8f06-f41b3cfdee2a",
+                "md_name" : "ALKIS Liegenschaftskarte - ausgewählte Daten Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten",
+                    "Infrastruktur, Bauen und Wohnen",
+                    "Transport und Verkehr"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "179",
+        "name" : "Schuleinzugsgebiete Bsb - Farbig",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSB_Schul_EZGebiet/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "01273048-C88B-4B01-946D-CA17B1A832B0",
+                "rs_id" : "HMDK#813229c4-105a-49e7-9da9-8abf6c35c1fb",
+                "md_name" : "Schuleinzugsgebiete",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "180",
+        "name" : "Schuleinzugsgebiete Bsb - Umrißdarstellung",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSB_Schul_EZGebiet/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "01273048-C88B-4B01-946D-CA17B1A832B0",
+                "rs_id" : "HMDK#813229c4-105a-49e7-9da9-8abf6c35c1fb",
+                "md_name" : "Schuleinzugsgebiete",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "181",
+        "name" : "Image",
+        "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DISK60_SW/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
+                "rs_id" : "HMDK#D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
+                "md_name" : "Digitale Stadtkarte Hamburg",
+                "bbox" : "541991.14,5916243.3,594005.93,5956232.54",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "182",
+        "name" : "Straßenbaumkataster Hamburg",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_LP_Strassenbaumkataster/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "false",
+        "transparent" : "true",
+        "tilesize" : "256",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : {
+            "gattung" : " Gattung",
+            "art" : " Baumart",
+            "pflanzjahr" : " Pflanzjahr",
+            "stammumfangzahl" : " Stammumfang",
+            "kronendmzahl" : " Kronendurchmesser",
+            "strasse" : " Straße"
+        },
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
+                "rs_id" : "HMDK#C1C61928-C602-4E37-AF31-2D23901E2540",
+                "md_name" : "Straßenbaumkataster Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Umwelt und Klima"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "183",
+        "name" : "Baublock",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.000396",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "184",
+        "name" : "Strassenschlüssel",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.194030",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "185",
+        "name" : "Strassennamen",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.194030",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "186",
+        "name" : "Hausnummer",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "3",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.194030",
+        "maxScale" : "0.593970",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "187",
+        "name" : "Flurstücksinfo",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "4",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.194030",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "188",
+        "name" : "Gebäude",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "5",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.194030",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "189",
+        "name" : "Adresse",
+        "url" : "http://wsca0620.fhhnet.stadt.hamburg.de:8399/arcgis/services/Adressen/MapServer/WMSServer",
+        "typ" : "WMS",
+        "layers" : "6",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "0.194030",
+        "maxScale" : "1.980295",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : []
+    },
+    {
+        "id" : "190",
+        "name" : "Ortsteile",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaANord_Verwaltungsgrenzen/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "77984FF9-DC9C-43FC-8874-54A3F310FFDC",
+                "rs_id" : "HMDK#09b29662-f893-42fc-93c0-99242b46ac6d",
+                "md_name" : "Hamburger Ortsteile",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "191",
+        "name" : "Stadtteile",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaANord_Verwaltungsgrenzen/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "89D617D4-9BE9-440C-9AE5-043E3CB4BE1E",
+                "rs_id" : "HMDK#6026561c-4ad4-4263-8189-940852b4d426",
+                "md_name" : "Hamburger Stadtteile",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "192",
+        "name" : "Bezirk",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaANord_Verwaltungsgrenzen/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "1D5B6DF1-57B0-42E2-ADAF-184889AFCA98",
+                "rs_id" : "HMDK#d4afac55-11d9-4b99-8f70-3de9fa78e5e8",
+                "md_name" : "Hamburger Bezirke",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "193",
+        "name" : "4000",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "194",
+        "name" : "1000",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "3",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "195",
+        "name" : "250",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "4",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "196",
+        "name" : "1000",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "6",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "197",
+        "name" : "500",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "7",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "198",
+        "name" : "250",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "8",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "199",
+        "name" : "200",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "9",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "200",
+        "name" : "Dtk25 Regelblattschnitt Gk3 Transformiert In Utm32",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "10",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "201",
+        "name" : "Etrs89 Utm 1km",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "11",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "202",
+        "name" : "Dhdn Gk 1km",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "12",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "203",
+        "name" : "Etrs89 Utm 100m",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Koordinatensysteme/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "13",
+        "format" : "image/jpeg",
+        "version" : "1.3.0",
+        "singleTile" : "true",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "F6B40F95-94F2-46E2-9D48-04C32F443A54",
+                "rs_id" : "HMDK#0a06919b-22ca-424e-8475-1e30fe21863c",
+                "md_name" : "Gitternetz",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "211",
+        "name" : "Amtsgericht",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaNord_Zustaendigkeitspolygone/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "0",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "FAA70FF5-9EFB-41B7-BDDB-2092F90C5649",
+                "rs_id" : "HMDK#ce8856e6-9eb2-4d1d-8e7f-c7f3b237699f",
+                "md_name" : "Hamburger Amtsgerichte",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "212",
+        "name" : "Hpaokz",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaNord_Zustaendigkeitspolygone/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "77984FF9-DC9C-43FC-8874-54A3F310FFDC",
+                "rs_id" : "HMDK#09b29662-f893-42fc-93c0-99242b46ac6d",
+                "md_name" : "Hamburger Ortsteile",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "213",
+        "name" : "Finanzamt",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/StaNord_Zustaendigkeitspolygone/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "1998EDF3-C86D-4FBD-9CC5-B230E40EF47B",
+                "rs_id" : "HMDK#973d345c-906d-467f-9190-8e13859ebb9f",
+                "md_name" : "Hamburger Finanzamtbezirke",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    },
+    {
+        "id" : "584",
+        "name" : "Bahnverkehr",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "1",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
+                "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
+                "md_name" : "Straßen HH-SIB",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "585",
+        "name" : "Bahnverkehrsanlage",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "2",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
+                "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
+                "md_name" : "Straßen HH-SIB",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "586",
+        "name" : "Bahnstrecke",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "3",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
+                "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
+                "md_name" : "Straßen HH-SIB",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "587",
+        "name" : "Bahnverkehrsanlage Punkt",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "4",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "47247.023810",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
+                "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
+                "md_name" : "Straßen HH-SIB",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "588",
+        "name" : "Flugverkehr",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "6",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
+                "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
+                "md_name" : "Straßen HH-SIB",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "589",
+        "name" : "Flugverkehrsanlage",
+        "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WmsServer",
+        "typ" : "WMS",
+        "layers" : "7",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : "nicht vorhanden",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB",
+                "rs_id" : "HMDK#72796D51-86BC-4343-AE77-85ECAFFACF15",
+                "md_name" : "Straßen HH-SIB",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Geographie, Geologie und Geobasisdaten"
+                ],
+                "filter" : [
+                    "hmbtg",
+                    "#opendata_hh#",
+                    "inspireidentifiziert"
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "453",
+        "name" : "Stadtplan",
+        "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+        "typ" : "WMS",
+        "layers" : "geobasisdaten",
+        "format" : "image/png",
+        "version" : "1.1.1",
+        "singleTile" : "false",
+        "transparent" : "true",
+        "tilesize" : "512",
+        "gutter" : "0",
+        "minScale" : "nicht vorhanden",
+        "maxScale" : "nicht vorhanden",
+        "gfiAttributes" : "ignore",
+        "layerAttribution" : "nicht vorhanden",
+        "cache" : "false",
+        "datasets" : [
+            {
+                "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
+                "rs_id" : "HMDK#932c8a6b-31f7-40e0-aade-c29c5c631c4f",
+                "md_name" : "Internetstadtplan Hamburg",
+                "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+                "kategorie_opendata" : [
+                    "Sonstiges"
+                ],
+                "filter" : []
+            }
+        ]
+    }
+]

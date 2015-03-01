@@ -15,10 +15,42 @@ for (var i = 0; i < fhhnetHosts.length; i++){
     }
 }
 
+require.config({
+    waitSeconds: 60,
+    paths: {
+        openlayers: '../_libs/openlayers/js/ol',
+        jquery: '../components/jquery/dist/jquery',
+        underscore: '../components/underscore/underscore',
+        backbone: '../components/backbone/backbone',
+        text: '../components/requirejs-text/text',
+        bootstrap: '../components/bootstrap/dist/js/bootstrap',
+        proj4: '../components/proj4/dist/proj4',
+        eventbus: '../js/EventBus',
+        views: '../js/views',
+        models: '../js/models',
+        collections: '../js/collections',
+        config: window.siteConfig || 'site-config'
+    },
+
+    shim: {
+        bootstrap: {
+            deps: ['jquery']
+        },
+        openlayers: {
+            exports: 'ol'
+        }
+    },
+    urlArgs: {
+        'bust': Date.now()
+    }
+});
+
+
 require([
-    locations.portal + 'config',
     'jquery',
-    ], function (Config, $) {
+    'config'
+    ], function ($, Config) {
+        'use strict';
 
         if (Config.allowParametricURL && Config.allowParametricURL === true) {
             require(['models/ParametricURL'], function (ParametricURL) {
