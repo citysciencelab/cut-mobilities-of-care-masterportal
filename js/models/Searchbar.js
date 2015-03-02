@@ -80,6 +80,7 @@ define([
                     stopEvent: false
                 }));
                 EventBus.trigger("addOverlay", this.get("marker"));
+                EventBus.trigger('getVisibleWFSLayer');
             },
 
             /**
