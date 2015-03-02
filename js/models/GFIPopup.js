@@ -258,7 +258,11 @@ define([
                     var attr, gfiList = [];
                     // ESRI
                     if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
-                        gfiList.push(data.getElementsByTagName('FIELDS')[0].attributes);
+                        _.each(data.getElementsByTagName('FIELDS'), function (element) {
+                            console.log(element.attributes);
+                            gfiList.push(element.attributes);
+                        });
+                        // gfiList.push(data.getElementsByTagName('FIELDS')[0].attributes);
                     }
                     // deegree
                     else if (data.getElementsByTagName('gml:featureMember')[0] !== undefined) {
@@ -303,7 +307,9 @@ define([
                                     }
                                 });
                             }
-                            pgfi.push(gfi);
+                            if (_.isEmpty(gfi) !== true) {
+                                pgfi.push(gfi);
+                            }
                         });
                     }
                 },
