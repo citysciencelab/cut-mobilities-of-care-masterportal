@@ -227,6 +227,16 @@ define([
             else if (this.get('url').indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
                 var newURL = this.get('url').replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
             }
+            // ab hier Internet
+			else if (this.get('url').indexOf('http://extmap.hbt.de') != -1) {
+                var newURL = this.get('url').replace('http://extmap.hbt.de', locations.host + '/extmap');
+            }
+			else if (this.get('url').indexOf('http://gateway.hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://gateway.hamburg.de', locations.host + '/gateway-hamburg');
+            }
+			else if (this.get('url').indexOf('http://geodienste-hamburg.de') != -1) {
+                var newURL = this.get('url').replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
+            }
 
             this.set('url', newURL);
             var data = 'REQUEST=GetFeature'
