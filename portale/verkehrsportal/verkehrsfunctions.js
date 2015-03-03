@@ -15,6 +15,7 @@ define([
                     url = layerdef.get('url');
                     url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
                     url = url.replace('http://geofos', locations.host + '/geofos');
+                    url = url.replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
                 }
             });
             this.set('url', url);
