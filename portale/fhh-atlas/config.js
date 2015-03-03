@@ -34,7 +34,7 @@ define(function () {
             helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: true,
+            treeFilter: false,
             wfsFeatureFilter: false,
             legend: false,
             routing: false
@@ -42,7 +42,7 @@ define(function () {
         startUpModul: '',
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
-            placeholder: "Straße, Adresse, Thema",
+            placeholder: "Suche Ort, Flurstück oder Thema",
             gazetteerURL: function () {
                 if (locations.fhhnet) {
                     return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";

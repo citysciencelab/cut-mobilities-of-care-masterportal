@@ -31,3 +31,15 @@
         max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
     }
 }
+
+@media (min-width: 768px) {
+    a.dropdown-toggle > span.glyphicon {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    a.dropdown-toggle > span.glyphicon {
+        font-size: 16px;
+    }
+}

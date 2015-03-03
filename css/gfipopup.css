@@ -5,7 +5,8 @@
     color: #777;
     height: 34px;
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    min-width: 270px;
+    min-width: 28em;
+    /*min-width: 26em;*/
 }
 
 #gfiContent {
@@ -26,7 +27,7 @@
 
 @media (min-width: 768px) {
     .popover {
-        white-space: nowrap;
+        /*white-space: nowrap;*/
     }
 }
 
@@ -68,21 +69,15 @@
 .gfi-title {
     float: left;
     padding: 5px;
+    /*min-width: 12em;*/
 }
 
-/* Das Glyphicon für das Minimieren */
-.gfi-toggle {
-    float: left;
-    padding: 10px 12px;
-    width: 50%;
-    cursor: pointer;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-}
-
-/* Das Glyphicon für das Schließen*/
-.gfi-close {
+.gfi-title-buttons {
     float: right;
-    width: 50%;
+    /*margin-left: 12em;*/
+}
+
+.gfi-title-buttons > span {
     padding: 10px 12px;
     cursor: pointer;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);

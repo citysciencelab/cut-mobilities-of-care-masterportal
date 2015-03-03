@@ -69,6 +69,10 @@ define([
                         else {
                             modelsArray[index].visibility = false;
                         }
+                        // Name aus Config statt aus Capabilities
+                        if (_.has(element, "name")) {
+                            modelsArray[index].name = element.name;
+                        }
                         // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: '550,551,552,553,554,555,556,557,558,559', visible: false}
                         if (layers.length > 1) {
                             var layerList = "";
