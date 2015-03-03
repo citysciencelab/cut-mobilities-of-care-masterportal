@@ -41,10 +41,21 @@
 /* Style für das maximierte Fenster */
 .win-max {
     position: absolute;
-    left: 63px;
-    top: 63px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-    min-width: 250px;
+    min-width: 270px;
+}
+@media (max-width: 768px) {
+    .win-max {
+        left: 5px;
+        top: 55px;
+    }
+}
+
+@media (min-width: 768px) {
+    .win-max {
+        left: 63px;
+        top: 63px;
+    }
 }
 
 .win-max > .win-heading {
@@ -67,7 +78,7 @@
     color: #fff;
     background-color: #d42132;
     cursor: pointer;
-    border-radius: 0 0 8px 8px !important;
+    border-radius: 8px !important;
 }
 
 .win-min > .win-heading {
