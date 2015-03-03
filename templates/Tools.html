@@ -8,6 +8,11 @@ if (measure === true) { %>
     <a href="#"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Messen</a>
 </li>
 <% }
+if (draw === true) { %>
+<li id="drawMenu" <% if (active === "draw") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Zeichnen</a>
+</li>
+<% }
 if (gfi === true) { %>
 <li id="gfiMenu" <% if (active === "gfi") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Informationen abfragen</a>

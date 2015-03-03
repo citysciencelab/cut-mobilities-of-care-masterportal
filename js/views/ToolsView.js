@@ -19,7 +19,8 @@ define([
                 'click #coordinateMenu': 'activateCoordinate',
                 'click #gfiMenu': 'activateGFI',
                 'click #measureMenu': 'activateMeasure',
-                'click #printMenu': 'activatePrint'
+                'click #printMenu': 'activatePrint',
+                "click #drawMenu": "activateDraw"
             },
             activateCoordinate: function () {
                 this.model.activateCoordinate();
@@ -28,8 +29,12 @@ define([
                 this.model.activateGFI();
             },
             activateMeasure: function () {
-                EventBus.trigger("toggleWin", ["measure", "Messeinstellungen", "glyphicon-edit"]);
+                EventBus.trigger("toggleWin", ["measure", "Messen", "glyphicon-edit"]);
                 this.model.activateMeasure();
+            },
+            activateDraw: function () {
+                EventBus.trigger("toggleWin", ["draw", "Zeichnen", "glyphicon-pencil"]);
+                this.model.activateDraw();
             },
             activatePrint: function () {
                 // EventBus.trigger('togglePrintWin');

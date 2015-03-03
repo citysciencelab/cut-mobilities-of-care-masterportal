@@ -103,6 +103,11 @@ require([
                             new MeasureView();
                         });
                     }
+                    if (Config.tools.draw === true) {
+                        require(['views/DrawView'], function (DrawView) {
+                            new DrawView();
+                        });
+                    }
                     if (Config.tools.print === true) {
                         require(['views/PrintView'], function (PrintView) {
                             new PrintView();
