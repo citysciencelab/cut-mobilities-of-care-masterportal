@@ -62,6 +62,7 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
+            draw: false,
             active: "gfi"
         },
         orientation: true,

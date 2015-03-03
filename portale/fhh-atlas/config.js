@@ -69,9 +69,11 @@ define(function () {
                 else {
                     return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
-            }
+            },
+            title: 'FHH Atlas',
+            gfi: false
         },
-        proxyURL: '/cgi-bin/proxy.cgi',
+        proxyURL: '/cgi-bin/proxy.cgi'
     }
     return config;
 });

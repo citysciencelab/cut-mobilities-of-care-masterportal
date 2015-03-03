@@ -35,6 +35,7 @@ define([
                 EventBus.on("winParams", this.setStatus, this),
                 EventBus.on('layerForPrint', this.setLayerToPrint, this);
                 EventBus.on('gfiForPrint', this.setGFIToPrint, this);
+                EventBus.on("sendDrawLayer", this.setDrawLayer, this);
                 EventBus.on('currentMapCenter', this.setCurrentMapCenter, this);
                 EventBus.on('currentMapScale', this.setCurrentMapScale, this);
             },
@@ -84,91 +85,123 @@ define([
                         case 4:
                             this.set('createURL', Config.print.url() + '/master_gfi_4/create.json');
                             break;
-                            case 5:
-                                this.set('createURL', Config.print.url() + '/master_gfi_5/create.json');
-                                break;
-                                case 6:
-                                    this.set('createURL', Config.print.url() + '/master_gfi_6/create.json');
-                                    break;
+                        case 5:
+                            this.set('createURL', Config.print.url() + '/master_gfi_5/create.json');
+                            break;
+                        case 6:
+                            this.set('createURL', Config.print.url() + '/master_gfi_6/create.json');
+                            break;
+                    }
+                }
+                else {
+                    this.set('createURL', Config.print.url() + '/master/create.json');
+                }
+            },
+            setDrawLayer: function (layer) {
+                var features = [];
+                _.each(layer.getSource().getFeatures(), function (feature) {
+                    features.push({
+                                "type": "Feature",
+                                "properties": {
+                                    _style: 1
+                                },
+                                "geometry": {
+                                    coordinates: feature.getGeometry().getCoordinates(),
+                                    type: feature.getGeometry().getType()
                                 }
-                            }
-                            else {
-                                this.set('createURL', Config.print.url() + '/master/create.json');
-                            }
-                        },
-                        /**
-                        *
-                        */
-                        setLayerToPrint: function (layers) {
-                            this.set('layerToPrint', []);
-                            _.each(layers, function (layer) {
-                                // nur wichtig für treeFilter Zeile 80 - 88
-                                var params = {};
-                                var style = [];
-                                if(layer.has('SLDBody')) {
-                                    params.SLD_BODY = layer.get('SLDBody');
-                                }
-                                if(layer.get('id') === '5182_strassenbaumkataster_grau') {
-                                    style.push('strassenbaumkataster_grau');
-                                }
-                                this.get('layerToPrint').push({
-                                    type: layer.get('typ'),
-                                    layers: layer.get('layers').split(),
-                                    baseURL: layer.get('url'),
-                                    format: "image/png",
-                                    opacity: layer.get('opacity'),
-                                    customParams: params,
-                                    styles: style
-                                });
-                            }, this);
-                            this.setSpec();
-                        },
-                        /**
-                        *
-                        */
-                        setSpec: function () {
-                            this.set('spec', {
-                                layout: $('#layoutField option:selected').html(),
-                                srs: "EPSG:25832",
-                                units: "m",
-                                // NOTE über config steuern
-                                // outputFilename: "test",
-                                outputFormat: "pdf",
-                                layers: this.get('layerToPrint'),
-                                pages: [
-                            {
-                                center: this.get('currentMapCenter'),
-                                scale:  this.get('currentScale'),
-                                dpi: 96,
-                                mapTitle: Config.print.title
-                            }
-                            ]
-                        });
-
-                        if (this.get('hasPrintGFIParams') === true) {
-                            _.each(_.flatten(this.get('gfiParams')), function (element, index) {
-                                this.get('spec').pages[0]["attr_" + index] = element;
-                            }, this);
-                            this.get('spec').pages[0]["layerName"] = $('#gfiTitle')[0].childNodes[1].textContent;
+                    })
+                });
+                this.get("layerToPrint").push({
+                    type: "Vector",
+                    styles: {
+                        1: {
+                            fillColor: layer.getStyle().getFill().getColor(),
+                            pointRadius: layer.getStyle().getImage().getRadius(),
+                            strokeColor: layer.getStyle().getStroke().getColor(),
+                            strokeWidth: layer.getStyle().getStroke().getWidth()
                         }
-
-                        $.ajax({
-                            url: Config.proxyURL + "?url=" + this.get("createURL"),
-                            type: 'POST',
-                            data: JSON.stringify(this.get('spec')),
-                            headers: {
-                                "Content-Type": "application/json; charset=UTF-8"
-                            },
-                            success: function (data) {
-                                $('#loader').hide();
-                                window.open(data.getURL);
-                            },
-                            error: function (err) {
-                                $('#loader').hide();
-                            }
-                        });
+                    },
+                    geoJson: {
+                        "type": "FeatureCollection",
+                        "features": features
                     }
                 });
+            },
+            /**
+            *
+            */
+            setLayerToPrint: function (layers) {
+                this.set('layerToPrint', []);
+                _.each(layers, function (layer) {
+                    // nur wichtig für treeFilter Zeile 80 - 88
+                    var params = {};
+                    var style = [];
+                    if(layer.has('SLDBody')) {
+                        params.SLD_BODY = layer.get('SLDBody');
+                    }
+                    if(layer.get('id') === '5182_strassenbaumkataster_grau') {
+                        style.push('strassenbaumkataster_grau');
+                    }
+                    this.get('layerToPrint').push({
+                        type: layer.get('typ'),
+                        layers: layer.get('layers').split(),
+                        baseURL: layer.get('url'),
+                        format: "image/png",
+                        opacity: layer.get('opacity'),
+                        customParams: params,
+                        styles: style
+                    });
+                }, this);
+                if (Config.tools.draw === true) {console.log(Config.tools.draw);
+                    EventBus.trigger("getDrawlayer");
+                }
+                this.setSpec();
+            },
+            /**
+            *
+            */
+            setSpec: function () {
+                this.set('spec', {
+                    layout: $('#layoutField option:selected').html(),
+                    srs: "EPSG:25832",
+                    units: "m",
+                    // NOTE über config steuern
+                    // outputFilename: "test",
+                    outputFormat: "pdf",
+                    layers: this.get('layerToPrint'),
+                    pages: [
+                        {
+                            center: this.get('currentMapCenter'),
+                            scale:  this.get('currentScale'),
+                            dpi: 96,
+                            mapTitle: Config.print.title
+                        }
+                    ]
+                });
+                if (this.get('hasPrintGFIParams') === true) {
+                    _.each(_.flatten(this.get('gfiParams')), function (element, index) {
+                        this.get('spec').pages[0]["attr_" + index] = element;
+                    }, this);
+                    this.get('spec').pages[0]["layerName"] = $('#gfiTitle')[0].childNodes[1].textContent;
+                }
+
+                $.ajax({
+                    url: Config.proxyURL + "?url=" + this.get("createURL"),
+                    type: 'POST',
+                    data: JSON.stringify(this.get('spec')),
+                    headers: {
+                        "Content-Type": "application/json; charset=UTF-8"
+                    },
+                    success: function (data) {
+                        $('#loader').hide();
+                        window.open(data.getURL);
+                    },
+                    error: function (err) {
+                        $('#loader').hide();
+                    }
+                });
+            }
+        });
 
                 return new Print();
             });

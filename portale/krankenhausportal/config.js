@@ -78,6 +78,7 @@ define(function () {
             measure: false,
             print: false,
             coord: false,
+            draw: false,
             orientation: false,
             active: 'gfi'
         }

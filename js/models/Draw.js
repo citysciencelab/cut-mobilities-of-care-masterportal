@@ -11,7 +11,8 @@ define([
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                     fill: new ol.style.Fill({
-                        color: 'rgba(255, 255, 255, 0.2)'
+                        color: '#fc8d62'
+                        // color: 'rgba(255, 255, 255, 0.2)'
                     }),
                     stroke: new ol.style.Stroke({
                         color: '#fc8d62',
@@ -29,6 +30,7 @@ define([
 
         "initialize": function () {
             EventBus.on("winParams", this.setStatus, this);
+            EventBus.on("getDrawlayer", this.getLayer, this);
             this.on("change:type", this.createInteraction, this);
 
             this.set("layer", new ol.layer.Vector({
@@ -75,6 +77,10 @@ define([
         "deleteFeatures": function () {
             // lösche alle Geometrien
             this.get("source").clear();
+        },
+
+        "getLayer": function () {
+            EventBus.trigger("sendDrawLayer", this.get("layer"));
         }
     });
 
