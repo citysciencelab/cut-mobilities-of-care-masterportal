@@ -21,6 +21,9 @@ define([
         activateMeasure: function () {
             this.set('active', 'measure');
         },
+        activateDraw: function () {
+            this.set("active", "draw");
+        },
         activateGFI: function () {
             this.set('active', 'gfi');
         },

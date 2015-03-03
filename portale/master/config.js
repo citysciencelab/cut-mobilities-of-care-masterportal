@@ -211,6 +211,7 @@ define(function () {
         * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
         * @property {Boolean}  gfi - GetFeatureInfo-Abfrage.
         * @property {Boolean}  measure - Messen.
+        * @property {Boolean}  draw - Zeichnen.
         * @property {Boolean}  print - Drucken.
         * @property {Boolean}  coord - Koordinaten-Abfrage.
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
@@ -220,6 +221,7 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
+            draw: true,
             active: 'gfi'
         },
         /**
