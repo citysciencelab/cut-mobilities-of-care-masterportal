@@ -55,11 +55,25 @@ define([
             }
             else {
                 var parts = value.split(/[.,\/ -]/);
-                var plz = _.find(parts, function(val) {
-                    return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
-                });
-                if (!plz) {
-                    value = value + '&filter=plz:20* OR plz:21* OR plz:22*';
+                if (value.indexOf('&filter=') === -1) {
+                    var plz = _.find(parts, function(val) {
+                        return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
+                    });
+                    var hsnr = _.find(parts, function(val) {
+                        return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
+                    });
+                    if (!plz) {
+                        value = value + '&filter=(plz:20* OR plz:21* OR plz:22*)';
+                    }
+                    else {
+                        value = value + '&filter=(plz:' + plz + ')';
+                    }
+                    if (hsnr) {
+                        value = value + ' AND (typ:Haus) AND haus:(' + hsnr + '*)';
+                    }
+                    else {
+                        value = value + ' AND (typ:Strasse OR typ:Ort OR typ:Geoname)';
+                    }
                 }
             }
             $.ajax({
@@ -114,8 +128,14 @@ define([
                                 this.set('toList', '');
                                 this.set('zielAdresse', data.features[0].properties.text);
                             }
-                            if (data.features[0].properties.typ != 'Haus'){
-                                this.suggestByBKG(data.features[0].properties.text, target);
+                            if (data.features[0].properties.typ === 'Strasse'){
+                                this.suggestByBKG(data.features[0].properties.text + ' &filter=(typ:Haus) ', target);
+                            }
+                            else if (data.features[0].properties.typ === 'Ort'){
+                                this.suggestByBKG(data.features[0].properties.text + ' &filter=(typ:Strasse) ', target);
+                            }
+                            else if (data.features[0].properties.typ === 'Geoname'){
+                                this.suggestByBKG(data.features[0].properties.text + ' &filter=(typ:Ort) ', target);
                             }
                         }
                     }
