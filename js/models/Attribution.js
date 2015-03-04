@@ -108,7 +108,7 @@ define([
                 collapsible: true,
                 collapsed: false,
                 className: 'attribution', //in attribution.css
-                tipLabel: 'Hinweise'
+                tipLabel: ''
             });
             this.get('map').addControl(attribution);
             this.set('attribution', attribution);

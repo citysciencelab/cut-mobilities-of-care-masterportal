@@ -27,7 +27,7 @@ define(function () {
             {id:
              [
                  {
-                     id: '1364',
+                     id: '946',
                      attribution:
                      {
                          eventname: 'aktualisiereverkehrsnetz',
@@ -35,7 +35,7 @@ define(function () {
                      }
                  },
                  {
-                     id: '1365'
+                     id: '947'
                  }
              ],
              name: 'aktuelle Meldungen der TBZ', visible: false
@@ -101,6 +101,7 @@ define(function () {
             gfi: true,
             measure: true,
             print: false,
+            draw: false,
             coord: true,
             active: 'gfi'
         },

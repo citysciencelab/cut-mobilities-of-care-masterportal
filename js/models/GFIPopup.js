@@ -65,11 +65,15 @@ define([
         destroyPopup: function () {
             this.get('element').popover('destroy');
             this.set('isPopupVisible', false);
+            this.unset('coordinate', {silent:true});
         },
         /**
          * Zeigt das Popup.
          */
         showPopup: function () {
+            $('#popovermin').fadeOut(500, function() {
+                $('#popovermin').remove();
+            });
             this.get('element').popover('show');
             this.set('isPopupVisible', true);
         },
@@ -117,7 +121,6 @@ define([
                 this.set('coordinate', position);
             }
             else {
-                this.unset('coordinate', {silent:true});
                 EventBus.trigger('closeGFIParams', this);
             }
             $('#loader').hide();
