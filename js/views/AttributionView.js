@@ -7,21 +7,18 @@ define([
 
     var AttributionView = Backbone.View.extend({
         model: Attribution,
-        /*events: {
-            'click .buttonStandpunkt': 'getOrientation',
-            'click .buttonPOI': 'getPOI'
-        },*/
         initialize: function () {
+            $(window).resize($.proxy(function () {
+                this.render();
+            }, this));
             this.render();
         },
         render: function () {
-            $(window).resize($.proxy(function () {
-                if (window.innerWidth < 768) {
-                    this.model.get('attribution').setCollapsed(true);
-                } else {
-                    this.model.get('attribution').setCollapsed(false);
-                }
-            }, this));
+            if (window.innerWidth < 768) {
+                this.model.get('attribution').setCollapsed(true);
+            } else {
+                this.model.get('attribution').setCollapsed(false);
+            }
         }
     });
 
