@@ -12,16 +12,31 @@ define([
         className: 'win-body',
         template: _.template(DrawTemplate),
         events: {
-            "change select": "setGeometryType",
+            "change .drawType": "setType",
+            "change .drawColor": "setColor",
+            "change .drawPointRadius": "setPointRadius",
+            "change .drawStrokeWidth": "setStrokeWidth",
             "click button": "deleteFeatures"
         },
         initialize: function () {
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
         },
 
-        "setGeometryType": function (evt) {
-            this.model.setGeometryType(evt.target.value);
-            // EventBus.trigger('activateClick', 'draw');
+        "setType": function (evt) {
+            this.model.setType(evt.target.value);
+            this.render();
+        },
+
+        "setColor": function (evt) {
+            this.model.setColor(evt.target.value);
+        },
+
+        "setPointRadius": function (evt) {
+            this.model.setPointRadius(evt.target.value);
+        },
+
+        "setStrokeWidth": function (evt) {
+            this.model.setStrokeWidth(evt.target.value);
         },
 
         "deleteFeatures": function () {

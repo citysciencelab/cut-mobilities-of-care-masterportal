@@ -97,36 +97,37 @@ define([
                     this.set('createURL', Config.print.url() + '/master/create.json');
                 }
             },
+
             setDrawLayer: function (layer) {
-                var features = [];
-                _.each(layer.getSource().getFeatures(), function (feature) {
+                var features = [], featureStyles = {};
+                _.each(layer.getSource().getFeatures(), function (feature, index) {
                     features.push({
-                                "type": "Feature",
-                                "properties": {
-                                    _style: 1
-                                },
-                                "geometry": {
-                                    coordinates: feature.getGeometry().getCoordinates(),
-                                    type: feature.getGeometry().getType()
-                                }
-                    })
+                        "type": "Feature",
+                        "properties": {
+                            _style: index
+                        },
+                        "geometry": {
+                            coordinates: feature.getGeometry().getCoordinates(),
+                            type: feature.getGeometry().getType()
+                        }
+                    });
+                    featureStyles[index] = {
+                        fillColor: feature.getStyle().getFill().getColor(),
+                        pointRadius: feature.getStyle().getImage().getRadius(),
+                        strokeColor: feature.getStyle().getStroke().getColor(),
+                        strokeWidth: feature.getStyle().getStroke().getWidth()
+                    };
                 });
                 this.get("layerToPrint").push({
                     type: "Vector",
-                    styles: {
-                        1: {
-                            fillColor: layer.getStyle().getFill().getColor(),
-                            pointRadius: layer.getStyle().getImage().getRadius(),
-                            strokeColor: layer.getStyle().getStroke().getColor(),
-                            strokeWidth: layer.getStyle().getStroke().getWidth()
-                        }
-                    },
+                    styles: featureStyles,
                     geoJson: {
                         "type": "FeatureCollection",
                         "features": features
                     }
                 });
             },
+
             /**
             *
             */
@@ -152,7 +153,7 @@ define([
                         styles: style
                     });
                 }, this);
-                if (Config.tools.draw === true) {console.log(Config.tools.draw);
+                if (Config.tools.draw === true) {
                     EventBus.trigger("getDrawlayer");
                 }
                 this.setSpec();

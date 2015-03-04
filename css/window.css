@@ -55,7 +55,7 @@
 @media (min-width: 768px) {
     .win-max {
         left: 63px;
-        top: 63px;
+        margin-top: 13px;
     }
 }
 
