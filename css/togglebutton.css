@@ -1,7 +1,7 @@
 #toggleButton {
     position: fixed;
     right: 17px;
-    z-index: 1000;
+    z-index: 999;
 }
 
 #toggleButton:hover {
