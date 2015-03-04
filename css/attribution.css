@@ -20,7 +20,7 @@
     background: none;
     left: auto;
     right: 45px;
-    font-size: 20px;
+    font-size: 14px;
 }
 .attribution ul {
     color: #000;
@@ -30,6 +30,10 @@
     max-width: 100%;
     padding: 0 0.5em;
     text-shadow: 0 0 2px #fff;
+}
+.attribution button:hover {
+    color: #333;
+    background-color: #d42132;
 }
 .attribution li {
     display: inline;
@@ -48,10 +52,8 @@
     background-color: #d42132;
     color: #f3f3f3;
     font-size: 30px;
-    border-style: solid;
 }
-.attribution.ol-collapsed ul, .ol-attribution:not(.ol-collapsed) button:hover [role="tooltip"] {
-    font-size: 20px;
+.attribution.ol-collapsed ul, .ol-attribution:not(.ol-collapsed) [role="tooltip"] {
     display: none;
 }
 .attribution.ol-logo-only ul {

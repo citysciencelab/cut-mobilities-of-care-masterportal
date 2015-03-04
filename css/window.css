@@ -42,7 +42,8 @@
 .win-max {
     position: absolute;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-    min-width: 270px;
+    min-width: 300px;
+	z-index: 9999;
 }
 @media (max-width: 768px) {
     .win-max {
