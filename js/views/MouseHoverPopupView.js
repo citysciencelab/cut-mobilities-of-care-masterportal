@@ -12,6 +12,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, 'change:mhpresult', this.render);
             EventBus.on('closeMouseHoverPopup', this.destroy, this);
+            EventBus.trigger('addOverlay', this.model.get('mhpOverlay'));
         },
         /**
         * Render merkt sich zunächst den neuen Wert newText, weil this.model mit this.destroy() zerstört wird.
@@ -34,11 +35,11 @@ define([
                     'html': true,
                     'title': newText,
                     'placement': 'auto',
-                    'delay': { show: 100, hide: 100 },
+                    'delay': { show: 100, hide: 500 },
                     'template' : '<div class="tooltip" role="tooltip"><div class="tooltip-inner mouseHover"></div></div>'
                 });
+                // EventBus.trigger('addOverlay', this.model.get('mhpOverlay'));
                 this.model.showPopup();
-                EventBus.trigger('addOverlay', this.model.get('mhpOverlay'));
                 var that = this;
                 var myTimeout = setTimeout(function(){
                     that.destroy();
@@ -47,7 +48,7 @@ define([
             }
         },
         destroy: function () {
-            EventBus.trigger('removeOverlay', this.model.get('mhpOverlay'));
+            // EventBus.trigger('removeOverlay', this.model.get('mhpOverlay'));
             var myTimeout = this.model.get('mhptimeout');
             if (myTimeout != '') {
                 clearTimeout(myTimeout);
