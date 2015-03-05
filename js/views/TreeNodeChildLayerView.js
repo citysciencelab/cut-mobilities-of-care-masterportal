@@ -27,6 +27,7 @@ define([
             render: function (model) {
                 this.stopListening();
                 this.listenToOnce(this.model, 'change:visibility', this.render);
+                this.listenToOnce(this.model, 'change:visibility', this.toggleStyle);
                 this.listenToOnce(this.model, 'change:transparence', this.render);
                 this.listenToOnce(this.model, 'change:settings', this.render);
                 this.delegateEvents();
@@ -104,6 +105,16 @@ define([
                 this.model.toggleSettings();
                 this.$('.glyphicon-cog').toggleClass('rotate2');
                 this.$('.glyphicon-cog').toggleClass('rotate');
+            },
+            toggleStyle: function () {
+                if (this.model.get("visibility") === true) {
+                    this.$el.css("color", "#fc8d62");
+                    this.model.get("parentView").toggleStyle();
+                }
+                else {
+                    this.$el.css("color", "#333333");
+                    this.model.get("parentView").toggleStyle();
+                }
             }
         });
 

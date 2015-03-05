@@ -56,6 +56,17 @@ define([
                 else if (evt.target.classList[1] === "glyphicon-arrow-down") {
                     this.model.moveDownInList();
                 }
+            },
+            toggleStyle: function () {
+                var someTrue = _.some(this.model.get("layerList"), function (model) {
+                    return model.get("visibility") === true;
+                });
+                if (someTrue === true) {
+                    this.$el.css("color", "#fc8d62");
+                }
+                else {
+                    this.$el.css("color", "#333333");
+                }
             }
         });
 
