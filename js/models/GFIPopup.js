@@ -262,7 +262,6 @@ define([
                     // ESRI
                     if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
                         _.each(data.getElementsByTagName('FIELDS'), function (element) {
-                            console.log(element.attributes);
                             gfiList.push(element.attributes);
                         });
                         // gfiList.push(data.getElementsByTagName('FIELDS')[0].attributes);
@@ -291,7 +290,7 @@ define([
                             if (params.attributes === 'showAll') {
                                 _.each(element, function (element) {
                                     var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    gfi[attribute] = element.textContent.trim();
+                                    gfi[attribute] = element.value.trim();
                                 });
                             }
                             else {
@@ -377,7 +376,7 @@ define([
             vectorlayer.id = 'route';
             this.get('map').addLayer(vectorlayer);
             EventBus.trigger('zoomToExtent', olFeature.getGeometry().getExtent());
-        },
+        }
     });
 
     return new GFIPopup();

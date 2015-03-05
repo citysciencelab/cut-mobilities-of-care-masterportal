@@ -106,6 +106,8 @@ define([
             },
             toggleVisibility: function (evt) {
                 this.model.toggleVisibility();
+                this.$el.css("color", "#fc8d62");
+                this.model.get("parentView").$el.css("color", "#fc8d62");
             },
             getMetadata: function () {
                 window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('metaID'), "_blank");
