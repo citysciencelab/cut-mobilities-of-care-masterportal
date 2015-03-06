@@ -11,7 +11,8 @@ define([
         var TreeNode = Backbone.Model.extend({
 
             "defaults": {
-                isExpanded: false
+                isExpanded: false,
+                isStyled: false
             },
 
             "initialize": function () {

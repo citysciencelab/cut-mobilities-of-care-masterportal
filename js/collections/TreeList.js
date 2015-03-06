@@ -81,51 +81,37 @@ define([
 
             "showLayerInTree": function (model) {
                 // öffnet den Tree
-                // $(".nav li:first-child").addClass("open");
+                $(".nav li:first-child").addClass("open");
                 this.forEach(function (element) {
                     if (model.get("kategorieOpendata") === element.get("kategorie")) {
                         element.set("isExpanded", true);
-                        if (model.get("layerType") === "nodeChildLayer") {
+                        // if (model.get("layerType") === "nodeChildLayer") {
                             _.each(element.get("childViews"), function (view) {
-
-                                if (view.model.get("name") === model.get("metaName")) {
-                                    // console.log();
-                                    console.log(view.model.get("childViews"));
-                                    // console.log(view.model.get("children"));
-                                    // console.log(model.cid);
+                                if (view.model.get("name") === model.get("metaName")) {console.log(84);
                                     view.model.set("isExpanded", true);
                                     var modelID = _.where(view.model.get("children"), {cid: model.cid});
-                                    var viewtest = _.find(view.model.get("childViews"), function (view) {
-                                        console.log(view.model.cid);
-                                        console.log(modelID[0].cid);
+                                    var viewChildLayer = _.find(view.model.get("childViews"), function (view) {
                                         return view.model.cid === modelID[0].cid;
                                     });
-
-                                    // console.log(viewtest.$el.position().top);
-                                    // console.log(viewtest.$el.position());
-                                    // console.log(view.$el);
-                                    // console.log($("#tree").height());
-                                    // $("#tree").scrollTop(307);
-                                    $("#tree").scrollTop(viewtest.$el.position().top);
+                                    $("#tree").scrollTop(viewChildLayer.$el.position().top);
                                 }
-                                else {
-                                    view.model.set("isExpanded", false);
+                                else if (view.model.get("name") === model.get("name")){
+                                    $("#tree").scrollTop(view.$el.position().top);
                                 }
+                                // else {
+                                //     view.model.set("isExpanded", false);
+                                // }
                             });
-                        }
+                        // }
+                        // else {
+                        //     console.log(model);
+                        // }
                         model.set("visibility", true);
                     }
                     else {
                         element.set("isExpanded", false);
                     }
                 });
-                // $(".nav li:first-child").dropdown("toggle");
-                // console.log($("#treetoggle"));
-                // $("#treetoggle").addClass("open");
-                // $("#tree").addClass("open");
-                // $("#tree").show();
-                // $(".nav li:first-child").addClass("open");
-                // console.log($(".nav li:first-child"));
             }
         });
 

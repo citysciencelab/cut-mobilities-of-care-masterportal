@@ -116,7 +116,7 @@ define([
                 this.$('.glyphicon-cog').toggleClass('rotate2');
                 this.$('.glyphicon-cog').toggleClass('rotate');
             },
-            toggleStyle: function () {console.log(804);
+            toggleStyle: function () {
                 if (this.model.get("visibility") === true) {
                     this.$el.css("color", "#fc8d62");
                 }

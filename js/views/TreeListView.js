@@ -19,7 +19,6 @@ define([
             render: function () {
                 this.$el.html('');
                 this.collection.forEach(this.addTreeNode, this);
-                // this.$el.parent().addClass("open");
             },
             addTreeNode: function (node) {
                 if (node.get("layerList").length > 0) {

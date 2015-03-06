@@ -227,6 +227,7 @@ define([
                 else if (hit.type === "Thema") {
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("showLayerInTree", hit.model);
+                    evt.stopPropagation();
                 }
                 else if (hit.type === "festgestellt" || hit.type === "im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
                     var typeName = (hit.type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
@@ -327,6 +328,7 @@ define([
                 if ($(".dropdown-menu-search").css("display") === "block") {
                     $("#searchMarker").css("display", "none");
                     searchVector.setVisible(false);
+                    // this.zoomTo(evt);
                 }
                 // else {
                     // this.zoomTo(evt);
