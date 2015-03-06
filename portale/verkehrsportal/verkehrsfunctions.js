@@ -11,7 +11,7 @@ define([
             EventBus.on('aktualisiereverkehrsnetz', this.refreshVerkehrssituation, this);
             _.each(LayerList.models, function (layerdef) {
                 if (layerdef.id === '45') {
-                    //layer 45 hat gleiche URL
+                    //layer 45 hat gleiche URL und wurde geladen.
                     url = layerdef.get('url');
                     url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
                     url = url.replace('http://geofos', locations.host + '/geofos');
@@ -37,6 +37,7 @@ define([
             postmessage += '</wfs:Query>';
             postmessage += '</wfs:GetFeature>';
             var url = this.get('url');
+            // diese Abfrage füllt die Attribution
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -50,32 +51,55 @@ define([
                         var node = _.filter(nodeList, function (element) {
                             return element.localName === "received";
                         });
-                        if (node[0]) {
-                            newEventValue = '<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</br>';
-                        }
                     }
-                    $.ajax({
-                        url: url,
-                        data: 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0',
-                        async: true,
-                        context: layer,
-                        success: function (data, textStatus, jqXHR) {
-                            if (data.getElementsByTagName('wfs:FeatureCollection')[0]) {
-                                var nodeList = data.getElementsByTagName('wfs:FeatureCollection')[0].childNodes[0];//.nextSibling.childNodes;
-                                if (nodeList[0]) {
-                                    newEventValue = '<strong>' + nodeList[0].textContent.trim() + '</strong>' + '</br>' + newEventValue;
-                                }
-                            }
-                            this.set('eventValue', newEventValue);
-                        },
-                        error: function (data, textStatus, jqXHR) {
-                            this.set('eventValue', newEventValue);
-                        }
-                    });
+                    if (data.getElementsByTagName('featureMember')[0]) {
+                        var nodeList = data.getElementsByTagName('featureMember')[0].childNodes[0].nextSibling.childNodes;
+                        var node = _.filter(nodeList, function (element) {
+                            return element.localName === "received";
+                        });
+                    }
+                    if (node && node[0]) {
+                        newEventValue = '<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</br>';
+                        this.set('eventValue', newEventValue);
+                    }
                 },
                 context: layer,
                 error: function (err) {
-//                    alert('Dienst zur Darstellung der Aktualität derzeit gestört.');
+                    this.set('eventValue', '');
+                }
+            });
+            // diese Abfrage zeigt im Bedarfsfall eine Meldung
+            $.ajax({
+                url: url,
+                data: 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0',
+                async: true,
+                context: layer,
+                success: function (data, textStatus, jqXHR) {
+                    var wfsReader = new ol.format.WFS({
+                        featureNS : 'http://www.deegree.org/app',
+                        featureType : 'vkl_hinweis'
+                    });
+                    if (data[0]) {
+                        var hinweis = wfsReader.readFeatures(data)[0].get('hinweis');
+                        var datum =  wfsReader.readFeatures(data)[0].get('stand');
+                        if (hinweis && datum) {
+                            newEventValue = newEventValue + '<p class="alert alert-danger"><strong>' + hinweis + '</strong></p>';
+                            var html = '<div class="alert alert-warning alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50px;width: 50%;">';
+                            html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times';
+                            html += '</span></button>';
+                            html += '<strong>Tunnelbetrieb Hamburg: </strong>' + hinweis + ' (' + datum + ')';
+                            html += '</div>';
+                            $('body').append(html);
+                        }
+                    }
+                },
+                error: function (data, textStatus, jqXHR) {
+                    var html = '<div class="alert alert-info alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50px;width: 50%;">';
+                    html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times';
+                    html += '</span></button>';
+                    html += '<strong>Verkehrsmeldungen </strong>der TBZ momentan nicht verfügbar.';
+                    html += '</div>';
+                    $('body').append(html);
                 }
             });
         }/*,
