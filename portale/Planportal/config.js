@@ -56,7 +56,17 @@ define(function () {
                 }
             }
         },
-        bPlanURL: locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene",
+        bPlan: {
+            url: function () {
+                if (locations.fhhnet) {
+                    return locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene";
+                }
+                else {
+                    return locations.host + "/geodienste-hamburg.de/HH_WFS_Bebauungsplaene";
+                }
+            }
+		},
+        // bPlanURL: locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene",
         tools: {
             gfi: true,
             measure: true,

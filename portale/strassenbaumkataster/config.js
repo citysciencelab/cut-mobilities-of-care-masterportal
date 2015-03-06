@@ -36,12 +36,23 @@ define(function () {
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
             placeholder: "Adresssuche",
-        gazetteerURL: function () {
-            if (locations.fhhnet) {
-                return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            gazetteerURL: function () {
+                if (locations.fhhnet) {
+                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                }
+                else {
+                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                }
             }
-            else {
-                return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+        },
+        bPlan: {
+            url: function () {
+                if (locations.fhhnet) {
+                    return locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene";
+                }
+                else {
+                    return locations.host + "/geodienste-hamburg.de/HH_WFS_Bebauungsplaene";
+                }
             }
         },
         tools: {
@@ -49,6 +60,7 @@ define(function () {
             measure: false,
             print: true,
             coord: true,
+            draw: false,
             orientation: false,
             active: 'gfi'
         },
@@ -64,7 +76,7 @@ define(function () {
             title: 'Straßenbaumkataster',
             gfi: true
         },
-        proxyURL: '/cgi-bin/proxy.cgi',
+        proxyURL: '/cgi-bin/proxy.cgi'
     }
 
     return config;

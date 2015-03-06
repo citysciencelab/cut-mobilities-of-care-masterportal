@@ -109,12 +109,11 @@ define([
             toggleStyle: function () {
                 if (this.model.get("visibility") === true) {
                     this.$el.css("color", "#fc8d62");
-                    this.model.get("parentView").toggleStyle();
                 }
                 else {
                     this.$el.css("color", "#333333");
-                    this.model.get("parentView").toggleStyle();
                 }
+                this.model.get("parentView").toggleStyle();
             }
         });
 

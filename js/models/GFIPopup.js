@@ -243,6 +243,9 @@ define([
             else if (params.url.indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
                 url = params.url.replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
             }
+            else if (params.url.indexOf('http://geodienste-hamburg.de') != -1) {
+                url = params.url.replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
+            }
             // Für B-Pläne wird Feature_Count auf 3 gesetzt
             if (params.name === "Festgestellte Bebauungspläne") {
                 data = "FEATURE_COUNT=3";

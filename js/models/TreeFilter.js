@@ -300,7 +300,9 @@ define([
 
             var filterwfs = "<ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
             this.set('filter', filterwfs);
+
             this.set('SLDBody', header + filter + symbolizer + footer);
+            console.log(this.get("SLDBody"));
         },
         getFilterHits: function () {
             $('#loader').show();

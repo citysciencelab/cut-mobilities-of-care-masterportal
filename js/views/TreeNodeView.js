@@ -57,7 +57,7 @@ define([
                     this.model.moveDownInList();
                 }
             },
-            toggleStyle: function () {
+            toggleStyle: function () {console.log(809);
                 var someTrue = _.some(this.model.get("layerList"), function (model) {
                     return model.get("visibility") === true;
                 });

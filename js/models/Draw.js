@@ -55,7 +55,6 @@ define([
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source")
             }));
-
             EventBus.trigger("addLayer", this.get("layer"));
         },
 

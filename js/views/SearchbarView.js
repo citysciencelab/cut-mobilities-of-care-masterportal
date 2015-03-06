@@ -36,7 +36,7 @@ define([
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.zoomTo);
                 this.render();
-                if (Config.bPlanURL !== undefined) {
+                if (Config.bPlan !== undefined) {
                     $("#searchInput").prop("disabled", "disabled");
                 }
                 $(window).on("orientationchange", function () {
@@ -324,11 +324,13 @@ define([
             *
             */
             "hideMarker": function (evt) {
-                $("#searchMarker").css("display", "none");
-                searchVector.setVisible(false);
-                if ($(".dropdown-menu-search").css("display") === "none") {
-                    this.zoomTo(evt);
+                if ($(".dropdown-menu-search").css("display") === "block") {
+                    $("#searchMarker").css("display", "none");
+                    searchVector.setVisible(false);
                 }
+                // else {
+                    // this.zoomTo(evt);
+                // }
             },
 
             /**

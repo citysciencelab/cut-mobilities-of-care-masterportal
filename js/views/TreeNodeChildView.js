@@ -135,7 +135,6 @@ define([
             },
 
             toggleStyle: function () {
-                console.log(this.model);
                 var someTrue = _.some(this.model.get("children"), function (model) {
                     return model.get("visibility") === true;
                 });
