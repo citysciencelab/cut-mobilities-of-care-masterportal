@@ -1,32 +1,98 @@
 define(function () {
+    /**
+    * @namespace config
+    * @desc Beschreibung
+    */
     var config = {
-        tree: {
-            active: true,
-            orderBy: "opendata",
-            layerAttribute: "kategorieOpendata",
-            // groupLayerByID: ["DC71F8A1-7A8C-488C-AC99-23776FA7775E"],
-            // categoryConf: locations.baseUrl + '../category.json'
-            groupLayerByID: ["DFDA2969-A041-433B-BD65-4CDA9F830A55","38575F13-7FA2-4F26-973F-EDED24D937E5", "757A328B-415C-4E5A-A696-353ABDC80419", "335B680C-CA3E-4FE9-BC05-641BA565E366", "DC71F8A1-7A8C-488C-AC99-23776FA7775E", "3EE8938B-FF9E-467B-AAA2-8534BB505580","19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB"]
-        },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         allowParametricURL: false,
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {Array}  center - Beschreibung.
+        * @property {Number}  resolution - Beschreibung.
+        * @property {Number}  scale - Beschreibung.
+        */
         view: {
             center: [565874, 5934140],
             resolution: 15.874991427504629,
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + '../configuration/diensteapiFHHNET.json',
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
+        layerConf: locations.baseUrl + (locations.fhhnet ? '../configuration/diensteapiFHHNET.json' : '../configuration/diensteapiInternet.json'),
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
+        styleConf: locations.baseUrl + '../configuration/style.json',
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
+        proxyURL: '/cgi-bin/proxy.cgi',
+        /**
+        * @memberof config
+        * @type {Object[]}
+        * @property {String|Array}  id - Beschreibung.
+        * @property {Boolean}  visible - Beschreibung.
+        * @property {String|Array}  style - Beschreibung.
+        * @property {Number}  clusterDistance - Beschreibung.
+        * @property {String}  searchField - Beschreibung.
+        * @property {String}  mouseHoverField - Beschreibung.
+        * @property {Object[]}  filterOptions - Beschreibung.
+        * @property {String}  filterOptions.fieldName - Beschreibung.
+        * @property {String}  styleLabelField - Beschreibung.
+        * @desc Beschreibung.
+        */
         layerIDs: [
             {id: '453', visible: true},
-            {id: '8', visible: false},
-            // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich
-            {id: '5182', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
-            {id: '5182', visible: false, styles: "strassenbaumkataster"},
-            {id: '5183', visible: false, displayInTree: false}
+            {id: '94', visible: false},
+            {id: '1119', visible: false},
+            {id: '2028', visible: false, opacity: "40"},
+            {id: '2029', visible: false, opacity: "30"},
+            {id: '2039', visible: false, opacity: "40"},
+            {id: '2030', visible: false, opacity: "10"},
+            {id: '2031', visible: false, opacity: "10"},
+            {id: '2032', visible: false, opacity: "10"},
+            {id: '2040', visible: false},
+            {id: '2041', visible: true},
+            {id: '2038', visible: false}
         ],
-        styleConf: locations.baseUrl + '../configuration/style.json',
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         menubar: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
+        */
         scaleLine: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
         isMenubarVisible: true,
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {Boolean}  searchBar - Beschreibung.
+        * @property {Boolean}  layerTree - Beschreibung.
+        * @property {Boolean}  helpButton - Beschreibung.
+        */
         menu: {
             viewerName: 'GeoViewer',
             searchBar: true,
@@ -36,30 +102,34 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: '',
-        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {String}  placeholder - Beschreibung.
+        * @property {Function}  gazetteerURL - Beschreibung.
+        */
         searchBar: {
-            placeholder: "Suche Ort, Flurstück oder Thema",
+            placeholder: "Straße, Adresse",
             gazetteerURL: function () {
                 if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                    return locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
                 }
                 else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                    return "http://geodienste-hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
                 }
             }
         },
-        tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            orientation: false,
-            active: 'gfi'
-        },
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {String}  url - Beschreibung.
+        * @property {String}  title - Beschreibung.
+        * @property {Boolean}  gfi - Beschreibung.
+        */
         print: {
             url: function () {
                 if (locations.fhhnet) {
@@ -68,9 +138,36 @@ define(function () {
                 else {
                     return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
-            }
+            },
+            title: 'Gewässerunterhaltung',
+            gfi: false
         },
-        proxyURL: '/cgi-bin/proxy.cgi',
+        /**
+        * @memberof config
+        * @desc Beschreibung
+        * @property {Boolean}  gfi - Beschreibung.
+        * @property {Boolean}  measure - Beschreibung.
+        */
+        tools: {
+            gfi: true,
+            measure: true,
+            print: true,
+            coord: true,
+            active: 'gfi'
+        },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
+        orientation: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Beschreibung.
+        */
+        poi: false
     }
+
     return config;
 });

@@ -1,14 +1,16 @@
 if (window.location.href.charAt(window.location.href.length-1) === '#') {
     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 }
-    var locations = {
-        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
-        baseUrl : require.toUrl(''),
-        host : window.location.protocol + '//' + window.location.host,
-        fhhnet : false
-    };
+
+var locations = {
+    portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
+    baseUrl : require.toUrl(''),
+    host : window.location.protocol + '//' + window.location.host,
+    fhhnet : false
+};
 
 var fhhnetHosts = ["wscd0096","wscd0096.fhhnet.stadt.hamburg.de","wscd0095","wscd0095.fhhnet.stadt.hamburg.de","geofos","geofos.fhhnet.stadt.hamburg.de"];
+
 for (var i = 0; i < fhhnetHosts.length; i++){
     if (location.host === fhhnetHosts[i]){
         locations.fhhnet = true;
