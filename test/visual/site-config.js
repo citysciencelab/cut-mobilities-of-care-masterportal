@@ -1,9 +1,18 @@
 define(function () {
+
+    var locations = {
+        portal : window.location.protocol + '//' + window.location.host + window.location.pathname,
+        baseUrl : require.toUrl(''),
+        host : window.location.protocol + '//' + window.location.host,
+        fhhnet : false
+    };
+
     /**
     * @namespace config
     * @desc Beschreibung
     */
     var config = {
+        locations: locations,
         /**
         * @memberof config
         * @type {Boolean}
@@ -27,13 +36,13 @@ define(function () {
         * @type {String}
         * @desc Beschreibung.
         */
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../configuration/diensteapiFHHNET.json' : '../configuration/diensteapiInternet.json'),
+        layerConf: layerConfigurationURL,
         /**
         * @memberof config
         * @type {String}
         * @desc Beschreibung.
         */
-        styleConf: locations.baseUrl + '../configuration/style.json',
+        styleConf: styleConfigurationURL,
         /**
         * @memberof config
         * @type {String}

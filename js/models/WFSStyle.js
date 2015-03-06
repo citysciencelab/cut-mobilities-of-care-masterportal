@@ -7,7 +7,7 @@ define([
 ], function (_, Backbone, ol, EventBus, Config) {
     var WFSStyle = Backbone.Model.extend({
         defaults: {
-            imagepath : locations.baseUrl + '../img/',
+            imagepath : Config.locations.baseUrl + '../img/',
             subclass : 'Icon',
             // für Icon
             imagename : 'unknown.png',
