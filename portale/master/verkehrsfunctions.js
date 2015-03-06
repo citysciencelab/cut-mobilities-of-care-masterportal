@@ -79,8 +79,9 @@ define([
                         featureNS : 'http://www.deegree.org/app',
                         featureType : 'vkl_hinweis'
                     });
-                    var hinweis = wfsReader.readFeatures(data)[0].get('hinweis');
-                    var datum =  wfsReader.readFeatures(data)[0].get('stand');
+                    if (data[0]) {
+                        var hinweis = wfsReader.readFeatures(data)[0].get('hinweis');
+                        var datum =  wfsReader.readFeatures(data)[0].get('stand');
                         if (hinweis && datum) {
                             newEventValue = newEventValue + '<p class="alert alert-danger"><strong>' + hinweis + '</strong></p>';
                             var html = '<div class="alert alert-warning alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50px;width: 50%;">';
@@ -90,7 +91,7 @@ define([
                             html += '</div>';
                             $('body').append(html);
                         }
-
+                    }
                 },
                 error: function (data, textStatus, jqXHR) {
                     var html = '<div class="alert alert-info alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50px;width: 50%;">';
