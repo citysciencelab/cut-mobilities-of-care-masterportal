@@ -7,7 +7,7 @@ define([
     ], function (_, Backbone, TreeNode, Config, EventBus) {
 
         var TreeList = Backbone.Collection.extend({
-            "url": "../../configuration/category.json",
+            "url": Config.categoryConf,
             "model": TreeNode,
             "initialize": function () {
                 this.fetch({

@@ -36,13 +36,20 @@ define(function () {
         * @type {String}
         * @desc Beschreibung.
         */
-        layerConf: layerConfigurationURL,
+        layerConf: '../test-config/diensteapiINTERNET.json',
         /**
         * @memberof config
         * @type {String}
         * @desc Beschreibung.
         */
-        styleConf: styleConfigurationURL,
+        styleConf: '../test-config/style.json',
+
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Beschreibung.
+        */
+        categoryConf: '../test-config/category.json',
         /**
         * @memberof config
         * @type {String}
