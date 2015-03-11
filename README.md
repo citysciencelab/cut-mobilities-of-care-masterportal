@@ -2,14 +2,24 @@
 
 ## Local Development Setup
 
-Make sure you've the latest version of [Node.js](http://nodejs.org), [NPM](http://npmjs.org) and [Bower](http://bower.io) installed on your local machine.
+Folgende Tools müssen lokal installiert werden:
 
-Please run
+### [Node.js](http://nodejs.org)
+
+Via installer von der Seite.
+
+### [NPM](http://npmjs.org)
+
+Kommt automatisch mit der Node.js Installation mit (Node Package Manager).
+
+* [Bower](http://bower.io)
+
+Wird über NPM global auf dem System installiert:
 
 ```
-$ npm install
+# -g Für globale installation des Modules
+$ npm install bower -g
 ```
-
 ## set proxies:
 
 ### npm 
@@ -23,6 +33,19 @@ git config --global http.proxy http://wall.lit.hamburg.de:80
 git config --global https.proxy http://wall.lit.hamburg.de:80
 ```
 
-### Gulp Tasks
+
+## Build Abhängigkeiten ziehen via NPM.
+
+```
+$ npm install
+```
+
+## App Abhängigkeiten ziehen via Bower
+
+```
+$ bower install
+```
+
+### Grunt Tasks
 
 @TODO
