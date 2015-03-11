@@ -12,7 +12,7 @@ Via installer von der Seite.
 
 Kommt automatisch mit der Node.js Installation mit (Node Package Manager).
 
-### Bower](http://bower.io)
+### [Bower](http://bower.io)
 
 Wird über NPM global auf dem System installiert:
 
