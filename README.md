@@ -10,12 +10,18 @@ Please run
 $ npm install
 ```
 
-# set proxies:
-npm 
-bower
-git: 
+## set proxies:
+
+### npm 
+
+### bower
+
+### git
+
+```
 git config --global http.proxy http://wall.lit.hamburg.de:80
 git config --global https.proxy http://wall.lit.hamburg.de:80
+```
 
 ### Gulp Tasks
 
