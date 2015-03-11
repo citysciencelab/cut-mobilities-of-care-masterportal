@@ -10,9 +10,13 @@ Please run
 $ npm install
 ```
 
-in your project's directory to install required dependencies.
+# set proxies:
+npm 
+bower
+git: 
+git config --global http.proxy http://wall.lit.hamburg.de:80
+git config --global https.proxy http://wall.lit.hamburg.de:80
 
 ### Gulp Tasks
 
 @TODO
-
