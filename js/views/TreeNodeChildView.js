@@ -30,6 +30,7 @@ define([
                 this.stopListening();
                 this.listenToOnce(this.model, "change:isExpanded change:isVisible change:settings change:transparence", this.render);
                 this.listenToOnce(this.model, "change:isExpanded change:isVisible change:settings", this.renderChildren);
+                // this.listenToOnce(this.model, "change:isVisible", this.toggleStyle);
                 this.delegateEvents();
                 this.$(".node-child-settings").remove();
                 this.$(".node-child-content").remove();
@@ -60,6 +61,7 @@ define([
             toggleVisibility: function () {
                 this.model.toggleVisibility();
                 this.model.toggleVisibilityChildren();
+                this.toggleStyle();
             },
             toggleExpand: function () {
                 this.model.toggleExpand();
@@ -129,7 +131,22 @@ define([
 
             checkVisibilityOfAllChildren: function () {
                 this.model.checkVisibilityOfAllChildren();
+                this.toggleStyle();
+            },
+
+            toggleStyle: function () {
+                var someTrue = _.some(this.model.get("children"), function (model) {
+                    return model.get("visibility") === true;
+                });
+                if (someTrue === true) {
+                    this.$el.css("color", "#fc8d62");
+                }
+                else {
+                    this.$el.css("color", "#333333");
+                }
+                this.model.get("parentView").toggleStyle();
             }
+
         });
 
         return TreeNodeChildView;

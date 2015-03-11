@@ -243,6 +243,9 @@ define([
             else if (params.url.indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
                 url = params.url.replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
             }
+            else if (params.url.indexOf('http://geodienste-hamburg.de') != -1) {
+                url = params.url.replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
+            }
             // Für B-Pläne wird Feature_Count auf 3 gesetzt
             if (params.name === "Festgestellte Bebauungspläne") {
                 data = "FEATURE_COUNT=3";
@@ -262,7 +265,6 @@ define([
                     // ESRI
                     if (data.getElementsByTagName('FIELDS')[0] !== undefined) {
                         _.each(data.getElementsByTagName('FIELDS'), function (element) {
-                            console.log(element.attributes);
                             gfiList.push(element.attributes);
                         });
                         // gfiList.push(data.getElementsByTagName('FIELDS')[0].attributes);
@@ -291,7 +293,7 @@ define([
                             if (params.attributes === 'showAll') {
                                 _.each(element, function (element) {
                                     var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    gfi[attribute] = element.textContent.trim();
+                                    gfi[attribute] = element.value.trim();
                                 });
                             }
                             else {
@@ -377,7 +379,7 @@ define([
             vectorlayer.id = 'route';
             this.get('map').addLayer(vectorlayer);
             EventBus.trigger('zoomToExtent', olFeature.getGeometry().getExtent());
-        },
+        }
     });
 
     return new GFIPopup();

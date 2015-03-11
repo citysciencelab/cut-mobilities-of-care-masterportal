@@ -66,8 +66,8 @@ define([
                 this.getLayerForSearch();
 
                 // Prüfen ob BPlan-Suche konfiguriert ist. Wenn ja --> B-Pläne laden(bzw. die Namen der B-Pläne) und notwendige Attrbiute setzen
-                if (Config.bPlanURL !== undefined) {
-                    this.set("bPlanURL", Config.bPlanURL);
+                if (Config.bPlan !== undefined) {
+                    this.set("bPlanURL", Config.bPlan.url());
                     this.set("bPlans", []);
                     this.get("isSearchReady").set("bPlanSearch", false);
                     this.getBPlans();

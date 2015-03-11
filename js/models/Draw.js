@@ -9,35 +9,52 @@ define([
 
         "defaults": {
             source: new ol.source.Vector(),
-            style: new ol.style.Style({
-                    fill: new ol.style.Fill({
-                        color: '#fc8d62'
-                        // color: 'rgba(255, 255, 255, 0.2)'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: '#fc8d62',
-                        width: 2
-                    }),
-                    image: new ol.style.Circle({
-                      radius: 7,
-                      fill: new ol.style.Fill({
-                        color: '#fc8d62'
-                      })
-                    })
-                   }),
-            type: "Point"
+            types: [
+                { name: "Point", value: "Point" },
+                { name: "LineString", value: "LineString" },
+                { name: "Polygon", value: "Polygon" }
+            ],
+            colors: [
+                { name: "Grau", value: "#999999" },
+                { name: "Orange", value: "#fc8d62" },
+                { name: "Rot", value: "#e31a1c" },
+                { name: "Blau", value: "#1f78b4" },
+                { name: "Grün", value: "#33a02c" },
+                { name: "Gelb", value: "#ffff33" },
+                { name: "Schwarz", value: "#000000" },
+                { name: "Weiß", value: "#ffffff" }
+            ],
+            pointRadiuses: [
+                { name: "6 px", value: 6 },
+                { name: "8 px", value: 8 },
+                { name: "10 px", value: 10 },
+                { name: "12 px", value: 12 },
+                { name: "14 px", value: 14 },
+                { name: "16 px", value: 16 }
+            ],
+            strokeWidth: [
+                { name: "1 px", value: 1 },
+                { name: "2 px", value: 2 },
+                { name: "3 px", value: 3 },
+                { name: "4 px", value: 4 },
+                { name: "5 px", value: 5 },
+                { name: "6 px", value: 6 }
+            ],
+            selectedType: "Point",
+            selectedColor: "#fc8d62",
+            selectedRadius: 6,
+            selectedStrokeWidth: 1
         },
 
         "initialize": function () {
             EventBus.on("winParams", this.setStatus, this);
             EventBus.on("getDrawlayer", this.getLayer, this);
-            this.on("change:type", this.createInteraction, this);
+            this.on("change:selectedType change:style", this.createInteraction, this);
+            this.on("change:selectedColor change:selectedRadius change:selectedStrokeWidth", this.setStyle, this);
 
             this.set("layer", new ol.layer.Vector({
-                source: this.get("source"),
-                style: this.get("style")
+                source: this.get("source")
             }));
-
             EventBus.trigger("addLayer", this.get("layer"));
         },
 
@@ -45,7 +62,7 @@ define([
             if (args[2] === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-                this.createInteraction();
+                this.setStyle();
             }
             else {
                 this.set("isCurrentWin", false);
@@ -58,8 +75,12 @@ define([
             EventBus.trigger("removeInteraction", this.get("draw"));
             this.set('draw', new ol.interaction.Draw({
                 source: this.get('source'),
-                type: this.get("type")
+                type: this.get("selectedType"),
+                style: this.get("style")
             }));
+            this.get("draw").on("drawend", function (evt) {
+                evt.feature.setStyle(this.get("style"));
+            }, this);
             EventBus.trigger("addInteraction", this.get("draw"));
         },
 
@@ -67,8 +88,42 @@ define([
          * Setzt den Typ der Geometrie (Point, LineString oder Polygon).
          * @param {String} value - Typ der Geometrie
          */
-        "setGeometryType": function (value) {
-            this.set("type", value);
+        "setType": function (value) {
+            this.set("selectedType", value);
+            if (this.get("selectedType") !== "Point") {
+                this.set("selectedRadius", 6);
+            }
+        },
+
+        "setColor": function (value) {
+            this.set("selectedColor", value);
+        },
+
+        "setPointRadius": function (value) {
+            this.set("selectedRadius", parseInt(value, 10));
+        },
+
+        "setStrokeWidth": function (value) {
+            this.set("selectedStrokeWidth", parseInt(value, 10));
+        },
+
+        "setStyle": function () {
+            var style = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: this.get("selectedColor")
+                }),
+                stroke: new ol.style.Stroke({
+                    color: this.get("selectedColor"),
+                    width: this.get("selectedStrokeWidth")
+                }),
+                image: new ol.style.Circle({
+                    radius: this.get("selectedRadius"),
+                    fill: new ol.style.Fill({
+                        color: this.get("selectedColor")
+                     })
+                })
+            });
+            this.set("style", style);
         },
 
         /**

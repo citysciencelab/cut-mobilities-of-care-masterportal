@@ -105,7 +105,7 @@ define([
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
                 'placement': function () {
-                    if (this.getPosition().y > window.innerWidth / 2) {
+                    if (this.getPosition().top > window.innerHeight / 2) {
                         return 'top'
                     }
                     else {

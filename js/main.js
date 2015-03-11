@@ -20,7 +20,7 @@ require.config({
     waitSeconds: 60,
     paths: {
         openlayers: '/libs/OpenLayers-3.0.0/build/ol-debug',
-        jquery: '/libs/jQuery-2.0.3/jquery.min',
+        jquery: '/libs/jQuery-2.1.0/jquery',
         underscore: '/libs/underscore-1.6.0/underscore.min',
         backbone: '/libs/backbone-1.1.2/backbone.min',
         text: '/libs/require-2.1.11/plugins/text-2.0.10/text',

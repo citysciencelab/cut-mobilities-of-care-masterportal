@@ -36,7 +36,7 @@ define([
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.zoomTo);
                 this.render();
-                if (Config.bPlanURL !== undefined) {
+                if (Config.bPlan !== undefined) {
                     $("#searchInput").prop("disabled", "disabled");
                 }
                 $(window).on("orientationchange", function () {
@@ -227,10 +227,11 @@ define([
                 else if (hit.type === "Thema") {
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("showLayerInTree", hit.model);
+                    evt.stopPropagation();
                 }
-                else if (hit.type === "BPlan festgestellt" || hit.type === "BPlan im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
-                    var typeName = (hit.type === "BPlan festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
-                    var propertyName = (hit.type === "BPlan festgestellt") ? "planrecht" : "plan";
+                else if (hit.type === "festgestellt" || hit.type === "im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
+                    var typeName = (hit.type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
+                    var propertyName = (hit.type === "festgestellt") ? "planrecht" : "plan";
                     $.ajax({
                         url: this.model.get("bPlanURL"),
                         data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + hit.name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>",
@@ -324,11 +325,14 @@ define([
             *
             */
             "hideMarker": function (evt) {
-                $("#searchMarker").css("display", "none");
-                searchVector.setVisible(false);
-                if ($(".dropdown-menu-search").css("display") === "none") {
-                    this.zoomTo(evt);
+                if ($(".dropdown-menu-search").css("display") === "block") {
+                    $("#searchMarker").css("display", "none");
+                    searchVector.setVisible(false);
+                    // this.zoomTo(evt);
                 }
+                // else {
+                    // this.zoomTo(evt);
+                // }
             },
 
             /**

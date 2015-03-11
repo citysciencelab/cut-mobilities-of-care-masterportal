@@ -85,16 +85,27 @@ define([
                 this.forEach(function (element) {
                     if (model.get("kategorieOpendata") === element.get("kategorie")) {
                         element.set("isExpanded", true);
-                        if (model.get("layerType") === "nodeChildLayer") {
+                        // if (model.get("layerType") === "nodeChildLayer") {
                             _.each(element.get("childViews"), function (view) {
-                                if (view.model.get("name") === model.get("metaName")) {
+                                if (view.model.get("name") === model.get("metaName")) {console.log(84);
                                     view.model.set("isExpanded", true);
+                                    var modelID = _.where(view.model.get("children"), {cid: model.cid});
+                                    var viewChildLayer = _.find(view.model.get("childViews"), function (view) {
+                                        return view.model.cid === modelID[0].cid;
+                                    });
+                                    $("#tree").scrollTop(viewChildLayer.$el.position().top);
                                 }
-                                else {
-                                    view.model.set("isExpanded", false);
+                                else if (view.model.get("name") === model.get("name")){
+                                    $("#tree").scrollTop(view.$el.position().top);
                                 }
+                                // else {
+                                //     view.model.set("isExpanded", false);
+                                // }
                             });
-                        }
+                        // }
+                        // else {
+                        //     console.log(model);
+                        // }
                         model.set("visibility", true);
                     }
                     else {
