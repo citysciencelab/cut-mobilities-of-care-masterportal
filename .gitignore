@@ -4,6 +4,8 @@
 .DS_Store
 *.sass-cache
 
+coverage
+test/coverage
 node_modules
 components
 dist

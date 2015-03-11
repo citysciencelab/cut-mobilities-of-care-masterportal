@@ -1,15 +1,15 @@
 /**
- * Main.js specification
+ * App.js specification
  * Loads the module and runs the test suite
  */
-define(['main'], function (main) {
+define(['app'], function (app) {
     'use strict';
 
     // Test suit
-    describe('Main', function () {
+    describe('Application', function () {
 
         it('is available', function () {
-            expect(main).not.toBe(null);
+            expect(app).not.toBe(null);
         });
     });
 });

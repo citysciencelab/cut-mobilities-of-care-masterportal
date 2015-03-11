@@ -2,7 +2,8 @@
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
 
-define(['jquery', 'config'], function ($, Config) {
+define('app',
+    ['jquery', 'config'], function ($, Config) {
     'use strict';
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
