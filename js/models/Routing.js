@@ -63,7 +63,7 @@ define([
                         return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
                     });
                     if (!plz) {
-                        value = value + '&filter=(plz:20* OR plz:21* OR plz:22*)';
+                        value = value + '&filter=(plz:20* OR plz:21* OR plz:22* OR plz:23* OR plz:24* OR plz:25*)';
                     }
                     else {
                         value = value + '&filter=(plz:' + plz + ')';
