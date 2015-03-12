@@ -36320,7 +36320,7 @@
       "layers" : "TrafficFlow",
       "format" : "nicht vorhanden",
       "version" : "1.3.0",
-      "singleTile" : false,
+      "singleTile" : true,
       "transparent" : true,
       "tilesize" : "512",
       "gutter" : "0",
