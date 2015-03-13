@@ -28,6 +28,6 @@
     "underscore": "~1.8.2"
   },
   "devDependencies": {
-    "build-config": "https://<your-user-here>@bitbucket.org/lgv-team/build-config.git#latest"
+    "build-config": "https://bitbucket.org/lgv-team/build-config.git#latest"
   }
 }
