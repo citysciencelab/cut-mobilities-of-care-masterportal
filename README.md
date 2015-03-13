@@ -104,7 +104,11 @@ $ npm install -g bower
 $ npm install
 ```
 
-liest package.json
+liest package.json.
+
+postinstall-hook läuft auf einen Fehler, daher entfernt:
+
+  "scripts": {    "postinstall": "bower install"  }
 
 ## App Abhängigkeiten ziehen via Bower
 
