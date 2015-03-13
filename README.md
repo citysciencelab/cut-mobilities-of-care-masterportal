@@ -104,11 +104,15 @@ $ npm install -g bower
 $ npm install
 ```
 
+liest package.json
+
 ## App Abhängigkeiten ziehen via Bower
 
 ```
 $ bower install
 ```
+
+liest bower.json
 
 ### Grunt Tasks
 
