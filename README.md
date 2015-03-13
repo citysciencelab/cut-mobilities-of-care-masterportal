@@ -11,7 +11,8 @@ C:\Program Files\Git\bin\ muss in der systemweiten PATH-Variable stehen.
 ```
 git config --global http.proxy http://wall.lit.hamburg.de:80
 git config --global https.proxy http://wall.lit.hamburg.de:80
-git config --global httpsinsteadOf
+git config --global httpsinsteadOfgit 
+git config --global httpsinsteadOfgit github
 ```
 
 
@@ -102,6 +103,7 @@ yeaih!
 
 
 Alle grunt-Tasks 
+
 ```
 # grunt -h
-```d
+```
