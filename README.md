@@ -2,17 +2,16 @@
 
 ## Local Development Setup
 
-Folgende Tools müssen lokal installiert werden. 
-
 Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.
 
-### [git](http://git-scm.com/)
-C:\Program Files\Git\bin\ muss in der systemweiten PATH-Variable stehen.
+Dann folgende Tools lokal installieren.
 
-#### Proxy-Einstellungen
+### [git](http://git-scm.com/)
+Der Installationspfad von Git (C:\Program Files\Git\bin\) muss in der systemweiten PATH-Umgebungsvariable stehen.
+
+Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei git-URLs stattdessen das https-Protokoll nutzen soll
 ```
-# git config --global httpsinsteadOfgit 
-# git config --global httpsinsteadOfgit github
+# git config --global url.https://.insteadof=git://
 ```
 
 ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
@@ -41,21 +40,31 @@ Test in cmd:
 # npm -v
 ```
 
-#### Proxy-Einstellungen
-npm lädt Pakete aus dem Netz. Dafür braucht es Proxy-Einstellungen in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen). 
+npm lädt Pakete aus dem Netz. 
 
-
-ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
-```
-# npm config set proxy http://wall.lit.hamburg.de:80
-# npm config set https-proxy http://wall.lit.hamburg.de:80
-```
-
-npm-config Einträge werden je in die Dateien C:\Users\<user>\npmrc geschrieben. Übersicht über alle npm configs:
+#### Einstellungen
+npm-config Einträge werden je in die Dateien C:\Users\<user>\.npmrc geschrieben. Übersicht über alle npm configs:
 
 ```
 # npm config list
 # npm config ls -l
+```
+
+Sinnvoll denke noch den Pfad zum npm-cache außerhalb des Roaming-Profils zu legen (cmd und Admin-cmd oder die .npmrc-Dateien entsprechend anpassen)
+
+```
+npm config set npm-cache <D:\npm-cache>
+```
+
+#### Proxy-Einstellungen
+
+ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
+
+in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen). 
+
+```
+# npm config set proxy http://wall.lit.hamburg.de:80
+# npm config set https-proxy http://wall.lit.hamburg.de:80
 ```
 
 #### npm-Pakete global installieren
