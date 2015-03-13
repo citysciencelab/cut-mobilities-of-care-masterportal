@@ -14,7 +14,7 @@ Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei
 # git config --global url.https://.insteadof=git://
 ```
 
-ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
+ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig / auf git Bash benötigt, cmd nicht:
 
 ```
 git config --global http.proxy http://wall.lit.hamburg.de:80
