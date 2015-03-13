@@ -53,7 +53,7 @@ npm-config Einträge werden je in die Dateien C:\Users\<user>\.npmrc geschrieben
 Sinnvoll denke noch den Pfad zum npm-cache außerhalb des Roaming-Profils zu legen (cmd und Admin-cmd oder die .npmrc-Dateien entsprechend anpassen)
 
 ```
-npm config set npm-cache <D:\npm-cache>
+npm config set npm-cache D:\npm-cache
 ```
 
 #### Proxy-Einstellungen
