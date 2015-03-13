@@ -4,17 +4,23 @@
 
 Folgende Tools müssen lokal installiert werden. 
 
+Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.
+
 ### [git](http://git-scm.com/)
 C:\Program Files\Git\bin\ muss in der systemweiten PATH-Variable stehen.
 
 #### Proxy-Einstellungen
 ```
-git config --global http.proxy http://wall.lit.hamburg.de:80
-git config --global https.proxy http://wall.lit.hamburg.de:80
-git config --global httpsinsteadOfgit 
-git config --global httpsinsteadOfgit github
+# git config --global httpsinsteadOfgit 
+# git config --global httpsinsteadOfgit github
 ```
 
+ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
+
+```
+git config --global http.proxy http://wall.lit.hamburg.de:80
+git config --global https.proxy http://wall.lit.hamburg.de:80
+```
 
 ### [Node.js](http://nodejs.org)
 
@@ -38,6 +44,8 @@ Test in cmd:
 #### Proxy-Einstellungen
 npm lädt Pakete aus dem Netz. Dafür braucht es Proxy-Einstellungen in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen). 
 
+
+ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
 ```
 # npm config set proxy http://wall.lit.hamburg.de:80
 # npm config set https-proxy http://wall.lit.hamburg.de:80
