@@ -124,7 +124,7 @@ define([
                 this.get("isSearchReady").set("streetSearch", false);
                 var requestStreetName, streetNames = [];
                 // Prüft ob der Suchstring ein Teilstring vom Straßennamen ist. Und ob zurzeit nur eine Straße vorhanden ist.
-                if (this.get("isOnlyOneStreet") === true && this.get("onlyOneStreetName").search(this.get("searchString")) === -1) {
+                if (this.get("isOnlyOneStreet") === true && this.get("onlyOneStreetName").search(this.get("searchString")) === -1) {console.log("search");
                     // Damit die Straßensuche auch funktioniert wenn nach Hausnummern gesucht wird.
                     requestStreetName = this.get("onlyOneStreetName");
                 }
@@ -161,12 +161,15 @@ define([
                             }
                             // Marker - wurde mehr als eine Straße gefunden
                             if (streetNames.length === 1) {
-                                this.set("isOnlyOneStreet", true);
                                 this.set("onlyOneStreetName", streetNames[0].name);
                                 // Prüft ob der Suchstring ein Teilstring vom Straßennamen ist. Wenn nicht, dann wird die Hausnummernsuche ausgeführt.
                                 var searchStringRegExp = new RegExp(this.get("searchString"), "i");
                                 if (this.get("onlyOneStreetName").search(searchStringRegExp) === -1) {
                                     this.searchHouseNumbers();
+                                    this.set("isOnlyOneStreet", true);
+                                }
+                                else {
+                                    this.set("isOnlyOneStreet", false);
                                 }
                             }
                             else {
