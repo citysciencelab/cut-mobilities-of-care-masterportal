@@ -1,0 +1,268 @@
+# Code
+### Allgemein
+* Alle Dokumente werden in utf-8 gespeichert
+* Jedes Dokument wird mit einer leeren Zeile beendet
+* [***EditorConfig***](http://editorconfig.org/) und [***JSHint***](http://jshint.com/docs/options) werden eingesetzt, um die Konventionen leichter einhalten zu können
+
+### Whitespace
+* Soft Intends (Spaces) statt Tabs
+* Vier Spaces repräsentieren einen Tab
+* Die Größe der Einrückung beträgt vier Spaces (1 Tab)
+* Keine Whitespaces am Ender der Zeile
+* Keine leeren "Whitespace Zeilen"
+
+### JavaScript
+##### Leerzeichen, geschweifte Klammern und Zeilenumbrüche
+
+* *if / else / for / while / try* enthalten immer Leerzeichen, geschweifte Klammern und erstrecken sich über mehrere Zeilen
+* keine leeren Blöcke
+
+"so nicht" Beispiele:
+```javascript
+if(Bedingung) machWas();
+
+while(Bedingung) iterieren++;
+
+for(var i=0;i<100;i++) machWas();
+```
+
+"so ja" Beispiele:
+```javascript
+if ( Bedingung ) {
+    // statements
+}
+else {
+    // statements
+}
+
+while ( Bedingung ) {
+    // statements
+}
+
+for ( var i = 0; i < 100; i++ ) {
+    // statements
+}
+```
+
+#### Zuweisungen, Deklarationen, Funktionen
+* Nur einmal "var" pro Scope (Funktion) verwenden
+```javascript
+// so nicht
+var foo = "";
+var bar = "";
+var foobar;
+// sondern so
+var foo = "",
+      bar = "",
+      foobar;
+```
+* "var" am Anfang der Funktion definieren
+* Eine Funktion erfüllt genau eine Aufgabe
+* Object und Array ohne new Operator erzeugen
+* Definierte Variable, Parameter oder Funktionen die nicht genutzt werden vermeiden
+
+"so nicht" Beispiele:
+```javascript
+var car = new Object();
+car.goes = "far";
+var cars = new Array();
+```
+"so ja" Beispiele:
+```javascript
+var car = {goes:"far"};
+var cars = [];
+```
+
+#### Typprüfung
+* Zur Typprüfung wird Underscore JS eingesetzt
+
+String:
+```
+_.isString(variable)
+```
+Number:
+```
+_.isNumber(variable)
+```
+Boolean:
+```
+_.isBoolean(variable)
+```
+Object:
+```
+_.isObject(variable)
+```
+Array:
+```
+_.isArray(variable)
+```
+null:
+```
+_.isNull(variable)
+```
+undefined:
+```
+_.isUndefined(variable)
+```
+
+#### Auswertungen
+* Vergleiche mit **"==="** und **"!=="** anstatt mit **"=="** und **"!="**
+
+Ob ein Array eine Länge hat:
+```
+if ( array.length ) ...
+```
+Ob ein Array leer ist:
+```
+if ( !array.length ) ...
+```
+Ob ein String nich leer ist:
+```
+if ( string ) ...
+```
+Ob ein String leer ist:
+```
+if ( !string ) ...
+```
+
+#### Bezeichnungen
+* Sprechende Namen für Variablen und Funktionen verwenden
+* camelCase für Funktions- und var- Deklarationen
+* Wenn es die String-Variable "dog" gibt, ist "dogList" ein Array bestehend aus "dog" Strings
+* Bezeichnung für Konstanten --> SYMBOLIC_CONSTANTS_LIKE_THIS
+
+#### Anführungszeichen
+* Es werden doppelte Anführungszeichen eingesetzt
+* Beim Einsatz von inneren und äußeren Anführungszeichen, doppelte Anführungszeichen außen und einfache Anführungszeichen innen
+```javascript
+var html = "<div id='my-id'></div>";
+```
+
+#### Kommentare
+* Mehrzeilige Kommentare sind gut
+* Kommentare am Zeilenende sind untersagt
+* JSDoc Style Kommentare sind gut, aber erfordern mehr Zeit
+
+#### Backbone spezifische Konventionen
+* "listenTo" anstatt "on" als Eventlistener
+
+#### Sonstiges
+* Comma-First-Formatierung ist verboten
+* So wenig globale Variablen wie möglich
+
+### EditorConfig
+```ini
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+```
+
+### JSHintConfig
+```ini
+{
+    "asi": true,
+    "bitwise": true,
+    "boss": true,
+    "browser": true,
+    "curly": true,
+    "debug" : false,
+    "devel": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "es3": true,
+    "es5": false,
+    "esnext": true,
+    "evil": true,
+    "expr": true,
+    "forin": true,
+    "immed": true,
+    "indent": 4,
+    "iterator": true,
+    "jquery": true,
+    "lastsemic": true,
+    "latedef": true,
+    "laxbreak": true,
+    "laxcomma": true,
+    "loopfunc": true,
+    "maxerr": 80,
+    "multistr": true,
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "nonstandard": true,
+    "onecase": true,
+    "proto": true,
+    "quotmark": "double",
+    "regexdash": true,
+    "regexp": true,
+    "scripturl": true,
+    "shadow": true,
+    "smarttabs": true,
+    "sub": true,
+    "supernew": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "validthis": true,
+    "white": true,
+    "withstmt": true,
+    "wsh": true,
+    "predef": [
+        "define",
+        "require"
+    ]
+}
+```
+
+### CSS
+* CSS-Code gehört nur in CSS-Dateien und in keine HTML-Dokumente
+* Keine ID-Selektoren verwenden
+* !improtant vermeiden
+* Nach dem Selektor gehört ein Leerzeichen
+* Regeln einrücken und über mehrere Zeilen und nicht in einer schreiben
+
+"so nicht" Beispiel:
+```css
+.btn-panel-submit{background-color: #e6e6e6; border-color: #ccc; color: #333;}
+```
+
+"so ja" Beispiel:
+```css
+.btn-panel-submit {
+    background-color: #e6e6e6;
+    border-color: #ccc;
+    color: #333;
+}
+```
+# Git
+### Commit
+* Committe früh und oft
+* Ein Commit repräsentiert eine Idee oder eine Änderung
+* Nutze Verben für die Commits (add/remove/update/refactor/fix)
+
+# Architektur
+    |-- modules
+    |   |-- Layer
+    |       |-- img
+    |       |-- style.css
+    |       |-- model.js
+    |       |-- collection.js
+    |       |-- view.js
+    |       |-- templateA.html
+    |       |-- templateB.html
+    |   |-- ...
+    |-- libs
+    |   |-- OpenLayers
+    |       |-- ...
+    |   |-- Backbone
+    |       |-- ...
+    |   |-- Sandbox (Backbone.Radio, EventBus.js, ...)
+    |   |-- ..
+    |-- main.js
+    |-- doc
