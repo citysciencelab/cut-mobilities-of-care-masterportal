@@ -80,7 +80,7 @@ define([
                     stopEvent: false
                 }));
                 EventBus.trigger("addOverlay", this.get("marker"));
-                EventBus.trigger('getVisibleWFSLayer');
+                EventBus.trigger("getVisibleWFSLayer");
             },
 
             /**
@@ -107,9 +107,9 @@ define([
             *
             */
             "checkStringAndSearch": function () {
+                var firstFourChars = this.get("searchString").slice(0, 4);
                 this.set("hitList", []);
-                // Prüft ob der String aus genau 8 Ziffern besteht oder aus genau 8 Ziffern und an 5. Stelle ein Leerzeichen --> Flurstückssuche
-                if(/^[0-9]{8}$/.test(this.get("searchString")) === true || /^[0-9 ]{9}$/.test(this.get("searchString")) === true && this.get("searchString").charAt(4) === " ") {
+                if (/^[0-9]{4}$/.test(firstFourChars) === true) {
                     this.searchParcel();
                 }
                 else if (this.get("searchString").length >= 3) {
@@ -124,7 +124,7 @@ define([
                 this.get("isSearchReady").set("streetSearch", false);
                 var requestStreetName, streetNames = [];
                 // Prüft ob der Suchstring ein Teilstring vom Straßennamen ist. Und ob zurzeit nur eine Straße vorhanden ist.
-                if (this.get("isOnlyOneStreet") === true && this.get("onlyOneStreetName").search(this.get("searchString")) === -1) {console.log("search");
+                if (this.get("isOnlyOneStreet") === true && this.get("onlyOneStreetName").search(this.get("searchString")) === -1) {
                     // Damit die Straßensuche auch funktioniert wenn nach Hausnummern gesucht wird.
                     requestStreetName = this.get("onlyOneStreetName");
                 }
@@ -276,15 +276,13 @@ define([
              */
             "searchParcel": function () {
                 var gemarkung, flurstuecksnummer;
-                if (this.get("searchString").length === 9) {
-                    var splitSearchString = this.get("searchString").split(" ");
-                    gemarkung = splitSearchString[0];
-                    flurstuecksnummer = splitSearchString[1];
+                if (this.get("searchString").charAt(4) === " ") {
+                    flurstuecksnummer = this.get("searchString").slice(5);
                 }
                 else {
-                    gemarkung = this.get("searchString").slice(0, 4);
-                    flurstuecksnummer = this.get("searchString").slice(4, 8);
+                    flurstuecksnummer = this.get("searchString").slice(4);
                 }
+                gemarkung = this.get("searchString").slice(0, 4);
                 $.ajax({
                     url: Config.proxyURL,
                     data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer},
@@ -392,7 +390,7 @@ define([
                     contentType: "text/xml",
                     async: false,
                     type: "POST",
-                    data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:imverfahren"><wfs:PropertyName>app:plan</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
+                    data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:imverfahren'><wfs:PropertyName>app:plan</wfs:PropertyName></wfs:Query></wfs:GetFeature>",
                     success: function (data) {
                         try {
                             // Firefox, IE
@@ -423,7 +421,7 @@ define([
                     contentType: "text/xml",
                     async: true,
                     type: "POST",
-                    data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:hh_hh_planung_festgestellt"><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
+                    data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:hh_hh_planung_festgestellt'><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>",
                     success: function (data) {
                         try {
                             // Firefox, IE
@@ -476,7 +474,7 @@ define([
                 this.set("features", []);
                 var featureArray = [];
                 _.each(layermodels, function (layer) {
-                    if (_.has(layer.attributes, "searchField") === true && layer.get('searchField') !== '') {
+                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "") {
                         var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
                         if (imageSrc) {
                             var features = layer.get("source").getFeatures();
