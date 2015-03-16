@@ -36,7 +36,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: '',
@@ -70,7 +70,7 @@ define(function () {
                     return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             },
-            title: 'FHH Atlas',
+            title: 'Freie und Hansestadt Hamburg - Atlas',
             gfi: false
         },
         proxyURL: '/cgi-bin/proxy.cgi'
