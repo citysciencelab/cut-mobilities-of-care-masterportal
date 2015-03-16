@@ -2,7 +2,8 @@
 
 ## Local Development Setup
 
-Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.
+Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen. 
+
 Testen in neu geöffneter cmd:
 ```
 # echo %HTTP_PROXY%
@@ -37,24 +38,24 @@ Test in cmd:
 
 ### [NPM](http://npmjs.org)
 
-Kommt automatisch mit der Node.js Installation mit (Node Package Manager). 
+Kommt automatisch mit der Node.js Installation mit (Node Package Manager). npm lädt Pakete aus dem Netz. 
+
 Test in cmd:
 
 ```
 # npm -v
 ```
 
-npm lädt Pakete aus dem Netz. 
-
-#### Einstellungen
-npm-config Einträge werden je in die Dateien C:\Users\<user>\.npmrc geschrieben. Übersicht über alle npm configs:
+npm lässt sich über die Kommandozeile konfigurieren. Konfig-Einträge werden je in die Dateien C:\Users\<user>\.npmrc geschrieben, die man auch direkt editieren kann. Übersicht über alle npm configs:
 
 ```
 # npm config list
 # npm config ls -l
 ```
 
-Sinnvoll denke noch den Pfad zum npm-cache außerhalb des Roaming-Profils zu legen (cmd und Admin-cmd oder die .npmrc-Dateien entsprechend anpassen)
+#### Cache-Einstellungen
+
+npm legt einen Paket-Cache an. Per Default liegt der unter C:\Users\<user>\AppData\Roaming\npm-cache. Das ist nicht gut, weil dieser Ordner beim An-/Abmelden synchronisiert wird. Daher den Pfad zum npm-cache außerhalb des Roaming-Profils setzen. Dazu die .npmrc-Dateien entsprechend anpassen oder in der cmd und Admin-cmd:
 
 ```
 npm config set npm-cache D:\npm-cache
@@ -71,14 +72,14 @@ in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 # npm config set https-proxy http://wall.lit.hamburg.de:80
 ```
 
-#### npm-Pakete global installieren
+#### npm-Pakete global als Admin installieren
 Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werden, damit sie auf der Kommandozeile als normaler User ausführbar sind (wie normale Programme auch). Um das vorzubereiten in der Admin-cmd
 
 ```
 # npm config set prefix C:\Programme\nodejs\
 ```
 
-Durch den Admin global installierte Pakete werden in diesen Pfad installiert. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
+In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
 ### [Grunt](http://gruntjs.com/)
 Grunt-cli (Command Line Interface) in der Admin-cmd global installieren
@@ -91,14 +92,20 @@ Test in normaler cmd:
 # grunt
 ```
 
-Das 'echte' grunt wird später lokal (und durch den normalen User) installiert.
-
 ### [Bower](http://bower.io)
 Paketmanager für das Web.
 
 In der Admin-cmd global installieren
 ```
 $ npm install -g bower
+```
+
+## Repository klonen
+
+Dieses Repository irgendwohin klonen.
+
+```
+# git clone https://bitbucket.org/lgv-team/lgv-main.git 
 ```
 
 
@@ -110,9 +117,6 @@ $ npm install
 
 liest package.json.
 
-postinstall-hook läuft auf einen Fehler, daher entfernt:
-
-  "scripts": {    "postinstall": "bower install"  }
 
 ## App Abhängigkeiten ziehen via Bower
 
@@ -120,9 +124,11 @@ postinstall-hook läuft auf einen Fehler, daher entfernt:
 $ bower install
 ```
 
-liest bower.json
+liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind.
 
-### Grunt Tasks
+
+## Grunt Tasks ausführen
+
 
 ```
 # grunt server
