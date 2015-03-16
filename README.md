@@ -3,6 +3,10 @@
 ## Local Development Setup
 
 Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.
+Testen in neu geöffneter cmd:
+```
+# echo %HTTP_PROXY%
+```
 
 Dann folgende Tools lokal installieren.
 
