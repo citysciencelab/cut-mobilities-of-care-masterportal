@@ -109,7 +109,12 @@ define([
                 this.model.toggleVisibility();
             },
             getMetadata: function () {
-                window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('metaID'), "_blank");
+                if (locations.fhhnet) {
+                    window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+                }
+                else {
+                    window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+                }
             },
             toggleSettings: function () {
                 this.model.toggleSettings();
