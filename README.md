@@ -26,6 +26,16 @@ git config --global http.proxy http://wall.lit.hamburg.de:80
 git config --global https.proxy http://wall.lit.hamburg.de:80
 ```
 
+### python in PATH
+python haben alle wegen ArcGIS schon installiert. 
+Der Pfad zur python.exe muss in der PATH-Umgebungsvariable stehen, meist: C:\Program Files\Python27
+
+Test in cmd
+
+```
+# python
+```
+
 ### [Node.js](http://nodejs.org)
 
 Via Windows-Installer von der Seite.
@@ -82,6 +92,8 @@ Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werd
 In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
 ### [Grunt](http://gruntjs.com/)
+Grunt ist ein JavaScript Task Runner. 
+
 Grunt-cli (Command Line Interface) in der Admin-cmd global installieren
 ```
 # npm install -g grunt-cli
@@ -124,7 +136,7 @@ liest package.json.
 $ bower install
 ```
 
-liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind.
+liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind. Es werden 2mal Benutzername und Passwort für unser repository abgefragt, die cmd-Ausgabe bleibt dann nicht stehen, was etwas unübersichtlich ist. Trotzdem: Benutzername eingeben, Enter; Passwort eingeben, Enter.
 
 
 ## Grunt Tasks ausführen
