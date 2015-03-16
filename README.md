@@ -75,7 +75,7 @@ in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werden, damit sie auf der Kommandozeile als normaler User ausführbar sind (wie normale Programme auch). Um das vorzubereiten in der Admin-cmd
 
 ```
-# npm config set prefix = C:\Programme\nodejs\
+# npm config set prefix C:\Programme\nodejs\
 ```
 
 Durch den Admin global installierte Pakete werden in diesen Pfad installiert. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
