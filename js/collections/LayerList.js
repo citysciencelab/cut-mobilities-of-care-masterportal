@@ -1,24 +1,24 @@
 define([
-    'underscore',
-    'backbone',
-    'models/wmslayer',
-    'models/wfslayer',
-    'models/grouplayer',
-    'config',
-    'eventbus'
+    "underscore",
+    "backbone",
+    "models/wmslayer",
+    "models/wfslayer",
+    "models/grouplayer",
+    "config",
+    "eventbus"
     ], function (_, Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus) {
 
     var LayerList = Backbone.Collection.extend({
         // URL der DiensteAPI
         url: Config.layerConf,
         model: function (attrs, options) {
-            if (attrs.typ === 'WMS') {
+            if (attrs.typ === "WMS") {
                 return new WMSLayer(attrs, options);
             }
-            else if (attrs.typ === 'WFS') {
+            else if (attrs.typ === "WFS") {
                 return new WFSLayer(attrs, options);
             }
-            else if (attrs.typ === 'GROUP') {
+            else if (attrs.typ === "GROUP") {
                 return new GroupLayer(attrs, options);
             }
         },
@@ -26,7 +26,7 @@ define([
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config, "tree") && Config.tree.active === true) {
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
-                return _.filter(_.where(response, {typ: "WMS", cache: "false"}), function (element) {
+                return _.filter(_.where(response, {typ: "WMS", cache: false}), function (element) {
                     return element.datasets.length > 0;
                 });
             }
@@ -35,9 +35,9 @@ define([
                 var configIDs = Config.layerIDs;
                 var modelsArray = [];
                 _.each(configIDs, function (element, index) {
-                    // für "Singel-Model" z.B.: {id: '5181', visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
+                    // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                     if (_.has(element, "id") && _.isString(element.id)) {
-                        var layers = element.id.split(',');
+                        var layers = element.id.split(",");
                         modelsArray.push(_.findWhere(response, {id: layers[0]}));
                         // default: Layer ist nicht routable, Punktabfrage kann nicht fürs Routing benutzt werden
                         if (_.has(element, "routable")) {
@@ -73,7 +73,7 @@ define([
                         if (_.has(element, "name")) {
                             modelsArray[index].name = element.name;
                         }
-                        // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: '550,551,552,553,554,555,556,557,558,559', visible: false}
+                        // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
                         if (layers.length > 1) {
                             var layerList = "";
                             _.each(layers, function (layer) {
@@ -89,7 +89,7 @@ define([
                             }
                         }
                     }
-                    // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: '1364' }, { id: '1365' }], visible: false }
+                    // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
                     else if (_.has(element, "id") && _.isArray(element.id)) {
                         var groupModel = {
                             id: _.uniqueId("grouplayer_"),
@@ -103,7 +103,7 @@ define([
                         }
                         var modelChildren = [];
                         //Childlayerattributierung
-                        _.each(element.id, function(childlayer, index, list) {
+                        _.each(element.id, function(childlayer) {
                             modelChildren.push(_.findWhere(response, {id: childlayer.id}));
                         });
                         groupModel.layerdefinitions = modelChildren;
@@ -130,12 +130,12 @@ define([
         initialize: function () {
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
             EventBus.on("setVisible", this.setVisibleByID, this);
-            EventBus.on('getVisibleWFSLayer', this.sendVisibleWFSLayer, this);
-            EventBus.on('getVisibleWFSLayerPOI', this.sendVisibleWFSLayerPOI, this);
+            EventBus.on("getVisibleWFSLayer", this.sendVisibleWFSLayer, this);
+            EventBus.on("getVisibleWFSLayerPOI", this.sendVisibleWFSLayerPOI, this);
             EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
-            EventBus.on('getVisibleWMSLayer', this.sendVisibleWMSLayer, this);
-            EventBus.on('getAllVisibleLayer', this.sendAllVisibleLayer, this);
-            EventBus.on('currentResolution', this.setResolutionForAll, this);
+            EventBus.on("getVisibleWMSLayer", this.sendVisibleWMSLayer, this);
+            EventBus.on("getAllVisibleLayer", this.sendAllVisibleLayer, this);
+            EventBus.on("currentMapScale", this.setMapScaleForAll, this);
             // EventBus.on("showLayerInTree", this.showLayerInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
@@ -165,7 +165,7 @@ define([
             // Iteriert über die Metadaten-ID's aus der Config
             _.each(Config.tree.groupLayerByID, function (id) {
                 // Alle Models mit der Metadaten-ID
-                var modelsByID = this.where({"metaID": id, "cache": "false"});
+                var modelsByID = this.where({"metaID": id, "cache": false});
                 // Der Parameter "layers" aus allen Models wird in einer Variable als String gespeichert.
                 var layerList = "";
                 _.each(modelsByID, function (model) {
@@ -173,24 +173,17 @@ define([
                 });
                 // Layer aus einem Dienst können unterschiedliche Scales haben (z.B. ALKIS).
                 // Daher wird das Model mit dem niedrigsten und das mit dem höchsten Wert gesucht.
-                // var minScaleModel = _.min(modelsByID, function (model) {
-                //     if (model.get("minScale") === "nicht vorhanden") {
-                //         model.set("minScale", "0")
-                //     }
-                //     return model.get("minScale");
-                // });
-                // var maxScaleModel = _.max(modelsByID, function (model) {
-                //     if (model.get("maxScale") === "nicht vorhanden") {
-                //         model.set("maxScale", "500")
-                //     }
-                //     return model.get("maxScale");
-                // });
+                var minScaleModel = _.min(modelsByID, function (model) {
+                    return model.get("minScale");
+                });
+                var maxScaleModel = _.max(modelsByID, function (model) {
+                    return model.get("maxScale");
+                });
                 // Die Parameter "maxScale", "minScale", "layers" und "name" werden beim ersten Model aus der Liste überschrieben.
                 modelsByID[0].set("layers", layerList.slice(1, layerList.length));
                 modelsByID[0].set("name", modelsByID[0].get("metaName"));
-                // modelsByID[0].set("maxScale", maxScaleModel.get("maxScale"));
-                // modelsByID[0].set("minScale", minScaleModel.get("minScale"));
-
+                modelsByID[0].set("maxScale", maxScaleModel.get("maxScale"));
+                modelsByID[0].set("minScale", minScaleModel.get("minScale"));
                 // Das erste Model aus der Liste wird kopiert.
                 var firstModel = modelsByID[0].clone();
                 // Die Liste der Models wird aus der Collection gelöscht.
@@ -297,37 +290,37 @@ define([
         * args[0] = id, args[1] = SLD_Body
         */
         updateStyleByID: function (args) {
-            this.get(args[0]).get('source').updateParams({'SLD_BODY': args[1]});
-            this.get(args[0]).set('SLDBody', args[1]);
+            this.get(args[0]).get("source").updateParams({"SLD_BODY": args[1]});
+            this.get(args[0]).set("SLDBody", args[1]);
         },
         /**
         * Aktualisiert den Style vom Layer mit SLD_BODY.
         * args[0] = id, args[1] = visibility(bool)
         */
         setVisibleByID: function (args) {
-            this.get(args[0]).set('visibility', args[1]);
-            this.get(args[0]).get('layer').setVisible(args[1]);
+            this.get(args[0]).set("visibility", args[1]);
+            this.get(args[0]).get("layer").setVisible(args[1]);
         },
         /**
         *
         */
         sendVisibleWFSLayer: function () {
-            EventBus.trigger('sendVisibleWFSLayer', this.getVisibleWFSLayer());
+            EventBus.trigger("sendVisibleWFSLayer", this.getVisibleWFSLayer());
         },
         sendVisibleWFSLayerPOI: function () {
-            EventBus.trigger('sendVisibleWFSLayerPOI', this.getVisibleWFSLayer());
+            EventBus.trigger("sendVisibleWFSLayerPOI", this.getVisibleWFSLayer());
         },
         /**
         *
         */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger('layerForPrint', this.getVisibleWMSLayer());
+            EventBus.trigger("layerForPrint", this.getVisibleWMSLayer());
         },
         /**
         *
         */
         sendAllVisibleLayer: function () {
-            EventBus.trigger('sendAllVisibleLayer', this.getAllVisibleLayer());
+            EventBus.trigger("sendAllVisibleLayer", this.getAllVisibleLayer());
         },
         /**
         * Gibt alle Sichtbaren Layer zurück.
@@ -359,9 +352,9 @@ define([
         /**
          *
          */
-         setResolutionForAll: function (resolution) {
+         setMapScaleForAll: function (scale) {
              this.forEach(function (model) {
-                 model.set("resolution", resolution);
+                 model.set("currentScale", scale);
              })
         }
     });

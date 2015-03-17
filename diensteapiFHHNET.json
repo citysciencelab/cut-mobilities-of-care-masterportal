@@ -1,4 +1,4 @@
-[
+﻿[
    {
       "id" : "8",
       "name" : "Luftbilder DOP 10",
@@ -22573,36 +22573,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -22624,36 +22594,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
             "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
@@ -22703,36 +22643,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -22754,36 +22664,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
             "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
@@ -22833,36 +22713,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -22884,36 +22734,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
             "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
@@ -32820,36 +32640,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -32871,36 +32661,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
             "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
@@ -32950,36 +32710,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -33001,36 +32731,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
             "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
@@ -33080,36 +32780,6 @@
                "#opendata_hh#",
                "inspireidentifiziert"
             ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
          }
       ]
    },
@@ -33131,36 +32801,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
-         {
-            "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
-            "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
-            "md_name" : "Denkmalkartierung Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Infrastruktur, Bauen und Wohnen"
-            ],
-            "kategorie_inspire" : "Schutzgebiete",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "3B43E143-2C8B-43E8-8004-EE9EDA3EA563",
             "rs_id" : "HMDK#FC5D4D7C-4021-4734-BB6F-DC15990E90AB",
@@ -37296,7 +36936,7 @@
          {
             "md_id" : "E91CB051-6248-4AF4-A616-4B0962526CE2",
             "rs_id" : "HMDK#28569a30-d03b-485e-a851-96ee67ff8a7b",
-            "md_name" : "Änderungsübersicht zum Landschaftsprogramm Hamburg",
+            "md_name" : "Landschaftsprogramm Hamburg - Änderungsbereiche",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima",
@@ -45279,7 +44919,7 @@
          {
             "md_id" : "E91CB051-6248-4AF4-A616-4B0962526CE2",
             "rs_id" : "HMDK#28569a30-d03b-485e-a851-96ee67ff8a7b",
-            "md_name" : "Änderungsübersicht zum Landschaftsprogramm Hamburg",
+            "md_name" : "Landschaftsprogramm Hamburg - Änderungsbereiche",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima",

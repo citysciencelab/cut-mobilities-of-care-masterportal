@@ -26,6 +26,7 @@ define([
             },
             render: function (model) {
                 this.stopListening();
+                this.listenTo(this.model, 'change:isInScaleRange', this.toggleStyle);
                 this.listenToOnce(this.model, 'change:visibility', this.render);
                 this.listenToOnce(this.model, 'change:visibility', this.toggleStyle);
                 this.listenToOnce(this.model, 'change:transparence', this.render);
@@ -55,6 +56,7 @@ define([
                         this.$el.find(".node-layer-button").after(this.template(attr));
                     }
                 }
+                this.toggleStyle();
                 return this;
             },
 
@@ -122,13 +124,15 @@ define([
                 this.$('.glyphicon-cog').toggleClass('rotate');
             },
             toggleStyle: function () {
-                if (this.model.get("visibility") === true) {
+                if (this.model.get("isInScaleRange") === true && this.model.get("visibility") === true) {
                     this.$el.css("color", "#fc8d62");
                 }
-                else {
+                else if (this.model.get("isInScaleRange") === true && this.model.get("visibility") === false) {
                     this.$el.css("color", "#333333");
                 }
-                this.model.get("parentView").toggleStyle();
+                else {
+                    this.$el.css("color", "#cdcdcd");
+                }
             }
         });
 

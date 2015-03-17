@@ -14,6 +14,7 @@ define([
             this.listenTo(this.model, 'change:visibility', this.render);
             this.listenTo(this.model, 'change:transparence', this.render);
             this.listenTo(this.model, 'change:settings', this.render);
+            this.listenTo(this.model, 'change:isInScaleRange', this.toggleStyle);
         },
         events: {
             'click .plus': 'upTransparence',
@@ -51,6 +52,14 @@ define([
         },
         toggleSettings: function () {
             this.model.toggleSettings();
+        },
+        toggleStyle: function () {
+            if (this.model.get("isInScaleRange") === true) {
+                this.$el.css("color", "#333333");
+            }
+            else {
+                this.$el.css("color", "#cdcdcd");
+            }
         },
         render: function () {
             if (this.model.get('displayInTree') !== false) {
