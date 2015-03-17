@@ -24,9 +24,11 @@ define([
             },
             activateCoordinate: function () {
                 this.model.activateCoordinate();
+                EventBus.trigger("winParams", [false, false, ""]);
             },
             activateGFI: function () {
                 this.model.activateGFI();
+                EventBus.trigger("winParams", [false, false, ""]);
             },
             activateMeasure: function () {
                 EventBus.trigger("toggleWin", ["measure", "Messen", "glyphicon-edit"]);

@@ -63,10 +63,10 @@ define([
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.setStyle();
+                this.createInteraction();
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("activateGFI");
                 EventBus.trigger("removeInteraction", this.get("draw"));
             }
         },

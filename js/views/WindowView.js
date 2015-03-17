@@ -27,6 +27,9 @@ define([
                     this.model.sendParamsToWinCotent();
                     this.$el.show("slow");
                 }
+                else {
+                    this.$el.hide("slow");
+                }
             },
             minimize: function () {
                 this.$el.addClass("win-min");
@@ -45,6 +48,7 @@ define([
                 this.$el.hide("slow");
                 this.model.setVisible(false);
                 this.model.sendParamsToWinCotent();
+                EventBus.trigger("onlyActivateGFI");
             }
         });
 

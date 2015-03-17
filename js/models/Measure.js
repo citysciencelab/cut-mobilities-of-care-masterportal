@@ -43,7 +43,6 @@ define([
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("activateGFI");
                 EventBus.trigger("removeInteraction", this.get("draw"));
             }
         },

@@ -171,6 +171,11 @@ define([
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get("map").on("pointermove", this.pointerMoveOnMap);
             }
+            else if (tool === "draw") {
+                this.get("map").un("click", this.setPositionCoordPopup);
+                this.get("map").un("click", this.setGFIParams, this);
+                this.get("map").un("pointermove", this.pointerMoveOnMap);
+            }
         },
         pointerMoveOnMap: function (evt) {
             EventBus.trigger("pointerMoveOnMap", evt)
