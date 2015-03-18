@@ -70,7 +70,7 @@ define(function () {
             {id: '452', visible: false},
             {id: '1346', visible: true},
             {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
-            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', opacity:"40"},
+            {id: '2058', visible: true, style: '2058', clusterDistance: 30, searchField: '', styleField :'kategorie', opacity:"40"},
             {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
             {id:
