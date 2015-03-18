@@ -293,16 +293,26 @@ define([
                             if (params.attributes === 'showAll') {
                                 _.each(element, function (element) {
                                     var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    gfi[attribute] = element.value.trim();
+                                    if (element.value && element.value != '') {
+                                        gfi[attribute] = element.value.trim();
+                                    }
+                                    else if (element.textContent && element.textContent != '') {
+                                        gfi[attribute] = element.textContent.trim();
+                                    }
                                 });
                             }
                             else {
                                 _.each(params.attributes, function(value, key, list) {
-                                    var nodevalue = _.find(element, function(node) {
+                                    var node = _.find(element, function(node) {
                                         return node.localName === key;
                                     });
-                                    if (nodevalue) {
-                                        nodevalue = nodevalue.textContent.trim();
+                                    if (node) {
+                                        if (node.value && node.value != '') {
+                                            var nodevalue = node.value.trim();
+                                        }
+                                        else if (node.textContent && node.textContent != '') {
+                                            var nodevalue = node.textContent.trim();
+                                        }
                                         var key = [];
                                         key.push(value);
                                         var val = [];
