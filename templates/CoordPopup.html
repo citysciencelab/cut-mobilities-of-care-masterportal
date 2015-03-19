@@ -1,9 +1,11 @@
-<p>
-    <span class="close">&times;</span>
-</p>
+<div class="coord-header">
+        <span class="glyphicon glyphicon-remove coord-close"></span>
+</div>
+<div class="coord-content">
 <p><small>UTM-Koordinate (ETRS 89):</small>
     <pre>Rechtswert: <%= Math.round(coordinateUTM[0] * 100) / 100 %> m<br>Hochwert: <%= Math.round(coordinateUTM[1] * 100) / 100 %> m</pre>
 </p>
 <p><small>Geografische-Koordinate (WGS 84):</small>
     <pre><%= coordinateGeo %></pre>
 </p>
+</div>

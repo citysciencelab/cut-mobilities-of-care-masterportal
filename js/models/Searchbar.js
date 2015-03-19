@@ -20,6 +20,7 @@ define([
             */
             "initialize": function () {
                 this.set("streetSearch", false);
+                this.set("districtSearch", false);
                 this.set("numberSearch", true);
                 this.on("change", this.checkAttributes);
             },
@@ -178,6 +179,7 @@ define([
                                 this.get("isSearchReady").set("numberSearch", true);
                             }
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
+                            this.searchDistricts();
                             this.searchInBPlans();
                             this.searchInFeatures();
                             if (_.has(Config, "tree") && Config.tree.active === true) {
@@ -196,7 +198,6 @@ define([
             *
             */
             "searchHouseNumbers": function () {
-                // this.set("numberSearch", false);
                 this.get("isSearchReady").set("numberSearch", false);
                 $.ajax({
                     url: this.get("gazetteerURL"),
@@ -267,6 +268,46 @@ define([
                         }
                         // this.set("numberSearch", true);
                         this.get("isSearchReady").set("numberSearch", true);
+                    }
+                });
+            },
+
+            "searchDistricts": function () {
+                this.get("isSearchReady").set("districtSearch", false);
+                $.ajax({
+                    url: this.get("gazetteerURL"),
+                    data: "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"),
+                    context: this,
+                    async: true,
+                    type: "GET",
+                    success: function (data) {
+                        try {
+                            var districtName = [];
+                            // Firefox, IE
+                            if (data.getElementsByTagName("wfs:member").length > 0) {
+                                var hits = data.getElementsByTagName("wfs:member");
+                                _.each(hits, function (element, index) {
+                                    var coord = [parseFloat(data.getElementsByTagName("gml:pos")[index].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("gml:pos")[index].textContent.split(" ")[1])];
+                                    var name = data.getElementsByTagName("dog:kreisname_normalisiert")[index].textContent;
+                                    districtName.push({"name": name, "type": "Stadtteil", "coordinate": coord, "glyphicon": "glyphicon-map-marker", "id": name.replace(/ /g, "") + "Stadtteil"});
+                                }, this);
+                                this.pushHits("hitList", districtName);
+                            }
+                            // WebKit
+                            else if (data.getElementsByTagName("member") !== undefined) {
+                                var hits = data.getElementsByTagName("member");
+                                _.each(hits, function (element, index) {
+                                    var coord = [parseFloat(data.getElementsByTagName("pos")[index].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("pos")[index].textContent.split(" ")[1])];
+                                    var name = data.getElementsByTagName("kreisname_normalisiert")[index].textContent;
+                                    districtName.push({"name": name, "type": "Stadtteil", "coordinate": coord, "glyphicon": "glyphicon-map-marker", "id": name.replace(/ /g, "") + "Stadtteil"});
+                                }, this);
+                                this.pushHits("hitList", districtName);
+                            }
+                        }
+                        catch (error) {
+                            //console.log(error);
+                        }
+                        this.get("isSearchReady").set("districtSearch", true);
                     }
                 });
             },

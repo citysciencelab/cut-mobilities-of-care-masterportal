@@ -8,10 +8,10 @@ define([
 
     var CoordPopupView = Backbone.View.extend({
         model: CoordPopup,
-        id: 'coordPopup',
+        // id: 'coordPopup',
         template: _.template(CoordPopupTemplate),
         events: {
-            'click .close': 'destroy'
+            'click .coord-close': 'destroy'
         },
         initialize: function () {
             this.listenTo(this.model, 'change:coordinateGeo', this.render);

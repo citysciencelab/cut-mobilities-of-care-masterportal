@@ -217,7 +217,7 @@ define([
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("setCenter", hit.coordinate, 5);
                 }
-                else if (hit.type === "Adresse") {
+                else if (hit.type === "Adresse" || hit.type === "Stadtteil") {
                     zoomLevel = 7;
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
@@ -315,7 +315,7 @@ define([
                     searchVector.setVisible(true);
                     searchVector.getSource().addFeature(feature);
                 }
-                else if (hit.type === "Adresse") {
+                else if (hit.type === "Adresse" || hit.type === "Stadtteil") {
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                 }
