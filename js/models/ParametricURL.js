@@ -106,16 +106,8 @@ define([
             /**
             *
             */
-            if (_.has(result, 'BPLANFEST')) {
-                var value = _.values(_.pick(result, 'BPLANFEST'))[0];
-                Config.searchBar.initString = value;
-            }
-
-            /**
-            *
-            */
-            if (_.has(result, 'BPLANIV')) {
-                var value = _.values(_.pick(result, 'BPLANIV'))[0];
+            if (_.has(result, 'QUERY')) {
+                var value = _.values(_.pick(result, 'QUERY'))[0];
                 Config.searchBar.initString = value;
             }
         }
