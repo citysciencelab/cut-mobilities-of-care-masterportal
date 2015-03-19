@@ -15,7 +15,7 @@ define([
             EventBus.trigger('addOverlay', this.model.get('mhpOverlay'));
         },
         /**
-        * html = true damit </br> korrekt erkannt bei cluster
+        * html = true damit </br> korrekt bei cluster
         * erkannt werden
         */
         render: function (evt) {

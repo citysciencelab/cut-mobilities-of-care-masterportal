@@ -10,7 +10,6 @@ define([
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
-            mhpOverlay: new ol.Overlay({ element: $('#mousehoverpopup')}), // ol.Overlay
             wfsList: [],
             mhpresult: '',
             mhpcoordinates: [],
@@ -18,6 +17,10 @@ define([
             GFIPopupVisibility: false
         },
         initialize: function () {
+            $('body').append('<div id="mousehoverpopup" class="col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5"></div>');
+            this.set('mhpOverlay', new ol.Overlay({
+                element: $('#mousehoverpopup')
+            }));
             this.set('element', this.get('mhpOverlay').getElement());
             EventBus.on('newMouseHover', this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
