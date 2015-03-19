@@ -9,39 +9,29 @@ define([
 ], function ($, _, Backbone, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({
-        /**
-         * The defaults hash (or function) can be used to specify
-         * the default attributes for your model.
-         * When creating an instance of the model,
-         * any unspecified attributes will be set to their default value.
-         */
         defaults: {
             mhpOverlay: new ol.Overlay({ element: $('#mousehoverpopup')}), // ol.Overlay
             wfsList: [],
             mhpresult: '',
             mhpcoordinates: [],
-            mhptimeout: '',
             oldSelection: '',
-            newSelection: '',
             GFIPopupVisibility: false
         },
         initialize: function () {
             this.set('element', this.get('mhpOverlay').getElement());
-            EventBus.on('newMouseHover', this.newMouseHover, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
+            EventBus.on('newMouseHover', this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            EventBus.on('setMap', this.setMap, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initMouseHover reagiert wurde.
+            EventBus.on('setMap', this.checkLayersAndRegisterEvent, this); // initieren. Wird in Map.js getriggert, nachdem dort auf getMap reagiert wurde.
             EventBus.trigger('getMap', this);
-            this.checkLayer();
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
             this.set('GFIPopupVisibility', GFIPopupVisibility);
         },
-        setMap: function (map) {
-            this.set('map', map);
-        },
-        checkLayer: function () {
-            var map = this.get('map');
-            // Lese Config-Optionen ein und speichere Ergebnisse
+        checkLayersAndRegisterEvent: function (map) {
+            // speichere Map-Zeugs für später
+            this.set('resolution', map.getView().getResolution());
+            this.set('dots_per_inch', map.DOTS_PER_INCH);
+            // Lese Config-Optionen ein
             var layerIDs = Config.layerIDs;
             var wfsList = new Array();
             _.each(layerIDs, function(element, key, list) {
@@ -64,6 +54,7 @@ define([
                     }
                 }
             }, this);
+            // speichere Ergebnisse in wfsList
             this.set('wfsList', wfsList);
             if (wfsList && wfsList.length > 0) {
                 map.on('pointermove', function(evt) {
@@ -95,7 +86,8 @@ define([
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            this.set('mhpresult', '');
+            this.set('oldSelection', '');
+            this.unset('mhpresult', {silent: true});
             this.get('element').tooltip('destroy');
         },
         /**
@@ -107,28 +99,32 @@ define([
         /**
         * forEachFeatureAtPixel greift nur bei sichtbaren Features.
         * wenn 2. Parameter (layer) == null, dann kein Layer
+        * Wertet an der aktuell getriggerten Position alle Features der
+        * Map aus, die über subfunction function(layer) zurückgegeben werden.
+        * pFeatureArray wird so mit allen darzustellenden Features gepusht.
+        * Nachdem die Selektion erstellt wurde, wird diese für initiale
+        * if-Bedingung gespeichert und abschließend wird das Aufbereiten dieser
+        * Selektion angestpßen.
         */
-        newMouseHover: function (evt, map) {
+        checkForEachFeatureAtPixel: function (evt, map) {
             var pFeatureArray = new Array();
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
-                oldSelection = this.get('oldSelection');
-                if (layer && oldSelection != selection) {
-                    var selProps = selection.getProperties();
-                    if (selProps.features) {
-                        var list = selProps.features;
-                        _.each(list, function (element, index, list) {
-                            pFeatureArray.push({
-                                attributes: element.getProperties(),
-                                layerId: layer.id
-                            });
-                        });
-                    }
-                    else {
+                if (!layer || !selection) return;
+                var selProps = selection.getProperties();
+                if (selProps.features) {
+                    var list = selProps.features;
+                    _.each(list, function (element, index, list) {
                         pFeatureArray.push({
-                            attributes: selProps,
+                            attributes: element.getProperties(),
                             layerId: layer.id
                         });
-                    }
+                    });
+                }
+                else {
+                    pFeatureArray.push({
+                        attributes: selProps,
+                        layerId: layer.id
+                    });
                 }
             }, this, function (layer) {
                 var wfsList = this.get('wfsList');
@@ -147,11 +143,51 @@ define([
                     return null;
                 }
             }, this);
+            if (pFeatureArray.length > 0) {
+                if (this.get('oldSelection') === '') {
+                    this.set('oldSelection', pFeatureArray);
+                    this.prepMouseHoverFeature(pFeatureArray);
+                }
+                else {
+                    if (this.compareArrayOfObjects(pFeatureArray, this.get('oldSelection')) === false) {
+                        this.destroyPopup(pFeatureArray);
+                        this.set('oldSelection', pFeatureArray);
+                            this.prepMouseHoverFeature(pFeatureArray);
+                    }
+                }
+            }
+            else {
+                this.removeMouseHoverFeatureIfSet();
+            }
+        },
+        compareArrayOfObjects: function (arr1, arr2) {
+            if (arr1.length != arr2.length) return false;
+            for (i=0; i<arr1.length; i++) {
+                var obj1 = arr1[i];
+                var obj2 = arr2[i];
+                if (_.isEqual(obj1, obj2) === false) return false;
+            }
+            return true;
+        },
+        /**
+        * Diese Funktion prüft ob mhpresult = '' und falls nicht
+        * wird MouseHover destroyt
+        */
+        removeMouseHoverFeatureIfSet: function () {
+            if (this.get('mhpresult') && this.get('mhpresult') !== '') {
+                this.destroyPopup();
+            }
+        },
+        /**
+        * Dies Funktion durchsucht das übergebene pFeatureArray und extrahiert den
+        * anzuzeigenden Text sowie die Popup-Koordinate und setzt
+        * mhpresult. Auf mhpresult lauscht die View, die daraufhin rendert
+        */
+        prepMouseHoverFeature: function (pFeatureArray) {
             var wfsList = this.get('wfsList');
             var value = '';
             var coord = new Array();
             if (pFeatureArray.length > 0) {
-                this.set('newSelection', pFeatureArray);
                 // für jedes gehoverte Feature...
                 _.each(pFeatureArray, function(element, index, list) {
                     if (value != '') {
@@ -166,8 +202,7 @@ define([
                             if (_.has(element.attributes, mouseHoverField)) {
                                 value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
                                 if (coord.length == 0) {
-                                    var resolution = this.get('map').getView().getResolution();
-                                    var delta = Math.round(resolution * 39.37 * this.get('map').DOTS_PER_INCH) * 0.002;
+                                    var delta = Math.round(this.get('resolution') * 39.37 * this.get('dots_per_inch')) * 0.002;
                                     if (element.attributes.geom) {
                                         coord.push(element.attributes.geom.getFirstCoordinate()[0] + delta);
                                         coord.push(element.attributes.geom.getFirstCoordinate()[1] - delta);
@@ -185,9 +220,9 @@ define([
                     }
                 }, this);
                 if (value != '') {
-                    this.set('mhpresult', value);
                     this.get('mhpOverlay').setPosition(coord);
                     this.set('mhpcoordinates', coord);
+                    this.set('mhpresult', value);
                 }
             }
         }
