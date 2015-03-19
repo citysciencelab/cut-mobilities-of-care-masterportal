@@ -257,7 +257,8 @@ html, body {
 
 .mouseHover {
     font-size: 12px;
-    background-color: rgba(150, 150, 150, 1);
+    max-width: inherit;
+    background-color: initial;
     color: #fff;
     font-weight: bold;
     display: block;
