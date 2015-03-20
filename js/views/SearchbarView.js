@@ -46,7 +46,6 @@ define([
                     $("#searchInput").val(this.model.get('placeholder'));
                 }
                 $("#searchInput").blur();
-
             },
             "events": {
                 "keyup input": "setSearchString",

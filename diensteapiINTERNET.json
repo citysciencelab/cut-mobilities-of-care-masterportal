@@ -31311,7 +31311,7 @@
       "url" : "http://geodienste-hamburg.de/HH_WMS_Cache",
       "typ" : "WMS",
       "layers" : "FNP",
-      "format" : "image/jpeg",
+      "format" : "image/png",
       "version" : "1.1.1",
       "singleTile" : false,
       "transparent" : false,

@@ -180,11 +180,11 @@ define([
                             }
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
                             this.searchDistricts();
-                            this.searchInBPlans();
                             this.searchInFeatures();
                             if (_.has(Config, "tree") && Config.tree.active === true) {
                                 this.searchInLayers();
                             }
+                            this.searchInBPlans();
                         }
                         catch (error) {
                             //console.log(error);

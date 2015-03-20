@@ -145,6 +145,8 @@ var html = "<div id='my-id'></div>";
 
 #### Backbone spezifische Konventionen
 * "listenTo" anstatt "on" als Eventlistener
+* Die initialize-Funktion ist die erste Funktion in den Backbone-Objekten
+* Die render-Funktion ist in jeder View die zweite Funktion
 
 #### Sonstiges
 * Comma-First-Formatierung ist verboten
@@ -245,6 +247,7 @@ insert_final_newline = true
 * Committe früh und oft
 * Ein Commit repräsentiert eine Idee oder eine Änderung
 * Nutze Verben für die Commits (add/remove/update/refactor/fix)
+* Es dürfen keine console.log Statements in den Commits vorhanden sein
 
 # Architektur
     |-- modules
@@ -266,3 +269,8 @@ insert_final_newline = true
     |   |-- ..
     |-- main.js
     |-- doc
+    |-- dist
+    |   |-- Planportal
+    |       |-- v1.4.3.min.js
+    |       |-- v1.5.1.min.js
+    |       |-- ...

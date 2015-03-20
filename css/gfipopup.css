@@ -15,6 +15,9 @@
 
 #gfiContent {
     font-size: 12px;
+    max-height: 280px;
+    min-width: 100%;
+    overflow-y: auto;
 }
 
 .popover {
