@@ -3,7 +3,7 @@ define([
     'backbone',
     'openlayers',
     'config',
-    'collections/LayerList_new',
+    'collections/LayerList',
     'collections/TreeList',
     'eventbus'
     ], function (_, Backbone, ol, Config, LayerList, TreeList, EventBus) {
@@ -40,6 +40,8 @@ define([
                 EventBus.on('removeLayer', this.removeLayer, this);
                 EventBus.on('addOverlay', this.addOverlay, this);
                 EventBus.on('removeOverlay', this.removeOverlay, this);
+                EventBus.on("addInteraction", this.addInteraction, this);
+                EventBus.on("removeInteraction", this.removeInteraction, this);
                 EventBus.on('moveLayer', this.moveLayer, this);
                 EventBus.on('setCenter', this.setCenter, this);
                 EventBus.on('zoomToExtent', this.zoomToExtent, this);
@@ -50,7 +52,6 @@ define([
                 EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
                 EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
-                EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); //Mitteilung, ob GFI geööfnet oder nicht
 
                 this.set('projection', proj25832);
 
@@ -72,16 +73,42 @@ define([
                     controls: [],
                     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false})
                 }));
+
+                // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
+				if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf('android') != -1) {
+					var startx = 0;
+					var starty = 0;
+					this.get('map').getViewport().addEventListener('touchstart', function(e){
+						var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
+						startx = parseInt(touchobj.clientX); // get x position of touch point relative to left edge of browser
+						e.preventDefault();
+					}, false);
+					this.get('map').getViewport().addEventListener('touchend', function(e){
+						var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
+						// Calculate if there was "significant" movement of the finger
+						var movementX = Math.abs(startx-touchobj.clientX);
+						var movementY = Math.abs(starty-touchobj.clientY);
+						if(movementX < 5 || movementY < 5) {
+							var x = _.values(_.pick(touchobj, 'pageX'))[0];
+							var y = _.values(_.pick(touchobj, 'pageY'))[0];
+							var coordinates = this.get('map').getCoordinateFromPixel([x,y]);
+                            // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
+							this.setGFIParams({coordinate: coordinates});
+						}
+						//e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
+					}.bind(this),false);
+				}
+
                 // Dieses Attribut brauche ich wirklich für die ScaleLine
                 this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
                 if (_.has(Config, "tree")) {
-                _.each(TreeList.pluck("layerList").reverse(), function (layer) {
-                    _.each(layer, function (element) {
-                        this.get("map").addLayer(element.get("layer"));
-                    }, this);
-                },this);
+                    _.each(TreeList.pluck("sortedLayerList").reverse(), function (layer) {
+                        _.each(layer, function (element) {
+                            this.get("map").addLayer(element.get("layer"));
+                        }, this);
+                    },this);
                 }
                 else {
                     _.each(LayerList.pluck("layer"), function (layer) {
@@ -91,12 +118,14 @@ define([
 
                 // View listener
                 this.get('view').on('change:resolution', function () {
-                    // NOTE brauche ich wahrscheinlich nicht mehr (sd)
+                    EventBus.trigger("currentResolution", this.get('view').getResolution());
                     EventBus.trigger('currentMapScale', Math.round(this.getCurrentScale()));
                 },this);
                 this.get('view').on('change:center', function () {
                     EventBus.trigger('currentMapCenter', this.get('view').getCenter());
                 },this);
+
+                EventBus.trigger('getMap');
             },
 
             GFIPopupVisibility: function(value) {
@@ -106,10 +135,6 @@ define([
                 else {
                     this.set('GFIPopupVisibility', false);
                 }
-            },
-
-            setMeasurePopup: function (ele) {
-                this.set('MeasurePopup', ele);
             },
 
             initWfsFeatureFilter: function () {
@@ -131,31 +156,35 @@ define([
             return scale;
         },
         activateClick: function (tool) {
-            var MeasurePopup = this.get('MeasurePopup');
             if (tool === 'coords') {
                 this.get('map').un('click', this.setGFIParams, this);
                 this.get('map').on('click', this.setPositionCoordPopup);
-                if (MeasurePopup) {
-                    this.get('map').removeLayer(MeasurePopup.get('layer'));
-                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                    $('#measurePopup').html('');
-                }
+                this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === 'gfi') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').on('click', this.setGFIParams, this);
-                if (MeasurePopup) {
-                    this.get('map').removeLayer(MeasurePopup.get('layer'));
-                    this.get('map').removeInteraction(MeasurePopup.get('draw'));
-                    $('#measurePopup').html('');
-                }
+                this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === 'measure') {
                 this.get('map').un('click', this.setPositionCoordPopup);
                 this.get('map').un('click', this.setGFIParams, this);
-                this.get('map').addLayer(MeasurePopup.get('layer'));
-                this.get('map').addInteraction(MeasurePopup.get('draw'));
+                this.get("map").on("pointermove", this.pointerMoveOnMap);
             }
+            else if (tool === "draw") {
+                this.get("map").un("click", this.setPositionCoordPopup);
+                this.get("map").un("click", this.setGFIParams, this);
+                this.get("map").un("pointermove", this.pointerMoveOnMap);
+            }
+        },
+        pointerMoveOnMap: function (evt) {
+            EventBus.trigger("pointerMoveOnMap", evt)
+        },
+        addInteraction: function (interaction) {
+            this.get("map").addInteraction(interaction);
+        },
+        removeInteraction: function (interaction) {
+            this.get("map").removeInteraction(interaction);
         },
         /**
         */
@@ -165,12 +194,7 @@ define([
         /**
         */
         removeOverlay: function (overlay) {
-            var map = this.get('map');
-            map.getOverlays().forEach(function (ol) {
-                if (ol == overlay) {
-                    map.removeOverlay(overlay);
-                }
-            });
+            this.get('map').removeOverlay(overlay);
         },
         /**
         */
@@ -183,7 +207,8 @@ define([
             this.get('map').removeLayer(layer);
         },
         /**
-        */
+         *
+         */
         moveLayer: function (args) {
             var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
@@ -204,10 +229,13 @@ define([
         setPositionCoordPopup: function (evt) {
             EventBus.trigger('setPositionCoordPopup', evt.coordinate);
         },
+        /**
+         * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
+         * scale ist zur Definition der BoundingBox um den Klickpunkt - nur bei WFS
+         * routable legt fest, ob das Feature als RoutingDestination gesetzt werden darf.
+         * style Anfrage bei WFS, ob Style auf unsichtbar.
+         */
         setGFIParams: function (evt) {
-            if (this.get('GFIPopupVisibility') === true) {
-                EventBus.trigger('closeGFIParams', this);
-            }
             var layersVisible, gfiParams = [], resolution, projection, layers, coordinate;
             coordinate = evt.coordinate;
             layers = this.get('map').getLayers().getArray();
@@ -231,7 +259,8 @@ define([
                             scale: scale,
                             url: gfiURL,
                             name: element.get('name'),
-                            attributes: gfiAttributes
+                            attributes: gfiAttributes,
+                            routable: element.get('routable')
                         });
                     }
                     else if (element.getProperties().typ === 'WFS') {
@@ -241,7 +270,8 @@ define([
                             source: element.getSource(),
                             style: element.getStyle(),
                             name: element.get('name'),
-                            attributes: gfiAttributes
+                            attributes: gfiAttributes,
+                            routable: element.get('routable')
                         });
                     }
                 }

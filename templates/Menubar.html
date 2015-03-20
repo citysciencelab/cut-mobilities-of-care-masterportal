@@ -9,7 +9,7 @@
           </button>
         </div>
         <!-- Alle Navigationslinks, Formulare und anderer Inhalt werden hier zusammengefasst und können dann ein- und ausgeblendet werden -->
-        <div id="lgvnavbar" class="collapse navbar-collapse navbar-left" style="width: 100%;">
+        <div class="collapse navbar-collapse navbar-left" style="width: 100%;">
             <ul class="nav navbar-nav">
             <% if (layerTree === true) { %>
                 <li class="dropdown">
@@ -31,14 +31,14 @@
             <% } %>
             <% if (routing === true) { %>
                 <li>
-                    <a href="#" class="routingModul">
+                    <a href="#" class="menuitem routingModul">
                         <span class="glyphicon glyphicon-road"></span>&nbsp;Routenplaner
                     </a>
                 </li>
             <% } %>
             <% if (wfsFeatureFilter === true) { %>
                 <li>
-                    <a href="#" class="filterWfsFeature">
+                    <a href="#" class="menuitem filterWfsFeature">
                         <span class="glyphicon glyphicon-filter"></span>&nbsp;Filter
                     </a>
                 </li>

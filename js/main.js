@@ -13,7 +13,8 @@ require.config({
         models: '../js/models',
         collections: '../js/collections',
         config: '../test/test-config/portal-config',
-        app: '../js/app'
+        app: '../js/app',
+        templates: '../templates'
     },
 
     shim: {

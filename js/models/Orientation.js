@@ -37,14 +37,13 @@ define([
                 }
                 EventBus.trigger('showGeolocationMarker', this);
             },this);
-            geolocation.on('error', function(err) {
+            geolocation.once('error', function(err) {
                 alert('Standpunktbestimmung momentan nicht verfügbar!');
                 $(function () {
                     $('#loader').hide();
                 });
-                EventBus.trigger('setGeolocation', err);
                 EventBus.trigger('clearGeolocationMarker', this);
-            });
+            }, this);
         },
         getPOI: function(distance){
             this.set('distance', distance);
@@ -58,8 +57,8 @@ define([
             var featureArray = [];
             _.each(visibleWFSLayers, function (layer) {
                 layer.get('source').forEachFeatureInExtent(this.get('circleExtent'), function (feature) {
-                    featureArray.push(feature);
-                    EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'));
+                    //featureArray.push(feature);
+                    EventBus.trigger('setModel', feature, StyleList, this.get('distance'), this.get('newCenter'),layer);
                 }, this);
             }, this);
             EventBus.trigger('showPOIModal');

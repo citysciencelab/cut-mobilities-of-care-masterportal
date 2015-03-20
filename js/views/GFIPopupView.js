@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/GFIPopup.html',
+    'text!templates/GFIPopup.html',
     'models/GFIPopup',
     'eventbus'
 ], function ($, _, Backbone, GFIPopupTemplate, GFIPopup, EventBus) {
@@ -15,7 +15,8 @@ define([
             'click .gfi-toggle': 'minMaximizePop',
             'click .pager-right': 'renderNext',
             'click .pager-left': 'renderPrevious',
-            'click #RouteZeigenButton' : 'startShowingRoute'
+            'click #RouteZeigenButton' : 'startShowingRoute',
+            'click #setRoutingDestination' : 'setRoutingDestination'
         },
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
@@ -33,6 +34,9 @@ define([
          */
         setMap: function (map) {
             this.model.set('map', map);
+        },
+        setRoutingDestination: function (evt) {
+            EventBus.trigger('setRoutingDestination', this.model.get('coordinate'));
         },
         startShowingRoute: function (evt) {
             // hole Map nur, wenn Route angezeigt werden soll
@@ -92,15 +96,29 @@ define([
          *
          */
         render: function () {
+            var uniqueId = _.uniqueId('video');
+            if (_.has(this.model.get('gfiContent')[0], 'video') && this.model.get('isStreamingLibLoaded') === false) {
+                this.model.loadStreamingLibsAndStartStreaming();
+            }
+            this.model.set('uniqueId', uniqueId);
             var attr = this.model.toJSON();
-            var that = this;
             this.$el.html(this.template(attr));
             $(this.model.get('element')).popover({
-                'placement': 'auto',
+                'placement': function () {
+                    if (this.getPosition().top > window.innerHeight / 2) {
+                        return 'top'
+                    }
+                    else {
+                        return 'bottom'
+                    }
+                },
                 'html': true,
                 'content': this.$el
             });
             this.model.showPopup();
+            if (_.has(this.model.get('gfiContent')[0], 'video') && this.model.get('isStreamingLibLoaded') === true) {
+                this.model.starteStreaming(uniqueId);
+            }
             EventBus.trigger('closeMouseHoverPopup', this);
             EventBus.trigger('GFIPopupVisibility', true);
         },
@@ -127,9 +145,9 @@ define([
          */
         destroy: function () {
             $('#popovermin').remove();
-            this.model.clearRoute();
-            EventBus.trigger('GFIPopupVisibility', false);
             this.model.destroyPopup();
+            EventBus.trigger('GFIPopupVisibility', false);
+            this.model.clearRoute();
         }
     });
 

@@ -31,8 +31,8 @@ define([
                 'LAYERS': this.get('layers'),
                 'FORMAT': format,
                 'VERSION': version,
-                'TRANSPARENT': this.get('transparent')
-            }
+                'TRANSPARENT': this.get('transparent').toString()
+            };
             if (version === '1.1.1' || version === '1.1.0' || version === '1.0.0') {
                 params = _.extend(params, {
                     "SRS": 'EPSG:25832'
@@ -54,11 +54,34 @@ define([
             else{
                 var legendURL = 'ignore';
             }
-            this.set('source', new ol.source.TileWMS({
-                url: this.get('url'),
-                gutter: this.get('gutter'),
-                params: params,
-                tileGrid: new ol.tilegrid.TileGrid({
+            if (this.get('singleTile') !== true) {
+                this.set('source', new ol.source.TileWMS({
+                    url: this.get('url'),
+                    gutter: this.get('gutter'),
+                    params: params,
+                    tileGrid: new ol.tilegrid.TileGrid({
+                        resolutions: [
+                            66.14614761460263,
+                            26.458319045841044,
+                            15.874991427504629,
+                            10.583327618336419,
+                            5.2916638091682096,
+                            2.6458319045841048,
+                            1.3229159522920524,
+                            0.6614579761460262,
+                            0.2645831904584105
+                        ],
+                        origin: [
+                            442800,
+                            5809000
+                        ]
+                    })
+                }));
+            }
+            else {
+                this.set('source', new ol.source.ImageWMS({
+                    url: this.get('url'),
+                    params: params,
                     resolutions: [
                         66.14614761460263,
                         26.458319045841044,
@@ -69,26 +92,28 @@ define([
                         1.3229159522920524,
                         0.6614579761460262,
                         0.2645831904584105
-                    ],
-                    origin: [
-                        442800,
-                        5809000
                     ]
-                })
-            }));
+                }));
+            }
         },
         /**
-         *
+         * Erzeugt ein Layerobject abhängig von 'singleTile'
          */
         setAttributionLayer: function () {
-            this.set('layer', new ol.layer.Tile({
-                source: this.get('source'),
-                name: this.get('name'),
-                typ: this.get('typ'),
-                gfiAttributes: this.get('gfiAttributes'),
-                legendURL: this.get('legendURL')
-//                gfiAttributes: this.convertGFIAttributes()
-            }));
+            var layerobjects = {
+                    source: this.get('source'),
+                    name: this.get('name'),
+                    typ: this.get('typ'),
+                    gfiAttributes: this.get('gfiAttributes'),
+                    legendURL: this.get('legendURL'),
+                    routable: this.get('routable')
+                };
+            if (this.get('singleTile') !== true) {
+                this.set('layer', new ol.layer.Tile(layerobjects));
+            }
+            else {
+                this.set('layer', new ol.layer.Image(layerobjects));
+            }
         }
     });
     return WMSLayer;

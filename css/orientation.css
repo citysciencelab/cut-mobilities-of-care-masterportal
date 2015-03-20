@@ -1,6 +1,6 @@
 .buttonStandpunkt {
     position: absolute;
-    z-index: 100;
+    z-index: 999;
     right: 0px;
     top:0px;
     margin-top: 5px;
@@ -46,4 +46,3 @@
     line-height: 1;
     width: 35px;
 }
-

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/Tools.html',
+    'text!templates/Tools.html',
     'models/Tools',
     'eventbus'
     ], function ($, _, Backbone, ToolsTemplate, Tools, EventBus) {
@@ -19,16 +19,24 @@ define([
                 'click #coordinateMenu': 'activateCoordinate',
                 'click #gfiMenu': 'activateGFI',
                 'click #measureMenu': 'activateMeasure',
-                'click #printMenu': 'activatePrint'
+                'click #printMenu': 'activatePrint',
+                "click #drawMenu": "activateDraw"
             },
             activateCoordinate: function () {
                 this.model.activateCoordinate();
+                EventBus.trigger("winParams", [false, false, ""]);
             },
             activateGFI: function () {
                 this.model.activateGFI();
+                EventBus.trigger("winParams", [false, false, ""]);
             },
             activateMeasure: function () {
+                EventBus.trigger("toggleWin", ["measure", "Messen", "glyphicon-edit"]);
                 this.model.activateMeasure();
+            },
+            activateDraw: function () {
+                EventBus.trigger("toggleWin", ["draw", "Zeichnen", "glyphicon-pencil"]);
+                this.model.activateDraw();
             },
             activatePrint: function () {
                 // EventBus.trigger('togglePrintWin');

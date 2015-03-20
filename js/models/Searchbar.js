@@ -3,9 +3,10 @@ define([
     "underscore",
     "backbone",
     "openlayers",
+    "collections/LayerList",
     "eventbus",
     "config"
-    ], function ($, _, Backbone, ol, EventBus, Config) {
+    ], function ($, _, Backbone, ol, LayerList, EventBus, Config) {
 
         /**
         * Dieses Model ist ein Attribut der Searchbar.
@@ -19,7 +20,8 @@ define([
             */
             "initialize": function () {
                 this.set("streetSearch", false);
-                this.set("numberSearch", false);
+                this.set("districtSearch", false);
+                this.set("numberSearch", true);
                 this.on("change", this.checkAttributes);
             },
 
@@ -62,10 +64,11 @@ define([
                 EventBus.on("sendVisibleWFSLayer", this.getFeaturesForSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
                 this.set("isSearchReady", new SearchReady());
+                this.getLayerForSearch();
 
                 // Prüfen ob BPlan-Suche konfiguriert ist. Wenn ja --> B-Pläne laden(bzw. die Namen der B-Pläne) und notwendige Attrbiute setzen
-                if (Config.bPlanURL !== undefined) {
-                    this.set("bPlanURL", Config.bPlanURL);
+                if (Config.bPlan !== undefined) {
+                    this.set("bPlanURL", Config.bPlan.url());
                     this.set("bPlans", []);
                     this.get("isSearchReady").set("bPlanSearch", false);
                     this.getBPlans();
@@ -78,6 +81,7 @@ define([
                     stopEvent: false
                 }));
                 EventBus.trigger("addOverlay", this.get("marker"));
+                EventBus.trigger("getVisibleWFSLayer");
             },
 
             /**
@@ -104,8 +108,12 @@ define([
             *
             */
             "checkStringAndSearch": function () {
+                var firstFourChars = this.get("searchString").slice(0, 4);
                 this.set("hitList", []);
-                if (this.get("searchString").length >= 3) {
+                if (/^[0-9]{4}$/.test(firstFourChars) === true) {
+                    this.searchParcel();
+                }
+                else if (this.get("searchString").length >= 3) {
                     this.searchStreets();
                 }
             },
@@ -125,9 +133,9 @@ define([
                     requestStreetName = this.get("searchString");
                 }
                 $.ajax({
-                    url: Config.proxyURL,
-                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName)},
-                    context: this,  // das model
+                    url: this.get("gazetteerURL"),
+                    data: "StoredQuery_ID=findeStrasse&strassenname=" + requestStreetName,
+                    context: this,
                     async: true,
                     type: "GET",
                     success: function (data) {
@@ -154,12 +162,15 @@ define([
                             }
                             // Marker - wurde mehr als eine Straße gefunden
                             if (streetNames.length === 1) {
-                                this.set("isOnlyOneStreet", true);
                                 this.set("onlyOneStreetName", streetNames[0].name);
                                 // Prüft ob der Suchstring ein Teilstring vom Straßennamen ist. Wenn nicht, dann wird die Hausnummernsuche ausgeführt.
                                 var searchStringRegExp = new RegExp(this.get("searchString"), "i");
                                 if (this.get("onlyOneStreetName").search(searchStringRegExp) === -1) {
                                     this.searchHouseNumbers();
+                                    this.set("isOnlyOneStreet", true);
+                                }
+                                else {
+                                    this.set("isOnlyOneStreet", false);
                                 }
                             }
                             else {
@@ -168,8 +179,12 @@ define([
                                 this.get("isSearchReady").set("numberSearch", true);
                             }
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
-                            this.searchInBPlans();
+                            this.searchDistricts();
                             this.searchInFeatures();
+                            if (_.has(Config, "tree") && Config.tree.active === true) {
+                                this.searchInLayers();
+                            }
+                            this.searchInBPlans();
                         }
                         catch (error) {
                             //console.log(error);
@@ -183,12 +198,11 @@ define([
             *
             */
             "searchHouseNumbers": function () {
-                // this.set("numberSearch", false);
                 this.get("isSearchReady").set("numberSearch", false);
                 $.ajax({
-                    url: Config.proxyURL,
-                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName"))},
-                    context: this,  // das model
+                    url: this.get("gazetteerURL"),
+                    data: "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + this.get("onlyOneStreetName"),
+                    context: this,
                     async: true,
                     type: "GET",
                     success: function (data) {
@@ -258,6 +272,94 @@ define([
                 });
             },
 
+            "searchDistricts": function () {
+                this.get("isSearchReady").set("districtSearch", false);
+                $.ajax({
+                    url: this.get("gazetteerURL"),
+                    data: "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"),
+                    context: this,
+                    async: true,
+                    type: "GET",
+                    success: function (data) {
+                        try {
+                            var districtName = [];
+                            // Firefox, IE
+                            if (data.getElementsByTagName("wfs:member").length > 0) {
+                                var hits = data.getElementsByTagName("wfs:member");
+                                _.each(hits, function (element, index) {
+                                    var coord = [parseFloat(data.getElementsByTagName("gml:pos")[index].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("gml:pos")[index].textContent.split(" ")[1])];
+                                    var name = data.getElementsByTagName("dog:kreisname_normalisiert")[index].textContent;
+                                    districtName.push({"name": name, "type": "Stadtteil", "coordinate": coord, "glyphicon": "glyphicon-map-marker", "id": name.replace(/ /g, "") + "Stadtteil"});
+                                }, this);
+                                this.pushHits("hitList", districtName);
+                            }
+                            // WebKit
+                            else if (data.getElementsByTagName("member") !== undefined) {
+                                var hits = data.getElementsByTagName("member");
+                                _.each(hits, function (element, index) {
+                                    var coord = [parseFloat(data.getElementsByTagName("pos")[index].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("pos")[index].textContent.split(" ")[1])];
+                                    var name = data.getElementsByTagName("kreisname_normalisiert")[index].textContent;
+                                    districtName.push({"name": name, "type": "Stadtteil", "coordinate": coord, "glyphicon": "glyphicon-map-marker", "id": name.replace(/ /g, "") + "Stadtteil"});
+                                }, this);
+                                this.pushHits("hitList", districtName);
+                            }
+                        }
+                        catch (error) {
+                            //console.log(error);
+                        }
+                        this.get("isSearchReady").set("districtSearch", true);
+                    }
+                });
+            },
+
+            /**
+             *
+             */
+            "searchParcel": function () {
+                var gemarkung, flurstuecksnummer;
+                if (this.get("searchString").charAt(4) === " ") {
+                    flurstuecksnummer = this.get("searchString").slice(5);
+                }
+                else {
+                    flurstuecksnummer = this.get("searchString").slice(4);
+                }
+                gemarkung = this.get("searchString").slice(0, 4);
+                $.ajax({
+                    url: Config.proxyURL,
+                    data: {url: this.get("gazetteerURL") + "&StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer},
+                    context: this,  // das model
+                    async: true,
+                    type: "GET",
+                    success: function (data) {
+                        var coord, geom, parcel = [];
+                        // Firefox, IE
+                        if (data.getElementsByTagName("wfs:member").length > 0) {
+                            try {
+                                coord = [parseFloat(data.getElementsByTagName("gml:pos")[0].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("gml:pos")[0].textContent.split(" ")[1])];
+                                geom = data.getElementsByTagName("gml:posList")[0].textContent;
+                                parcel.push({"type": "Parcel", "coordinate": coord, "geom": geom});
+                                this.pushHits("hitList", parcel);
+                            }
+                            catch (error) {
+                                // console.log(error);
+                            }
+                        }
+                        // WebKit
+                        else if (data.getElementsByTagName("member") !== undefined) {
+                            try {
+                                coord = [parseFloat(data.getElementsByTagName("pos")[0].textContent.split(" ")[0]), parseFloat(data.getElementsByTagName("pos")[0].textContent.split(" ")[1])];
+                                geom = data.getElementsByTagName("posList")[0].textContent;
+                                parcel.push({"type": "Parcel", "coordinate": coord, "geom": geom});
+                                this.pushHits("hitList", parcel);
+                            }
+                            catch (error) {
+                                // console.log(error);
+                            }
+                        }
+                    }
+                });
+            },
+
             /**
             *
             */
@@ -300,15 +402,36 @@ define([
             /**
             *
             */
+            "searchInLayers": function () {
+                this.get("isSearchReady").set("layerSearch", false);
+                var layers = [];
+                // Join den Suchstring
+                var searchStringJoin = this.get("searchString").replace(/ /g, "");
+                var searchStringRegExp = new RegExp(searchStringJoin, "i");
+                _.each(this.get("layers"), function (layer) {
+                    var layerName = layer.name.replace(/ /g, "");
+                    var metaName = layer.metaName.replace(/ /g, "");
+                    // Prüft ob der Suchstring ein Teilstring vom Feature ist
+                    if (layerName.search(searchStringRegExp) !== -1 || metaName.search(searchStringRegExp) !== -1) {
+                        layers.push(layer);
+                    }
+                }, this);
+                this.pushHits("hitList", layers);
+                this.get("isSearchReady").set("layerSearch", true);
+            },
+
+            /**
+            *
+            */
             "getBPlans": function () {
                 var plans = [];
                 $.ajax({
-                    url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
+                    url: this.get("bPlanURL"),
                     context: this,  // das model
                     contentType: "text/xml",
                     async: false,
                     type: "POST",
-                    data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:imverfahren"><wfs:PropertyName>app:plan</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
+                    data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:imverfahren'><wfs:PropertyName>app:plan</wfs:PropertyName></wfs:Query></wfs:GetFeature>",
                     success: function (data) {
                         try {
                             // Firefox, IE
@@ -316,7 +439,7 @@ define([
                                 var hits = data.getElementsByTagName("gml:featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("app:plan")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             // WebKit
@@ -324,7 +447,7 @@ define([
                                 var hits = data.getElementsByTagName("featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("plan")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "im Verfahren", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                         }
@@ -334,12 +457,12 @@ define([
                     }
                 });
                 $.ajax({
-                    url: Config.proxyURL + "?url=" + this.get("bPlanURL"),
+                    url: this.get("bPlanURL"),
                     context: this,  // das model
                     contentType: "text/xml",
                     async: true,
                     type: "POST",
-                    data: '<?xml version="1.0" encoding="UTF-8"?><wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="app:hh_hh_planung_festgestellt"><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>',
+                    data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:hh_hh_planung_festgestellt'><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>",
                     success: function (data) {
                         try {
                             // Firefox, IE
@@ -347,7 +470,7 @@ define([
                                 var hits = data.getElementsByTagName("gml:featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("app:planrecht")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             // WebKit
@@ -355,7 +478,7 @@ define([
                                 var hits = data.getElementsByTagName("featureMember");
                                 _.each(hits, function (hit, index) {
                                     var name = data.getElementsByTagName("planrecht")[index].textContent;
-                                    plans.push({"name": name.trim(), "type": "BPlan festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
+                                    plans.push({"name": name.trim(), "type": "festgestellt", "glyphicon": "glyphicon-picture", "id": name.replace(/ /g, "") +  "BPlan"});
                                 }, this);
                             }
                             $("#searchInput").prop("disabled", "");
@@ -373,14 +496,26 @@ define([
             },
 
             /**
+             *
+             *
+             */
+            "getLayerForSearch": function () {
+                this.set("layers", []);
+                var layerModels = LayerList.getAllLayer();
+                var layerArray = [];
+                _.each(layerModels, function (model) {
+                    layerArray.push({"name": model.get("name"), "metaName": model.get("metaName"), "type": "Thema", "glyphicon": "glyphicon-list", "id": model.get("id"), "model": model});
+                });
+                this.pushHits("layers", layerArray);
+            },
+            /**
             *
             */
             "getFeaturesForSearch": function (layermodels) {
                 this.set("features", []);
-                this.get("isSearchReady").set("featureSearch", false);
                 var featureArray = [];
                 _.each(layermodels, function (layer) {
-                    if (_.has(layer.attributes, "searchField") === true && layer.get('searchField') != '') {
+                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "") {
                         var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
                         if (imageSrc) {
                             var features = layer.get("source").getFeatures();

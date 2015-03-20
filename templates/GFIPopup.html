@@ -1,6 +1,6 @@
 <div id="gfiTitle">
     <span class="gfi-title"><%= gfiTitles[gfiContent.length-gfiCounter] %></span>
-    <div style="width=70px; float:right;">
+    <div class="gfi-title-buttons">
         <span class="glyphicon glyphicon-minus gfi-toggle"></span>
         <span class="glyphicon glyphicon-remove gfi-close"></span>
     </div>
@@ -15,46 +15,60 @@
             }
     %>
     <tr>
-        <% if(key!=='Bild'){%>
-        <td>
-            <strong><%= key + ':'%></strong>
-        </td>
-        <td>
-            <% if (value.search('.html') !== -1) { %>
-                <a href="<%= value%>" target="_blank">Link</a>
-            <% } else if (value.substr(0, 7) == 'http://') { %>
-                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                    <img height="150" src="<%= value%>">
-                <% } else { %>
-                    <a href="<%= value%>" target="_blank">Link</a>
-                <% } %>
-            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-            <% } else { %>
-                <%= value %>
+        <% if(key === 'video'){ %>
+            <% if( !navigator.userAgent.match(/Android/i) && !navigator.userAgent.match(/webOS/i) && !navigator.userAgent.match(/iPhone/i) && !navigator.userAgent.match(/iPad/i)
+                 && !navigator.userAgent.match(/iPod/i) && !navigator.userAgent.match(/BlackBerry/i) && !navigator.userAgent.match(/Windows Phone/i)) { %>
+                <td colspan="2" >
+                   <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="500" height="300">
+                       <source src="<%=value%>"/>
+                   </video>
+                </td>
             <% } %>
-        </td>
+        <% } else if(key === 'Bild'){%>
+            <td colspan="2" >
+               <% if (value.search('.html') !== -1) { %>
+                    <a href="<%= value%>" target="_blank">Link</a>
+                <% } else if (value.substr(0, 7) == 'http://') { %>
+                    <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                        <a href="<%= value%>" target="_blank"><img width="250px" src="<%= value%>"/></a>
+                    <% } else { %>
+                        <a href="<%= value%>" target="_blank">Link</a>
+                    <% } %>
+                <% } else { %>
+                    <%= value %>
+                <% } %>
+            </td>
         <% } else {%>
-
-         <td colspan="2" >
-           <% if (value.search('.html') !== -1) { %>
-                <a href="<%= value%>" target="_blank">Link</a>
-            <% } else if (value.substr(0, 7) == 'http://') { %>
-                <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
-                    <img height="150" src="<%= value%>">
-                <% } else { %>
+            <td>
+                <strong><%= key + ':'%></strong>
+            </td>
+            <td>
+                <% if (value.search('.html') !== -1) { %>
                     <a href="<%= value%>" target="_blank">Link</a>
+                <% } else if (value.substr(0, 7) == 'http://') { %>
+                    <% if (value.search('.jpg') !== -1 || value.search('.png') !== -1) { %>
+                        <img height="150" src="<%= value%>">
+                    <% } else { %>
+                        <a href="<%= value%>" target="_blank">Link</a>
+                    <% } %>
+                <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+                    <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+                <% } else { %>
+                    <%= value %>
                 <% } %>
-            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-            <% } else { %>
-                <%= value %>
-            <% } %>
-        </td>
-        <% }%>
+            </td>
+        <% } %>
     </tr>
     <% })}; %>
     </table>
+    <% if (gfiRoutables && gfiRoutables[gfiContent.length-gfiCounter] === true) { %>
+        <div class="dropdown" style="width=100%;">
+            <button id="setRoutingDestination" style="width: 100%;" type="button" class="btn btn-default" title="Diesen Ort als Routingziel übernehmen.">
+                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                <span class="" aria-hidden="true">als Ziel übernehmen</span>
+            </button>
+        </div>
+    <% } %>
 </div>
 
 <% if(gfiContent.length > 1) { %>

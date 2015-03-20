@@ -108,7 +108,7 @@ define([
                 collapsible: true,
                 collapsed: false,
                 className: 'attribution', //in attribution.css
-                tipLabel: 'Hinweise'
+                tipLabel: ''
             });
             this.get('map').addControl(attribution);
             this.set('attribution', attribution);
@@ -121,7 +121,7 @@ define([
             if (attribution) {
                 return [
                     new ol.Attribution({
-                        html: attribution
+                        html: '<strong>' + layer.get('name') + ':</strong></br>' + attribution + '</br>'
                     })
                 ];
             }
@@ -131,7 +131,7 @@ define([
             if (config && _.isString(config.attribution)) {
                 return [
                     new ol.Attribution({
-                        html: config.attribution
+                        html: '<strong>' + layer.get('name') + ':</strong></br>' + config.attribution + '</br>'
                     })
                 ];
             }

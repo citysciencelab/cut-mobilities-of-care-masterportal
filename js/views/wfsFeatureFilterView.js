@@ -2,10 +2,11 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/wfsFeatureFilter.html',
+    'text!templates/wfsFeatureFilter.html',
     'models/wfsFeatureFilter',
-    'eventbus'
-], function ($, _, Backbone, wfsFeatureFilterTemplate, wfsFeatureFilter, EventBus) {
+    'eventbus',
+    'config'
+], function ($, _, Backbone, wfsFeatureFilterTemplate, wfsFeatureFilter, EventBus, Config) {
 
 var wfsFeatureFilterView = Backbone.View.extend({
         model: wfsFeatureFilter,
@@ -15,6 +16,9 @@ var wfsFeatureFilterView = Backbone.View.extend({
         initialize: function () {
             this.render();
             EventBus.on('toggleFilterWfsWin', this.toggleFilterWfsWin, this);
+            if (Config.startUpModul.toUpperCase() === 'WFSFEATUREFILTER') {
+                this.toggleFilterWfsWin();
+            }
         },
         events: {
             'click .glyphicon-chevron-up, .glyphicon-chevron-down': 'toggleContent',

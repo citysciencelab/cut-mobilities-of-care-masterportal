@@ -3,9 +3,9 @@ define([
     "underscore",
     "backbone",
     "openlayers",
-    "text!../../templates/Searchbar.html",
-    "text!../../templates/SearchbarRecommendedList.html",
-    "text!../../templates/SearchbarHitList.html",
+    "text!templates/Searchbar.html",
+    "text!templates/SearchbarRecommendedList.html",
+    "text!templates/SearchbarHitList.html",
     "models/Searchbar",
     "eventbus",
     "config"
@@ -29,14 +29,14 @@ define([
         var SearchbarView = Backbone.View.extend({
             "model": Searchbar,
             "id": "searchbar",
-            "className": "col-md-5 col-sm-4 col-xs-9",
+            "className": "col-md-5 col-sm-6 col-xs-9",
             "template": _.template(SearchbarTemplate),
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.zoomTo);
                 this.render();
-                if (Config.bPlanURL !== undefined) {
+                if (Config.bPlan !== undefined) {
                     $("#searchInput").prop("disabled", "disabled");
                 }
                 $(window).on("orientationchange", function () {
@@ -46,7 +46,6 @@ define([
                     $("#searchInput").val(this.model.get('placeholder'));
                 }
                 $("#searchInput").blur();
-
             },
             "events": {
                 "keyup input": "setSearchString",
@@ -120,9 +119,17 @@ define([
                 this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length <= 2) {
+                        // console.log(this.model.get("hitList"));
                         var types = _.pluck(this.model.get("hitList"), "type");
                         if (_.contains(types, "Straße") && _.contains(types, "Adresse")) {
                             var hit = _.findWhere(this.model.get("hitList"), {type: "Adresse"});
+                            this.model.get("marker").setPosition(hit.coordinate);
+                            $("#searchMarker").css("display", "block");
+                            $(".dropdown-menu-search").hide();
+                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                        }
+                        else if (_.contains(types, "Parcel")) {
+                            var hit = _.findWhere(this.model.get("hitList"), {type: "Parcel"});
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
                             $(".dropdown-menu-search").hide();
@@ -209,18 +216,23 @@ define([
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("setCenter", hit.coordinate, 5);
                 }
-                else if (hit.type === "Adresse") {
+                else if (hit.type === "Adresse" || hit.type === "Stadtteil") {
                     zoomLevel = 7;
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
                 }
-                else if (hit.type === "BPlan festgestellt" || hit.type === "BPlan im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
-                    var typeName = (hit.type === "BPlan festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
-                    var propertyName = (hit.type === "BPlan festgestellt") ? "planrecht" : "plan";
+                else if (hit.type === "Thema") {
+                    $(".dropdown-menu-search").hide();
+                    EventBus.trigger("showLayerInTree", hit.model);
+                    evt.stopPropagation();
+                }
+                else if (hit.type === "festgestellt" || hit.type === "im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
+                    var typeName = (hit.type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren";
+                    var propertyName = (hit.type === "festgestellt") ? "planrecht" : "plan";
                     $.ajax({
-                        url: Config.proxyURL + "?url=" + this.model.get("bPlanURL"),
+                        url: this.model.get("bPlanURL"),
                         data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + hit.name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>",
                         type: "POST",
                         context: this,  // model
@@ -302,7 +314,7 @@ define([
                     searchVector.setVisible(true);
                     searchVector.getSource().addFeature(feature);
                 }
-                else if (hit.type === "Adresse") {
+                else if (hit.type === "Adresse" || hit.type === "Stadtteil") {
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                 }
@@ -312,11 +324,14 @@ define([
             *
             */
             "hideMarker": function (evt) {
-                $("#searchMarker").css("display", "none");
-                searchVector.setVisible(false);
-                if ($(".dropdown-menu-search").css("display") === "none") {
-                    this.zoomTo(evt);
+                if ($(".dropdown-menu-search").css("display") === "block") {
+                    $("#searchMarker").css("display", "none");
+                    searchVector.setVisible(false);
+                    // this.zoomTo(evt);
                 }
+                // else {
+                    // this.zoomTo(evt);
+                // }
             },
 
             /**

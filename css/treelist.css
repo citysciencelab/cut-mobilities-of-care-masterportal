@@ -1,24 +1,31 @@
+/***** Node *****/
 .node {
     padding: 0;
 }
 
-.node > div {
-    padding: 15px 8px;
+.node-content {
+    width: 26em;
+    padding: 14px 10px;
 }
 
-.node-child {
-    border-right: 0;
-    padding: 12px 24px;
+.node-button {
+    margin: 6px;
+    font-size: 10px;
+    color: #cdcdcd;
+    padding: 0 6px;
 }
 
-.node-child > div {
-    padding-left: 16px;
-    border-left: 1px dashed #232323;
+.node-button:hover {
+    background-color: #e7e7e7;
 }
 
-.node-child-content > div.folder-arrow {
-    border-right: 1px solid #ddd;
-    top: -12px;
+.node-button > span {
+    padding: 12px 4px;
+}
+
+.node-button > span:hover {
+    cursor: pointer;
+    color: #333;
 }
 
 .folder-icons {
@@ -30,76 +37,255 @@
     padding-right: 5px;
 }
 
-.folder-arrow {
-    position: relative;
-    right: -8px;
-    top: -15px;
-    background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border-bottom: 1px solid #ddd;
-    border-left: 1px solid #ddd;
-}
-
-.folder-arrow span {
-    color: #777;
-    padding: 3px 5px 4px;
-    font-size: 12px;
-    opacity: 0.6;
-}
-
-.folder-arrow span:hover {
-    cursor: pointer;
-    opacity: 1.0;
-}
 
 .folder-name {
     padding-left: 4em;
     padding-right: 5em;
-    width: 350px;
     font-size: 12px;
     cursor: pointer;
 }
 
-#tree ul {
-    padding-left: 0;
-}
-
-/*.tree-node-children > li:last-child {
-    border-bottom: 0;
-}*/
-
-.children {
-    font-size: 12px;
-    padding-left: 23px;
-}
-
-.layerByNode {
-    font-size: 12px;
+/***** Node-Child *****/
+.node-child {
+    padding: 4px;
     padding-left: 26px;
-    margin-left: 10px;
-    border-left: 1px dashed #232323;
-    max-height: 22px;
-    overflow: hidden;
-    padding-top: 2px;
 }
 
-.layerByChildNode {
-    padding-left: 30px;
-    margin-left: 32px;
+.node-child-content {
+    width: 26em;
+    padding: 8px;
+    padding-left: 12px;
+    border-left: 1px dashed #232323;
+}
+
+.node-child-name {
+    padding-left: 6em;
+    padding-right: 3em;
     font-size: 12px;
-    border-left: 1px dashed #cdcdcd;
-    padding-top: 2px;
+    cursor: pointer;
+}
+
+.node-child-settings {
+    width: 26em;
+    padding-left: 24px;
+    border-left: 1px dashed #232323;
+}
+
+.node-child-settings > .text {
+    font-size: 12px;
+    vertical-align: text-bottom;
+}
+
+.node-child-settings > .glyphicon {
+    font-size: 16px;
+    padding: 8px;
+}
+
+.node-child-settings > .badge {
+    vertical-align: text-bottom !important;
+}
+
+.node-child-arrows {
+    font-size: 10px;
+    color: #cdcdcd;
+    /*padding: 0 6px;*/
+    margin-right: 2em;
+}
+
+.node-child-arrows:hover {
+    background-color: #e7e7e7;
+}
+
+.node-child-arrows > span {
+    padding: 12px 6px;
+}
+
+.node-child-arrows > span:hover {
+    cursor: pointer;
+    color: #333;
+}
+
+.node-child-button {
+    border: 0;
+    font-size: 14px;
+    color: #cdcdcd;
+}
+
+.node-child-button:hover {
+    background-color: #e7e7e7;
+    cursor: pointer;
+    color: #333;
+}
+
+.node-child-button > span {
+    padding: 10px;
+}
+
+/***** Node-Layer ******/
+.node-layer {
+    padding: 4px;
+    padding-left: 26px;
+}
+
+.node-layer-content {
+    border-left: 1px dashed #232323;
+    padding: 8px 8px 8px 24px;
+    width: 26em;
+}
+
+.node-layer-button {
+    color: #cdcdcd;
+}
+
+.node-layer-button:hover {
+    background-color: #e7e7e7;
+    cursor: pointer;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .node-layer-button > span {
+        padding: 8px;
+    }
+}
+
+@media (min-width: 768px) {
+    .node-layer-button > span {
+        padding: 10px;
+    }
+}
+
+.node-layer-settings {
+    width: 26em;
+    padding-left: 24px;
+    border-left: 1px dashed #232323;
+}
+
+.node-layer-settings > .text {
+    font-size: 12px;
+    vertical-align: text-bottom;
+}
+
+.node-layer-settings > .glyphicon {
+    font-size: 16px;
+    padding: 8px;
+}
+
+.node-layer-settings > .badge {
+    vertical-align: text-bottom !important;
+}
+
+.node-layer-arrows {
+    font-size: 10px;
+    color: #cdcdcd;
+    padding: 0 6px;
+    margin-right: 2em;
+}
+
+.node-layer-arrows:hover {
+    background-color: #e7e7e7;
+}
+
+.node-layer-arrows > span {
+    padding: 12px 4px;
+}
+
+.node-layer-arrows > span:hover {
+    cursor: pointer;
+    color: #333;
+}
+
+.info-button {
+    color: #cdcdcd;
+    position: relative;
+    bottom: 8px;
+}
+
+.info-button:hover {
+    background-color: #e7e7e7;
+    cursor: pointer;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .info-button > span {
+        padding: 8px;
+    }
+}
+
+@media (min-width: 768px) {
+    .info-button > span {
+        padding: 10px;
+    }
 }
 
 
-.test2 {
+/***** Node-Child-Layer *****/
+.wrapper-node-child-layer {
     border-left: 1px dashed #232323;
-    margin-left: 10px;
-    overflow: hidden;
-    max-height: 22px;
+    padding: 0px 8px 0px 30px;
+    width: 26em;
+}
+
+.node-child-layer {
+    padding: 4px;
+    padding-left: 26px;
+}
+
+.node-child-layer-content {
+    padding: 8px 4px 8px 28px;
+    border-left: 1px dashed #cdcdcd;
+}
+
+.node-child-layer-button {
+    color: #cdcdcd;
+}
+
+.node-child-layer-button:hover {
+    background-color: #e7e7e7;
+    cursor: pointer;
+    color: #333;
+}
+
+.node-child-layer-button > span {
+    padding: 10px;
+}
+
+.node-child-layer-settings {
+    padding-left: 28px;
+    border-left: 1px dashed #cdcdcd;
+}
+
+.node-child-layer-settings > .text {
+    font-size: 12px;
+    vertical-align: text-bottom;
+}
+
+.node-child-layer-settings > .glyphicon {
+    font-size: 16px;
+    padding: 8px;
+}
+
+.node-child-layer-settings > .badge {
+    vertical-align: text-bottom !important;
 }
 
 .layer-name {
     padding-left: 2em;
-    padding-right: 4em;
-    width: 300px;
+    padding-right: 5em;
+    font-size: 12px;
+}
+
+.layer-name:hover {
+    cursor: pointer;
+}
+
+/***** Animation glyphicon-cog *****/
+.rotate {
+    transform: rotate(-360deg);
+    transition: .5s;
+}
+.rotate2 {
+    transform: rotate(0deg);
+    transition: .5s;
 }

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/Menubar.html',
+    'text!templates/Menubar.html',
     'views/LayerListView',
     'models/Menubar',
     'config',
@@ -54,7 +54,8 @@ define([
             EventBus.trigger('toggleLegendWin');
         },
         activateRoutingModul: function () {
-            EventBus.trigger('toggleRoutingWin');
+//            EventBus.trigger('toggleRoutingWin');
+            EventBus.trigger('toggleWin', ['routing', 'Routenplaner', 'glyphicon-road']);
         }
     });
 

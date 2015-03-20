@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/Legend.html',
+    'text!templates/Legend.html',
     'models/Legend',
     'eventbus'
 ], function ($, _, Backbone, LegendTemplate, Legend, EventBus) {
@@ -10,7 +10,7 @@ define([
     var LegendView = Backbone.View.extend({
         model: Legend,
         id: 'base-modal-legend',
-        className: 'modal bs-example-modal-sm legend',
+        className: 'modal bs-example-modal-sm legend fade in',
         template: _.template(LegendTemplate),
         initialize: function () {
             this.getVisibleLayer();

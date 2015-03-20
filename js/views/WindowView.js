@@ -4,7 +4,7 @@ define([
     "config",
     "eventbus",
     "models/Window",
-    "text!../../templates/Window.html"
+    "text!templates/Window.html"
     ], function (_, Backbone, Config, EventBus, Window, WindowTemplate) {
 
         var WindowView = Backbone.View.extend({
@@ -27,6 +27,9 @@ define([
                     this.model.sendParamsToWinCotent();
                     this.$el.show("slow");
                 }
+                else {
+                    this.$el.hide("slow");
+                }
             },
             minimize: function () {
                 this.$el.addClass("win-min");
@@ -39,9 +42,13 @@ define([
                 this.$el.removeClass("win-min");
             },
             hide: function () {
+                if (this.model.get('winType') === 'routing') {
+                    EventBus.trigger('deleteRoute', this);
+                }
                 this.$el.hide("slow");
                 this.model.setVisible(false);
                 this.model.sendParamsToWinCotent();
+                EventBus.trigger("onlyActivateGFI");
             }
         });
 

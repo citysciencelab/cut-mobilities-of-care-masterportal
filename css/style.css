@@ -1,7 +1,9 @@
-@import "http://fast.fonts.com/cssapi/ecf72570-6ad2-463d-a585-b433c31c75eb.css";
+@charset "utf-8";
+
 @import "../components/bootstrap/dist/css/bootstrap.css";
 @import "../_libs/openlayers/css/ol.css";
 @import "lgv.css";
+@import "http://fast.fonts.com/cssapi/ecf72570-6ad2-463d-a585-b433c31c75eb.css";
 @import "searchbar.css";
 @import "togglebutton.css";
 @import "gfipopup.css";
@@ -16,3 +18,6 @@
 @import "window.css";
 @import "treelist.css";
 @import "scaleline.css";
+@import "menubar.css";
+@import "measure.css";
+@import "coordpopup.css";

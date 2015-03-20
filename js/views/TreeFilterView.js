@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/TreeFilter.html',
+    'text!templates/TreeFilter.html',
     'eventbus',
     'models/TreeFilter'
 ], function ($, _, Backbone, TreeFilterTemplate, EventBus, TreeFilter) {

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../templates/Layer.html',
+    'text!templates/Layer.html',
     'eventbus'
 ], function ($, _, Backbone, LayerTemplate, EventBus) {
 
@@ -14,12 +14,13 @@ define([
             this.listenTo(this.model, 'change:visibility', this.render);
             this.listenTo(this.model, 'change:transparence', this.render);
             this.listenTo(this.model, 'change:settings', this.render);
+            this.listenTo(this.model, 'change:isInScaleRange', this.toggleStyle);
         },
         events: {
             'click .plus': 'upTransparence',
             'click .minus': 'downTransparence',
             'click .info': 'getMetadata',
-            'click .check, .unchecked, small': 'toggleVisibility',
+            'click .check, .unchecked, .layer-name': 'toggleVisibility',
             'click .up, .down': 'moveLayer',
             'click .refresh': 'toggleSettings'
         },
@@ -42,10 +43,23 @@ define([
             this.model.toggleVisibility();
         },
         getMetadata: function () {
-            window.open('http://hmdk.de/trefferanzeige?docuuid=' + this.model.get('metaID'), "_blank");
+            if (locations.fhhnet) {
+                window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+            }
+            else {
+                window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+            }
         },
         toggleSettings: function () {
             this.model.toggleSettings();
+        },
+        toggleStyle: function () {
+            if (this.model.get("isInScaleRange") === true) {
+                this.$el.css("color", "#333333");
+            }
+            else {
+                this.$el.css("color", "#cdcdcd");
+            }
         },
         render: function () {
             if (this.model.get('displayInTree') !== false) {

@@ -32,22 +32,9 @@ html, body {
     }
 }
 
-@media (min-width: 768px) {
-    .navbar, .connav, .navbar-collapse, #navbarRow {
-        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
-    }
-}
 
-.navbar {
-    min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
-    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    border-top: 1px solid #e5e5e5;
-}
+
+
 
 
 
@@ -55,7 +42,7 @@ html, body {
     position: relative;
     top:50px;
     right: 17px;
-    z-index: 1000;
+    z-index: 999;
 }
 
 .color {
@@ -83,7 +70,9 @@ html, body {
     .legendbody{
         max-height:120px;
     }
-
+    #poibody{
+        max-height:120px;
+    }
     .legenddiv{
         max-height:100px;
     }
@@ -93,6 +82,9 @@ html, body {
         max-height:230px;
     }
     .legendbody{
+        max-height:200px;
+    }
+    #poibody{
         max-height:200px;
     }
     .legenddiv{
@@ -107,7 +99,9 @@ html, body {
     .legendbody{
         max-height:220px;
     }
-
+    #poibody{
+        max-height:220px;
+    }
     .legenddiv{
         max-height:120px;
     }
@@ -120,7 +114,9 @@ html, body {
     .legendbody{
         max-height:400px;
     }
-
+    #poibody{
+        max-height:400px;
+    }
     .legenddiv{
         max-height:300px;
     }
@@ -133,7 +129,9 @@ html, body {
     .legendbody{
         max-height:700px;
     }
-
+    #poibody{
+        max-height:700px;
+    }
     .legenddiv{
         max-height:540px;
     }
@@ -143,6 +141,9 @@ html, body {
     border:0;
     overflow:auto;
     overflow-x: hidden;
+}
+#poibody{
+    overflow:auto;
 }
 .legendbody{
     overflow:auto;
@@ -191,19 +192,9 @@ html, body {
     padding-left: 10px !important;
 }
 
-.dropdown-menu {
-    padding:  0 !important;
-    min-width: 340px !important;
-}
 
-.nav > li {
-    border-left: 1px solid white;
-    border-right: 1px solid #e5e5e5;
-}
 
-.nav > li:hover {
-    background-color: white;
-}
+
 
 .glyphicon {
     vertical-align: baseline;
@@ -266,9 +257,11 @@ html, body {
 
 .mouseHover {
     font-size: 12px;
-    background-color: rgba(150, 150, 150, 1);
+    max-width: inherit;
+    background-color: initial;
     color: #fff;
     font-weight: bold;
+    display: block;
 }
 .cluster{
     font-size:25px;

@@ -10,3 +10,7 @@ node_modules
 components
 dist
 temp
+
+/nbproject/private/
+/img/*.db
+jshintrc
