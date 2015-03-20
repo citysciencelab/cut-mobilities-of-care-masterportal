@@ -118,6 +118,20 @@ define([
                 var value = _.values(_.pick(result, 'BPLANIV'))[0];
                 Config.searchBar.initString = value;
             }
+            
+            /**
+            * Gibt den Wert für die config-Option clickCounter.enabled zurück.
+            *
+            */
+            if (_.has(result, 'CLICKCOUNTER')) {
+                var value = _.values(_.pick(result, 'CLICKCOUNTER'))[0].toUpperCase();
+                if (value === 'TRUE') {
+                    Config.clickCounter.enabled = true;
+                }
+                else {
+                    Config.clickCounter.enabled = false;
+                }
+            }
         }
     });
 

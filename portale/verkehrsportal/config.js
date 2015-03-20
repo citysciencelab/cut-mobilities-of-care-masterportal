@@ -22,7 +22,7 @@ define(function () {
         },
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
-            {id: '453', visible: true},
+            {id: '453', visible: false},
             {id: '452', visible: false},
             {id:
              [
@@ -69,6 +69,10 @@ define(function () {
             {id: '2132', visible: false, style: '2132', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
         ],
         attributions: true,
+        clickCounter: {
+        		enabled: false,
+        		url: 'http://static.hamburg.de/countframes/verkehrskarte_count.html'
+        },
         menubar: true,
         scaleLine: true,
         mouseHover: false,
