@@ -2,11 +2,7 @@ define([
     'underscore',
     'backbone'
 ], function (_, Backbone) {
-<<<<<<< ours
-    'use strict';
 
-=======
->>>>>>> theirs
     /**
      * @exports EventBus
      * @classdesc Dieses Modul gibt ein Objekt vom Typ Backbone.Events zurück. Damit ist es möglich
