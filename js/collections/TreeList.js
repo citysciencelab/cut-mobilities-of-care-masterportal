@@ -7,7 +7,7 @@ define([
     ], function (_, Backbone, TreeNode, Config, EventBus) {
 
         var TreeList = Backbone.Collection.extend({
-            "url": locations.baseUrl + "../category.json",
+            "url": Config.categoryConf,
             "model": TreeNode,
             "initialize": function () {
                 EventBus.on("showLayerInTree", this.showLayerInTree, this);
