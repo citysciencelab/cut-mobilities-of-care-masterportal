@@ -77,7 +77,7 @@ define([
                 }
             }
             $.ajax({
-                url: locations.host + '/bkg_suggest',
+                url: '/bkg_suggest',
                 data: 'count=15&query=' + value,
                 context: this,  //das Model
                 async: true,
@@ -110,7 +110,7 @@ define([
         },
         geosearchByBKG: function (value, target) {
             $.ajax({
-                url: locations.host + '/bkg_geosearch',
+                url: '/bkg_geosearch',
                 data: 'srsName=EPSG:25832&count=1&outputformat=json&query=' + value,
                 context: this,  // das model
                 async: true,
@@ -164,7 +164,7 @@ define([
             }
             $('#loader').show();
             $.ajax({
-                url: locations.host + '/viom_v05',
+                url: '/viom_v05',
                 data: request,
                 async: true,
                 context: this,
