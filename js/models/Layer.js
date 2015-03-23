@@ -98,6 +98,13 @@ define([
                     else {
                         this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
                     }
+                    // besser auf type kontrollieren (Array oder String)
+                    if (dataset.kategorie_inspire.length > 1) {
+                        this.set("kategorieInspire", dataset.kategorie_inspire);
+                    }
+                    else {
+                        this.set("kategorieInspire", dataset.kategorie_inspire[0]);
+                    }
                 }
             }
         },

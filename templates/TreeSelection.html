@@ -1,0 +1,13 @@
+<div class="form-group form-group-sm">
+    <div class="col-md-4 col-sm-4 col-xs-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+        <span class="glyphicon glyphicon-triangle-bottom selectionFormButton"></span>
+        <label class="control-label selectionLabel">Kategorie:</label>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-6">
+        <select class="form-control ttt">
+            <% _.each(topicList, function (topic) { %>
+                <option><%= topic %></option>
+            <% }); %>
+        </select>
+    </div>
+</div>

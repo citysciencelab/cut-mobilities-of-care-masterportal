@@ -13,6 +13,7 @@ define([
             el: "#tree",
             initialize: function () {
                 this.collection.on("add", this.render, this);
+                this.collection.on("sync", this.render, this);
                 this.render();
             },
             render: function () {

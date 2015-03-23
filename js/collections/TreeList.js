@@ -1,9 +1,9 @@
 define([
-    'underscore',
-    'backbone',
-    'models/TreeNode',
-    'config',
-    'eventbus'
+    "underscore",
+    "backbone",
+    "models/TreeNode",
+    "config",
+    "eventbus"
     ], function (_, Backbone, TreeNode, Config, EventBus) {
 
         var TreeList = Backbone.Collection.extend({
@@ -11,26 +11,46 @@ define([
             "model": TreeNode,
             "initialize": function () {
                 EventBus.on("showLayerInTree", this.showLayerInTree, this);
-                this.fetch({
-                    cache: false,
-                    async: false,
-                    error: function () {
-                        alert('Fehler beim Parsen');
-                    }
-                });
+                EventBus.on("fetchTreeList", this.fetchCategories, this);
+                this.fetchCategories();
+
                 // leere Ordner entfernen
                 var modelsToRemove = this.filter(function (model) {
                     return model.get("layerList").length === 0;
                 });
                 this.remove(modelsToRemove);
             },
-            "parse": function (response) {
+            "parse": function (response, options) {
                 if(_.has(Config, "tree") && Config.tree.active === true) {
-                    switch (Config.tree.orderBy) {
+                    switch (options.data) {
                         case "opendata":
+                            _.each(response.opendata, function (element) {
+                                element.layerAttribute = "kategorieOpendata";
+                            });
                             return response.opendata;
-                        }
+                        case "inspire":
+                            _.each(response.inspire, function (element) {
+                                element.layerAttribute = "kategorieInspire";
+                            });
+                            return response.inspire;
+                        default:
+                            _.each(response.opendata, function (element) {
+                                element.layerAttribute = "kategorieOpendata";
+                            });
+                            return response.opendata;
+                    }
                 }
+            },
+
+            "fetchCategories": function (value) {
+                this.fetch({
+                    data: value,
+                    cache: false,
+                    async: false,
+                    error: function () {
+                        alert("Fehler beim Parsen");
+                    }
+                });
             },
 
             /**
@@ -47,7 +67,7 @@ define([
                     var countLayer = this.at(fromIndex).get("sortedLayerList").length + this.at(toIndex).get("sortedLayerList").length - 1;
                     // bewegt die Layer auf der Karte nach oben --> Map.js
                     _.each(this.at(fromIndex).get("sortedLayerList"), function (element) {
-                        EventBus.trigger('moveLayer', [countLayer, element.get('layer')]);
+                        EventBus.trigger("moveLayer", [countLayer, element.get("layer")]);
                     });
                     // Entfernt das Model aus der Collection
                     this.remove(model);
@@ -70,7 +90,7 @@ define([
                     var countLayer = this.at(toIndex).get("sortedLayerList").length;
                     // bewegt die Layer auf der Karte nach unten --> Map.js
                     _.each(this.at(fromIndex).get("sortedLayerList"), function (element) {
-                        EventBus.trigger('moveLayer', [-countLayer, element.get('layer')]);
+                        EventBus.trigger("moveLayer", [-countLayer, element.get("layer")]);
                     });
                     // Entfernt das Model aus der Collection
                     this.remove(model);
@@ -83,7 +103,7 @@ define([
                 // öffnet den Tree
                 $(".nav li:first-child").addClass("open");
                 this.forEach(function (element) {
-                    if (model.get("kategorieOpendata") === element.get("kategorie")) {
+                    if (model.get("kategorieOpendata") === element.get("kategorie") || model.get("kategorieInspire") === element.get("kategorie")) {
                         element.set("isExpanded", true);
                         // if (model.get("layerType") === "nodeChildLayer") {
                             _.each(element.get("childViews"), function (view) {
@@ -98,14 +118,7 @@ define([
                                 else if (view.model.get("name") === model.get("name")){
                                     $("#tree").scrollTop(view.$el.position().top);
                                 }
-                                // else {
-                                //     view.model.set("isExpanded", false);
-                                // }
                             });
-                        // }
-                        // else {
-                        //     console.log(model);
-                        // }
                         model.set("visibility", true);
                     }
                     else {

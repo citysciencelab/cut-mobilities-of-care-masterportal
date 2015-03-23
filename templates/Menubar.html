@@ -16,8 +16,19 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-list"></span><small class="menuitem">Themen</small><b class="caret"></b>
                     </a>
-                    <ul id="tree" class="dropdown-menu list-group">
-                    </ul>
+                    <% if (hasTree) { %>
+                    <div class="dropdown-menu">
+                        <form class="form-horizontal treeSelectionForm">
+                        </form>
+                        <ul id="tree" class="list-group">
+                        </ul>
+                    </div>
+                    <% } else { %>
+                        <div class="dropdown-menu">
+                            <ul id="tree" class="list-group">
+                            </ul>
+                        </div>
+                    <% } %>
                 </li>
             <% } %>
             <% if (tools === true && oneTool === false) { %>
