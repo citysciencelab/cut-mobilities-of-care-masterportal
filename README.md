@@ -2,7 +2,7 @@
 
 ## Local Development Setup
 
-Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen. 
+Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.
 
 Testen in neu geöffneter cmd:
 ```
@@ -27,7 +27,7 @@ git config --global https.proxy http://wall.lit.hamburg.de:80
 ```
 
 ### python in PATH
-python haben alle wegen ArcGIS schon installiert. 
+python haben alle wegen ArcGIS schon installiert.
 Der Pfad zur python.exe muss in der PATH-Umgebungsvariable stehen, meist: C:\Program Files\Python27
 
 Test in cmd
@@ -48,7 +48,7 @@ Test in cmd:
 
 ### [NPM](http://npmjs.org)
 
-Kommt automatisch mit der Node.js Installation mit (Node Package Manager). npm lädt Pakete aus dem Netz. 
+Kommt automatisch mit der Node.js Installation mit (Node Package Manager). npm lädt Pakete aus dem Netz.
 
 Test in cmd:
 
@@ -75,7 +75,7 @@ npm config set npm-cache D:\npm-cache
 
 ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
 
-in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen). 
+in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 
 ```
 # npm config set proxy http://wall.lit.hamburg.de:80
@@ -92,7 +92,7 @@ Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werd
 In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
 ### [Grunt](http://gruntjs.com/)
-Grunt ist ein JavaScript Task Runner. 
+Grunt ist ein JavaScript Task Runner.
 
 Grunt-cli (Command Line Interface) in der Admin-cmd global installieren
 ```
@@ -114,10 +114,16 @@ $ npm install -g bower
 
 ## Repository klonen
 
-Dieses Repository irgendwohin klonen.
+Unser Repository irgendwohin klonen. Zurzeit noch das lokale auf G:.
 
 ```
-# git clone https://bitbucket.org/lgv-team/lgv-main.git 
+# git clone G:\AG_GeoDaten_Anwendungen\Projekte\Master-Portal\lgv.git
+```
+
+und den branch merge/bitbucket-local-dev auschecken
+
+```
+# git checkout merge/bitbucket-local-dev
 ```
 
 
@@ -149,7 +155,7 @@ liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /c
 yeaih!
 
 
-Alle grunt-Tasks 
+Alle grunt-Tasks
 
 ```
 # grunt -h
