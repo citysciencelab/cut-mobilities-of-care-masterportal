@@ -22,8 +22,8 @@ Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei
 ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig / auf git Bash benötigt, cmd nicht:
 
 ```
-git config --global http.proxy http://wall.lit.hamburg.de:80
-git config --global https.proxy http://wall.lit.hamburg.de:80
+# git config --global http.proxy http://wall.lit.hamburg.de:80
+# git config --global https.proxy http://wall.lit.hamburg.de:80
 ```
 
 ### python in PATH
@@ -68,7 +68,7 @@ npm lässt sich über die Kommandozeile konfigurieren. Konfig-Einträge werden j
 npm legt einen Paket-Cache an. Per Default liegt der unter C:\Users\<user>\AppData\Roaming\npm-cache. Das ist nicht gut, weil dieser Ordner beim An-/Abmelden synchronisiert wird. Daher den Pfad zum npm-cache außerhalb des Roaming-Profils setzen. Dazu die .npmrc-Dateien entsprechend anpassen oder in der cmd und Admin-cmd:
 
 ```
-npm config set npm-cache D:\npm-cache
+npm config set cache D:\npm-cache
 ```
 
 #### Proxy-Einstellungen
@@ -108,8 +108,9 @@ Test in normaler cmd:
 Paketmanager für das Web.
 
 In der Admin-cmd global installieren
+
 ```
-$ npm install -g bower
+# npm install -g bower
 ```
 
 ## Repository klonen
@@ -130,7 +131,7 @@ und den branch merge/bitbucket-local-dev auschecken
 ## Build Abhängigkeiten ziehen via NPM.
 
 ```
-$ npm install
+# npm install
 ```
 
 liest package.json.
@@ -139,7 +140,7 @@ liest package.json.
 ## App Abhängigkeiten ziehen via Bower
 
 ```
-$ bower install
+# bower install
 ```
 
 liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind. Es werden 2mal Benutzername und Passwort für unser repository abgefragt, die cmd-Ausgabe bleibt dann nicht stehen, was etwas unübersichtlich ist. Trotzdem: Benutzername eingeben, Enter; Passwort eingeben, Enter.
