@@ -36,7 +36,7 @@ define(function () {
         * @type {String}
         * @desc Beschreibung.
         */
-        layerConf: '../test-config/diensteapiINTERNET.json',
+        layerConf: '../test-config/diensteapiFHHNET.json',
         /**
         * @memberof config
         * @type {String}
