@@ -34,7 +34,7 @@ define([
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
-                this.listenTo(this.model, "change:initString", this.zoomTo);
+                this.listenTo(this.model, "change:initString", this.checkInitString);
                 this.render();
                 if (Config.bPlan !== undefined) {
                     $("#searchInput").prop("disabled", "disabled");
@@ -187,13 +187,25 @@ define([
                 searchVector.getSource().clear();
             },
 
+            "checkInitString": function (evt) {
+                if (this.model.get("hitList").length < 3) {
+                    this.zoomTo(evt);
+                }
+            },
+
             /**
             *
             */
             "zoomTo": function (evt) {
+                console.log(evt);
                 var zoomLevel, hitID, hit;
                 if (_.has(evt, "cid")) {    // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
-                    hit = this.model.get("hitList")[0];
+                    if(Config.searchBar.initString.search(",") !== -1) {
+                        hit = this.model.get("hitList")[1];     // initial Suche Adresse mit Hausnummer
+                    }
+                    else {
+                        hit = this.model.get("hitList")[0];     // alles andere, Straßen, BPläne, Flurstücke...
+                    }
                 }
                 else {
                     hitID = evt.currentTarget.id;

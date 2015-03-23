@@ -73,6 +73,20 @@ define([
                     this.get("isSearchReady").set("bPlanSearch", false);
                     this.getBPlans();
                 }
+                else {
+                    // Initiale Suche query=...
+                    if (Config.searchBar.initString !== undefined) {
+                        if (Config.searchBar.initString.search(",") !== -1) {
+                            var splitInitString = Config.searchBar.initString.split(",");
+                            this.set("onlyOneStreetName", splitInitString[0]);
+                            this.set("isOnlyOneStreet", true);
+                            this.set("searchString", splitInitString[0] + " " + splitInitString[1]);
+                        }
+                        else {
+                            this.set("searchString", Config.searchBar.initString);
+                        }
+                    }
+                }
 
                 // Marker zur Visualisierung eines Punktes
                 this.set("marker", new ol.Overlay({
@@ -90,7 +104,7 @@ define([
             "setSearchString": function (value) {
                 this.set("searchString", value);
                 // NOTE hier muss ich nochmal bei. Stichwort "Backspacetaste gedrückt lassen"
-                if (value === "" || value.length < 3) {
+                if (value === "" || value.length < 3) {console.log(558);
                     this.set("isOnlyOneStreet", false);
                 }
             },
@@ -170,7 +184,7 @@ define([
                                     this.set("isOnlyOneStreet", true);
                                 }
                                 else {
-                                    this.set("isOnlyOneStreet", false);
+                                       this.set("isOnlyOneStreet", false);
                                 }
                             }
                             else {
