@@ -10,7 +10,7 @@ define(function () {
         layerIDs:
         [
             {id: "453", visible: true},
-            {id: "94", visible: false, name: "Luftbilder"},
+            {id: "8", visible: false}
         ],
         styleConf: locations.baseUrl + "../style.json",
         menubar: true,
