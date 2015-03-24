@@ -11,7 +11,7 @@ define(function () {
         [
         {id: "453", visible: true},
         {id: "94", visible: false, name: "Luftbilder"},
-        {id: "1392", visible: false},
+        {id: "365", visible: false},
         {id: "1750", visible: false},
         // {id: "522,521,523,524,525,526,527,528,529,530,531,532,533,534,535,536", visible: false},
         {id: "1747", visible: false, name: "Flächennutzungsplan (FNP) ab 1:10000"},
@@ -24,8 +24,8 @@ define(function () {
         // {id: "1409,1410,1411,1412,1413,1414,1415,1416", visible: false},
         {id: "433,434", visible: false, name: "Soziale Erhaltungsverordnungen"},
         {id: "1205", visible: false},
-        {id: "1347", visible: true},
-        {id: "1346", visible: true}
+        {id: "1562", visible: true},
+        {id: "1561", visible: true}
         ],
         styleConf: locations.baseUrl + "../style.json",
         menubar: true,
