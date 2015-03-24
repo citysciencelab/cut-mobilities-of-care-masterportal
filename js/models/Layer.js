@@ -21,6 +21,10 @@ define([
             if (this.get("visibility") === undefined) {
                 this.set("visibility", false);
             }
+            // Stadtplan immer sichtbar
+            if (this.get("id") === "453") {
+                this.set("visibility", true);
+            }
 
             // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
             this.set("currentScale", Config.view.scale);
@@ -97,6 +101,13 @@ define([
                     }
                     else {
                         this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
+                    }
+                    // besser auf type kontrollieren (Array oder String)
+                    if (dataset.kategorie_inspire.length > 1) {
+                        this.set("kategorieInspire", dataset.kategorie_inspire);
+                    }
+                    else {
+                        this.set("kategorieInspire", dataset.kategorie_inspire[0]);
                     }
                 }
             }

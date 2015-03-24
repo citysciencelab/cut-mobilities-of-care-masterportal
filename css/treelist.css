@@ -35,13 +35,15 @@
 
 .folder-icons span {
     padding-right: 5px;
+    font-size: 16px;
+    vertical-align: text-bottom;
 }
 
 
 .folder-name {
     padding-left: 4em;
-    padding-right: 5em;
-    font-size: 12px;
+    padding-right: 6em;
+    font-size: 14px;
     cursor: pointer;
 }
 

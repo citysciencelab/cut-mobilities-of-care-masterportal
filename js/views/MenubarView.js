@@ -36,7 +36,8 @@ define([
                 $('#navbarRow').css('display', 'none');
             }
             if (_.has(Config, "tree") === true) {
-                require(['views/TreeListView'], function (TreeListView) {
+                require(["views/TreeListView", "views/TreeSelectionView"], function (TreeListView, TreeSelectionView) {
+                    new TreeSelectionView();
                     new TreeListView();
                 });
             } else {

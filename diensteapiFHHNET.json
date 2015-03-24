@@ -27328,7 +27328,7 @@
          "aenderung1" : "1. Änderung",
          "aenderung2" : "2. Änderung",
          "staedtebaulichervertrag" : "Vertragsform",
-         "gop" : "Gop vorhanden",
+         "gop" : "Grünordnungsplan vorhanden",
          "hotlink" : "Planrecht",
          "hotlink_begr" : "Begründung",
          "baustufenplan_hotlink" : "Baustufenplan"
@@ -28347,7 +28347,7 @@
       "minScale" : "0",
       "maxScale" : "350000",
       "gfiAttributes" : {
-         "O_BEO_BEZEICHNUNG" : "Biotopentwicklungsraum",
+         "O_BEZEICHNUNG" : "Biotopentwicklungsraum",
          "STAND_BEARBEITUNG" : "Bearbeitungsstand",
          "Shape_Area" : "Größe"
       },
@@ -32428,7 +32428,7 @@
    },
    {
       "id" : "1748",
-      "name" : "Arten- Und Biotopschutz Hamburg",
+      "name" : "Arten- und Biotopschutz - AuBS (ehem. APRO)",
       "url" : "http://geofos/geowebcache/service/wms",
       "typ" : "WMS",
       "layers" : "APRO",
@@ -32440,7 +32440,11 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "O_BEZEICHNUNG" : "Biotopentwicklungsraum",
+         "STAND_BEARBEITUNG" : "Bearbeitungsstand",
+         "Shape_Area" : "Größe"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : true,
       "datasets" : [

@@ -12,7 +12,8 @@ define([
 
             "defaults": {
                 isExpanded: false,
-                isStyled: false
+                isStyled: false,
+                layerAttribute: "kategorieOpendata"
             },
 
             "initialize": function () {
@@ -27,7 +28,7 @@ define([
              * Config.tree.layerAttribute = Das Layer-Model-Attribut in dem die jeweilige Kategorie gesetzt ist.
              */
             "setLayerList": function () {
-                var layerList = LayerList.getLayerByProperty(Config.tree.layerAttribute, this.get("kategorie"));
+                var layerList = LayerList.getLayerByProperty(this.get("layerAttribute"), this.get("kategorie"));
                 this.set("layerList", layerList);
             },
 
