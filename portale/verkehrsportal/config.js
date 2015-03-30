@@ -4,7 +4,8 @@ define(function () {
         view: {
             center: [561210, 5932600],
             resolution: 15.874991427504629, // 1:60.000
-            scale: 60000 // für print.js benötigt
+            scale: 60000, // für print.js benötigt
+            extent: [454591, 5809000, 700000, 6075769]
         },
         layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
         styleConf: locations.baseUrl + '../style.json',

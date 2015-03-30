@@ -16,11 +16,13 @@ define(function () {
         * @property {Array}  center - Die initiale Zentrumskoordinate.
         * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
         * @property {Number}  scale - Der initiale Maßstab.
+        * @property {Array}  extent - Der ol.view.extent der Karte
         */
         view: {
             center: [565874, 5934140],
             resolution: 15.874991427504629,
-            scale: 60000 // für print.js benötigt
+            scale: 60000, // für print.js benötigt
+            extent: [454591, 5809000, 700000, 6075769]
         },
         /**
         * @memberof config
@@ -197,10 +199,10 @@ define(function () {
         print: {
             url: function () {
                 if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
+                    return locations.host + "/mapfish/mapfish_print_2.0/";
                 }
                 else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
+                    return locations.host + "/geoportal-hamburg/mapfish_print_2.0/";
                 }
             },
             title: 'Master',

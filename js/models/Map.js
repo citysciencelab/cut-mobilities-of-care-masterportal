@@ -13,17 +13,6 @@ define([
         //    var POINTS_PER_INCH = 72; //PostScript points 1/72"  --> = dpi nicht ppi
         var MM_PER_INCHES = 25.4;
 
-        // Definition der Projektion EPSG:25832
-        ol.proj.addProjection(new ol.proj.Projection({
-            code: 'EPSG:25832',
-            units: 'm',
-            extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-            axisOrientation: 'enu', // default
-            global: false  // default
-        }));
-        var proj25832 = ol.proj.get('EPSG:25832');
-        proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
-
         /**
         * @exports Map
         * @requires LayerList
@@ -35,6 +24,24 @@ define([
             *
             */
             initialize: function () {
+	            	// Auswerten der Config.view.extent und evtl. ausgeben eines Standardextents
+								var viewExtent = new Array();
+								if (_.isArray(Config.view.extent) && Config.view.extent.length === 4) {
+									viewExtent = Config.view.extent;
+								}
+								else {
+									viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0]
+								}
+								
+								// Definition der Projektion EPSG:25832
+								ol.proj.addProjection(new ol.proj.Projection({
+									code: 'EPSG:25832',
+									units: 'm',
+									extent: viewExtent,
+									axisOrientation: 'enu', // default
+									global: false  // default
+								}));
+							
                 EventBus.on('activateClick', this.activateClick, this);
                 EventBus.on('addLayer', this.addLayer, this);
                 EventBus.on('removeLayer', this.removeLayer, this);
@@ -53,12 +60,12 @@ define([
                 EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
 
-                this.set('projection', proj25832);
+                this.set('projection', ol.proj.get('EPSG:25832'));
 
                 this.set('view', new ol.View({
                     projection: this.get('projection'),
                     center: Config.view.center,
-                    extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+                    extent: viewExtent,
                     resolution: Config.view.resolution,
                     resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
                 }));
