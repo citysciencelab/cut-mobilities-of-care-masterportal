@@ -1,0 +1,10 @@
+<div class="layer-content">
+    <span class="glyphicon glyphicon-remove-circle pull-left" data-toggle="tooltip" data-placement="bottom" title="Auswahl entfernen"></span>
+    <% if(visibility === true) { %>
+        <span class="glyphicon glyphicon-check pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer ausschalten"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer einschalten"></span>
+    <% } %>
+    <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
+    <div class="layer-name"><%= name %></div>
+</div>

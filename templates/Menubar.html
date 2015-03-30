@@ -17,12 +17,8 @@
                         <span class="glyphicon glyphicon-list"></span><small class="menuitem">Themen</small><b class="caret"></b>
                     </a>
                     <% if (hasTree) { %>
-                    <div class="dropdown-menu">
-                        <form class="form-horizontal treeSelectionForm">
-                        </form>
-                        <ul id="tree" class="list-group">
-                        </ul>
-                    </div>
+                        <div class="dropdown-menu dropdown-tree">
+                        </div>
                     <% } else { %>
                         <div class="dropdown-menu">
                             <ul id="tree" class="list-group">

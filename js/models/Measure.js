@@ -43,7 +43,7 @@ define([
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                // EventBus.trigger("removeInteraction", this.get("draw"));
             }
         },
 

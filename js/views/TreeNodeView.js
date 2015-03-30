@@ -1,17 +1,16 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'text!templates/TreeNode.html'
+    "jquery",
+    "underscore",
+    "backbone",
+    "text!templates/TreeNode.html"
     ], function ($, _, Backbone, TreeNodeTemplate) {
 
         var TreeNodeView = Backbone.View.extend({
-            className : 'list-group-item node',
-            tagName: 'li',
+            className : "list-group-item node",
+            tagName: "li",
             template: _.template(TreeNodeTemplate),
             events: {
-                "click .node-content": "toggleExpand",
-                "click .node-button > .glyphicon": "moveInList"
+                "click .node-content": "toggleExpand"
             },
             initialize: function () {
                 this.listenToOnce(this.model, "change:isExpanded", this.setParentView);
@@ -39,6 +38,7 @@ define([
                         }
                     }, this);
                 }
+                this.toggleStyle();
                 return this;
             },
             setParentView: function () {
@@ -49,23 +49,15 @@ define([
             toggleExpand: function () {
                 this.model.toggleExpand();
             },
-            moveInList: function (evt) {
-                if (evt.target.classList[1] === "glyphicon-arrow-up") {
-                    this.model.moveUpInList();
-                }
-                else if (evt.target.classList[1] === "glyphicon-arrow-down") {
-                    this.model.moveDownInList();
-                }
-            },
             toggleStyle: function () {
                 var someTrue = _.some(this.model.get("layerList"), function (model) {
-                    return model.get("visibility") === true;
+                    return model.get("selected") === true;
                 });
                 if (someTrue === true) {
                     this.$el.css("color", "#fc8d62");
                 }
                 else {
-                    this.$el.css("color", "#333333");
+                    this.$el.css("color", "rgb(150, 150, 150)");
                 }
             }
         });

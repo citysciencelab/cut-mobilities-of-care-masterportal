@@ -1,10 +1,10 @@
 .treeSelectionForm {
-    padding: 10px 0px;
-    background-color: #777;
+    padding: 4px 0px;
+    background-color: rgb(189, 189, 189);
     color: #fff;
-    font-size: 16px;
-    border-bottom: 3px solid #fff;
-    min-width: 366px;
+    /*font-size: 14px;*/
+    border: 1px solid #fff;
+    min-width: 368px;
 }
 
 .selectionLabel {
@@ -13,7 +13,7 @@
 
 .selectionFormButton {
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 2px;
     padding: 6px;
 }

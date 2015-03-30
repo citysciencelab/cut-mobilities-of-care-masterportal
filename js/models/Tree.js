@@ -5,13 +5,11 @@ define([
     "eventbus"
 ], function (_, Backbone, Config, EventBus) {
 
-        var TreeSelection = Backbone.Model.extend({
-
+        var Tree = Backbone.Model.extend({
             "defaults": {
                 topicList: ["Opendata", "Inspire"],
                 currentSelection: Config.tree.orderBy
             },
-
             "initialize": function () {
                 this.listenTo(this, "change:currentSelection", this.sendSelection);
             },
@@ -28,8 +26,7 @@ define([
                 }
                 EventBus.trigger("fetchTreeList", this.get("currentSelection"));
             }
-
         });
 
-        return TreeSelection;
+        return Tree;
     });

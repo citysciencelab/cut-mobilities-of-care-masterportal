@@ -104,11 +104,11 @@ define([
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
                 if (_.has(Config, "tree")) {
-                    _.each(TreeList.pluck("sortedLayerList").reverse(), function (layer) {
-                        _.each(layer, function (element) {
-                            this.get("map").addLayer(element.get("layer"));
-                        }, this);
-                    },this);
+                    // _.each(TreeList.pluck("sortedLayerList").reverse(), function (layer) {
+                    //     _.each(layer, function (element) {
+                    //         this.get("map").addLayer(element.get("layer"));
+                    //     }, this);
+                    // },this);
                 }
                 else {
                     _.each(LayerList.pluck("layer"), function (layer) {
@@ -199,12 +199,20 @@ define([
         /**
         */
         addLayer: function (layer) {
-            this.get('map').addLayer(layer);
+            // Alle Layer
+            var layerList = this.get('map').getLayers().getArray();
+            // Vector-Layer habe keine ID --> der erste Vectorlayer in der Liste
+            var firstVectorLayer = _.where(layerList, {id: undefined})[0];
+            // Index vom ersten VectorLayer in der Layerlist
+            var index = _.indexOf(layerList, firstVectorLayer);
+            // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
+            this.get("map").getLayers().insertAt(index, layer);
         },
         /**
         */
         removeLayer: function (layer) {
             this.get('map').removeLayer(layer);
+            layers = this.get('map').getLayers().getArray();
         },
         /**
          *
@@ -212,6 +220,7 @@ define([
         moveLayer: function (args) {
             var layers, index, layersCollection, model;
             layers = this.get('map').getLayers().getArray();
+            console.log(layers);
             index = layers.indexOf(args[1]);
             if (index + args[0] < LayerList.length && index + args[0] >= 0) {
                 layersCollection = this.get('map').getLayers();

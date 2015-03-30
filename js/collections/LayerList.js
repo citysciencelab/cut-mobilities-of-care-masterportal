@@ -135,6 +135,7 @@ define([
             EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
             EventBus.on("getVisibleWMSLayer", this.sendVisibleWMSLayer, this);
             EventBus.on("getAllVisibleLayer", this.sendAllVisibleLayer, this);
+            EventBus.on("getAllSelectedLayer", this.sendAllSelectedLayer, this);
             EventBus.on("currentMapScale", this.setMapScaleForAll, this);
             // EventBus.on("showLayerInTree", this.showLayerInTree, this);
 
@@ -323,25 +324,37 @@ define([
             EventBus.trigger("sendAllVisibleLayer", this.getAllVisibleLayer());
         },
         /**
-        * Gibt alle Sichtbaren Layer zurück.
+         *
+         */
+        sendAllSelectedLayer: function () {
+            EventBus.trigger("sendAllSelectedLayer", this.getAllSelectedLayer());
+        },
+        /**
+        * Gibt alle sichtbaren Layer zurück.
         *
         */
         getVisibleWMSLayer: function () {
             return this.where({visibility: true, typ: "WMS"});
         },
         /**
-        * Gibt alle Sichtbaren WFS-Layer zurück.
+        * Gibt alle sichtbaren WFS-Layer zurück.
         *
         */
         getVisibleWFSLayer: function () {
             return this.where({visibility: true, typ: "WFS"});
         },
         /**
-        * Gibt alle Sichtbaren Layer zurück.
+        * Gibt alle sichtbaren Layer zurück.
         *
         */
         getAllVisibleLayer: function () {
             return this.where({visibility: true});
+        },
+        /**
+         * Gibt alle selektierten Layer zurück.
+         */
+        getAllSelectedLayer: function () {
+            return this.where({selected: true});
         },
         /**
          *

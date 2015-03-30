@@ -1,0 +1,127 @@
+#LayerSelection {
+    background-color: rgb(189, 189, 189);
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+
+
+#LayerSelection > div {
+    padding: 6px 4px;
+}
+
+.layer-selection-button {
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 2px;
+    padding: 4px;
+}
+
+.layer-selection-label {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#tree2 {
+    color: #777;
+}
+
+/*layer selection*/
+.layer-content {
+    color: rgb(150, 150, 150);
+    font-size: 16px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+}
+
+.layer-content > .glyphicon {
+    cursor: pointer;
+}
+
+.layer-content > .glyphicon-check, .layer-content > .glyphicon-unchecked {
+    padding-left: 12px;
+}
+
+.layer-content > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .layer-name {
+    font-size: 12px;
+    margin: 0em 5em;
+    cursor: pointer;
+}
+
+.layer-content > .layer-name:hover {
+    opacity: 0.6;
+}
+
+
+.layer-content > .glyphicon-info-sign {
+    margin-right: 10px;
+}
+
+/*layer settings*/
+.layer-settings {
+    color: rgb(150, 150, 150);
+}
+
+.layer-settings > .text {
+    font-size: 12px;
+}
+
+.layer-settings > .text2 {
+    font-size: 12px;
+    padding-right: 5px;
+    color: rgb(82, 82, 82);
+    cursor: pointer;
+}
+
+.layer-settings > div {
+    padding-right: 1em;
+}
+
+.layer-settings > div > .glyphicon {
+    font-size: 14px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.layer-settings > div > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-settings > .glyphicon {
+    font-size: 14px;
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 0 4px;
+}
+
+.layer-settings > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+
+
+/*Button for Settings*/
+.layer-button > .glyphicon {
+    font-size: 18px;
+    color: rgb(150,150,150);
+    cursor: pointer;
+    vertical-align: inherit;
+}
+
+.layer-button > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+/***** Animation glyphicon-cog *****/
+.rotate {
+    transform: rotate(-360deg);
+    transition: .5s;
+}
+.rotate2 {
+    transform: rotate(0deg);
+    transition: .5s;
+}

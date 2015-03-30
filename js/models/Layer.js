@@ -10,8 +10,12 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
-
+        defaults: {
+            selected: false
+        },
         initialize: function () {
+            this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
+
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             if (this.get("displayInTree") === false) {
                 this.set("gfiAttributes", false)
@@ -20,10 +24,6 @@ define([
             // Wenn Visibility nicht gesetzt ist (FHH-Atlas), werden alle Layer standardmäßig ausgeblendet.
             if (this.get("visibility") === undefined) {
                 this.set("visibility", false);
-            }
-            // Stadtplan immer sichtbar
-            if (this.get("id") === "453") {
-                this.set("visibility", true);
             }
 
             // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
@@ -40,6 +40,7 @@ define([
             // });
 
             this.listenTo(this, "change:visibility", this.setVisibility);
+
             this.listenTo(this, "change:transparence", this.updateOpacity);
             this.listenTo(this, "change:currentScale", this.setScaleRange);
 
@@ -66,6 +67,10 @@ define([
                 this.updateData();
             }
 
+            // Stadtplan immer sichtbar
+            if (this.get("id") === "453") {
+                this.set("selected", true);
+            }
         },
         // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -155,8 +160,16 @@ define([
             else {
                 this.set({"visibility": true});
             }
+        },
+        toggleSelected: function () {
+            if (this.get("selected") === true) {
+                this.set({"selected": false});
+            }
+            else {
+                this.set({"selected": true});
+            }
             if (this.get("layerType") === "nodeChildLayer") {
-                this.get("parentView").checkVisibilityOfAllChildren();
+                this.get("parentView").checkSelectedOfAllChildren();
             }
         },
         /**
@@ -190,6 +203,16 @@ define([
             var visibility = this.get("visibility");
             this.get("layer").setVisible(visibility);
             this.toggleEventAttribution(visibility);
+        },
+        toggleToSelectionLayerList: function () {
+            if (this.get("selected") === true) {
+                this.set("visibility", true);
+                EventBus.trigger("addModelToSelectionList", this);
+            }
+            else {
+                this.set("visibility", false);
+                EventBus.trigger("removeModelFromSelectionList", this);
+            }
         },
         /**
          *
