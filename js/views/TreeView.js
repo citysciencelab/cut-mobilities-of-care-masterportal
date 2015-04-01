@@ -10,6 +10,8 @@ define([
             template: _.template(TreeSelectionTemplate),
             events: {
                 "change select": "setSelection",
+                "click .rotate-pin": "unfixTree",
+                "click .rotate-pin-back": "fixTree",
                 "click .selectionLabel, .selectionFormButton": "toggleTree",
                 "click .layer-selection-label, .layer-selection-button": "toggle"
             },
@@ -37,6 +39,21 @@ define([
                 $(".layer-selected-list").toggle("slow");
                 $(".layer-selection-button").toggleClass("glyphicon-triangle-bottom");
                 $(".layer-selection-button").toggleClass("glyphicon-triangle-right");
+            },
+            fixTree: function () {
+                $("body").on("click", "#map", this.helpForFixing);
+                $("body").on("click", "#searchbar", this.helpForFixing);
+                $(".glyphicon-pushpin").addClass("rotate-pin");
+                $(".glyphicon-pushpin").removeClass("rotate-pin-back");
+            },
+            unfixTree: function () {
+                $("body").off("click", "#map", this.helpForFixing);
+                $("body").off("click", "#searchbar", this.helpForFixing);
+                $(".glyphicon-pushpin").removeClass("rotate-pin");
+                $(".glyphicon-pushpin").addClass("rotate-pin-back");
+            },
+            helpForFixing: function (evt) {
+                evt.stopPropagation();
             }
         });
 

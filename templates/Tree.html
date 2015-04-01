@@ -4,12 +4,15 @@
         <span class="glyphicon glyphicon-triangle-bottom selectionFormButton"></span>
         <span class="control-label selectionLabel">Kategorie</span>
     </div>
-    <div class="col-md-6 col-sm-6 col-xs-6">
+    <div class="col-md-5 col-sm-5 col-xs-5">
         <select class="form-control">
             <% _.each(topicList, function (topic) { %>
                 <option><%= topic %></option>
             <% }); %>
         </select>
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1">
+        <span class="glyphicon glyphicon-pushpin rotate-pin-back" style="padding: 6px; font-size:14px; cursor: pointer" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
     </div>
 </div>
 </form>
