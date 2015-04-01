@@ -34,7 +34,7 @@ define([
                 $(".selectionFormButton").toggleClass("glyphicon-triangle-right");
             },
             toggle: function () {
-                $("#tree2").toggle("slow");
+                $(".layer-selected-list").toggle("slow");
                 $(".layer-selection-button").toggleClass("glyphicon-triangle-bottom");
                 $(".layer-selection-button").toggleClass("glyphicon-triangle-right");
             }

@@ -104,7 +104,7 @@ define([
             "setSearchString": function (value) {
                 this.set("searchString", value);
                 // NOTE hier muss ich nochmal bei. Stichwort "Backspacetaste gedrückt lassen"
-                if (value === "" || value.length < 3) {console.log(558);
+                if (value === "" || value.length < 3) {
                     this.set("isOnlyOneStreet", false);
                 }
             },

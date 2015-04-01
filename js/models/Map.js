@@ -32,7 +32,7 @@ define([
 								else {
 									viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0]
 								}
-								
+
 								// Definition der Projektion EPSG:25832
 								ol.proj.addProjection(new ol.proj.Projection({
 									code: 'EPSG:25832',
@@ -41,7 +41,7 @@ define([
 									axisOrientation: 'enu', // default
 									global: false  // default
 								}));
-							
+
                 EventBus.on('activateClick', this.activateClick, this);
                 EventBus.on('addLayer', this.addLayer, this);
                 EventBus.on('removeLayer', this.removeLayer, this);
@@ -50,6 +50,7 @@ define([
                 EventBus.on("addInteraction", this.addInteraction, this);
                 EventBus.on("removeInteraction", this.removeInteraction, this);
                 EventBus.on('moveLayer', this.moveLayer, this);
+                EventBus.on('addLayerToIndex', this.addLayerToIndex, this);
                 EventBus.on('setCenter', this.setCenter, this);
                 EventBus.on('zoomToExtent', this.zoomToExtent, this);
                 EventBus.on('setZoomLevelUp', this.setZoomLevelUp, this);
@@ -214,6 +215,7 @@ define([
             var index = _.indexOf(layerList, firstVectorLayer);
             // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
             this.get("map").getLayers().insertAt(index, layer);
+            // console.log(this.get("map").getLayers());
         },
         /**
         */
@@ -230,6 +232,7 @@ define([
             console.log(layers);
             index = layers.indexOf(args[1]);
             if (index + args[0] < LayerList.length && index + args[0] >= 0) {
+                console.log(index);
                 layersCollection = this.get('map').getLayers();
                 layersCollection.removeAt(index);
                 layersCollection.insertAt(index + args[0], args[1]);
@@ -237,7 +240,17 @@ define([
                 LayerList.remove(model);
                 LayerList.add(model, {at: index + args[0]});
             }
-
+        },
+        /**
+         * Bewegt den Layer auf der Karte an die vorhergesehene Position
+         * @param {Array} args - [0] = Layer, [1] = Index
+         */
+         addLayerToIndex: function (args) {
+            var layer = args[0],
+                index = args[1],
+                layersCollection = this.get("map").getLayers();
+            layersCollection.remove(layer);
+            layersCollection.insertAt(index, layer)
         },
         /**
         *

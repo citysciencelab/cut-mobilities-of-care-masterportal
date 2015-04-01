@@ -269,3 +269,25 @@ html, body {
     float:left;
     margin:10px;
 }
+
+.layer-selection {
+    background-color: rgb(189, 189, 189);
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.layer-selection > div {
+    padding: 6px 4px;
+}
+
+.layer-selection-button {
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 2px;
+    padding: 4px;
+}
+
+.layer-selection-label {
+    cursor: pointer;
+    font-size: 14px;
+}

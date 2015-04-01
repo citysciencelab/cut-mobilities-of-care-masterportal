@@ -28,18 +28,18 @@ for(var i=0;i<100;i++) machWas();
 
 "so ja" Beispiele:
 ```javascript
-if ( Bedingung ) {
+if (Bedingung) {
     // statements
 }
 else {
     // statements
 }
 
-while ( Bedingung ) {
+while (Bedingung) {
     // statements
 }
 
-for ( var i = 0; i < 100; i++ ) {
+for (var i = 0; i < 100; i++) {
     // statements
 }
 ```
@@ -147,6 +147,7 @@ var html = "<div id='my-id'></div>";
 * "listenTo" anstatt "on" als Eventlistener
 * Die initialize-Funktion ist die erste Funktion in den Backbone-Objekten
 * Die render-Funktion ist in jeder View die zweite Funktion
+* Die Logik wird im Model programmiert(Controller)
 
 #### Sonstiges
 * Comma-First-Formatierung ist verboten

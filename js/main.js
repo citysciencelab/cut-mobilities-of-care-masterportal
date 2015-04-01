@@ -23,11 +23,13 @@ require.config({
         jquery: '/libs/jQuery-2.1.0/jquery.min',
         underscore: '/libs/underscore-1.6.0/underscore.min',
         backbone: '/libs/backbone-1.1.2/backbone.min',
+        // radio: 'libs/backbone.radio-0.9.0/build/backbone.radio.min',
         text: '/libs/require-2.1.11/plugins/text-2.0.10/text',
         bootstrap: '/libs/bootstrap-3.3.2/js/bootstrap.min',
         proj4: '/libs/proj4-2.2.1/dist/proj4',
         config: locations.portal + 'config',
         eventbus: 'EventBus',
+        modules: '../modules',
         views: 'views',
         models: 'models',
         collections: 'collections',
@@ -73,7 +75,7 @@ function loadMap () {
                 new ClickCounterView();
             });
       }
-  
+
       if (Config.attributions && Config.attributions === true) {
           require(['views/AttributionView'], function (AttributionView) {
               new AttributionView();

@@ -68,8 +68,16 @@ define([
             }
 
             // Stadtplan immer sichtbar
-            if (this.get("id") === "453") {
-                this.set("selected", true);
+            // if (this.get("id") === "453") {
+            //     this.set("selected", true);
+            // }
+
+            // setzen der MetadatenURL, vlt. besser in layerlist??
+            if (this.get("url").search("geodienste") !== -1) {
+                this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            }
+            else {
+                this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
             }
         },
         // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
@@ -171,6 +179,9 @@ define([
             if (this.get("layerType") === "nodeChildLayer") {
                 this.get("parentView").checkSelectedOfAllChildren();
             }
+            else {
+                this.get("parentView").toggleStyle();
+            }
         },
         /**
          *
@@ -234,6 +245,15 @@ define([
                     EventBus.trigger("stopEventAttribution", this);
                 }
             }
+        },
+        openMetadata: function () {
+            window.open(this.get("metaURL"), "_blank");
+        },
+        moveUp: function () {
+            this.collection.moveModelUp(this);
+        },
+        moveDown: function () {
+            this.collection.moveModelDown(this);
         }
     });
     return Layer;
