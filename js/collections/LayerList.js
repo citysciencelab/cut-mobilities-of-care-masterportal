@@ -73,6 +73,14 @@ define([
                         if (_.has(element, "name")) {
                             modelsArray[index].name = element.name;
                         }
+                        // MinScale aus Config statt aus JSON
+                        if (_.has(element, "minScale")) {
+                            modelsArray[index].minScale = element.minScale;
+                        }
+                        // MaxScale aus Config statt aus JSON
+                        if (_.has(element, "maxScale")) {
+                            modelsArray[index].maxScale = element.maxScale;
+                        }
                         // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
                         if (layers.length > 1) {
                             var layerList = "";

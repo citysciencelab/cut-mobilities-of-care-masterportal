@@ -11,6 +11,11 @@ define(function () {
         [
         {id: "453", visible: true},
         {id: "94", visible: false},
+        {id: "1554", visible: false, minScale: "10000"},
+        {id: "1555", visible: false, minScale: "10000"},
+        {id: "1519", visible: false, minScale: "10000"},
+        // {id: "1703", visible: false},
+        {id: "1568,1569,1570", visible: false, name: "Schutzwürdige Böden", minScale: "10000"},
         {id: "1702", visible: true}
         ],
         styleConf: locations.baseUrl + "../style.json",
@@ -47,7 +52,7 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
-            draw: false,
+            draw: true,
             active: "gfi"
         },
         orientation: true,

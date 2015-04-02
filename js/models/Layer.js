@@ -156,6 +156,7 @@ define([
             }
             else {
                 this.set("isInScaleRange", false);
+                this.set("visibility", false);
             }
         },
         /**
@@ -165,7 +166,7 @@ define([
             if (this.get("visibility") === true) {
                 this.set({"visibility": false});
             }
-            else {
+            else if (this.get("visibility") === false && this.get("isInScaleRange") === true) {
                 this.set({"visibility": true});
             }
         },
