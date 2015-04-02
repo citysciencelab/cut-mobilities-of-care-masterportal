@@ -64,6 +64,8 @@ define(function () {
         * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
         * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
         * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
+        * @property {String}  minScale - 
+        * @property {String}  maxScale -
         * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
         * @desc Beschreibung.
         */
