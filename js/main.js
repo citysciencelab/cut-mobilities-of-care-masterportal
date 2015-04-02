@@ -21,6 +21,7 @@ require.config({
     paths: {
         openlayers: '/libs/OpenLayers-3.0.0/build/ol-debug',
         jquery: '/libs/jQuery-2.1.0/jquery.min',
+        jqueryui: '/libs/jquery-ui-1.11.4/jquery-ui.min',
         underscore: '/libs/underscore-1.6.0/underscore.min',
         backbone: '/libs/backbone-1.1.2/backbone.min',
         // radio: 'libs/backbone.radio-0.9.0/build/backbone.radio.min',
@@ -41,6 +42,10 @@ require.config({
         },
         openlayers: {
             exports: 'ol'
+        },
+        jqueryui: {
+            exports: "$",
+            deps: ['jquery']
         }
     },
     urlArgs: {

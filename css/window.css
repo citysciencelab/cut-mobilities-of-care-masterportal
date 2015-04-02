@@ -1,6 +1,10 @@
 #window {
     font-size: 14px;
     display: none;
+    position: absolute !important;
+    margin: 10px;
+    margin-top: 60px;
+    top: 10px;
 }
 
 /* Das Fenster Symbol (Glyphicon) */
@@ -68,6 +72,7 @@
     background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     color: #777;
     height: 34px;
+    cursor: move;
 }
 
 /* Style für das minimierte Fenster */
