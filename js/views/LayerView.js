@@ -1,45 +1,43 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'text!templates/Layer.html',
-    'eventbus'
+    "jquery",
+    "underscore",
+    "backbone",
+    "text!templates/Layer.html",
+    "eventbus"
 ], function ($, _, Backbone, LayerTemplate, EventBus) {
 
     var LayerView = Backbone.View.extend({
-        className : 'list-group-item',
-        tagName: 'li',
+        className : "list-group-item",
+        tagName: "li",
         template: _.template(LayerTemplate),
         initialize: function () {
-            this.listenTo(this.model, 'change:visibility', this.render);
-            this.listenTo(this.model, 'change:transparence', this.render);
-            this.listenTo(this.model, 'change:settings', this.render);
-            this.listenTo(this.model, 'change:isInScaleRange', this.toggleStyle);
+            this.listenTo(this.model, "change:visibility", this.render);
+            this.listenTo(this.model, "change:transparence", this.render);
+            this.listenTo(this.model, "change:settings", this.render);
+            this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
         },
         events: {
-            'click .plus': 'upTransparence',
-            'click .minus': 'downTransparence',
-            'click .info': 'getMetadata',
-            'click .check, .unchecked, .layer-name': 'toggleVisibility',
-            'click .up, .down': 'moveLayer',
-            'click .refresh': 'toggleSettings'
+            "click .plus": "upTransparence",
+            "click .minus": "downTransparence",
+            "click .info": "getMetadata",
+            "click .check, .unchecked, .layer-name": "toggleVisibility",
+            "click .up": "moveModelUp",
+            "click .down": "moveModelDown",
+            "click .refresh": "toggleSettings"
         },
-        moveLayer: function (evt) {
-            var className = evt.currentTarget.className;
-            if (className.search('down') !== -1) {
-                EventBus.trigger('moveLayer', [-1, this.model.get('layer')]);
-            }
-            else if (className.search('up') !== -1) {
-                EventBus.trigger('moveLayer', [1, this.model.get('layer')]);
-            }
+        moveModelUp: function () {
+            this.model.moveUp();
         },
-        upTransparence: function (evt) {
+        moveModelDown: function () {
+            this.model.moveDown();
+        },
+        upTransparence: function () {
             this.model.setUpTransparence(10);
         },
-        downTransparence: function (evt) {
+        downTransparence: function () {
             this.model.setDownTransparence(10);
         },
-        toggleVisibility: function (evt) {
+        toggleVisibility: function () {
             this.model.toggleVisibility();
         },
         getMetadata: function () {
@@ -62,12 +60,12 @@ define([
             }
         },
         render: function () {
-            if (this.model.get('displayInTree') !== false) {
+            if (this.model.get("displayInTree") !== false) {
                 var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
                 return this;
             }else {
-                return '';
+                return "";
             }
         }
     });

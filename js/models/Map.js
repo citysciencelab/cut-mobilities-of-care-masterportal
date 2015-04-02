@@ -224,23 +224,23 @@ define([
             layers = this.get('map').getLayers().getArray();
         },
         /**
-         *
+         * Wird denke ich nicht mehr gebraucht
          */
-        moveLayer: function (args) {
-            var layers, index, layersCollection, model;
-            layers = this.get('map').getLayers().getArray();
-            console.log(layers);
-            index = layers.indexOf(args[1]);
-            if (index + args[0] < LayerList.length && index + args[0] >= 0) {
-                console.log(index);
-                layersCollection = this.get('map').getLayers();
-                layersCollection.removeAt(index);
-                layersCollection.insertAt(index + args[0], args[1]);
-                model = LayerList.at(index);
-                LayerList.remove(model);
-                LayerList.add(model, {at: index + args[0]});
-            }
-        },
+        // moveLayer: function (args) {
+        //     var layers, index, layersCollection, model;
+        //     layers = this.get('map').getLayers().getArray();
+        //     console.log(layers);
+        //     index = layers.indexOf(args[1]);
+        //     if (index + args[0] < LayerList.length && index + args[0] >= 0) {
+        //         console.log(index);
+        //         layersCollection = this.get('map').getLayers();
+        //         layersCollection.removeAt(index);
+        //         layersCollection.insertAt(index + args[0], args[1]);
+        //         model = LayerList.at(index);
+        //         LayerList.remove(model);
+        //         LayerList.add(model, {at: index + args[0]});
+        //     }
+        // },
         /**
          * Bewegt den Layer auf der Karte an die vorhergesehene Position
          * @param {Array} args - [0] = Layer, [1] = Index

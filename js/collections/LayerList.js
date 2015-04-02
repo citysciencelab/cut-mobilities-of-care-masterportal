@@ -141,6 +141,8 @@ define([
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
+            this.listenTo(this, "add", this.addLayerToMap);
+            this.listenTo(this, "remove", this.removeLayerFromMap);
 
             this.fetch({
                 cache: false,
@@ -369,7 +371,47 @@ define([
              this.forEach(function (model) {
                  model.set("currentScale", scale);
              })
-        }
+        },
+        /**
+         * Schiebt das Model in der Collection eine Position nach oben.
+         * @param {Backbone.Model} model - Layer-Model
+         */
+         moveModelUp: function (model) {
+            var fromIndex = this.indexOf(model),
+                toIndex = fromIndex + 1;
+
+            if (fromIndex < this.length - 1) {
+                this.remove(model);
+                this.add(model, {at: toIndex});
+            }
+        },
+        /**
+         * Schiebt das Model in der Collection eine Position nach unten.
+         * @param {Backbone.Model} model - Layer-Model
+         */
+         moveModelDown: function (model) {
+            var fromIndex = this.indexOf(model),
+                toIndex = fromIndex - 1;
+
+            if (fromIndex > 0) {
+                this.remove(model);
+                this.add(model, {at: toIndex});
+            }
+        },
+        /**
+         * Triggert das Event "addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).
+         * @param {Backbone.Model} model - Layer-Model
+         */
+         addLayerToMap: function (model) {
+            EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+        },
+        /**
+         * Triggert das Event "removeLayer". Übergibt das "layer"-Attribut vom Model (ol.layer).
+         * @param {Backbone.Model} model - Layer-Model
+         */
+        removeLayerFromMap: function (model) {
+           EventBus.trigger("removeLayer", model.get("layer"));
+       }
     });
 
     return new LayerList();
