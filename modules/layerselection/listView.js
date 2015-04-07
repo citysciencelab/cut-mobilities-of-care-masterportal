@@ -2,16 +2,33 @@ define([
     "underscore",
     "backbone",
     "modules/layerselection/list",
-    "modules/layerselection/view"
-], function (_, Backbone, List, View) {
+    "modules/layerselection/view",
+    "eventbus",
+    "jqueryui"
+], function (_, Backbone, List, View, EventBus) {
 
         var listView = Backbone.View.extend({
             collection: new List(),
             tagName: "ul",
             className: "list-group layer-selected-list",
             initialize: function () {
+                EventBus.on("test", this.render);
                 this.render();
                 this.listenTo(this.collection, "add", this.render);
+                // JQuery UI
+                this.$el.sortable({
+                    start: function (evt, ui) {
+                        ui.item.startPos = ui.item.index();
+                    },
+                    update: function (evt, ui) {
+                        if (ui.item.startPos - ui.item.index() < 0) {
+                            ui.item.trigger("movemodel", ui.item.startPos - ui.item.index());
+                        }
+                        else {
+                            ui.item.trigger("movemodel", ui.item.startPos + ui.item.index())
+                        }
+                    }
+                });
             },
             render: function () {
                 $(".layer-selection").after(this.$el.html(""));

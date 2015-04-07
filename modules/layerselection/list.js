@@ -66,6 +66,18 @@ define([
                 this.remove(model);
                 this.add(model, {at: toIndex});
             }
+        },
+        /**
+         * Verschiebt das Model innerhalb der Collection nach oben oder unten.
+         * @param {Backbone.Model} model - Layer-Model
+         * @param {Number} index - Wert um den das Model verschoben werden soll
+         */
+        moveModelDelta: function (model, index) {
+            var fromIndex = this.indexOf(model),
+                toIndex = fromIndex + index;
+
+                this.remove(model);
+                this.add(model, {at: toIndex});
         }
     });
 

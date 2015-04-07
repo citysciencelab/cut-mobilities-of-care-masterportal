@@ -37,6 +37,7 @@
     font-size: 12px;
     padding-right: 5px;
     color: rgb(82, 82, 82);
+    width: 5em;
 }
 
 .layer-settings > .text {
