@@ -4,8 +4,9 @@ define([
     'backbone',
     'eventbus',
     'models/ScaleLine',
-    'text!templates/ScaleLine.html'
-], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate) {
+    'text!templates/ScaleLine.html',
+    "config"
+], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config) {
 
     var ScaleLineView = Backbone.View.extend({
         model: ScaleLine,
@@ -22,7 +23,15 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-            $('body').append(this.$el);
+            if (Config.footer && Config.footer === true) {
+                $('.footer').append(this.$el);
+                $('.scale-line').addClass("pull-right");
+                this.$el.removeClass("scale-line");
+            }
+            else {
+                $('body').append(this.$el);
+            }
+
         }
     });
 

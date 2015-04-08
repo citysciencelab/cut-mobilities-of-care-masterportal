@@ -99,6 +99,12 @@ function loadMap () {
           });
       }
 
+      if (Config.footer && Config.footer === true) {
+          require(["modules/footer/view"], function (FooterView) {
+              new FooterView();
+          });
+      }
+
       if (Config.menubar === true) {
           require(['views/MenubarView', 'views/ToggleButtonView', 'views/ZoomButtonsView'], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
               new MenubarView();
