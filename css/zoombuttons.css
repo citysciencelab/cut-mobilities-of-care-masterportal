@@ -9,16 +9,27 @@
     left: 15px;
 }
 
-#zoomButtons span {
+#zoomButtons span.glyphicon-minus {
     background-color: #d42132;
-    padding: 5px;
-    margin: 2px;
     font-size: 18px;
     color: #fff;
     top: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    padding: 5px 6px 5px 5px;
+    margin-top: 2px;
 }
+
+#zoomButtons span.glyphicon-plus {
+    background-color: #d42132;
+    font-size: 18px;
+    color: #fff;
+    top: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    padding: 5px 5px 6px 6px;
+}
+
 
 #zoomButtons span:hover {
     cursor: pointer;
+    opacity: 0.6;
 }
