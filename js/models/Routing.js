@@ -17,9 +17,13 @@ define([
             fromList: [],
             toList: [],
             startAdresse: '',
-            zielAdresse: ''
+            zielAdresse: '',
+            bbox: ''
         },
         initialize: function () {
+            if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
+                this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=EPSG:25832');
+            }
             EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
@@ -55,6 +59,9 @@ define([
             }
             else {
                 var parts = value.split(/[.,\/ -]/);
+                if (this.get('bbox') !== '') {
+                    value = value + this.get('bbox');
+                }
                 if (value.indexOf('&filter=') === -1) {
                     var plz = _.find(parts, function(val) {
                         return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
@@ -62,17 +69,22 @@ define([
                     var hsnr = _.find(parts, function(val) {
                         return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
                     });
-                    if (!plz) {
-                        value = value + '&filter=(plz:2* OR plz:19*)';
-                    }
-                    else {
+                    if (plz) {
                         value = value + '&filter=(plz:' + plz + ')';
-                    }
-                    if (hsnr) {
-                        value = value + ' AND (typ:Haus) AND haus:(' + hsnr + '*)';
+                        if (hsnr) {
+                            value = value + ' AND (typ:Haus) AND haus:(' + hsnr + '*)';
+                        }
+                        else {
+                            value = value + ' AND (typ:Strasse OR typ:Ort OR typ:Geoname)';
+                        }
                     }
                     else {
-                        value = value + ' AND (typ:Strasse OR typ:Ort OR typ:Geoname)';
+                        if (hsnr) {
+                            value = value + '&filter=(typ:Haus) AND haus:(' + hsnr + '*)';
+                        }
+                        else {
+                            value = value + '&filter=(typ:Strasse OR typ:Ort OR typ:Geoname)';
+                        }
                     }
                 }
             }
