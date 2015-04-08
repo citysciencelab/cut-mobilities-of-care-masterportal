@@ -1,15 +1,9 @@
-<div class="wrapper-node-child-layer">
-    <div class="node-child-layer-content">
-        <div class="info-button pull-right">
-            <span class="glyphicon glyphicon-info-sign"></span>
-        </div>
-        <div class="folder-icons pull-left">
-        <% if(visibility === true) { %>
-            <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span></button>
-        <% } else { %>
-            <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked"></span></button>
-        <% } %>
-        </div>
-        <div class="layer-name"><%= name %></div>
-    </div>
+<div class="node-child-layer-content">
+    <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
+    <% if(selected === true) { %>
+        <span class="glyphicon glyphicon-check pull-left"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left"></span>
+    <% } %>
+    <div class="layer-name"><%= name %></div>
 </div>

@@ -138,11 +138,11 @@ define([
             },
 
             "toggleExpand": function () {
-                if (this.get('isExpanded') === true) {
-                    this.set('isExpanded', false);
+                if (this.get("isExpanded") === true) {
+                    this.set("isExpanded", false);
                 }
                 else {
-                    this.set('isExpanded', true);
+                    this.set("isExpanded", true);
                 }
             },
 

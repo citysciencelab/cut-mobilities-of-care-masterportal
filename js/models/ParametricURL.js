@@ -108,9 +108,10 @@ define([
             */
             if (_.has(result, 'QUERY')) {
                 var value = _.values(_.pick(result, 'QUERY'))[0];
+                value = value.substring(0, 1) + value.substring(1).toLowerCase();
                 Config.searchBar.initString = value;
             }
-            
+
             /**
             * Gibt den Wert für die config-Option clickCounter.enabled zurück.
             *
