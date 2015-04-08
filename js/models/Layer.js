@@ -154,6 +154,9 @@ define([
             if (this.get("currentScale") <= parseInt(this.get("maxScale"),10) && this.get("currentScale") >= parseInt(this.get("minScale"),10)) {
                 this.set("isInScaleRange", true);
             }
+            else if (this.get("typ") === "WFS") {
+                this.set("isInScaleRange", true);
+            }
             else {
                 this.set("isInScaleRange", false);
                 this.set("visibility", false);
@@ -162,7 +165,7 @@ define([
         /**
          *
          */
-        toggleVisibility: function () {
+        toggleVisibility: function () {console.log(this.get("isInScaleRange"));
             if (this.get("visibility") === true) {
                 this.set({"visibility": false});
             }
