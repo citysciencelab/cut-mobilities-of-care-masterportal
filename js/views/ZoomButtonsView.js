@@ -13,6 +13,7 @@ define([
             },
             initialize: function () {
                 this.render();
+                EventBus.trigger('registerZoomButtonsInClickCounter', this.$el);
             },
             render: function () {
                 this.template = "<span class='glyphicon glyphicon-plus'></span><br><span class='glyphicon glyphicon-minus'></span>";

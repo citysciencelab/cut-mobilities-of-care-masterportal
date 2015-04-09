@@ -32,7 +32,7 @@ define([
             if( !navigator.userAgent.match(/Android/i) || !navigator.userAgent.match(/webOS/i) || !navigator.userAgent.match(/iPhone/i) || !navigator.userAgent.match(/iPad/i)
                || !navigator.userAgent.match(/iPod/i) || !navigator.userAgent.match(/BlackBerry/i) || !navigator.userAgent.match(/Windows Phone/i)) {
                 $("head").append($("<link rel='stylesheet' href='" + locations.host + "/libs/video-js/video-js.css' type='text/css' media='screen' />"));
-                $.getScript(locations.host + "/libs/video-js/video.dev.js", function( data, textStatus, jqxhr ) {
+                require(['videojs'], function (videojs) {
                     videojs.options.flash.swf = locations.host + "/libs/video-js/video-js.swf";
                     this.set('isStreamingLibLoaded', true);
                     this.starteStreaming(this.get('uniqueId'));

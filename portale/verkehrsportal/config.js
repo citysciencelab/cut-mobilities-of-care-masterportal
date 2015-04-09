@@ -23,7 +23,7 @@ define(function () {
         },
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
-            {id: '453', visible: false},
+            {id: '453', visible: true},
             {id: '452', visible: false},
             {id:
              [

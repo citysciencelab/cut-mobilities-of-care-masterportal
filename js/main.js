@@ -34,7 +34,8 @@ require.config({
         views: 'views',
         models: 'models',
         collections: 'collections',
-        templates: '../templates'
+        templates: '../templates',
+        videojs: '/libs/video-js/video.dev'
     },
     shim: {
         bootstrap: {
@@ -76,7 +77,7 @@ function loadMap () {
 	], function (Map, Config, $) {
       new Map();
       if (typeof(Config.clickCounter) === 'object' && Config.clickCounter.enabled === true) {
-            require(['views/ClickCounterView'], function (ClickCounterView) {
+            require(['modules/ClickCounter/view'], function (ClickCounterView) {
                 new ClickCounterView();
             });
       }
