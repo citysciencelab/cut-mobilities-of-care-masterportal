@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'models/ClickCounter'
+    'modules/ClickCounter/model'
 ], function ($, _, Backbone, EventBus, ClickCounter) {
 
     var ClickCounterView = Backbone.View.extend({

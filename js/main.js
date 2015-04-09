@@ -76,7 +76,7 @@ function loadMap () {
 	], function (Map, Config, $) {
       new Map();
       if (typeof(Config.clickCounter) === 'object' && Config.clickCounter.enabled === true) {
-            require(['views/ClickCounterView'], function (ClickCounterView) {
+            require(['modules/ClickCounter/view'], function (ClickCounterView) {
                 new ClickCounterView();
             });
       }
