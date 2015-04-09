@@ -73,12 +73,7 @@ define([
             // }
 
             // setzen der MetadatenURL, vlt. besser in layerlist??
-            if (this.get("url").search("geodienste") !== -1) {
-                this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
-            }
-            else {
-                this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
-            }
+            this.setMetadataURL();
         },
         // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -152,6 +147,9 @@ define([
         },
         setScaleRange: function () {
             if (this.get("currentScale") <= parseInt(this.get("maxScale"),10) && this.get("currentScale") >= parseInt(this.get("minScale"),10)) {
+                this.set("isInScaleRange", true);
+            }
+            else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
                 this.set("isInScaleRange", true);
             }
             else {
@@ -249,6 +247,25 @@ define([
         },
         openMetadata: function () {
             window.open(this.get("metaURL"), "_blank");
+        },
+        setMetadataURL: function () {
+            if (this.get("url") !== undefined) {
+                if (this.get("url").search("geodienste") !== -1) {
+                    this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                }
+                else {
+                    this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                }
+            }
+            // Für Group-Layer
+            else {
+                if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
+                    this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                }
+                else {
+                    this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                }
+            }
         },
         moveUp: function () {
             this.collection.moveModelUp(this);

@@ -20,7 +20,8 @@ define([
             "click .glyphicon-arrow-up": "moveModelUp",
             "click .glyphicon-arrow-down": "moveModelDown",
             "click .layer-toggle-button": "toggleSettings",
-            "click .glyphicon-remove-circle": "toggleSelected"
+            "click .glyphicon-remove-circle": "toggleSelected",
+            "movemodel": "moveModelDelta"
         },
         initialize: function () {
             this.$el.append(this.templateButton);
@@ -74,6 +75,9 @@ define([
             else {
                 this.$el.css("color", "#cdcdcd");
             }
+        },
+        moveModelDelta: function (evt, index) {
+            this.model.collection.moveModelDelta(this.model, index);
         }
     });
 

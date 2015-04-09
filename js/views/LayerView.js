@@ -41,12 +41,13 @@ define([
             this.model.toggleVisibility();
         },
         getMetadata: function () {
-            if (locations.fhhnet) {
-                window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
-            }
-            else {
-                window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
-            }
+            this.model.openMetadata();
+            // if (locations.fhhnet) {
+            //     window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+            // }
+            // else {
+            //     window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+            // }
         },
         toggleSettings: function () {
             this.model.toggleSettings();
