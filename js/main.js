@@ -3,6 +3,7 @@ require.config({
     paths: {
         openlayers: '../_libs/openlayers/js/ol.amd',
         jquery: '../components/jquery/dist/jquery',
+        jqueryui: '/libs/jquery-ui-1.11.4/jquery-ui.min',
         underscore: '../components/underscore/underscore',
         backbone: '../components/backbone/backbone',
         text: '../components/requirejs-text/text',
@@ -16,9 +17,15 @@ require.config({
         app: '../js/app',
         templates: '../templates'
     },
-
     shim: {
         bootstrap: {
+            deps: ['jquery']
+        },
+        openlayers: {
+            exports: 'ol'
+        },
+        jqueryui: {
+            exports: "$",
             deps: ['jquery']
         }
     },

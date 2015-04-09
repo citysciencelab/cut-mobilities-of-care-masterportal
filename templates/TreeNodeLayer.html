@@ -1,13 +1,9 @@
 <div class="node-layer-content">
-    <div class="info-button pull-right">
-        <span class="glyphicon glyphicon-info-sign"></span>
-    </div>
-    <div class="folder-icons pull-left">
-    <% if(visibility === true) { %>
-        <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span></button>
+    <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
+    <% if(selected === true) { %>
+        <span class="glyphicon glyphicon-check pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer entfernen"></span>
     <% } else { %>
-        <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked"></span></button>
+        <span class="glyphicon glyphicon-unchecked pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer hinzufügen"></span>
     <% } %>
-    </div>
     <div class="layer-name"><%= name %></div>
 </div>

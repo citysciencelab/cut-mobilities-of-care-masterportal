@@ -10,8 +10,12 @@ define([
      *
      */
     var Layer = Backbone.Model.extend({
-
+        defaults: {
+            selected: false
+        },
         initialize: function () {
+            this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
+
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             if (this.get("displayInTree") === false) {
                 this.set("gfiAttributes", false)
@@ -36,6 +40,7 @@ define([
             // });
 
             this.listenTo(this, "change:visibility", this.setVisibility);
+
             this.listenTo(this, "change:transparence", this.updateOpacity);
             this.listenTo(this, "change:currentScale", this.setScaleRange);
 
@@ -62,6 +67,13 @@ define([
                 this.updateData();
             }
 
+            // Stadtplan immer sichtbar
+            // if (this.get("id") === "453") {
+            //     this.set("selected", true);
+            // }
+
+            // setzen der MetadatenURL, vlt. besser in layerlist??
+            this.setMetadataURL();
         },
         // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -98,6 +110,13 @@ define([
                     else {
                         this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
                     }
+                    // besser auf type kontrollieren (Array oder String)
+                    if (dataset.kategorie_inspire.length > 1) {
+                        this.set("kategorieInspire", dataset.kategorie_inspire);
+                    }
+                    else {
+                        this.set("kategorieInspire", dataset.kategorie_inspire[0]);
+                    }
                 }
             }
         },
@@ -130,8 +149,12 @@ define([
             if (this.get("currentScale") <= parseInt(this.get("maxScale"),10) && this.get("currentScale") >= parseInt(this.get("minScale"),10)) {
                 this.set("isInScaleRange", true);
             }
+            else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
+                this.set("isInScaleRange", true);
+            }
             else {
                 this.set("isInScaleRange", false);
+                this.set("visibility", false);
             }
         },
         /**
@@ -141,11 +164,22 @@ define([
             if (this.get("visibility") === true) {
                 this.set({"visibility": false});
             }
-            else {
+            else if (this.get("visibility") === false && this.get("isInScaleRange") === true) {
                 this.set({"visibility": true});
             }
+        },
+        toggleSelected: function () {
+            if (this.get("selected") === true) {
+                this.set({"selected": false});
+            }
+            else {
+                this.set({"selected": true});
+            }
             if (this.get("layerType") === "nodeChildLayer") {
-                this.get("parentView").checkVisibilityOfAllChildren();
+                this.get("parentView").checkSelectedOfAllChildren();
+            }
+            else {
+                this.get("parentView").toggleStyle();
             }
         },
         /**
@@ -180,6 +214,16 @@ define([
             this.get("layer").setVisible(visibility);
             this.toggleEventAttribution(visibility);
         },
+        toggleToSelectionLayerList: function () {
+            if (this.get("selected") === true) {
+                this.set("visibility", true);
+                EventBus.trigger("addModelToSelectionList", this);
+            }
+            else {
+                this.set("visibility", false);
+                EventBus.trigger("removeModelFromSelectionList", this);
+            }
+        },
         /**
          *
          */
@@ -200,6 +244,34 @@ define([
                     EventBus.trigger("stopEventAttribution", this);
                 }
             }
+        },
+        openMetadata: function () {
+            window.open(this.get("metaURL"), "_blank");
+        },
+        setMetadataURL: function () {
+            if (this.get("url") !== undefined) {
+                if (this.get("url").search("geodienste") !== -1) {
+                    this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                }
+                else {
+                    this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                }
+            }
+            // Für Group-Layer
+            else {
+                if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
+                    this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                }
+                else {
+                    this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                }
+            }
+        },
+        moveUp: function () {
+            this.collection.moveModelUp(this);
+        },
+        moveDown: function () {
+            this.collection.moveModelDown(this);
         }
     });
     return Layer;

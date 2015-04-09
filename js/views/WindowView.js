@@ -4,16 +4,21 @@ define([
     "config",
     "eventbus",
     "models/Window",
-    "text!templates/Window.html"
+    "text!templates/Window.html",
+    "jqueryui"
     ], function (_, Backbone, Config, EventBus, Window, WindowTemplate) {
 
         var WindowView = Backbone.View.extend({
             id: "window",
-            className: "win-max",
+            className: "win-max ui-widget-content",
             model: Window,
             template: _.template(WindowTemplate),
             initialize: function () {
                 this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
+                // console.log(this.$el);
+                this.$el.draggable({
+                    containment: "#map"
+                });
             },
             events: {
                 "click .win-minimize": "minimize",

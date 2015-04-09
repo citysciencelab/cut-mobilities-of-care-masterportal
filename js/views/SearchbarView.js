@@ -197,7 +197,6 @@ define([
             *
             */
             "zoomTo": function (evt) {
-                console.log(evt);
                 var zoomLevel, hitID, hit;
                 if (_.has(evt, "cid")) {    // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
                     if(Config.searchBar.initString.search(",") !== -1) {

@@ -29,6 +29,7 @@ define([
             if (Config.startUpModul.toUpperCase() === 'ROUTING') {
                 EventBus.trigger('toggleWin', ['routing', 'Routenplaner', 'glyphicon-road']);
             }
+            EventBus.trigger('registerRoutingClickInClickCounter', this.$el);
         },
         events: {
             'click .toggleRoutingOptions': 'toggleRoutingOptions',

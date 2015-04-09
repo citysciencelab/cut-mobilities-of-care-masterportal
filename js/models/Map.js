@@ -13,17 +13,6 @@ define([
         //    var POINTS_PER_INCH = 72; //PostScript points 1/72"  --> = dpi nicht ppi
         var MM_PER_INCHES = 25.4;
 
-        // Definition der Projektion EPSG:25832
-        ol.proj.addProjection(new ol.proj.Projection({
-            code: 'EPSG:25832',
-            units: 'm',
-            extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-            axisOrientation: 'enu', // default
-            global: false  // default
-        }));
-        var proj25832 = ol.proj.get('EPSG:25832');
-        proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
-
         /**
         * @exports Map
         * @requires LayerList
@@ -35,6 +24,24 @@ define([
             *
             */
             initialize: function () {
+	            	// Auswerten der Config.view.extent und evtl. ausgeben eines Standardextents
+								var viewExtent = new Array();
+								if (_.isArray(Config.view.extent) && Config.view.extent.length === 4) {
+									viewExtent = Config.view.extent;
+								}
+								else {
+									viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0]
+								}
+
+								// Definition der Projektion EPSG:25832
+								ol.proj.addProjection(new ol.proj.Projection({
+									code: 'EPSG:25832',
+									units: 'm',
+									extent: viewExtent,
+									axisOrientation: 'enu', // default
+									global: false  // default
+								}));
+
                 EventBus.on('activateClick', this.activateClick, this);
                 EventBus.on('addLayer', this.addLayer, this);
                 EventBus.on('removeLayer', this.removeLayer, this);
@@ -43,6 +50,7 @@ define([
                 EventBus.on("addInteraction", this.addInteraction, this);
                 EventBus.on("removeInteraction", this.removeInteraction, this);
                 EventBus.on('moveLayer', this.moveLayer, this);
+                EventBus.on('addLayerToIndex', this.addLayerToIndex, this);
                 EventBus.on('setCenter', this.setCenter, this);
                 EventBus.on('zoomToExtent', this.zoomToExtent, this);
                 EventBus.on('setZoomLevelUp', this.setZoomLevelUp, this);
@@ -53,12 +61,12 @@ define([
                 EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
 
-                this.set('projection', proj25832);
+                this.set('projection', ol.proj.get('EPSG:25832'));
 
                 this.set('view', new ol.View({
                     projection: this.get('projection'),
                     center: Config.view.center,
-                    extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+                    extent: viewExtent,
                     resolution: Config.view.resolution,
                     resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
                 }));
@@ -104,11 +112,11 @@ define([
                 // für den Layerbaum (FHH-Atlas)
                 // switch (Config.tree.orderBy) {
                 if (_.has(Config, "tree")) {
-                    _.each(TreeList.pluck("sortedLayerList").reverse(), function (layer) {
-                        _.each(layer, function (element) {
-                            this.get("map").addLayer(element.get("layer"));
-                        }, this);
-                    },this);
+                    // _.each(TreeList.pluck("sortedLayerList").reverse(), function (layer) {
+                    //     _.each(layer, function (element) {
+                    //         this.get("map").addLayer(element.get("layer"));
+                    //     }, this);
+                    // },this);
                 }
                 else {
                     _.each(LayerList.pluck("layer"), function (layer) {
@@ -199,29 +207,50 @@ define([
         /**
         */
         addLayer: function (layer) {
-            this.get('map').addLayer(layer);
+            // Alle Layer
+            var layerList = this.get('map').getLayers().getArray();
+            // Vector-Layer habe keine ID --> der erste Vectorlayer in der Liste
+            var firstVectorLayer = _.where(layerList, {id: undefined})[0];
+            // Index vom ersten VectorLayer in der Layerlist
+            var index = _.indexOf(layerList, firstVectorLayer);
+            // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
+            this.get("map").getLayers().insertAt(index, layer);
+            // console.log(this.get("map").getLayers());
         },
         /**
         */
         removeLayer: function (layer) {
             this.get('map').removeLayer(layer);
+            layers = this.get('map').getLayers().getArray();
         },
         /**
-         *
+         * Wird denke ich nicht mehr gebraucht
          */
-        moveLayer: function (args) {
-            var layers, index, layersCollection, model;
-            layers = this.get('map').getLayers().getArray();
-            index = layers.indexOf(args[1]);
-            if (index + args[0] < LayerList.length && index + args[0] >= 0) {
-                layersCollection = this.get('map').getLayers();
-                layersCollection.removeAt(index);
-                layersCollection.insertAt(index + args[0], args[1]);
-                model = LayerList.at(index);
-                LayerList.remove(model);
-                LayerList.add(model, {at: index + args[0]});
-            }
-
+        // moveLayer: function (args) {
+        //     var layers, index, layersCollection, model;
+        //     layers = this.get('map').getLayers().getArray();
+        //     console.log(layers);
+        //     index = layers.indexOf(args[1]);
+        //     if (index + args[0] < LayerList.length && index + args[0] >= 0) {
+        //         console.log(index);
+        //         layersCollection = this.get('map').getLayers();
+        //         layersCollection.removeAt(index);
+        //         layersCollection.insertAt(index + args[0], args[1]);
+        //         model = LayerList.at(index);
+        //         LayerList.remove(model);
+        //         LayerList.add(model, {at: index + args[0]});
+        //     }
+        // },
+        /**
+         * Bewegt den Layer auf der Karte an die vorhergesehene Position
+         * @param {Array} args - [0] = Layer, [1] = Index
+         */
+         addLayerToIndex: function (args) {
+            var layer = args[0],
+                index = args[1],
+                layersCollection = this.get("map").getLayers();
+            layersCollection.remove(layer);
+            layersCollection.insertAt(index, layer)
         },
         /**
         *

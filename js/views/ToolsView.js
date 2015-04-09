@@ -14,6 +14,7 @@ define([
             initialize: function () {
                 this.render();
                 this.listenTo(this.model, 'change', this.render);
+                EventBus.trigger('registerToolsClickInClickCounter', this.$el);
             },
             events: {
                 'click #coordinateMenu': 'activateCoordinate',

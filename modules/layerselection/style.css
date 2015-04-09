@@ -1,0 +1,87 @@
+/* Liste der ausgewählten Layer -- listView.js */
+.layer-selected-list {
+    color: rgb(150, 150, 150);
+}
+
+/* ausgwählter Layer -- template.html */
+.layer-selected {
+    font-size: 16px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+}
+
+.layer-selected > .glyphicon {
+    cursor: pointer;
+}
+
+.layer-selected > .glyphicon-check, .layer-selected > .glyphicon-unchecked {
+    padding-left: 12px;
+}
+
+.layer-selected > .layer-name {
+    font-size: 12px;
+    margin: 0em 5em;
+    cursor: pointer;
+}
+
+.layer-selected > .layer-name:hover, .layer-selected > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-selected > .glyphicon-info-sign {
+    margin-right: 10px;
+}
+
+/* Layereinstellungen -- templateSetting.html */
+.layer-settings > .layer-name {
+    font-size: 12px;
+    padding-right: 5px;
+    color: rgb(82, 82, 82);
+    width: 5em;
+}
+
+.layer-settings > .text {
+    font-size: 12px;
+}
+
+.layer-settings > div {
+    padding-right: 1em;
+}
+
+.layer-settings > div > .glyphicon {
+    font-size: 14px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.layer-settings > .glyphicon {
+    font-size: 14px;
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 0 4px;
+}
+
+.layer-settings > div > .glyphicon:hover, .layer-settings > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+/* Togglebutton -- view.js */
+.layer-toggle-button > .glyphicon {
+    font-size: 18px;
+    cursor: pointer;
+    vertical-align: inherit;
+}
+
+.layer-toggle-button > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+/* Animation Togglebutton -- view.js */
+.rotate {
+    transform: rotate(-360deg);
+    transition: .5s;
+}
+.rotate-back {
+    transform: rotate(0deg);
+    transition: .5s;
+}

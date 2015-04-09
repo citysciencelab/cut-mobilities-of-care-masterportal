@@ -10,19 +10,24 @@ define([
 
         var TreeListView = Backbone.View.extend({
             collection: TreeList,
-            el: "#tree",
+            tagName: "ul",
+            className: "list-group",
+            id: "tree",
             initialize: function () {
+                this.listenTo(this.collection, "add", this.render);
                 this.collection.on("add", this.render, this);
+                this.collection.on("sync", this.render, this);
                 this.render();
             },
             render: function () {
-                this.$el.html("");
+                $(".treeSelectionForm").after(this.$el.html(""));
+
                 this.collection.forEach(this.addTreeNode, this);
             },
             addTreeNode: function (node) {
                 if (node.get("layerList").length > 0) {
                     var treeNodeView = new TreeNodeView({model: node});
-                    $("#tree").append(treeNodeView.render().el);
+                    this.$el.append(treeNodeView.render().el);
                 }
             }
         });

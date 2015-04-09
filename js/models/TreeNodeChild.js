@@ -13,6 +13,7 @@ define([
             "defaults": {
                 isExpanded: false,
                 isVisible: false,
+                isSelected: false,
                 settings: false,
                 transparence: 0
             },
@@ -55,16 +56,29 @@ define([
                     layer.set("visibility", this.get("isVisible"));
                 }, this);
             },
-            "checkVisibilityOfAllChildren": function () {
+            "toggleSelected": function () {
+                if (this.get("isSelected") === true) {
+                    this.set("isSelected", false);
+                }
+                else {
+                    this.set("isSelected", true);
+                }
+            },
+            "toggleSelectedChildren": function () {
+                _.each(this.get("children"), function (layer) {
+                    layer.set("selected", this.get("isSelected"));
+                }, this);
+            },
+            "checkSelectedOfAllChildren": function () {
                 var everyTrue = _.every(this.get("children"), function (model) {
-                    return model.get("visibility") === true;
+                    return model.get("selected") === true;
                 });
                 // Wenn alle Child-Layer sichtbar sind
                 if (everyTrue === true) {
-                    this.set("isVisible", true);
+                    this.set("isSelected", true);
                 }
                 else {
-                    this.set("isVisible", false);
+                    this.set("isSelected", false);
                 }
             },
             "toggleSettings": function () {

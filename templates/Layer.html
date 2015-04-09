@@ -2,23 +2,23 @@
     <% if(settings === false) { %>
         <div class="folder-icons pull-left">
         <% if(visibility === true) { %>
-            <button type="button" class="btn-glyphicon check"><span class="glyphicon glyphicon-check"></span></button>
+            <button type="button" class="btn-glyphicon check" data-toggle="tooltip" data-placement="bottom" title="Layer ausschalten"><span class="glyphicon glyphicon-check"></span></button>
         <% } else { %>
-            <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked"></span></button>
+            <button type="button" class="btn-glyphicon unchecked" data-toggle="tooltip" data-placement="bottom" title="Layer einschalten"><span class="glyphicon glyphicon-unchecked"></span></button>
         <% } %>
         </div>
         <div class="pull-right">
             <button type="button" class="btn-glyphicon info" data-toggle="tooltip" data-placement="bottom" title="Metadaten"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
-            <button type="button" class="btn-glyphicon refresh"><span class="glyphicon glyphicon-cog"></span></button>
+            <button type="button" class="btn-glyphicon refresh" data-toggle="tooltip" data-placement="bottom" title="Einstellungen"><span class="glyphicon glyphicon-cog"></span></button>
         </div>
-        <div class="layer-name"><%= name %></div>
+        <div class="layer-name" style="padding-left: 2em; padding-right: 4em; cursor: pointer;"><%= name %></div>
     <% } else { %>
         <button type="button" class="btn-glyphicon"><span><small>Transparenz:</small></span></button>
-        <button type="button" class="btn-glyphicon plus"><span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px"></span></button>
+        <button type="button" class="btn-glyphicon plus" data-toggle="tooltip" data-placement="bottom" title="Transparenz erhöhen"><span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px"></span></button>
         <button type="button" class="btn-glyphicon"><span class="badge" style="margin-left: 5px; margin-right: 5px;"><%= transparence + '%'%></span></button>
-        <button type="button" class="btn-glyphicon minus"><span class="glyphicon glyphicon-minus-sign"></span></button>
-        <button type="button" class="btn-glyphicon down"><span style="margin-left: 25px;" class="glyphicon glyphicon-arrow-down"></span></button>
-        <button type="button" class="btn-glyphicon up"><span class="glyphicon glyphicon-arrow-up"></span></button>
+        <button type="button" class="btn-glyphicon minus" data-toggle="tooltip" data-placement="bottom" title="Transparenz verringern"><span class="glyphicon glyphicon-minus-sign"></span></button>
+        <button type="button" class="btn-glyphicon down" data-toggle="tooltip" data-placement="bottom" title="Ebene nach unten"><span style="margin-left: 25px;" class="glyphicon glyphicon-arrow-down"></span></button>
+        <button type="button" class="btn-glyphicon up" data-toggle="tooltip" data-placement="bottom" title="Ebene nach oben"><span class="glyphicon glyphicon-arrow-up"></span></button>
         <button type="button" class="btn-glyphicon refresh pull-right"><span class="glyphicon glyphicon-cog"></span></button>
     <% } %>
 </div>

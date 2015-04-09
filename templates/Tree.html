@@ -1,0 +1,25 @@
+<form class="form-horizontal treeSelectionForm">
+<div class="form-group form-group-sm">
+    <div class="col-md-4 col-sm-4 col-xs-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+        <span class="glyphicon glyphicon-triangle-bottom selectionFormButton"></span>
+        <span class="control-label selectionLabel">Kategorie</span>
+    </div>
+    <div class="col-md-5 col-sm-5 col-xs-5">
+        <select class="form-control">
+            <% _.each(topicList, function (topic) { %>
+                <option><%= topic %></option>
+            <% }); %>
+        </select>
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1">
+        <span class="glyphicon glyphicon-pushpin rotate-pin-back" style="padding: 6px; font-size:14px; cursor: pointer" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
+    </div>
+</div>
+</form>
+
+<div class="layer-selection">
+<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+    <span class="glyphicon glyphicon-triangle-bottom layer-selection-button"></span>
+    <span class="control-label layer-selection-label">Auswahl</span>
+</div>
+</div>

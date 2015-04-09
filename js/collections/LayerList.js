@@ -73,6 +73,14 @@ define([
                         if (_.has(element, "name")) {
                             modelsArray[index].name = element.name;
                         }
+                        // MinScale aus Config statt aus JSON
+                        if (_.has(element, "minScale")) {
+                            modelsArray[index].minScale = element.minScale;
+                        }
+                        // MaxScale aus Config statt aus JSON
+                        if (_.has(element, "maxScale")) {
+                            modelsArray[index].maxScale = element.maxScale;
+                        }
                         // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
                         if (layers.length > 1) {
                             var layerList = "";
@@ -135,11 +143,14 @@ define([
             EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
             EventBus.on("getVisibleWMSLayer", this.sendVisibleWMSLayer, this);
             EventBus.on("getAllVisibleLayer", this.sendAllVisibleLayer, this);
+            EventBus.on("getAllSelectedLayer", this.sendAllSelectedLayer, this);
             EventBus.on("currentMapScale", this.setMapScaleForAll, this);
             // EventBus.on("showLayerInTree", this.showLayerInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
+            this.listenTo(this, "add", this.addLayerToMap);
+            this.listenTo(this, "remove", this.removeLayerFromMap);
 
             this.fetch({
                 cache: false,
@@ -323,25 +334,37 @@ define([
             EventBus.trigger("sendAllVisibleLayer", this.getAllVisibleLayer());
         },
         /**
-        * Gibt alle Sichtbaren Layer zurück.
+         *
+         */
+        sendAllSelectedLayer: function () {
+            EventBus.trigger("sendAllSelectedLayer", this.getAllSelectedLayer());
+        },
+        /**
+        * Gibt alle sichtbaren Layer zurück.
         *
         */
         getVisibleWMSLayer: function () {
             return this.where({visibility: true, typ: "WMS"});
         },
         /**
-        * Gibt alle Sichtbaren WFS-Layer zurück.
+        * Gibt alle sichtbaren WFS-Layer zurück.
         *
         */
         getVisibleWFSLayer: function () {
             return this.where({visibility: true, typ: "WFS"});
         },
         /**
-        * Gibt alle Sichtbaren Layer zurück.
+        * Gibt alle sichtbaren Layer zurück.
         *
         */
         getAllVisibleLayer: function () {
             return this.where({visibility: true});
+        },
+        /**
+         * Gibt alle selektierten Layer zurück.
+         */
+        getAllSelectedLayer: function () {
+            return this.where({selected: true});
         },
         /**
          *
@@ -356,7 +379,47 @@ define([
              this.forEach(function (model) {
                  model.set("currentScale", scale);
              })
-        }
+        },
+        /**
+         * Schiebt das Model in der Collection eine Position nach oben.
+         * @param {Backbone.Model} model - Layer-Model
+         */
+         moveModelUp: function (model) {
+            var fromIndex = this.indexOf(model),
+                toIndex = fromIndex + 1;
+
+            if (fromIndex < this.length - 1) {
+                this.remove(model);
+                this.add(model, {at: toIndex});
+            }
+        },
+        /**
+         * Schiebt das Model in der Collection eine Position nach unten.
+         * @param {Backbone.Model} model - Layer-Model
+         */
+         moveModelDown: function (model) {
+            var fromIndex = this.indexOf(model),
+                toIndex = fromIndex - 1;
+
+            if (fromIndex > 0) {
+                this.remove(model);
+                this.add(model, {at: toIndex});
+            }
+        },
+        /**
+         * Triggert das Event "addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).
+         * @param {Backbone.Model} model - Layer-Model
+         */
+         addLayerToMap: function (model) {
+            EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+        },
+        /**
+         * Triggert das Event "removeLayer". Übergibt das "layer"-Attribut vom Model (ol.layer).
+         * @param {Backbone.Model} model - Layer-Model
+         */
+        removeLayerFromMap: function (model) {
+           EventBus.trigger("removeLayer", model.get("layer"));
+       }
     });
 
     return new LayerList();
