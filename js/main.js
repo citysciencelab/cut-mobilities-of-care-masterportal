@@ -101,8 +101,13 @@ function loadMap () {
       }
 
       if (Config.footer && Config.footer === true) {
-          require(["modules/footer/view", "modules/quickhelp/view"], function (FooterView, QuickHelpView) {
+          require(["modules/footer/view",], function (FooterView) {
               new FooterView();
+          });
+      }
+
+      if (Config.quickHelp && Config.quickHelp === true) {
+          require(["modules/quickhelp/view"], function (QuickHelpView) {
               new QuickHelpView();
           });
       }

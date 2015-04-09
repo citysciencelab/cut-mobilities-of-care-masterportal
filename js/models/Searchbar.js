@@ -88,6 +88,14 @@ define([
                     }
                 }
 
+                // Quick-Help
+                if (Config.quickHelp && Config.quickHelp === true) {
+                    this.set("quickHelp", true);
+                }
+                else {
+                    this.set("quickHelp", false);
+                }
+
                 // Marker zur Visualisierung eines Punktes
                 this.set("marker", new ol.Overlay({
                     positioning: "bottom-center",
