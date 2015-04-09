@@ -14,8 +14,8 @@ define([
         		this.registerEvents();
         },
         registerEvents: function () {
-        		// fired beim Öffnen der Seite
-	        	this.registerClick();			
+        		// fired beim Ã–ffnen der Seite
+	        	this.registerClick();
 	        	// fired beim Ausschnitt-Move und Klickabfragen auf Features
 						$('#map').click(function() {
 						  this.registerClick();
@@ -25,14 +25,14 @@ define([
 							$('#tree').click(function() {
 							  this.registerClick();
 							}.bind(this));
-						}					
+						}
 						// fired beim ToolChange
 						if ($('#tools').length > 0) {
 							$('#tools').click(function() {
 							  this.registerClick();
 							}.bind(this));
 						}
-						// fired beim Öffnen der Routenberechnung
+						// fired beim Ã–ffnen der Routenberechnung
 						if ($('.routingModul').length > 0) {
 							$('.routingModul').click(function() {
 							  this.registerClick();
