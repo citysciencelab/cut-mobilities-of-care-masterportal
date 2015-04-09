@@ -34,7 +34,8 @@ require.config({
         views: 'views',
         models: 'models',
         collections: 'collections',
-        templates: '../templates'
+        templates: '../templates',
+        videojs: '/libs/video-js/video.dev'
     },
     shim: {
         bootstrap: {
