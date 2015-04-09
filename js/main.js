@@ -100,8 +100,9 @@ function loadMap () {
       }
 
       if (Config.footer && Config.footer === true) {
-          require(["modules/footer/view"], function (FooterView) {
+          require(["modules/footer/view", "modules/quickhelp/view"], function (FooterView, QuickHelpView) {
               new FooterView();
+              new QuickHelpView();
           });
       }
 

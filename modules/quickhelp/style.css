@@ -1,0 +1,48 @@
+.quick-help-window {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    background-color: rgb(255, 255, 255);
+    width: 600px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 60px 10px 30px 10px;
+    display: none;
+    color: rgb(150, 150, 150);
+    z-index: 2000;
+}
+
+.quick-help-window > .header {
+    cursor: move;
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    padding: 10px 6px;
+    font-size: 16px;
+    border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.quick-help-window > .header > .glyphicon-remove {
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.quick-help-window > .content {
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.quick-help-window > .content h3 {
+    margin-top: 0;
+}
+
+.quick-help-window > .content > img {
+    max-width: 540px;
+    border: 1px solid rgb(215, 215, 215);
+    margin: 5px 14px 30px 14px;
+}
