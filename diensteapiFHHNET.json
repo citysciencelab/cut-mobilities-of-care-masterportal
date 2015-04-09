@@ -28545,7 +28545,7 @@
    },
    {
       "id" : "1416",
-      "name" : "Aubs Änderungen",
+      "name" : "Arten- und Biotopschutz, Änderungsübersicht",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_NR_AuBS/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "7",
@@ -28558,8 +28558,10 @@
       "minScale" : "0",
       "maxScale" : "350000",
       "gfiAttributes" : {
-         "O_BEZEICHNUNG" : "Biotopentwicklungsraum",
-         "STAND_BEARBEITUNG" : "Bearbeitungsstand",
+         "Aenderung" : "Änderung",
+         "Dokument" : "Dokument",
+         "Typ" : "Typ",
+         "APRO_PFAD" : "Änderungsdokument",
          "Shape_Area" : "Größe"
       },
       "layerAttribution" : "nicht vorhanden",
@@ -36307,7 +36309,7 @@
    },
    {
       "id" : "2042",
-      "name" : "Änderungsübersicht zum Flächennutzungsplan",
+      "name" : "Flächennutzungsplan, Änderungsübersicht",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_FNP_Aend/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "0",
@@ -37012,7 +37014,7 @@
    },
    {
       "id" : "2117",
-      "name" : "Änderungsübersicht zum Landschaftsprogramm",
+      "name" : "Landschaftsprogramm, Änderungsübersicht",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_LP_LaPro_Aend/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "0",

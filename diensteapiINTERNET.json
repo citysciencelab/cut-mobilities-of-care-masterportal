@@ -27462,7 +27462,7 @@
    },
    {
       "id" : "1416",
-      "name" : "Aubs Änderungen",
+      "name" : "Arten- und Biotopschutz, Änderungsübersicht",
       "url" : "http://geodienste-hamburg.de/HH_WMS_AuBS",
       "typ" : "WMS",
       "layers" : "7",
@@ -27475,9 +27475,11 @@
       "minScale" : "0",
       "maxScale" : "350000",
       "gfiAttributes" : {
-         "O_BEZEICHNUNG" : "Biotopentwicklungsraum",
-         "STAND_BEARBEITUNG" : "Bearbeitungsstand",
-         "Shape_Area" : "Größe"
+          "Aenderung" : "Änderung",
+          "Dokument" : "Dokument",
+          "Typ" : "Typ",
+          "APRO_PFAD" : "Änderungsdokument",
+          "Shape_Area" : "Größe"
       },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
@@ -35439,7 +35441,7 @@
    },
    {
       "id" : "2042",
-      "name" : "Änderungsübersicht zum Flächennutzungsplan",
+      "name" : "Flächennutzungsplan, Änderungsübersicht",
       "url" : "http://geodienste-hamburg.de/HH_WMS_FNP_Aend",
       "typ" : "WMS",
       "layers" : "0",
@@ -36069,7 +36071,7 @@
    },
    {
       "id" : "2117",
-      "name" : "Änderungsübersicht zum Landschaftsprogramm",
+      "name" : "Landschaftsprogramm, Änderungsübersicht",
       "url" : "http://geodienste-hamburg.de/HH_WMS_LaPro_Aend",
       "typ" : "WMS",
       "layers" : "0",
