@@ -4,8 +4,9 @@ define([
     'backbone',
     'collections/LayerList',
     'views/LayerView',
-    'bootstrap'
-], function ($, _, Backbone, LayerList, LayerView) {
+    'bootstrap',
+    'eventbus'
+], function ($, _, Backbone, LayerList, LayerView, Bootstrap, EventBus) {
 
     var LayerListView = Backbone.View.extend({
         collection: LayerList,
@@ -19,6 +20,7 @@ define([
         render: function () {
             this.$el.html('');
             this.collection.forEach(this.addTreeNode, this);
+            EventBus.trigger('registerLayerTreeInClickCounter', this.$el);
         },
         addTreeNode: function (node) {
             var layerView = new LayerView({model: node});
