@@ -45,7 +45,6 @@ define([
                     }
                 }
                 this.checkConfigForEventAttribution(layer);
-                layer.reload();
             }
         },
         /*
