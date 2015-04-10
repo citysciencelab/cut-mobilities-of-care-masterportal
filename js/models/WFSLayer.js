@@ -36,25 +36,25 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
-                    var docEle = data.documentElement.nodeName;
-                    if (docEle.indexOf('Exception') != -1) {
-                        alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
-                        return;
+                    try {                        
+                        var wfsReader = new ol.format.WFS({
+                            featureNS : this.get('featureNS'),
+                            featureType : this.get('featureType')
+                        });
+                        if (this.get('source').distance_) { // Erkennungszeichen für Clustersource
+                            this.get('source').source_.addFeatures(wfsReader.readFeatures(data));
+                        }
+                        else {
+                            this.get('source').addFeatures(wfsReader.readFeatures(data));
+                        }
                     }
-                    var wfsReader = new ol.format.WFS({
-                        featureNS : this.get('featureNS'),
-                        featureType : this.get('featureType')
-                    });
-                    if (this.get('source').distance_) { // Erkennungszeichen für Clustersource
-                        this.get('source').source_.addFeatures(wfsReader.readFeatures(data));
-                    }
-                    else {
-                        this.get('source').addFeatures(wfsReader.readFeatures(data));
+                    catch(e) {
+                        alert('Fehlermeldung beim Laden von Daten: \n' + e.message);
                     }
                 },
                 error: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
-                    alert('Fehlermeldung beim Laden von Daten: \n' + data.responseText);
+                    alert('Fehler beim Laden von Daten: \n' + data.responseText);
                 }
             });
         },
