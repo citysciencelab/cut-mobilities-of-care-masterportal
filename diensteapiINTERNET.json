@@ -1,4 +1,4 @@
-[
+﻿[
    {
       "id" : "36",
       "name" : "Stadtteile",
@@ -27462,7 +27462,7 @@
    },
    {
       "id" : "1416",
-      "name" : "Aubs Änderungen",
+      "name" : "Arten- und Biotopschutz, Änderungsübersicht",
       "url" : "http://geodienste-hamburg.de/HH_WMS_AuBS",
       "typ" : "WMS",
       "layers" : "7",
@@ -27475,8 +27475,10 @@
       "minScale" : "0",
       "maxScale" : "350000",
       "gfiAttributes" : {
-         "O_BEZEICHNUNG" : "Biotopentwicklungsraum",
-         "STAND_BEARBEITUNG" : "Bearbeitungsstand",
+         "Aenderung" : "Änderung",
+         "Dokument" : "Dokument",
+         "Typ" : "Typ",
+         "APRO_PFAD" : "Änderungsdokument",
          "Shape_Area" : "Größe"
       },
       "layerAttribution" : "nicht vorhanden",
@@ -35439,7 +35441,7 @@
    },
    {
       "id" : "2042",
-      "name" : "Änderungsübersicht zum Flächennutzungsplan",
+      "name" : "Flächennutzungsplan, Änderungsübersicht",
       "url" : "http://geodienste-hamburg.de/HH_WMS_FNP_Aend",
       "typ" : "WMS",
       "layers" : "0",
@@ -36069,7 +36071,7 @@
    },
    {
       "id" : "2117",
-      "name" : "Änderungsübersicht zum Landschaftsprogramm",
+      "name" : "Landschaftsprogramm, Änderungsübersicht",
       "url" : "http://geodienste-hamburg.de/HH_WMS_LaPro_Aend",
       "typ" : "WMS",
       "layers" : "0",
@@ -36486,7 +36488,19 @@
       "layerAttribution" : "",
       "cache" : false,
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2158",
@@ -36506,7 +36520,19 @@
       "layerAttribution" : "",
       "cache" : false,
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2159",
@@ -36526,7 +36552,19 @@
       "layerAttribution" : "",
       "cache" : false,
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2160",
@@ -36546,7 +36584,19 @@
       "layerAttribution" : "",
       "cache" : false,
       "legendURL" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "9",
@@ -46536,7 +46586,7 @@
       "featureType" : "Strassenachse",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -46566,7 +46616,7 @@
       "featureType" : "Europastrassen",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -46686,7 +46736,7 @@
       "featureType" : "Fahrwegachse",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -46716,7 +46766,7 @@
       "featureType" : "Gemeindestrassen",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -46776,7 +46826,7 @@
       "featureType" : "Nullpunkte",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -46806,7 +46856,7 @@
       "featureType" : "Strassennamen_G",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -46866,7 +46916,7 @@
       "featureType" : "Bundesstrassen",
       "format" : "",
       "version" : "1.1.0",
-      "featureNS" : "http://geodienste-hamburg.de/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
       "datasets" : [
@@ -47476,15 +47526,20 @@
    },
    {
       "id" : "2156",
-      "name" : "App:verkehr A7deckel",
+      "name" : "A7-Deckel",
       "url" : "http://geodienste-hamburg.de/HH_WFS_BWVI_opendata",
       "typ" : "WFS",
       "featureType" : "verkehr_a7deckel",
-      "format" : "",
+      "format" : "nicht vorhanden",
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "",
+      "gfiAttributes" : {
+         "name" : "Bezeichnung",
+         "datum" : "Baumaßnahmen",
+         "beschreibung" : "Beschreibung",
+         "moreurl" : "Weitere Infos"
+      },
+      "layerAttribution" : "nicht vorhanden",
       "datasets" : [
          {
             "md_id" : "B0E7BE2F-CEF1-4837-AC10-DE7FBBBA9D3A",
@@ -47510,7 +47565,19 @@
       "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Zaehlstellen_Pegel",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2162",
@@ -47523,7 +47590,19 @@
       "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Zaehlstellen_Pegel",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2163",
@@ -47536,7 +47615,19 @@
       "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Zaehlstellen_Pegel",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    },
    {
       "id" : "2164",
@@ -47549,6 +47640,18 @@
       "featureNS" : "http://geodienste-hamburg.de/HH_WFS_Zaehlstellen_Pegel",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "7E0B7C8A-20D5-4BFB-A9DA-C892638F74C8",
+            "rs_id" : "HMDK#04ede102-67cd-4fc1-b2ca-1716845b695a",
+            "md_name" : "Verkehrszählstellen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
    }
 ]

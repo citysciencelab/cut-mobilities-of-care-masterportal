@@ -11,9 +11,11 @@ define([
             subclass : 'Icon',
             // für Icon
             imagename : 'unknown.png',
-            imagewidth : 10,
-            imageheight : 10,
+            imagewidth : 1,
+            imageheight : 1,
             imagescale : 1,
+            imageoffsetx: 0,
+            imageoffsety: 0,
             // für Circle
             circleradius : 10,
             circlefillcolor : [0, 153, 255, 1],
@@ -114,11 +116,15 @@ define([
                 var width = this.get('imagewidth');
                 var height = this.get('imageheight');
                 var scale = parseFloat(this.get('imagescale'));
+                var offset = [parseFloat(this.get('imageoffsetx')), parseFloat(this.get('imageoffsety'))];
                 var imagestyle = new ol.style.Icon({
                     src: src,
                     width: width,
                     height: height,
-                    scale: scale
+                    scale: scale,
+                    anchor: offset,                    
+//                    anchorXUnits: 'pixels',
+//                    anchorYUnits: 'pixels'
                 });
             }
             else if (this.get('subclass') == 'IconWithText') {

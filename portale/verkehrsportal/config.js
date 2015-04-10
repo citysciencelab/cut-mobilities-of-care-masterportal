@@ -67,7 +67,8 @@ define(function () {
             {id: '2119', visible: false, style: '2119', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '2092', visible: false},
             {id: '2128', visible: false, style: '2128', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2132', visible: false, style: '2132', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
+            {id: '2132', visible: false, style: '2132', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
+            {id: '2156', visible: true, style: '2156', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'name', routable: false}
         ],
         attributions: true,
         clickCounter: {
