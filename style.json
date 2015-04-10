@@ -561,7 +561,7 @@
         "styleFieldValue" : "Langenfelder Brücke",
         "subclass" : "Icon",
         "imagename" : "Hinweis-hellgrau.svg",
-        "imagescale" : 0.45,
+        "imagescale" : 0.4,
         "imageoffsetx" : 0.45,
         "imageoffsety" : 0.60
     }
