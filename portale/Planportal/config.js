@@ -20,8 +20,9 @@ define(function () {
         // {id: "1152,1153,1154,1155,1156,1157,1158,1159,1160,1161,1162,1163", visible: false, name: "Landschaftsprogramm"},
         {id: "1749", visible: false, name: "Landschaftsprogramm"},
         {id: "2117", visible: false},
-        {id: "1748", visible: false},
-        // {id: "1409,1410,1411,1412,1413,1414,1415,1416", visible: false},
+        // {id: "1748", visible: false}, ehemals APRO Cache
+        {id: "1409,1410,1411,1412,1413,1414,1415", visible: false},
+        {id: "1416", visible: false},
         {id: "433,434", visible: false, name: "Soziale Erhaltungsverordnungen"},
         {id: "1205", visible: false},
         {id: "1562", visible: true},

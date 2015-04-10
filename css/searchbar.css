@@ -2,6 +2,9 @@
     #searchbar {
         margin-top: 8px;
         margin-bottom: 8px;
+        border: 0;
+        padding: 0;
+        margin-left: 15px;
     }
     #searchForm {
         border: 0;
@@ -13,6 +16,7 @@
 @media (min-width: 768px) {
     #searchbar {
         float: right;
+        /*min-width: 400px;*/
         /*margin-right: 20px;*/
         /*width: 100%;*/
     }
@@ -35,8 +39,9 @@
 
 .btn-deleteSearch {
     border-left-width: 0;
-    border-right-width: 2px;
+    border-right-width: 1px;
     color: #cdcdcd;
+    border-color: rgb(204, 204, 204);
 }
 
 .btn-deleteSearch:hover {
@@ -46,7 +51,7 @@
 #searchInput {
     box-shadow: none;
     font-size: 12px;
-    /*min-width: 300px;*/
+    min-width: 300px;
 }
 
 #searchInput::-ms-clear {
@@ -86,6 +91,15 @@
     padding-left: 10px;
 }
 
+.dropdown-menu-search li.type {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
 .dropdown-menu-search li:hover {
     cursor: pointer;
     background-color: #efefef;
@@ -95,4 +109,46 @@
     color: #d42132;
     font-size: 38px;
     display: none;
+}
+
+.btn-search > .glyphicon-search {
+    font-size: 12px;
+}
+
+.btn-search {
+    background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    /*border-left: 0;*/
+}
+
+.btn-search:hover {
+    background: rgb(255, 255, 255);
+    border-color: rgb(204, 204, 204);
+}
+
+.btn-deleteSearch > .glyphicon-remove {
+    font-size: 12px;
+}
+
+.btn-search-question {
+    border: 0;
+    background: 0;
+    padding: 0;
+    /*padding-left: 10px;*/
+    margin-top: 3px;
+    /*display: none;*/
+    opacity: 0;
+}
+
+.btn-search-question > span {
+    font-size: 14px;
+    color: rgb(82, 82, 82);
+    opacity: 0.6;
+}
+
+.btn-search-question > span:hover {
+    opacity: 1;
 }

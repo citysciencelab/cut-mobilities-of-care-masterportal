@@ -29,7 +29,8 @@ define([
         var SearchbarView = Backbone.View.extend({
             "model": Searchbar,
             "id": "searchbar",
-            "className": "col-md-5 col-sm-6 col-xs-9",
+            // tagName: "form",
+            "className": "navbar-form col-xs-10",
             "template": _.template(SearchbarTemplate),
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);
@@ -56,9 +57,11 @@ define([
                 "click .list-group-item.hit": "zoomTo",
                 "mouseover .list-group-item.hit": "showMarker",
                 "mouseleave .list-group-item.hit": "hideMarker",
-                "click .list-group-item.type": "collapseHits"
+                "click .list-group-item.type": "collapseHits",
+                "mouseover": "showHelp",
+                "mouseleave": "hideHelp",
+                "click .glyphicon-question-sign": "showHelpWindow"
             },
-
             /**
             *
             */
@@ -401,6 +404,15 @@ define([
                 var strLength= element.val().length * 2;
                 element.focus();
                 element[0].setSelectionRange(strLength, strLength);
+            },
+            showHelp: function () {
+                $(".btn-search-question").css("opacity", "1");
+            },
+            hideHelp: function () {
+                $(".btn-search-question").css("opacity", "0");
+            },
+            showHelpWindow: function () {
+                EventBus.trigger("showWindowHelp", "search");
             }
         });
 

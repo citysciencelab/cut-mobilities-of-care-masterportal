@@ -1,15 +1,17 @@
 #toggleButton {
     position: fixed;
-    right: 17px;
+    right: 15px;
     z-index: 999;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 }
 
 #toggleButton:hover {
     cursor: pointer;
+    opacity: 0.6;
 }
 
 .glyphicon-up, .glyphicon-down {
-    font-size: 30px;
+    font-size: 24px;
     color: #f3f3f3;
     background-color: #d42132;
     border-color: #d42132;
@@ -18,9 +20,9 @@
 }
 
 .glyphicon-up {
-    border-width: 5px 4px 8px 6px;
+    border-width: 5px 4px 6px 6px;
 }
 
 .glyphicon-down {
-    border-width: 8px 6px 5px 4px;
+    border-width: 7px 4px 4px 6px;
 }
