@@ -17,11 +17,11 @@ define([
             EventBus.trigger('getMap', this);
             EventBus.on('startEventAttribution', this.startEventAttribution, this); //Beim erneuten sichtbar schalten des Layers wird die Funktion wieder ausgeführt
             EventBus.on('stopEventAttribution', this.stopEventAttribution, this); //Beim ausschalten des Layers wird die Funktion ausgeführt
-            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
-            EventBus.trigger('getBackboneLayerForAttribution', this);
+            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);            
         },
         setMap: function (map) {
             this.set('map', map);
+            EventBus.trigger('getBackboneLayerForAttribution', this);
         },
         /*
         * Diese Funktion wird für jeden Backbone-Layer ausgeführt und startet
@@ -40,8 +40,13 @@ define([
                     Mit ol3-debug kann setAttributions() verwendet werden, mit ol3 nur .attributions =
                     */
                     layer.get('layer').getSource().attributions_ = layerattributions;
+//                    layer.set('olAttribution', layerattributions);
                     if (this.get('alreadySet') == false) {
                         this.addAttributionControl();
+                    }
+                    // Erzwinge das Neuladen des Layers. Problem beim Verkehrslagelayer, der untiled abgefragt zu lange braucht um zu antworten
+                    if (layer.get('visibility') === true) {
+                        layer.reload();
                     }
                 }
                 this.checkConfigForEventAttribution(layer);

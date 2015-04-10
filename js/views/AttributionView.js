@@ -11,7 +11,7 @@ define([
             $(window).resize($.proxy(function () {
                 this.render();
             }, this));
-            this.render();
+            this.listenTo(this.model, 'change:attribution', this.render);
         },
         render: function () {
             if (window.innerWidth < 768) {

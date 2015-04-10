@@ -32,9 +32,6 @@ define([
 
             this.set("settings", false);
 
-            EventBus.on("getBackboneLayerForAttribution", function() {
-                EventBus.trigger("returnBackboneLayerForAttribution", this);
-            }, this);
             // EventBus.on("currentMapScale", function () {
             //     console.log(8);
             // });
@@ -43,7 +40,9 @@ define([
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
             this.listenTo(this, "change:currentScale", this.setScaleRange);
-
+            EventBus.on("getBackboneLayerForAttribution", function() {
+                EventBus.trigger("returnBackboneLayerForAttribution", this);
+            }, this);
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.

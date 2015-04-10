@@ -67,9 +67,9 @@ define([
             this.set('searchField', layerIDs.searchField);
             this.set('styleField', layerIDs.styleField);
             this.set('styleLabelField', layerIDs.styleLabelField);
-
             this.set('source', new ol.source.Vector({
-                projection: proj25832
+                projection: proj25832,
+                attributions: []
             }));
             this.styling(this.get('source'), layerIDs);
         },
