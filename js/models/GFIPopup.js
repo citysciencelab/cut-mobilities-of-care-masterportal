@@ -246,6 +246,9 @@ define([
             else if (params.url.indexOf('http://geodienste-hamburg.de') != -1) {
                 url = params.url.replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
             }
+            else if (params.url.indexOf('http://wscd0096') != -1) {
+                url = params.url;
+            }
             // Für B-Pläne wird Feature_Count auf 3 gesetzt
             if (params.name === "Festgestellte Bebauungspläne") {
                 data = "FEATURE_COUNT=3";
