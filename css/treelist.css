@@ -211,11 +211,20 @@
     .info-button > span {
         padding: 8px;
     }
+    .layer-name {
+        font-size: 14px;
+    }
+
+
+
 }
 
 @media (min-width: 768px) {
     .info-button > span {
         padding: 10px;
+    }
+    .layer-name {
+        font-size: 12px;
     }
 }
 
@@ -273,7 +282,6 @@
 .layer-name {
     padding-left: 2em;
     padding-right: 5em;
-    font-size: 12px;
 }
 
 .layer-name:hover {
