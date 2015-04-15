@@ -226,6 +226,9 @@
     .layer-name {
         font-size: 12px;
     }
+    .layerlistitem {
+        width: 24em;
+    }
 }
 
 
