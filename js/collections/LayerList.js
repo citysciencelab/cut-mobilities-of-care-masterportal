@@ -38,7 +38,14 @@ define([
                     // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(",");
-                        modelsArray.push(_.findWhere(response, {id: layers[0]}));
+                        var layerinfos = _.findWhere(response, {id: layers[0]});
+                        if (layerinfos) {
+                            modelsArray.push(layerinfos);
+                        }
+                        else {
+                            alert ('Layerbeschreibung ' + layers[0] + ' nicht verfügbar.');
+                            return;
+                        }
                         // default: Layer ist nicht routable, Punktabfrage kann nicht fürs Routing benutzt werden
                         if (_.has(element, "routable")) {
                             modelsArray[index].routable = element.routable;
@@ -112,7 +119,14 @@ define([
                         var modelChildren = [];
                         //Childlayerattributierung
                         _.each(element.id, function(childlayer) {
-                            modelChildren.push(_.findWhere(response, {id: childlayer.id}));
+                            var layerinfos = _.findWhere(response, {id: childlayer.id});
+                            if (layerinfos) {
+                                modelChildren.push(layerinfos);
+                            }
+                            else {
+                                alert ('Layerbeschreibung ' + childlayer.id + ' nicht verfügbar.');
+                                return;
+                            }
                         });
                         groupModel.layerdefinitions = modelChildren;
                         // default: Layer wird im Themenbaum angezeigt
