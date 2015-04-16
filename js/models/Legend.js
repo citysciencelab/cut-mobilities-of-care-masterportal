@@ -39,9 +39,10 @@ define([
                         this.get('layerid').push(element.layerID);
                         this.set('typ',element.typ);
                         if(element.legendURL!='ignore'&&layers.length==1){
+                            console.log(element);
                             this.get('layername').push(element.name);
                             if(element.legendURL===""||!element.legendURL){
-                                var url=element.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+element.layers;
+                                var url=element.source+'?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER='+element.layers;
                                 this.get('img').push(url);
                             }
                             else{
@@ -62,7 +63,7 @@ define([
                             }
                             else{
                                 _.each(layers, function(layersgroup, layersindex){
-                                    url.push(element.source+'?Version=1.1.1&Request=GetLegendGraphic&Format=image/png&Layer='+layers[layersindex]);
+                                    url.push(element.source+'?Version=1.1.1&SERVICE=WMS&Request=GetLegendGraphic&Format=image/png&Layer='+layers[layersindex]);
                                 },this);
                             }
                             this.set('img',url);
