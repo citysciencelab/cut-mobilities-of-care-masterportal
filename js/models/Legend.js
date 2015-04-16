@@ -39,7 +39,6 @@ define([
                         this.get('layerid').push(element.layerID);
                         this.set('typ',element.typ);
                         if(element.legendURL!='ignore'&&layers.length==1){
-                            console.log(element);
                             this.get('layername').push(element.name);
                             if(element.legendURL===""||!element.legendURL){
                                 var url=element.source+'?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER='+element.layers;
