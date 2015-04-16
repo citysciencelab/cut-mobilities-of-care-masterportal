@@ -3,7 +3,7 @@ require.config({
     paths: {
         openlayers: '../_libs/openlayers/js/ol.amd',
         jquery: '../components/jquery/dist/jquery',
-        jqueryui: '/libs/jquery-ui-1.11.4/jquery-ui.min',
+        jqueryui: '../components/jquery-ui/jquery-ui.min',
         underscore: '../components/underscore/underscore',
         backbone: '../components/backbone/backbone',
         text: '../components/requirejs-text/text',
@@ -15,7 +15,8 @@ require.config({
         collections: '../js/collections',
         config: '../test/test-config/portal-config',
         app: '../js/app',
-        templates: '../templates'
+        templates: '../templates',
+        modules: '../modules'
     },
     shim: {
         bootstrap: {
