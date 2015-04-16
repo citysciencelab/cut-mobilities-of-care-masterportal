@@ -1,10 +1,10 @@
 {
-  "name": "lgv-main",
+  "name": "lgv",
   "version": "0.1.0",
   "authors": [
-    "Andreas Klein <mail@andreasklein.org>"
+    "LGV G12"
   ],
-  "description": "LGV Hamburg Geo Application",
+  "description": "LGV G12 Master",
   "main": "main.js",
   "moduleType": [
     "amd"
@@ -25,7 +25,8 @@
     "proj4": "~2.3.4",
     "requirejs": "~2.1.16",
     "requirejs-text": "~2.0.14",
-    "underscore": "~1.8.2"
+    "underscore": "~1.8.2",
+    "jquery-ui": "~1.11.4"
   },
   "devDependencies": {
     "build-config": "https://bitbucket.org/lgv-team/build-config.git#latest"
