@@ -5,9 +5,13 @@ define([
     'eventbus',
     'config'
 ], function (_, Backbone, ol, EventBus, Config) {
+
+    //lade relativ von requirejs baseurl
+    var baseUrl = require.toUrl('').split('?')[0];
+
     var WFSStyle = Backbone.Model.extend({
         defaults: {
-            imagepath : Config.locations.baseUrl + '../img/',
+            imagepath : baseUrl + '../img/',
             subclass : 'Icon',
             // für Icon
             imagename : 'unknown.png',

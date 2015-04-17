@@ -5,6 +5,9 @@ define([
     'config'
 ], function (_, Backbone, WFSStyle, Config) {
 
+    //interpretiere Pfade relativ von requirejs baseUrl
+    var baseUrl = require.toUrl('').split('?')[0];
+
     var StyleList = Backbone.Collection.extend({
         model: WFSStyle,
         parse: function (response) {
@@ -39,13 +42,13 @@ define([
                 }
             });
         },
-        url: Config.styleConf,
+        url: baseUrl + Config.styleConf,
         initialize: function () {
             this.fetch({
                 cache: false,
                 async: false,
                 error: function () {
-                    alert('Fehler beim Laden der ' + Config.styleConf);
+                    alert('Fehler beim Laden von: ' + baseUrl + Config.styleConf);
                 },
                 success: function (collection) {
 //                    console.log(collection);

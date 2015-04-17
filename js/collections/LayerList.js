@@ -8,9 +8,12 @@ define([
     "eventbus"
     ], function (_, Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus) {
 
+    //interpretiere Pfade relativ von requirejs baseurl
+    var baseUrl = require.toUrl('').split('?')[0];
+
     var LayerList = Backbone.Collection.extend({
         // URL der DiensteAPI
-        url: Config.layerConf,
+        url: baseUrl + Config.layerConf,
         model: function (attrs, options) {
             if (attrs.typ === "WMS") {
                 return new WMSLayer(attrs, options);
@@ -156,7 +159,7 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Parsen " + Config.layerConf);
+                    alert("Fehler beim Laden von: " + baseUrl + Config.layerConf);
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)

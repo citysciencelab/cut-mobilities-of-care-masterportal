@@ -6,8 +6,11 @@ define([
     "eventbus"
     ], function (_, Backbone, TreeNode, Config, EventBus) {
 
+        //interpretiere Pfade relativ von requirejs baseurl
+        var baseUrl = require.toUrl('').split('?')[0];
+
         var TreeList = Backbone.Collection.extend({
-            "url": Config.categoryConf,
+            "url": baseUrl + Config.categoryConf,
             "model": TreeNode,
             "initialize": function () {
                 EventBus.on("showLayerInTree", this.showLayerInTree, this);
@@ -48,7 +51,7 @@ define([
                     cache: false,
                     async: false,
                     error: function () {
-                        alert("Fehler beim Parsen");
+                        alert("Fehler beim Parsen von: " + baseUrl + Config.categoryConf);
                     }
                 });
             },
