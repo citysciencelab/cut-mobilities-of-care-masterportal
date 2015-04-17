@@ -2,7 +2,7 @@
 
 ## Local Development Setup
 
-Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.
+Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.  Über Rechtsklick Computer/Einstellungen/Erweiterte Systemeinstellungen/Umgebungsvariablen/Systemvariablen
 
 Testen in neu geöffneter cmd:
 ```
@@ -121,7 +121,7 @@ Unser Repository irgendwohin klonen. Zurzeit noch das lokale auf G:.
 # git clone G:\AG_GeoDaten_Anwendungen\Projekte\Master-Portal\lgv.git
 ```
 
-und den branch merge/bitbucket-local-dev auschecken
+in das erstellte Verzeichnis wechseln und den branch merge/bitbucket-local-dev auschecken
 
 ```
 # git checkout merge/bitbucket-local-dev
