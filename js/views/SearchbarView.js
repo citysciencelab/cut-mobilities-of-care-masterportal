@@ -82,7 +82,10 @@ define([
             "renderRecommendedList": function () {
                 if (this.model.get("isHitListReady") === true) {
                     var attr = this.model.toJSON();
-                    $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                    //sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+                    //$("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                    var template = _.template(SearchbarRecommendedListTemplate);
+                    $("ul.dropdown-menu-search").html(template(attr));
                 }
                 if (Config.searchBar.initString !== undefined) {   // workaround für die initiale Suche von B-Plänen
                     this.model.set("initString", Config.searchBar.initString);
@@ -107,7 +110,10 @@ define([
                     else {
                         this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
                         var attr = this.model.toJSON();
-                        $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
+                        //sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+                        //$("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
+                        var template = _.template(SearchbarHitListTemplate);
+                        $("ul.dropdown-menu-search").html(template(attr));
                     }
                 }
             },
