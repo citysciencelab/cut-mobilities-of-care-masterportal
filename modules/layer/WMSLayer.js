@@ -28,6 +28,8 @@ define([
                 var format = 'image/png';
             }
             var params = {
+                't' : new Date().getMilliseconds(),
+                'zufall' : Math.random(),
                 'LAYERS': this.get('layers'),
                 'FORMAT': format,
                 'VERSION': version,
@@ -57,6 +59,7 @@ define([
             if (this.get('singleTile') !== true) {
                 this.set('source', new ol.source.TileWMS({
                     url: this.get('url'),
+                    attributions: this.get('olAttribution'),
                     gutter: this.get('gutter'),
                     params: params,
                     tileGrid: new ol.tilegrid.TileGrid({
@@ -81,6 +84,7 @@ define([
             else {
                 this.set('source', new ol.source.ImageWMS({
                     url: this.get('url'),
+                    attributions: this.get('olAttribution'),
                     params: params,
                     resolutions: [
                         66.14614761460263,

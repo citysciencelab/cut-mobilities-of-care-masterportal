@@ -69,9 +69,23 @@ define([
             this.set('styleLabelField', layerIDs.styleLabelField);
             this.set('source', new ol.source.Vector({
                 projection: proj25832,
-                attributions: []
+                attributions: this.get('olAttribution')
             }));
             this.styling(this.get('source'), layerIDs);
+        },
+        /**
+         * wird von Layer.js aufgerufen
+         */
+        setAttributionLayer: function () {
+            this.set('layer', new ol.layer.Vector({
+                source: this.get('source'),
+                name: this.get('name'),
+                typ: this.get('typ'),
+                style: this.get('style'),
+                gfiAttributes: this.get('gfiAttributes'),
+                routable: this.get('routable')
+            }))
+            this.setVisibility();
         },
         setVisibility: function () {
             EventBus.trigger('returnBackboneLayerForSearchbar', this);
@@ -175,23 +189,7 @@ define([
             this.set('style', function (feature, resolution) {
                 return stylelistmodel.getClusterStyle(feature);
             });
-        },
-        /**
-         * wird von Layer.js aufgerufen
-         */
-        setAttributionLayer: function () {
-            this.set('layer', new ol.layer.Vector({
-                source: this.get('source'),
-                name: this.get('name'),
-                typ: this.get('typ'),
-                style: this.get('style'),
-                gfiAttributes: this.get('gfiAttributes'),
-                routable: this.get('routable')
-            }));
-            this.get('layer').once('render', function() { // triggert einmalig wenn gerendert wird
-                EventBus.trigger('getVisibleWFSLayer');
-            });
-        },
+        },        
         buildGetRequest : function () {
             // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
             if (this.get('url').indexOf('http://WSCA0620.fhhnet.stadt.hamburg.de') != -1) {

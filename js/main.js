@@ -82,12 +82,6 @@ function loadMap () {
             });
       }
 
-      if (Config.attributions && Config.attributions === true) {
-          require(['views/AttributionView'], function (AttributionView) {
-              new AttributionView();
-          });
-      }
-
       if (Config.mouseHover && Config.mouseHover === true) {
           require(['views/MouseHoverPopupView'], function (MouseHoverPopupView) {
               new MouseHoverPopupView();

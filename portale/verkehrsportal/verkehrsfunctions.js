@@ -19,7 +19,6 @@ define([
                 }
             });
             this.set('url', url);
-//            EventBus.on('aktualisierebaustellen', this.refreshBaustellen, this);
         },
         refreshVerkehrssituation: function (attributions, layer) {
             if (!layer) {
@@ -60,12 +59,12 @@ define([
                     }
                     if (node && node[0]) {
                         newEventValue = '<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: ' + node[0].textContent.trim().replace('T', ' ').substring(0, node[0].textContent.length - 3) + '</br>';
-                        this.set('eventValue', newEventValue);
+                        this.set('eventAttribution', newEventValue);
                     }
                 },
                 context: layer,
                 error: function (err) {
-                    this.set('eventValue', '');
+                    this.set('eventAttribution', '');
                 }
             });
             // diese Abfrage zeigt im Bedarfsfall eine Meldung
@@ -106,13 +105,7 @@ define([
                     $('body').append(html);
                 }
             });
-        }/*,
-        refreshBaustellen: function (attributions, layer) {
-            if (!layer) {
-                return
-            }
-            layer.set('eventValue', '<strong>aktuelle Baustellen:</strong></br><p><a href="http://geoportal-hamburg.de/verkehr/static/baustellenliste.htm" target="_blank">Liste anzeigen</a></p>');
-        }*/
+        }
     });
     return aktualisiereVerkehrsdaten;
 });

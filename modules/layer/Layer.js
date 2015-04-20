@@ -3,11 +3,12 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "config"
-], function (_, Backbone, ol, EventBus, Config) {
-
+    "config",
+    "modules/attribution/view"
+], function (_, Backbone, ol, EventBus, Config, AttView) {
     /**
-     *
+     * Der Layer lädt über define immer auch das Attributions-Modul, da diese nur bei 
+     * initialer Bereitstellung der source des Layers gesetzt werden kann. 
      */
     var Layer = Backbone.Model.extend({
         defaults: {
@@ -39,10 +40,17 @@ define([
             this.listenTo(this, "change:visibility", this.setVisibility);
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
-            this.listenTo(this, "change:currentScale", this.setScaleRange);
-            EventBus.on("getBackboneLayerForAttribution", function() {
-                EventBus.trigger("returnBackboneLayerForAttribution", this);
-            }, this);
+            this.listenTo(this, "change:currentScale", this.setScaleRange);   
+            // Prüfung, ob die Attributions ausgewertet werden sollen.
+            if (Config.attributions && Config.attributions === true) {
+                EventBus.trigger("setAttributionToLayer", this);
+                this.postInit();
+            }
+            else {
+                this.postInit();
+            }
+        },
+        postInit: function() {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
@@ -62,39 +70,15 @@ define([
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
             this.get("layer").id = this.get("id");
 
-            if(this.get("typ") === "WFS" && this.get("visibility") === true) {
-                this.updateData();
-            }
-
-            // Stadtplan immer sichtbar
-            // if (this.get("id") === "453") {
-            //     this.set("selected", true);
-            // }
-
             // setzen der MetadatenURL, vlt. besser in layerlist??
             this.setMetadataURL();
         },
-        // NOTE Reolad für automatisches Aktualisieren im Rahmen der Attribution
+        // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
-            function reloadLayer(singleLayer) {
-                if (singleLayer.get("typ") === "WMS") {
-                    var params = singleLayer.get("layer").getSource().getParams();
-                    params.t = new Date().getMilliseconds();
-                    params.zufall = Math.random();
-                    singleLayer.get("layer").getSource().updateParams(params);
-                }
-                else if (singleLayer.get("typ") === "WFS") {
-                    singleLayer.updateData();
-                }
-            }
-            if (this.get("typ") === "GROUP") {
-                this.get("layer").getLayers().forEach(function () {
-                    reloadLayer(this);
-                });
-            }
-            else {
-                reloadLayer(this);
-            }
+            this.setAttributionLayerSource();
+            EventBus.trigger('removeLayer', this.get('layer'));                    
+            this.setAttributionLayer();
+            EventBus.trigger('addLayer', this.get('layer'))                
         },
         setAttributions: function () {
             var datasets = this.get("datasets");

@@ -11,7 +11,7 @@
 @import "glyphiconbutton.css";
 @import "orientation.css";
 @import "copyright.css";
-@import "attribution.css";
+@import "../modules/attribution/style.css";
 @import "treefilter.css";
 @import "zoombuttons.css";
 @import "routingwin.css";

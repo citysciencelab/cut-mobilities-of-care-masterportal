@@ -58,6 +58,11 @@ define([
             }));
             this.unset('layerdefinitions');
             this.unset('layers');
+        },
+        reload: function() {
+            this.get("layer").getLayers().forEach(function () {
+                reloadLayer(this);
+            });        
         }
     });
     return GroupLayer;
