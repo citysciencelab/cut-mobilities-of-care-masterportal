@@ -1,0 +1,123 @@
+@font-face { font-family: 'UniversLTW01-47LightCn';
+src: url('woffs/UniversLTW01-47LightCn.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversLTW01-55Roman';
+src: url('woffs/UniversLTW01-55Roman.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversLTW01-57Condense';
+src: url('woffs/UniversLTW01-57Condense.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversLTW01-67BoldCn';
+src: url('woffs/UniversLTW01-67BoldCn.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversNextW01-Regular';
+src: url('woffs/UniversNextW01-Regular.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversNextW04-320CondL';
+src: url('woffs/UniversNextW04-320CondL.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversNextW04-420CondR';
+src: url('woffs/UniversNextW04-420CondR.woff')  format('woff'); }
+
+@font-face { font-family: 'UniversNextW04-620CondB';
+src: url('woffs/UniversNextW04-620CondB.woff')  format('woff'); }
+
+
+body{
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-family: "UniversNextW01-Regular",sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 17px;
+  color: #222;
+  background: #fff;
+}
+
+h1{
+  font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+  font-size: 32px;
+  color: #646262;
+  text-transform: none;
+  margin: 0;
+  font-weight: normal;
+  line-height: normal;
+}
+
+.kopfzeile{
+  font-size: 18px;
+  color: #d42132;
+  font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+  text-transform: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-weight: normal;
+  line-height: normal;
+}
+
+h2{
+  margin: -2px 0 4px 0;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-family: "UniversNextW04-320CondL","Arial Narrow",Arial,sans-serif;
+}
+
+h3 {
+  display: block;
+  margin: 0 10px 10px 0;
+  padding: 3px 0 8px 0;
+  font-size: 36px;
+  font-weight: normal;
+  font-family: "UniversNextW04-420CondR","Arial Narrow",Arial,sans-serif;
+  line-height: 44px;
+  color: #666;
+  border-bottom: 2px solid #bbb;
+  letter-spacing: -0.03em;
+}
+
+p {
+  display: block;
+  margin: 0 10px 0 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 17px;
+  color: #646262;
+ }
+
+.sub-navigation {
+  font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+  display: block;
+  float: left;
+  line-height: 24px;
+  width: 140px;
+  padding: 0 5px 0 5px;
+  margin: -1px 0 0 10px;
+  font-size: 12px;
+  border-left: none;
+  border-right: 0;
+  border-bottom: 1px solid #ababab;
+  text-decoration: none;
+  color: #444;
+  -webkit-box-shadow: 0 1px 0 0 white;
+  box-shadow: 0 1px 0 0 white;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.navigation{
+  font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+  display: block;
+  float: left;
+  height: 26px;
+  line-height: 26px;
+  padding: 3px 20px 0 20px;
+  font-size: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #444;
+  white-space: nowrap;
+  letter-spacing: 0.05px;
+}
