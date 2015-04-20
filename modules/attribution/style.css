@@ -1,0 +1,84 @@
+/*
+* Dieses css wurde aus Auszügen aus der openlayers.css generiert und verändert.
+*/
+.attribution {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+    max-width: 60%;
+    min-width: 20px;
+    bottom: 18px;
+    right: 10px;
+    position: absolute;
+    font-size: 14px;
+/*    font-family: "UniversNextW04-620CondB,Arial Narrow,Arial,sans-serif";*/
+    z-index: 1000;
+    border-radius: 5px 5px 0 !important;
+    padding: 2px;
+    text-align: right
+}
+.attribution .ol-has-tooltip:focus [role="tooltip"], .ol-attribution .ol-has-tooltip:hover [role="tooltip"], .ol-full-screen .ol-has-tooltip:focus [role="tooltip"], .ol-full-screen .ol-has-tooltip:hover [role="tooltip"], .ol-rotate .ol-has-tooltip:focus [role="tooltip"], .ol-rotate .ol-has-tooltip:hover [role="tooltip"] {
+    border: none;
+    background: none;
+    left: auto;
+    right: 45px;
+    font-size: 14px;
+}
+.attribution ul {
+    color: #000;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    max-width: 100%;
+    padding: 0 0.5em;
+    text-shadow: 0 0 2px #fff;
+}
+.attribution button:hover {
+    color: #333;
+    background-color: #d42132;
+}
+.attribution li {
+    display: inline;
+    line-height: inherit;
+    list-style: outside none none;
+}
+.attribution li:not(:last-child):after {
+    content: '\A';
+    white-space: pre;
+}
+.attribution img {
+    max-height: 2em;
+}
+.attribution button, .ol-attribution ul {
+    display: inline-block;
+    background-color: #d42132;
+    color: #f3f3f3;
+    font-size: 30px;
+}
+.attribution.ol-collapsed ul, .ol-attribution:not(.ol-collapsed) [role="tooltip"] {
+    display: none;
+}
+.attribution.ol-logo-only ul {
+    display: block;
+}
+.attribution:not(.ol-collapsed) {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+}
+.attribution.ol-uncollapsible {
+    border-radius: 4px 0 0;
+    bottom: 0;
+    height: 1.1em;
+    line-height: 1em;
+    right: 0;
+}
+.attribution.ol-logo-only {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    bottom: 0.4em;
+    height: 1.1em;
+    line-height: 1em;
+}
+.attribution.ol-uncollapsible img {
+    margin-top: -0.2em;
+    max-height: 1.6em;
+}
+.attribution.ol-logo-only button, .ol-attribution.ol-uncollapsible button {
+    display: none;
+}
