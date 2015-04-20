@@ -1,4 +1,4 @@
-﻿[
+[
    {
       "id" : "8",
       "name" : "Luftbilder DOP 10",
@@ -6895,7 +6895,7 @@
       "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
       "typ" : "WMS",
       "layers" : "dop",
-      "format" : "image/png",
+      "format" : "image/jpeg",
       "version" : "1.1.1",
       "singleTile" : false,
       "transparent" : true,
@@ -6926,7 +6926,7 @@
       "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
       "typ" : "WMS",
       "layers" : "geobasisdaten",
-      "format" : "image/png",
+      "format" : "image/jpeg",
       "version" : "1.1.1",
       "singleTile" : false,
       "transparent" : true,

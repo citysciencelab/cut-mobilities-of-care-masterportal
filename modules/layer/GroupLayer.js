@@ -4,9 +4,9 @@ define([
     'openlayers',
     'eventbus',
     'config',
-    'models/Layer',
-    'models/wmslayer',
-    'models/wfslayer'
+    'modules/layer/Layer',
+    'modules/layer/wmslayer',
+    'modules/layer/wfslayer'
 ], function (_, Backbone, ol, EventBus, Config, Layer, WMSLayer, WFSLayer) {
 
     /**

@@ -1,9 +1,9 @@
 define([
     "underscore",
     "backbone",
-    "models/wmslayer",
-    "models/wfslayer",
-    "models/grouplayer",
+    "modules/layer/wmslayer",
+    "modules/layer/wfslayer",
+    "modules/layer/grouplayer",
     "config",
     "eventbus"
     ], function (_, Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus) {
