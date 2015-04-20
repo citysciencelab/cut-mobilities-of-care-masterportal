@@ -9,12 +9,12 @@ require.config({
         text: '../components/requirejs-text/text',
         bootstrap: '../components/bootstrap/dist/js/bootstrap',
         proj4: '../components/proj4/dist/proj4',
-        eventbus: '../js/EventBus',
-        views: '../js/views',
-        models: '../js/models',
-        collections: '../js/collections',
-        config: '../test/test-config/portal-config',
-        app: '../js/app',
+        eventbus: 'EventBus',
+        views: 'views',
+        models: 'models',
+        collections: 'collections',
+        config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') +1 ) + 'config',
+        app: 'app',
         templates: '../templates',
         modules: '../modules'
     },
@@ -33,6 +33,6 @@ require.config({
     urlArgs: 'bust=' +  (new Date()).getTime()
 });
 
-define('main',['app'], function (App) {
+define(['app'], function (App) {
     console.log('Application initialized');
 });
