@@ -1,10 +1,10 @@
 {
-  "name": "lgv",
-  "version": "0.1.0",
+  "name": "LGV Master",
+  "version": "1.0.7",
   "authors": [
     "LGV G12"
   ],
-  "description": "LGV G12 Master",
+  "description": "LGV Master",
   "main": "main.js",
   "moduleType": [
     "amd"

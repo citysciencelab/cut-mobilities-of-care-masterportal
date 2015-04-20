@@ -1,8 +1,8 @@
 {
-  "name": "lgv-main",
-  "title": "LGV Main",
-  "description": "LGV Hamburg Geo Application",
-  "version": "0.1.0",
+  "name": "LGV Master",
+  "title": "LGV Master",
+  "description": "LGV Master",
+  "version": "1.0.7",
   "repository": {
     "type": "git",
     "url": "git://git@bitbucket.org:lgv-team/lgv-main.git"
@@ -29,6 +29,7 @@
     "grunt-karma": "0.9.0",
     "grunt-modernizr": "0.6.0",
     "grunt-scss-lint": "0.3.4",
+    "grunt-string-replace": "^1.0.0",
     "jit-grunt": "^0.9.0",
     "time-grunt": "1.0.0"
   }
