@@ -1,0 +1,913 @@
+{
+    "trees":[
+    {
+        "Gattung": "Abies / Tanne",
+        "Arten": [
+            "Abies alba / Weiß-Tanne, Edel-Tanne",
+            "Abies concolor / Grau-Tanne, Kolorado-Tanne",
+            "Abies grandis / Küsten-Tanne, Riesen-Tanne",
+            "Abies homolepis / Nikko-Tanne",
+            "Abies nordmanniana / Nordmanns-Tanne",
+            "Abies pinsapo 'Kelleriis' / Spanische Tanne 'Kelleriis",
+            "Abies spec. / Tanne, Art unbekannt",
+            "Abies veitchii / Veitch`s Tanne, Japan-Tanne"
+      ]
+    },
+    {
+        "Gattung": "Acer / Ahorn",
+        "Arten": [
+            "Acer campestre / Feld - Ahorn, Hecken - Ahorn",
+            "Acer campestre 'Elsrijk' / Feld - Ahorn 'Elsrijk'",
+            "Acer campestre 'Fastigiata' / Feld - Ahorn",
+            "Acer campestre 'Queen Elisabeth' / Feld - Ahorn",
+            "Acer cappadocicum / Kolchischer Ahorn",
+            "Acer davidii / Davids Streifen - Ahorn",
+            "Acer ginnala / Feuerahorn",
+            "Acer monspessulanum / Felsen - Ahorn, Wein - Ahorn, Burgen - Ahorn, Französischer Ahorn",
+            "Acer neglectum 'Annae' / Roter Feld - Ahorn",
+            "Acer negundo / Eschen - Ahorn",
+            "Acer palmatum / Fächer - Ahorn",
+            "Acer palmatum 'Atropurpureum' / Fächer - Ahorn",
+            "Acer platanoides / Spitz - Ahorn",
+            "Acer platanoides 'Autumn Blaze' / Spitz - Ahorn",
+            "Acer platanoides 'Cleveland' / Spitz - Ahorn 'Cleveland'",
+            "Acer platanoides 'Columnare' / Spitz - Ahorn 'Columnare'",
+            "Acer platanoides 'Crimson King' / Spitz - Ahorn 'Crimson King'",
+            "Acer platanoides 'Deborah' / Blutroter Spitz - Ahorn",
+            "Acer platanoides 'Drummondii' / Gelbweißer Spitz - Ahorn",
+            "Acer platanoides 'Emerald Queen' / Spitz - Ahorn 'Emerald Queen'",
+            "Acer platanoides 'Faassen's Black' / Schwarzer Spitz-Ahorn",
+            "Acer platanoides 'Farlake 's Green' / Spitz - Ahorn 'Farlake's Green'",
+            "Acer platanoides 'Globosum' / Kugel-Ahorn, Spitz-Ahorn",
+            "Acer platanoides 'Laciniatum' / Vogelkrallen Spitz-Ahorn 'Laciniatum'",
+            "Acer platanoides 'Ley Typ 1' / Spitz-Ahorn",
+            "Acer platanoides 'Meyering' / Spitz-Ahorn 'Meyering'",
+            "Acer platanoides 'Olmsted' / Schmalsäulenförmiger Spitz-Ahorn,",
+            "Acer platanoides 'Reitenbachii' / Schwarzbrauner Spitz-Ahorn",
+            "Acer platanoides 'Royal Red' / Rotbrauner Spitz-Ahorn",
+            "Acer platanoides 'Schwedleri' / Blut-Ahorn, Spitz-Ahorn 'Schwedleri'",
+            "Acer platanoides 'Summershade' / Schatten-Spitz-Ahorn",
+            "Acer pseudoplatanus / Berg-Ahorn, Wald-Ahorn",
+            "Acer pseudoplatanus 'Atropurpureum' / Berg-Ahorn, Rotblättrig",
+            "Acer pseudoplatanus 'Erectum' / Schmalkroniger Berg-Ahorn",
+            "Acer pseudoplatanus 'Leopoldii' / Gelbgefleckter Berg-Ahorn",
+            "Acer pseudoplatanus 'Negenia' / Kegelförmiger Berg-Ahorn",
+            "Acer pseudoplatanus 'Purpurascens' / Berg-Ahorn 'Purpurascens'",
+            "Acer pseudoplatanus 'Rotterdam' / Breitkegelförmiger Berg-Ahorn",
+            "Acer pseudoplatanus 'Spaethii' / Berg-Ahorn",
+            "Acer rubrum / Rot-Ahorn",
+            "Acer rubrum 'Armstrong' / Säulen-Rot-Ahorn 'Armstrong'",
+            "Acer rubrum 'October Glory' / Rot-Ahorn",
+            "Acer rubrum 'Red Sunset' / Rot-Ahorn 'Red Sunset'",
+            "Acer rubrum 'Scanlon' / Rot-Ahorn 'Scanlon'",
+            "Acer rubrum var. Tomentosum / Rot-Ahorn",
+            "Acer rufinerve / Rostnerviger Schlangenhaut-Ahorn",
+            "Acer saccharinum / Silber-Ahorn",
+            "Acer saccharinum 'Laciniatum Wieri' / Geschlitzter Silber-Ahorn",
+            "Acer saccharinum 'Pyramidale' / Silber-Ahorn 'Pyramidale'",
+            "Acer saccharum / Zucker-Ahorn",
+            "Acer spec. / Ahorn, Art unbekannt",
+            "Acer tataricum / Tatarischer Steppen-Ahorn",
+            "Acer tataricum var. ginnala / Amur-Ahorn"
+        ]
+   },
+    {
+        "Gattung": "Aesculus / Kastanie",
+        "Arten": [
+            "Aesculus carnea / Rote Rosskastanie, Rotblühende Rosskastanie",
+            "Aesculus carnea 'Briotii' / Rotblühende Rosskastanie",
+            "Aesculus flava / Gelbe Rosskastanie, Appalachen-Rosskastanie",
+            "Aesculus flava f. vestita / Gelbe Pavie",
+            "Aesculus flava 'vestita' / Gelbe Pavie",
+            "Aesculus glabra / Ohio-Rosskastanie",
+            "Aesculus hippocastanum / Gemeine Rosskastanie, Balkan-Rosskastanie",
+            "Aesculus hippocastanum 'Baumannii' / Gefülltblühende Rosskastanie",
+            "Aesculus hippocastanum 'Globosa' / Gemeine Rosskastanie, kugelform",
+            "Aesculus hippocastanum 'Pyramidalis' / Pyramiden-Rosskastanie",
+            "Aesculus parviflora / Strauch-Kastanie",
+            "Aesculus spec. / Rosskastanie, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Ailanthus / Götterbaum",
+        "Arten": [
+            "Ailanthus altissima / Drüsiger Götterbaum"
+        ]
+    },
+    {
+        "Gattung": "Alnus / Erle",
+        "Arten": [
+            "Alnus cordata / Italienische-Erle, Herzblättrige Erle",
+            "Alnus glutinosa / Schwarz-Erle, Rot-Erle",
+            "Alnus incana / Grau-Erle, Weiß-Erle",
+            "Alnus spaethii / Späths Erle",
+            "Alnus spec. / Erle, Art unbekannt",
+            "Alnus viridis / Grün-Erle"
+        ]
+    },
+    {
+        "Gattung": "Amelanchier / Felsenbirne",
+        "Arten": [
+            "Amelanchier 'Ballerina' / Felsenbirne",
+            "Amelanchier laevis / Kahle Felsenbirne",
+            "Amelanchier lamarckii / Kanadische Felsenbirne",
+            "Amelanchier ovalis / Gewöhnliche Felsenbirne",
+            "Amelanchier spec. / Felsenbirne, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Araucaria / Araukarie",
+        "Arten": [
+            "Araucaria araucana / Schmucktanne, Andentanne"
+        ]
+    },
+    {
+        "Gattung": "Betula / Birke",
+        "Arten": [
+            "Betula ermanii / Gold-Birke",
+            "Betula maximowicziana / Lindenblättrige Birke, Bronze-Birke",
+            "Betula nigra / Scharz-Birke, Ufer-Birke",
+            "Betula papyrifera / Papier-Birke",
+            "Betula pend.dar. / s.u.",
+            "Betula pendula / Sand-Birke, Weiß-Birke, Warzen-Birke",
+            "Betula pendula 'Dalecarlica' / Schlitz-Birke",
+            "Betula pendula 'Fastigiata' / Säulen-Birke",
+            "Betula pendula 'Laciniata' / Schlitz-Birke",
+            "Betula pendula 'Tristis' / Hänge-Birke",
+            "Betula pendula 'Youngii' / Birke Youngii",
+            "Betula pubescens / Moor-Birke",
+            "Betula spec. / Birke, Art unbekannt",
+            "Betula utilis / Himalaja-Birke",
+            "Betula utilis 'Doorenbos' / Himalaja-Birke",
+            "Betula utilis var. jacquemontii / Weißrindige Himalaja-Birke"
+        ]
+    },
+    {
+        "Gattung": "Calocedrus / Weihrauchzeder",
+        "Arten": [
+            "Calocedrus decurrens / Kalifornische Weihrauchszeder"
+        ]
+    },
+    {
+        "Gattung": "Carpinus / Hainbuche",
+        "Arten": [
+            "Carpinus betulus / Gemeine Hainbuche, Weißbuche",
+            "Carpinus betulus 'Columnaris' / Hainbuche 'Columnaris'",
+            "Carpinus betulus 'Fastigiata' / Säulen-Hainbuche",
+            "Carpinus betulus 'Frans Fontaine' / Hainbuche, Weissbuche, schmalwüchsig",
+            "Carpinus betulus 'Quercifolia' / Hainbuche 'Quercifolia'",
+            "Carpinus spec. / Hainbuche, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Carya",
+        "Arten": [
+            "Carya glabra / Ferkelnuß"
+        ]
+    },
+    {
+        "Gattung": "Castanea / Edelkastanie",
+        "Arten": [
+            "Castanea sativa / Esskastanie, Marone",
+            "Castanea spec. / Esskastanie, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Catalpa / Trompetenbaum",
+        "Arten": [
+            "Catalpa bignonioides / Gewöhnlicher Trompetenbaum",
+            "Catalpa bignonioides 'Nana' / Zwerg-Trompetenbaum"
+        ]
+    },
+    {
+        "Gattung": "Cedrus / Zeder",
+        "Arten": [
+            "Cedrus atlantica / Atlas-Zeder",
+            "Cedrus atlantica 'Glauca' / Blaue Atlas-Zeder, Blau-Zeder",
+            "Cedrus atlantica 'Glauca Fastigiata' / Blaue Säulen-Atlas-Zeder",
+            "Cedrus deodara / Himalaja-Zeder, Deodara-Zeder"
+        ]
+    },
+    {
+        "Gattung": "Celtis / Zürgelbaum",
+        "Arten": [
+            "Celtis australis / Südlicher Zürgelbaum"
+        ]
+    },
+    {
+        "Gattung": "Cercidiphyllum / Katsurabaum",
+        "Arten": [
+            "Cercidiphyllum japonicum / Kuchenbaum, Katsurabaum"
+        ]
+    },
+    {
+        "Gattung": "Cercis / Judasbaum",
+        "Arten": [
+            "Cercis siliquastrum / Gewöhnlicher Judasbaum"
+        ]
+    },
+    {
+        "Gattung": "Chamaecyparis / Scheinzypresse",
+        "Arten": [
+            "Chamaecyparis lawsoniana / Lawsons Scheinzypresse",
+            "Chamaecyparis lawsoniana 'Alumii' / Lawsons Scheinzypresse 'Alumii'",
+            "Chamaecyparis lawsoniana 'Columnaris' / Scheinzypresse, blaugrün",
+            "Chamaecyparis lawsoniana 'Columnaris Glauca' / Blaue Säulenzypresse, Lawsons Scheinzypresse",
+            "Chamaecyparis lawsoniana 'Golden Wonder' / Lawsons Scheinzypresse 'Golden Wonder'",
+            "Chamaecyparis lawsoniana 'Wisselii' / Lawsons Scheinzypresse 'Wisselii'",
+            "Chamaecyparis obtusa / Hinoki-Scheinzypresse",
+            "Chamaecyparis spec. / Scheinzypresse, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Cladastris",
+        "Arten": [
+            "Cladastris lutea / Gelbholz"
+        ]
+    },
+    {
+        "Gattung": "Cornus / Hartriegel",
+        "Arten": [
+            "Cornus kousa / Japanischer Blumen-Hartriegel",
+            "Cornus kousa var. chinensis / Japanischer Blumen-Hartriegel",
+            "Cornus mas / Kornelkirsche",
+            "Cornus spec. / Hartriegel, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Corylus / Hasel",
+        "Arten": [
+            "Corylus colurna / Baumhasel",
+            "Corylus spec. / Hasel, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Crataegus / Weissdorn",
+        "Arten": [
+            "Crataegus crus-galli / Hahnensporn-Weißdorn",
+            "Crataegus laevigata / Zweigriffliger Weißdorn",
+            "Crataegus laevigata 'Alboplena' / Gemeiner Weißdorn",
+            "Crataegus laevigata 'Mutabilis' / Gemeiner Weißdorn",
+            "Crataegus laevigata 'Paul Scarlet' / Rotdorn",
+            "Crataegus lavallei 'Carrierei' / Leder Weißdorn",
+            "Crataegus lavallei 'Carrierei' / Lederblättriger Weißdorn",
+            "Crataegus monogyna / Eingriffliger Weißdorn",
+            "Crataegus monogyna 'Stricta' / Säulenförmiger Weißdorn",
+            "Crataegus pedicellata / Scharlach-Weißdorn",
+            "Crataegus persimilis 'Mac Leod' / Weißdorn",
+            "Crataegus persimilis 'Splendens' / Weißdorn",
+            "Crataegus spec. / Weißdorn, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Cupressus / Zypresse",
+        "Arten": [
+            "Cupressus spec / Zypresse, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Davidia / Taubenbaum, Taschentuchbaum",
+        "Arten": [
+            "Davidia involucrata / Taubenbaum, Taschentuchbaum"
+        ]
+    },
+    {
+        "Gattung": "Elaeagnus",
+        "Arten": [
+            "Elaeagnus angustifolia / Schmalblättrige Ílweide"
+        ]
+    },
+    {
+        "Gattung": "Euonymus / Spindelstrauch, Pfaffenhütchen",
+        "Arten": [
+            "Euonymus europaeus / Gew.Spindelstrauch,Pfaffenhütchen"
+        ]
+    },
+    {
+        "Gattung": "Fagus / Buche",
+        "Arten": [
+            "Fagus sylvatica / Rot-Buche",
+            "Fagus sylvatica 'Asplenifolia' / Farnblättrige Rot-Buche",
+            "Fagus sylvatica 'Atropunicea' / Blut-Buche, veredelt",
+            "Fagus sylvatica 'Dawyck' / Säulen-Buche",
+            "Fagus sylvatica 'Dawyck Gold' / Rot-Buche 'Dawyck Gold'",
+            "Fagus sylvatica 'Dawyck Purple' / Rot-Buche 'Dawyck Purple'",
+            "Fagus sylvatica 'Laciniata' / Geschlitztblättrige Buche",
+            "Fagus sylvatica 'Pendula' / Grünlaubige Hänge-Buche",
+            "Fagus sylvatica 'Purpurea' / Blut-Buche, Sämling",
+            "Fagus sylvatica 'Purpurea Latifolia' / Blut-Buche",
+            "Fagus sylvatica 'Purpurea Pendula' / Hänge-Blut-Buche, Trauer-Blut-Buche",
+            "Fagus sylvatica 'Swat Magret' / Blut-Buche 'Swat Magret'"
+        ]
+    },
+    {
+        "Gattung": "Fraxinus / Esche",
+        "Arten": [
+            "Fraxinus americana / Weiß-Esche",
+            "Fraxinus angustifolia 'Raywood' / Schmalblättrige Esche 'Raywood'",
+            "Fraxinus excelsior / Gemeine Esche, Gewöhnliche Esche",
+            "Fraxinus excelsior 'Altena' / Esche 'Altena'",
+            "Fraxinus excelsior 'Atlas' / Gemeine Esche",
+            "Fraxinus excelsior 'Diversifolia' / Einblättrige Esche",
+            "Fraxinus excelsior 'Eureka' / Esche 'Eureka'",
+            "Fraxinus excelsior 'Geessink' / Esche 'Geessink'",
+            "Fraxinus excelsior 'Globosa' / Esche",
+            "Fraxinus excelsior 'Hessei' / Esche",
+            "Fraxinus excelsior 'Nana' / Kugel-Esche",
+            "Fraxinus excelsior 'Pendula' / Hänge-Esche, Trauer-Esche",
+            "Fraxinus excelsior 'Westhof Glorie' / Straßen-Esche, Esche 'Westhof Glorie'",
+            "Fraxinus ornus / Blumen-Esche, Manna-Esche",
+            "Fraxinus ornus 'Meczek' / Manna-, Blumen-Esche, kugelförmig",
+            "Fraxinus pennsylvanica / Grün-Esche, Rot-Esche",
+            "Fraxinus spec. / Esche, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Ginkgo / Fächerblattbaum",
+        "Arten": [
+            "Ginkgo biloba / Fächertanne, Ginkgo",
+            "Ginkgo biloba 'Autumn Gold' / Goldener Ginkgo",
+            "Ginkgo biloba 'Fastigiata' / Ginkgo 'Fastigiata'",
+            "Ginkgo biloba 'Princeton Sentry' / Fächertanne, Ginkgo",
+            "Ginkgo biloba 'Tremonia' / Säulen-Ginkgo",
+            "Ginkgo spec. / Fächertanne, Ginkgo"
+        ]
+    },
+    {
+        "Gattung": "Gleditsia / Falscher Christusdorn",
+        "Arten": [
+            "Gleditsia spec. / Lederhülsenbaum",
+            "Gleditsia triacanthos / Amerikanische Gleditschie, Lederhülsenbaum",
+            "Gleditsia triacanthos 'Elegantissima' / Gleditschie, Lederhülsenbaum",
+            "Gleditsia triacanthos f. inermis / Gleditschie, Lederhülsenbaum",
+            "Gleditsia triacanthos 'Inermis' / Dornenlose Gleditschie",
+            "Gleditsia triacanthos 'Shademaster' / Dornenlose Gleditschie 'Shademaster'",
+            "Gleditsia triacanthos 'Skyline' / Säulen-Gleditschie",
+            "Gleditsia triacanthos 'Sunburst' / Gelbe Gleditschie"
+        ]
+    },
+    {
+        "Gattung": "Ilex / Stechpalme",
+        "Arten": [
+            "Ilex aquifolium / Gewöhnl.Stechpalme",
+            "Ilex aquifolium 'J.c. van Tol' / Stechpalme",
+            "Ilex spec. / Stechpalme, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Juglans / Walnuss",
+        "Arten": [
+            "Juglans ailantifolia var. cordiformis / Japanische Walnuss",
+            "Juglans nigra / Schwarznuss",
+            "Juglans regia / Echte Walnuss, Gew.Nussbaum",
+            "Juglans spec. / Walnuss"
+        ]
+    },
+    {
+        "Gattung": "Juniperus / Wacholder",
+        "Arten": [
+            "Juniperus communis / Gemeiner Wacholder",
+            "Juniperus communis 'Meyer' / Meyers Heide-Wacholder",
+            "Juniperus media 'Mathot' / Chinesischer Wacholder 'Mathot'",
+            "Juniperus media 'Pfitzeriana Glauca' / Blauer Pfitzer-Wacholder",
+            "Juniperus virginiana / Zypressen-Wacholder"
+        ]
+    },
+    {
+        "Gattung": "Koelreuteria / Blasenbaum, Blasenesche",
+        "Arten": [
+            "Koelreuteria paniculata / Rispiger Blasenbaum"
+        ]
+    },
+    {
+        "Gattung": "Laburnum / Goldregen",
+        "Arten": [
+            "Laburnum anagyroides / Gewöhnl.Goldregen",
+            "Laburnum watereri 'Vossii' / Goldregen"
+        ]
+    },
+    {
+        "Gattung": "Larix / Lärche",
+        "Arten": [
+            "Larix decidua / Europäische Lärche",
+            "Larix decidua 'Pendula' / Europäische Hänge-Lärche",
+            "Larix kaempferi / Japanische Lärche"
+        ]
+    },
+    {
+        "Gattung": "Liquidambar / Amberbaum",
+        "Arten": [
+            "Liquidambar spec. / Amberbaum",
+            "Liquidambar styraciflua / Amerikanischer Amberbaum",
+            "Liquidambar styraciflua 'Parl' / Amerikanischer Amberbaum",
+            "Liquidambar styraciflua 'Worplesdon'"
+        ]
+    },
+    {
+        "Gattung": "Liriodendron / Tulpenbaum",
+        "Arten": [
+            "Liriodendron tulipifera / Amerikanischer Tulpenbaum",
+            "Liriodendron tulipifera 'Fastigiatum' / Amerikanischer Tulpenbaum"
+        ]
+    },
+    {
+        "Gattung": "Magnolia / Magnolie",
+        "Arten": [
+            "Magnolia denudata / Yulan-Magnolie",
+            "Magnolia kobus / Kobushi-Magnolie, Baum-Magnolie",
+            "Magnolia soulangiana / Tulpen-Magnolie",
+            "Magnolia spec. / Magnolie"
+        ]
+    },
+    {
+        "Gattung": "Malus / Apfelbaum",
+        "Arten": [
+            "Malus 9 'York' / siehe Tab.fragl.Bäume",
+            "Malus adstringens / Veredl.Unterlagen siehe Tab. Fragliche Bäume",
+            "Malus 'Aldenhamensis' / Zier-Apfel",
+            "Malus 'Almey' / Veredl.Unterlagen siehe Tab. Fragliche Bäume",
+            "Malus atrosanguinea 'Gorgeous' / Zier-Apfel",
+            "Malus baccata 'Himalaica' / Veredl.Unterlagen siehe Tab. Fragliche Bäume",
+            "Malus baccata var. Jackii / Beeren-Apfel",
+            "Malus 'Butterball' / Zier-Apfel",
+            "Malus coronaria / Kronen-Apfel",
+            "Malus domestica / Zier-Apfel",
+            "Malus domestica 'Cox Orange' / Apfel-Obstgehölz 'Cox Orange'",
+            "Malus domestica 'Engelsberger Renette' / Apfel-Obstgehölz 'Engelsberger Renette'",
+            "Malus domestica 'Goldparmäne' / Apfel-Obstgehölz 'Goldparmäne'",
+            "Malus domestica 'James Grieve' / Apfel-Obstgehölz 'James Grieve'",
+            "Malus domestica 'Roter Boskoop' / Apfel-Obstgehölz 'Roter Boskoop'",
+            "Malus domestica 'Weißer Klarapfel' / Apfel-Obstgehölz 'Weißer Klarapfel'",
+            "Malus 'Eleyi' / Zier-Apfel",
+            "Malus 'Evereste' / Zier-Apfel",
+            "Malus floribunda / Vielblütiger Zier-Apfel",
+            "Malus 'Golden Hornet' / Zier-Apfel",
+            "Malus 'Hillieri' / Zier-Apfel",
+            "Malus 'John Downie' / Zier-Apfel 'John Downie'",
+            "Malus 'Liset' / Zier-Apfel",
+            "Malus 'Makamik' / Zier-Apfel 'Makamik'",
+            "Malus moerlandsii / Apfel",
+            "Malus moerlandsii 'Profusion' / Zier-Apfel 'Profusion'",
+            "Malus 'Niedzwetskyana' / Zier-Apfel",
+            "Malus 'Profusion' / Zier-Apfel",
+            "Malus pumila / Johannis-Apfel",
+            "Malus purpurea / Apfel",
+            "Malus 'Red Jade' / Zier-Apfel 'Red Jade'",
+            "Malus 'Red Sentinel' / Zier-Apfel",
+            "Malus sargentii 'Rudolph' / Sargent-Apfel",
+            "Malus spec. / Apfel",
+            "Malus 'Striped Beauty' / Zier-Apfel 'Striped Beauty'",
+            "Malus sylvestris / Wild-Apfel, Holz-Apfel",
+            "Malus sylvestris 'Bittenfelder Sämlinge' / Holz-Apfel",
+            "Malus toringo / Japan-Apfel",
+            "Malus toringo sargentii 'Sämling' / Japan-Apfel",
+            "Malus tschonoskii / Woll-Apfel",
+            "Malus zumi 'Professor Sprenger' / Zier-Apfel 'Professor Sprenger'"
+        ]
+    },
+    {
+        "Gattung": "Malus-hybriden",
+        "Arten": [
+            "Malus-hybriden spec. / Zier-Apfelbaum, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Mespilus / Mispel",
+        "Arten": [
+            "Mespilus germanica / Mispel"
+        ]
+    },
+    {
+        "Gattung": "Metasequoia / Rotholz",
+        "Arten": [
+            "Metasequoia glyptostroboides / Chinesisches Rotholz"
+        ]
+    },
+    {
+        "Gattung": "Morus / Maulbeerbaum",
+        "Arten": [
+            "Morus alba / Weißer Maulbeerbaum",
+            "Morus nigra / Schwarzer Maulbeerbaun"
+        ]
+    },
+    {
+        "Gattung": "Nothofagus / Südbuche, Antarktische Buche",
+        "Arten": [
+            "Nothofagus antarctica / Scheinbuche, Südbuche",
+            "Nothofagus spec. / Scheinbuche, Südbuche"
+        ]
+    },
+    {
+        "Gattung": "Ostrya",
+        "Arten": [
+            "Ostrya carpinifolia / Gewöhnl.Hopfenbuche"
+        ]
+    },
+    {
+        "Gattung": "Parrotia / Eisenholzbaum",
+        "Arten": [
+            "Parrotia persica / Parrotie, Eisenholz"
+        ]
+    },
+    {
+        "Gattung": "Paulownia / Blauglockenbaum",
+        "Arten": [
+            "Paulownia tomentosa / Kaiser-Paulownie"
+        ]
+    },
+    {
+        "Gattung": "Phellodendron",
+        "Arten": [
+            "Phellodendron amurense / Amur-Korkbaum"
+        ]
+    },
+    {
+        "Gattung": "Picea / Fichte",
+        "Arten": [
+            "Picea abies / Rottanne, Gemeine Fichte, Rot-Fichte",
+            "Picea abies 'Inversa' / Hänge-Fichte, Schleppen-Fichte",
+            "Picea abies 'Pumila Glauca' / Gewöhnl.Fichte,Rottanne",
+            "Picea glauca / Schimmel-Fichte, Kanadische-Fichte",
+            "Picea omorika / Serbische Fichte",
+            "Picea pungens (s) / Stech-Fichte, Sämling",
+            "Picea pungens (v) / Stech-Fichte, veredelt",
+            "Picea pungens / Stech-Fichte",
+            "Picea pungens 'Endtz' / Blau-Fichte 'Endtz'",
+            "Picea pungens 'Glauca' / Blau-Fichte,Stech-Fichte",
+            "Picea pungens 'Glauca Globosa' / Blau-Fichte,Stech-Fichte",
+            "Picea pungens 'Hoto' / Stech-Fichte 'Hoto'",
+            "Picea pungens 'Koster' / Blau-Fichte Koster",
+            "Picea sitchensis / Sitka-Fichte",
+            "Picea spec. / Fichte"
+        ]
+    },
+    {
+        "Gattung": "Pinus / Kiefer",
+        "Arten": [
+            "Pinus banksiana / Banks Kiefer",
+            "Pinus cembra / Zirbel-Kiefer",
+            "Pinus contorta / Dreh-Kiefer",
+            "Pinus heldreichii '*' / Schlangenhautkiefer",
+            "Pinus mugo / Berg-Kiefer,Krummholz-K.,Latsche",
+            "Pinus nigra / Schwarz-Kiefer, Ísterreichische Schwarz-Kiefer",
+            "Pinus parviflora / Mädchen-Kiefer",
+            "Pinus peuce / Mazedonische Kiefer, Rumelische Kiefer",
+            "Pinus ponderosa / Gelb-Kiefer",
+            "Pinus spec. / Kiefer, Art unbekannt",
+            "Pinus strobus / Weymouths-Kiefer, Strobe",
+            "Pinus sylvestris / Föhre, Gemeine Kiefer",
+            "Pinus sylvestris 'Typ Norwegen' / Säulen-Kiefer",
+            "Pinus uncinata ssp. uncinata / Haken-Kiefer",
+            "Pinus wallichiana / Tränen-Kiefer"
+        ]
+    },
+    {
+        "Gattung": "Platanus / Platane",
+        "Arten": [
+            "Platanus acerifolia / Ahornblättrige Platane",
+            "Platanus acerifolia 'Pyramidalis' / Säulen-Platane",
+            "Platanus occidentalis / Abendländische Platane",
+            "Platanus orientalis / Orientalische Platane",
+            "Platanus spec. / Platane"
+        ]
+    },
+    {
+        "Gattung": "Populus / Pappel",
+        "Arten": [
+            "Populus alba / Silber-Pappel",
+            "Populus alba 'Nivea' / Silber-Pappel",
+            "Populus alba 'Pyramidalis' / Säulen-Silber-Pappel",
+            "Populus alba ssp. / Silber-Pappel",
+            "Populus balsamifera / Balsam-Pappel",
+            "Populus berolinensis / Berliner Lorbeer-Pappel",
+            "Populus canadensis / Kanadische Pappel",
+            "Populus canadensis 'Robusta' / Kanadische Holz-Pappel",
+            "Populus canescens / Grau-Pappel",
+            "Populus canescens 'De Moffart' / Grau-Pappel",
+            "Populus nigra / Schwarz-Pappel",
+            "Populus nigra 'Italica' / Säulen-Pappel",
+            "Populus simonii / Birken-Pappel",
+            "Populus simonii 'Fastigiata' / Säulen-Birken-Pappel",
+            "Populus spec. / Pappel",
+            "Populus tremula / Zitter-Pappel",
+            "Populus tremula 'Erecta' / Säulen-Zitter-Pappel",
+            "Populus trichocarpa / Westliche Balsam-Pappel"
+        ]
+    },
+    {
+        "Gattung": "Prunus / Kirsche",
+        "Arten": [
+            "Prunus 'Accolade' / Zier-Kirsche",
+            "Prunus avium / Vogel-Kirsche",
+            "Prunus avium 'Alkavo' / Süß-Kirsche-Obstgehölz 'Alkavo'",
+            "Prunus avium 'Annabella' / Süß-Kirsche-Obstgehölz 'Annabella'",
+            "Prunus avium 'Dönissens Gelbe Knorpelkirsche' / Süß-Kirsche-Obstgeh. 'Gelbe Knorpelk.'",
+            "Prunus avium 'Plena' / Gefülltblühende Vogel-Kirsche",
+            "Prunus cerasifera / Kirsch-Pflaume",
+            "Prunus cerasifera 'Nigra' / Kirsch-Pflaume",
+            "Prunus cerasifera ssp. / Kirsch-Pflaume",
+            "Prunus cerasifera 'Woodii' / Kirsch-Pflaume",
+            "Prunus cerasus / Sauer-Kirsche",
+            "Prunus cerasus 'Schattenmorelle' / Schattenmorelle",
+            "Prunus domestica / Gemeine Pflaume, Zwetschge",
+            "Prunus domestica 'Auerbacher' / Pflaume-Obstgehölz 'Auerbacher'",
+            "Prunus domestica 'Hauszwetschge' / Pflaume-Obstgehölz 'Hauszwetsche'",
+            "Prunus domestica 'Nancymirabelle' / Pflaume-Obstgehölz 'Nancymirabelle'",
+            "Prunus domestica ssp. instititia / Haferschlehe",
+            "Prunus domestica ssp. italica 'Große Grüne Reneclaude' / Pflaume-Obstgehölz, Reneclaude",
+            "Prunus fruticosa 'Globosa' / Steppen-Kirsche, Zwerg-Kirsche",
+            "Prunus 'Gisela' / Kirsche",
+            "Prunus maackii / Amur-Traubenkirsche",
+            "Prunus mahaleb / Felsen-Kirsche,Stein-Weichsel",
+            "Prunus padus / Gewöhnliche Traubenkirsche",
+            "Prunus padus 'Schloß Tiefurt' / Gewöhnliche Traubenkirsche",
+            "Prunus padus 'Watereri' / Gewöhnliche Traubenkirsche",
+            "Prunus 'Pandora' / Trauben-Kirsche",
+            "Prunus persica 'Klara Mayer' / Pfirsich-Obstgehölz 'Klara Mayer'",
+            "Prunus sargentii / Berg-Kirsche, Scharlach-Kirsche",
+            "Prunus sargentii 'Rancho' / Berg-Kirsche, Scharlach-Kirsche",
+            "Prunus sargentii veredlung / Berg-Kirsche, Scharlach-Kirsche",
+            "Prunus schmittii / Schmitts-Kirsche",
+            "Prunus serotina / Späte Traubenkirsche",
+            "Prunus serrula / Tibetanische Kirsche, Mahagoni-Kirsche",
+            "Prunus serrulata / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Amanogawa' / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Fudan-zakura' / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Kanzan' / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Kiku-shidare-zakura' / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Pink Perfection' / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Shirofugen' / Japanische Blüten-Kirsche",
+            "Prunus serrulata 'Sunset Boulevard' / Japanische Kirsche",
+            "Prunus spec. / Kirsche",
+            "Prunus spinosa / Gewöhnliche Schlehe",
+            "Prunus 'Spire' / Zwetsche",
+            "Prunus subhirtella / Higan-Kirsche",
+            "Prunus subhirtella 'Autumnalis' / Higan-Kirsche",
+            "Prunus subhirtella 'Autumnalis Rosea' / Higan-Kirsche",
+            "Prunus subhirtella 'Pendula' / Higan-Kirsche",
+            "Prunus subhirtella 'Plena' / Higan-Kirsche",
+            "Prunus 'Trailblazer' / Zier-Kirsche",
+            "Prunus triloba / Mandelbäumchen",
+            "Prunus 'Umineko' / Zier-Kirsche"
+        ]
+    },
+    {
+        "Gattung": "Pseudotsuga / Douglasie, Douglastanne",
+        "Arten": [
+            "Pseudotsuga menziesii / Douglasie, Douglasfichte",
+            "Pseudotsuga menziesii var. caesia / Graue Douglasie",
+            "Pseudotsuga menziesii var. glauca / Blaue Douglasie,Colorado-D.,Gebirgs-D.",
+            "Pseudotsuga spec. / Douglasie, Douglasfichte"
+        ]
+    },
+    {
+        "Gattung": "Pterocarya / Flügelnuss",
+        "Arten": [
+            "Pterocarya fraxinifolia / Kaukasische Flügelnuss",
+            "Pterocarya spec. / Flügelnuss"
+        ]
+    },
+    {
+        "Gattung": "Pyrus / Birnbaum",
+        "Arten": [
+            "Pyrus calleryana 'Bradford' / Chinesische Birne",
+            "Pyrus calleryana 'Chanticleer' / Chinesische Birne,Stadt-Birne",
+            "Pyrus caucasica / Kaukasische Birne",
+            "Pyrus communis / Kultur-Birne",
+            "Pyrus communis 'Alexander Lucas' / Birne-Obstgehölz 'Alexander Lucas'",
+            "Pyrus communis 'Beech Hill' / Kultur-Birne",
+            "Pyrus communis 'spec.' / Birne-Obstgehölz",
+            "Pyrus communis 'Williams Christ' / Birne-Obstgehölz 'Williams Christ'",
+            "Pyrus pyraster / Holzbirne, Gemeine Birne",
+            "Pyrus regelii / Wildbirne 'Regelii'",
+            "Pyrus spec. / Birne, Art unbekannt"
+        ]
+    },
+    {
+        "Gattung": "Quercus / Eiche",
+        "Arten": [
+            "Quercus acutissima / Seidenraupen-Eiche",
+            "Quercus alba / Weiß-Eiche",
+            "Quercus cerris / Zerr-Eiche",
+            "Quercus coccinea / Scharlach-Eiche",
+            "Quercus frainetto / Ungarische Eiche",
+            "Quercus ilex / Stein-Eiche",
+            "Quercus imbricaria / Schindel-Eiche",
+            "Quercus libani / Libanon-Eiche",
+            "Quercus macranthera / Persische Eiche",
+            "Quercus palustris / Sumpf-Eiche",
+            "Quercus petraea / Trauben-Eiche",
+            "Quercus petraea 'Columna' / Säulen-Trauben-Eiche",
+            "Quercus phellos f. latifolia / Weiden-Eiche",
+            "Quercus pubescens / Flaum-Eiche",
+            "Quercus robur / Stiel-Eiche, Sommer-Eiche",
+            "Quercus robur 'Atropurpurea' / Stiel-Eiche Atropurpurea",
+            "Quercus robur 'Fastigiata' / Säulen-Eiche 'Fastigiata'",
+            "Quercus robur 'Fastigiata Koster' / Stiel-Eiche",
+            "Quercus robur 'Pectinata' / Stiel-Eiche",
+            "Quercus rubra / Amerikanische Rot-Eiche, Rot-Eiche",
+            "Quercus spec. / Eiche",
+            "Quercus spec. 'muehlenbergii' / Gelbeiche",
+            "Quercus turneri 'Pseudoturneri' / Turners Wintergrüne Eiche"
+        ]
+    },
+    {
+        "Gattung": "Rhus / Sumach-Essigbaum",
+        "Arten": [
+            "Rhus typhina / Essigbaum, Hirschkolben-Sumach"
+        ]
+    },
+    {
+        "Gattung": "Robinia / Robinie, Scheinakazie",
+        "Arten": [
+            "Robinia hispida 'Macrophylla' / Borstige Robinie",
+            "Robinia pseudoacacia / Schein-Akazie",
+            "Robinia pseudoacacia 'Bessoniana' / Kegel-Robinie",
+            "Robinia pseudoacacia 'Casque Rouge' / Rosarote Robinie",
+            "Robinia pseudoacacia 'Frisia' / Gold-Robinie",
+            "Robinia pseudoacacia 'Inermis' / Robinie, Schein-Akazie",
+            "Robinia pseudoacacia 'Monophylla' / Robinie, Schein-Akazie",
+            "Robinia pseudoacacia 'Pyramidalis' / Pyramiden-Säulen-Robinie",
+            "Robinia pseudoacacia 'Semperflorens' / Robinie 'Semperflorens'",
+            "Robinia pseudoacacia 'spec.' / Robinie, Schein-Akazie",
+            "Robinia pseudoacacia 'Tortuosa' / Korkenzieher-Robinie",
+            "Robinia pseudoacacia 'Umbraculifera' / Kugel-Robinie",
+            "Robinia pseudoacacia 'Unifoliola' / Robinie, Strassen-Robinie",
+            "Robinia slavinii 'Hillieri' / Robinie 'Hillieri'",
+            "Robinia spec. / Robinie",
+            "Robinia spec. ''Casque Rouge'' / Falsche Akazie"
+        ]
+    },
+    {
+        "Gattung": "Salix / Weide",
+        "Arten": [
+            "Salix alba / Silber-Weide",
+            "Salix alba 'Liempde' / Kegel-Silber-Weide",
+            "Salix alba 'Tristis' / Hänge-Weide, Trauer-Weide",
+            "Salix alba 'Tristis Resistenta' / Silber-Weide",
+            "Salix caprea / Sal-Weide",
+            "Salix caprea 'Kilmarnock' / Sal-Weide, hängend",
+            "Salix cinerea / Grau-Weide,Asch-Weide",
+            "Salix elaeagnos / Ufer-Weide, Grau-Weide, Lavendel-Weide",
+            "Salix fragilis / Bruch-Weide, Knack-Weide",
+            "Salix matsudana 'Tortuosa' / Chinesische Baum-Weide, Dauerwellen-Weide",
+            "Salix pentandra / Lorbeer-Weide",
+            "Salix purpurea / Purpur-Weide",
+            "Salix rubens 'Godesberg' / Fahl-Weide,Gerber-Weide,Rot-Weide",
+            "Salix spec. / Weide",
+            "Salix viminalis / Korb-Weide,Hanf-Weide"
+        ]
+    },
+    {
+        "Gattung": "Sambucus / Holunder, Attich",
+        "Arten": [
+            "Sambucus spec. / Holunder"
+        ]
+    },
+    {
+        "Gattung": "Sequoia",
+        "Arten": [
+            "Sequoia sempervirens / Küsten-Mammutbaum,Redwood"
+        ]
+    },
+    {
+        "Gattung": "Sequoia sempervirens / Küsten-Mammutbaum,Redwoode",
+        "Arten": [
+            "Sequoiadendron giganteum / Mammutbaum, Riesensequoia"
+        ]
+    },
+    {
+        "Gattung": "Sophora / Schnurbaum",
+        "Arten": [
+            "Sophora japonica / Japanischer Schnurbaum",
+            "Sophora japonica 'Regent' / Schnurbaum 'Regent'"
+        ]
+    },
+    {
+        "Gattung": "Sorbus / Eberesche",
+        "Arten": [
+            "Sorbus alnifolia / Erlenblättrige Mehlbeere",
+            "Sorbus americana / Amerikanische Mehlbeere, Kanadische Mehlbeere",
+            "Sorbus aria / Echte Mehlbeere",
+            "Sorbus aria 'Gigantea' / Echte Mehlbeere",
+            "Sorbus aria 'Lutescens' / Gelbfilzige Mehlbeere",
+            "Sorbus aria 'Magnifica' / Großlaubige Mehlbeere",
+            "Sorbus aria 'Majestica' / Grünfilzige Mehlbeere",
+            "Sorbus arnoldiana 'Apricot Queen' / Arnolds Eberesche",
+            "Sorbus aucuparia / Gemeine Eberesche, Vogelbeerbaum, Nordirische Eberesche",
+            "Sorbus aucuparia 'Cardinal Royal' / Gemeine Eberesche, Vogelbeere",
+            "Sorbus aucuparia 'Fastigiata' / Säulen-Eberesche",
+            "Sorbus aucuparia 'Sheerwater Seedling' / Eberesche",
+            "Sorbus aucuparia ssp. moravica / Eßbare Eberesche, Mährische Eberesche",
+            "Sorbus aucuparia var. edulis / Eberesche",
+            "Sorbus austriaca / Ísterreichische Mehlbeere",
+            "Sorbus commixta / Japanische Eberesche",
+            "Sorbus commixta 'Dodong'",
+            "Sorbus discolor / Mehlbeere",
+            "Sorbus domestica / Speierling, Sperbe, Schmerbirne",
+            "Sorbus hybrida / Bastardvogelbeere",
+            "Sorbus intermedia / Oxelbeere, Schwedische Mehlbeere",
+            "Sorbus intermedia 'Brouwers' / Oxelbeere, Schwedische Mehlbeere",
+            "Sorbus koehneana / Weißfrüchtige Eberesche",
+            "Sorbus latifolia / Park-Mehlbeere, Rundblättrige Mehlbeere",
+            "Sorbus spec. / Mehlbeere",
+            "Sorbus thuringiaca / Thüringische Eberesche",
+            "Sorbus thuringiaca 'Fastigiata' / Thüringische Säulen-Eberesche",
+            "Sorbus torminalis / Elsbeere",
+            "Sorbus vilmorinii / Vilmorins-Eberesche"
+        ]
+    },
+    {
+        "Gattung": "Taxodium / Sumpfzypresse",
+        "Arten": [
+            "Taxodium distichum / Sumpfzypresse"
+        ]
+    },
+    {
+        "Gattung": "Taxus / Eibe",
+        "Arten": [
+            "Taxus baccata / Eibe, Europäische Eibe, Gewöhnliche Eibe",
+            "Taxus baccata 'Adpressa' / Gewöhnliche Eibe",
+            "Taxus cuspidata / Japanische Eibe, Stachelspitzige Eibe",
+            "Taxus spec. / Eibe"
+        ]
+    },
+    {
+        "Gattung": "Thuja / Lebensbaum",
+        "Arten": [
+            "Thuja occidentalis / Abendländischer Lebensbaum",
+            "Thuja plicata / Riesen-Lebensbaum",
+            "Thuja plicata 'Atrovirens' / Riesen-Lebensbaum",
+            "Thuja spec. / Lebensbaum"
+        ]
+    },
+    {
+        "Gattung": "Tilia / Linde",
+        "Arten": [
+            "Tilia americana / Amerikanische Linde",
+            "Tilia americana 'Nova' / Americanische-Linde Riesenblättrige Linde",
+            "Tilia cordata / Winter-Linde",
+            "Tilia cordata 'Böhlje' / Winter-Linde",
+            "Tilia cordata 'Erecta' / Winter-Linde",
+            "Tilia cordata 'Glenleven' / Kegel-Linde",
+            "Tilia cordata 'Greenspire' / Stadt-Linde",
+            "Tilia cordata 'Rancho' / Kleinkronige Winter-Linde",
+            "Tilia cordata 'Roelvo' / Winter-Linde",
+            "Tilia cordata 'Sheridan' / Winter-Linde",
+            "Tilia euchlora / Krim-Linde",
+            "Tilia intermedia / Holländische Linde",
+            "Tilia petiolaris / Hänge-Silber-Linde",
+            "Tilia platyphyllos / Sommer-Linde",
+            "Tilia spec. / Linde",
+            "Tilia tomentosa / Silber-Linde",
+            "Tilia tomentosa 'Brabant' / Brabanter Silber-Linde",
+            "Tilia vulgaris / Holländische-Linde",
+            "Tilia vulgaris europaea / Europäische-Linde",
+            "Tilia vulgaris 'Pallida' / Kaiser-Linde"
+        ]
+    },
+    {
+        "Gattung": "Tsuga / Hemlocktanne",
+        "Arten": [
+            "Tsuga canadensis / Kanadische Hemlocktanne , Schirlingstanne",
+            "Tsuga heterophylla / Westliche Hemlocktanne"
+        ]
+    },
+    {
+        "Gattung": "Ulmus / Ulme",
+        "Arten": [
+            "Ulmus / Ulme",
+            "Ulmus americana / Amerikanische Ulme",
+            "Ulmus 'Clusius' / Hybrid-Ulme / Clusius-Ulme",
+            "Ulmus 'Columella' / Hybrid-Ulme / Columella-Ulme",
+            "Ulmus 'Dodoens' / Hybrid-Ulme / Dodoens-Ulme",
+            "Ulmus glabra / Berg-Ulme",
+            "Ulmus glabra 'Cornuta' / Spitzblättrige Ulme",
+            "Ulmus glabra 'Exoniensis' / Exeter-Ulme",
+            "Ulmus glabra 'Lutescens' / Gelbe Ulme",
+            "Ulmus hollandica / Holländische Ulme",
+            "Ulmus hollandica 'Belgica' / Belgische Ulme",
+            "Ulmus hollandica 'Commelin' / Commelin-Ulme",
+            "Ulmus hollandica 'Vegeta' / Huntingdon-Ulme",
+            "Ulmus laevis / Flatter-Ulme",
+            "Ulmus 'Lobel' / Hybrid-Ulme / Lobel-Ulme",
+            "Ulmus minor / Feldulme",
+            "Ulmus minor 'Jacqueline Hillier' / Elegantissima-Ulme",
+            "Ulmus minor var. vulgaris / Englische Ulme",
+            "Ulmus minor 'Wredei' / Gold-Ulme",
+            "Ulmus 'New Horizon' / Hybrid-Ulme / New-Horizon-Ulme",
+            "Ulmus 'Plantijn' / Hybrid-Ulme / Plantjin-Ulme",
+            "Ulmus pumila / Sibirische Ulme",
+            "Ulmus pumila 'Den Haag'",
+            "Ulmus 'Regal' / Hybrid-Ulme / Regal-Ulme",
+            "Ulmus 'Sapporo Autumn Gold' / Hybrid-Ulme / Sapporo-Ulme",
+            "Ulmus spec. / Ulme"
+        ]
+    },
+    {
+        "Gattung": "Zelkova / Zelkove",
+        "Arten": [
+            "Zelkova serrata / Japanische Zelkove"
+        ]
+    }
+ ]}
