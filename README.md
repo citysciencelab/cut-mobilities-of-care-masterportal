@@ -143,8 +143,7 @@ liest package.json.
 # bower install
 ```
 
-liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind. Es werden 2mal Benutzername und Passwort für unser repository abgefragt, die cmd-Ausgabe bleibt dann nicht stehen, was etwas unübersichtlich ist. Trotzdem: Benutzername eingeben, Enter; Passwort eingeben, Enter.
-
+liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind. Außerdem das Repo lgv-config mit services.json und style.json. Beide liegen neben dem lgv.git Repo im Master-Portal-Projekt-Ordner.
 
 ## Grunt Tasks ausführen
 
@@ -171,3 +170,12 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 ```
 # grunt -h
 ```
+
+## Aktualisieren von build-config und lgv-config
+
+```
+# bower update build-config
+# bower update lgv-config
+```
+
+aktualisiert die Verzeichnisse components/lgv-config und components/build-config, wenn dort neue Commits vorhanden sind.
