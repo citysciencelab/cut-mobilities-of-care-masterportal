@@ -4,7 +4,7 @@ define([
     'openlayers',
     'eventbus',
     'config',
-    'models/Layer',
+    'modules/layer/Layer',
     'collections/stylelist'
 
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
@@ -36,25 +36,25 @@ define([
                 context: this,
                 success: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
-                    var docEle = data.documentElement.nodeName;
-                    if (docEle.indexOf('Exception') != -1) {
-                        alert('Fehlermeldung beim Laden von Daten: \n' + jqXHR.responseText);
-                        return;
+                    try {                        
+                        var wfsReader = new ol.format.WFS({
+                            featureNS : this.get('featureNS'),
+                            featureType : this.get('featureType')
+                        });
+                        if (this.get('source').distance_) { // Erkennungszeichen für Clustersource
+                            this.get('source').source_.addFeatures(wfsReader.readFeatures(data));
+                        }
+                        else {
+                            this.get('source').addFeatures(wfsReader.readFeatures(data));
+                        }
                     }
-                    var wfsReader = new ol.format.WFS({
-                        featureNS : this.get('featureNS'),
-                        featureType : this.get('featureType')
-                    });
-                    if (this.get('source').distance_) { // Erkennungszeichen für Clustersource
-                        this.get('source').source_.addFeatures(wfsReader.readFeatures(data));
-                    }
-                    else {
-                        this.get('source').addFeatures(wfsReader.readFeatures(data));
+                    catch(e) {
+                        alert('Fehlermeldung beim Laden von Daten: \n' + e.message);
                     }
                 },
                 error: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
-                    alert('Fehlermeldung beim Laden von Daten: \n' + data.responseText);
+                    alert('Fehler beim Laden von Daten: \n' + data.responseText);
                 }
             });
         },
@@ -67,11 +67,25 @@ define([
             this.set('searchField', layerIDs.searchField);
             this.set('styleField', layerIDs.styleField);
             this.set('styleLabelField', layerIDs.styleLabelField);
-
             this.set('source', new ol.source.Vector({
-                projection: proj25832
+                projection: proj25832,
+                attributions: this.get('olAttribution')
             }));
             this.styling(this.get('source'), layerIDs);
+        },
+        /**
+         * wird von Layer.js aufgerufen
+         */
+        setAttributionLayer: function () {
+            this.set('layer', new ol.layer.Vector({
+                source: this.get('source'),
+                name: this.get('name'),
+                typ: this.get('typ'),
+                style: this.get('style'),
+                gfiAttributes: this.get('gfiAttributes'),
+                routable: this.get('routable')
+            }))
+            this.setVisibility();
         },
         setVisibility: function () {
             EventBus.trigger('returnBackboneLayerForSearchbar', this);
@@ -175,67 +189,51 @@ define([
             this.set('style', function (feature, resolution) {
                 return stylelistmodel.getClusterStyle(feature);
             });
-        },
-        /**
-         * wird von Layer.js aufgerufen
-         */
-        setAttributionLayer: function () {
-            this.set('layer', new ol.layer.Vector({
-                source: this.get('source'),
-                name: this.get('name'),
-                typ: this.get('typ'),
-                style: this.get('style'),
-                gfiAttributes: this.get('gfiAttributes'),
-                routable: this.get('routable')
-            }));
-            this.get('layer').once('render', function() { // triggert einmalig wenn gerendert wird
-                EventBus.trigger('getVisibleWFSLayer');
-            });
-        },
+        },        
         buildGetRequest : function () {
             // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
             if (this.get('url').indexOf('http://WSCA0620.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://WSCA0620.fhhnet.stadt.hamburg.de', '/wsca0620');
+                var newURL = this.get('url').replace('http://WSCA0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
             }
             else if (this.get('url').indexOf('http://bsu-ims.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://bsu-ims.fhhnet.stadt.hamburg.de', '/bsu-ims');
+                var newURL = this.get('url').replace('http://bsu-ims.fhhnet.stadt.hamburg.de', locations.host + '/bsu-ims');
             }
             else if (this.get('url').indexOf('http://bsu-ims') != -1) {
-                var newURL = this.get('url').replace('http://bsu-ims', '/bsu-ims');
+                var newURL = this.get('url').replace('http://bsu-ims', locations.host + '/bsu-ims');
             }
             else if (this.get('url').indexOf('http://bsu-uio.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://bsu-uio.fhhnet.stadt.hamburg.de', '/bsu-uio');
+                var newURL = this.get('url').replace('http://bsu-uio.fhhnet.stadt.hamburg.de', locations.host + '/bsu-uio');
             }
             else if (this.get('url').indexOf('http://geofos.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://geofos.fhhnet.stadt.hamburg.de', '/geofos');
+                var newURL = this.get('url').replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
             }
             else if (this.get('url').indexOf('http://geofos') != -1) {
-                var newURL = this.get('url').replace('http://geofos', '/geofos');
+                var newURL = this.get('url').replace('http://geofos', locations.host + '/geofos');
             }
             else if (this.get('url').indexOf('http://wscd0095') != -1) {
-                var newURL = this.get('url').replace('http://wscd0095', '/geofos');
+                var newURL = this.get('url').replace('http://wscd0095', locations.host + '/geofos');
             }
             else if (this.get('url').indexOf('http://hmbtg.geronimus.info') != -1) {
-                var newURL = this.get('url').replace('http://hmbtg.geronimus.info', '/hmbtg');
+                var newURL = this.get('url').replace('http://hmbtg.geronimus.info', locations.host + '/hmbtg');
             }
             else if (this.get('url').indexOf('http://lgvfds01.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://lgvfds01.fhhnet.stadt.hamburg.de', '/lgvfds01');
+                var newURL = this.get('url').replace('http://lgvfds01.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds01');
             }
             else if (this.get('url').indexOf('http://lgvfds02.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://lgvfds02.fhhnet.stadt.hamburg.de', '/lgvfds02');
+                var newURL = this.get('url').replace('http://lgvfds02.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds02');
             }
             else if (this.get('url').indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://wsca0620.fhhnet.stadt.hamburg.de', '/wsca0620');
+                var newURL = this.get('url').replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
             }
             // ab hier Internet
 			else if (this.get('url').indexOf('http://extmap.hbt.de') != -1) {
-                var newURL = this.get('url').replace('http://extmap.hbt.de', '/extmap');
+                var newURL = this.get('url').replace('http://extmap.hbt.de', locations.host + '/extmap');
             }
 			else if (this.get('url').indexOf('http://gateway.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://gateway.hamburg.de', '/gateway-hamburg');
+                var newURL = this.get('url').replace('http://gateway.hamburg.de', locations.host + '/gateway-hamburg');
             }
 			else if (this.get('url').indexOf('http://geodienste-hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://geodienste-hamburg.de', '/geodienste-hamburg');
+                var newURL = this.get('url').replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
             }
 
             this.set('url', newURL);

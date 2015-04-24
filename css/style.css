@@ -11,7 +11,7 @@
 @import "glyphiconbutton.css";
 @import "orientation.css";
 @import "copyright.css";
-@import "attribution.css";
+@import "../modules/attribution/style.css";
 @import "treefilter.css";
 @import "zoombuttons.css";
 @import "routingwin.css";
@@ -23,3 +23,5 @@
 @import "coordpopup.css";
 @import "treeselection.css";
 @import "../modules/layerselection/style.css";
+@import "../modules/footer/style.css";
+@import "../modules/quickhelp/style.css";

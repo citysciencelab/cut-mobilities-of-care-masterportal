@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'collections/LayerList',
-    'views/LayerView',
+    'modules/layer/view',
     'bootstrap',
     'eventbus'
 ], function ($, _, Backbone, LayerList, LayerView, Bootstrap, EventBus) {

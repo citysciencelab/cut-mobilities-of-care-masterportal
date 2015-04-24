@@ -2,7 +2,7 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!templates/Layer.html",
+    "text!modules/layer/Layer.html",
     "eventbus"
 ], function ($, _, Backbone, LayerTemplate, EventBus) {
 

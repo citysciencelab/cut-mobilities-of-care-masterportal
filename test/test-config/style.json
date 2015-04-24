@@ -528,5 +528,41 @@
         "subclass" : "Icon",
         "imagename" : "dwista.png",
         "imagescale" : "0.3"
+    },
+    {
+        "layerId" : "2156",
+        "styleFieldValue" : "Deckel Altona",
+        "subclass" : "Icon",
+        "imagename" : "Info-Altona-hellgrau.svg",
+        "imagescale" : 0.4,
+        "imageoffsetx" : 0.18,
+        "imageoffsety" : 0.05
+    },
+    {
+        "layerId" : "2156",
+        "styleFieldValue" : "Deckel Stellingen",
+        "subclass" : "Icon",
+        "imagename" : "Info-Stellingen-hellgrau.svg",
+        "imagescale" : 0.4,
+        "imageoffsetx" : 0.10,
+        "imageoffsety" : 0.35
+    },
+    {
+        "layerId" : "2156",
+        "styleFieldValue" : "Deckel Schnelsen",
+        "subclass" : "Icon",
+        "imagename" : "Info-Schnelsen-hellgrau.svg",
+        "imagescale" : 0.4,
+        "imageoffsetx" : 0.10,
+        "imageoffsety" : 0.70
+    },
+    {
+        "layerId" : "2156",
+        "styleFieldValue" : "Langenfelder Brücke",
+        "subclass" : "Icon",
+        "imagename" : "Hinweis-hellgrau.svg",
+        "imagescale" : 0.4,
+        "imageoffsetx" : 0.45,
+        "imageoffsety" : 0.60
     }
 ]

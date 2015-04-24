@@ -47,6 +47,8 @@ define([
                 EventBus.on('removeLayer', this.removeLayer, this);
                 EventBus.on('addOverlay', this.addOverlay, this);
                 EventBus.on('removeOverlay', this.removeOverlay, this);
+                EventBus.on('addControl', this.addControl, this);
+                EventBus.on('removeControl', this.removeControl, this);
                 EventBus.on("addInteraction", this.addInteraction, this);
                 EventBus.on("removeInteraction", this.removeInteraction, this);
                 EventBus.on('moveLayer', this.moveLayer, this);
@@ -132,8 +134,6 @@ define([
                 this.get('view').on('change:center', function () {
                     EventBus.trigger('currentMapCenter', this.get('view').getCenter());
                 },this);
-
-                EventBus.trigger('getMap');
             },
 
             GFIPopupVisibility: function(value) {
@@ -188,6 +188,9 @@ define([
         pointerMoveOnMap: function (evt) {
             EventBus.trigger("pointerMoveOnMap", evt)
         },
+        /**
+        * Interaction-Handling
+        */
         addInteraction: function (interaction) {
             this.get("map").addInteraction(interaction);
         },
@@ -195,6 +198,7 @@ define([
             this.get("map").removeInteraction(interaction);
         },
         /**
+        * Overlay-Handling
         */
         addOverlay: function (overlay) {
             this.get('map').addOverlay(overlay);
@@ -205,6 +209,16 @@ define([
             this.get('map').removeOverlay(overlay);
         },
         /**
+        * Control-Handling
+        */
+        addControl: function (control) {
+            this.get('map').addControl(control);
+        },
+        removeControl: function (control) {
+            this.get('map').removeControl(control);
+        },
+        /**
+        * Layer-Handling
         */
         addLayer: function (layer) {
             // Alle Layer

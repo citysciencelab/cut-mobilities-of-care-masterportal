@@ -16,7 +16,8 @@ require.config({
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') +1 ) + 'config',
         app: 'app',
         templates: '../templates',
-        modules: '../modules'
+        modules: '../modules',
+        videojs: '../_libs/video-js/video.dev'
     },
     shim: {
         bootstrap: {

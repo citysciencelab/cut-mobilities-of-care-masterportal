@@ -3,32 +3,27 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config',
-    'models/map'
+    'config'
 ], function (_, Backbone, ol, EventBus, Config) {
 
     var Attribution = Backbone.Model.extend({
         defaults: {
-            counter: 0,
-            alreadySet: false
+            alreadySet: false,
+            attribution: ''
         },
         initialize: function () {
-            EventBus.on('setMap', this.setMap, this);
-            EventBus.trigger('getMap', this);
+            this.listenTo(this, 'change:alreadySet', this.addAttributionControl);
             EventBus.on('startEventAttribution', this.startEventAttribution, this); //Beim erneuten sichtbar schalten des Layers wird die Funktion wieder ausgeführt
             EventBus.on('stopEventAttribution', this.stopEventAttribution, this); //Beim ausschalten des Layers wird die Funktion ausgeführt
-            EventBus.on('returnBackboneLayerForAttribution', this.checkLayer, this);
-            EventBus.trigger('getBackboneLayerForAttribution', this);
-        },
-        setMap: function (map) {
-            this.set('map', map);
+            EventBus.on('setAttributionToLayer', this.checkLayer, this);
+            EventBus.on('setMap', this.addAttributionControl, this);
         },
         /*
         * Diese Funktion wird für jeden Backbone-Layer ausgeführt und startet
-        * die Auswertung
+        * die Auswertung. Die gefundenen html-Tags werden im Attribut olAttribution am Layer
+        * gespeichert und vom layer an die source übernommen.
         */
         checkLayer: function (layer) {
-            //die childlayer des Gruppenlayer kommen extra rein
             if (layer.get('typ') != 'GROUP'){
                 var checkConfig = this.checkConfigForStringAttribution(layer);
                 var checkApi = this.checkAPIforAttribution(layer);
@@ -36,13 +31,7 @@ define([
                     return arr === undefined;
                 });
                 if (_.isArray(layerattributions) && layerattributions.length > 0) {
-                    /* TODO:
-                    Mit ol3-debug kann setAttributions() verwendet werden, mit ol3 nur .attributions =
-                    */
-                    layer.get('layer').getSource().attributions_ = layerattributions;
-                    if (this.get('alreadySet') == false) {
-                        this.addAttributionControl();
-                    }
+                    layer.set('olAttribution', layerattributions);                    
                 }
                 this.checkConfigForEventAttribution(layer);
             }
@@ -52,12 +41,12 @@ define([
         * definierten Abstand. Damit das Event bekannt ist, muss es über die Main
         * geladen werden. Als Speicherort bietet sich eine .js im Portalverzeichnis an.
         */
-        checkConfigForEventAttribution: function (layer) {
+        checkConfigForEventAttribution: function (layer) {            
             var config = this.returnConfig(layer);
             if (config && _.isObject(config.attribution)) {
-                this.listenTo(layer, 'change:eventValue', function (layer) {
-                    var eventValue = layer.get('eventValue');
-                    if (eventValue) {
+                this.listenTo(layer, 'change:eventAttribution', function (layer) {
+                    var eventAttribution = layer.get('eventAttribution');
+                    if (eventAttribution) {
                         var layerattributions = layer.get('layer').getSource().getAttributions();
                         if (!layerattributions) {
                             var layerattributions = new Array();
@@ -67,22 +56,20 @@ define([
                         }
                         layerattributions.push (
                             new ol.Attribution({
-                                html: eventValue
+                                html: eventAttribution
                             })
                         );
-                        layer.get('layer').getSource().attributions_ = layerattributions;
+                        layer.set('olAttribution', layerattributions);
+                        // layer.get('layer').getSource().attributions_ = layerattributions;
                         layer.reload();
                     }
                 });
-                if (this.get('alreadySet') == false) {
-                    this.addAttributionControl();
-                }
                 if (config.attribution.timeout && config.attribution.timeout > 0 && config.attribution.eventname){
                     layer.EventAttribution = {
                         name: config.attribution.eventname,
                         timeout: config.attribution.timeout
                     }
-                    if (layer.get('layer').getVisible() === true) {
+                    if (layer.visibility === true) {
                         EventBus.trigger('startEventAttribution', layer);
                     }
                 }
@@ -103,16 +90,18 @@ define([
             clearInterval(event);
             layer.EventAttribution.Event = '';
         },
-        addAttributionControl: function () {
-            var attribution = new ol.control.Attribution({
-                collapsible: true,
-                collapsed: false,
-                className: 'attribution', //in attribution.css
-                tipLabel: ''
-            });
-            this.get('map').addControl(attribution);
-            this.set('attribution', attribution);
-            this.set('alreadySet', true);
+        addAttributionControl: function (map) {
+            if (this.get('alreadySet') === false) {
+                var attribution = new ol.control.Attribution({
+                    collapsible: true,
+                    collapsed: false,
+                    className: 'attribution', //in attribution.css
+                    tipLabel: ''
+                });
+                EventBus.trigger('addControl', attribution);
+                this.set('alreadySet', true);
+                this.set('attribution', attribution);
+            }            
         },
         checkAPIforAttribution: function (layer) {
             if (layer.get('layerAttribution') && layer.get('layerAttribution') != '' && layer.get('layerAttribution') != 'nicht vorhanden') {
