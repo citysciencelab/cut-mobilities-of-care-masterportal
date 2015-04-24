@@ -156,6 +156,14 @@ liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /c
 yeaih!
 
 
+```
+# grunt build --path=portale/<portal>
+# grunt build --path=portale/local
+'''
+
+baut das Portal in den Ordner dist/<pkg.version>; Pfade in index.html werden automatisch ersetzt,
+components/lgv-config wird in den Ordner /lgv-config kopiert, Pfade in config.js werden ersetzt, da wird die auf den echten Servern erwartet
+
 Alle grunt-Tasks
 
 ```
