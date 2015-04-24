@@ -7,8 +7,8 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../config/diensteapiInternet.json',
-        categoryConf: '../config/category.json',
+        layerConf: '../components/lgv-config/services-fhhnet.json',
+        categoryConf: '../components/lgv-config/category.json',
         layerIDs:
         [
         {id: "453", visible: true},
@@ -20,7 +20,7 @@ define(function () {
         {id: "1568,1569,1570", visible: false, name: "Schutzwürdige Böden", minScale: "10000"},
         {id: "1702", visible: true}
         ],
-        styleConf: "../config/style.json",
+        styleConf: "../components/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
