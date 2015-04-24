@@ -10,6 +10,7 @@ node_modules
 components
 dist
 temp
+lgv-config
 
 /nbproject/private/
 /img/*.db

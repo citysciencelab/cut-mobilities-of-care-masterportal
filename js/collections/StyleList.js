@@ -5,8 +5,11 @@ define([
     'config'
 ], function (_, Backbone, WFSStyle, Config) {
 
-    //interpretiere Pfade relativ von requirejs baseUrl
+    //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
     var baseUrl = require.toUrl('').split('?')[0];
+    if (Config.layerConf.startsWith('/')){
+        baseUrl = ''
+    }
 
     var StyleList = Backbone.Collection.extend({
         model: WFSStyle,

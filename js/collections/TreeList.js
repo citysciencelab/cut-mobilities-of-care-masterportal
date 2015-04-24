@@ -6,8 +6,11 @@ define([
     "eventbus"
     ], function (_, Backbone, TreeNode, Config, EventBus) {
 
-        //interpretiere Pfade relativ von requirejs baseurl
+        //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
         var baseUrl = require.toUrl('').split('?')[0];
+        if (Config.layerConf.startsWith('/')){
+            baseUrl = ''
+        }
 
         var TreeList = Backbone.Collection.extend({
             "url": baseUrl + Config.categoryConf,
