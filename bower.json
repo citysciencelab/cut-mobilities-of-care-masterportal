@@ -31,6 +31,6 @@
 
   },
   "devDependencies": {
-    "build-config": "G:/AG_GeoDaten_Anwendungen/Projekte/Master-Portal/lgv-config.git#latest"
+    "build-config": "G:/AG_GeoDaten_Anwendungen/Projekte/Master-Portal/build-config.git#latest"
   }
 }
