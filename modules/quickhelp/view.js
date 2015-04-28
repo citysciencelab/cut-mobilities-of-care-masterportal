@@ -10,7 +10,8 @@ define([
         templateSearch: _.template(TemplateSearch),
         className: "quick-help-window ui-widget-content",
         events: {
-            "click .glyphicon-remove": "removeWindow"
+            "click .glyphicon-remove": "removeWindow",
+            "click .glyphicon-print": "printHelp"
         },
         initialize: function () {
             this.render();
@@ -25,6 +26,10 @@ define([
         removeWindow: function () {
             this.$el.hide("slow");
         },
+        /**
+         * [showWindow description]
+         * @param {[type]} value [description]
+         */
         showWindow: function (value) {
             switch (value) {
                 case "search":
@@ -34,6 +39,16 @@ define([
                     break;
             }
             this.$el.show("slow");
+        },
+        /**
+         * [printHelp description]
+         */
+        printHelp: function () {
+            var htmlToPrint = document.getElementsByClassName("quick-help-window")[0],
+                newWin= window.open("");
+
+            newWin.document.write(htmlToPrint.outerHTML);
+            newWin.print();
         }
     });
 
