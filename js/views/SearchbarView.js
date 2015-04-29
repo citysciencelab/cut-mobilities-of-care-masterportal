@@ -397,10 +397,16 @@ define([
                             wkt += ",((";
                         }
                     });
-                    wkt = wkt.replace(", )?(", "),(");
+                    var regExp = new RegExp(", \\)\\?\\(", "g");
+                    wkt = wkt.replace(regExp, "),(");
                 }
                 return wkt;
             },
+            //
+            // escapeRegExp: function (string) {
+            //     console.log(string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"));
+            //     return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+            // },
 
             /**
             * Platziert den Cursor am Ende vom String

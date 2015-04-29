@@ -9,7 +9,8 @@ define(function () {
         layerConf: locations.baseUrl + (locations.fhhnet ? "../diensteapiFHHNET.json" : "../diensteapiINTERNET.json"),
         layerIDs:
         [
-        {id: "453", visible: true},
+        {id: "453", visible: true}, 
+        {id: "1452", visible: true},
         {id: "94", visible: false},
         {id: "1554", visible: false, minScale: "10000"},
         {id: "1555", visible: false, minScale: "10000"},

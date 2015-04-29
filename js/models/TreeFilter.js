@@ -31,7 +31,7 @@ define([
             this.listenTo(this, 'change:searchTypeString', this.setTypeArray);
             this.listenTo(this, 'change:SLDBody', this.updateStyleByID);
             this.listenTo(this, 'change:SLDBody', this.getFilterHits);
-            this.set('layerID', '5182');
+            this.set('layerID', '182');
             // this.set('layerCacheID', '5183');
 
             this.fetch({
@@ -302,7 +302,6 @@ define([
             this.set('filter', filterwfs);
 
             this.set('SLDBody', header + filter + symbolizer + footer);
-            console.log(this.get("SLDBody"));
         },
         getFilterHits: function () {
             $('#loader').show();
