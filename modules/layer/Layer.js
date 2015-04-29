@@ -3,18 +3,17 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "config",
-    "modules/attribution/view"
+    "config"
 ], function (_, Backbone, ol, EventBus, Config, AttView) {
     /**
-     * Der Layer lädt über define immer auch das Attributions-Modul, da diese nur bei 
-     * initialer Bereitstellung der source des Layers gesetzt werden kann. 
-     */
+    * Bereitstellung des Layers
+    */
     var Layer = Backbone.Model.extend({
         defaults: {
             selected: false
         },
         initialize: function () {
+
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
 
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
@@ -78,7 +77,7 @@ define([
             this.setAttributionLayerSource();
             EventBus.trigger('removeLayer', this.get('layer'));                    
             this.setAttributionLayer();
-            EventBus.trigger('addLayer', this.get('layer'))                
+            EventBus.trigger('addLayer', this.get('layer'))
         },
         setAttributions: function () {
             var datasets = this.get("datasets");
