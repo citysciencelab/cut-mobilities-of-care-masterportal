@@ -3299,7 +3299,7 @@
       "format" : "image/jpeg",
       "version" : "1.3.0",
       "singleTile" : false,
-      "transparent" : true,
+      "transparent" : false,
       "tilesize" : "512",
       "gutter" : "0",
       "minScale" : "0",
@@ -3320,6 +3320,48 @@
             "filter" : [
                "hmbtg",
                "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "5181",
+      "name" : "Strassenbaumkataster Hamburg",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public_3.2/services/wms_hh_strassenbaumkataster",
+      "typ" : "WMS",
+      "layers" : "strassenbaum",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "256",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "gattung" : " Gattung",
+         "art" : " Baumart",
+         "pflanzjahr" : " Pflanzjahr",
+         "stammumfangzahl" : " Stammumfang",
+         "kronendmzahl" : " Kronendurchmesser",
+         "strasse" : " Straße"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "C1C61928-C602-4E37-AF31-2D23901E2540",
+            "rs_id" : "HMDK#C1C61928-C602-4E37-AF31-2D23901E2540",
+            "md_name" : "Straßenbaumkataster Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Umwelt und Klima"
+            ],
+            "kategorie_inspire" : "Bodenbedeckung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
             ]
          }
       ]
@@ -5567,7 +5609,7 @@
    },
    {
       "id" : "411",
-      "name" : "Image",
+      "name" : "DISK 1:60000 gb",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DISK60_GB/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
@@ -6425,7 +6467,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -6459,7 +6501,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -8606,7 +8648,7 @@
    },
    {
       "id" : "520",
-      "name" : "Image",
+      "name" : "DISK 1:20000 gb",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DISK20_GB/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "1",
@@ -10967,42 +11009,6 @@
       ]
    },
    {
-      "id" : "645",
-      "name" : "Bodenkunde-Horizonte",
-      "url" : "http://bsu-uio.fhhnet.stadt.hamburg.de:8083/uioows/services/wms_internet",
-      "typ" : "WMS",
-      "layers" : "0",
-      "format" : "image/png",
-      "version" : "1.1.1",
-      "singleTile" : false,
-      "transparent" : true,
-      "tilesize" : "512",
-      "gutter" : "0",
-      "minScale" : "0",
-      "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "cache" : false,
-      "datasets" : [
-         {
-            "md_id" : "2B609FD3-DAC9-11D2-9A86-080000507261",
-            "rs_id" : "HMDK#2B609FD3-DAC9-11D2-9A86-080000507261",
-            "md_name" : "Bohrarchiv",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten",
-               "Umwelt und Klima"
-            ],
-            "kategorie_inspire" : "Kein INSPIRE-Thema",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         }
-      ]
-   },
-   {
       "id" : "646",
       "name" : "Geologische Profilschnitte",
       "url" : "http://bsu-uio.fhhnet.stadt.hamburg.de:8083/uioows/services/wms_internet",
@@ -12235,7 +12241,7 @@
    },
    {
       "id" : "719",
-      "name" : "Image",
+      "name" : "ATKIS 1:20000 farbig",
       "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "9",
@@ -12250,7 +12256,23 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "DDABB1F8-C90D-4849-95EE-18E9F8D6D0FA",
+            "rs_id" : "HMDK#C5FE747D-F3AF-4136-AED7-BBC1237B719D",
+            "md_name" : "ATKIS Digitales Basis Landschaftsmodell Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Geographie, Geologie und Geobasisdaten"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
    },
    {
       "id" : "720",
@@ -13309,21 +13331,6 @@
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
-         {
-            "md_id" : "DDABB1F8-C90D-4849-95EE-18E9F8D6D0FA",
-            "rs_id" : "HMDK#C5FE747D-F3AF-4136-AED7-BBC1237B719D",
-            "md_name" : "ATKIS Digitales Basis Landschaftsmodell Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Geographie, Geologie und Geobasisdaten"
-            ],
-            "kategorie_inspire" : "Kein INSPIRE-Thema",
-            "filter" : [
-               "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
-            ]
-         },
          {
             "md_id" : "D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
             "rs_id" : "HMDK#D2DA3359-3DC9-4CA4-AE9B-7C63D53B220F",
@@ -19968,7 +19975,7 @@
       "name" : "Quartärbasis",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "12",
+      "layers" : "13",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : false,
@@ -20003,7 +20010,7 @@
       "name" : "Pethrographie",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "13",
+      "layers" : "14",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : false,
@@ -20038,7 +20045,7 @@
       "name" : "Kaltzeit",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "14",
+      "layers" : "15",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : false,
@@ -20073,7 +20080,7 @@
       "name" : "Geologie 50000",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "15",
+      "layers" : "16",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : false,
@@ -20108,7 +20115,7 @@
       "name" : "Genese",
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WmsServer",
       "typ" : "WMS",
-      "layers" : "16",
+      "layers" : "17",
       "format" : "image/png",
       "version" : "1.3.0",
       "singleTile" : false,
@@ -21983,8 +21990,7 @@
             "kategorie_inspire" : "Gebiete mit naturbedingten Risiken",
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -22018,8 +22024,7 @@
             "kategorie_inspire" : "Gebiete mit naturbedingten Risiken",
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -29876,7 +29881,15 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "OBJECTID" : "ObjectID",
+         "DATASOURCE" : "Data Source",
+         "KLASSE" : "Klasse",
+         "VERDUNSTUNGSPOTENTIAL" : "Verdunstungspotential",
+         "FLAECHENBEZEICHNUNG" : "Flächenbezeichnung",
+         "BESCHREIBUNG" : "Beschreibung",
+         "STAND_BEARBEITUNG" : "Stand Bearbeitung"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -30372,7 +30385,13 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "OBJECTID" : "ObjectID",
+         "VERSIEGELUNGSKLASSE" : "Versiegelungsklasse",
+         "KARTIERUNG_JAHR" : "Kartierungsjahr",
+         "BIOTOPGRUPPE" : "Biotopgruppe",
+         "STAND_BEARBEITUNG" : "Stand Bearbeitung"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -30407,7 +30426,18 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "OBJECTID" : "ObjectID",
+         "GENESE" : "Genese",
+         "KALTZEITEN" : "Kaltzeiten",
+         "ZEITALTER" : "Zeitalter",
+         "REGION" : "Region",
+         "VERSIEGELUNGSGRAD" : "Versiegelungsgrad",
+         "BODENGESELLSCHAFT" : "Bodengesellschaft",
+         "PETROGRAPHIE" : "Petrographie",
+         "BODENSUBSTRAT" : "Bodensubstrat",
+         "STAND_BEARBEITUNG" : "Stand Bearbeitung"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -30908,7 +30938,14 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "OBJECTID" : "ObjectID",
+         "NAME" : "Name",
+         "GRUND" : "Grund",
+         "A_TYP" : "A Typ",
+         "A_KLASSE" : "A Klasse",
+         "HOTLINK" : "Steckbrief"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -30942,7 +30979,14 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "OBJECTID" : "ObjectID",
+         "NAME" : "Name",
+         "GRUND" : "Grund",
+         "A_TYP" : "A Typ",
+         "A_KLASSE" : "A Klasse",
+         "HOTLINK" : "Steckbrief"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -30976,7 +31020,14 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "OBJECTID" : "ObjectID",
+         "NAME" : "Name",
+         "GRUND" : "Grund",
+         "A_TYP" : "A Typ",
+         "A_KLASSE" : "A Klasse",
+         "HOTLINK" : "Steckbrief"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -32139,7 +32190,23 @@
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "350000",
-      "gfiAttributes" : "showAll",
+      "gfiAttributes" : {
+         "A_OBJECTID" : "Object",
+         "DATENSTANDARD" : "Datenstandard",
+         "A_1_PROFILBESCHREIBUNG" : "Weitere Informationen",
+         " E_4_DATUM_DER_AUFNAHME" : "Datum der Aufnahme",
+         "G_6_RECHTSWERT_GK" : "Rechtswert GK",
+         "H_7_HOCHWERT_GK" : "Hochwert GK",
+         "J_9_AUFSCHLUSSART_ETC" : "Aufschlussart",
+         "L_10_BEMERKUNGEN" : "Bemerkungen",
+         "M_11_NEIGUNG" : "Neigung",
+         "V_19_NUTZUNG" : "Nutzung",
+         "W_20_VEGETATION" : "Vegetation",
+         "Z_50_BODENSYST_EINHEÌT" : "Bodentyp",
+         "Z_51_SUBSTRATSYST_EINHEIT_WERT" : "Substrattyp",
+         "Z_52_HUMUSFORM" : "Humusform",
+         "Z_53B_WASSERSTAND" : "Wasserstand und Geländeroberfläche"
+      },
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
       "datasets" : [
@@ -34366,7 +34433,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -34400,7 +34467,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -34434,7 +34501,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -34468,7 +34535,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -34502,7 +34569,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -34536,7 +34603,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -37597,7 +37664,22 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2179",
@@ -37616,7 +37698,22 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2180",
@@ -37635,7 +37732,22 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2181",
@@ -37654,7 +37766,22 @@
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "cache" : false,
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2182",
@@ -37662,6 +37789,394 @@
       "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/HHA_Tunnel/MapServer/WmsServer",
       "typ" : "WMS",
       "layers" : "5",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2183",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Mrh",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_mrh_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2184",
+      "name" : "Ladestandorte Für Elektrofahrzeuge",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_hh_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2185",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Cuxhaven",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_cux_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2186",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Laünburg",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_lauenburg_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2187",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Lüneburg",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_lueneburg_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2188",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Steinburg",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_steinburg_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2189",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Pinneberg",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_pi_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2190",
+      "name" : "Ladestandorte Für Elektrofahrzeuge Rotenburg",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_row_emobility",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2191",
+      "name" : "Park Und Ride Hh",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_hh_parkandride",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2192",
+      "name" : "Park Und Ride Mrh",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_parkandride",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2193",
+      "name" : "Bike Und Ride Mrh",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_bikeandride",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2194",
+      "name" : "Verkehrsnetz Bahn",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_bahnlinien",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2195",
+      "name" : "Schienenprojekte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_schienenprojekte",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2196",
+      "name" : "Strassenprojekte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_strassenprojekte",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2197",
+      "name" : "Verkehrsprojekte Mrh",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_verkehrsprojekte",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2198",
+      "name" : "Wasserwegeprojekte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_mrh_verkehr",
+      "typ" : "WMS",
+      "layers" : "mrh_wasserprojekte",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2199",
+      "name" : "Präquartär",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "12",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "2B60A0BD-DAC9-11D2-9A86-080000507261",
+            "rs_id" : "HMDK#2B60A0BD-DAC9-11D2-9A86-080000507261",
+            "md_name" : "Geologische Karte Präquartärer Untergrund 1:50 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Geologie",
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "2201",
+      "name" : "Bohrungen Gla",
+      "url" : "http://bsu-uio.fhhnet.stadt.hamburg.de:8083/uioows/services/wms_internet",
+      "typ" : "WMS",
+      "layers" : "bohrungen",
+      "format" : "nicht vorhanden",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "6681",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2202",
+      "name" : "Footprint",
+      "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/Geobasisdaten_SW/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "10",
       "format" : "nicht vorhanden",
       "version" : "1.3.0",
       "singleTile" : false,
@@ -46585,8 +47100,7 @@
             "kategorie_inspire" : "Gebiete mit naturbedingten Risiken",
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46643,8 +47157,7 @@
             "kategorie_inspire" : "Gebiete mit naturbedingten Risiken",
             "filter" : [
                "hmbtg",
-               "#opendata_hh#",
-               "inspireidentifiziert"
+               "#opendata_hh#"
             ]
          }
       ]
@@ -46664,7 +47177,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46678,7 +47191,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46706,7 +47219,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46720,7 +47233,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46748,7 +47261,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46776,7 +47289,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46790,7 +47303,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46818,7 +47331,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46846,7 +47359,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46874,7 +47387,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46902,7 +47415,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46916,7 +47429,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46944,7 +47457,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46958,7 +47471,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -46986,7 +47499,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47014,7 +47527,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47042,7 +47555,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47056,7 +47569,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47084,7 +47597,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47098,7 +47611,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47126,7 +47639,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47140,7 +47653,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47168,7 +47681,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -47196,7 +47709,7 @@
          {
             "md_id" : "47233BC2-8D3F-4D9E-B760-BA153327F0E8",
             "rs_id" : "HMDK#d8a5cc54-7410-4777-8296-bb1131bf2581",
-            "md_name" : "Hochwasserrisikomanagement / Gefahren- und Risikokarten in Risikogebieten Hamburg",
+            "md_name" : "Hochwasserrisikomanagement",
             "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
             "kategorie_opendata" : [
                "Umwelt und Klima"
@@ -48521,7 +49034,7 @@
       "featureType" : "Strassenachse",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48551,7 +49064,7 @@
       "featureType" : "Europastrassen",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48581,7 +49094,7 @@
       "featureType" : "Strassenverkehr",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48611,7 +49124,7 @@
       "featureType" : "Bundesautobahnen",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48641,7 +49154,7 @@
       "featureType" : "Strassennamen_B",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48671,7 +49184,7 @@
       "featureType" : "Fahrwegachse",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48701,7 +49214,7 @@
       "featureType" : "Gemeindestrassen",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48731,7 +49244,7 @@
       "featureType" : "Strassennamen_E",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48761,7 +49274,7 @@
       "featureType" : "Nullpunkte",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48791,7 +49304,7 @@
       "featureType" : "Strassennamen_G",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48821,7 +49334,7 @@
       "featureType" : "Strassennamen_BAB",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -48851,7 +49364,7 @@
       "featureType" : "Bundesstrassen",
       "format" : "nicht vorhanden",
       "version" : "1.1.0",
-      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WFS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/INSPIRE/DE_HH_WMS_INSPIRE_A1_7_Verkehrsnetze/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "datasets" : [
@@ -49600,7 +50113,22 @@
       "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/HHA_Tunnel/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2174",
@@ -49613,7 +50141,22 @@
       "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/HHA_Tunnel/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2175",
@@ -49626,7 +50169,22 @@
       "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/HHA_Tunnel/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2176",
@@ -49639,7 +50197,22 @@
       "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/HHA_Tunnel/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
    },
    {
       "id" : "2177",
@@ -49652,6 +50225,46 @@
       "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/HHA_Tunnel/MapServer/WFSServer",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "datasets" : []
+      "datasets" : [
+         {
+            "md_id" : "8EC0A17F-C265-4CE9-A9DD-5E5B0409F961",
+            "rs_id" : "HMDK#68e276c6-bab9-4d60-9c82-350ff9b57027",
+            "md_name" : "HOCHBAHN Tunnel",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Transport und Verkehr"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2200",
+      "name" : "Präquartär",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WFSServer",
+      "typ" : "WFS",
+      "featureType" : "Praequartaer",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_U_Geologie_GLA/MapServer/WFSServer",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "datasets" : [
+         {
+            "md_id" : "2B60A0BD-DAC9-11D2-9A86-080000507261",
+            "rs_id" : "HMDK#2B60A0BD-DAC9-11D2-9A86-080000507261",
+            "md_name" : "Geologische Karte Präquartärer Untergrund 1:50 000",
+            "bbox" : "543991.0,5916243.31,590003.12,5956232.43",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Geologie",
+            "filter" : []
+         }
+      ]
    }
 ]
