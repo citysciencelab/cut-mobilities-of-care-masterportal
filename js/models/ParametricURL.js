@@ -118,12 +118,7 @@ define([
             */
             if (_.has(result, 'CLICKCOUNTER')) {
                 var value = _.values(_.pick(result, 'CLICKCOUNTER'))[0].toUpperCase();
-                if (value === 'TRUE') {
-                    Config.clickCounter.enabled = true;
-                }
-                else {
-                    Config.clickCounter.enabled = false;
-                }
+                Config.clickCounter.version = value;
             }
         }
     });

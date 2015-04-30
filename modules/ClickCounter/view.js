@@ -9,16 +9,18 @@ define([
     var ClickCounterView = Backbone.View.extend({
         model: ClickCounter,
         initialize: function () {
-            // Warte auf Zufügen von Layern in Layertree
-            EventBus.on('registerLayerTreeInClickCounter', this.registerLayerEvent, this);
-            EventBus.on('registerToolsClickInClickCounter', this.registerToolsClickEvent, this);
-            EventBus.on('registerRoutingClickInClickCounter', this.registerRoutingClickEvent, this);
-            EventBus.on('registerZoomButtonsInClickCounter', this.registerZoomButtonsClickEvent, this);
-            // Erzeuge iFrame
-            $('<iframe " src="' + this.model.get('srcUrl') + '" id="' + this.model.get('countframeid') + '" width="0" height="0" frameborder="0"/>').appendTo('body');
-            this.registerMap();
-            // fired beim Öffnen der Seite
-            this.registerClick();
+            if (this.model.get('srcUrl') !== '') {
+                // Warte auf Zufügen von Layern in Layertree
+                EventBus.on('registerLayerTreeInClickCounter', this.registerLayerEvent, this);
+                EventBus.on('registerToolsClickInClickCounter', this.registerToolsClickEvent, this);
+                EventBus.on('registerRoutingClickInClickCounter', this.registerRoutingClickEvent, this);
+                EventBus.on('registerZoomButtonsInClickCounter', this.registerZoomButtonsClickEvent, this);
+                // Erzeuge iFrame
+                $('<iframe " src="' + this.model.get('srcUrl') + '" id="' + this.model.get('countframeid') + '" width="0" height="0" frameborder="0"/>').appendTo('body');
+                this.registerMap();
+                // fired beim Öffnen der Seite
+                this.registerClick();
+            }
         },
         registerZoomButtonsClickEvent: function (zoomButtons) {
             // fired beim Zoomen über zoombuttons

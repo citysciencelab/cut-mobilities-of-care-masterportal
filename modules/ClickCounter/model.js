@@ -10,7 +10,15 @@ define([
     		srcUrl: ''
         },
     	initialize: function () {
-    	   this.set('srcUrl', Config.clickCounter.url);
+            var srcurl = '';
+            _.each(Config.clickCounter, function (value, key) {
+                if (Config.clickCounter.version.toUpperCase() === key.toUpperCase()) {
+                    srcurl = value;
+                }
+            });
+            if (srcurl != '') {
+                this.set('srcUrl', srcurl);
+            }
         },
         refreshIframe: function () {
             $('#' + this.get('countframeid')).attr( 'src', function ( i, val ) { return val; });
