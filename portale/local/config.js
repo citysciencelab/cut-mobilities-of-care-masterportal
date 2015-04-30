@@ -47,7 +47,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             draw: true,
             active: "gfi"
@@ -56,12 +56,13 @@ define(function () {
         poi: false,
         print: {
             url: function () {
-                    return "/mapfish/mapfish_print_2.0/";
+                    return "http://wscd0096:8680/mapfish_print_2.0/";
                 }
             ,
             title: "Bodenschutz-Portal",
             gfi: false
-        }
+        },
+        proxyURL: "/cgi-bin/proxy.cgi"
     }
     return config;
 });
