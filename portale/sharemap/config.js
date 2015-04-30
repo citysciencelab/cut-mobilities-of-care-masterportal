@@ -6,13 +6,14 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        categoryConf: "../components/lgv-config/category.json",
         layerIDs:
         [
             {id: "453", visible: true},
             {id: "8", visible: false}
         ],
-        styleConf: locations.baseUrl + "../style.json",
+        styleConf: "../components/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
@@ -29,17 +30,11 @@ define(function () {
             legend: false,
             routing: false
         },
-        startUpModul: '',
-        // gazetteerURL: locations.host + "/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+        startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         // bPlanURL: locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene",
@@ -55,14 +50,9 @@ define(function () {
         poi: false,
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
+                return "http://wscd0096:8680/mapfish_print_2.0/";
             },
-            title: 'Hamburg',
+            title: "Hamburg",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
