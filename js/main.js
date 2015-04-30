@@ -1,7 +1,7 @@
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: '../_libs/openlayers/js/ol.amd',
+        openlayers: '../_libs/openlayers/js/ol-debug',
         jquery: '../components/jquery/dist/jquery',
         jqueryui: '../components/jquery-ui/jquery-ui.min',
         underscore: '../components/underscore/underscore',

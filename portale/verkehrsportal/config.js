@@ -7,24 +7,22 @@ define(function () {
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
-        styleConf: locations.baseUrl + '../style.json',
+        layerConf: '../components/lgv-config/services-fhhnet.json',
+        categoryConf: '../components/lgv-config/category.json',
+        styleConf: '../components/lgv-config/style.json',
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
+                    return "http://wscd0096:8680/mapfish_print_2.0/";
                 }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
-            },
-            title: 'Verkehrsportal',
+            ,
+            title: "Verkehrsportal",
             gfi: false
         },
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
             {id: '453', visible: true},
             {id: '452', visible: false},
+            {id: '2092', visible: false},
             {id:
              [
                  {
@@ -65,15 +63,15 @@ define(function () {
             {id: '50', visible: false, style: '50', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '2119', visible: false, style: '2119', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2092', visible: false},
             {id: '2128', visible: false, style: '2128', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '2132', visible: false, style: '2132', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
             {id: '2156', visible: true, style: '2156', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'name', routable: false}
         ],
         attributions: true,
         clickCounter: {
-        		enabled: false,
-        		url: 'http://static.hamburg.de/countframes/verkehrskarte_count.html'
+            version: '',
+            desktop: 'http://static.hamburg.de/countframes/verkehrskarte_count.html',
+            mobil : 'http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html'
         },
         menubar: true,
         scaleLine: true,
@@ -95,12 +93,7 @@ define(function () {
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {

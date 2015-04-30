@@ -41,7 +41,7 @@ define('app', ['jquery', 'config'], function($, Config) {
             'jquery'
         ], function(Map, Config, $) {
             new Map();
-            if (typeof(Config.clickCounter) === 'object' && Config.clickCounter.enabled === true) {
+            if (typeof(Config.clickCounter) === 'object' && Config.clickCounter.version != '') {
                 require(['modules/ClickCounter/view'], function(ClickCounterView) {
                     new ClickCounterView();
                 });

@@ -54,6 +54,7 @@ define([
                 },
                 error: function (data, textStatus, jqXHR) {
                     $('#loader').hide();
+                    console.log(data);
                     alert('Fehler beim Laden von Daten: \n' + data.responseText);
                 }
             });
@@ -193,47 +194,47 @@ define([
         buildGetRequest : function () {
             // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
             if (this.get('url').indexOf('http://WSCA0620.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://WSCA0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
+                var newURL = this.get('url').replace('http://WSCA0620.fhhnet.stadt.hamburg.de', '/wsca0620');
             }
             else if (this.get('url').indexOf('http://bsu-ims.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://bsu-ims.fhhnet.stadt.hamburg.de', locations.host + '/bsu-ims');
+                var newURL = this.get('url').replace('http://bsu-ims.fhhnet.stadt.hamburg.de', '/bsu-ims');
             }
             else if (this.get('url').indexOf('http://bsu-ims') != -1) {
-                var newURL = this.get('url').replace('http://bsu-ims', locations.host + '/bsu-ims');
+                var newURL = this.get('url').replace('http://bsu-ims', '/bsu-ims');
             }
             else if (this.get('url').indexOf('http://bsu-uio.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://bsu-uio.fhhnet.stadt.hamburg.de', locations.host + '/bsu-uio');
+                var newURL = this.get('url').replace('http://bsu-uio.fhhnet.stadt.hamburg.de', '/bsu-uio');
             }
             else if (this.get('url').indexOf('http://geofos.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://geofos.fhhnet.stadt.hamburg.de', locations.host + '/geofos');
+                var newURL = this.get('url').replace('http://geofos.fhhnet.stadt.hamburg.de', '/geofos');
             }
             else if (this.get('url').indexOf('http://geofos') != -1) {
-                var newURL = this.get('url').replace('http://geofos', locations.host + '/geofos');
+                var newURL = this.get('url').replace('http://geofos', '/geofos');
             }
             else if (this.get('url').indexOf('http://wscd0095') != -1) {
-                var newURL = this.get('url').replace('http://wscd0095', locations.host + '/geofos');
+                var newURL = this.get('url').replace('http://wscd0095', '/geofos');
             }
             else if (this.get('url').indexOf('http://hmbtg.geronimus.info') != -1) {
-                var newURL = this.get('url').replace('http://hmbtg.geronimus.info', locations.host + '/hmbtg');
+                var newURL = this.get('url').replace('http://hmbtg.geronimus.info', '/hmbtg');
             }
             else if (this.get('url').indexOf('http://lgvfds01.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://lgvfds01.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds01');
+                var newURL = this.get('url').replace('http://lgvfds01.fhhnet.stadt.hamburg.de', '/lgvfds01');
             }
             else if (this.get('url').indexOf('http://lgvfds02.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://lgvfds02.fhhnet.stadt.hamburg.de', locations.host + '/lgvfds02');
+                var newURL = this.get('url').replace('http://lgvfds02.fhhnet.stadt.hamburg.de', '/lgvfds02');
             }
             else if (this.get('url').indexOf('http://wsca0620.fhhnet.stadt.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://wsca0620.fhhnet.stadt.hamburg.de', locations.host + '/wsca0620');
+                var newURL = this.get('url').replace('http://wsca0620.fhhnet.stadt.hamburg.de', '/wsca0620');
             }
             // ab hier Internet
 			else if (this.get('url').indexOf('http://extmap.hbt.de') != -1) {
-                var newURL = this.get('url').replace('http://extmap.hbt.de', locations.host + '/extmap');
+                var newURL = this.get('url').replace('http://extmap.hbt.de', '/extmap');
             }
 			else if (this.get('url').indexOf('http://gateway.hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://gateway.hamburg.de', locations.host + '/gateway-hamburg');
+                var newURL = this.get('url').replace('http://gateway.hamburg.de', '/gateway-hamburg');
             }
 			else if (this.get('url').indexOf('http://geodienste-hamburg.de') != -1) {
-                var newURL = this.get('url').replace('http://geodienste-hamburg.de', locations.host + '/geodienste-hamburg');
+                var newURL = this.get('url').replace('http://geodienste-hamburg.de', '/geodienste-hamburg');
             }
 
             this.set('url', newURL);

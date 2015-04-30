@@ -59,7 +59,8 @@ define([
         * Fügt dem normalen Symbol ein Symbol für das Cluster hinzu und gibt evtl. den Cache zurück
         */
         getClusterStyle : function (feature) {
-            var size = feature.get('features').length;
+            var mycoll = new ol.Collection(feature.get('features'));
+            var size = mycoll.getLength();
             var style = this.get('styleCache')[size];
             if (!style) {
                 if (size != '1') {
