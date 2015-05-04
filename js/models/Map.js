@@ -24,14 +24,14 @@ define([
             *
             */
             initialize: function () {
-	            	// Auswerten der Config.view.extent und evtl. ausgeben eines Standardextents
-								var viewExtent = new Array();
-								if (_.isArray(Config.view.extent) && Config.view.extent.length === 4) {
-									viewExtent = Config.view.extent;
-								}
-								else {
-									viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0]
-								}
+            	// Auswerten der Config.view.extent und evtl. ausgeben eines Standardextents
+				var viewExtent = new Array();
+			    if (_.isArray(Config.view.extent) && Config.view.extent.length === 4) {
+					viewExtent = Config.view.extent;
+				}
+				else {
+					viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0];
+				}
 
 								// Definition der Projektion EPSG:25832
 								ol.proj.addProjection(new ol.proj.Projection({
@@ -70,7 +70,7 @@ define([
                     center: Config.view.center,
                     extent: viewExtent,
                     resolution: Config.view.resolution,
-                    resolutions : [ 66.14614761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
+                    resolutions : [ 66.14579761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105 ]
                 }));
 
                 this.set('map', new ol.Map({

@@ -20,9 +20,9 @@
         /*margin-right: 20px;*/
         /*width: 100%;*/
     }
-    #searchForm {
-        /*float: right;*/
-    }
+    /*#searchForm {
+        float: right;
+    }*/
 }
 
 #searchForm > .input-group {
