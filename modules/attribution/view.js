@@ -1,10 +1,8 @@
 define([
     'jquery',
-    'underscore',
     'backbone',
-    'modules/attribution/model',
-    'config'
-], function ($, _, Backbone, Attribution, Config) {
+    'modules/attribution/model'
+], function ($, Backbone, Attribution) {
     var AttributionView = Backbone.View.extend({
         model: Attribution,
         initialize: function () {

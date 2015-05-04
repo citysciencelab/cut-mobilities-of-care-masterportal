@@ -4,7 +4,7 @@ define([
     "openlayers",
     "eventbus",
     "config"
-], function (_, Backbone, ol, EventBus, Config, AttView) {
+], function (_, Backbone, ol, EventBus, Config) {
     /**
     * Bereitstellung des Layers
     */
