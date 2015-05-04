@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/RoutingWin.html',
-    'models/Routing',
+    'text!modules/routing/template.html',
+    'modules/routing/model',
     'eventbus',
     'config',
     'models/Orientation'

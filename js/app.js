@@ -5,7 +5,7 @@
 define('app', ['jquery', 'config'], function($, Config) {
     'use strict';
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
-        require(['models/ParametricURL'], function(ParametricURL) {
+        require(['modules/parametricURL/model'], function(ParametricURL) {
             new ParametricURL();
         });
     }
@@ -40,7 +40,7 @@ define('app', ['jquery', 'config'], function($, Config) {
         }
 
         if (Config.scaleLine && Config.scaleLine === true) {
-            require(['views/ScaleLineView'], function(ScaleLineView) {
+            require(['modules/scaleline/view'], function(ScaleLineView) {
                 new ScaleLineView();
             });
         }
@@ -127,7 +127,7 @@ define('app', ['jquery', 'config'], function($, Config) {
                     });
                 }
                 if (Config.menu.routing === true) {
-                    require(['views/RoutingView'], function(RoutingView) {
+                    require(['modules/routing/view'], function(RoutingView) {
                         new RoutingView();
                     });
                 }

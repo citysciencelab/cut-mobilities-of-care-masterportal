@@ -17,7 +17,7 @@
 @import "routingwin.css";
 @import "window.css";
 @import "treelist.css";
-@import "scaleline.css";
+@import "../modules/scaleline/style.css";
 @import "menubar.css";
 @import "measure.css";
 @import "coordpopup.css";
