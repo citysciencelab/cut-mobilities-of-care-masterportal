@@ -6,9 +6,9 @@ define([
 ], function (_, Backbone, WFSStyle, Config) {
 
     //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
-    var baseUrl = require.toUrl('').split('?')[0];
-    if (Config.layerConf.startsWith('/')){
-        baseUrl = ''
+    var baseUrl = require.toUrl("").split("?")[0];
+    if (Config.styleConf.indexOf("/") == 0){
+        baseUrl = "";
     }
 
     var StyleList = Backbone.Collection.extend({

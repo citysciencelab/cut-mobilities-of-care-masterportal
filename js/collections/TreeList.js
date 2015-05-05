@@ -7,9 +7,9 @@ define([
     ], function (_, Backbone, TreeNode, Config, EventBus) {
 
         //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
-        var baseUrl = require.toUrl('').split('?')[0];
-        if (Config.layerConf.startsWith('/')){
-            baseUrl = ''
+        var baseUrl = require.toUrl("").split("?")[0];
+        if (Config.categoryConf.indexOf("/") == 0){
+            baseUrl = "";
         }
 
         var TreeList = Backbone.Collection.extend({
