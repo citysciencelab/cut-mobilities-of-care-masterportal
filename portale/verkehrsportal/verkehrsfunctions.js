@@ -13,9 +13,9 @@ define([
                 if (layerdef.id === '45') {
                     //layer 45 hat gleiche URL und wurde geladen.
                     url = layerdef.get('url');
-                    url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', 'localhost/geofos');
-                    url = url.replace('http://geofos', 'localhost/geofos');
-                    url = url.replace('http://geodienste-hamburg.de', 'localhost/geodienste-hamburg');
+                    url = url.replace('http://geofos.fhhnet.stadt.hamburg.de', '/geofos');
+                    url = url.replace('http://geofos', '/geofos');
+                    url = url.replace('http://geodienste-hamburg.de', '/geodienste-hamburg');
                 }
             });
             this.set('url', url);
