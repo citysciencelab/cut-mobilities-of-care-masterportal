@@ -17,7 +17,8 @@ define(function () {
             resolution: 15.874991427504629,
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + '../diensteapiFHHNET_16012015.json',
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        categoryConf: "../components/lgv-config/category.json",
         layerIDs: [
             {id: '453', visible: true},
             {id: '8', visible: false},
@@ -26,7 +27,7 @@ define(function () {
             {id: '5182', visible: false, styles: "strassenbaumkataster"},
             {id: '5183', visible: false, displayInTree: false}
         ],
-        styleConf: locations.baseUrl + '../style.json',
+        styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
         isMenubarVisible: true,
@@ -45,14 +46,9 @@ define(function () {
         startUpModul: '',
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
-            placeholder: "Suche Ort, Flurstück oder Thema",
+            placeholder: "Suche Adresse, Stadtteil",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
@@ -66,12 +62,7 @@ define(function () {
         },
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
+                return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: 'Freie und Hansestadt Hamburg - Atlas',
             gfi: false

@@ -6,11 +6,11 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? "../diensteapiFHHNET.json" : "../diensteapiINTERNET.json"),
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        categoryConf: "../components/lgv-config/category.json",
         layerIDs:
         [
-        {id: "453", visible: true}, 
-        {id: "1452", visible: true},
+        {id: "453", visible: true},
         {id: "94", visible: false},
         {id: "1554", visible: false, minScale: "10000"},
         {id: "1555", visible: false, minScale: "10000"},
@@ -19,7 +19,7 @@ define(function () {
         {id: "1568,1569,1570", visible: false, name: "Schutzwürdige Böden", minScale: "10000"},
         {id: "1702", visible: true}
         ],
-        styleConf: locations.baseUrl + "../style.json",
+        styleConf: "../components/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
@@ -40,12 +40,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
@@ -60,12 +55,7 @@ define(function () {
         poi: false,
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
+                return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: "Bodenschutz-Portal",
             gfi: false
