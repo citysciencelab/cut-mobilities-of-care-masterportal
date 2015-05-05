@@ -122,6 +122,10 @@
 }
 
 /***** Layer ohne Ordnerstruktur *****/
+.layer-content {
+    width: 24em;
+}
+
 .layer-content > .layer-name {
     margin-right: 2em;
     font-size: 14px;
