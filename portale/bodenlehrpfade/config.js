@@ -6,7 +6,9 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? "../diensteapiBodenlehrpfade.json" : "../diensteapiINTERNET.json"),
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        categoryConf: "../components/lgv-config/category.json",
+        styleConf: "../components/lgv-config/style.json",
         layerIDs:
         [
         {id: "453", visible: true},
@@ -31,7 +33,6 @@ define(function () {
         {id: "5557", visible: false},
         {id: "5556", visible: false}
         ],
-        styleConf: locations.baseUrl + "../style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
@@ -52,12 +53,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
@@ -72,12 +68,7 @@ define(function () {
         poi: false,
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
+                return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: "Bodenschutz-Portal",
             gfi: false
