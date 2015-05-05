@@ -156,8 +156,8 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 
 
 ```
-// grunt build --path=<pfad-zum-portal>
-# grunt build --path=portale/local
+// grunt build --path=<pfad-zum-portal> --name=<Portalname>
+# grunt build --path=portale/local --name=FHH-Atlas
 ```
 
 - baut das Portal und alles, was es braucht in den Ordner dist/<pkg.version>
