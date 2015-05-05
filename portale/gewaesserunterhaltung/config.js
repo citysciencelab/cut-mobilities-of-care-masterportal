@@ -22,18 +22,9 @@ define(function () {
             resolution: 15.874991427504629,
             scale: 60000 // für print.js benötigt
         },
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Beschreibung.
-        */
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Beschreibung.
-        */
-        styleConf: locations.baseUrl + '../style.json',
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        categoryConf: "../components/lgv-config/category.json",
+        styleConf: "../components/lgv-config/style.json",
         /**
         * @memberof config
         * @type {String}
@@ -115,12 +106,7 @@ define(function () {
         searchBar: {
             placeholder: "Straße, Adresse",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         /**
@@ -132,12 +118,7 @@ define(function () {
         */
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
+                return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: 'Gewässerunterhaltung',
             gfi: false
@@ -158,6 +139,7 @@ define(function () {
             measure: true,
             print: true,
             coord: true,
+            draw: false,
             active: 'gfi'
         },
         /**
