@@ -30,7 +30,7 @@ define([
             "model": Searchbar,
             "id": "searchbar",
             // tagName: "form",
-            "className": "navbar-form col-xs-10",
+            "className": "navbar-form col-xs-9",
             "template": _.template(SearchbarTemplate),
             "initialize": function () {
                 this.listenTo(this.model, "change:searchString", this.render);

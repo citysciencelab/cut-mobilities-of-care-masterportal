@@ -2,12 +2,7 @@
 
 ## Local Development Setup
 
-Da wir an vielen Stellen von der cmd ins Internet wollen, die Umgebungsvariablen HTTP_PROXY und HTTPS_PROXY je auf http://wall.lit.hamburg.de:80 setzen.  Über Rechtsklick Computer/Einstellungen/Erweiterte Systemeinstellungen/Umgebungsvariablen/Systemvariablen
 
-Testen in neu geöffneter cmd:
-```
-# echo %HTTP_PROXY%
-```
 
 Dann folgende Tools lokal installieren.
 
@@ -19,7 +14,7 @@ Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei
 # git config --global url.https://.insteadof=git://
 ```
 
-ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig / auf git Bash benötigt, cmd nicht:
+proxies setzen / auf git Bash benötigt, cmd nicht:
 
 ```
 # git config --global http.proxy http://wall.lit.hamburg.de:80
@@ -73,7 +68,6 @@ npm config set cache D:\npm-cache
 
 #### Proxy-Einstellungen
 
-ggf. durch HTTP*_PROXY Umgebungsvariablen nicht mehr notwendig:
 
 in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 

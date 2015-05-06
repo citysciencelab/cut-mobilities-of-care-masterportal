@@ -3,8 +3,8 @@ define([
     'underscore',
     'backbone',
     'eventbus',
-    'models/ScaleLine',
-    'text!templates/ScaleLine.html',
+    'modules/scaleline/model',
+    'text!modules/scaleline/template.html',
     "config"
 ], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config) {
 
