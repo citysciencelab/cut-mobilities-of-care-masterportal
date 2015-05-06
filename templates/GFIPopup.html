@@ -38,11 +38,18 @@
                     <%= value %>
                 <% } %>
             </td>
-        <% } else {%>
+        <% } else {
+           if( !navigator.userAgent.match(/Android/i) && !navigator.userAgent.match(/webOS/i) && !navigator.userAgent.match(/iPhone/i) && !navigator.userAgent.match(/iPad/i)
+                 && !navigator.userAgent.match(/iPod/i) && !navigator.userAgent.match(/BlackBerry/i) && !navigator.userAgent.match(/Windows Phone/i)) {%>
             <td>
                 <strong><%= key + ':'%></strong>
             </td>
+           <% } %>
             <td>
+                <% if( navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)
+                 || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {%>
+                    <strong><%= key + ':</br>' %></strong>
+                <% } %>
                 <% if (value.search('.html') !== -1) { %>
                     <a href="<%= value%>" target="_blank">Link</a>
                 <% } else if (value.substr(0, 7) == 'http://') { %>
