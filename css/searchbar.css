@@ -11,6 +11,9 @@
         margin: 0;
         padding: 0;
     }
+    #searchInput {
+        min-width: 200px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -19,6 +22,9 @@
         /*min-width: 400px;*/
         /*margin-right: 20px;*/
         /*width: 100%;*/
+    }
+    #searchInput {
+        min-width: 300px;
     }
     /*#searchForm {
         float: right;
@@ -51,7 +57,6 @@
 #searchInput {
     box-shadow: none;
     font-size: 12px;
-    min-width: 300px;
 }
 
 #searchInput::-ms-clear {

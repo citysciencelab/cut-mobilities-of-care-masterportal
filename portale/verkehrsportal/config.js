@@ -12,7 +12,7 @@ define(function () {
         styleConf: '../components/lgv-config/style.json',
         print: {
             url: function () {
-                    return "http://wscd0096:8680/mapfish_print_2.0/";
+                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
             ,
             title: "Verkehrsportal",
