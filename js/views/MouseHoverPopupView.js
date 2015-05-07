@@ -23,8 +23,7 @@ define([
             $(this.model.get("element")).tooltip({
                 "html": true,
                 "title": this.model.get("mhpresult"),
-                "placement": "top",
-                "delay": { "show": 0, "hide": 0 },
+                "placement": "auto",
                 "template" : "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
                 "animation": false
             });
