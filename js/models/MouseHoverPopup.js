@@ -1,44 +1,44 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'openlayers',
-    'eventbus',
-    'config',
-    'models/map'
+    "jquery",
+    "underscore",
+    "backbone",
+    "openlayers",
+    "eventbus",
+    "config",
+    "models/map"
 ], function ($, _, Backbone, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
             wfsList: [],
-            mhpresult: '',
+            mhpresult: "",
             mhpcoordinates: [],
-            oldSelection: '',
+            oldSelection: "",
             GFIPopupVisibility: false
         },
         initialize: function () {
-            $('body').append('<div id="mousehoverpopup" class="col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5"></div>');
-            this.set('mhpOverlay', new ol.Overlay({
-                element: $('#mousehoverpopup')
+            $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
+            this.set("mhpOverlay", new ol.Overlay({
+                element: $("#mousehoverpopup")
             }));
-            this.set('element', this.get('mhpOverlay').getElement());
-            EventBus.on('newMouseHover', this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
-            EventBus.on('GFIPopupVisibility', this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            EventBus.on('setMap', this.checkLayersAndRegisterEvent, this); // initieren. Wird in Map.js getriggert, nachdem dort auf getMap reagiert wurde.
-            EventBus.trigger('getMap', this);
+            this.set("element", this.get("mhpOverlay").getElement());
+            EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
+            EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
+            EventBus.on("setMap", this.checkLayersAndRegisterEvent, this); // initieren. Wird in Map.js getriggert, nachdem dort auf getMap reagiert wurde.
+            EventBus.trigger("getMap", this);
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
-            this.set('GFIPopupVisibility', GFIPopupVisibility);
+            this.set("GFIPopupVisibility", GFIPopupVisibility);
         },
         checkLayersAndRegisterEvent: function (map) {
             // speichere Map-Zeugs für später
-            this.set('resolution', map.getView().getResolution());
-            this.set('dots_per_inch', map.DOTS_PER_INCH);
+            this.set("resolution", map.getView().getResolution());
+            this.set("dots_per_inch", map.DOTS_PER_INCH);
             // Lese Config-Optionen ein
             var layerIDs = Config.layerIDs;
-            var wfsList = new Array();
-            _.each(layerIDs, function(element, key, list) {
-                if (_.has(element, 'mouseHoverField')) {
+            var wfsList = [];
+            _.each(layerIDs, function(element) {
+                if (_.has(element, "mouseHoverField")) {
                     wfsList.push({
                         layerId : element.id,
                         fieldname : element.mouseHoverField
@@ -47,7 +47,7 @@ define([
             });
             // Füge zugehörige Layer der wfsList hinzu
             map.getLayers().forEach(function (layer) {
-                if (layer.getProperties().typ === 'WFS') {
+                if (layer.getProperties().typ === "WFS") {
                     var layerId = layer.id;
                     var wfslistlayer = _.find(wfsList, function(listlayer) {
                         return listlayer.layerId === layerId
@@ -58,11 +58,11 @@ define([
                 }
             }, this);
             // speichere Ergebnisse in wfsList
-            this.set('wfsList', wfsList);
+            this.set("wfsList", wfsList);
             if (wfsList && wfsList.length > 0) {
-                map.on('pointermove', function(evt) {
-                    if (this.get('GFIPopupVisibility') === false) {
-                        EventBus.trigger('newMouseHover', evt, map);
+                map.on("pointermove", function(evt) {
+                    if (this.get("GFIPopupVisibility") === false) {
+                        EventBus.trigger("newMouseHover", evt, map);
                     }
                 }, this);
                 /**
@@ -80,8 +80,8 @@ define([
                 }, this);
                 map.addInteraction(selectMouseMove);
                 var mouseHoverCollection = selectMouseMove.getFeatures();
-                mouseHoverCollection.on('add', function(ele) {
-                    EventBus.trigger('newMouseHover', ele);
+                mouseHoverCollection.on("add", function(ele) {
+                    EventBus.trigger("newMouseHover", ele);
                 });*/
             }
         },
@@ -89,15 +89,15 @@ define([
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            this.set('oldSelection', '');
-            this.unset('mhpresult', {silent: true});
-            this.get('element').tooltip('destroy');
+            this.set("oldSelection", "");
+            this.unset("mhpresult", {silent: true});
+            this.get("element").tooltip("destroy");
         },
         /**
          * Zeigt das Popup.
          */
         showPopup: function () {
-            this.get('element').tooltip('show');
+            this.get("element").tooltip("show");
         },
         /**
         * forEachFeatureAtPixel greift nur bei sichtbaren Features.
@@ -110,13 +110,13 @@ define([
         * Selektion angestpßen.
         */
         checkForEachFeatureAtPixel: function (evt, map) {
-            var pFeatureArray = new Array();
+            var pFeatureArray = [];
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
                 if (!layer || !selection) return;
                 var selProps = selection.getProperties();
                 if (selProps.features) {
                     var list = selProps.features;
-                    _.each(list, function (element, index, list) {
+                    _.each(list, function (element) {
                         pFeatureArray.push({
                             attributes: element.getProperties(),
                             layerId: layer.id
@@ -130,7 +130,7 @@ define([
                     });
                 }
             }, this, function (layer) {
-                var wfsList = this.get('wfsList');
+                var wfsList = this.get("wfsList");
                 if (wfsList) {
                     var found = _.find(wfsList, function(layerlist) {
                         return layerlist.layerId == layer.id;
@@ -147,14 +147,14 @@ define([
                 }
             }, this);
             if (pFeatureArray.length > 0) {
-                if (this.get('oldSelection') === '') {
-                    this.set('oldSelection', pFeatureArray);
+                if (this.get("oldSelection") === "") {
+                    this.set("oldSelection", pFeatureArray);
                     this.prepMouseHoverFeature(pFeatureArray);
                 }
                 else {
-                    if (this.compareArrayOfObjects(pFeatureArray, this.get('oldSelection')) === false) {
+                    if (this.compareArrayOfObjects(pFeatureArray, this.get("oldSelection")) === false) {
                         this.destroyPopup(pFeatureArray);
-                        this.set('oldSelection', pFeatureArray);
+                        this.set("oldSelection", pFeatureArray);
                             this.prepMouseHoverFeature(pFeatureArray);
                     }
                 }
@@ -165,7 +165,7 @@ define([
         },
         compareArrayOfObjects: function (arr1, arr2) {
             if (arr1.length != arr2.length) return false;
-            for (i=0; i<arr1.length; i++) {
+            for (var i= 0; i < arr1.length; i++) {
                 var obj1 = arr1[i];
                 var obj2 = arr2[i];
                 if (_.isEqual(obj1, obj2) === false) return false;
@@ -173,11 +173,11 @@ define([
             return true;
         },
         /**
-        * Diese Funktion prüft ob mhpresult = '' und falls nicht
+        * Diese Funktion prüft ob mhpresult = "" und falls nicht
         * wird MouseHover destroyt
         */
         removeMouseHoverFeatureIfSet: function () {
-            if (this.get('mhpresult') && this.get('mhpresult') !== '') {
+            if (this.get("mhpresult") && this.get("mhpresult") !== "") {
                 this.destroyPopup();
             }
         },
@@ -187,14 +187,14 @@ define([
         * mhpresult. Auf mhpresult lauscht die View, die daraufhin rendert
         */
         prepMouseHoverFeature: function (pFeatureArray) {
-            var wfsList = this.get('wfsList');
-            var value = '';
-            var coord = new Array();
+            var wfsList = this.get("wfsList");
+            var value = "";
+            var coord = [];
             if (pFeatureArray.length > 0) {
                 // für jedes gehoverte Feature...
-                _.each(pFeatureArray, function(element, index, list) {
-                    if (value != '') {
-                        value = value + '</br></br>';
+                _.each(pFeatureArray, function(element) {
+                    if (value !== "") {
+                        value = value + "</br></br>";
                     }
                     var listEintrag = _.find(wfsList, function (ele) {
                         return ele.layerId = element.layerId;
@@ -204,8 +204,8 @@ define([
                         if (mouseHoverField) {
                             if (_.has(element.attributes, mouseHoverField)) {
                                 value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
-                                if (coord.length == 0) {
-                                    var delta = Math.round(this.get('resolution') * 39.37 * this.get('dots_per_inch')) * 0.002;
+                                if (coord.length === 0) {
+                                    var delta = Math.round(this.get("resolution") * 39.37 * this.get("dots_per_inch")) * 0.002;
                                     if (element.attributes.geom) {
                                         coord.push(element.attributes.geom.getFirstCoordinate()[0] + delta);
                                         coord.push(element.attributes.geom.getFirstCoordinate()[1] - delta);
@@ -214,18 +214,22 @@ define([
                                         coord.push(element.attributes.the_geom.getFirstCoordinate()[0] + delta);
                                         coord.push(element.attributes.the_geom.getFirstCoordinate()[1] - delta);
                                     }
+                                    else if (element.attributes.geometry) {
+                                        coord.push(element.attributes.geometry.getFirstCoordinate()[0] + delta);
+                                        coord.push(element.attributes.geometry.getFirstCoordinate()[1] - delta);
+                                    }
                                     else {
-                                        console.error('Unbekanntes Geometrieformat');
+                                        console.error("Unbekanntes Geometrieformat");
                                     }
                                 }
                             }
                         }
                     }
                 }, this);
-                if (value != '') {
-                    this.get('mhpOverlay').setPosition(coord);
-                    this.set('mhpcoordinates', coord);
-                    this.set('mhpresult', value);
+                if (value !== "") {
+                    this.get("mhpOverlay").setPosition(coord);
+                    this.set("mhpcoordinates", coord);
+                    this.set("mhpresult", value);
                 }
             }
         }
