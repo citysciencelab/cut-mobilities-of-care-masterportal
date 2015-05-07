@@ -3,7 +3,6 @@ define([
     "backbone",
     "models/MouseHoverPopup",
     "eventbus",
-    "bootstrap",
     "jqueryui"
 ], function (_, Backbone, MouseHoverPopup, EventBus) {
 
@@ -24,6 +23,7 @@ define([
                 "html": true,
                 "title": this.model.get("mhpresult"),
                 "placement": "auto",
+                "delay": { "show": 0, "hide": 0 },
                 "template" : "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
                 "animation": false
             });
