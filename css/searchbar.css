@@ -33,6 +33,7 @@
 
 #searchForm > .input-group {
     width: 100%;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
 #autoCompleteBody {
