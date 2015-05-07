@@ -28,6 +28,11 @@
     padding:  0;
 }
 
+
+.dropdown-menu > li > a {
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+}
+
 @media (min-width: 768px) {
     .navbar {
         max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
