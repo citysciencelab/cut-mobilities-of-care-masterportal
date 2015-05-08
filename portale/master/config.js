@@ -27,21 +27,40 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
+        * @desc zeigt einen Footer-Bereich an
+        */
+        footer: true,
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc aktiviert das QuickHelp-Modul
+        */
+        quickHelp: true,
+
+        /**
+        * @memberof config
+        * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: locations.baseUrl  + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
+        layerConf: "../components/lgv-config/services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
-        styleConf: locations.baseUrl  + '../style.json',
+        styleConf: "../components/lgv-config/style.json",
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Pfad zur Konfig-Datei für den automatisiert generiereten Layerbaum
+        */
+        categoryConf: "../components/lgv-config/category.json",
         /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur Proxy-CGI
         */
-        proxyURL: '/cgi-bin/proxy.cgi',
+        proxyURL: "/cgi-bin/proxy.cgi",
         /**
         * @memberof config
         * @type {Object[]}
@@ -60,54 +79,52 @@ define(function () {
         * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
         * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
         * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
-        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value 'eventValue' am Layer setzen, um ihn zu übernehmen.
+        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
         * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
         * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
         * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String}  minScale - 
+        * @property {String}  minScale -
         * @property {String}  maxScale -
         * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: '453', visible: true},
-            {id: '452', visible: false},
-            {id: '1346', visible: true},
-            {id: '356', visible: true, style: '356', clusterDistance: 30, searchField: '', styleField :'kategorie'},
-            {id: '2058', visible: true, style: '2058', clusterDistance: 30, searchField: '', styleField :'kategorie', opacity:"40"},
-            {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
-            {id: '2054', visible: false, style: '2054', clusterDistance: 30, searchField: '', styleField :'kategorie'},
+            {id: "453", visible: true, legendUrl: "ignore"},
+            {id: "148", visible: false},
+            {id: "1748", visible: false},
+            {id: "1562", visible: true},
+            {id: "1561", visible: true},
+            {id: "45", visible: false, style: "45", clusterDistance: 10, routable: true},
             {id:
              [
                  {
-                     id: '1364',
+                     id: "946",
                      attribution:
                      {
-                         eventname: 'aktualisiereverkehrsnetz',
+                         eventname: "aktualisiereverkehrsnetz",
                          timeout: (10 * 60000)
                      }
                  },
                  {
-                     id: '1365'
+                     id: "947"
                  }
              ],
-             name: 'Verkehrsbelastung auf Autobahnen', visible: true
+             name: "aktuelle Meldungen der TBZ", visible: false
             },
-            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
-             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Krankenhausattributierung in config</a></strong>',
+            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
              displayInTree: true,
              filterOptions: [
                  {
-                     'fieldName': 'teilnahme_geburtsklinik',
-                     'filterType': 'combo',
-                     'filterName': 'Geburtsklinik',
-                     'filterString': ['*','ja','nein']
+                     "fieldName": "teilnahme_geburtsklinik",
+                     "filterType": "combo",
+                     "filterName": "Geburtsklinik",
+                     "filterString": ["*","ja","nein"]
                  },
                  {
-                     'fieldName': 'teilnahme_notversorgung',
-                     'filterType': 'combo',
-                     'filterName': 'Not- und Unfallversorgung',
-                     'filterString': ['*','ja','eingeschränkt','nein']
+                     "fieldName": "teilnahme_notversorgung",
+                     "filterType": "combo",
+                     "filterName": "Not- und Unfallversorgung",
+                     "filterString": ["*","ja","eingeschränkt","nein"]
                  }
              ],
              routable: true
@@ -122,7 +139,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Steuert, ob das Porta eine Menüleiste(Navigationsleiste) haben soll oder nicht.
+        * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
         */
         menubar: true,
         /**
@@ -157,13 +174,13 @@ define(function () {
         * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
         */
         menu: {
-            viewerName: 'GeoViewer',
+            viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
-            helpButton: true,
+            helpButton: false,
             contactButton: true,
             tools: true,
-            treeFilter: true,
+            treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
             routing: true
@@ -173,7 +190,7 @@ define(function () {
         * @desc Konfiguration des beim Starten zu ladenden Moduls. Funktioniert derzeit mit wfsFeatureFilter und Routing. Wird auch im parametrisierten Aufruf erkannt.
         * @property {String}  Name des Moduls.
         */
-        startUpModul: '',
+        startUpModul: "",
         /**
         * @memberof config
         * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
@@ -181,17 +198,18 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche Adresse, B-Plan",
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            },
+        },
+
+        bPlan: {
+            url: function () {
+                return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
             }
         },
-        /**
+                 /**
         * @memberof config
         * @desc Konfiguration für den Druckdienst.
         * @property {String}  url - Die Druckdienst-URL
@@ -200,14 +218,10 @@ define(function () {
         */
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/mapfish/mapfish_print_2.0/";
+                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
                 }
-                else {
-                    return locations.host + "/geoportal-hamburg/mapfish_print_2.0/";
-                }
-            },
-            title: 'Master',
+            ,
+            title: "Master",
             gfi: false
         },
         /**
@@ -226,7 +240,7 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
-            active: 'gfi'
+            active: "gfi"
         },
         /**
         * @memberof config
