@@ -35,5 +35,4 @@ require.config({
 });
 
 define(["app"], function () {
-    console.log("Application initialized");
 });
