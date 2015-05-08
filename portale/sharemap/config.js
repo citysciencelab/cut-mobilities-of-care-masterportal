@@ -50,7 +50,7 @@ define(function () {
         poi: false,
         print: {
             url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
+                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
             },
             title: "Hamburg",
             gfi: false
