@@ -44,6 +44,11 @@ define([
             } else {
                 new LayerListView();
             }
+            if (_.has(Config, "title") === true) {
+                require(["modules/title/view"], function (TitleView) {
+                    new TitleView();
+                });
+            }
             // new OpenDataTreeList();
         },
         activateFilterTree: function () {
