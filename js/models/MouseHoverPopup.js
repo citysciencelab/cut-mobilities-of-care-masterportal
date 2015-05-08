@@ -31,26 +31,24 @@ define([
             this.set("GFIPopupVisibility", GFIPopupVisibility);
         },
         checkLayersAndRegisterEvent: function (map) {
-            // speichere Map-Zeugs für später
-            this.set("resolution", map.getView().getResolution());
-            this.set("dots_per_inch", map.DOTS_PER_INCH);
             // Lese Config-Optionen ein
-            var layerIDs = Config.layerIDs;
-            var wfsList = [];
-            _.each(layerIDs, function(element) {
+            var layerIDs = Config.layerIDs,
+                wfsList = [];
+
+            _.each(layerIDs, function (element) {
                 if (_.has(element, "mouseHoverField")) {
                     wfsList.push({
-                        layerId : element.id,
-                        fieldname : element.mouseHoverField
+                        layerId: element.id,
+                        fieldname: element.mouseHoverField
                     });
                 }
             });
             // Füge zugehörige Layer der wfsList hinzu
             map.getLayers().forEach(function (layer) {
                 if (layer.getProperties().typ === "WFS") {
-                    var layerId = layer.id;
-                    var wfslistlayer = _.find(wfsList, function(listlayer) {
-                        return listlayer.layerId === layerId
+                    var layerId = layer.id,
+                        wfslistlayer = _.find(wfsList, function (listlayer) {
+                        return listlayer.layerId === layerId;
                     });
                     if (wfslistlayer) {
                         wfslistlayer.layer = layer;
@@ -60,7 +58,7 @@ define([
             // speichere Ergebnisse in wfsList
             this.set("wfsList", wfsList);
             if (wfsList && wfsList.length > 0) {
-                map.on("pointermove", function(evt) {
+                map.on("pointermove", function (evt) {
                     if (this.get("GFIPopupVisibility") === false) {
                         EventBus.trigger("newMouseHover", evt, map);
                     }
@@ -112,7 +110,9 @@ define([
         checkForEachFeatureAtPixel: function (evt, map) {
             var pFeatureArray = [];
             map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
-                if (!layer || !selection) return;
+                if (!layer || !selection) {
+                    return;
+                }
                 var selProps = selection.getProperties();
                 if (selProps.features) {
                     var list = selProps.features;
@@ -132,8 +132,8 @@ define([
             }, this, function (layer) {
                 var wfsList = this.get("wfsList");
                 if (wfsList) {
-                    var found = _.find(wfsList, function(layerlist) {
-                        return layerlist.layerId == layer.id;
+                    var found = _.find(wfsList, function (layerlist) {
+                        return layerlist.layerId === layer.id;
                     });
                     if (found) {
                         return layer;
@@ -164,11 +164,15 @@ define([
             }
         },
         compareArrayOfObjects: function (arr1, arr2) {
-            if (arr1.length != arr2.length) return false;
-            for (var i= 0; i < arr1.length; i++) {
-                var obj1 = arr1[i];
-                var obj2 = arr2[i];
-                if (_.isEqual(obj1, obj2) === false) return false;
+            if (arr1.length !== arr2.length) {
+                return false;
+            }
+            for (var i = 0; i < arr1.length; i++) {
+                var obj1 = arr1[i],
+                    obj2 = arr2[i];
+                if (_.isEqual(obj1, obj2) === false) {
+                    return false;
+                }
             }
             return true;
         },
@@ -187,12 +191,12 @@ define([
         * mhpresult. Auf mhpresult lauscht die View, die daraufhin rendert
         */
         prepMouseHoverFeature: function (pFeatureArray) {
-            var wfsList = this.get("wfsList");
-            var value = "";
-            var coord = [];
+            var wfsList = this.get("wfsList"),
+                value = "",
+                coord = [];
             if (pFeatureArray.length > 0) {
                 // für jedes gehoverte Feature...
-                _.each(pFeatureArray, function(element) {
+                _.each(pFeatureArray, function (element) {
                     if (value !== "") {
                         value = value + "</br></br>";
                     }
@@ -205,18 +209,17 @@ define([
                             if (_.has(element.attributes, mouseHoverField)) {
                                 value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
                                 if (coord.length === 0) {
-                                    var delta = Math.round(this.get("resolution") * 39.37 * this.get("dots_per_inch")) * 0.002;
-                                    if (element.attributes.geom) {
-                                        coord.push(element.attributes.geom.getFirstCoordinate()[0] + delta);
-                                        coord.push(element.attributes.geom.getFirstCoordinate()[1] - delta);
+                                        if (element.attributes.geom) {
+                                        coord.push(element.attributes.geom.getFirstCoordinate()[0]);
+                                        coord.push(element.attributes.geom.getFirstCoordinate()[1]);
                                     }
                                     else if (element.attributes.the_geom) {
-                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[0] + delta);
-                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[1] - delta);
+                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[0]);
+                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[1]);
                                     }
                                     else if (element.attributes.geometry) {
-                                        coord.push(element.attributes.geometry.getFirstCoordinate()[0] + delta);
-                                        coord.push(element.attributes.geometry.getFirstCoordinate()[1] - delta);
+                                        coord.push(element.attributes.geometry.getFirstCoordinate()[0]);
+                                        coord.push(element.attributes.geometry.getFirstCoordinate()[1]);
                                     }
                                     else {
                                         console.error("Unbekanntes Geometrieformat");
@@ -228,6 +231,7 @@ define([
                 }, this);
                 if (value !== "") {
                     this.get("mhpOverlay").setPosition(coord);
+                    this.get("mhpOverlay").setOffset([45, -60]);
                     this.set("mhpcoordinates", coord);
                     this.set("mhpresult", value);
                 }

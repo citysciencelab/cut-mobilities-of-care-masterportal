@@ -58,7 +58,7 @@ define([
                 this.createMeasureTooltip();
             }, this);
             this.get("draw").on("drawend", function (evt) {
-                this.get("measureTooltipElement").className = 'tooltip tooltip-static';
+                this.get("measureTooltipElement").className = 'tooltip-default tooltip-static';
                 this.get("measureTooltip").setOffset([0, -7]);
                 // unset sketch
                 this.get("sketch", null);
@@ -74,7 +74,7 @@ define([
                 measureTooltipElement.parentNode.removeChild(measureTooltipElement);
             }
             measureTooltipElement = document.createElement('div');
-            measureTooltipElement.className = 'tooltip tooltip-measure';
+            measureTooltipElement.className = 'tooltip-default tooltip-measure';
             measureTooltip = new ol.Overlay({
                 element: measureTooltipElement,
                 offset: [0, -15],

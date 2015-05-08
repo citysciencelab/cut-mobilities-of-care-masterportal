@@ -20,12 +20,11 @@ define([
         */
         render: function () {
             $(this.model.get("element")).tooltip({
-                "html": true,
-                "title": this.model.get("mhpresult"),
-                "placement": "auto",
-                "delay": { "show": 0, "hide": 0 },
-                "template" : "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
-                "animation": false
+                html: true,
+                title: this.model.get("mhpresult"),
+                placement: "auto",
+                template: "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
+                animation: true
             });
             this.model.showPopup();
         },
@@ -33,6 +32,5 @@ define([
             this.model.destroyPopup();
         }
     });
-
     return MouseHoverPopupView;
 });

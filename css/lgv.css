@@ -257,12 +257,16 @@ html, body {
 
 .mouseHover {
     font-size: 12px;
-    max-width: inherit;
-    background-color: initial;
-    color: #fff;
+    /*max-width: inherit;*/
+    padding: 6px;
+    background-color: rgb(255, 255, 255);
+    color: #777;
     font-weight: bold;
-    display: block;
+    /*display: block;*/
+    white-space: pre;
+    border: 1px solid #777;
 }
+
 .cluster{
     font-size:25px;
     border-radius:30px!important;
