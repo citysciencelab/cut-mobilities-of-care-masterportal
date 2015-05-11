@@ -3,12 +3,7 @@ define(function () {
         title: "FHH - Atlas",
         tree: {
             active: true,
-            // layerAttribute: "kategorieOpendata",
-            // orderBy: "inspire",
-            // layerAttribute: "kategorieInspire",
-            groupLayerByID: ["DC71F8A1-7A8C-488C-AC99-23776FA7775E"]
-            // categoryConf: locations.baseUrl + "../category.json"
-            // groupLayerByID: ["DFDA2969-A041-433B-BD65-4CDA9F830A55","38575F13-7FA2-4F26-973F-EDED24D937E5", "757A328B-415C-4E5A-A696-353ABDC80419", "335B680C-CA3E-4FE9-BC05-641BA565E366", "DC71F8A1-7A8C-488C-AC99-23776FA7775E", "3EE8938B-FF9E-467B-AAA2-8534BB505580","19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB"]
+            groupLayerByID: ["DFDA2969-A041-433B-BD65-4CDA9F830A55","38575F13-7FA2-4F26-973F-EDED24D937E5", "757A328B-415C-4E5A-A696-353ABDC80419", "335B680C-CA3E-4FE9-BC05-641BA565E366", "DC71F8A1-7A8C-488C-AC99-23776FA7775E", "3EE8938B-FF9E-467B-AAA2-8534BB505580","19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB"]
         },
         footer: true,
         quickHelp: true,
@@ -20,14 +15,6 @@ define(function () {
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         categoryConf: "../components/lgv-config/category.json",
-        layerIDs: [
-            {id: "453", visible: true},
-            {id: "8", visible: false},
-            // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich
-            {id: "5182", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false},
-            {id: "5182", visible: false, styles: "strassenbaumkataster"},
-            {id: "5183", visible: false, displayInTree: false}
-        ],
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
