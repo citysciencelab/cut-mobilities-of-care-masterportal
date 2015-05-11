@@ -2,13 +2,13 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!templates/TreeNodeChild.html"
-], function ($, _, Backbone, TreeNodeChildTemplate) {
+    "text!modules/layercatalog/templateNodeChild.html"
+], function ($, _, Backbone, NodeChildTemplate) {
 
         var TreeNodeChildView = Backbone.View.extend({
-            className : "list-group-item node-child",
+            className: "list-group-item node-child",
             tagName: "li",
-            template: _.template(TreeNodeChildTemplate),
+            template: _.template(NodeChildTemplate),
             events: {
                 "click .glyphicon-plus-sign, .glyphicon-minus-sign": "toggleExpand",
                 "click .node-child-name, .glyphicon-unchecked, .glyphicon-check": "toggleSelected"
@@ -70,8 +70,6 @@ define([
                 }
                 this.model.get("parentView").toggleStyle();
             }
-
         });
-
         return TreeNodeChildView;
     });

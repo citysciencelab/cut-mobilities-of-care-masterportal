@@ -16,14 +16,13 @@
 @import "zoombuttons.css";
 @import "routingwin.css";
 @import "window.css";
-@import "treelist.css";
 @import "../modules/scaleline/style.css";
 @import "menubar.css";
 @import "measure.css";
 @import "coordpopup.css";
-@import "treeselection.css";
 @import "../modules/layerselection/style.css";
 @import "../modules/footer/style.css";
 @import "../modules/quickhelp/style.css";
 @import "../modules/title/style.css";
 @import "../modules/layertree/style.css";
+@import "../modules/layercatalog/style.css";

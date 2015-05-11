@@ -2,13 +2,13 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!templates/TreeNode.html"
-    ], function ($, _, Backbone, TreeNodeTemplate) {
+    "text!modules/layercatalog/templateNode.html"
+    ], function ($, _, Backbone, NodeTemplate) {
 
-        var TreeNodeView = Backbone.View.extend({
-            className : "list-group-item node",
+        var NodeView = Backbone.View.extend({
+            className: "list-group-item node",
             tagName: "li",
-            template: _.template(TreeNodeTemplate),
+            template: _.template(NodeTemplate),
             events: {
                 "click .node-content": "toggleExpand"
             },
@@ -61,6 +61,5 @@ define([
                 }
             }
         });
-
-        return TreeNodeView;
+        return NodeView;
     });

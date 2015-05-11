@@ -1,16 +1,15 @@
 define([
-    'underscore',
-    'backbone',
-    'eventbus',
-    'config',
-    'collections/LayerList',
-    'views/TreeNodeChildLayerView',
-    'eventbus'
-    ], function (_, Backbone, EventBus, Config, LayerList, TreeNodeChildLayerView, EventBus) {
+    "underscore",
+    "backbone",
+    "eventbus",
+    "config",
+    "collections/LayerList",
+    "modules/layercatalog/viewNodeChildLayer"
+    ], function (_, Backbone, EventBus, Config, LayerList, NodeChildLayerView) {
 
         var TreeNodeChild = Backbone.Model.extend({
 
-            "defaults": {
+            defaults: {
                 isExpanded: false,
                 isVisible: false,
                 isSelected: false,
@@ -18,24 +17,24 @@ define([
                 transparence: 0
             },
 
-            "initialize": function () {
+            initialize: function () {
                 this.setNestedViews();
             },
 
             /**
              * Erzeugt aus "children" pro Eintrag eine Model/View Komponente und schreibt diese gesammelt in das Attribut "childViews".
              */
-            "setNestedViews": function () {
+            setNestedViews: function () {
                 var nestedViews = [];
                 _.each(this.get("children"), function (child) {
                     child.set("layerType", "nodeChildLayer");
                     // child.set("parentNode", this);
-                    var treeNodeChildLayer = new TreeNodeChildLayerView({model: child});
-                    nestedViews.push(treeNodeChildLayer);
+                    var nodeChildLayer = new NodeChildLayerView({model: child});
+                    nestedViews.push(nodeChildLayer);
                 }, this);
                 this.set("childViews", nestedViews);
             },
-            "toggleExpand": function () {
+            toggleExpand: function () {
                 if (this.get("isExpanded") === true) {
                     this.set("isExpanded", false);
                 }
@@ -43,7 +42,7 @@ define([
                     this.set("isExpanded", true);
                 }
             },
-            "toggleVisibility": function () {
+            toggleVisibility: function () {
                 if (this.get("isVisible") === true) {
                     this.set("isVisible", false);
                 }
@@ -51,12 +50,12 @@ define([
                     this.set("isVisible", true);
                 }
             },
-            "toggleVisibilityChildren": function () {
+            toggleVisibilityChildren: function () {
                 _.each(this.get("children"), function (layer) {
                     layer.set("visibility", this.get("isVisible"));
                 }, this);
             },
-            "toggleSelected": function () {
+            toggleSelected: function () {
                 if (this.get("isSelected") === true) {
                     this.set("isSelected", false);
                 }
@@ -64,12 +63,12 @@ define([
                     this.set("isSelected", true);
                 }
             },
-            "toggleSelectedChildren": function () {
+            toggleSelectedChildren: function () {
                 _.each(this.get("children"), function (layer) {
                     layer.set("selected", this.get("isSelected"));
                 }, this);
             },
-            "checkSelectedOfAllChildren": function () {
+            checkSelectedOfAllChildren: function () {
                 var everyTrue = _.every(this.get("children"), function (model) {
                     return model.get("selected") === true;
                 });
@@ -81,37 +80,36 @@ define([
                     this.set("isSelected", false);
                 }
             },
-            "toggleSettings": function () {
-                if (this.get('settings') === true) {
-                    this.set({'settings': false});
+            toggleSettings: function () {
+                if (this.get("settings") === true) {
+                    this.set({settings: false});
                 }
                 else {
-                    this.set({'settings': true});
+                    this.set({settings: true});
                 }
             },
-            "setUpTransparence": function (value) {
-                if (this.get('transparence') < 90) {
-                    this.set('transparence', this.get('transparence') + value);
-                }
-                _.each(this.get("children"), function (layer) {
-                    layer.set("transparence", this.get("transparence"));
-                }, this);
-            },
-            "setDownTransparence": function (value) {
-                if (this.get('transparence') > 0) {
-                    this.set('transparence', this.get('transparence') - value);
+            setUpTransparence: function (value) {
+                if (this.get("transparence") < 90) {
+                    this.set("transparence", this.get("transparence") + value);
                 }
                 _.each(this.get("children"), function (layer) {
                     layer.set("transparence", this.get("transparence"));
                 }, this);
             },
-            "moveUpInList": function () {
+            setDownTransparence: function (value) {
+                if (this.get("transparence") > 0) {
+                    this.set("transparence", this.get("transparence") - value);
+                }
+                _.each(this.get("children"), function (layer) {
+                    layer.set("transparence", this.get("transparence"));
+                }, this);
+            },
+            moveUpInList: function () {
                 this.get("parentNode").moveChildInList(this.get("name"), 1);
             },
-            "moveDownInList": function () {
+            moveDownInList: function () {
                 this.get("parentNode").moveChildInList(this.get("name"), -1);
             }
         });
-
         return TreeNodeChild;
     });

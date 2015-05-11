@@ -4,9 +4,9 @@ define([
     'openlayers',
     'config',
     'collections/LayerList',
-    'collections/TreeList',
+    // 'collections/TreeList',
     'eventbus'
-    ], function (_, Backbone, ol, Config, LayerList, TreeList, EventBus) {
+    ], function (_, Backbone, ol, Config, LayerList, EventBus) {
 
         var DOTS_PER_INCH = $('#dpidiv').outerWidth(); // Hack um die Bildschirmauflösung zu bekommen
         $('#dpidiv').remove();

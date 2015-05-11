@@ -32,7 +32,7 @@ define([
                 this.model.setSelection(evt.target.value);
             },
             toggleCatalog: function () {
-                $("#tree").toggle("slow");
+                $(".layer-catalog-list").toggle("slow");
                 $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
                 $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-right");
             },

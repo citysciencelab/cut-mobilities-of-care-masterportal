@@ -2,13 +2,13 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!templates/TreeNodeLayer.html"
-    ], function ($, _, Backbone, TreeNodeLayerTemplate) {
+    "text!modules/layercatalog/templateNodeChildLayer.html"
+    ], function ($, _, Backbone, NodeChildLayerTemplate) {
 
-        var TreeNodeLayerView = Backbone.View.extend({
-            className : "list-group-item node-layer",
+        var NodeChildLayerView = Backbone.View.extend({
+            className: "list-group-item node-child-layer",
             tagName: "li",
-            template: _.template(TreeNodeLayerTemplate),
+            template: _.template(NodeChildLayerTemplate),
             events: {
                 "click .glyphicon-info-sign": "getMetadata",
                 "click .glyphicon-check, .glyphicon-unchecked, .layer-name": "toggleSelected"
@@ -20,7 +20,6 @@ define([
                 this.stopListening();
                 this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
                 this.listenToOnce(this.model, "change:selected", this.render);
-                // this.listenToOnce(this.model, "change:visibility", this.toggleStyle);
                 this.listenToOnce(this.model, "change:selected", this.toggleStyle);
 
                 this.delegateEvents();
@@ -29,6 +28,9 @@ define([
                 this.$el.html(this.template(attr));
                 this.toggleStyle();
                 return this;
+            },
+            toggleVisibility: function () {
+                this.model.toggleVisibility();
             },
             toggleSelected: function () {
                 this.model.toggleSelected();
@@ -50,8 +52,6 @@ define([
                 }
                 this.model.get("parentView").toggleStyle();
             }
-
         });
-
-        return TreeNodeLayerView;
+        return NodeChildLayerView;
     });

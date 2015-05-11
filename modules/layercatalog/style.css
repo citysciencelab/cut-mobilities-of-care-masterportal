@@ -1,40 +1,30 @@
-#tree {
-    /*max-height: 350px !important;*/
+.layer-catalog-list {
+    max-height: 400px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
-}
-/***** Node *****/
-.node {
-    color: rgb(150, 150, 150);
+    overflow-y: scroll;
     font-size: 14px;
+    color: rgb(150, 150, 150);
 }
 
+/***** Catalog - Node *****/
 .node-content {
     width: 24em;
-}
-
-.node-content > span {
-    cursor: pointer;
-}
-
-.node-content > span:hover {
-    opacity: 0.6;
 }
 
 .node-name {
     margin-left: 2em;
     font-size: 12px;
+}
+
+.node-content > span:hover, .node-name:hover {
+    opacity: 0.6;
     cursor: pointer;
 }
 
-.node-name:hover {
-    opacity: 0.6;
-}
-
-
-/***** Node-Layer ******/
+/***** Catalag - Node-Layer ******/
 .node-layer {
     color: rgb(150, 150, 150);
-    font-size: 14px;
+    /*font-size: 14px;*/
 }
 
 .node-layer-content > .layer-name {
@@ -64,10 +54,10 @@
     font-size: 16px;
 }
 
-/***** Node-Child *****/
+/***** Catalog - Node-Child *****/
 .node-child {
     color: rgb(150, 150, 150);
-    font-size: 14px;
+    /*font-size: 14px;*/
 }
 
 .node-child-content {
@@ -96,11 +86,10 @@
     opacity: 0.6;
 }
 
-/***** Node-Child-Layer *****/
-
+/***** Catalog - Node-Child-Layer *****/
 .node-child-layer {
     color: rgb(150, 150, 150);
-    font-size: 14px;
+    /*font-size: 14px;*/
 }
 
 .node-child-layer-content > .layer-name {
@@ -120,39 +109,4 @@
 
 .node-child-layer-content > .glyphicon-info-sign {
     font-size: 16px;
-}
-
-/***** Layer ohne Ordnerstruktur *****/
-.layer-content {
-    width: 24em;
-}
-
-.layer-content > .layer-name {
-    margin-right: 2em;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.layer-content > .layer-name:hover {
-    opacity: 0.6;
-}
-
-.layer-content > .folder-icons > .btn-glyphicon > .glyphicon:hover {
-    opacity: 0.6;
-}
-
-.layer-content > .pull-right > .btn-glyphicon > .glyphicon {
-    font-size: 16px;
-}
-
-.layer-content > .pull-right > .btn-glyphicon > .glyphicon:hover {
-    opacity: 0.6;
-}
-
-.layer-content > .btn-glyphicon > .glyphicon {
-    font-size: 16px;
-}
-
-.layer-content > .btn-glyphicon > .glyphicon:hover {
-    opacity: 0.6;
 }

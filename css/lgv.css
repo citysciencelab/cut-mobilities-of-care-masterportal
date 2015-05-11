@@ -256,3 +256,39 @@ html, body {
     float:left;
     margin:10px;
 }
+
+/***** Layer ohne Ordnerstruktur *****/
+.layer-content {
+    width: 24em;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+}
+
+.layer-content > .layer-name {
+    margin-right: 2em;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.layer-content > .layer-name:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .folder-icons > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .pull-right > .btn-glyphicon > .glyphicon {
+    font-size: 16px;
+}
+
+.layer-content > .pull-right > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .btn-glyphicon > .glyphicon {
+    font-size: 16px;
+}
+
+.layer-content > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}

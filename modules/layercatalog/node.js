@@ -1,22 +1,22 @@
 define([
-    'underscore',
-    'backbone',
-    'config',
-    'collections/LayerList',
-    'models/TreeNodeChild',
-    'views/TreeNodeChildView',
-    'views/TreeNodeLayerView'
-    ], function (_, Backbone, Config, LayerList, TreeNodeChild, TreeNodeChildView, TreeNodeLayerView) {
+    "underscore",
+    "backbone",
+    "config",
+    "collections/LayerList",
+    "modules/layercatalog/nodeChild",
+    "modules/layercatalog/viewNodeChild",
+    "modules/layercatalog/viewNodeLayer"
+    ], function (_, Backbone, Config, LayerList, NodeChild, NodeChildView, NodeLayerView) {
 
         var TreeNode = Backbone.Model.extend({
 
-            "defaults": {
+            defaults: {
                 isExpanded: false,
                 isStyled: false,
                 layerAttribute: "kategorieOpendata"
             },
 
-            "initialize": function () {
+            initialize: function () {
                 this.setLayerList();
                 this.setChildren();
                 this.setSortedLayerList();
@@ -27,7 +27,7 @@ define([
              * Alle Layer-Models die zu dieser Node(Kategorie) gehören.
              * Config.tree.layerAttribute = Das Layer-Model-Attribut in dem die jeweilige Kategorie gesetzt ist.
              */
-            "setLayerList": function () {
+            setLayerList: function () {
                 var layerList = LayerList.getLayerByProperty(this.get("layerAttribute"), this.get("kategorie"));
                 this.set("layerList", layerList);
             },
@@ -37,16 +37,16 @@ define([
              * Es gibt zwei Arten von Children, LAYER-CHILDREN und NODE-CHILDREN. Wenn zu einer Metadaten-ID genau ein Datensatz(Layer) vorhanden ist, handelt es sich um ein LAYER-CHILDREN.
              * Gibt es zu einer Metadaten-ID mehrere Datensätze(Layer), werden diese in einen Unterordner(NODE-Children) zusammgengefasst.
              */
-            "setChildren": function () {
+            setChildren: function () {
                 // Zählt die Layer pro Metadaten-ID die in "layerList" vorkommen.
-                var countIDs = _.countBy(_.pluck(this.get("layerList"), "attributes"), "metaID");
-                // Zwischenspeicher für die NODE-CHILDREN
-                var nodeChildren = [];
-                // Zwischenspeicher für die LAYER-CHILDREN
-                var layerChildren = [];
+                var countIDs = _.countBy(_.pluck(this.get("layerList"), "attributes"), "metaID"),
+                    // Zwischenspeicher für die NODE-CHILDREN
+                    nodeChildren = [],
+                    // Zwischenspeicher für die LAYER-CHILDREN
+                    layerChildren = [];
+
                 // Iteriert über die Metadaten-ID's
                 _.each(countIDs, function (value, key) {
-                    // Es gibt mehrere Layer
                     if (value > 1) {
                         // Alle Layer zur Metadaten-ID
                         var nodeChildLayerList = _.filter(this.get("layerList"), function (layer) {
@@ -57,16 +57,16 @@ define([
                             return layer.get("name");
                         }).reverse();
                         // NODE-CHILDREN wird als Objekt zwischengespeichert
-                        nodeChildren.push({"type": "nodeChild", "name": nodeChildLayerList[0].get("metaName"), "children": nodeChildLayerList});
+                        nodeChildren.push({type: "nodeChild", name: nodeChildLayerList[0].get("metaName"), children: nodeChildLayerList});
                     }
-                    // Es gibt genau einen Layer
                     else {
+                        // Es gibt genau einen Layer
                         // Der Layer zur Metadaten-ID
                         var nodeLayer = _.filter(this.get("layerList"), function (layer) {
                             return layer.attributes.metaID === key;
                         });
                         // LAYER-CHILDREN wird als Objekt zwischengespeichert
-                        layerChildren.push({"type": "nodeLayer", "name": nodeLayer[0].get("name"), "layer": nodeLayer[0]});
+                        layerChildren.push({type: "nodeLayer", name: nodeLayer[0].get("name"), layer: nodeLayer[0]});
                     }
                 }, this);
                 // LAYER-CHILDREN und NODE-CHILDREN werden zusammengefügt und absteigend alphabetisch sortiert --> Das ABSTEIGENDE ist für das rendern erforderlich
@@ -78,7 +78,7 @@ define([
              * "sortedLayerList" wird für die Map.js gebraucht. Der unterste Layer im Layerbaum wird als erster in der Map.js der Karte hinzugefügt.
              * So wird sichergestellt das die Reihenfolge der Layer im Layerbaum und der Layer auf der Karte dieselbe ist.
              */
-            "setSortedLayerList": function () {
+            setSortedLayerList: function () {
                 // Zwischenspeicher für die Layer (Models)
                 var sortedLayerList = [];
                 // Iteriert über "children"
@@ -99,7 +99,7 @@ define([
             /**
              * "sortedLayerList" wird aktualisiert. Die Layer-Models werden in die gleiche Reihenfolge gebracht wie die Views im Layerbaum.
              */
-            "updateSortedLayerList": function () {
+            updateSortedLayerList: function () {
                 var sortedLayerList = [];
                 _.each(this.get("childViews"), function (childView) {
                     if (childView.model.get("type") === "nodeLayer") {
@@ -108,7 +108,7 @@ define([
                     else if (childView.model.get("type") === "nodeChild") {
                         _.each(childView.model.get("childViews"), function (nodeChildView) {
                             sortedLayerList.push(nodeChildView.model);
-                        })
+                        });
                     }
                 });
                 this.set("sortedLayerList", sortedLayerList);
@@ -117,7 +117,7 @@ define([
             /**
              * Erzeugt aus "children" pro Eintrag eine Model/View Komponente und schreibt diese gesammelt in das Attribut "childViews".
              */
-            "setNestedViews": function () {
+            setNestedViews: function () {
                 // Zwischenspeicher für die Views
                 var nestedViews = [];
                 // Iteriert über "children"
@@ -125,19 +125,19 @@ define([
                     if (child.type === "nodeLayer") {
                         // nodeLayerView
                         child.layer.set("type", "nodeLayer");
-                        var treeNodeLayerView = new TreeNodeLayerView({model: child.layer});
-                        nestedViews.push(treeNodeLayerView);
+                        var nodeLayerView = new NodeLayerView({model: child.layer});
+                        nestedViews.push(nodeLayerView);
                     }
                     else if (child.type === "nodeChild") {
                         // nodeChildView
-                        var treeNodeChildView = new TreeNodeChildView({model: new TreeNodeChild(child)});
-                        nestedViews.push(treeNodeChildView);
+                        var nodeChildView = new NodeChildView({model: new NodeChild(child)});
+                        nestedViews.push(nodeChildView);
                     }
                 }, this);
                 this.set("childViews", nestedViews);
             },
 
-            "toggleExpand": function () {
+            toggleExpand: function () {
                 if (this.get("isExpanded") === true) {
                     this.set("isExpanded", false);
                 }
@@ -146,16 +146,15 @@ define([
                 }
             },
 
-            "moveUpInList": function () {
+            moveUpInList: function () {
                 this.updateSortedLayerList();
                 this.collection.moveNodeUp(this);
             },
 
-            "moveDownInList": function () {
+            moveDownInList: function () {
                 this.updateSortedLayerList();
                 this.collection.moveNodeDown(this);
             }
         });
-
         return TreeNode;
     });
