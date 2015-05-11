@@ -6,17 +6,17 @@ define([
 ], function (_, Backbone, Config, EventBus) {
 
         var Tree = Backbone.Model.extend({
-            "defaults": {
+            defaults: {
                 topicList: ["Opendata", "Inspire"],
                 currentSelection: Config.tree.orderBy
             },
-            "initialize": function () {
+            initialize: function () {
                 this.listenTo(this, "change:currentSelection", this.sendSelection);
             },
-            "setSelection": function (value) {
+            setSelection: function (value) {
                 this.set("currentSelection", value.toLowerCase());
             },
-            "sendSelection": function () {
+            sendSelection: function () {
                 Config.tree.orderBy = this.get("currentSelection");
                 if (this.get("currentSelection") === "opendata") {
                     Config.tree.layerAttribute = "kategorieOpendata";
@@ -27,6 +27,5 @@ define([
                 EventBus.trigger("fetchTreeList", this.get("currentSelection"));
             }
         });
-
         return Tree;
     });

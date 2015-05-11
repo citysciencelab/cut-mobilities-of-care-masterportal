@@ -31,12 +31,6 @@ html, body {
     }
 }
 
-
-
-
-
-
-
 #toggleDiv {
     position: relative;
     top:50px;
@@ -54,11 +48,7 @@ html, body {
     .legendbody{
         max-height:100px;
     }
-
-
 }
-
-
 
 }
 
@@ -167,9 +157,6 @@ html, body {
     text-transform: uppercase;
 }
 
-
-
-
 .legend{
     overflow:hidden;
 }
@@ -191,10 +178,6 @@ html, body {
     background-color: #ffffff !important;
     padding-left: 10px !important;
 }
-
-
-
-
 
 .glyphicon {
     vertical-align: baseline;
@@ -272,36 +255,4 @@ html, body {
     border-radius:30px!important;
     float:left;
     margin:10px;
-}
-
-.layer-selection {
-    background-color: rgb(189, 189, 189);
-    color: #fff;
-    border: 1px solid #fff;
-}
-
-.layer-selection > div {
-    padding: 6px 4px;
-}
-
-.layer-selection-button {
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 2px;
-    padding: 4px;
-}
-
-.layer-selection-label {
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.rotate-pin {
-    transform: rotate(270deg);
-    transition: .5s;
-}
-
-.rotate-pin-back {
-    transform: rotate(360deg);
-    transition: .5s;
 }

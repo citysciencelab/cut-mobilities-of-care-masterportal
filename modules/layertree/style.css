@@ -1,0 +1,38 @@
+.dropdown-tree {
+    font-size: 16px;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+}
+
+.dropdown-tree > div, .dropdown-tree > form {
+    background-color: rgb(189, 189, 189);
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 6px;
+    min-width: 380px;
+}
+
+.layer-catalog-label, .layer-selection-label {
+    cursor: pointer;
+}
+
+.layer-catalog-label > .glyphicon, .layer-selection-label > .glyphicon {
+    font-size: 14px;
+    margin-top: 2px;
+    padding: 4px;
+}
+
+.rotate-pin {
+    transform: rotate(270deg);
+    transition: .5s;
+    padding: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.rotate-pin-back {
+    transform: rotate(360deg);
+    transition: .5s;
+    padding: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}

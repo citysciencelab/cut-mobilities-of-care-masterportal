@@ -1,23 +1,24 @@
 define([
     "underscore",
     "backbone",
-    "models/Tree",
-    "text!templates/Tree.html"
-], function (_, Backbone, TreeSelection, TreeSelectionTemplate) {
+    "modules/layertree/model",
+    "text!modules/layertree/template.html"
+], function (_, Backbone, LayerTree, LayerTreeTemplate) {
 
         var TreeView = Backbone.View.extend({
-            model: new TreeSelection(),
-            template: _.template(TreeSelectionTemplate),
+            model: new LayerTree(),
+            el: ".dropdown-tree",
+            template: _.template(LayerTreeTemplate),
             events: {
                 "change select": "setSelection",
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
-                "click .selectionLabel, .selectionFormButton": "toggleTree",
-                "click .layer-selection-label, .layer-selection-button": "toggle"
+                "click .layer-catalog-label": "toggleCatalog",
+                "click .layer-selection-label": "toggleSelection"
             },
             initialize: function () {
                 this.$el.on({
-                    "click": function (e) {
+                    click: function (e) {
                         e.stopPropagation();
                     }
                 });
@@ -30,15 +31,15 @@ define([
             setSelection: function (evt) {
                 this.model.setSelection(evt.target.value);
             },
-            toggleTree: function () {
+            toggleCatalog: function () {
                 $("#tree").toggle("slow");
-                $(".selectionFormButton").toggleClass("glyphicon-triangle-bottom");
-                $(".selectionFormButton").toggleClass("glyphicon-triangle-right");
+                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
+                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-right");
             },
-            toggle: function () {
+            toggleSelection: function () {
                 $(".layer-selected-list").toggle("slow");
-                $(".layer-selection-button").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-selection-button").toggleClass("glyphicon-triangle-right");
+                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
+                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-right");
             },
             fixTree: function () {
                 $("body").on("click", "#map", this.helpForFixing);
@@ -56,6 +57,5 @@ define([
                 evt.stopPropagation();
             }
         });
-
         return TreeView;
     });

@@ -20,7 +20,7 @@ define([
                 this.render();
             },
             render: function () {
-                $(".treeSelectionForm").after(this.$el.html(""));
+                $(".layer-catalog").after(this.$el.html(""));
 
                 this.collection.forEach(this.addTreeNode, this);
             },
