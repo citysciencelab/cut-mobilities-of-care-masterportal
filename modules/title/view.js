@@ -12,9 +12,7 @@ define([
             this.render();
         },
         render: function () {
-            // var attr = this.model.toJSON();
             this.$el.html(this.template({title: Config.title}));
-            console.log(this.$el);
             $(".nav").append(this.$el);
         }
     });
