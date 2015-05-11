@@ -1,0 +1,37 @@
+.layer-content {
+    width: 24em;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    padding-right: 8px;
+    color: #777;
+}
+
+.layer-content > .layer-name {
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 2em;
+    margin-right: 4em
+}
+
+.layer-content > .layer-name:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .folder-icons > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .pull-right > .btn-glyphicon > .glyphicon {
+    font-size: 16px;
+}
+
+.layer-content > .pull-right > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.layer-content > .btn-glyphicon > .glyphicon {
+    font-size: 16px;
+}
+
+.layer-content > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
