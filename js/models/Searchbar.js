@@ -156,7 +156,7 @@ define([
                 }
                 $.ajax({
                     url: this.get("gazetteerURL"),
-                    data: "StoredQuery_ID=findeStrasse&strassenname=" + requestStreetName,
+                    data: "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(requestStreetName),
                     context: this,
                     async: true,
                     type: "GET",
@@ -223,7 +223,7 @@ define([
                 this.get("isSearchReady").set("numberSearch", false);
                 $.ajax({
                     url: this.get("gazetteerURL"),
-                    data: "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + this.get("onlyOneStreetName"),
+                    data: "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")),
                     context: this,
                     async: true,
                     type: "GET",
