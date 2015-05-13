@@ -11,7 +11,7 @@ Der Installationspfad von Git (C:\Program Files\Git\bin\) muss in der systemweit
 
 Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei git-URLs stattdessen das https-Protokoll nutzen soll
 ```
-# git config --global url.https://.insteadof=git://
+# git config --global url.https://.insteadof git://
 ```
 
 proxies setzen / auf git Bash benötigt, cmd nicht:
