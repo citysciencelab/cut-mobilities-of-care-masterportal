@@ -293,10 +293,10 @@ define([
                             if (params.attributes === 'showAll') {
                                 _.each(element, function (element) {
                                     var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace('_', ' ');
-                                    if (element.value && element.value != '') {
+                                    if (element.value && element.value !== "") {
                                         gfi[attribute] = element.value.trim();
                                     }
-                                    else if (element.textContent && element.textContent != '') {
+                                    else if (element.textContent && element.textContent !== "") {
                                         gfi[attribute] = element.textContent.trim();
                                     }
                                 });
@@ -307,18 +307,20 @@ define([
                                         return node.localName === key;
                                     });
                                     if (node) {
-                                        if (node.value && node.value != '') {
+                                        if ( node.value && node.value !== "" && node.value !== "Null") {
                                             var nodevalue = node.value.trim();
                                         }
-                                        else if (node.textContent && node.textContent != '') {
+                                        else if (node.textContent && node.textContent !== "" && node.textContent !== "Null") {
                                             var nodevalue = node.textContent.trim();
                                         }
-                                        var key = [];
-                                        key.push(value);
-                                        var val = [];
-                                        val.push(nodevalue);
-                                        var newgfi = _.object(key, val);
-                                        gfi = _.extend(gfi, newgfi);
+                                        if (nodevalue) {
+                                            var key = [];
+                                            key.push(value);
+                                            var val = [];
+                                            val.push(nodevalue);
+                                            var newgfi = _.object(key, val);
+                                            gfi = _.extend(gfi, newgfi);
+                                        }
                                     }
                                 });
                             }
