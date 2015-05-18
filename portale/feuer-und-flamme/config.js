@@ -12,7 +12,7 @@ define(function () {
         layerIDs:
         [
         {id: "453", visible: true},
-        {id: "8", visible: false},
+        {id: "452", visible: false},
         {id: "o2", visible: true},
         {id: "o1", visible: true}
         ],
@@ -55,7 +55,7 @@ define(function () {
                     return "http://wscd0096:8680/mapfish_print_2.0/";
                 }
             ,
-            title: "Bodenschutz-Portal",
+            title: "Feuer und Flamme",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
