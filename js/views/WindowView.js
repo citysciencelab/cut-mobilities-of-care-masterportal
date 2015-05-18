@@ -47,8 +47,8 @@ define([
                 this.$el.removeClass("win-min");
             },
             hide: function () {
-                if (this.model.get('winType') === 'routing') {
-                    EventBus.trigger('deleteRoute', this);
+                if (this.model.get("winType") === "routing") {
+                    EventBus.trigger("deleteRoute", this);
                 }
                 this.$el.hide("slow");
                 this.model.setVisible(false);
