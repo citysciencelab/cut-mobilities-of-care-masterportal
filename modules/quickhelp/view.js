@@ -3,7 +3,7 @@ define([
     "backbone",
     "text!modules/quickhelp/templateSearch.html",
     "eventbus",
-    "jqueryui"
+    "jqueryui/draggable"
 ], function (_, Backbone, TemplateSearch, EventBus) {
 
     var view = Backbone.View.extend({

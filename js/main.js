@@ -3,7 +3,7 @@ require.config({
     paths: {
         openlayers: "../_libs/openlayers/js/ol-debug",
         jquery: "../components/jquery/dist/jquery",
-        jqueryui: "../components/jquery-ui/jquery-ui.min",
+        jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore",
         backbone: "../components/backbone/backbone",
         text: "../components/requirejs-text/text",

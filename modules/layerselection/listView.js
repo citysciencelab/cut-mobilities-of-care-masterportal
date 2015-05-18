@@ -4,7 +4,7 @@ define([
     "modules/layerselection/list",
     "modules/layerselection/view",
     "eventbus",
-    "jqueryui"
+    "jqueryui/sortable"
 ], function (_, Backbone, List, View, EventBus) {
 
         var listView = Backbone.View.extend({
@@ -15,7 +15,7 @@ define([
                 EventBus.on("test", this.render);
                 this.render();
                 this.listenTo(this.collection, "add", this.render);
-                // JQuery UI
+                // // JQuery UI
                 this.$el.sortable({
                     start: function (evt, ui) {
                         ui.item.startPos = ui.item.index();
@@ -25,7 +25,7 @@ define([
                             ui.item.trigger("movemodel", ui.item.startPos - ui.item.index());
                         }
                         else {
-                            ui.item.trigger("movemodel", ui.item.startPos + ui.item.index())
+                            ui.item.trigger("movemodel", ui.item.startPos + ui.item.index());
                         }
                     }
                 });

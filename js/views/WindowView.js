@@ -2,11 +2,11 @@ define([
     "underscore",
     "backbone",
     "config",
-    "eventbus",
     "models/Window",
     "text!templates/Window.html",
-    "jqueryui"
-    ], function (_, Backbone, Config, EventBus, Window, WindowTemplate) {
+    "eventbus",
+    "jqueryui/draggable"
+], function (_, Backbone, Config, Window, WindowTemplate, EventBus) {
 
         var WindowView = Backbone.View.extend({
             id: "window",
