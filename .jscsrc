@@ -21,6 +21,7 @@
     "requireLineBreakAfterVariableAssignment": true,
     "requireMultipleVarDecl": true,
     "requireOperatorBeforeLineBreak": true,
+    "requirePaddingNewLineAfterVariableDeclaration": true,
     "requireSemicolons": true,
     "requireSpaceAfterBinaryOperators": true,
     "requireSpaceAfterKeywords": true,
