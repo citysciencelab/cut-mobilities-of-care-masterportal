@@ -5,7 +5,7 @@ define([
     "openlayers",
     "eventbus",
     "config",
-    "models/map"
+    "bootstrap"
 ], function ($, _, Backbone, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({

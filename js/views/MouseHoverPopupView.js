@@ -3,7 +3,7 @@ define([
     "backbone",
     "models/MouseHoverPopup",
     "eventbus",
-    "jqueryui"
+    "bootstrap"
 ], function (_, Backbone, MouseHoverPopup, EventBus) {
 
     var MouseHoverPopupView = Backbone.View.extend({
