@@ -21,8 +21,7 @@ define(function () {
         [
         {id: "453", visible: true},
         {id: "94", visible: false, name: "Luftbilder"},
-        // {id: "1452", visible: true},
-        {id: "1728", visible: true, style: "1728", clusterDistance: 0, searchField: "", mouseHoverField: "name", filterOptions: [], styleLabelField: "", styleField: "eg_einstufung", name: "Badegewässer"}
+        {id: "1728", visible: true, style: "1728", distance: "", clusterDistance: 0, searchField: "", mouseHoverField: "name", styleLabelField: "", styleField: "eg_einstufung", name: "Badegewässer"}
         ],
         menubar: true,
         mouseHover: true,
@@ -57,6 +56,7 @@ define(function () {
         },
         orientation: true,
         poi: false
-    }
+    };
+
     return config;
 });

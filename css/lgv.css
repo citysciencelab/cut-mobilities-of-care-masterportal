@@ -240,7 +240,7 @@ html, body {
 
 .mouseHover {
     font-size: 12px;
-    /*max-width: inherit;*/
+    max-width: inherit;
     padding: 6px;
     background-color: rgb(255, 255, 255);
     color: #777;
