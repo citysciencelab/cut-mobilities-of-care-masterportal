@@ -18,7 +18,7 @@ define([
 
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             if (this.get("displayInTree") === false) {
-                this.set("gfiAttributes", false)
+                this.set("gfiAttributes", false);
             }
 
             // Wenn Visibility nicht gesetzt ist (FHH-Atlas), werden alle Layer standardmäßig ausgeblendet.
@@ -39,7 +39,7 @@ define([
             this.listenTo(this, "change:visibility", this.setVisibility);
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
-            this.listenTo(this, "change:currentScale", this.setScaleRange);   
+            this.listenTo(this, "change:currentScale", this.setScaleRange);
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
@@ -49,16 +49,16 @@ define([
                 this.postInit();
             }
         },
-        postInit: function() {
+        postInit: function () {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
             this.get("layer").setVisible(this.get("visibility"));
 
-            if(this.get("opacity")){
+            if (this.get("opacity")) {
                 this.set("transparence", parseInt(this.get("opacity"), 10));
             }
-            else{
+            else {
                  this.set("transparence", 0);
             }
             this.updateOpacity();
@@ -75,14 +75,14 @@ define([
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
             this.setAttributionLayerSource();
-            EventBus.trigger('removeLayer', this.get('layer'));                    
+            EventBus.trigger("removeLayer", this.get("layer"));
             this.setAttributionLayer();
-            EventBus.trigger('addLayer', this.get('layer'))
+            EventBus.trigger("addLayer", this.get("layer"));
         },
         setAttributions: function () {
             var datasets = this.get("datasets");
             if (datasets) {
-                if(datasets[0] !== undefined) {
+                if (datasets[0] !== undefined) {
                     var dataset = this.get("datasets")[0];
                     this.set("metaID", dataset.md_id);
                     this.set("metaName", dataset.md_name);
@@ -108,15 +108,15 @@ define([
         */
         convertGFIAttributes: function () {
             if (this.get("gfiAttributes")) {
-                if (this.get("gfiAttributes").toUpperCase() === "SHOWALL" || this.get("gfiAttributes").toUpperCase() === "IGNORE" ) {
+                if (this.get("gfiAttributes").toUpperCase() === "SHOWALL" || this.get("gfiAttributes").toUpperCase() === "IGNORE") {
                     return this.get("gfiAttributes");
                 }
                 else {
-                    var gfiAttributList = this.get("gfiAttributes").split(",");
-                    var gfiAttributes = {};
+                    var gfiAttributList = this.get("gfiAttributes").split(","),
+                        gfiAttributes = {};
                     _.each(gfiAttributList, function (gfiAttributeConfig) {
-                        var gfiAttribute = gfiAttributeConfig.split(":");
-                        var key = [];
+                        var gfiAttribute = gfiAttributeConfig.split(":"),
+                            key = [];
                         key.push(gfiAttribute[0].trim());
                         var value = [];
                         value.push(gfiAttribute[1].trim());
@@ -128,7 +128,7 @@ define([
             }
         },
         setScaleRange: function () {
-            if (this.get("currentScale") <= parseInt(this.get("maxScale"),10) && this.get("currentScale") >= parseInt(this.get("minScale"),10)) {
+            if (this.get("currentScale") <= parseInt(this.get("maxScale"), 10) && this.get("currentScale") >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
             }
             else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
@@ -144,18 +144,18 @@ define([
          */
         toggleVisibility: function () {
             if (this.get("visibility") === true) {
-                this.set({"visibility": false});
+                this.set({visibility: false});
             }
             else if (this.get("visibility") === false && this.get("isInScaleRange") === true) {
-                this.set({"visibility": true});
+                this.set({visibility: true});
             }
         },
         toggleSelected: function () {
             if (this.get("selected") === true) {
-                this.set({"selected": false});
+                this.set({selected: false});
             }
             else {
-                this.set({"selected": true});
+                this.set({selected: true});
             }
             if (this.get("layerType") === "nodeChildLayer") {
                 this.get("parentView").checkSelectedOfAllChildren();
@@ -186,7 +186,7 @@ define([
         updateOpacity: function () {
             var opacity = (100 - this.get("transparence")) / 100;
             this.get("layer").setOpacity(opacity);
-            this.set({"opacity": opacity});
+            this.set({opacity: opacity});
         },
         /**
          * wird in WFSLayer und GroupLayer überschrieben
@@ -211,10 +211,10 @@ define([
          */
         toggleSettings: function () {
             if (this.get("settings") === true) {
-                this.set({"settings": false});
+                this.set({settings: false});
             }
             else {
-                this.set({"settings": true});
+                this.set({settings: true});
             }
         },
         toggleEventAttribution: function (value) {
