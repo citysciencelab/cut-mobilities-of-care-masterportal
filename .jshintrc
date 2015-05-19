@@ -38,6 +38,7 @@
     "wsh": true,
     "predef": [
         "define",
-        "require"
+        "require",
+        "_"
     ]
 }
