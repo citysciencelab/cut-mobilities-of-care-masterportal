@@ -1,12 +1,8 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "modules/layercatalog/list",
-    "modules/layercatalog/viewNode",
-    "eventbus",
-    "bootstrap"
-], function ($, _, Backbone, CatalogList, NodeView) {
+    "modules/layercatalog/viewNode"
+], function (Backbone, CatalogList, NodeView) {
 
     var listView = Backbone.View.extend({
         collection: CatalogList,

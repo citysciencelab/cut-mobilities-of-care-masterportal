@@ -1,10 +1,10 @@
 define([
-    'underscore',
     'backbone',
     'eventbus',
     'openlayers',
-    'config'
-], function (_, Backbone, EventBus, ol, Config) {
+    'config',
+    "bootstrap/popover"
+], function (Backbone, EventBus, ol, Config) {
 
     var GFIPopup = Backbone.Model.extend({
         /**

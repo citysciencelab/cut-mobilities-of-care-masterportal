@@ -4,9 +4,8 @@ define([
     'backbone',
     'collections/LayerList',
     'modules/layer/view',
-    'bootstrap',
     'eventbus'
-], function ($, _, Backbone, LayerList, LayerView, Bootstrap, EventBus) {
+], function ($, _, Backbone, LayerList, LayerView, EventBus) {
 
     var LayerListView = Backbone.View.extend({
         collection: LayerList,
