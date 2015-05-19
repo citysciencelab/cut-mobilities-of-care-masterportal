@@ -1,10 +1,8 @@
 define([
-    "underscore",
     "backbone",
     "models/MouseHoverPopup",
-    "eventbus",
-    "bootstrap"
-], function (_, Backbone, MouseHoverPopup, EventBus) {
+    "eventbus"
+], function (Backbone, MouseHoverPopup, EventBus) {
 
     var MouseHoverPopupView = Backbone.View.extend({
         model: MouseHoverPopup,
@@ -32,5 +30,6 @@ define([
             this.model.destroyPopup();
         }
     });
+
     return MouseHoverPopupView;
 });

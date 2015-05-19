@@ -1,12 +1,10 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "openlayers",
     "eventbus",
     "config",
-    "bootstrap"
-], function ($, _, Backbone, ol, EventBus, Config) {
+    "bootstrap/popover"
+], function (Backbone, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
