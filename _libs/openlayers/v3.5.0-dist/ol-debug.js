@@ -70584,6 +70584,9 @@ if (typeof define === 'function' && define.amd) define('rbush', function() { ret
 else if (typeof module !== 'undefined') module.exports = rbush;
 else if (typeof self !== 'undefined') self.rbush = rbush;
 else window.rbush = rbush;
+
+//sz, behebt Fehler mit rbush, requirejs und ol-debug, tritt in ol.min nicht auf
+module.exports=rbush;
 })();
 
 ol.ext.rbush = module.exports;
