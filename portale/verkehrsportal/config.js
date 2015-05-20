@@ -37,8 +37,9 @@ define(function () {
                      id: '947'
                  }
              ],
-             name: 'aktuelle Meldungen der TBZ', visible: false
+             name: 'Verkehrslage auf Autobahnen', visible: false
             },
+            {id: '1935', visible: false, styles: ['geofox_Faehre', 'geofox-bahn'], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
             {id:
              [
                 {
@@ -52,20 +53,19 @@ define(function () {
              ],
              visible: false, name: 'HVV Buslinien', styles: ['geofox-bus', 'geofox_BusName']
             },
-            {id: '1935', visible: false, styles: ['geofox_Faehre', 'geofox-bahn'], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
             {id: '1933', visible: false, styles: 'geofox_stations', name: "HVV Haltestellen"},
             {id: '46', visible: false, style: '46', clusterDistance: 60, searchField: '', mouseHoverField: '', filterOptions: [], routable: true},
-            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
-            {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
-            {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
-            {id: '52', visible: false, style: '52', clusterDistance: 30, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'situation', routable: true},
             {id: '48', visible: false, style: '48', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '50', visible: false, style: '50', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
             {id: '53', visible: false, style: '53', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
-            {id: '2119', visible: false, style: '2119', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
+            {id: '45', visible: false, style: '45', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
+            {id: '51', visible: false, style: '51', clusterDistance: 40, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', routable: true},
+            {id: '52', visible: false, style: '52', clusterDistance: 30, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'situation', routable: true},
             {id: '2128', visible: false, style: '2128', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2132', visible: false, style: '2132', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
-            {id: '2156', visible: true, style: '2156', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'name', routable: false}
+            {id: '47', visible: false, style: '47', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: 'id_kost'},
+            {id: '2156', visible: true, style: '2156', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: '', styleField: 'name', routable: false},
+            {id: '2119', visible: false, style: '2119', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''},
+            {id: '2132', visible: false, style: '2132', clusterDistance: 0, searchField: '', mouseHoverField: '', filterOptions: [], styleLabelField: ''}
         ],
         attributions: true,
         clickCounter: {
@@ -93,7 +93,7 @@ define(function () {
         searchBar: {
             placeholder: "Adresssuche",
             gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
