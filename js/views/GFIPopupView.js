@@ -61,8 +61,8 @@ define([
             else {
                 overlay.setPosition(undefined);
                 var html = '<div id="popovermin" class="popover-min">';
-                html += '<span class="glyphicon glyphicon-info-sign gfi-icon-min"></span>'
-                html += '<span class="popovermintext">Abfrageergebnisse</span>';
+                html += '<span class="glyphicon glyphicon-info-sign gfi-min-icon"></span>'
+                html += '<span class="gfi-title">Informationen</span>';
                 html += '</div>';
                 $('#map').append(html);
                 $('#popovermin').fadeIn(500);

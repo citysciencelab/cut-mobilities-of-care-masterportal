@@ -31,13 +31,14 @@
 .win-minimize {
     float: right;
     padding: 10px 6px 0 10px;
-    fontsize: 16px;
+    font-size: 16px;
     cursor: pointer;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
 }
 
 /* Das Glyphicon für das Schließen*/
 .win-close {
+    font-size: 16px;
     float: right;
     padding: 8px 4px;
     cursor: pointer;
