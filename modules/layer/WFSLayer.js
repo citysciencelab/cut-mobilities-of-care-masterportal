@@ -83,6 +83,7 @@ define([
                             this.get("layer").setVisible(true);
                             this.reload();
                         }
+                        this.get("layer").id = this.get("id");
                     }
                     catch (e) {
                         alert("Fehlermeldung beim Laden von Daten: \n" + e.message);
