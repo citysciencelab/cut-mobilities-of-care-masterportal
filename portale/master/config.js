@@ -94,7 +94,7 @@ define(function () {
             {id: "1748", visible: false},
             {id: "1562", visible: true},
             {id: "1561", visible: true},
-            {id: "45", visible: false, style: "45", clusterDistance: 10, routable: true},
+            {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
             {id:
              [
                  {
@@ -115,16 +115,16 @@ define(function () {
              displayInTree: true,
              filterOptions: [
                  {
-                     "fieldName": "teilnahme_geburtsklinik",
-                     "filterType": "combo",
-                     "filterName": "Geburtsklinik",
-                     "filterString": ["*","ja","nein"]
+                     fieldName: "teilnahme_geburtsklinik",
+                     filterType: "combo",
+                     filterName: "Geburtsklinik",
+                     filterString: ["*", "ja", "nein"]
                  },
                  {
-                     "fieldName": "teilnahme_notversorgung",
-                     "filterType": "combo",
-                     "filterName": "Not- und Unfallversorgung",
-                     "filterString": ["*","ja","eingeschränkt","nein"]
+                     fieldName: "teilnahme_notversorgung",
+                     filterType: "combo",
+                     filterName: "Not- und Unfallversorgung",
+                     filterString: ["*", "ja", "eingeschränkt", "nein"]
                  }
              ],
              routable: true
@@ -201,7 +201,7 @@ define(function () {
             placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
             gazetteerURL: function () {
                     return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            },
+            }
         },
 
         bPlan: {
@@ -219,8 +219,7 @@ define(function () {
         print: {
             url: function () {
                 return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-                }
-            ,
+                },
             title: "Master",
             gfi: false
         },
@@ -254,7 +253,7 @@ define(function () {
         * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
         */
         poi: true
-    }
+    };
 
     return config;
 });
