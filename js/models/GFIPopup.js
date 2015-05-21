@@ -368,21 +368,15 @@ define([
                     return value;
                 }
             });
-            var newCoord = new Array();
-            for (i=0; i < route.getCoordinates().length; i = i + 3) {
-                newCoord.push([
-                    route.getCoordinates()[i],
-                    route.getCoordinates()[i+1],
-                    route.getCoordinates()[i+2]
-                ]);
-            }
+            var geom = new ol.geom.LineString(route.getCoordinates(), 'XYZ');
             var olFeature = new ol.Feature({
-                geometry : new ol.geom.LineString(newCoord, 'XYZ'),
+                geometry : geom,
                 name : gesuchteRoute
             });
             var vectorlayer = new ol.layer.Vector({
                 source: new ol.source.Vector({
-                    features: [olFeature]
+                    features: [olFeature],
+                    projection: ol.proj.get("EPSG:25832")
                 }),
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({
