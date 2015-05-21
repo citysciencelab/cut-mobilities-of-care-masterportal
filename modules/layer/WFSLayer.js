@@ -42,12 +42,46 @@ define([
                             featureNS: this.get("featureNS"),
                             featureType: this.get("featureType")
                         });
-
-                        if (this.get("source").distance_) { // Erkennungszeichen für Clustersource
-                            this.get("source").source_.addFeatures(wfsReader.readFeatures(data));
-                        }
-                        else {
-                            this.get("source").addFeatures(wfsReader.readFeatures(data));
+                        if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
+                            var src = new ol.source.Vector({
+                                projection: proj25832,
+                                attributions: this.get("olAttribution")
+                            });
+                            src.addFeatures(wfsReader.readFeatures(data));
+                            this.set('source', src);
+                            this.styling();
+                            this.set("layer", new ol.layer.Vector({
+                                source: this.get("source"),
+                                name: this.get("name"),
+                                typ: this.get("typ"),
+                                style: this.get("style"),
+                                gfiAttributes: this.get("gfiAttributes"),
+                                routable: this.get("routable")
+                            }));
+                            this.get("layer").setVisible(true);
+                            this.reload();
+                        } else {
+                            var src = new ol.source.Vector({
+                                projection: proj25832,
+                                attributions: this.get("olAttribution")
+                            });
+                            src.addFeatures(wfsReader.readFeatures(data));
+                            var cluster = new ol.source.Cluster({
+                                source: src,
+                                distance: this.get("clusterDistance")
+                            });
+                            this.set('source', cluster);
+                            this.styling();
+                            this.set("layer", new ol.layer.Vector({
+                                source: this.get("source"),
+                                name: this.get("name"),
+                                typ: this.get("typ"),
+                                style: this.get("style"),
+                                gfiAttributes: this.get("gfiAttributes"),
+                                routable: this.get("routable")
+                            }));
+                            this.get("layer").setVisible(true);
+                            this.reload();
                         }
                     }
                     catch (e) {
@@ -61,41 +95,35 @@ define([
             });
         },
         setAttributionLayerSource: function () {
-            // Finde layerIDs zu dieser Layer-Id, hole Infos und weise sie dem Layer zu
-            var id = this.get("id"),
-                layerIDs = _.find(Config.layerIDs, function (num) {
+            // Nur einmalig und nicht beim reload.
+            if (this.get('layer') === undefined) {
+                var id = this.get("id");
+                var layerIDs = _.find(Config.layerIDs, function (num) {
                     return num.id === id;
                 });
-
-            this.set("styleId", layerIDs.style);
-            this.set("clusterDistance", layerIDs.clusterDistance);
-            this.set("searchField", layerIDs.searchField);
-            this.set("styleField", layerIDs.styleField);
-            this.set("styleLabelField", layerIDs.styleLabelField);
-            this.set("source", new ol.source.Vector({
-                projection: proj25832,
-                attributions: this.get("olAttribution")
-            }));
-            this.styling(this.get("source"), layerIDs);
+                this.set("styleId", layerIDs.style);
+                this.set("clusterDistance", layerIDs.clusterDistance);
+                this.set("searchField", layerIDs.searchField);
+                this.set("styleField", layerIDs.styleField);
+                this.set("styleLabelField", layerIDs.styleLabelField);
+            }
         },
         /**
          * wird von Layer.js aufgerufen
          */
         setAttributionLayer: function () {
-            this.set("layer", new ol.layer.Vector({
-                source: this.get("source"),
-                name: this.get("name"),
-                typ: this.get("typ"),
-                style: this.get("style"),
-                gfiAttributes: this.get("gfiAttributes"),
-                routable: this.get("routable")
-            }));
-            this.setVisibility();
+            // Dummy-Layer, damit initialize des Layer durchläuft. Nur einmalig und nicht beim reload.
+            if (this.get('layer') === undefined) {
+                this.set("layer", new ol.layer.Vector({
+                    source: new ol.source.Vector(),
+                    visible: false
+                }));
+                this.setVisibility();
+            }
         },
         setVisibility: function () {
             EventBus.trigger("returnBackboneLayerForSearchbar", this);
             var visibility = this.get("visibility");
-
             this.toggleEventAttribution(visibility);
             if (visibility === true) {
                 if (this.get("layer").getSource().getFeatures().length === 0) {
@@ -107,7 +135,7 @@ define([
                 this.get("layer").setVisible(false);
             }
         },
-        styling: function (pServerVector, layerIDs) {
+        styling: function () {
             // NOTE Hier werden die Styles zugeordnet
             if (this.get("styleField") && this.get("styleField") !== "") {
                 if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
@@ -115,7 +143,7 @@ define([
                         //TODO
                     }
                     else {
-                        this.setSimpleStyleForStyleField(pServerVector, layerIDs);
+                        this.setSimpleStyleForStyleField();
                     }
                 }
                 else {
@@ -123,89 +151,78 @@ define([
                         //TODO
                     }
                     else {
-                        this.setClusterStyleForStyleField(pServerVector, layerIDs);
+                        this.setClusterStyleForStyleField();
                     }
                 }
             }
             else {
                 if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
                     if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.setSimpleCustomLabeledStyle(pServerVector, layerIDs);
+                        this.setSimpleCustomLabeledStyle();
                     }
                     else {
-                        this.setSimpleStyle(pServerVector, layerIDs);
+                        this.setSimpleStyle();
                     }
                 }
                 else {
                     if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.getClusterStyle(pServerVector, layerIDs);
+                        this.getClusterStyle();
                     }
                     else {
-                        this.setClusterStyle(pServerVector, layerIDs);
+                        this.setClusterStyle();
                     }
                 }
             }
         },
-        setSimpleCustomLabeledStyle: function (pServerVector, layerIDs) {
-            this.set("source", pServerVector);
+        setSimpleCustomLabeledStyle: function () {
+            var styleId = this.get('styleId');
+            var styleLabelField = this.get("styleLabelField");
             this.set("style", function (feature) {
-                var stylelistmodel = StyleList.returnModelById(layerIDs.style),
-                    label = _.values(_.pick(feature.getProperties(), layerIDs.styleLabelField))[0].toString();
-
+                var stylelistmodel = StyleList.returnModelById(styleId);
+                var label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
                 return stylelistmodel.getCustomLabeledStyle(label);
             });
         },
-        setSimpleStyleForStyleField: function (pServerVector, layerIDs) {
-            this.set("source", pServerVector);
+        setSimpleStyleForStyleField: function () {
+            var styleId = this.get('styleId');
+            var styleField = this.get('styleField');
             this.set("style", function (feature) {
-                var styleFieldValue = _.values(_.pick(feature.getProperties(), layerIDs.styleField))[0],
-                    stylelistmodel = StyleList.returnModelByValue(layerIDs.style, styleFieldValue);
+                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
+                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
 
                 return stylelistmodel.getSimpleStyle();
             });
         },
-        setClusterStyleForStyleField: function (pServerVector, layerIDs) {
-            var pCluster = new ol.source.Cluster({
-                source: pServerVector,
-                distance: this.get("clusterDistance")
-            });
-
-            this.set("source", pCluster);
-            this.set("style", function (feature) {
-                var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), layerIDs.styleField))[0],
-                    size = feature.get("features").length,
-                    stylelistmodel;
-
+        setClusterStyleForStyleField: function () {
+            var styleId = this.get('styleId');
+            var styleField = this.get('styleField');
+            this.set("style", function (feature, resolution) {
+                var size = feature.get("features").length;
+                var stylelistmodel;
                 if (size > 1) {
-                    stylelistmodel = StyleList.returnModelById(layerIDs.style + "_cluster");
+                    stylelistmodel = StyleList.returnModelById(styleId + "_cluster");
                 }
                 if (!stylelistmodel) {
-                    stylelistmodel = StyleList.returnModelByValue(layerIDs.style, styleFieldValue);
+                    var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
+                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
                 }
                 return stylelistmodel.getClusterStyle(feature);
             });
         },
-        setSimpleStyle: function (pServerVector, layerIDs) {
-            var stylelistmodel = StyleList.returnModelById(layerIDs.style);
-
-            this.set("source", pServerVector);
+        setSimpleStyle: function () {
+            var styleId = this.get('styleId');
+            var stylelistmodel = StyleList.returnModelById(styleId);
             this.set("style", stylelistmodel.getSimpleStyle());
         },
-        setClusterStyle: function (pServerVector, layerIDs) {
-            var stylelistmodel = StyleList.returnModelById(layerIDs.style),
-                pCluster = new ol.source.Cluster({
-                    source: pServerVector,
-                    distance: this.get("clusterDistance")
-                });
-
-            this.set("source", pCluster);
-            this.set("style", function (feature) {
+        setClusterStyle: function () {
+            var styleId = this.get('styleId');
+            var stylelistmodel = StyleList.returnModelById(styleId)
+            this.set("style", function (feature, resolution) {
                 return stylelistmodel.getClusterStyle(feature);
             });
         },
         buildGetRequest: function () {
             var newURL;
-
             // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
             if (this.get("url").indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = this.get("url").replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
