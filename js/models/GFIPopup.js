@@ -144,6 +144,9 @@ define([
                 }));
             }
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
+            if (!pFeatures) {
+                return;
+            }
             // 1 cm um Klickpunkt forEachFeatureInExtent
             var pMaxDist = 0.01 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
@@ -366,11 +369,11 @@ define([
                 }
             });
             var newCoord = new Array();
-            for (i=0; i < route.flatCoordinates.length; i = i + 3) {
+            for (i=0; i < route.getCoordinates().length; i = i + 3) {
                 newCoord.push([
-                    route.flatCoordinates[i],
-                    route.flatCoordinates[i+1],
-                    route.flatCoordinates[i+2]
+                    route.getCoordinates()[i],
+                    route.getCoordinates()[i+1],
+                    route.getCoordinates()[i+2]
                 ]);
             }
             var olFeature = new ol.Feature({
