@@ -337,10 +337,6 @@ define([
             var zoomLevel = this.get('view').getZoom();
             this.get('view').setZoom(zoomLevel -1);
         },
-        setPOICenter: function (center, zoom) {
-            this.get('map').getView().setCenter(center);
-            this.get('map').getView().setZoom(zoom);
-        },
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);
             this.set("scalePrintPage", args[2]);
