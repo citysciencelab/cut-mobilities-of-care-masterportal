@@ -70,7 +70,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.gfi === true) {
-                        require(["views/GFIPopupView"], function (GFIPopupView) {
+                        require(["modules/gfipopup/view"], function (GFIPopupView) {
                             new GFIPopupView();
                         });
                     }

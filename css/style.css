@@ -6,7 +6,7 @@
 @import "lgv.css";
 @import "searchbar.css";
 @import "togglebutton.css";
-@import "gfipopup.css";
+@import "../modules/gfipopup/style.css";
 @import "panel.css";
 @import "glyphiconbutton.css";
 @import "orientation.css";
