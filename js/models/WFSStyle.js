@@ -108,12 +108,9 @@ define([
             }
         },
         getCustomLabeledStyle : function (label) {
+            this.set('textlabel', label);
             var style = this.getSimpleStyle();
-            var text = style[0].getText();
-            if (text) {
-                text.text_ = label;
-                return style;
-            }
+            return style;
         },
         getSimpleStyle : function () {
             if (this.get('subclass') == 'Icon') {
