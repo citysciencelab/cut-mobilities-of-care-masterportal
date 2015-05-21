@@ -1,7 +1,8 @@
 define([
     "backbone",
     "config",
-    "bootstrap/dropdown"
+    "bootstrap/dropdown",
+    "bootstrap/collapse"
 ], function (Backbone, Config) {
 
     var Menubar = Backbone.Model.extend({
