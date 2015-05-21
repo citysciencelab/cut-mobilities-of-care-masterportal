@@ -2,7 +2,7 @@
 
 @import "fonts.css";
 @import "../components/bootstrap/dist/css/bootstrap.css";
-@import "../_libs/openlayers/css/ol.css";
+@import "../_libs/openlayers/v3.5.0/ol.css";
 @import "lgv.css";
 @import "searchbar.css";
 @import "togglebutton.css";
