@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/wfsFeatureFilter.html',
-    'models/wfsFeatureFilter',
+    'text!modules/wfsfeaturefilter/template.html',
+    'modules/wfsfeaturefilter/model',
     'eventbus',
     'config'
 ], function ($, _, Backbone, wfsFeatureFilterTemplate, wfsFeatureFilter, EventBus, Config) {

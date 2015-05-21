@@ -44,7 +44,7 @@ define([
             var map = this.get('map');
             var wfsList = this.get('wfsList');
             map.getLayers().forEach(function(layer) {
-                if (layer.getProperties().typ === 'WFS') {
+                if (layer.getProperties() && layer.getProperties().typ === 'WFS') {
                     var layerID = layer.id;
                         if (layerID) {
                             var wfsListEntry = _.find(wfsList, function (ele) {

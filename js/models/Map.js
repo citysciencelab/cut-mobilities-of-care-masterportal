@@ -33,14 +33,14 @@ define([
 					viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0];
 				}
 
-								// Definition der Projektion EPSG:25832
-								ol.proj.addProjection(new ol.proj.Projection({
-									code: 'EPSG:25832',
-									units: 'm',
-									extent: viewExtent,
-									axisOrientation: 'enu', // default
-									global: false  // default
-								}));
+                // Definition der Projektion EPSG:25832
+                ol.proj.addProjection(new ol.proj.Projection({
+                    code: 'EPSG:25832',
+                    units: 'm',
+                    extent: viewExtent,
+                    axisOrientation: 'enu', // default
+                    global: false  // default
+                }));
 
                 EventBus.on('activateClick', this.activateClick, this);
                 EventBus.on('addLayer', this.addLayer, this);

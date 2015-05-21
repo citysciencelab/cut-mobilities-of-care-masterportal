@@ -104,7 +104,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {
-                    require(["views/wfsFeatureFilterView"], function (WFSFeatureFilterView) {
+                    require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
                     });
                 }
