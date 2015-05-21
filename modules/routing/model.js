@@ -1,10 +1,11 @@
 define([
     'underscore',
     'backbone',
+    'openlayers',
     'eventbus',
     'config',
     'models/SearchBar'
-], function (_, Backbone, EventBus, Config, Searchbar) {
+], function (_, Backbone, ol, EventBus, Config, Searchbar) {
 
     var RoutingModel = Backbone.Model.extend({
         defaults: {
