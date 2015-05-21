@@ -7,8 +7,9 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
-        styleConf: locations.baseUrl + '../style.json',
+        layerConf: '../components/lgv-config/services-fhhnet.json',
+        categoryConf: '../components/lgv-config/category.json',
+        styleConf: '../components/lgv-config/style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
             {id: '453', visible: true},
@@ -51,26 +52,17 @@ define(function () {
         },
         startUpModul: '',
         searchBar: {
-            placeholder: "Suche nach Straße oder Krankenhausname",
+            placeholder: "Adresssuche",
             gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
+                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         print: {
             url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
                     return "http://geoportal-hamburg.de/mapfish_print_2.0/";
                 }
-            },
-            title: 'Krankenhausportal',
+            ,
+            title: "Verkehrsportal",
             gfi: false
         },
         tools: {
