@@ -1,40 +1,41 @@
-#gfiTitle {
-    padding: 3px;
-    font-size: 14px;
-    background: -moz-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -webkit-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -o-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -ms-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    color: #777;
-    height: 34px;
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    min-width: 28em;
-    /*min-width: 26em;*/
-}
-
-#gfiContent {
+.gfiContent {
     font-size: 12px;
     max-height: 400px;
     min-width: 100%;
     overflow-y: auto;
+    padding-top: 33px;
 }
 
 .popover {
-    max-width: none;
-    min-width: 250px;
     padding: 0px;
 }
 
-@media (max-width: 768px) {
+/* iPhone4 iPhone5 Lumia7x0*/
+@media (min-width:320px){
     .popover {
-        white-space: normal;
+        min-width:310px;
+        max-width:310px;
     }
 }
-
-@media (min-width: 768px) {
+/* iPhone6 Nexus4*/
+@media (min-width:375px){
     .popover {
-        /*white-space: nowrap;*/
+        min-width:370px;
+        max-width:370px;
+    }
+}
+/* Nexus5 BlackberryZ10/Z30 GalaxyS4 XperiaZ1*/
+@media (min-width:360px){
+    .popover {
+        min-width:350px;
+        max-width:350px;
+    }
+}
+/* Tablet Desktop*/
+@media (min-width: 966px) {
+    .popover {
+        min-width:350px;
+        max-width:450px;
     }
 }
 
@@ -72,72 +73,98 @@
     margin-bottom: 4px !important;
 }
 
+/* Icon neben gfi-title*/
+.gfi-icon {
+    float: left;
+    padding: 6px;
+    font-size: 16px;
+}
+
+.gfi-heading {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    height: 34px;
+    border-bottom: 1px solid rgb(215, 215, 215);
+    position: absolute;
+	z-index: 999;
+    width: 100%;
+}
+
 /* Die Überschrift für das Fenster */
 .gfi-title {
     float: left;
     padding: 5px;
-    /*min-width: 12em;*/
+    font-size: 16px;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    max-width: 66%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: help;
 }
 
-.gfi-title-buttons {
+/* Das Glyphicon für das Minimieren */
+.gfi-toggle {
     float: right;
-    /*margin-left: 12em;*/
-}
-
-.gfi-title-buttons > span {
-    padding: 10px 12px;
+    padding: 10px 6px 0 10px;
+    font-size: 16px;
     cursor: pointer;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
 }
 
+/* Das Glyphicon für das Schließen*/
+.gfi-close {
+    font-size: 16px;
+    float: right;
+    padding: 8px 4px;
+    cursor: pointer;
+}
+
+/* minimiertes Info-Fenster*/
+.popover-min {
+    position: fixed;
+    box-shadow: 2px 2px 2px 0px #666666;
+    color: #fff;
+    background-color: #d42132;
+    cursor: pointer;
+    border-radius: 8px !important;
+    display: none;
+}
+
+/* gfi-min-icon identisch zu gfi-icon*/
+.gfi-min-icon  {
+    float: left;
+    padding: 6px;
+    font-size: 16px;
+}
+
 @media (max-width: 768px) {
-    .popovermintext{
-        display: none;
-    }
     .popover-min {
-        font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
         position: fixed;
         left: 10px;
         top: 60px;
-        box-shadow: 2px 2px 2px 0px #666666;
-        color: #fff;
-        background-color: #d42132;
-        cursor: pointer;
-        border-radius: 8px !important;
         height: 40px;
         width: 40px;
-        display: none;
     }
-    .gfi-icon-min {
-        font-size: 16px;
-        padding: 10px;
+    .gfi-min-icon  {
+        padding: 11px;
     }
 }
 
 @media (min-width: 768px) {
-    .popovermintext{
-        vertical-align: baseline;
-        float: right;
-        padding: 5px;
-        display: block;
-    }
     .popover-min {
-        font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
         position: fixed;
-        left: 63px;
-        top: 100px;
-        box-shadow: 2px 2px 2px 0px #666666;
-        color: #fff;
-        background-color: #d42132;
-        cursor: pointer;
-        border-radius: 8px !important;
+        left: 73px;
+        top: 110px;
         height: 30px;
-        width: 140px;
-        display: none;
+        width: 175px;
     }
-    .gfi-icon-min {
-        float: left;
-        font-size: 16px;
-        padding: 5px;
+    .gfi-min-icon  {
+        padding: 6px;
     }
 }

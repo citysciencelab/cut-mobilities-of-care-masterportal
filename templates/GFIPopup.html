@@ -1,12 +1,11 @@
-<div id="gfiTitle">
-    <span class="gfi-title"><%= gfiTitles[gfiContent.length-gfiCounter] %></span>
-    <div class="gfi-title-buttons">
-        <span class="glyphicon glyphicon-minus gfi-toggle"></span>
-        <span class="glyphicon glyphicon-remove gfi-close"></span>
-    </div>
+<div class="gfi-heading">
+    <span class="glyphicon glyphicon-info-sign gfi-icon"></span>
+    <span class="gfi-title" title="<%= gfiTitles[gfiContent.length-gfiCounter] %>"><%= gfiTitles[gfiContent.length-gfiCounter] %></span>
+    <span class="glyphicon glyphicon-remove gfi-close"></span>
+    <span class="glyphicon glyphicon-minus gfi-toggle"></span>
 </div>
 
-<div id="gfiContent">
+<div class="gfiContent">
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
         _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
