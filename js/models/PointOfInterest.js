@@ -1,8 +1,8 @@
 define([
-    'underscore',
-    'backbone',
-    'openlayers',
-    'eventbus'
+    "underscore",
+    "backbone",
+    "openlayers",
+    "eventbus"
 ], function (_, Backbone, ol, EventBus) {
 
     var PointOfInterest = Backbone.Model.extend({
@@ -10,17 +10,17 @@ define([
         },
         setCenter: function(){
             var zoom;
-            if(this.get('distance')<500){
+            if(this.get("distance")<500){
                 zoom=7;
             }
-            else if(this.get('distance')>500&&this.get('distance')<1000){
+            else if(this.get("distance")>500&&this.get("distance")<1000){
                 zoom=7;
             }
             else{
                 zoom=7;
             }
-            EventBus.trigger('hidePOIModal');
-            EventBus.trigger('setPOICenter', [parseInt(this.get('xCoord'),10),parseInt(this.get('yCoord'),10)], zoom);
+            EventBus.trigger("hidePOIModal");
+            EventBus.trigger("setCenter", [parseInt(this.get("xCoord"),10),parseInt(this.get("yCoord"),10)], zoom);
         }
 
     });

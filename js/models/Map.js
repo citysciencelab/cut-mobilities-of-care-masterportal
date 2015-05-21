@@ -60,7 +60,6 @@ define([
                 EventBus.on('updatePrintPage', this.updatePrintPage, this);
                 EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
                 EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
-                EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
 
                 this.set('projection', ol.proj.get('EPSG:25832'));
