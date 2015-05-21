@@ -27,7 +27,8 @@ define([
             'click .filterTree': 'activateFilterTree',
             'click .filterWfsFeature': 'activateWfsFilter',
             'click .legend': 'activateLegend',
-            'click .routingModul': 'activateRoutingModul'
+            'click .routingModul': 'activateRoutingModul',
+            'click .wfsFeatureFilter': 'activateWfsFeatureFilter'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -61,9 +62,11 @@ define([
             EventBus.trigger('toggleLegendWin');
         },
         activateRoutingModul: function () {
-//            EventBus.trigger('toggleRoutingWin');
             EventBus.trigger('toggleWin', ['routing', 'Routenplaner', 'glyphicon-road']);
-        }
+        },
+        activateWfsFeatureFilter: function () {
+            EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
+        },
     });
 
     return MenubarView;

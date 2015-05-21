@@ -25,7 +25,7 @@ define([
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
                 this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=EPSG:25832');
             }
-            EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
+            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             EventBus.on('setMap', this.setMap, this);
             EventBus.trigger('getMap', this);
         },
