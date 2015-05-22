@@ -56,7 +56,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
         }
 
         if (Config.menubar === true) {
-            require(["views/MenubarView", "views/ToggleButtonView", "views/ZoomButtonsView"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
+            require(["modules/menubar/view", "views/ToggleButtonView", "views/ZoomButtonsView"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
                 new MenubarView();
                 new ToggleButtonView();
                 new ZoomButtonsView();
