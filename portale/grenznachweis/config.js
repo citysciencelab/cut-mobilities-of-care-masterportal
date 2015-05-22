@@ -149,7 +149,8 @@ define(function () {
             routing: false,
             formular: {
                 title: 'Bestellung Grenznachweis',
-                symbol: 'glyphicon glyphicon-shopping-cart'
+                symbol: 'glyphicon glyphicon-shopping-cart',
+                model: 'grenznachweis'
             }
         },
         /**
