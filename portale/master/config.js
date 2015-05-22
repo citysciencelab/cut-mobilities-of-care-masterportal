@@ -90,7 +90,7 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "148", visible: false},
+            {id: "452", visible: false},
             {id: "1748", visible: false},
             {id: "1562", visible: true},
             {id: "1561", visible: true},
