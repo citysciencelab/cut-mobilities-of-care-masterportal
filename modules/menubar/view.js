@@ -2,9 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Menubar.html',
+    'text!modules/menubar/template.html',
     'views/LayerListView',
-    'models/Menubar',
+    'modules/menubar/model',
     'config',
     'eventbus'
 ], function ($, _, Backbone, MenubarTemplate, LayerListView, Menubar, Config, EventBus) {
