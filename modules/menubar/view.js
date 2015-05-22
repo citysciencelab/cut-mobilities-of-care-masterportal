@@ -28,7 +28,8 @@ define([
             'click .filterWfsFeature': 'activateWfsFilter',
             'click .legend': 'activateLegend',
             'click .routingModul': 'activateRoutingModul',
-            'click .wfsFeatureFilter': 'activateWfsFeatureFilter'
+            'click .wfsFeatureFilter': 'activateWfsFeatureFilter',
+            'click .formular': 'activateFormular'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -67,6 +68,9 @@ define([
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
         },
+        activateFormular: function () {
+            EventBus.trigger("toggleWin", ["formular", Config.menu.formular.title, Config.menu.formular.symbol]);
+        }
     });
 
     return MenubarView;
