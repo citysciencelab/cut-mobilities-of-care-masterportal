@@ -33,14 +33,14 @@ define([
 					viewExtent = [510000.0, 5850000.0, 625000.4, 6000000.0];
 				}
 
-								// Definition der Projektion EPSG:25832
-								ol.proj.addProjection(new ol.proj.Projection({
-									code: 'EPSG:25832',
-									units: 'm',
-									extent: viewExtent,
-									axisOrientation: 'enu', // default
-									global: false  // default
-								}));
+                // Definition der Projektion EPSG:25832
+                ol.proj.addProjection(new ol.proj.Projection({
+                    code: 'EPSG:25832',
+                    units: 'm',
+                    extent: viewExtent,
+                    axisOrientation: 'enu', // default
+                    global: false  // default
+                }));
 
                 EventBus.on('activateClick', this.activateClick, this);
                 EventBus.on('addLayer', this.addLayer, this);
@@ -60,7 +60,6 @@ define([
                 EventBus.on('updatePrintPage', this.updatePrintPage, this);
                 EventBus.on('getMap', this.getMap, this); // getriggert aus MouseHoverPopup
                 EventBus.on('initWfsFeatureFilter', this.initWfsFeatureFilter, this);
-                EventBus.on('setPOICenter', this.setPOICenter, this);
                 EventBus.on('setMeasurePopup', this.setMeasurePopup, this); //warte auf Fertigstellung des MeasurePopup für Übergabe
 
                 this.set('projection', ol.proj.get('EPSG:25832'));
@@ -337,10 +336,6 @@ define([
         setZoomLevelDown: function () {
             var zoomLevel = this.get('view').getZoom();
             this.get('view').setZoom(zoomLevel -1);
-        },
-        setPOICenter: function (center, zoom) {
-            this.get('map').getView().setCenter(center);
-            this.get('map').getView().setZoom(zoom);
         },
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);

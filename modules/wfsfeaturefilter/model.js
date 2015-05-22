@@ -13,6 +13,16 @@ define([
         initialize: function () {
             EventBus.on('checkwfsfeaturefilter', this.prep, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initWfsFeatureFilter reagiert wurde.
             EventBus.trigger('initWfsFeatureFilter', this);
+            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
+        },
+        setStatus: function (args) {   // Fenstermanagement
+            if (args[2] === "wfsfeaturefilter") {
+                this.set("isCollapsed", args[1]);
+                this.set("isCurrentWin", args[0]);
+            }
+            else {
+                this.set("isCurrentWin", false);
+            }
         },
         prep: function (map) {
             // Trigger übergibt map -> abspeichern
@@ -44,7 +54,7 @@ define([
             var map = this.get('map');
             var wfsList = this.get('wfsList');
             map.getLayers().forEach(function(layer) {
-                if (layer.getProperties().typ === 'WFS') {
+                if (layer.getProperties() && layer.getProperties().typ === 'WFS') {
                     var layerID = layer.id;
                         if (layerID) {
                             var wfsListEntry = _.find(wfsList, function (ele) {

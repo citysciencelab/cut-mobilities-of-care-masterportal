@@ -52,8 +52,6 @@ define([
         postInit: function () {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
-            // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
-            this.get("layer").setVisible(this.get("visibility"));
 
             if (this.get("opacity")) {
                 this.set("transparence", parseInt(this.get("opacity"), 10));
@@ -71,6 +69,9 @@ define([
 
             // setzen der MetadatenURL, vlt. besser in layerlist??
             this.setMetadataURL();
+
+            // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
+            this.get("layer").setVisible(this.get("visibility"));
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {

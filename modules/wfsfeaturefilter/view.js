@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/wfsFeatureFilter.html',
-    'models/wfsFeatureFilter',
+    'text!modules/wfsfeaturefilter/template.html',
+    'modules/wfsfeaturefilter/model',
     'eventbus',
     'config'
 ], function ($, _, Backbone, wfsFeatureFilterTemplate, wfsFeatureFilter, EventBus, Config) {
@@ -11,18 +11,12 @@ define([
 var wfsFeatureFilterView = Backbone.View.extend({
         model: wfsFeatureFilter,
         id: 'wfsFilterWin',
-        className: 'panel panel-master',
+        className: 'win-body',
         template: _.template(wfsFeatureFilterTemplate),
         initialize: function () {
-            this.render();
-            EventBus.on('toggleFilterWfsWin', this.toggleFilterWfsWin, this);
-            if (Config.startUpModul.toUpperCase() === 'WFSFEATUREFILTER') {
-                this.toggleFilterWfsWin();
-            }
+            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
         },
         events: {
-            'click .glyphicon-chevron-up, .glyphicon-chevron-down': 'toggleContent',
-            'click .close': 'toggleFilterWfsWin',
             'click #filterbutton': 'getFilterInfos'
         },
         getFilterInfos: function () {
@@ -127,7 +121,7 @@ var wfsFeatureFilterView = Backbone.View.extend({
                                             feature.setStyle(null);
                                             Resolved vermutlich mit 3.1.0
                                         */
-                                        if (feature.getStyle() && feature.getStyle()[0].image_.getSrc() != '../../img/blank.png') {
+                                        if (feature.getStyle() && feature.getStyle()[0].getImage().getSrc() != '../../img/blank.png') {
                                             feature.defaultStyle = feature.getStyle();
                                         }
                                         if (feature.defaultStyle) {
@@ -158,19 +152,13 @@ var wfsFeatureFilterView = Backbone.View.extend({
             this.model.set('layerfilters', layerfilters);
         },
         render: function () {
-            var attr = this.model.toJSON();
-             $('#toggleRow').append(this.$el.html(this.template(attr)));
-        },
-        refreshHtml: function () {
-            var attr = this.model.toJSON();
-            this.$el.html(this.template(attr));
-        },
-        toggleContent: function () {
-            $('#wfsFilterWin > .panel-body').toggle('slow');
-            $('#wfsFilterWin > .panel-heading > .toggleChevron').toggleClass('glyphicon-chevron-up glyphicon-chevron-down');
-        },
-        toggleFilterWfsWin: function () {
-            if ($('#wfsFilterWin').is(":visible")){
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+                this.model.prep();
+                var attr = this.model.toJSON();
+                this.$el.html("");
+                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.delegateEvents();
+            } else if (this.model.get("isCurrentWin") === false) {
                 var layerfilters = this.model.get('layerfilters');
                 if (layerfilters) {
                     _.each(layerfilters, function(layerfilter, index, list) {
@@ -180,12 +168,6 @@ var wfsFeatureFilterView = Backbone.View.extend({
                     });
                     this.filterLayers(layerfilters);
                 }
-                $('#wfsFilterWin').hide();
-            }
-            else {
-                this.model.prep();
-                this.refreshHtml();
-                $('#wfsFilterWin').toggle();
             }
         }
     });

@@ -1,15 +1,13 @@
-<div class="panel-heading">
+<!--<div class="panel-heading">
     <h3 class="panel-title" style="font-size: 14px; float: left; padding: 10px 0px;"><span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;Filtereinstellungen</h3>
     <span class="close" style="padding: 8px;">×</span>
     <span class="glyphicon glyphicon-chevron-up toggleChevron"></span>
-</div>
+</div>-->
 
 <% if (wfsList[0]) { %>
-
-<div class="panel-body">
-
+<div class="wfsfeaturefilter-body">
 <% _.each(wfsList, function (wfslayer, index, list) { %>
-    <span class="panel-body" style="font-size: 14px; padding: 10px 0px;"><%=wfslayer.layer.getProperties().name %></span>
+    <span style="font-size: 14px; "><%=wfslayer.layer.getProperties().name %></span>
     <form class="form-horizontal" role="form">
 <% _.each(wfslayer.filterOptions, function (filter, index, list) {
    if (filter.filterType === 'combo') { %>
@@ -54,7 +52,7 @@
 <% }
 else {
 %>
-    <div class="panel-body">
+    <div class="wfsfeaturefilter-body">
         <label class=".text-center h4">Keine Themen sichtbar.</label>
     </div>
 <% }
