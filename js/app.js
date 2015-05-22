@@ -131,13 +131,15 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                 }
                 if (Config.menu.formular && Config.menu.formular.title !== '' && Config.menu.formular.symbol !== '' && Config.menu.formular.model !== '') {
                     var templatePath = 'text!modules/formular/' + Config.menu.formular.model + '.html';
+                    var cssPath = 'text!modules/formular/' + Config.menu.formular.model + '.css';
                     var modelPath = 'modules/formular/' + Config.menu.formular.model;
                     require([
                         "modules/formular/view",
                         modelPath,
-                        templatePath
-                    ], function (FormularView, formularmodel, templatePath) {
-                        new FormularView(formularmodel, templatePath);
+                        templatePath,
+                        cssPath
+                    ], function (FormularView, formularmodel, template, css) {
+                        new FormularView(formularmodel, template, css);
                     });
                 }
             });

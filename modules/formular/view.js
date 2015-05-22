@@ -9,10 +9,11 @@ define([
     var formularView = Backbone.View.extend({
         id: 'formularWin',
         className: 'win-body',
-        initialize: function (formularmodel, templatePath) {
+        initialize: function (formularmodel, template, css) {
             this.model = formularmodel;
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.template = _.template(templatePath);
+            this.template = _.template(template);
+            $("head").prepend("<style>" + css + "</style>");
         },
         events: {
             'click #filterbutton': 'getFilterInfos'
