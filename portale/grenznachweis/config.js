@@ -134,6 +134,7 @@ define(function () {
         * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
         * @property {Boolean}  legend - Die Legende
         * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
+        * @property {String}  formular - Wenn TRUE, wird ein Knopf eingebunden, der den String enthält
         */
         menu: {
             viewerName: "GeoViewer",
@@ -145,7 +146,11 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: false,
-            routing: false
+            routing: false,
+            formular: {
+                title: 'Bestellung Grenznachweis',
+                symbol: 'glyphicon glyphicon-shopping-cart'
+            }
         },
         /**
         * @memberof config
