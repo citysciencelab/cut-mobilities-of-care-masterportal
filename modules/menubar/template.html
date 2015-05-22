@@ -27,7 +27,7 @@
                     <% } %>
                 </li>
             <% } %>
-            <% if (formular && formular.title !== '' && formular.symbol !== '') { %>
+            <% if (typeof (formular) === 'object' && formular.title !== '' && formular.symbol !== '') { %>
                 <li>
                     <a href="#" class="menuitem formular">
                         <span class="<%=formular.symbol%>"></span>&nbsp;<%=formular.title%>
