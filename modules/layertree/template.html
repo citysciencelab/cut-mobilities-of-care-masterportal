@@ -14,8 +14,11 @@
     <div class="col-md-5 col-sm-5 col-xs-5">
         <select class="form-control">
             <% _.each(topicList, function (topic) { %>
-                <option><%= topic %></option>
-            <% }); %>
+                <% if (topic.toLowerCase() === currentSelection) { %>
+                    <option <% print ("SELECTED") %>><%= topic %></option>
+                <% } else { %>
+                    <option><%= topic %></option>
+            <% }}); %>
         </select>
     </div>
     <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-md-1 col-sm-1 col-xs-1">

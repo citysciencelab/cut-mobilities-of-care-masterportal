@@ -1,13 +1,12 @@
 define([
-    "underscore",
     "backbone",
     "config",
     "eventbus"
-], function (_, Backbone, Config, EventBus) {
+], function (Backbone, Config, EventBus) {
 
         var Tree = Backbone.Model.extend({
             defaults: {
-                topicList: ["Opendata", "Inspire"],
+                topicList: ["Opendata", "Inspire", "Olympia"], // --> Config
                 currentSelection: Config.tree.orderBy
             },
             initialize: function () {
@@ -19,13 +18,16 @@ define([
             sendSelection: function () {
                 Config.tree.orderBy = this.get("currentSelection");
                 if (this.get("currentSelection") === "opendata") {
-                    Config.tree.layerAttribute = "kategorieOpendata";
+                    EventBus.trigger("getOpendataFolder");
+                }
+                else if (this.get("currentSelection") === "inspire") {
+                    EventBus.trigger("getInspireFolder");
                 }
                 else {
-                    Config.tree.layerAttribute = "kategorieInspire";
+                    EventBus.trigger("getCustomNodes");
                 }
-                EventBus.trigger("fetchTreeList", this.get("currentSelection"));
             }
         });
+
         return Tree;
     });

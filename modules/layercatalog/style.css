@@ -1,7 +1,8 @@
 .layer-catalog-list {
     max-height: 400px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     font-size: 14px;
     color: rgb(150, 150, 150);
 }
