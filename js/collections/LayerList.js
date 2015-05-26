@@ -313,12 +313,14 @@ define([
         */
         getLayerByProperty: function (key, value) {
             return this.filter(function (model) {
-                if (typeof model.get(key) === "object") {//console.log(model.get(key));
-                    return _.contains(model.get(key), value);
-                }
-                else {
-                    // else noch nicht getestet
-                    return model.get(key) === value;
+                if (model.get("isbaselayer") === false) {
+                    if (typeof model.get(key) === "object") {//console.log(model.get(key));
+                        return _.contains(model.get(key), value);
+                    }
+                    else {
+                        // else noch nicht getestet
+                        return model.get(key) === value;
+                    }
                 }
             });
         },

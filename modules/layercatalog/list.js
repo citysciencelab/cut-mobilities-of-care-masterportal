@@ -29,7 +29,6 @@ define([
             // öffnet den Tree
             $(".nav li:first-child").addClass("open");
             this.forEach(function (element) {
-                console.log(element);
                 if (model.get("kategorieOpendata") === element.get("folder") || model.get("kategorieInspire") === element.get("folder")) {
                     element.set("isExpanded", true);
                         _.each(element.get("childViews"), function (view) {

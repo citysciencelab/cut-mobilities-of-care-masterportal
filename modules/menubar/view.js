@@ -38,10 +38,11 @@ define([
                 $('#navbarRow').css('display', 'none');
             }
             if (_.has(Config, "tree") === true) {
-                require(["modules/layercatalog/listView", "modules/layertree/view", "modules/layerselection/listView"], function (TreeListView, LayerTreeView, LayerSelectionListView) {
+                require(["modules/layercatalog/listView", "modules/layertree/view", "modules/layerselection/listView", "modules/baselayercatalog/listView"], function (TreeListView, LayerTreeView, LayerSelectionListView, BaseLayerListView) {
                     new LayerTreeView();
                     new TreeListView();
                     new LayerSelectionListView();
+                    new BaseLayerListView();
                 });
             } else {
                 new LayerListView();
