@@ -26,6 +26,7 @@ define([
             },
             render: function () {
                 var attr = this.model.toJSON();
+
                 $(".dropdown-tree").append(this.$el.html(this.template(attr)));
             },
             setSelection: function (evt) {
@@ -57,5 +58,6 @@ define([
                 evt.stopPropagation();
             }
         });
+
         return TreeView;
     });

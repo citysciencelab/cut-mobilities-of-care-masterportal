@@ -7,7 +7,8 @@ define([
         var Tree = Backbone.Model.extend({
             defaults: {
                 topicList: ["Opendata", "Inspire", "Olympia"], // --> Config
-                currentSelection: Config.tree.orderBy
+                currentSelection: Config.tree.orderBy,
+                filter: Config.filter
             },
             initialize: function () {
                 this.listenTo(this, "change:currentSelection", this.sendSelection);
