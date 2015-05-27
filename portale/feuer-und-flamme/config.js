@@ -14,7 +14,7 @@ define(function () {
         {id: "453", visible: true},
         {id: "452", visible: false},
         {id: "o2", visible: true},
-        {id: "o1", visible: true, displayInTree: false},
+        {id: "o1", visible: true},
         {id: "o3", visible: true}
         ],
         styleConf: "../components/lgv-config/style.json",

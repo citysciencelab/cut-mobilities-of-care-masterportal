@@ -149,8 +149,7 @@ define(function () {
             routing: false,
             formular: {
                 title: 'Bestellung Grenznachweis',
-                symbol: 'glyphicon glyphicon-shopping-cart',
-                model: 'grenznachweis'
+                symbol: 'glyphicon glyphicon-shopping-cart'
             }
         },
         /**
@@ -166,7 +165,7 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
+            placeholder: "Suche nach Adresse",
             gazetteerURL: function () {
                     return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
