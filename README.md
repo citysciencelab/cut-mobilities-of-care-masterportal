@@ -1,10 +1,6 @@
-# LGV Main
+# LGV G12 Master
 
-## Local Development Setup
-
-
-
-Dann folgende Tools lokal installieren.
+## lokale Entwicklungsumgebung einrichten
 
 ### [git](http://git-scm.com/)
 Der Installationspfad von Git (C:\Program Files\Git\bin\) muss in der systemweiten PATH-Umgebungsvariable stehen.
@@ -14,7 +10,7 @@ Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei
 # git config --global url.https://.insteadof git://
 ```
 
-proxies setzen / auf git Bash benötigt, cmd nicht:
+Proxies setzen:
 
 ```
 # git config --global http.proxy http://wall.lit.hamburg.de:80
@@ -22,10 +18,9 @@ proxies setzen / auf git Bash benötigt, cmd nicht:
 ```
 
 ### python in PATH
-python haben alle wegen ArcGIS schon installiert.
-Der Pfad zur python.exe muss in der PATH-Umgebungsvariable stehen, meist: C:\Program Files\Python27
+python haben alle wegen ArcGIS schon installiert. Der Pfad zur python.exe muss in der PATH-Umgebungsvariable stehen, meist: C:\Program Files\Python27
 
-Test in cmd
+Test in cmd:
 
 ```
 # python
@@ -60,7 +55,7 @@ npm lässt sich über die Kommandozeile konfigurieren. Konfig-Einträge werden j
 
 #### Cache-Einstellungen
 
-npm legt einen Paket-Cache an. Per Default liegt der unter C:\Users\<user>\AppData\Roaming\npm-cache. Das ist nicht gut, weil dieser Ordner beim An-/Abmelden synchronisiert wird. Daher den Pfad zum npm-cache außerhalb des Roaming-Profils setzen. Dazu die .npmrc-Dateien entsprechend anpassen oder in der cmd und Admin-cmd:
+npm legt einen Paket-Cache an. Per Default liegt der unter C:\Users\<user>\AppData\Roaming\npm-cache. Das ist nicht gut, weil dieser Ordner beim An-/Abmelden synchronisiert wird. Daher den Pfad zum npm-cache außerhalb des Roaming-Profils setzen. Dazu die .npmrc-Dateien entsprechend anpassen oder in der cmd **UND** Admin-cmd (cmd als Admin ausführen):
 
 ```
 npm config set cache D:\npm-cache
@@ -115,11 +110,7 @@ Unser Repository irgendwohin klonen. Zurzeit noch das lokale auf G:.
 # git clone G:\AG_GeoDaten_Anwendungen\Projekte\Master-Portal\lgv.git
 ```
 
-in das erstellte Verzeichnis wechseln und den branch merge/bitbucket-local-dev auschecken
-
-```
-# git checkout merge/bitbucket-local-dev
-```
+Dann in das erstellte Verzeichnis wechseln.
 
 
 ## Build Abhängigkeiten ziehen via NPM.
