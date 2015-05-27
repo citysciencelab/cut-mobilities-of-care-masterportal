@@ -68,8 +68,8 @@ define([
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
         },
-        activateFormular: function () {
-            EventBus.trigger("toggleWin", ["formular", Config.menu.formular.title, Config.menu.formular.symbol]);
+        activateFormular: function (evt) {
+            EventBus.trigger("toggleWin", ["formular", evt.target.children[0].title, evt.target.children[0].className]);
         }
     });
 

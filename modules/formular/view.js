@@ -12,8 +12,8 @@ define([
     var formularView = Backbone.View.extend({
         id: 'formularWin',
         className: 'win-body',
-        initialize: function () {
-            if (Config.menu.formular.title === 'Bestellung Grenznachweis') {
+        initialize: function (modelname) {
+            if (modelname === 'grenznachweis') {
                 this.model = grenznachweismodel;
                 this.template = _.template(grenznachweistemplate);
                 $("head").prepend("<style>" + grenznachweiscss + "</style>");

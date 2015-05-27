@@ -147,10 +147,11 @@ define(function () {
             wfsFeatureFilter: false,
             legend: false,
             routing: false,
-            formular: {
+            formular: [{
                 title: 'Bestellung Grenznachweis',
-                symbol: 'glyphicon glyphicon-shopping-cart'
-            }
+                symbol: 'glyphicon glyphicon-shopping-cart',
+                modelname: 'grenznachweis'
+            }]
         },
         /**
         * @memberof config
