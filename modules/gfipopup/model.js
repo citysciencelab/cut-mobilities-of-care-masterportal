@@ -144,6 +144,9 @@ define([
                 }));
             }
             var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
+            if (!pFeatures) {
+                return;
+            }
             // 1 cm um Klickpunkt forEachFeatureInExtent
             var pMaxDist = 0.01 * pScale;
             var pExtent = pFeatures.getGeometry().getExtent();
@@ -365,21 +368,15 @@ define([
                     return value;
                 }
             });
-            var newCoord = new Array();
-            for (i=0; i < route.flatCoordinates.length; i = i + 3) {
-                newCoord.push([
-                    route.flatCoordinates[i],
-                    route.flatCoordinates[i+1],
-                    route.flatCoordinates[i+2]
-                ]);
-            }
+            var geom = new ol.geom.LineString(route.getCoordinates(), 'XYZ');
             var olFeature = new ol.Feature({
-                geometry : new ol.geom.LineString(newCoord, 'XYZ'),
+                geometry : geom,
                 name : gesuchteRoute
             });
             var vectorlayer = new ol.layer.Vector({
                 source: new ol.source.Vector({
-                    features: [olFeature]
+                    features: [olFeature],
+                    projection: ol.proj.get("EPSG:25832")
                 }),
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({

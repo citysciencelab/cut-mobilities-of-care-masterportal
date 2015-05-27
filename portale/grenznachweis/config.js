@@ -9,7 +9,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
-        allowParametricURL: true,
+        allowParametricURL: false,
         /**
         * @memberof config
         * @desc Die initiale Zentrums-Koordinate und die Resolution
@@ -29,13 +29,13 @@ define(function () {
         * @type {String}
         * @desc zeigt einen Footer-Bereich an
         */
-        footer: true,
+        footer: false,
         /**
         * @memberof config
         * @type {String}
         * @desc aktiviert das QuickHelp-Modul
         */
-        quickHelp: true,
+        quickHelp: false,
 
         /**
         * @memberof config
@@ -90,52 +90,14 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "1748", visible: false},
-            {id: "1562", visible: true},
-            {id: "1561", visible: true},
-            {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
-            {id:
-             [
-                 {
-                     id: "946",
-                     attribution:
-                     {
-                         eventname: "aktualisiereverkehrsnetz",
-                         timeout: (10 * 60000)
-                     }
-                 },
-                 {
-                     id: "947"
-                 }
-             ],
-             name: "aktuelle Meldungen der TBZ", visible: false
-            },
-            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
-             displayInTree: true,
-             filterOptions: [
-                 {
-                     fieldName: "teilnahme_geburtsklinik",
-                     filterType: "combo",
-                     filterName: "Geburtsklinik",
-                     filterString: ["*", "ja", "nein"]
-                 },
-                 {
-                     fieldName: "teilnahme_notversorgung",
-                     filterType: "combo",
-                     filterName: "Not- und Unfallversorgung",
-                     filterString: ["*", "ja", "eingeschränkt", "nein"]
-                 }
-             ],
-             routable: true
-            }
+            {id: '452', visible: false}
         ],
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
         */
-        attributions: true,
+        attributions: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -153,7 +115,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/MouseHoverPopupView.js geladen. Dieses Modul steuert die Darstellung des MouseHovers entsprechend layerIDs{mouseHoverField}
         */
-        mouseHover: true,
+        mouseHover: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -172,22 +134,27 @@ define(function () {
         * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
         * @property {Boolean}  legend - Die Legende
         * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
+        * @property {String}  formular - Wenn TRUE, wird ein Knopf eingebunden, der den String enthält
         */
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
-            helpButton: false,
+            helpButton: true,
             contactButton: true,
             tools: true,
             treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: true,
-            routing: true
+            wfsFeatureFilter: false,
+            legend: false,
+            routing: false,
+            formular: {
+                title: 'Bestellung Grenznachweis',
+                symbol: 'glyphicon glyphicon-shopping-cart'
+            }
         },
         /**
         * @memberof config
-        * @desc Konfiguration des beim Starten zu ladenden Moduls. Funktioniert derzeit mit wfsFeatureFilter und Routing. Wird auch im parametrisierten Aufruf erkannt.
+        * @desc Konfiguration des beim Starten zu ladenden Moduls. Funktioniert derzeit mit Routing. Wird auch im parametrisierten Aufruf erkannt.
         * @property {String}  Name des Moduls.
         */
         startUpModul: "",
@@ -198,15 +165,9 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
+            placeholder: "Suche nach Adresse",
             gazetteerURL: function () {
                     return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
-        },
-
-        bPlan: {
-            url: function () {
-                return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
             }
         },
                  /**
@@ -220,7 +181,7 @@ define(function () {
             url: function () {
                 return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
                 },
-            title: "Master",
+            title: "Grenznchweis",
             gfi: false
         },
         /**
@@ -234,25 +195,25 @@ define(function () {
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
-            gfi: true,
+            gfi: false,
             measure: true,
             print: true,
             coord: true,
             draw: true,
-            active: "gfi"
+            active: "draw"
         },
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
         */
-        orientation: true,
+        orientation: false,
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
         */
-        poi: true
+        poi: false
     };
 
     return config;

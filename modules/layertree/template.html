@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<!-- <div class="layer-selection">
-<div>
+<div class="base-layer-selection">
     <span class="glyphicon glyphicon-triangle-bottom"></span>
     <span class="control-label">Geobasisdaten</span>
+    <span class="glyphicon glyphicon-pushpin rotate-pin-back pull-right" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
 </div>
-</div> -->
 <form class="form-horizontal layer-catalog">
 <div class="form-group form-group-sm">
-    <div class="layer-catalog-label col-md-4 col-sm-4 col-xs-4">
+    <div class="layer-catalog-label col-md-5 col-sm-5 col-xs-5">
         <span class="glyphicon glyphicon-triangle-bottom"></span>
-        <span class="control-label selectionLabel">Kategorie</span>
+        <span class="control-label selectionLabel">Geofachdaten</span>
     </div>
-    <div class="col-md-5 col-sm-5 col-xs-5">
+    <% if (filter === true) { %>
+    <div class="categoryLabel col-md-2 col-sm-2 col-xs-2 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+        <span class="control-label">Kategorie</span>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-4">
         <select class="form-control">
             <% _.each(topicList, function (topic) { %>
-                <option><%= topic %></option>
-            <% }); %>
+                <% if (topic.toLowerCase() === currentSelection) { %>
+                    <option <% print ("SELECTED") %>><%= topic %></option>
+                <% } else { %>
+                    <option><%= topic %></option>
+            <% }}); %>
         </select>
     </div>
-    <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-md-1 col-sm-1 col-xs-1">
-        <span class="glyphicon glyphicon-pushpin rotate-pin-back" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
-    </div>
+    <% } %>
 </div>
 </form>
 

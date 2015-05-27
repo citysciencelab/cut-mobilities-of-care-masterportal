@@ -2,11 +2,11 @@
 
 @import "fonts.css";
 @import "../components/bootstrap/dist/css/bootstrap.css";
-@import "../_libs/openlayers/css/ol.css";
+@import "../_libs/openlayers/v3.5.0/ol.css";
 @import "lgv.css";
 @import "searchbar.css";
 @import "togglebutton.css";
-@import "gfipopup.css";
+@import "../modules/gfipopup/style.css";
 @import "panel.css";
 @import "glyphiconbutton.css";
 @import "orientation.css";
@@ -17,7 +17,7 @@
 @import "routingwin.css";
 @import "window.css";
 @import "../modules/scaleline/style.css";
-@import "menubar.css";
+@import "../modules/menubar/style.css";
 @import "measure.css";
 @import "coordpopup.css";
 @import "../modules/layerselection/style.css";
@@ -27,3 +27,4 @@
 @import "../modules/layertree/style.css";
 @import "../modules/layercatalog/style.css";
 @import "../modules/layer/style.css";
+@import "../modules/baselayercatalog/style.css";

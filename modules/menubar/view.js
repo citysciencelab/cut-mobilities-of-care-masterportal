@@ -2,9 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Menubar.html',
+    'text!modules/menubar/template.html',
     'views/LayerListView',
-    'models/Menubar',
+    'modules/menubar/model',
     'config',
     'eventbus'
 ], function ($, _, Backbone, MenubarTemplate, LayerListView, Menubar, Config, EventBus) {
@@ -27,7 +27,9 @@ define([
             'click .filterTree': 'activateFilterTree',
             'click .filterWfsFeature': 'activateWfsFilter',
             'click .legend': 'activateLegend',
-            'click .routingModul': 'activateRoutingModul'
+            'click .routingModul': 'activateRoutingModul',
+            'click .wfsFeatureFilter': 'activateWfsFeatureFilter',
+            'click .formular': 'activateFormular'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -36,10 +38,11 @@ define([
                 $('#navbarRow').css('display', 'none');
             }
             if (_.has(Config, "tree") === true) {
-                require(["modules/layercatalog/listView", "modules/layertree/view", "modules/layerselection/listView"], function (TreeListView, LayerTreeView, LayerSelectionListView) {
+                require(["modules/layercatalog/listView", "modules/layertree/view", "modules/layerselection/listView", "modules/baselayercatalog/listView"], function (TreeListView, LayerTreeView, LayerSelectionListView, BaseLayerListView) {
                     new LayerTreeView();
                     new TreeListView();
                     new LayerSelectionListView();
+                    new BaseLayerListView();
                 });
             } else {
                 new LayerListView();
@@ -61,8 +64,13 @@ define([
             EventBus.trigger('toggleLegendWin');
         },
         activateRoutingModul: function () {
-//            EventBus.trigger('toggleRoutingWin');
             EventBus.trigger('toggleWin', ['routing', 'Routenplaner', 'glyphicon-road']);
+        },
+        activateWfsFeatureFilter: function () {
+            EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
+        },
+        activateFormular: function () {
+            EventBus.trigger("toggleWin", ["formular", Config.menu.formular.title, Config.menu.formular.symbol]);
         }
     });
 

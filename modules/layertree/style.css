@@ -11,14 +11,22 @@
     min-width: 380px;
 }
 
-.layer-catalog-label, .layer-selection-label {
+.layer-catalog-label, .layer-selection-label, .base-layer-selection {
     cursor: pointer;
 }
 
-.layer-catalog-label > .glyphicon, .layer-selection-label > .glyphicon {
+.layer-catalog-label > .glyphicon, .layer-selection-label > .glyphicon, .base-layer-selection > .glyphicon {
     font-size: 14px;
     margin-top: 2px;
     padding: 4px;
+}
+
+.categoryLabel {
+    padding-top: 3px;
+}
+
+.categoryLabel > span {
+    font-size: 12px;
 }
 
 .rotate-pin {

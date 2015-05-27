@@ -7,14 +7,15 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: '../components/lgv-config/services-fhhnet-sport.json',
-        categoryConf: '../components/lgv-config/category.json',
+        layerConf: "../components/lgv-config/services-fhhnet-sport.json",
+        categoryConf: "../components/lgv-config/category.json",
         layerIDs:
         [
         {id: "453", visible: true},
         {id: "452", visible: false},
         {id: "o2", visible: true},
-        {id: "o1", visible: true}
+        {id: "o1", visible: true},
+        {id: "o3", visible: true}
         ],
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
@@ -53,12 +54,12 @@ define(function () {
         print: {
             url: function () {
                     return "http://wscd0096:8680/mapfish_print_2.0/";
-                }
-            ,
+                },
             title: "Feuer und Flamme",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
+
     return config;
 });

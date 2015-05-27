@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/GFIPopup.html',
-    'models/GFIPopup',
+    'text!modules/gfipopup/template.html',
+    'modules/gfipopup/model',
     'eventbus'
 ], function ($, _, Backbone, GFIPopupTemplate, GFIPopup, EventBus) {
 
@@ -80,7 +80,7 @@ define([
                 var values = _.pairs(gfiContent[i]);
                 // Verändern des vorherigen Eintrags der Route
                 for (var j=0; j < values.length; j++) {
-                    if (_.isObject(values[j][1]) && values[j][1].flatCoordinates.length > 0 && _.isString(values[j-1][1])) {
+                    if (_.isObject(values[j][1]) && values[j][1].getCoordinates().length > 0 && _.isString(values[j-1][1])) {
                         var config = '<button id="RouteZeigenButton" title="Schnellste Route zeigen" value="' + values[j][0] + '" style="min-width: 130px; width:100%" type="button" class="btn btn-info btn-sm">';
                         config = config + '<span style="float:left;" class="" aria-hidden="true">' + values[j-1][1] + '  </span>';
                         config = config + '<span style="float:right; top:3px;" class="glyphicon glyphicon-road" aria-hidden="true"></span>';

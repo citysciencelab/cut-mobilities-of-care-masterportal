@@ -1,7 +1,6 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-
 define("app", ["jquery", "config", "modules/attribution/view"], function ($, Config, AttView) {
     "use strict";
 
@@ -10,6 +9,13 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
             new ParametricURL();
         });
     }
+
+    if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+        require(["modules/treeconfig/list"], function (TreeConfig) {
+            new TreeConfig();
+        });
+    }
+
     // TODO Über Config-Parameter steuern. In Config-Pfad(e) angeben und diesen dann laden
     require(["../portale/verkehrsportal/verkehrsfunctions"], function (Vf) {
         new Vf();
@@ -56,7 +62,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
         }
 
         if (Config.menubar === true) {
-            require(["views/MenubarView", "views/ToggleButtonView", "views/ZoomButtonsView"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
+            require(["modules/menubar/view", "views/ToggleButtonView", "views/ZoomButtonsView"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
                 new MenubarView();
                 new ToggleButtonView();
                 new ZoomButtonsView();
@@ -70,7 +76,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.gfi === true) {
-                        require(["views/GFIPopupView"], function (GFIPopupView) {
+                        require(["modules/gfipopup/view"], function (GFIPopupView) {
                             new GFIPopupView();
                         });
                     }
@@ -104,7 +110,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {
-                    require(["views/wfsFeatureFilterView"], function (WFSFeatureFilterView) {
+                    require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
                     });
                 }
@@ -127,6 +133,11 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                 if (Config.menu.routing === true) {
                     require(["modules/routing/view"], function (RoutingView) {
                         new RoutingView();
+                    });
+                }
+                if (Config.menu.formular && Config.menu.formular.title !== '' && Config.menu.formular.symbol !== '' && Config.menu.formular.model !== '') {
+                    require(["modules/formular/view"], function (FormularView) {
+                        new FormularView();
                     });
                 }
             });
