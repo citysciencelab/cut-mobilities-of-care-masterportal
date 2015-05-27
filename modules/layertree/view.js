@@ -14,7 +14,8 @@ define([
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
                 "click .layer-catalog-label": "toggleCatalog",
-                "click .layer-selection-label": "toggleSelection"
+                "click .layer-selection-label": "toggleSelection",
+                "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer"
             },
             initialize: function () {
                 this.$el.on({
@@ -41,6 +42,11 @@ define([
                 $(".layer-selected-list").toggle("slow");
                 $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
                 $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-right");
+            },
+            toggleBaseLayer: function () {
+                $(".base-layer-list").toggle("slow");
+                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
+                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-right");
             },
             fixTree: function () {
                 $("body").on("click", "#map", this.helpForFixing);

@@ -6,7 +6,8 @@ define([
     "collections/PointOfInterestList",
     "views/PointOfInterestView",
     "eventbus",
-    "bootstrap/tab"
+    "bootstrap/tab",
+    "bootstrap/modal"
 ], function ($, _, Backbone, PointOfInterestListTemplate, PointOfInterestList, PointOfInterestView, EventBus) {
 
     var PointOfInterestListView = Backbone.View.extend({

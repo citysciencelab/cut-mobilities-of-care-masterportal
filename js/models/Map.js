@@ -220,15 +220,25 @@ define([
         * Layer-Handling
         */
         addLayer: function (layer) {
+            var layerList,
+                firstVectorLayer,
+                index;
+
             // Alle Layer
-            var layerList = this.get('map').getLayers().getArray();
-            // Vector-Layer habe keine ID --> der erste Vectorlayer in der Liste
-            var firstVectorLayer = _.where(layerList, {id: undefined})[0];
+            layerList = this.get("map").getLayers().getArray();
+            // der erste Vectorlayer in der Liste
+            firstVectorLayer = _.find(layerList, function (layer) {
+                return layer instanceof ol.layer.Vector;
+            });
             // Index vom ersten VectorLayer in der Layerlist
-            var index = _.indexOf(layerList, firstVectorLayer);
-            // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
-            this.get("map").getLayers().insertAt(index, layer);
-            // console.log(this.get("map").getLayers());
+            index = _.indexOf(layerList, firstVectorLayer);
+            if (index !== -1) {
+                // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
+                this.get("map").getLayers().insertAt(index, layer);
+            }
+            else {
+                this.get("map").getLayers().push(layer);
+            }
         },
         /**
         */

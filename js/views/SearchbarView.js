@@ -15,12 +15,12 @@ define([
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: "#d42132",
+                    color: "#08775f",
                     lineDash: [8],
-                    width: 2
+                    width: 4
                 }),
                 fill: new ol.style.Fill({
-                    color: "rgba(215, 215, 215, 0.5)"
+                    color: "rgba(8, 119, 95, 0.3)"
                 })
             })
         });
@@ -111,7 +111,8 @@ define([
                         }
                     }
                     else {
-                        this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
+                        // _.uniq(this.model.get("hitList") muss sein, da Firefox und IE manchmal zu langsam sind und Ergebnisse dadurch doppelt in der List auftauchen
+                        this.model.set("typeList", _.uniq(_.pluck(_.uniq(this.model.get("hitList")), "type")));
                         var attr = this.model.toJSON();
                         //sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                         //$("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
