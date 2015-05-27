@@ -13,7 +13,7 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-olympia.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
             url: function () {
