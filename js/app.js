@@ -1,7 +1,6 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-
 define("app", ["jquery", "config", "modules/attribution/view"], function ($, Config, AttView) {
     "use strict";
 
@@ -130,16 +129,8 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.formular && Config.menu.formular.title !== '' && Config.menu.formular.symbol !== '' && Config.menu.formular.model !== '') {
-                    var templatePath = 'text!modules/formular/' + Config.menu.formular.model + '.html';
-                    var cssPath = 'text!modules/formular/' + Config.menu.formular.model + '.css';
-                    var modelPath = 'modules/formular/' + Config.menu.formular.model;
-                    require([
-                        "modules/formular/view",
-                        modelPath,
-                        templatePath,
-                        cssPath
-                    ], function (FormularView, formularmodel, template, css) {
-                        new FormularView(formularmodel, template, css);
+                    require(["modules/formular/view"], function (FormularView) {
+                        new FormularView();
                     });
                 }
             });
