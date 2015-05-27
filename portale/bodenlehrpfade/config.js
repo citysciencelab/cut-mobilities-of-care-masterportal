@@ -2,12 +2,12 @@ define(function () {
     var config = {
         allowParametricURL: true,
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
+            center: [571174, 5929140], // Rathausmarkt
+            resolution: 5.2916638091682096, // 1:20.000
             scale: 60000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
+        // categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         layerIDs:
         [
@@ -28,10 +28,8 @@ define(function () {
         },
         {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
         {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-        // {id: "5555", visible: false},
-        {id: "5558", visible: false},
-        {id: "5557", visible: false},
-        {id: "5556", visible: false}
+        {id: "2284", visible: true, name: "Lehrpfad"},
+        {id: "2283", visible: true, name: "Tafeln"}
         ],
         menubar: true,
         mouseHover: false,
@@ -46,7 +44,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: false
         },
         startUpModul: "",
@@ -74,6 +72,7 @@ define(function () {
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
+
     return config;
 });

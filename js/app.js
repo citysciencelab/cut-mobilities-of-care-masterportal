@@ -9,6 +9,13 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
             new ParametricURL();
         });
     }
+
+    if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+        require(["modules/treeconfig/list"], function (TreeConfig) {
+            new TreeConfig();
+        });
+    }
+
     // TODO Über Config-Parameter steuern. In Config-Pfad(e) angeben und diesen dann laden
     require(["../portale/verkehrsportal/verkehrsfunctions"], function (Vf) {
         new Vf();

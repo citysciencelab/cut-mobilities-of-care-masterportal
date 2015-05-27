@@ -1,12 +1,11 @@
 define([
-    "underscore",
     "backbone",
     "modules/layer/wmslayer",
     "modules/layer/wfslayer",
     "modules/layer/grouplayer",
     "config",
     "eventbus"
-    ], function (_, Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus) {
+    ], function (Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus) {
 
     //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
     var baseUrl = require.toUrl("").split("?")[0];
@@ -38,8 +37,9 @@ define([
             }
             // Ansonsten Layer über ID
             else if (_.has(Config, "layerIDs")) {
-                var configIDs = Config.layerIDs;
-                var modelsArray = [];
+                var configIDs = Config.layerIDs,
+                    modelsArray = [];
+
                 _.each(configIDs, function (element, index) {
                     // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                     if (_.has(element, "id") && _.isString(element.id)) {
@@ -49,7 +49,7 @@ define([
                             modelsArray.push(layerinfos);
                         }
                         else {
-                            alert ('Layerbeschreibung ' + layers[0] + ' nicht verfügbar.');
+                            alert ("Layerbeschreibung " + layers[0] + " nicht verfügbar.");
                             return;
                         }
                         // default: Layer ist nicht routable, Punktabfrage kann nicht fürs Routing benutzt werden
@@ -93,6 +93,14 @@ define([
                         // MaxScale aus Config statt aus JSON
                         if (_.has(element, "maxScale")) {
                             modelsArray[index].maxScale = element.maxScale;
+                        }
+                        //
+                        if (_.has(element, "kategorieCustom")) {
+                            modelsArray[index].kategorieCustom = element.kategorieCustom;
+                        }
+                        //
+                        if (_.has(element, "subfolder")) {
+                            modelsArray[index].subfolder = element.subfolder;
                         }
                         // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
                         if (layers.length > 1) {
@@ -165,6 +173,8 @@ define([
             EventBus.on("getAllVisibleLayer", this.sendAllVisibleLayer, this);
             EventBus.on("getAllSelectedLayer", this.sendAllSelectedLayer, this);
             EventBus.on("currentMapScale", this.setMapScaleForAll, this);
+            EventBus.on("getInspireFolder", this.sendInspireFolder, this);
+            EventBus.on("getOpendataFolder", this.sendOpendataFolder, this);
             // EventBus.on("showLayerInTree", this.showLayerInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
@@ -439,6 +449,18 @@ define([
          */
         removeLayerFromMap: function (model) {
            EventBus.trigger("removeLayer", model.get("layer"));
+       },
+       getInspireFolder: function () {
+           return _.uniq(this.pluck("kategorieInspire"));
+       },
+       getOpendataFolder: function () {
+           return _.uniq(this.pluck("kategorieOpendata"));
+       },
+       sendInspireFolder: function () {
+           EventBus.trigger("sendInspireFolder", this.getInspireFolder());
+       },
+       sendOpendataFolder: function () {
+           EventBus.trigger("sendOpendataFolder", this.getOpendataFolder());
        }
     });
 
