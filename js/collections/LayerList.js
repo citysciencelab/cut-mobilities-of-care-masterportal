@@ -29,7 +29,7 @@ define([
         },
         parse: function (response) {
             // Layerbaum mit Ordnerstruktur
-            if (_.has(Config, "tree") && Config.tree.active === true) {
+            if (_.has(Config, "tree") && Config.tree.custom === false) {
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
                 return _.filter(_.where(response, {typ: "WMS", cache: false}), function (element) {
                     return element.datasets.length > 0;
@@ -190,7 +190,7 @@ define([
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (_.has(Config, "tree") && Config.tree.active === true) {
+                    if (_.has(Config, "tree") && Config.tree.custom === false) {
                         collection.mergeByMetaID();
                         collection.resetModels();
                     }

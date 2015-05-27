@@ -203,7 +203,7 @@ define([
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
                             this.searchDistricts();
                             this.searchInFeatures();
-                            if (_.has(Config, "tree") && Config.tree.active === true) {
+                            if (_.has(Config, "tree") === true) {
                                 this.searchInLayers();
                             }
                             this.searchInBPlans();
