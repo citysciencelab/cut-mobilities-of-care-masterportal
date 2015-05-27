@@ -111,7 +111,6 @@ define([
                         }
                     }
                     else {
-                        console.log(this.model.get("hitList"));
                         // _.uniq(this.model.get("hitList") muss sein, da Firefox und IE manchmal zu langsam sind und Ergebnisse dadurch doppelt in der List auftauchen
                         this.model.set("typeList", _.uniq(_.pluck(_.uniq(this.model.get("hitList")), "type")));
                         var attr = this.model.toJSON();
