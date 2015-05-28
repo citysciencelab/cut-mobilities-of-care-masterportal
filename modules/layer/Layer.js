@@ -128,7 +128,7 @@ define([
                 }
             }
         },
-        setScaleRange: function () {
+        setScaleRange: function () {console.log(42);
             if (this.get("currentScale") <= parseInt(this.get("maxScale"), 10) && this.get("currentScale") >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
             }
@@ -137,7 +137,6 @@ define([
             }
             else {
                 this.set("isInScaleRange", false);
-                this.set("visibility", false);
             }
         },
         /**
@@ -147,7 +146,7 @@ define([
             if (this.get("visibility") === true) {
                 this.set({visibility: false});
             }
-            else if (this.get("visibility") === false && this.get("isInScaleRange") === true) {
+            else if (this.get("visibility") === false) {
                 this.set({visibility: true});
             }
         },
