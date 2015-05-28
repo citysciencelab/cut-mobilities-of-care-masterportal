@@ -18,7 +18,12 @@ define([
          * @param {Backbone.Model} model - Layer-Model
          */
         addModelToList: function (model) {
-            this.add(model);
+            if (model.get("isbaselayer") === false) {
+                this.add(model);
+            }
+            else {
+                this.add(model, {at: this.length - 1});
+            }
         },
         /**
          * Löscht ein Model aus der Collection.
