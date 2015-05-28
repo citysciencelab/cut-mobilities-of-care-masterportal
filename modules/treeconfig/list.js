@@ -5,8 +5,14 @@ define([
     "eventbus"
 ], function (Backbone, Model, Config, EventBus) {
 
+    //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
+    var baseUrl = require.toUrl("").split("?")[0];
+    if (Config.layerConf.indexOf("/") == 0){
+        baseUrl = "";
+    }
+
     var list = Backbone.Collection.extend({
-        url: "../../components/lgv-config/tree-config/" + Config.tree.orderBy + ".json",
+        url: baseUrl + Config.tree.customConfig,
         model: Model,
 
         /**
