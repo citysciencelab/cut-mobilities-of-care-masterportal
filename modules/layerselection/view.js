@@ -69,7 +69,7 @@ define([
             this.$(".glyphicon-cog").toggleClass("rotate-back");
             this.$(".glyphicon-cog").toggleClass("rotate");
         },
-        toggleStyle: function () {console.log(56);
+        toggleStyle: function () {
             if (this.model.get("isInScaleRange") === true) {
                 this.$el.css("color", "rgb(150, 150, 150)");
             }

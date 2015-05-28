@@ -128,7 +128,7 @@ define([
                 }
             }
         },
-        setScaleRange: function () {console.log(42);
+        setScaleRange: function () {
             if (this.get("currentScale") <= parseInt(this.get("maxScale"), 10) && this.get("currentScale") >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
             }
