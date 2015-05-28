@@ -10,7 +10,7 @@
         </div>
         <!-- Alle Navigationslinks, Formulare und anderer Inhalt werden hier zusammengefasst und können dann ein- und ausgeblendet werden -->
         <div class="collapse navbar-collapse navbar-left" style="width: 100%;">
-            <ul class="nav navbar-nav">
+            <ul class="menubarlgv nav navbar-nav">
             <% if (layerTree === true) { %>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -26,17 +26,6 @@
                         </div>
                     <% } %>
                 </li>
-            <% } %>
-            <% if (_.isArray(formular)) {
-               _.each(formular, function (element, index, list) {
-                    if (element.title !== '' && element.symbol !== '') { %>
-                        <li>
-                            <a href="#" class="menuitem formular">
-                                <span class="<%=element.symbol%>" title="<%=element.title%>" symbol="<%=element.symbol%>" modelname="<%=element.modelname%>"></span>&nbsp;<%=element.title%>
-                            </a>
-                        </li>
-                    <% } %>
-            <% }); %>
             <% } %>
             <% if (tools === true && oneTool === false) { %>
                 <li class="dropdown">

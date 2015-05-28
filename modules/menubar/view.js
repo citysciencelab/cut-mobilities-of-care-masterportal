@@ -16,6 +16,7 @@ define([
         attributes: {"role": "navigation"},
         template: _.template(MenubarTemplate),
         initialize: function () {
+            EventBus.on('appendItemToMenubar', this.appendItemToMenubar, this);
             this.render();
             $('#tree').on({
                 "click": function (e) {
@@ -54,6 +55,14 @@ define([
             }
             // new OpenDataTreeList();
         },
+        appendItemToMenubar: function (obj) {
+            var html = '<li>';
+            html += '<a href="#" class="menuitem ' + obj.classname + '">';
+            html += '<span class="' + obj.symbol + '"></span>&nbsp;' + obj.title;
+            html += '</a>';
+            html += '</li>';
+            $(".menubarlgv").append(html);
+        },
         activateFilterTree: function () {
             EventBus.trigger('toggleWin', ['treefilter', 'Filtereinstellungen', 'glyphicon-filter']);
         },
@@ -70,7 +79,7 @@ define([
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
         },
         activateFormular: function (evt) {
-            EventBus.trigger("toggleWin", ["formular", evt.target.children[0].title, evt.target.children[0].className]);
+            EventBus.trigger("toggleWin", [evt.target.className.split(' ')[1], evt.target.text, evt.target.children[0].className]);
         }
     });
 

@@ -139,7 +139,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     $.each(Config.menu.formular, function (name, obj) {
                         if (obj.title !== '' && obj.symbol !== '' && obj.modelname !== '') {
                             require(["modules/formular/view"], function (FormularView) {
-                                new FormularView(obj.modelname);
+                                new FormularView(obj.modelname, obj.title, obj.symbol);
                             });
                         }
                     });
