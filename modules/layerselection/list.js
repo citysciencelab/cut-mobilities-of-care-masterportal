@@ -9,6 +9,7 @@ define([
             // EventBus Listener
             EventBus.on("addModelToSelectionList", this.addModelToList, this);
             EventBus.on("removeModelFromSelectionList", this.removeModelFromList, this);
+            EventBus.on("getSelectedLayer", this.getSelectedLayer, this);
             // Eigene Listener
             this.listenTo(this, "add", this.addLayerToMap);
             this.listenTo(this, "remove", this.removeLayerFromMap);
@@ -83,6 +84,12 @@ define([
 
                 this.remove(model);
                 this.add(model, {at: toIndex});
+        },
+        /**
+         * Triggert das Event "layerForPrint". Übergibt alle Models die sichtbar und ausgewählt sind.
+         */
+        getSelectedLayer: function () {
+            EventBus.trigger("layerForPrint", this.where({selected: true, visibility: true}));
         }
     });
 
