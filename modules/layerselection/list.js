@@ -23,7 +23,7 @@ define([
                 this.add(model);
             }
             else {
-                this.add(model, {at: this.length - 1});
+                this.add(model, {at: 0});
             }
         },
         /**
