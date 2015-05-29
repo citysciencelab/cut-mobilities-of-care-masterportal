@@ -75,24 +75,36 @@ define([
 
                 // Iteriert über die gruppierten Layer
                 _.each(countByMetaID, function (value, key) {
-                    // Alle Layer der Gruppe (sprich gleiche MetaID)
-                    layerListByMetaID = _.filter(nodeLayerList, function (layer) {
-                        return layer.attributes.metaID === key;
-                    });
-                    // Layer nach Namen sortiert
-                    layerListByMetaID = _.sortBy(layerListByMetaID, function (layer) {
-                        return layer.get("name");
-                    }).reverse();
-                    // Gibt es mehrere Layer in der Gruppe werden sie in einem Unterordner (Metadaten-Name) zusammengefasst
-                    if (layerListByMetaID.length > 1) {
-                        // Layer zum Attribut "nodeChildLayer" hinzugefügt
-                        this.push("nodeChildLayer", {type: "nodeChild", name: layerListByMetaID[0].get("metaName"), children: layerListByMetaID});
-                    }
-                    else {
-                        // Layer zum Attribut "nodeLayer" hinzugefügt
-                        this.push("nodeLayer", {type: "nodeLayer", name: layerListByMetaID[0].get("name"), layer: layerListByMetaID[0]});
+                    if (key !== "undefined") {
+                        // Alle Layer der Gruppe (sprich gleiche MetaID)
+                        layerListByMetaID = _.filter(nodeLayerList, function (layer) {
+                            return layer.attributes.metaID === key;
+                        });
+                        // Layer nach Namen sortiert
+                        layerListByMetaID = _.sortBy(layerListByMetaID, function (layer) {
+                            return layer.get("name");
+                        }).reverse();
+                        // Gibt es mehrere Layer in der Gruppe werden sie in einem Unterordner (Metadaten-Name) zusammengefasst
+                        if (layerListByMetaID.length > 1) {
+                            // Layer zum Attribut "nodeChildLayer" hinzugefügt
+                            this.push("nodeChildLayer", {type: "nodeChild", name: layerListByMetaID[0].get("metaName"), children: layerListByMetaID});
+                        }
+                        else {
+                            // Layer zum Attribut "nodeLayer" hinzugefügt
+                            this.push("nodeLayer", {type: "nodeLayer", name: layerListByMetaID[0].get("name"), layer: layerListByMetaID[0]});
+                        }
                     }
                 }, this);
+
+                //********************************************** --> nur vorübergehend fürs Olympia-Portal...hoffentlich
+                // Alle Layer die keine MetaID und keinen Subfolder haben
+                nodeLayerList = _.filter(this.get("layerList"), function (layer) {
+                    return layer.attributes.metaID === undefined && layer.attributes.subfolder === undefined;
+                });
+                _.each(nodeLayerList, function (layer) {
+                    this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
+                }, this);
+                //**********************************************
         },
 
         /**
