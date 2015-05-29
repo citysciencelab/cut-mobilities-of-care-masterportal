@@ -135,7 +135,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         new RoutingView();
                     });
                 }
-                if ($.isArray(Config.menu.formular) && Config.menu.formular.title !== '' && Config.menu.formular.symbol !== '' && Config.menu.formular.modelname !== '') {
+                if ($.isArray(Config.menu.formular)) {
                     $.each(Config.menu.formular, function (name, obj) {
                         if (obj.title !== '' && obj.symbol !== '' && obj.modelname !== '') {
                             require(["modules/formular/view"], function (FormularView) {
