@@ -29,8 +29,7 @@ define([
             'click .filterWfsFeature': 'activateWfsFilter',
             'click .legend': 'activateLegend',
             'click .routingModul': 'activateRoutingModul',
-            'click .wfsFeatureFilter': 'activateWfsFeatureFilter',
-            'click .formular': 'activateFormular'
+            'click .wfsFeatureFilter': 'activateWfsFeatureFilter'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -62,6 +61,9 @@ define([
             html += '</a>';
             html += '</li>';
             $(".menubarlgv").append(html);
+            $("." + obj.classname).on('click', function (evt) {
+                EventBus.trigger("toggleWin", [evt.target.className.split(' ')[1], evt.target.text, evt.target.children[0].className]);
+            });
         },
         activateFilterTree: function () {
             EventBus.trigger('toggleWin', ['treefilter', 'Filtereinstellungen', 'glyphicon-filter']);
@@ -77,9 +79,6 @@ define([
         },
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
-        },
-        activateFormular: function (evt) {
-            EventBus.trigger("toggleWin", [evt.target.className.split(' ')[1], evt.target.text, evt.target.children[0].className]);
         }
     });
 

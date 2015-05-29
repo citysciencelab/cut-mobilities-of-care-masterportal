@@ -23,7 +23,7 @@ define([
             EventBus.trigger("addLayer", this.get("layer"));
         },
         setStatus: function (args) {   // Fenstermanagement
-            if (args[2] === "formular") {
+            if (args[2] === "grenznachweis") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

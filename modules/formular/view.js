@@ -21,7 +21,7 @@ define([
             EventBus.trigger('appendItemToMenubar', {
                 title: title,
                 symbol: symbol,
-                classname: 'formular'
+                classname: modelname
             });
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
         },
