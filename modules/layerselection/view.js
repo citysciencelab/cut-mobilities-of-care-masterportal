@@ -40,6 +40,7 @@ define([
             else {
                 this.$(".layer-toggle-button").after(this.template(attr));
             }
+            this.toggleStyle();
             return this;
         },
         moveModelUp: function () {
@@ -70,10 +71,10 @@ define([
         },
         toggleStyle: function () {
             if (this.model.get("isInScaleRange") === true) {
-                this.$el.css("color", "#333333");
+                this.$el.css("color", "rgb(150, 150, 150)");
             }
             else {
-                this.$el.css("color", "#cdcdcd");
+                this.$el.css("color", "rgba(150, 150, 150, 0.6)");
             }
         },
         moveModelDelta: function (evt, index) {

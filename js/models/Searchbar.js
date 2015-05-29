@@ -203,7 +203,7 @@ define([
                             // NOTE hier sollte man noch dran rumschrauben wenn noch mehr Suchen dazukommen (Reihenfolge, searchEnd-Parameter)?!
                             this.searchDistricts();
                             this.searchInFeatures();
-                            if (_.has(Config, "tree") && Config.tree.active === true) {
+                            if (_.has(Config, "tree") === true) {
                                 this.searchInLayers();
                             }
                             this.searchInBPlans();
@@ -432,10 +432,16 @@ define([
                 var searchStringRegExp = new RegExp(searchStringJoin, "i");
                 _.each(this.get("layers"), function (layer) {
                     var layerName = layer.name.replace(/ /g, "");
-                    var metaName = layer.metaName.replace(/ /g, "");
-                    // Prüft ob der Suchstring ein Teilstring vom Feature ist
-                    if (layerName.search(searchStringRegExp) !== -1 || metaName.search(searchStringRegExp) !== -1) {
-                        layers.push(layer);
+                    if (layer.metaName !== undefined) {
+                        var metaName = layer.metaName.replace(/ /g, "");
+                        if (layerName.search(searchStringRegExp) !== -1 || metaName.search(searchStringRegExp) !== -1) {
+                            layers.push(layer);
+                        }
+                    }
+                    else {
+                        if (layerName.search(searchStringRegExp) !== -1) {
+                            layers.push(layer);
+                        }
                     }
                 }, this);
                 this.pushHits("hitList", layers);

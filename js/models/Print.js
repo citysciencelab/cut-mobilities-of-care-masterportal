@@ -3,7 +3,7 @@ define([
     'backbone',
     'eventbus',
     'config'
-    ], function (_, Backbone, EventBus, Config) {
+], function (_, Backbone, EventBus, Config) {
 
         /**
         *
@@ -71,7 +71,13 @@ define([
             *
             */
             getLayersForPrint: function () {
-                EventBus.trigger('getVisibleWMSLayer');
+                if (_.has(Config, "tree") === true) {
+                    EventBus.trigger("getSelectedLayer");
+                }
+                else {
+                    EventBus.trigger("getVisibleWMSLayer");
+                }
+
             },
             /**
             * [[Description]]
@@ -132,6 +138,7 @@ define([
             *
             */
             setLayerToPrint: function (layers) {
+                console.log(layers);
                 this.set('layerToPrint', []);
                 _.each(layers, function (layer) {
                     // nur wichtig für treeFilter Zeile 80 - 88

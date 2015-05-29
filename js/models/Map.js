@@ -272,8 +272,9 @@ define([
             var layer = args[0],
                 index = args[1],
                 layersCollection = this.get("map").getLayers();
+
             layersCollection.remove(layer);
-            layersCollection.insertAt(index, layer)
+            layersCollection.insertAt(index, layer);
         },
         /**
         *

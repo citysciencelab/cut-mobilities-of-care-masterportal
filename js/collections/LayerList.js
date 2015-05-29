@@ -29,7 +29,7 @@ define([
         },
         parse: function (response) {
             // Layerbaum mit Ordnerstruktur
-            if (_.has(Config, "tree") && Config.tree.active === true) {
+            if (_.has(Config, "tree") && Config.tree.custom === false) {
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
                 return _.filter(_.where(response, {typ: "WMS", cache: false}), function (element) {
                     return element.datasets.length > 0;
@@ -190,7 +190,7 @@ define([
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (_.has(Config, "tree") && Config.tree.active === true) {
+                    if (_.has(Config, "tree") && Config.tree.custom === false) {
                         collection.mergeByMetaID();
                         collection.resetModels();
                     }
@@ -442,7 +442,7 @@ define([
          * Triggert das Event "addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).
          * @param {Backbone.Model} model - Layer-Model
          */
-         addLayerToMap: function (model) {
+        addLayerToMap: function (model) {
             EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
         },
         /**
@@ -451,19 +451,19 @@ define([
          */
         removeLayerFromMap: function (model) {
            EventBus.trigger("removeLayer", model.get("layer"));
-       },
-       getInspireFolder: function () {
-           return _.uniq(this.pluck("kategorieInspire"));
-       },
-       getOpendataFolder: function () {
-           return _.uniq(this.pluck("kategorieOpendata"));
-       },
-       sendInspireFolder: function () {
-           EventBus.trigger("sendInspireFolder", this.getInspireFolder());
-       },
-       sendOpendataFolder: function () {
-           EventBus.trigger("sendOpendataFolder", this.getOpendataFolder());
-       }
+        },
+        getInspireFolder: function () {
+            return _.uniq(this.pluck("kategorieInspire"));
+        },
+        getOpendataFolder: function () {
+            return _.uniq(this.pluck("kategorieOpendata"));
+        },
+        sendInspireFolder: function () {
+            EventBus.trigger("sendInspireFolder", this.getInspireFolder());
+        },
+        sendOpendataFolder: function () {
+            EventBus.trigger("sendOpendataFolder", this.getOpendataFolder());
+        }
     });
 
     return new LayerList();
