@@ -140,7 +140,7 @@ define(function () {
             viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
-            helpButton: true,
+            helpButton: false,
             contactButton: true,
             tools: true,
             treeFilter: false,
