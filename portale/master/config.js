@@ -6,6 +6,12 @@ define(function () {
     var config = {
         /**
         * @memberof config
+        * @type {String}
+        * @desc Pfad zum img-Ordner für WFS-Styles
+        */
+        wfsImgPath: "../components/lgv-config/img/",
+        /**
+        * @memberof config
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
