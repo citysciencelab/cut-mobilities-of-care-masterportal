@@ -1,17 +1,12 @@
 define([
-    'underscore',
-    'backbone',
-    'models/wfsstyle',
-    'config'
-], function (_, Backbone, WFSStyle, Config) {
+    "underscore",
+    "backbone",
+    "models/wfsstyle",
+    "config",
+    "util"
+], function (_, Backbone, WFSStyle, Config, Util) {
 
-    //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
-    var baseUrl = require.toUrl("").split("?")[0];
-    if (Config.styleConf.indexOf("/") == 0){
-        baseUrl = "";
-    }
-
-    var StyleList = Backbone.Collection.extend({
+    var StyleList = Backbone.Collection.extend ({
         model: WFSStyle,
         parse: function (response) {
             /* Erzeuge nur von denen einen WfsStyle
@@ -19,53 +14,54 @@ define([
             *  ein Nennung vorliegt und nicht von allen
             *  Einträgen in der json-Datei
             */
-            var idArray = new Array ();
+            var idArray = [];
+
             _.each(Config.layerIDs, function (wfsconfelement) {
-                if (_.isArray(wfsconfelement.id)) { //Gruppenlayer
+                if (_.isArray(wfsconfelement.id)) { // Gruppenlayer
                     _.each(wfsconfelement.id, function (childlayer) {
-                        if (_.has(childlayer, 'style')) {
+                        if (_.has(childlayer, "style")) {
                             idArray.push(childlayer.style);
-                            idArray.push(childlayer.style + '_cluster');
+                            idArray.push(childlayer.style + "_cluster");
                         }
                     });
                 }
                 else {
-                    if (_.has(wfsconfelement, 'style')) {
+                    if (_.has(wfsconfelement, "style")) {
                         idArray.push(wfsconfelement.style);
-                        idArray.push(wfsconfelement.style + '_cluster');
+                        idArray.push(wfsconfelement.style + "_cluster");
                     }
                 }
             });
             return _.filter(response, function (element) {
                 if (_.contains(idArray, element.layerId)) {
                     _.extend(element, {
-                        id: _.uniqueId('style_')
+                        id: _.uniqueId("style_")
                     });
                     return element;
                 }
             });
         },
-        url: baseUrl + Config.styleConf,
+        url: Util.getPath(Config.styleConf),
         initialize: function () {
             this.fetch({
                 cache: false,
                 async: false,
                 error: function () {
-                    alert('Fehler beim Laden von: ' + baseUrl + Config.styleConf);
+                    alert("Fehler beim Laden von: " + Util.getPath(Config.styleConf));
                 },
-                success: function (collection) {
+                success: function () {
 //                    console.log(collection);
                 }
             });
         },
-        returnModelById: function(layerId) {
+        returnModelById: function (layerId) {
             return _.find(this.models, function (slmodel) {
                 if (slmodel.attributes.layerId === layerId) {
                     return slmodel;
                 }
             });
         },
-        returnModelByValue: function(layerId, styleFieldValue) {
+        returnModelByValue: function (layerId, styleFieldValue) {
             return _.find(this.models, function (slmodel) {
                 if (slmodel.attributes.layerId === layerId && slmodel.attributes.styleFieldValue === styleFieldValue) {
                     return slmodel;
@@ -73,5 +69,6 @@ define([
             });
         }
     });
+
     return new StyleList();
 });
