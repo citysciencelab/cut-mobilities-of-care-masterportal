@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         view: {
             center: [561210, 5932600],

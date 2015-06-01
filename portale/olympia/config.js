@@ -1,6 +1,7 @@
 define(function () {
 
     var config = {
+        wfsImgPath: "..components/lgv-config/img",
         allowParametricURL: true,
         tree: {
             custom: true,
