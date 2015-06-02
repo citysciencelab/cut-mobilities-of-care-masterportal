@@ -31,20 +31,25 @@ define([
             this.forEach(function (element) {
                 if (model.get("kategorieOpendata") === element.get("folder") || model.get("kategorieInspire") === element.get("folder") || model.get("kategorieCustom") === element.get("folder")) {
                     element.set("isExpanded", true);
-                        _.each(element.get("childViews"), function (view) {
-                            if (view.model.get("name") === model.get("metaName") || view.model.get("name") === model.get("subfolder")) {
-                                view.model.set("isExpanded", true);
+                    _.each(element.get("childViews"), function (view) {
+                        if (view.model.get("name") === model.get("metaName") || view.model.get("name") === model.get("subfolder")) {
+                            view.model.set("isExpanded", true);
+                            if (model.get("type") === "nodeLayer") {
+                                $(".layer-catalog-list").scrollTop(view.$el[0].offsetTop - 200);
+                            }
+                            else {
                                 var modelID = _.where(view.model.get("children"), {cid: model.cid}),
                                     viewChildLayer = _.find(view.model.get("childViews"), function (view) {
-                                    return view.model.cid === modelID[0].cid;
-                                });
+                                        return view.model.cid === modelID[0].cid;
+                                    });
 
                                 $(".layer-catalog-list").scrollTop(viewChildLayer.$el[0].offsetTop - 200);
                             }
-                            else if (view.model.get("name") === model.get("name")) {
-                                $(".layer-catalog-list").scrollTop(view.$el[0].offsetTop - 200);
-                            }
-                        });
+                        }
+                        else if (view.model.get("name") === model.get("name")) {
+                            $(".layer-catalog-list").scrollTop(view.$el[0].offsetTop - 200);
+                        }
+                    });
                     model.set("selected", true);
                 }
                 else {
