@@ -4,18 +4,13 @@ define([
     "modules/layer/wfslayer",
     "modules/layer/grouplayer",
     "config",
-    "eventbus"
-    ], function (Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus) {
-
-    //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
-    var baseUrl = require.toUrl("").split("?")[0];
-    if (Config.layerConf.indexOf("/") == 0){
-        baseUrl = "";
-    }
+    "eventbus",
+    "util"
+    ], function (Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus, Util) {
 
     var LayerList = Backbone.Collection.extend({
         // URL der DiensteAPI
-        url: baseUrl + Config.layerConf,
+        url: Util.getPath(Config.layerConf),
         model: function (attrs, options) {
             if (attrs.typ === "WMS") {
                 return new WMSLayer(attrs, options);
@@ -186,7 +181,8 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Laden von: " + baseUrl + Config.layerConf);
+                    console.log(this);
+                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)

@@ -2,17 +2,12 @@ define([
     "backbone",
     "modules/treeconfig/model",
     "config",
-    "eventbus"
-], function (Backbone, Model, Config, EventBus) {
-
-    //interpretiere Pfade relativ von requirejs baseurl, es sei denn, er beginnt mit einem '/'
-    var baseUrl = require.toUrl("").split("?")[0];
-    if (Config.layerConf.indexOf("/") == 0){
-        baseUrl = "";
-    }
+    "eventbus",
+    "util"
+], function (Backbone, Model, Config, EventBus, Util) {
 
     var list = Backbone.Collection.extend({
-        url: baseUrl + Config.tree.customConfig,
+        url: Util.getPath(Config.tree.customConfig),
         model: Model,
 
         /**

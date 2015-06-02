@@ -2,6 +2,7 @@
 define(function () {
 
     var config = {
+        wfsImgPath: "../components/lgv-config/img/",
         view: {
             center: [565874, 5934140], // Rathausmarkt
             resolution: 15.874991427504629, // 1:60.000
