@@ -8,10 +8,7 @@ define([
 
     var GFIPopup = Backbone.Model.extend({
         /**
-         * The defaults hash (or function) can be used to specify
-         * the default attributes for your model.
-         * When creating an instance of the model,
-         * any unspecified attributes will be set to their default value.
+         *
          */
         defaults: {
             gfiOverlay: new ol.Overlay({ element: $("#gfipopup") }), // ol.Overlay
@@ -22,8 +19,31 @@ define([
             gfiCounter: 0,
             isCollapsed: false,
             isVisible: false,
-            isStreamingLibLoaded: false
+            isStreamingLibLoaded: false,
+            routeLayer: new ol.layer.Vector({
+                            source: new ol.source.Vector({
+                                projection: ol.proj.get("EPSG:25832")
+                            }),
+                            style: new ol.style.Style({
+                                stroke: new ol.style.Stroke({
+                                    color: "blue",
+                                    width: 5
+                                })
+                            })
+                        })
         },
+
+        /**
+         *
+         */
+        initialize: function () {
+            this.set("element", this.get("gfiOverlay").getElement());
+            this.listenTo(this, "change:isPopupVisible", this.sendGFIForPrint);
+            EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
+            EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
+//            EventBus.on("getGFIForPrint", this.sendGFIForPrint, this);
+        },
+
         /**
          * Diese Funktion lädt die erforderlichen Scripte und CSS nur im Bedarfsfall, wenn ein Video
          * wiedergegeben werden soll.
@@ -49,16 +69,7 @@ define([
                 });
             }
         },
-        /**
-         * Wird aufgerufen wenn das Model erzeugt wird.
-         */
-        initialize: function () {
-            this.set("element", this.get("gfiOverlay").getElement());
-            this.listenTo(this, "change:isPopupVisible", this.sendGFIForPrint);
-            EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
-            EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
-//            EventBus.on("getGFIForPrint", this.sendGFIForPrint, this);
-        },
+
         /**
          * Vernichtet das Popup.
          */
@@ -81,6 +92,7 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         setGFIParams: function (params) {
+            this.get("routeLayer").getSource().clear();
             $("#loader").show();
             this.set("wfsCoordinate", []);
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
@@ -366,56 +378,66 @@ define([
         sendGFIForPrint: function () {
             EventBus.trigger("gfiForPrint", [this.get("gfiContent")[0], this.get("isPopupVisible")]);
         },
+
         /**
-         * Löscht die Route aus der Karte
+         * Enfernt den "Route-Layer" von der Karte.
          */
         clearRoute: function () {
-            var map = this.get("map");
-
-            if (!map) {
-                return;
-            }
-            _.each(map.getLayers(), function (layer) {
-                if (_.isArray(layer)) {
-                    _.each(layer, function (childlayer) {
-                        if (childlayer.id && childlayer.id === "route") {
-                             map.removeLayer(childlayer);
-                        }
-                    });
-                }
-            });
+            EventBus.trigger("removeLayer", this.get("routeLayer"));
         },
+
         /**
-         * zeigt die Route, die der Button im Feld Value benennt.
+         * Zeigt die ausgewählte Route.
+         * @param  {String} target - Ziel der Route
          */
-        showRoute: function (gesuchteRoute) {
-            // erzeuge neue Route
-            var route = _.find(this.get("gfiContent")[0], function (value, key) {
-                if (key === gesuchteRoute) {
-                    return value;
+        showRoute: function (target) {
+            var gfiWithRoute,
+                route,
+                feature;
+
+            // Wählt der Route für das Ziel aus
+            switch (target) {
+                case "AD Horster Dreieck": {
+                    route = "Route6";
+                    break;
                 }
-            }),
-            geom = new ol.geom.LineString(route.getCoordinates(), "XYZ"),
-            olFeature = new ol.Feature({
-                geometry: geom,
-                name: gesuchteRoute
-            }),
-            vectorlayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: [olFeature],
-                    projection: ol.proj.get("EPSG:25832")
-                }),
-                style: new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: "blue",
-                        width: 5
-                    })
-                })
+                case "AD Buchholzer Dreieck": {
+                    route = "Route5";
+                    break;
+                }
+                case "AD HH-Nordwest": {
+                    route = "Route4";
+                    break;
+                }
+                case "Hafen AS HH-Waltershof": {
+                    route = "Route3";
+                    break;
+                }
+                case "Arenen AS HH-Volkspark": {
+                    route = "Route2";
+                    break;
+                }
+                case "Flughafen Hamburg": {
+                    route = "Route1";
+                    break;
+                }
+            }
+
+            // GFI welches die Routen enthält
+            gfiWithRoute = _.find(this.get("gfiContent"), function (element) {
+                return element[route] !== undefined;
             });
 
-            vectorlayer.id = "route";
-            this.get("map").addLayer(vectorlayer);
-            EventBus.trigger("zoomToExtent", olFeature.getGeometry().getExtent());
+            // Feature mit der gesuchten Route
+            feature = new ol.Feature({
+                geometry: gfiWithRoute[route],
+                name: target
+            });
+            this.get("routeLayer").getSource().clear();
+            this.get("routeLayer").getSource().addFeature(feature);
+
+            EventBus.trigger("addLayer", this.get("routeLayer"));
+            EventBus.trigger("zoomToExtent", feature.getGeometry().getExtent());
         }
     });
 

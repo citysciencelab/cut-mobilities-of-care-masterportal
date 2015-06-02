@@ -1,86 +1,14 @@
-.gfiContent {
-    font-size: 12px;
-    max-height: 400px;
-    min-width: 100%;
-    overflow-y: auto;
-    padding-top: 33px;
-}
-
 .popover {
     padding: 0px;
-}
-
-/* iPhone4 iPhone5 Lumia7x0*/
-@media (min-width:320px){
-    .popover {
-        min-width:310px;
-        max-width:310px;
-    }
-}
-/* iPhone6 Nexus4*/
-@media (min-width:375px){
-    .popover {
-        min-width:370px;
-        max-width:370px;
-    }
-}
-/* Nexus5 BlackberryZ10/Z30 GalaxyS4 XperiaZ1*/
-@media (min-width:360px){
-    .popover {
-        min-width:350px;
-        max-width:350px;
-    }
-}
-/* Tablet Desktop*/
-@media (min-width: 966px) {
-    .popover {
-        min-width:350px;
-        max-width:450px;
-    }
-}
-
-.pager {
-    height: auto;
-}
-
-.pager li {
-    color: rgb(119, 119, 119);
-    position: absolute;
-    width: 50%;
-    bottom: 0px;
-    font-size: 24px;
-}
-
-.pager li:hover {
-    opacity: 0.7;
-    color: #000;
-}
-
-.vorzurueckdisabled {
-    opacity: 0.2 !important;
-}
-
-.vorzurueck {
-    width:100%;
-    cursor: pointer;
+    min-width:350px;
+    max-width:450px;
 }
 
 .popover-content {
-    padding: 0px !important;
+    padding: 0;
 }
 
-.table {
-    margin-bottom: 4px !important;
-}
-
-/* Icon neben gfi-title*/
-.gfi-icon {
-    float: left;
-    padding: 6px;
-    font-size: 16px;
-}
-
-.gfi-heading {
+.gfi-header {
     background: #e7e7e7;
     background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -89,17 +17,17 @@
     background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     color: #777;
     height: 34px;
-    border-bottom: 1px solid rgb(215, 215, 215);
-    position: absolute;
-	z-index: 999;
-    width: 100%;
+    font-size: 16px;
 }
 
-/* Die Überschrift für das Fenster */
+.gfi-icon {
+    float: left;
+    padding: 8px;
+}
+
 .gfi-title {
     float: left;
-    padding: 5px;
-    font-size: 16px;
+    padding: 6px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     max-width: 66%;
     white-space: nowrap;
@@ -108,21 +36,56 @@
     cursor: help;
 }
 
-/* Das Glyphicon für das Minimieren */
 .gfi-toggle {
     float: right;
     padding: 10px 6px 0 10px;
-    font-size: 16px;
     cursor: pointer;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
 }
 
-/* Das Glyphicon für das Schließen*/
 .gfi-close {
-    font-size: 16px;
     float: right;
     padding: 8px 4px;
     cursor: pointer;
+}
+
+.gfi-content {
+    font-size: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.gfi-content > table {
+    margin-bottom: 4px;
+}
+
+.gfi-footer {
+    padding: 0;
+    color: rgb(119, 119, 119);
+    text-align: center;
+    font-size: 22px;
+}
+
+.gfi-footer > div {
+    background: #f3f3f3;
+    padding: 6px;
+    cursor: pointer;
+    width: 50%;
+}
+
+.gfi-footer > .disabled {
+    cursor: not-allowed;
+    background-color: rgb(255, 255, 255);
+    opacity: 0.2;
+}
+
+.gfi-footer > .pager-left {
+    float: left;
+    border-right: 1px solid #ddd;
+}
+
+.gfi-footer > .pager-right {
+    float: right;
 }
 
 /* minimiertes Info-Fenster*/
@@ -132,39 +95,36 @@
     color: #fff;
     background-color: #d42132;
     cursor: pointer;
-    border-radius: 8px !important;
+    left: 80px;
+    top: 50px;
     display: none;
 }
 
-/* gfi-min-icon identisch zu gfi-icon*/
-.gfi-min-icon  {
-    float: left;
-    padding: 6px;
+/****** GFI-Modal für mobile Geräte ******/
+.gfi-mobile-header {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    padding: 10px;
+    border-bottom: 0;
+}
+
+.gfi-mobile-content {
+    font-size: 12px;
+    padding: 0;
+}
+
+.gfi-mobile-content > table > tbody > tr > td {
+    padding: 5px 10px;
+}
+
+.gfi-mobile-close {
     font-size: 16px;
-}
-
-@media (max-width: 768px) {
-    .popover-min {
-        position: fixed;
-        left: 10px;
-        top: 60px;
-        height: 40px;
-        width: 40px;
-    }
-    .gfi-min-icon  {
-        padding: 11px;
-    }
-}
-
-@media (min-width: 768px) {
-    .popover-min {
-        position: fixed;
-        left: 73px;
-        top: 110px;
-        height: 30px;
-        width: 175px;
-    }
-    .gfi-min-icon  {
-        padding: 6px;
-    }
+    float: right;
+    padding: 5px;
+    cursor: pointer;
 }

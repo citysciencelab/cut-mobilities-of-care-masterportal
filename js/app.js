@@ -76,8 +76,13 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.gfi === true) {
-                        require(["modules/gfipopup/view"], function (GFIPopupView) {
-                            new GFIPopupView();
+                        require(["modules/gfipopup/view", "modules/gfipopup/viewMobile", "modules/mobile/model"], function (GFIPopupView, MobileGFIPopupView, Mobile) {
+                            if (new Mobile().isAny()) {
+                                new MobileGFIPopupView();
+                            }
+                            else {
+                                new GFIPopupView();
+                            }
                         });
                     }
                     if (Config.tools.measure === true) {
@@ -135,7 +140,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         new RoutingView();
                     });
                 }
-                if (Config.menu.formular && Config.menu.formular.title !== '' && Config.menu.formular.symbol !== '' && Config.menu.formular.model !== '') {
+                if (Config.menu.formular && Config.menu.formular.title !== "" && Config.menu.formular.symbol !== "" && Config.menu.formular.model !== "") {
                     require(["modules/formular/view"], function (FormularView) {
                         new FormularView();
                     });

@@ -1,11 +1,11 @@
-<div class="gfi-heading">
+<div class="gfi-header">
     <span class="glyphicon glyphicon-info-sign gfi-icon"></span>
     <span class="gfi-title" title="<%= gfiTitles[gfiContent.length-gfiCounter] %>"><%= gfiTitles[gfiContent.length-gfiCounter] %></span>
     <span class="glyphicon glyphicon-remove gfi-close"></span>
     <span class="glyphicon glyphicon-minus gfi-toggle"></span>
 </div>
 
-<div class="gfiContent">
+<div class="gfi-content">
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
         _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
@@ -37,7 +37,17 @@
                     <%= value %>
                 <% } %>
             </td>
-        <% } else {
+            <% } else if(value.match(/Min/i) && value.match(/km/i)) {%>
+                <td>
+                    <strong><%= key + ':'%></strong>
+                </td>
+                <td>
+                    <button id='RouteZeigenButton' title='Schnellste Route zeigen' value='<%= key %>' style='min-width: 130px; width:100%' type='button' class='btn btn-info btn-sm'>
+                        <span style='float:left;' class='' aria-hidden='true'><%= value %></span>
+                        <span style='float:right; top:3px;' class='glyphicon glyphicon-road' aria-hidden='true'></span>
+                    </button>
+                </td>
+            <% } else {
            if( !navigator.userAgent.match(/Android/i) && !navigator.userAgent.match(/webOS/i) && !navigator.userAgent.match(/iPhone/i) && !navigator.userAgent.match(/iPad/i)
                  && !navigator.userAgent.match(/iPod/i) && !navigator.userAgent.match(/BlackBerry/i) && !navigator.userAgent.match(/Windows Phone/i)) {%>
             <td>
@@ -76,10 +86,13 @@
         </div>
     <% } %>
 </div>
-
 <% if(gfiContent.length > 1) { %>
-    <ul class="pager">
-        <li class="pager-left <%if(gfiCounter-gfiContent.length === 0) {print (' disabled') }%>" style="left: 0px;"><span class="vorzurueck glyphicon glyphicon-chevron-left<% if(gfiCounter-gfiContent.length === 0) {print (' vorzurueckdisabled ') }%>"></span></li>
-        <li class="pager-right <%if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' disabled') }%>" style="right: 0px;"><span class="vorzurueck glyphicon glyphicon-chevron-right<% if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' vorzurueckdisabled ') }%>"></span></li>
-    </ul>
+<div class="modal-footer gfi-footer">
+      <div class="pager-left <% if(gfiCounter-gfiContent.length === 0) {print (' disabled') }%>">
+          <span class="glyphicon glyphicon-chevron-left <% if(gfiCounter-gfiContent.length === 0) {print (' vorzurueckdisabled ') }%>"></span>
+      </div>
+      <div class="pager-right <% if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' disabled') }%>">
+          <span class="glyphicon glyphicon-chevron-right <% if(gfiContent.length-gfiCounter === gfiContent.length - 1) {print (' vorzurueckdisabled ') }%>"></span>
+      </div>
+</div>
 <% } %>
