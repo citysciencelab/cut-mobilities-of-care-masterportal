@@ -5,8 +5,9 @@ define([
     'eventbus',
     'modules/scaleline/model',
     'text!modules/scaleline/template.html',
-    "config"
-], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config) {
+    "config",
+    "models/map"
+], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config, Map) {
 
     var ScaleLineView = Backbone.View.extend({
         model: ScaleLine,
@@ -15,10 +16,13 @@ define([
         initialize: function () {
             this.listenTo(this.model, 'change:reflength', this.render);
             EventBus.on('setMap', this.setMap, this);
+            EventBus.trigger('getMap', this);
         },
         setMap: function (map) {
-            this.model.set('map', map);
-            this.model.calculateScale();
+            if (this.model.get('map') === '') {
+                this.model.set('map', map);
+                this.model.calculateScale();
+            }
         },
         render: function () {
             var attr = this.model.toJSON();
