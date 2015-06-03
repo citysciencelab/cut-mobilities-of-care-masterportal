@@ -31,7 +31,8 @@ define([
             'keyup textarea': 'keyup',
             'click input[type=radio]': 'click',
             'click input[type=checkbox]': 'click',
-            'click button': 'click'
+            'click button': 'click',
+            'click a' : 'click'
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
