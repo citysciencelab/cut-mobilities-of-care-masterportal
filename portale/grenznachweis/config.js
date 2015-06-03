@@ -90,7 +90,20 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: '452', visible: false}
+            {id: '452', visible: false},
+            {id: '2295', visible: true},
+            {id: '2296', visible: true}
+            /*{id:
+             [
+                {
+                    id: '2295'
+                },
+                {
+                    id: '2296'
+                }
+             ],
+             visible: true, name: 'Grenznachweis'
+            }*/
         ],
         /**
         * @memberof config
