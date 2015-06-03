@@ -17,7 +17,8 @@ require.config({
         app: "app",
         templates: "../templates",
         modules: "../modules",
-        videojs: "../_libs/video-js/video.dev"
+        videojs: "../_libs/video-js/video.dev",
+        util: "util"
     },
     shim: {
         bootstrap: {

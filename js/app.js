@@ -76,8 +76,13 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.gfi === true) {
-                        require(["modules/gfipopup/view"], function (GFIPopupView) {
-                            new GFIPopupView();
+                        require(["modules/gfipopup/view", "modules/gfipopup/viewMobile", "modules/mobile/model"], function (GFIPopupView, MobileGFIPopupView, Mobile) {
+                            if (new Mobile().isAny()) {
+                                new MobileGFIPopupView();
+                            }
+                            else {
+                                new GFIPopupView();
+                            }
                         });
                     }
                     if (Config.tools.measure === true) {
