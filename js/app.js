@@ -106,7 +106,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.treeFilter === true) {
-                    require(["views/TreeFilterView"], function (TreeFilterView) {
+                    require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
                     });
                 }

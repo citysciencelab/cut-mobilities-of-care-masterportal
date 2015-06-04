@@ -138,7 +138,6 @@ define([
             *
             */
             setLayerToPrint: function (layers) {
-                console.log(layers);
                 this.set('layerToPrint', []);
                 _.each(layers, function (layer) {
                     // nur wichtig für treeFilter Zeile 80 - 88
