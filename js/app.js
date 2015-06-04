@@ -141,9 +141,13 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         new RoutingView();
                     });
                 }
-                if (Config.menu.formular && Config.menu.formular.title !== "" && Config.menu.formular.symbol !== "" && Config.menu.formular.model !== "") {
-                    require(["modules/formular/view"], function (FormularView) {
-                        new FormularView();
+                if ($.isArray(Config.menu.formular)) {
+                    $.each(Config.menu.formular, function (name, obj) {
+                        if (obj.title !== '' && obj.symbol !== '' && obj.modelname !== '') {
+                            require(["modules/formular/view"], function (FormularView) {
+                                new FormularView(obj.modelname, obj.title, obj.symbol);
+                            });
+                        }
                     });
                 }
             });

@@ -12,12 +12,17 @@ define([
     var formularView = Backbone.View.extend({
         id: 'formularWin',
         className: 'win-body',
-        initialize: function () {
-            if (Config.menu.formular.title === 'Bestellung Grenznachweis') {
+        initialize: function (modelname, title, symbol) {
+            if (modelname === 'grenznachweis') {
                 this.model = grenznachweismodel;
                 this.template = _.template(grenznachweistemplate);
                 $("head").prepend("<style>" + grenznachweiscss + "</style>");
             }
+            EventBus.trigger('appendItemToMenubar', {
+                title: title,
+                symbol: symbol,
+                classname: modelname
+            });
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
         },
         events: {
@@ -26,7 +31,8 @@ define([
             'keyup textarea': 'keyup',
             'click input[type=radio]': 'click',
             'click input[type=checkbox]': 'click',
-            'click button': 'click'
+            'click button': 'click',
+            'click a' : 'click'
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {

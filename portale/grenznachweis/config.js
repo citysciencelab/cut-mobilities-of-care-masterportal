@@ -90,7 +90,20 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: '452', visible: false}
+            {id: '452', visible: false},
+            {id: '2295', visible: true},
+            {id: '2296', visible: true}
+            /*{id:
+             [
+                {
+                    id: '2295'
+                },
+                {
+                    id: '2296'
+                }
+             ],
+             visible: true, name: 'Grenznachweis'
+            }*/
         ],
         /**
         * @memberof config
@@ -140,17 +153,18 @@ define(function () {
             viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
-            helpButton: true,
+            helpButton: false,
             contactButton: true,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: false,
             routing: false,
-            formular: {
+            formular: [{
                 title: 'Bestellung Grenznachweis',
-                symbol: 'glyphicon glyphicon-shopping-cart'
-            }
+                symbol: 'glyphicon glyphicon-shopping-cart',
+                modelname: 'grenznachweis'
+            }]
         },
         /**
         * @memberof config

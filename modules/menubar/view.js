@@ -16,6 +16,7 @@ define([
         attributes: {"role": "navigation"},
         template: _.template(MenubarTemplate),
         initialize: function () {
+            EventBus.on('appendItemToMenubar', this.appendItemToMenubar, this);
             this.render();
             $('#tree').on({
                 "click": function (e) {
@@ -28,8 +29,7 @@ define([
             'click .filterWfsFeature': 'activateWfsFilter',
             'click .legend': 'activateLegend',
             'click .routingModul': 'activateRoutingModul',
-            'click .wfsFeatureFilter': 'activateWfsFeatureFilter',
-            'click .formular': 'activateFormular'
+            'click .wfsFeatureFilter': 'activateWfsFeatureFilter'
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -54,6 +54,17 @@ define([
             }
             // new OpenDataTreeList();
         },
+        appendItemToMenubar: function (obj) {
+            var html = '<li>';
+            html += '<a href="#" class="menuitem ' + obj.classname + '">';
+            html += '<span class="' + obj.symbol + '"></span>&nbsp;' + obj.title;
+            html += '</a>';
+            html += '</li>';
+            $(".menubarlgv").append(html);
+            $("." + obj.classname).on('click', function (evt) {
+                EventBus.trigger("toggleWin", [evt.target.className.split(' ')[1], evt.target.text, evt.target.children[0].className]);
+            });
+        },
         activateFilterTree: function () {
             EventBus.trigger('toggleWin', ['treefilter', 'Filtereinstellungen', 'glyphicon-filter']);
         },
@@ -68,9 +79,6 @@ define([
         },
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
-        },
-        activateFormular: function () {
-            EventBus.trigger("toggleWin", ["formular", Config.menu.formular.title, Config.menu.formular.symbol]);
         }
     });
 
