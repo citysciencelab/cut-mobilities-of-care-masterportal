@@ -11,10 +11,10 @@ define (["require"], function (require) {
                  baseUrl = "";
              }
              return baseUrl + path;
-         }
-         else {
-            return "";
-         }
+             }
+             else {
+                return "";
+             }
         }
      };
 
