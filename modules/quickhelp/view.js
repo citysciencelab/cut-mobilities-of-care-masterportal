@@ -2,7 +2,7 @@ define([
     "backbone",
     "text!modules/quickhelp/templateSearch.html",
     "eventbus",
-    "util",
+    "modules/core/util",
     "jqueryui/draggable"
 ], function (Backbone, TemplateSearch, EventBus, Util) {
 
@@ -31,8 +31,6 @@ define([
          * @param {[type]} value [description]
          */
         showWindow: function (value) {
-            var baseUrl = Util.getBaseUrl();
-
             switch (value) {
                 case "search":
                     this.$el.html(this.templateSearch({util: Util}));

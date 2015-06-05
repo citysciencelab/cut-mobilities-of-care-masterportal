@@ -3,7 +3,7 @@ define([
     "backbone",
     "text!modules/title/template.html",
     "config",
-    "util"
+    "modules/core/util"
 ], function (_, Backbone, TitleTemplate, Config, Util) {
 
     var TitleView = Backbone.View.extend({

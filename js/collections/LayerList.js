@@ -5,7 +5,7 @@ define([
     "modules/layer/grouplayer",
     "config",
     "eventbus",
-    "util"
+    "modules/core/util"
     ], function (Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus, Util) {
 
     var LayerList = Backbone.Collection.extend({

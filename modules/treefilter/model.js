@@ -2,7 +2,7 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "util"
+    "modules/core/util"
 ], function (Backbone, EventBus, Config, Util) {
 
     var TreeFilter = Backbone.Model.extend({

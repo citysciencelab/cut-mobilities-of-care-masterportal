@@ -3,7 +3,7 @@ define([
     "modules/treeconfig/model",
     "config",
     "eventbus",
-    "util"
+    "modules/core/util"
 ], function (Backbone, Model, Config, EventBus, Util) {
 
     var list = Backbone.Collection.extend({
