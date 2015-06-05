@@ -30,7 +30,6 @@ define([
             this.listenTo(this, "change:searchTypeString", this.setTypeArray);
             this.listenTo(this, "change:SLDBody", this.updateStyleByID);
             this.listenTo(this, "change:SLDBody", this.getFilterHits);
-            this.set("layerID", "182");
             // this.set("layerCacheID", "5183");
 
             this.fetch({
@@ -255,14 +254,19 @@ define([
             }
         },
         updateStyleByID: function () {
-            EventBus.trigger("updateStyleByID", [this.get("layerID"), this.get("SLDBody")]);
-            // EventBus.trigger("setVisible", ["5181", this.get("isFilter")]);
-            // if (this.get("isFilter") === true) {
-            //     EventBus.trigger("setVisible", ["5182", false]);
-            // }
-            // else {
-            //     EventBus.trigger("setVisible", ["5182", true]);
-            // }
+            EventBus.trigger("updateStyleByID", ["182", this.get("SLDBody")]);
+            if (this.get("isFilter") === true) {
+                EventBus.trigger("displayInTree", ["2297", false]);
+                EventBus.trigger("displayInTree", ["182", true]);
+                EventBus.trigger("setVisible", ["2297", false]);
+                EventBus.trigger("setVisible", ["182", true]);
+            }
+            else {
+                EventBus.trigger("displayInTree", ["2297", true]);
+                EventBus.trigger("displayInTree", ["182", false]);
+                EventBus.trigger("setVisible", ["2297", true]);
+                EventBus.trigger("setVisible", ["182", false]);
+            }
         },
         removeFilter: function () {
             this.set("errors", "");

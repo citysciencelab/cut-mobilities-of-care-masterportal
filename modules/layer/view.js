@@ -2,12 +2,11 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!modules/layer/Layer.html",
-    "eventbus"
-], function ($, _, Backbone, LayerTemplate, EventBus) {
+    "text!modules/layer/Layer.html"
+], function ($, _, Backbone, LayerTemplate) {
 
     var LayerView = Backbone.View.extend({
-        className : "list-group-item",
+        className: "list-group-item",
         tagName: "li",
         template: _.template(LayerTemplate),
         initialize: function () {
@@ -42,12 +41,6 @@ define([
         },
         getMetadata: function () {
             this.model.openMetadata();
-            // if (locations.fhhnet) {
-            //     window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
-            // }
-            // else {
-            //     window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
-            // }
         },
         toggleSettings: function () {
             this.model.toggleSettings();
@@ -61,13 +54,16 @@ define([
             }
         },
         render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
             if (this.model.get("displayInTree") !== false) {
-                var attr = this.model.toJSON();
-                this.$el.html(this.template(attr));
-                return this;
-            }else {
-                return "";
+                this.$el.css("display", "block");
             }
+            else {
+                this.$el.css("display", "none");
+            }
+            return this;
         }
     });
 

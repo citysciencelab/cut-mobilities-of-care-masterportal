@@ -17,9 +17,9 @@ define([
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
 
             // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
-            if (this.get("displayInTree") === false) {
-                this.set("gfiAttributes", false);
-            }
+            // if (this.get("displayInTree") === false) {
+            //     this.set("gfiAttributes", false);
+            // }
 
             // Wenn Visibility nicht gesetzt ist (FHH-Atlas), werden alle Layer standardmäßig ausgeblendet.
             if (this.get("visibility") === undefined) {

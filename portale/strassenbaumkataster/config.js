@@ -11,9 +11,8 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "8", visible: false},
-            {id: "182", visible: true, name: "Straßenbaumkataster"}
-            // {id: "5182", visible: false, displayInTree: false},
-            // {id: "5183", visible: false, displayInTree: false}
+            {id: "182", visible: false, name: "Straßenbaumkataster", displayInTree: false},
+            {id: "2297", visible: true, name: "Straßenbaumkataster", displayInTree: true}
         ],
         styleConf: "../components/lgv-config/style.json",
         menubar: true,

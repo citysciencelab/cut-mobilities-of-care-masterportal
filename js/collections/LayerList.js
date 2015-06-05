@@ -170,7 +170,7 @@ define([
             EventBus.on("currentMapScale", this.setMapScaleForAll, this);
             EventBus.on("getInspireFolder", this.sendInspireFolder, this);
             EventBus.on("getOpendataFolder", this.sendOpendataFolder, this);
-            // EventBus.on("showLayerInTree", this.showLayerInTree, this);
+            EventBus.on("displayInTree", this.displayInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
@@ -333,12 +333,16 @@ define([
             this.get(args[0]).set("SLDBody", args[1]);
         },
         /**
-        * Aktualisiert den Style vom Layer mit SLD_BODY.
+        *
         * args[0] = id, args[1] = visibility(bool)
         */
         setVisibleByID: function (args) {
             this.get(args[0]).set("visibility", args[1]);
-            this.get(args[0]).get("layer").setVisible(args[1]);
+            // this.get(args[0]).get("layer").setVisible(args[1]);
+        },
+        displayInTree: function (args) {
+            this.get(args[0]).set("displayInTree", args[1]);
+            // this.get(args[0]).get("layer").setVisible(args[1]);
         },
         /**
         *
