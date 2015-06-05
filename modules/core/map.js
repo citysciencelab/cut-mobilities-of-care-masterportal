@@ -3,7 +3,7 @@ define([
     "openlayers",
     "config",
     "modules/core/mapView",
-    "collections/LayerList",
+    "modules/layer/list",
     "eventbus"
 ], function (Backbone, ol, Config, MapView, LayerList, EventBus) {
 

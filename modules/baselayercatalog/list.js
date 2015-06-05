@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "collections/LayerList"
+    "modules/layer/list"
 ], function (Backbone, LayerList) {
 
     var List = Backbone.Collection.extend({

@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "collections/LayerList",
+    "modules/layer/list",
     "modules/layer/view",
     "eventbus"
 ], function (Backbone, LayerList, LayerView, EventBus) {

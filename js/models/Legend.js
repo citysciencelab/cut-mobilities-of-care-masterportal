@@ -4,7 +4,7 @@ define([
     'openlayers',
     'config',
     'collections/stylelist',
-    'collections/LayerList',
+    'modules/layer/list',
     "bootstrap/modal"
 ], function (_, Backbone, ol, Config, StyleList, Layerlist) {
 

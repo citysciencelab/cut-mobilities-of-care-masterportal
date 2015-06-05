@@ -1,7 +1,7 @@
 define([
     "backbone",
     "config",
-    "collections/LayerList",
+    "modules/layer/list",
     "modules/layercatalog/nodeChild",
     "modules/layercatalog/viewNodeChild",
     "modules/layercatalog/viewNodeLayer"
