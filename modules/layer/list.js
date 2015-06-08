@@ -160,6 +160,7 @@ define([
         },
         initialize: function () {
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
+            EventBus.on("getModelById", this.sendModelByID, this);
             EventBus.on("setVisible", this.setVisibleByID, this);
             EventBus.on("getVisibleWFSLayer", this.sendVisibleWFSLayer, this);
             EventBus.on("getVisibleWFSLayerPOI", this.sendVisibleWFSLayerPOI, this);
@@ -333,6 +334,12 @@ define([
         updateStyleByID: function (args) {
             this.get(args[0]).get("source").updateParams({SLD_BODY: args[1]});
             this.get(args[0]).set("SLDBody", args[1]);
+        },
+        /**
+         *
+         */
+        sendModelByID: function (arg) {
+            EventBus.trigger("sendModelByID", this.get(arg));
         },
         /**
         *

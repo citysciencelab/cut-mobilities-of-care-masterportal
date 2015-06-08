@@ -25,12 +25,13 @@ define([
         url: Util.getPath("../components/lgv-config/tree.json"),
         initialize: function () {
             EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
+            EventBus.once("sendModelByID", this.setListenerForVisibility, this);
+            EventBus.trigger("getModelById", "182");
             this.listenTo(this, "change:searchCategoryString", this.setCategoryArray);
             this.listenTo(this, "change:treeCategory", this.setTypeArray);
             this.listenTo(this, "change:searchTypeString", this.setTypeArray);
             this.listenTo(this, "change:SLDBody", this.updateStyleByID);
             this.listenTo(this, "change:SLDBody", this.getFilterHits);
-            // this.set("layerCacheID", "5183");
 
             this.fetch({
                 cache: false,
@@ -58,6 +59,11 @@ define([
             else {
                 this.set("isCurrentWin", false);
             }
+        },
+        setListenerForVisibility: function (model) {
+            model.listenTo(model, "change:visibility", function () {
+                EventBus.trigger("setVisible", ["2298", model.get("visibility")]);
+            });
         },
         parse: function (response) {
             this.set("trees", response.trees);
@@ -260,12 +266,14 @@ define([
                 EventBus.trigger("displayInTree", ["182", true]);
                 EventBus.trigger("setVisible", ["2297", false]);
                 EventBus.trigger("setVisible", ["182", true]);
+                EventBus.trigger("setVisible", ["2298", true]);
             }
             else {
                 EventBus.trigger("displayInTree", ["2297", true]);
                 EventBus.trigger("displayInTree", ["182", false]);
                 EventBus.trigger("setVisible", ["2297", true]);
                 EventBus.trigger("setVisible", ["182", false]);
+                EventBus.trigger("setVisible", ["2298", false]);
             }
         },
         removeFilter: function () {
