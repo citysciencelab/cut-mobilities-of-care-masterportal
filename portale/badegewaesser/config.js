@@ -14,7 +14,7 @@ define(function () {
             url: function () {
                 return "http://wscd0096:8680/mapfish_print_2.0/";
             },
-            title: "Planportal",
+            title: "Badegewässer-Portal",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -65,7 +65,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: false,
             active: "gfi"
