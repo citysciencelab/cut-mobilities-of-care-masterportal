@@ -1,3 +1,8 @@
+.base-layer-list {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
 .base-layer {
     color: rgb(150, 150, 150);
     font-size: 14px;

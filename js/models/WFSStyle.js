@@ -4,7 +4,7 @@ define([
     "openlayers",
     "eventbus",
     "config",
-    "util"
+    "modules/core/util"
 ], function (_, Backbone, ol, EventBus, Config, Util) {
 
     var WFSStyle = Backbone.Model.extend({

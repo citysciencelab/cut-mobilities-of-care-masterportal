@@ -1,39 +1,30 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'eventbus',
-    'modules/scaleline/model',
-    'text!modules/scaleline/template.html',
-    "config",
-    "models/map"
-], function ($, _, Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config, Map) {
+    "backbone",
+    "eventbus",
+    "modules/scaleline/model",
+    "text!modules/scaleline/template.html",
+    "config"
+], function (Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config) {
 
     var ScaleLineView = Backbone.View.extend({
         model: ScaleLine,
-        className: 'scale-line',
+        className: "scale-line",
         template: _.template(ScaleLineTemplate),
         initialize: function () {
-            this.listenTo(this.model, 'change:reflength', this.render);
-            EventBus.on('setMap', this.setMap, this);
-            EventBus.trigger('getMap', this);
-        },
-        setMap: function (map) {
-            if (this.model.get('map') === '') {
-                this.model.set('map', map);
-                this.model.calculateScale();
-            }
+            this.listenTo(this.model, "change:reflength", this.render);
+            this.render();
         },
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
             if (Config.footer && Config.footer === true) {
-                $('.footer').append(this.$el);
-                $('.scale-line').addClass("pull-right");
-                this.$el.removeClass("scale-line");
+                $(".footer").append(this.$el);
+                $(".scale-line").css("right", 0);
             }
             else {
-                $('body').append(this.$el);
+                $("body").append(this.$el);
+                $(".scale-line").css("left", 0);
             }
 
         }

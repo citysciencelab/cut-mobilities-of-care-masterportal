@@ -26,11 +26,18 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
     }
 
     require([
-        "models/map",
+        "modules/core/map",
         "config",
         "jquery"
     ], function (Map, Config, $) {
         new Map();
+
+        if (Config.footer && Config.footer === true) {
+            require(["modules/footer/view"], function (FooterView) {
+                new FooterView();
+            });
+        }
+
         if (typeof (Config.clickCounter) === "object" && Config.clickCounter.version !== "") {
             require(["modules/ClickCounter/view"], function (ClickCounterView) {
                 new ClickCounterView();
@@ -43,21 +50,15 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
             });
         }
 
-        if (Config.scaleLine && Config.scaleLine === true) {
-            require(["modules/scaleline/view"], function (ScaleLineView) {
-                new ScaleLineView();
-            });
-        }
-
-        if (Config.footer && Config.footer === true) {
-            require(["modules/footer/view"], function (FooterView) {
-                new FooterView();
-            });
-        }
-
         if (Config.quickHelp && Config.quickHelp === true) {
             require(["modules/quickhelp/view"], function (QuickHelpView) {
                 new QuickHelpView();
+            });
+        }
+
+        if (Config.scaleLine && Config.scaleLine === true) {
+            require(["modules/scaleline/view"], function (ScaleLineView) {
+                new ScaleLineView();
             });
         }
 
@@ -76,8 +77,8 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.gfi === true) {
-                        require(["modules/gfipopup/view", "modules/gfipopup/viewMobile", "modules/mobile/model"], function (GFIPopupView, MobileGFIPopupView, Mobile) {
-                            if (new Mobile().isAny()) {
+                        require(["modules/gfipopup/view", "modules/gfipopup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
+                            if (Util.isAny()) {
                                 new MobileGFIPopupView();
                             }
                             else {
@@ -105,7 +106,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.treeFilter === true) {
-                    require(["views/TreeFilterView"], function (TreeFilterView) {
+                    require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
                     });
                 }

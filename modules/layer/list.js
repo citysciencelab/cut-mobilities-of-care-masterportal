@@ -119,21 +119,21 @@ define([
                             id: _.uniqueId("grouplayer_"),
                             name: element.name,
                             typ: "GROUP",
-                            styles: element.styles  // Styles der Childlayer
+                            styles: element.styles // Styles der Childlayer
                         };
                         // Transparenz für Group-Model
                         if (_.has(element, "opacity")) {
                             groupModel.opacity = element.opacity;
                         }
                         var modelChildren = [];
-                        //Childlayerattributierung
-                        _.each(element.id, function(childlayer) {
+                        // Childlayerattributierung
+                        _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
                             if (layerinfos) {
                                 modelChildren.push(layerinfos);
                             }
                             else {
-                                alert ('Layerbeschreibung ' + childlayer.id + ' nicht verfügbar.');
+                                alert ("Layerbeschreibung " + childlayer.id + " nicht verfügbar.");
                                 return;
                             }
                         });
@@ -160,6 +160,7 @@ define([
         },
         initialize: function () {
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
+            EventBus.on("getModelById", this.sendModelByID, this);
             EventBus.on("setVisible", this.setVisibleByID, this);
             EventBus.on("getVisibleWFSLayer", this.sendVisibleWFSLayer, this);
             EventBus.on("getVisibleWFSLayerPOI", this.sendVisibleWFSLayerPOI, this);
@@ -235,14 +236,16 @@ define([
          */
         resetModels: function () {
             var modelsByCategory, categoryAttribute;
+
             switch (Config.tree.orderBy) {
-                case "opendata":
+                case "opendata": {
                     // Name für das Model-Attribut für die entsprechende Kategorie
                     categoryAttribute = "kategorieOpendata";
                     // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
                     modelsByCategory = this.filter(function (element) {
                         return (typeof element.get(categoryAttribute) === "object");
                     });
+                }
             }
             // Iteriert über die Models
             _.each(modelsByCategory, function (element) {
@@ -310,7 +313,7 @@ define([
         getLayerByProperty: function (key, value) {
             return this.filter(function (model) {
                 if (model.get("isbaselayer") === false) {
-                    if (typeof model.get(key) === "object") {//console.log(model.get(key));
+                    if (typeof model.get(key) === "object") { //console.log(model.get(key));
                         return _.contains(model.get(key), value);
                     }
                     else {
@@ -329,8 +332,14 @@ define([
         * args[0] = id, args[1] = SLD_Body
         */
         updateStyleByID: function (args) {
-            this.get(args[0]).get("source").updateParams({"SLD_BODY": args[1]});
+            this.get(args[0]).get("source").updateParams({SLD_BODY: args[1]});
             this.get(args[0]).set("SLDBody", args[1]);
+        },
+        /**
+         *
+         */
+        sendModelByID: function (arg) {
+            EventBus.trigger("sendModelByID", this.get(arg));
         },
         /**
         *
@@ -410,7 +419,7 @@ define([
          setMapScaleForAll: function (scale) {
              this.forEach(function (model) {
                  model.set("currentScale", scale);
-             })
+             });
         },
         /**
          * Schiebt das Model in der Collection eine Position nach oben.

@@ -3,7 +3,7 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "collections/LayerList",
+    "modules/layer/list",
     "modules/layercatalog/viewNodeChildLayer"
     ], function (_, Backbone, EventBus, Config, LayerList, NodeChildLayerView) {
 

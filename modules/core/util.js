@@ -1,8 +1,9 @@
 define([
-    "backbone"
-], function (Backbone) {
+    "backbone",
+    "require"
+], function (Backbone, Require) {
 
-    var model = Backbone.Model.extend({
+    var Util = Backbone.Model.extend({
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
         },
@@ -17,8 +18,21 @@ define([
         },
         isAny: function () {
             return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
+        },
+        getPath: function (path) {
+            var baseUrl = Require.toUrl("").split("?")[0];
+
+            if (path) {
+                if (path.indexOf("/") === 0) {
+                    baseUrl = "";
+                }
+                return baseUrl + path;
+            }
+            else {
+                return "";
+            }
         }
     });
 
-    return model;
+    return new Util();
 });

@@ -1,29 +1,26 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'collections/LayerList',
-    'modules/layer/view',
-    'eventbus'
-], function ($, _, Backbone, LayerList, LayerView, EventBus) {
+    "backbone",
+    "modules/layer/list",
+    "modules/layer/view",
+    "eventbus"
+], function (Backbone, LayerList, LayerView, EventBus) {
 
     var LayerListView = Backbone.View.extend({
         collection: LayerList,
-        el: '#tree',
+        el: "#tree",
         initialize: function () {
-            this.listenTo(this.collection, 'change:isChecked', this.render);
-            this.listenTo(this.collection, 'change:isExpanded', this.render);
-            this.listenTo(this.collection, 'add', this.render);
+            this.listenTo(this.collection, "change:isChecked", this.render);
+            this.listenTo(this.collection, "change:isExpanded", this.render);
             this.render();
         },
         render: function () {
-            this.$el.html('');
             this.collection.forEach(this.addTreeNode, this);
-            EventBus.trigger('registerLayerTreeInClickCounter', this.$el);
+            EventBus.trigger("registerLayerTreeInClickCounter", this.$el);
         },
         addTreeNode: function (node) {
             var layerView = new LayerView({model: node});
-            $('#tree').prepend(layerView.render().el);
+
+            $("#tree").prepend(layerView.render().el);
         }
     });
 

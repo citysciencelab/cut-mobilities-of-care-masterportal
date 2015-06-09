@@ -1,47 +1,63 @@
 define([
-    'underscore',
-    'backbone',
-    'eventbus',
-    'openlayers'
-], function (_, Backbone, EventBus, ol) {
+    "backbone",
+    "eventbus",
+    "config"
+], function (Backbone, EventBus, Config) {
 
     var ScaleLine = Backbone.Model.extend({
-        defaults: {
-            scale: '',
-            map: '',
-            reflength: ''
-        },
+
+        /**
+         *
+         */
         initialize: function () {
-            this.listenTo(this, 'change:map', this.setListener);
+            EventBus.on("currentMapScale", this.setScaleValue, this);
+            this.listenTo(this, "change:scaleValue", this.setScale);
+            this.listenTo(this, "change:scale", this.setReflength);
+            this.setScaleValue(Config.view.scale);
         },
-        setListener: function () {
-            this.get('map').getView().on('change:resolution', function () {
-                this.calculateScale();
-            }, this);
+
+        /**
+         *
+         */
+        setScaleValue: function (value) {
+            this.set("scaleValue", value);
         },
-        calculateScale: function () {
-            var map = this.get('map');
-            var view = map.getView();
-            var resolution = view.getResolution();
-            var units = map.getView().getProjection().getUnits();
-            var scaleval = Math.round(resolution * 39.37 * this.get('map').DOTS_PER_INCH).toString();
-            if (scaleval >= 1000) {
-                var scale = 'Maßstab = 1:  ' + scaleval.substring(0, scaleval.length-3) + '.' + scaleval.substring(scaleval.length - 3);
+
+        /**
+         *
+         */
+        setScale: function () {
+            var scale,
+                scaleValue;
+
+            scaleValue = this.get("scaleValue").toString();
+
+            if (this.get("scaleValue") >= 1000) {
+                scale = "Maßstab = 1: " + scaleValue.substring(0, scaleValue.length - 3) + "." + scaleValue.substring(scaleValue.length - 3);
             }
             else {
-                var scale = 'Maßstab = 1: ' + scaleval;
+                scale = "Maßstab = 1: " + scaleValue;
             }
-            this.set('scale', scale);
-            this.set("scaleval", this.get('scale').toString().substr(10));
+            this.set("scale", scale);
+        },
+
+        /**
+         *
+         */
+        setReflength: function () {
             // reflength beziehtr sich auf 2cm lange Linie
-            var reflengthval = Math.round(0.02 * scaleval);
+            var reflength,
+                reflengthval;
+
+            reflengthval = Math.round(0.02 * this.get("scaleValue"));
+
             if (reflengthval >= 1000) {
-                var reflength = (reflengthval/1000).toString() + ' km';
+                reflength = (reflengthval / 1000).toString() + " km";
             }
             else {
-                var reflength = reflengthval.toString() + ' m';
+                reflength = reflengthval.toString() + " m";
             }
-            this.set('reflength', reflength);
+            this.set("reflength", reflength);
         }
     });
 

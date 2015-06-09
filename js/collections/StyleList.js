@@ -3,7 +3,7 @@ define([
     "backbone",
     "models/wfsstyle",
     "config",
-    "util"
+    "modules/core/util"
 ], function (_, Backbone, WFSStyle, Config, Util) {
 
     var StyleList = Backbone.Collection.extend ({

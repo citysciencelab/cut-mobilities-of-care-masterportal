@@ -2,7 +2,7 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "collections/LayerList",
+    "modules/layer/list",
     "openlayers"
 ], function (Backbone, EventBus, Config, LayerList, ol) {
 

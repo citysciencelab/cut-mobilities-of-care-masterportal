@@ -1,10 +1,10 @@
 define([
-    "underscore",
     "backbone",
     "text!modules/quickhelp/templateSearch.html",
     "eventbus",
+    "modules/core/util",
     "jqueryui/draggable"
-], function (_, Backbone, TemplateSearch, EventBus) {
+], function (Backbone, TemplateSearch, EventBus, Util) {
 
     var view = Backbone.View.extend({
         templateSearch: _.template(TemplateSearch),
@@ -33,7 +33,7 @@ define([
         showWindow: function (value) {
             switch (value) {
                 case "search":
-                    this.$el.html(this.templateSearch());
+                    this.$el.html(this.templateSearch({util: Util}));
                     break;
                 default:
                     break;

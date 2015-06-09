@@ -12,7 +12,6 @@
 @import "orientation.css";
 @import "copyright.css";
 @import "../modules/attribution/style.css";
-@import "treefilter.css";
 @import "zoombuttons.css";
 @import "routingwin.css";
 @import "window.css";
@@ -28,3 +27,4 @@
 @import "../modules/layercatalog/style.css";
 @import "../modules/layer/style.css";
 @import "../modules/baselayercatalog/style.css";
+@import "../modules/treefilter/style.css";

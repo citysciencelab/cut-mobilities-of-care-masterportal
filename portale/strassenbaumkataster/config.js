@@ -7,16 +7,16 @@ define(function () {
             scale: 20000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
         layerIDs: [
             {id: "453", visible: true},
             {id: "8", visible: false},
-            {id: "5182", visible: false, displayInTree: false},
-            {id: "5183", visible: false, displayInTree: false}
+            {id: "2298", visible: false, name: "StraßenbaumkatasterG", displayInTree: false, styles: "strassenbaumkataster_grau"},
+            {id: "182", visible: false, name: "Straßenbaumkataster", displayInTree: false},
+            {id: "2297", visible: true, name: "Straßenbaumkataster", displayInTree: true}
         ],
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
-        scaleLine: false,
+        scaleLine: true,
         isMenubarVisible: true,
         menu: {
             viewerName: "GeoViewer",
@@ -31,7 +31,6 @@ define(function () {
             routing: false
         },
         startUpModul: "",
-        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
             gazetteerURL: function () {
