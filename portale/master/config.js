@@ -23,12 +23,25 @@ define(function () {
         * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
         * @property {Number}  scale - Der initiale Maßstab.
         * @property {Array}  extent - Der ol.view.extent der Karte
+        * @property {Array}  resolutions - Optional die Resolutions der Karte. Default 1:25000 - 1:1000
         */
         view: {
             center: [565874, 5934140],
             resolution: 15.874991427504629,
             scale: 60000, // für print.js benötigt
-            extent: [454591, 5809000, 700000, 6075769]
+            extent: [454591, 5809000, 700000, 6075769],
+            resolutions : [
+                66.14579761460263,
+                26.458319045841044,
+                15.874991427504629,
+                10.583327618336419,
+                5.2916638091682096,
+                2.6458319045841048,
+                1.3229159522920524,
+                0.6614579761460262,
+                0.2645831904584105,
+                0.13229159522920525
+            ],
         },
         /**
         * @memberof config

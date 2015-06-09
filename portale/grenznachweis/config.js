@@ -21,6 +21,18 @@ define(function () {
         view: {
             center: [565874, 5934140],
             resolution: 15.874991427504629,
+            resolutions : [
+                66.14579761460263,
+                26.458319045841044,
+                15.874991427504629,
+                10.583327618336419,
+                5.2916638091682096,
+                2.6458319045841048,
+                1.3229159522920524,
+                0.6614579761460262,
+                0.2645831904584105,
+                0.13229159522920525
+            ],
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
@@ -89,21 +101,20 @@ define(function () {
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: '452', visible: false},
-            {id: '2295', visible: true},
-            {id: '2296', visible: true}
-            /*{id:
-             [
-                {
-                    id: '2295'
-                },
-                {
-                    id: '2296'
-                }
-             ],
-             visible: true, name: 'Grenznachweis'
-            }*/
+            {id: '453', visible: true},
+            {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397', visible: true, name: 'Alkis Liegenschaftskarte'},
+            {id: '2295,2296', visible: true, name: 'Alkis Grenznachweis'},
+//            /*{id:
+//             [
+//                {
+//                    id: '2295'
+//                },
+//                {
+//                    id: '2296'
+//                }
+//             ],
+//             visible: true, name: 'Grenznachweis'
+//            }*/
         ],
         /**
         * @memberof config

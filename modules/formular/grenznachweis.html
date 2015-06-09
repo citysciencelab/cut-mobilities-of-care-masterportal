@@ -1,27 +1,53 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="beschreibunggrenznachweis">
-            <p class="formularhead">Lagebeschreibung:</p>
+            <p class="formularhead">Auftragsnummer</p>
+            <input id="auftragsnummer" type="text" class="form-control" title="Hier können Sie Ihre Auftragsnummer zur Identifikation angeben. " placeholder="Ihre Auftragsnummer" aria-describedby="sizing-addon2" value=<%=auftragsnummer%>>
+            <p class="formularhead2">Lagebeschreibung*</p>
             <input id="lagebeschreibung" type="text" class="form-control" title="Bitte geben Sie eine Lagebezeichnung über Gemarkung/Flurstück oder über Straße/Hausnummer an." placeholder="Wo benötigen Sie Grenzpunkte?" aria-describedby="sizing-addon2" value=<%=lage%>>
-            <p class="formularhead2">Zweck:</p>
-            <textarea id="zweck" class="form-control" title="Bitte nennen Sie uns den Zweck / Anlass für Ihre Bestellung, z.B. Lageplan." placeholder="Nennen Sie bitte den Zweck / Anlass!" maxlength=92 rows=2 aria-describedby="sizing-addon2"><%=zweck%></textarea>
-            <p class="formularhead2">Freitext:</p>
+            <p class="formularhead2">Zweck*</p>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input id="zweckGebaeudeabsteckung" type="checkbox" aria-label="..." <% if (zweckGebaeudeabsteckung === true) {print (' checked')}; %>>
+                        </span>
+                        <p id="zweckGebaudeabsteckungtext" style="width:134px" class="form-control">Gebäudeabsteckung</p>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input id="zweckLageplan" type="checkbox" aria-label="..." <% if (zweckLageplan === true) {print (' checked')}; %>>
+                        </span>
+                        <p id="zweckLageplantext" class="form-control">Lageplan</p>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input id="zweckGebaeudeeinmessung" type="checkbox" aria-label="..." <% if (zweckGebaeudeeinmessung === true) {print (' checked')}; %>>
+                        </span>
+                        <p id="zweckGebaeudeeinmessungtext" style="width:134px" class="form-control">Gebäudeeinmessung</p>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input id="zweckSonstiges" type="checkbox" aria-label="..." <% if (zweckSonstiges === true) {print (' checked')}; %>>
+                        </span>
+                        <p id="zweckSonstigestext" class="form-control" title="Bitte ggf. im Freitextfeld näher erläutern.">Sonstiges</p>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+            <p class="formularhead2">Freitext</p>
             <textarea id="freitext" class="form-control" title="Detaillierte Informationen." placeholder="Was wir sonst noch wissen sollten, um Ihren Auftrag ausführen zu können?" maxlength=600 rows=4 aria-describedby="sizing-addon2"><%=freitext%></textarea>
-            <p class="formularhead2">Bestellung von:</p>
-            <div class="input-group formulargroup">
-                <span class="input-group-addon">
-                    <input id="eckpunkte" type="radio" class= "radioedit" aria-label="..." name="punktdefinition" <% if (punkte === 'eckpunkte') {print ('checked')} %>>
-                </span>
-                <p class="form-control">Eckpunkten</p>
-                <span class="input-group-addon">
-                    <input id="knick-eckpunkte" type="radio" class= "radioedit" aria-label="..." name="punktdefinition" <% if (punkte === 'knick-eckpunkte') {print ('checked')} %>>
-                </span>
-                <p class="form-control">Knick- und Eckpunkten</p>
-            </div><!-- /input-group -->
-            <p class="formularhead2">Umringe erfassen:</p>
+            <p class="formularhead2">Umringe erfassen*</p>
             <div class="btn-group btn-group-justified" role="group" aria-label="...">
                 <div class="btn-group" role="group">
-                    <button id="setgeometrie" type="button" class="btn btn-primary">Starten / Beenden</button>
+                    <button id="setgeometrie" type="button" class="<% if (source.getFeatures().length === 0) {print ('btn btn-primary');} else {print ('btn btn-default');} %>">Starten / Beenden</button>
                 </div>
                 <div class="btn-group" role="group">
                     <button id="removegeometrie" type="button" class="btn btn-default" <% if (source.getFeatures().length === 0) {print ('disabled')}; %> >alle löschen</button>
@@ -37,7 +63,11 @@
                 <li id="anrede3" role="presentation" class="<% if (kundenanrede === 'Firma') {print ('active')}; %>"><a id="anredefirma" href="#">Firma</a></li>
             </ul>
             <div class="formulargroup input-group">
-                <span class="input-group-addon" id="basic-addon1">Name </span>
+                <span class="input-group-addon" id="basic-addon1">Kundennr.</span>
+                <input id="kundennummer" type="text" class="form-control" placeholder="Kundennummer, sofern bekannt" aria-describedby="basic-addon1" value=<%=kundennummer%>>
+            </div>
+            <div class="formulargroup input-group">
+                <span class="input-group-addon" id="basic-addon1">Name*</span>
                 <input id="kundenname" type="text" class="form-control" placeholder="Vor- und Nachname" aria-describedby="basic-addon1" value=<%=kundenname%>>
             </div>
             <div class="formulargroup input-group">
@@ -45,17 +75,17 @@
                 <input id="kundenfirma" type="text" class="form-control" placeholder="Firmenname" aria-describedby="basic-addon1" value=<%=kundenfirma%>>
             </div>
             <div class="formulargroup input-group">
-                <span class="input-group-addon" id="basic-addon1">Adresse</span>
+                <span class="input-group-addon" id="basic-addon1">Adresse*</span>
                 <input id="kundenadresse" type="text" class="form-control" placeholder="Straße und Hausnummer" aria-describedby="basic-addon1" value=<%=kundenadresse%>>
             </div>
             <div class="formulargroup input-group">
-                <span class="input-group-addon" id="basic-addon1">PLZ</span>
+                <span class="input-group-addon" id="basic-addon1">PLZ*</span>
                 <input style="width:60px;" id="kundenplz" type="text" class="form-control" placeholder="PLZ" aria-describedby="basic-addon1" value=<%=kundenplz%>>
-                <span class="input-group-addon" id="basic-addon1">Ort</span>
+                <span class="input-group-addon" id="basic-addon1">Ort*</span>
                 <input id="kundenort" type="text" class="form-control" placeholder="Ort" aria-describedby="basic-addon1" value=<%=kundenort%>>
             </div>
             <div class="formulargroup input-group">
-                <span class="input-group-addon" id="basic-addon1">E-Mail</span>
+                <span class="input-group-addon" id="basic-addon1">E-Mail*</span>
                 <input id="kundenemail" type="text" class="form-control" placeholder="E-Mail" aria-describedby="basic-addon1" value=<%=kundenemail%>>
             </div>
             <div class="formulargroup input-group">
@@ -66,6 +96,23 @@
                 <span class="input-group-addon" id="basic-addon1">Mobilfunk</span>
                 <input id="kundenmobilfunk" type="text" class="form-control" placeholder="Telefonnummer im Mobilfunknetz" aria-describedby="basic-addon1" value=<%=kundenmobilfunk%>>
             </div>
+            <p class="formularhead2">Vertragsbestandteile:</p>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input id="nutzungsbedingungen" type="checkbox" aria-label="..."<% if (nutzungsbedingungakzeptiert === true) {print (' checked')}; %>>
+                </span>
+                <p id="nutzungsbedingungentext" class="form-control">Ich akzeptiere die
+                    <a target="_blank" href="http://www.hamburg.de/contentblob/350818/data/nutzungsbedingungen.pdf" class="navbar-link">Nutzungsbedingungen</a>.
+                </p>
+            </div><!-- /input-group -->
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input id="gebuehrenordnung" type="checkbox" aria-label="..."<% if (gebuehrenordnungakzeptiert === true) {print (' checked')}; %>>
+                </span>
+                <p id="gebuehrenordnungtext" class="form-control">Ich nehme die
+                    <a target="_blank" href="http://www.hamburg.de/contentblob/322288/data/d-gebuehrenordnung.pdf" class="navbar-link">Gebührenordnung</a> zur Kenntnis.
+                </p>
+            </div><!-- /input-group -->
         </div>
     </div>
 

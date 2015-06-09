@@ -39,6 +39,7 @@ define([
         },
         approval: function () {
             this.set('approved', true);
+            this.setItem('');
         },
         refusal: function () {
             this.set('approved', false);
