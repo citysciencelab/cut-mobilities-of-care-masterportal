@@ -165,7 +165,6 @@ define([
                     }
                 },this);
                 this.get('legendArray').reverse();
-                console.log(this.get('legendArray'));
         }
 
     });
