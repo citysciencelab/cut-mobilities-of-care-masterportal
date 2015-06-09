@@ -30,6 +30,13 @@ define([
                 if (this.model.get("isVisible") === true) {
                     $("#toggleRow").append(this.$el.html(this.template(attr)));
                     this.model.sendParamsToWinCotent();
+                    if (this.model.get('isCollapsed') === true) {
+                        this.$el.addClass("win-min");
+                        this.$el.removeClass("win-max");
+                    } else {
+                        this.$el.addClass("win-max");
+                        this.$el.removeClass("win-min");
+                    }
                     this.$el.show("slow");
                 }
                 else {

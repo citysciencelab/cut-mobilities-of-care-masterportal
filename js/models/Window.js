@@ -12,8 +12,16 @@ define([
             initialize: function () {
                 EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
+                EventBus.on("collapseWindow", this.collapseWindow, this);
+                EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
             },
-            setCollapse: function (value) {
+            collapseWindow: function () {
+                this.setCollapse(true);
+            },
+            uncollapseWindow: function () {
+                this.setCollapse(false);
+            },
+            setCollapse: function (value, val) {
                 this.set("isCollapsed", value);
             },
             setVisible: function (value) {
