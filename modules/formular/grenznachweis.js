@@ -91,18 +91,18 @@ define([
                     $('#kundenemail').removeClass('alert alert-danger');
                     this.set('kundenemail', evt.target.value);
                 }
-            } else if (evt.target.id === 'kundenfestnetz') {
-                if (evt.target.value.match(/[^0-9/-\.]/g)) {
-                    var value = evt.target.value.replace(/[^0-9/-\.]/g,'');
-                    evt.target.value = value;
-                }
-                this.set('kundenfestnetz', value);
-            } else if (evt.target.id === 'kundenmobilfunk') {
-                if (evt.target.value.match(/[^0-9/-\.]/g)) {
-                    var value = evt.target.value.replace(/[^0-9/-\.]/g,'');
-                    evt.target.value = value;
-                }
-                this.set('kundenmobilfunk', evt.target.value);
+            // } else if (evt.target.id === 'kundenfestnetz') {
+            //     if (evt.target.value.match(/[^0-9/-\.]/g)) {
+            //         var value = evt.target.value.replace(/[^0-9/-\.]/g,'');
+            //         evt.target.value = value;
+            //     }
+            //     this.set('kundenfestnetz', value);
+            // } else if (evt.target.id === 'kundenmobilfunk') {
+            //     if (evt.target.value.match(/[^0-9/-\.]/g)) {
+            //         var value = evt.target.value.replace(/[^0-9/-\.]/g,'');
+            //         evt.target.value = value;
+            //     }
+            //     this.set('kundenmobilfunk', evt.target.value);
             }
         },
         click: function (evt) {

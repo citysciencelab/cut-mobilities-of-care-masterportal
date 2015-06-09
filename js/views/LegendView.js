@@ -44,9 +44,13 @@ define([
         },
 
         getAllVisibleLayer: function () {
-            var visibleLayer=[];
-            _.each(this.model.get('layerlist'), function(element){
-                 visibleLayer.push(element);
+            var visibleLayer = [];
+
+            _.each(this.model.get("layerlist"), function (element) {
+                // kleiner schneller Hack damit HVV-Layer nicht in Legende erscheinen, weil nciht funktioniert --> SD
+                if (element.get("metaURL") !== "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=7A77D5EA-C3B4-44D9-8004-36D5D324485D") {
+                    visibleLayer.push(element);
+                }
             });
             return visibleLayer;
         },
