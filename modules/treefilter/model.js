@@ -22,7 +22,7 @@ define([
             searchCategoryString: "", // Treffer für die Vorschalgsuche der Baumgattung
             searchTypeString: "" // Treffer für die Vorschalgsuche der Baumart
         },
-        url: Util.getPath("../components/lgv-config/tree.json"),
+        url: Util.getPath(Config.treeConf),
         initialize: function () {
             EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
             EventBus.once("sendModelByID", this.setListenerForVisibility, this);
