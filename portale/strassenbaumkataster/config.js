@@ -51,10 +51,10 @@ define(function () {
                 return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: "Strassenbaum-Online",
-            gfi: false
+            gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
 
     return config;
 });
