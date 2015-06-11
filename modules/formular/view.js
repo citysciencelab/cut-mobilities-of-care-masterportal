@@ -23,7 +23,7 @@ define([
                 symbol: symbol,
                 classname: modelname
             });
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.model.on("change:isCollapsed render invalid change:isCurrentWin", this.render, this);
         },
         events: {
             //anonymisierte Events
@@ -32,7 +32,8 @@ define([
             'click input[type=radio]': 'click',
             'click input[type=checkbox]': 'click',
             'click button': 'click',
-            'click a' : 'click'
+            'click a' : 'click',
+            'focusout' : 'focusout'
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
@@ -54,6 +55,13 @@ define([
         click: function (evt) {
             if (evt.target.id) {
                 this.model.click(evt);
+                this.render();
+            }
+        },
+        focusout: function (evt) {
+            if (evt.target.id) {
+                this.model.focusout(evt);
+                this.render();
             }
         }
     });
