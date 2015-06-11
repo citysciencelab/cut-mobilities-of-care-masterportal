@@ -9,12 +9,13 @@ define(function () {
         layerConf: "../components/lgv-config/services-fhhnet.json",
         layerIDs: [
             {id: "453", visible: true},
-            {id: "8", visible: false},
+            {id: "94", visible: false},
             {id: "2298", visible: false, name: "StraßenbaumkatasterG", displayInTree: false, styles: "strassenbaumkataster_grau"},
             {id: "182", visible: false, name: "Straßenbaumkataster", displayInTree: false},
             {id: "2297", visible: true, name: "Straßenbaumkataster", displayInTree: true}
         ],
         styleConf: "../components/lgv-config/style.json",
+        treeConf: "../components/lgv-config/tree.json",
         menubar: true,
         scaleLine: true,
         isMenubarVisible: true,
@@ -51,10 +52,10 @@ define(function () {
                 return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: "Strassenbaum-Online",
-            gfi: false
+            gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
 
     return config;
 });

@@ -50,6 +50,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     min-width: 300px;
 	z-index: 999;
+    max-width: 420px;
 }
 @media (max-width: 768px) {
     .win-max {

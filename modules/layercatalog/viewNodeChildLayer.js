@@ -15,6 +15,10 @@ define([
             },
             initialize: function () {
                 this.$el.append(this.templateButton);
+
+                if (this.model.get("visibility") === true) {
+                    this.toggleSelected();
+                }
             },
             render: function () {
                 this.stopListening();

@@ -14,7 +14,7 @@ define(function () {
             url: function () {
                 return "http://wscd0096:8680/mapfish_print_2.0/";
             },
-            title: "Planportal",
+            title: "Badegewässer-Portal",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -22,6 +22,21 @@ define(function () {
         [
         {id: "453", visible: true},
         {id: "94", visible: false, name: "Luftbilder"},
+        {id:
+         [
+            {
+                id: "1935",
+                name: "Bus1"
+            },
+            {
+                id: "1935",
+                name: "Bus2"
+            }
+         ],
+         visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+        },
+        {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
+        {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
         {id: "1728", visible: true, style: "1728", distance: "", clusterDistance: 0, searchField: "", mouseHoverField: "name", styleLabelField: "", styleField: "eg_einstufung", name: "Badegewässer"}
         ],
         menubar: true,
@@ -50,7 +65,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: false,
             active: "gfi"

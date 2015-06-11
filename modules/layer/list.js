@@ -182,7 +182,6 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    console.log(this);
                     alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
                 },
                 success: function (collection) {
