@@ -8,6 +8,7 @@ define([
     'bootstrap/alert'
 ], function (_, Backbone, EventBus, Config, ol, cookie) {
 
+    "use strict";
     var grenznachweisModel = Backbone.Model.extend({
         defaults: {
             nutzungsbedingungakzeptiert: false,
@@ -50,8 +51,7 @@ define([
             if (args[2] === "grenznachweis") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-            }
-            else {
+            } else {
                 this.set("isCurrentWin", false);
             }
         },
@@ -79,9 +79,6 @@ define([
             },
             pattern: function (value, pattern) {
                 return new RegExp(pattern, "gi").test(value) ? true : false;
-            },
-            hasCharacters: function (value) {
-                return TreeFilter.prototype.validators.pattern(value, TreeFilter.prototype.patterns.digits);
             }
         },
         validate: function (attributes, identifier) {
@@ -165,7 +162,7 @@ define([
         // anonymisierte Events
         focusout: function (evt) {
             if (evt.target.id === 'lagebeschreibung') {
-                this.set('lage', evt.target.value, {validate:'lage'});
+                this.set('lage', evt.target.value, {validate: 'lage'});
                 this.checkInputBestelldaten();
             } else if (evt.target.id === 'kundennummer') {
                 this.set('kundennummer', evt.target.value, {validate: 'kundennummer'});
@@ -271,7 +268,7 @@ define([
             this.set('zurueckButton', {enabled: enabled, name: name});
         },
         checkInputKundendaten: function () {
-            var checker = this.isValid({validate:true});
+            var checker = this.isValid({validate: true});
             if (checker === true) {
                 this.writeCookie();
                 this.transmitOrder();
@@ -285,10 +282,7 @@ define([
             if (this.get('lage') === '') {
                 checker = false;
             }
-            if (this.get('zweckGebaeudeabsteckung') === false &&
-                this.get('zweckGebaeudeeinmessung') === false &&
-                this.get('zweckLageplan') === false &&
-                this.get('zweckSonstiges') === false) {
+            if (this.get('zweckGebaeudeabsteckung') === false && this.get('zweckGebaeudeeinmessung') === false && this.get('zweckLageplan') === false && this.get('zweckSonstiges') === false) {
                 checker = false;
             }
             // weiter oder abbruch?
@@ -300,28 +294,29 @@ define([
         },
         transmitOrder: function () {
             // kopiere Attributwerte in für den FME-Prozess taugliche Form
+            var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str;
             if (this.get('zweckGebaeudeeinmessung') === true) {
-                var zweckGebaeudeeinmessung = 'ja';
+                zweckGebaeudeeinmessung = 'ja';
             } else {
-                var zweckGebaeudeeinmessung = 'nein';
+                zweckGebaeudeeinmessung = 'nein';
             }
             if (this.get('zweckGebaeudeabsteckung') === true) {
-                var zweckGebaeudeabsteckung = 'ja';
+                zweckGebaeudeabsteckung = 'ja';
             } else {
-                var zweckGebaeudeabsteckung = 'nein';
+                zweckGebaeudeabsteckung = 'nein';
             }
             if (this.get('zweckLageplan') === true) {
-                var zweckLageplan = 'ja';
+                zweckLageplan = 'ja';
             } else {
-                var zweckLageplan = 'nein';
+                zweckLageplan = 'nein';
             }
             if (this.get('zweckSonstiges') === true) {
-                var zweckSonstiges = 'ja';
+                zweckSonstiges = 'ja';
             } else {
-                var zweckSonstiges = 'nein';
+                zweckSonstiges = 'nein';
             }
             // hier wird der request zusammengesetzt
-            var request_str = '<wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ows="http://www.opengis.net/ows/1.1" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">';
+            request_str = '<wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ows="http://www.opengis.net/ows/1.1" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">';
             request_str += '<ows:Identifier>grenznachweis_communicator.fmw</ows:Identifier>';
             request_str += '  <wps:DataInputs>';
 
@@ -455,8 +450,9 @@ define([
         buildJSONGeom: function () {
             var featurearray = [];
             _.each(this.get('source').getFeatures(), function (item, index, array) {
-                var geom = item.getGeometry();
-                var feature = {
+                var geom, feature;
+                geom = item.getGeometry();
+                feature = {
                     type: geom.getType(),
                     index: index,
                     coordinates: geom.getCoordinates()
@@ -483,7 +479,7 @@ define([
         writeCookie: function () {
             if (cookie.model.get('approved') === true) {
                 // schreibe cookie
-                var newCookie = new Object();
+                var newCookie = {};
                 newCookie.kundennummer = this.get('kundennummer');
                 newCookie.kundenanrede = this.get('kundenanrede');
                 newCookie.kundenname = this.get('kundenname');
@@ -547,5 +543,5 @@ define([
         }
     });
 
-    return new grenznachweisModel();
+    return new GrenznachweisModel();
 });
