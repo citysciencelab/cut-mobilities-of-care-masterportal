@@ -102,19 +102,8 @@ define(function () {
         */
         layerIDs: [
             {id: '453', visible: true},
-            {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397', visible: true, name: 'Alkis Liegenschaftskarte'},
+            {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396', visible: false, name: 'Alkis Liegenschaftskarte'},
             {id: '2295,2296', visible: true, name: 'Alkis Grenznachweis'},
-//            /*{id:
-//             [
-//                {
-//                    id: '2295'
-//                },
-//                {
-//                    id: '2296'
-//                }
-//             ],
-//             visible: true, name: 'Grenznachweis'
-//            }*/
         ],
         /**
         * @memberof config

@@ -10,6 +10,13 @@
 .formulargroup {
     margin-top: 10px;
 }
-.kundendatengrenznachweis{
-    display: none;
+.grenznachweiserrortext{
+    color: #a94442;
+}
+.grenznachweiszweck{
+    padding: 5px;
+}
+.grenznachweisrow{
+    padding-left: 5px;
+    padding-right: 5px;
 }

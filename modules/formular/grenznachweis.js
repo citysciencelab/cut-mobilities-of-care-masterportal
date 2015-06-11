@@ -4,7 +4,8 @@ define([
     'eventbus',
     'config',
     'openlayers',
-    'modules/cookie/view'
+    'modules/cookie/view',
+    'bootstrap/alert'
 ], function (_, Backbone, EventBus, Config, ol, cookie) {
 
     var grenznachweisModel = Backbone.Model.extend({
@@ -29,13 +30,21 @@ define([
             kundenfestnetz: '',
             kundenmobilfunk: '',
             auftragsnummer: '',
-            kundennummer: ''
+            kundennummer: '',
+            errors: {},
+            activatedInteraction: false,
+            weiterButton: {enabled: false, name: 'weiter'},
+            zurueckButton: {enabled: false, name: 'zurück'},
+            activeDIV: 'beschreibung' //beschreibung oder kundendaten
         },
         initialize: function () {
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source")
             }));
+            if (cookie.model.hasItem() === true) {
+                this.readCookie();
+            }
         },
         setStatus: function (args) {   // Fenstermanagement
             if (args[2] === "grenznachweis") {
@@ -48,121 +57,189 @@ define([
         },
         // Fenstermanagement-Events
         prepWindow: function () {
-            if (cookie.model.hasItem() === true) {
-                this.readCookie();
-            }
         },
         resetWindow: function () {
         },
+        // Validation
+        validators: {
+            minLength: function (value, minLength) {
+                return value.length >= minLength;
+            },
+            maxLength: function (value, maxLength) {
+                return value.length <= maxLength;
+            },
+            maxValue: function (value, maxValue) {
+                return value <= maxValue;
+            },
+            minValue: function (value, minValue) {
+                return value >= minValue;
+            },
+            isLessThan: function (min, max) {
+                return min <= max;
+            },
+            pattern: function (value, pattern) {
+                return new RegExp(pattern, "gi").test(value) ? true : false;
+            },
+            hasCharacters: function (value) {
+                return TreeFilter.prototype.validators.pattern(value, TreeFilter.prototype.patterns.digits);
+            }
+        },
+        validate: function (attributes, identifier) {
+            var errors = {};
+            if (identifier.validate === 'auftragsnummer') {
+                if (this.validators.maxLength(attributes.auftragsnummer, 12) === false) {
+                    errors.auftragsnummer = "Maximallänge 12 Zeichen überschritten";
+                }
+            }
+            if (identifier.validate === 'lage') {
+                if (this.validators.minLength(attributes.lage, 3) === false) {
+                    errors.lage = "Lagebeschreibung notwendig";
+                }
+            }
+            if (identifier.validate === 'zweck') {
+                if (attributes.zweckGebaeudeeinmessung === false && attributes.zweckGebaeudeabsteckung === false && attributes.zweckLageplan === false && attributes.zweckSonstiges === false) {
+                    errors.zweck = "Min. ein Feld muss markiert sein.";
+                }
+            }
+            if (identifier.validate === 'kundennummer') {
+                if (errors.kundennummer !== '') {
+                    if (this.validators.pattern(attributes.kundennummer, '[^0-9\]') === true || attributes.kundennummer.length !== 6) {
+                        errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
+                    }
+                }
+            }
+            if (identifier.validate === 'kundenname1') {
+                if (this.validators.pattern(attributes.kundenname, '[0-9\]') === true) {
+                    errors.kundenname = "Alphanumerischer Wert erwartet.";
+                }
+            }
+            if (identifier.validate === 'kundenname2' || identifier.validate === true) {
+                if (this.validators.minLength(attributes.kundenname, 3) === false) {
+                    errors.kundenname = "Name notwendig.";
+                }
+            }
+            if (identifier.validate === 'kundenadresse' || identifier.validate === true) {
+                if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
+                    errors.kundenadresse = "Adressangabe notwendig.";
+                }
+            }
+            if (identifier.validate === 'kundenplz' || identifier.validate === true) {
+                if (this.validators.pattern(attributes.kundenplz, '[^0-9\]') === true || attributes.kundenplz.length !== 5) {
+                    errors.kundenplz = "Numerischer Wert der Länge 5 erwartet.";
+                }
+            }
+            if (identifier.validate === 'kundenort' || identifier.validate === true) {
+                if (this.validators.pattern(attributes.kundenort, '[0-9\]') === true || this.validators.minLength(attributes.kundenort, 3) === false) {
+                    errors.kundenort = "Alphanumerischer Wert erwartet.";
+                }
+            }
+            if (identifier.validate === 'kundenemail' || identifier.validate === true) {
+                if (this.validators.minLength(attributes.kundenort, 1) === false || attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
+                    errors.kundenemail = "Syntax inkorrekt.";
+                }
+            }
+            if (identifier.validate === 'kundenfestnetz' || identifier.validate === true) {
+                if (this.validators.pattern(attributes.kundenfestnetz, '[^0-9\-/]') === true) {
+                    errors.kundenfestnetz = "Numerischer Wert erwartet.";
+                }
+            }
+            if (identifier.validate === 'kundenmobilfunk' || identifier.validate === true) {
+                if (this.validators.pattern(attributes.kundenmobilfunk, '[^0-9\-/]') === true) {
+                    errors.kundenmobilfunk = "Numerischer Wert erwartet.";
+                }
+            }
+            if (identifier.validate === true) {
+                if (attributes.nutzungsbedingungakzeptiert === false) {
+                    errors.nutzungsbedingungakzeptiert = "Zustimmung ist obligatorisch.";
+                }
+                if (attributes.gebuehrenordnungakzeptiert === false) {
+                    errors.gebuehrenordnungakzeptiert = "Kenntnisnahme ist obligatorisch.";
+                }
+            }
+            // return die Errors
+            this.set("errors", errors);
+            if (_.isEmpty(errors) === false) {
+                return errors;
+            }
+        },
         // anonymisierte Events
+        focusout: function (evt) {
+            if (evt.target.id === 'lagebeschreibung') {
+                this.set('lage', evt.target.value, {validate:'lage'});
+                this.checkInputBestelldaten();
+            } else if (evt.target.id === 'kundennummer') {
+                this.set('kundennummer', evt.target.value, {validate: 'kundennummer'});
+            } else if (evt.target.id === 'kundenname') {
+                this.set('kundenname', evt.target.value, {validate: 'kundenname2'});
+            } else if (evt.target.id === 'kundenadresse') {
+                this.set('kundenadresse', evt.target.value, {validate: 'kundenadresse'});
+            } else if (evt.target.id === 'kundenplz') {
+                this.set('kundenplz', evt.target.value, {validate: 'kundenplz'});
+            } else if (evt.target.id === 'kundenort') {
+                this.set('kundenort', evt.target.value, {validate: 'kundenort'});
+            } else if (evt.target.id === 'kundenemail') {
+                this.set('kundenemail', evt.target.value, {validate: 'kundenemail'});
+            }
+        },
         keyup: function (evt) {
             if (evt.target.id === 'lagebeschreibung') {
                 this.set('lage', evt.target.value);
                 this.checkInputBestelldaten();
             } else if (evt.target.id === 'auftragsnummer') {
-                if (evt.target.value.length < 13) {
-                    this.set('auftragsnummer', evt.target.value);
-                    $('#auftragsnummer').removeClass('alert alert-danger');
-                } else {
-                    $('#auftragsnummer').addClass('alert alert-danger');
-                }
+                this.set('auftragsnummer', evt.target.value, {validate: 'auftragsnummer'});
+                this.checkInputBestelldaten();
             } else if (evt.target.id === 'kundennummer') {
-                if (evt.target.value.match(/[^0-9\.]/g) || evt.target.value.length != 6) {
-                    $('#kundennummer').addClass('alert alert-danger');
-                } else {
-                    this.set('kundennummer', evt.target.value);
-                    $('#kundennummer').removeClass('alert alert-danger');
-                }
+                this.set('kundennummer', evt.target.value);
             } else if (evt.target.id === 'freitext') {
                 this.set('freitext', evt.target.value);
+                this.checkInputBestelldaten();
             } else if (evt.target.id === 'kundenname') {
-                if (evt.target.value.match(/[0-9\.]/g) || evt.target.value.length < 3) {
-                    $('#kundenname').addClass('alert alert-danger');
-                } else {
-                    $('#kundenname').removeClass('alert alert-danger');
-                    this.set('kundenname', evt.target.value);
-                }
+                this.set('kundenname', evt.target.value, {validate: 'kundenname1'});
             } else if (evt.target.id === 'kundenfirma') {
                 this.set('kundenfirma', evt.target.value);
             } else if (evt.target.id === 'kundenadresse') {
-                if (evt.target.value.length < 3) {
-                    $('#kundenadresse').addClass('alert alert-danger');
-                } else {
-                    $('#kundenadresse').removeClass('alert alert-danger');
-                    this.set('kundenadresse', evt.target.value);
-                }
+                this.set('kundenadresse', evt.target.value);
             } else if (evt.target.id === 'kundenplz') {
-                if (evt.target.value.match(/[^0-9\.]/g) || evt.target.value.length !== 5) {
-                    $('#kundenplz').addClass('alert alert-danger');
-                } else {
-                    $('#kundenplz').removeClass('alert alert-danger');
-                    this.set('kundenplz', evt.target.value);
-                }
+                this.set('kundenplz', evt.target.value);
             } else if (evt.target.id === 'kundenort') {
-                if (evt.target.value.match(/[0-9\.]/g) || evt.target.value.length < 3) {
-                    $('#kundenort').addClass('alert alert-danger');
-                } else {
-                    $('#kundenort').removeClass('alert alert-danger');
-                    this.set('kundenort', evt.target.value);
-                }
+                this.set('kundenort', evt.target.value);
             } else if (evt.target.id === 'kundenemail') {
-                if (!evt.target.value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm)) {
-                    $('#kundenemail').addClass('alert alert-danger');
-                } else {
-                    $('#kundenemail').removeClass('alert alert-danger');
-                    this.set('kundenemail', evt.target.value);
-                }
+                // nutze lieber focusout
             } else if (evt.target.id === 'kundenfestnetz') {
-                if (evt.target.value.match(/[^0-9\-/.]/g)) {
-                    var value = evt.target.value.replace(/[^0-9\-/.]/g, '');
-                    evt.target.value = value;
-                }
-                this.set('kundenfestnetz', evt.target.value);
+                this.set('kundenfestnetz', evt.target.value, {validate: 'kundenfestnetz'});
             } else if (evt.target.id === 'kundenmobilfunk') {
-                if (evt.target.value.match(/[^0-9\-/.]/g)) {
-                    var value = evt.target.value.replace(/[^0-9\-/.]/g, '');
-                    evt.target.value = value;
-                }
-                this.set('kundenmobilfunk', evt.target.value);
+                this.set('kundenmobilfunk', evt.target.value, {validate: 'kundenmobilfunk'});
             }
         },
         click: function (evt) {
             if (evt.target.id === 'zweckGebaeudeeinmessung') {
-                this.set('zweckGebaeudeeinmessung', evt.target.checked);
+                this.set('zweckGebaeudeeinmessung', evt.target.checked, {validate: 'zweck'});
                 this.checkInputBestelldaten();
             } else if (evt.target.id === 'zweckGebaeudeabsteckung') {
-                this.set('zweckGebaeudeabsteckung', evt.target.checked);
+                this.set('zweckGebaeudeabsteckung', evt.target.checked, {validate: 'zweck'});
                 this.checkInputBestelldaten();
             } else if (evt.target.id === 'zweckLageplan') {
-                this.set('zweckLageplan', evt.target.checked);
+                this.set('zweckLageplan', evt.target.checked, {validate: 'zweck'});
                 this.checkInputBestelldaten();
             } else if (evt.target.id === 'zweckSonstiges') {
-                this.set('zweckSonstiges', evt.target.checked);
+                this.set('zweckSonstiges', evt.target.checked, {validate: 'zweck'});
                 this.checkInputBestelldaten();
             } else if (evt.target.id === 'weiter') {
-                $("#zurueck").removeClass("disabled");
-                if ($('.beschreibunggrenznachweis').is(':visible')) {
-                    $('.beschreibunggrenznachweis').hide();
-                    $('.kundendatengrenznachweis').show();
-                    $("#weiter").text("Gebührenpflichtig bestellen");
-                } else if ($('.kundendatengrenznachweis').is(':visible')) {
+                this.changeZurueckButton(true, 'zurück');
+                if (this.get('activeDIV') === 'beschreibung') {
+                    this.set('activeDIV', 'kundendaten');
+                    this.changeWeiterButton(true, 'Gebührenpflichtig bestellen');
+                } else if (this.get('activeDIV') === 'kundendaten') {
                     this.checkInputKundendaten();
                 }
             } else if (evt.target.id === 'zurueck') {
-                if ($('.kundendatengrenznachweis').is(':visible')) {
-                    $("#weiter").text("weiter");
-                    $('.kundendatengrenznachweis').hide();
-                    $('.beschreibunggrenznachweis').show();
-                    $("#zurueck").addClass("disabled");
+                if (this.get('activeDIV') === 'kundendaten') {
+                    this.changeWeiterButton(true, 'weiter');
+                    this.set('activeDIV', 'beschreibung');
+                    this.changeZurueckButton(false, 'zurück');
                 }
             } else if (evt.target.id === 'setgeometrie') {
-                if ($("#setgeometrie").hasClass('active')) {
-                    $("#setgeometrie").removeClass('active');
-                    this.removeDrawInteraction();
-                } else {
-                    $("#setgeometrie").addClass('active');
-                    this.addDrawInteraction();
-                }
+                this.toggleDrawInteraction();
             } else if (evt.target.id === 'removegeometrie') {
                 this.removeAllGeometries();
             } else if (evt.target.id === 'anredeherr' || evt.target.id === 'anredefrau' || evt.target.id === 'anredefirma') {
@@ -187,52 +264,14 @@ define([
                 this.set('gebuehrenordnungakzeptiert', evt.target.checked);
             }
         },
+        changeWeiterButton: function (enabled, name) {
+            this.set('weiterButton', {enabled: enabled, name: name});
+        },
+        changeZurueckButton: function (enabled, name) {
+            this.set('zurueckButton', {enabled: enabled, name: name});
+        },
         checkInputKundendaten: function () {
-            var checker = true;
-            // prüfe Emailsyntax
-            if (this.get('kundenemail').match( /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/)) {
-                $('#kundenemail').removeClass('alert alert-danger');
-            } else {
-                $('#kundenemail').addClass('alert alert-danger');
-                checker = false;
-            }
-            if (this.get('kundenname').length >= 3) {
-                $('#kundenname').removeClass('alert alert-danger');
-            } else {
-                $('#kundenname').addClass('alert alert-danger');
-                checker = false;
-            }
-            if (this.get('kundenadresse').length >= 3) {
-                $('#kundenadresse').removeClass('alert alert-danger');
-            } else {
-                $('#kundenadresse').addClass('alert alert-danger');
-                checker = false;
-            }
-            if (this.get('kundenplz').length === 5) {
-                $('#kundenplz').removeClass('alert alert-danger');
-            } else {
-                $('#kundenplz').addClass('alert alert-danger');
-                checker = false;
-            }
-            if (this.get('kundenort').length >= 3) {
-                $('#kundenort').removeClass('alert alert-danger');
-            } else {
-                $('#kundenort').addClass('alert alert-danger');
-                checker = false;
-            }
-            if (this.get('gebuehrenordnungakzeptiert') === true) {
-                $('#gebuehrenordnungtext').removeClass('alert-danger');
-            } else {
-                $('#gebuehrenordnungtext').addClass('alert-danger');
-                checker = false;
-            }
-            if (this.get('nutzungsbedingungakzeptiert') === true) {
-                $('#nutzungsbedingungentext').removeClass('alert-danger');
-            } else {
-                $('#nutzungsbedingungentext').addClass('alert-danger');
-                checker = false;
-            }
-            // weiter oder abbruch?
+            var checker = this.isValid({validate:true});
             if (checker === true) {
                 this.writeCookie();
                 this.transmitOrder();
@@ -245,30 +284,18 @@ define([
             }
             if (this.get('lage') === '') {
                 checker = false;
-                $('#lagebeschreibung').addClass('alert-danger');
-            } else {
-                $('#lagebeschreibung').removeClass('alert-danger');
             }
             if (this.get('zweckGebaeudeabsteckung') === false &&
                 this.get('zweckGebaeudeeinmessung') === false &&
                 this.get('zweckLageplan') === false &&
                 this.get('zweckSonstiges') === false) {
                 checker = false;
-                $('#zweckGebaudeabsteckungtext').addClass('alert-danger');
-                $('#zweckGebaeudeeinmessungtext').addClass('alert-danger');
-                $('#zweckLageplantext').addClass('alert-danger');
-                $('#zweckSonstigestext').addClass('alert-danger');
-            } else {
-                $('#zweckGebaudeabsteckungtext').removeClass('alert-danger');
-                $('#zweckGebaeudeeinmessungtext').removeClass('alert-danger');
-                $('#zweckLageplantext').removeClass('alert-danger');
-                $('#zweckSonstigestext').removeClass('alert-danger');
             }
             // weiter oder abbruch?
             if (checker === true) {
-                $("#weiter").removeClass('disabled');
+                this.changeWeiterButton(true, 'weiter');
             } else {
-                $("#weiter").addClass('disabled');
+                this.changeWeiterButton(false, 'weiter');
             }
         },
         transmitOrder: function () {
@@ -470,31 +497,35 @@ define([
                 cookie.model.setItem(JSON.stringify(newCookie), Infinity);
             }
         },
-        addDrawInteraction: function () {
-            EventBus.trigger("addLayer", this.get("layer"));
-            this.set('draw', new ol.interaction.Draw({
-                source: this.get('source'),
-                type: 'Polygon',
-                style: new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: 'orange',
-                        width: 2
-                    })
-                })
-            }));
-            this.get("draw").on("drawend", function (evt) {
-                evt.feature.setStyle(new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: 'green',
-                        width: 2
+        toggleDrawInteraction: function () {
+            if (this.get('activatedInteraction') === false) {
+                EventBus.trigger("addLayer", this.get("layer"));
+                this.set('draw', new ol.interaction.Draw({
+                    source: this.get('source'),
+                    type: 'Polygon',
+                    style: new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: 'orange',
+                            width: 2
+                        })
                     })
                 }));
-            }, this);
-            EventBus.trigger("addInteraction", this.get("draw"));
-        },
-        removeDrawInteraction: function () {
-            EventBus.trigger("removeInteraction", this.get("draw"));
-            this.sourcechanged();
+                this.get("draw").on("drawend", function (evt) {
+                    evt.feature.setStyle(new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: 'green',
+                            width: 2
+                        })
+                    }));
+                }, this);
+                EventBus.trigger("addInteraction", this.get("draw"));
+                this.set('activatedInteraction', true);
+            } else {
+                EventBus.trigger("removeInteraction", this.get("draw"));
+                this.set('activatedInteraction', false);
+                this.sourcechanged();
+            }
+            this.trigger('render');
         },
         removeAllGeometries: function () {
             // lösche alle Geometrien
