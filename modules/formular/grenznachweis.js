@@ -9,7 +9,7 @@ define([
 ], function (_, Backbone, EventBus, Config, ol, cookie) {
 
     "use strict";
-    var grenznachweisModel = Backbone.Model.extend({
+    var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
             nutzungsbedingungakzeptiert: false,
             gebuehrenordnungakzeptiert: false,
