@@ -28,7 +28,7 @@ define([
          */
         setNodeLayer: function () {
             _.each(this.get("layerIDs"), function (element) {
-                this.push("layers", {id: element, kategorieCustom: this.get("node")});
+                this.push("layers", {id: element.id, kategorieCustom: this.get("node"), visible: element.visible});
             }, this);
         },
 
@@ -37,20 +37,13 @@ define([
          */
         setNodeChildLayer: function () {
             _.each(this.get("childnodes"), function (subfolder) {
-                _.each(subfolder.layerIDs, function (ele) {
-                    // if (_.has(subfolder, "node")) {
-                        this.push("layers", {
-                            id: ele,
-                            subfolder: subfolder.node,
-                            kategorieCustom: this.get("node")
-                        });
-                    // }
-                    // else {
-                    //     this.push("layers", {
-                    //         id: ele,
-                    //         kategorieCustom: this.get("node")
-                    //     });
-                    // }
+                _.each(subfolder.layerIDs, function (element) {
+                    this.push("layers", {
+                        id: element.id,
+                        visible: element.visible,
+                        subfolder: subfolder.node,
+                        kategorieCustom: this.get("node")
+                    });
                 }, this);
             }, this);
         },

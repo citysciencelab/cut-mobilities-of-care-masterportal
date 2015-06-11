@@ -161,7 +161,10 @@ define([
                 this.get("parentView").checkSelectedOfAllChildren();
             }
             else {
-                this.get("parentView").toggleStyle();
+                // noch komisch
+                if (this.get("parentView") !== undefined) {
+                    this.get("parentView").toggleStyle();
+                }
             }
         },
         /**

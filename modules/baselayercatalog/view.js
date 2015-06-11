@@ -16,9 +16,8 @@ define([
             initialize: function () {
                 this.$el.append(this.templateButton);
 
-                // Stadtplan wird initial angezeigt
-                if (this.model.get("id") === "453") {
-                    this.model.set("selected", true);
+                if (this.model.get("visibility") === true) {
+                    this.toggleSelected();
                 }
             },
             render: function () {
