@@ -25,6 +25,7 @@
     background-color: #fff;
     padding: 15px;
     max-width: 420px;
+    max-height:inherit;
 }
 
 /* Das Glyphicon für das Minimieren */
@@ -51,6 +52,7 @@
     min-width: 300px;
 	z-index: 999;
     max-width: 420px;
+    max-height: auto;
 }
 @media (max-width: 768px) {
     .win-max {

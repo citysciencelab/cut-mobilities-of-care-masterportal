@@ -14,11 +14,17 @@ define([
             model: Window,
             template: _.template(WindowTemplate),
             initialize: function () {
+                console.log(window.innerHeight);
                 this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
                 // console.log(this.$el);
                 this.$el.draggable({
                     containment: "#map"
                 });
+                $(window).resize($.proxy(function () {
+                    this.$el.css({
+                        'max-height': window.innerHeight - 130 //130 fixer Wert für navbar &co.
+                    });
+                }, this));
             },
             events: {
                 "click .win-minimize": "minimize",
