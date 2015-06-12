@@ -14,9 +14,12 @@
     color: #a94442;
 }
 .grenznachweiszweck{
-    padding: 5px;
+    padding-top: 5px;
 }
 .grenznachweisrow{
     padding-left: 5px;
     padding-right: 5px;
+}
+.grenznachweisscroll{
+    max-height: inherit;
 }

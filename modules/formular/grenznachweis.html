@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default grenznachweisscroll">
     <div class="panel-body">
         <div class="beschreibunggrenznachweis" <% if (activeDIV==='kundendaten') {print ('style="display:none;"');} %> >
             <div class="form-group <% if (errors.auftragsnummer !== undefined) print('has-error') %>">
@@ -15,10 +15,10 @@
                     <span id="lageError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.lage %></span>
                 <% } %>
             </div>
-            <div class="<% if (errors.zweck !== undefined) print('has-error') %>">
-                <p class="formularhead2">Zweck*</p>
+            <p class="formularhead2">Zweck*</p>
+            <div class="container-fluid <% if (errors.zweck !== undefined) print('has-error') %>">
                 <div class="row grenznachweisrow">
-                    <div class="col-md-6">
+                    <div class="col-sm-6">
                         <div class="checkbox">
                             <h5>
                                 <label class="grenznachweiszweck">
@@ -27,7 +27,7 @@
                             </h5>
                         </div>
                     </div><!-- /.col-lg-6 -->
-                    <div class="col-md-6">
+                    <div class="col-sm-6">
                         <div class="checkbox">
                             <h5>
                                 <label class="grenznachweiszweck">
@@ -38,7 +38,7 @@
                     </div><!-- /.col-lg-6 -->
                 </div><!-- /.row -->
                 <div class="row grenznachweisrow">
-                    <div class="col-md-6">
+                    <div class="col-sm-6">
                         <div class="checkbox">
                             <h5>
                                 <label class="grenznachweiszweck">
@@ -47,7 +47,7 @@
                             </h5>
                         </div>
                     </div><!-- /.col-lg-6 -->
-                    <div class="col-md-6">
+                    <div class="col-sm-6">
                         <div class="checkbox">
                             <h5>
                                 <label class="grenznachweiszweck">

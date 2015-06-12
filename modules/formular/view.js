@@ -14,6 +14,14 @@ define([
         id: 'formularWin',
         className: 'win-body',
         initialize: function (modelname, title, symbol) {
+            this.$el.css({
+                'max-height': window.innerHeight - 100 - 30 //100 aus win-max und 30 wegen padding
+            });
+            $(window).resize($.proxy(function () {
+                this.$el.css({
+                    'max-height': window.innerHeight - 100 - 30 //100 aus win-max und 30 wegen padding
+                });
+            }, this));
             if (modelname === 'grenznachweis') {
                 this.model = grenznachweismodel;
                 this.template = _.template(grenznachweistemplate);
