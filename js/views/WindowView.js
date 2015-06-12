@@ -20,6 +20,9 @@ define([
                 this.$el.draggable({
                     containment: "#map"
                 });
+                this.$el.css({
+                    'max-height': window.innerHeight - 130 //130 fixer Wert für navbar &co.
+                });
                 $(window).resize($.proxy(function () {
                     this.$el.css({
                         'max-height': window.innerHeight - 130 //130 fixer Wert für navbar &co.
