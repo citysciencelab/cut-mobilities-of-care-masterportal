@@ -424,7 +424,7 @@ define([
             request_str += '</wps:DataInputs>';
             request_str += '</wps:Execute>';
             $.ajax({
-                url: '/geofos/deegree-wps/services/wps?Request=Execute&Service=WPS&Version=1.0.0&Identifier=grenznachweis_communicator.fmw',
+                url: '/gateway-hamburg/OGCFassade/HH_WPS.aspx?Request=Execute&Service=WPS&Version=1.0.0&Identifier=grenznachweis_communicator.fmw',
                 data: request_str,
                 headers: {
                     "Content-Type": "text/xml; charset=UTF-8"
