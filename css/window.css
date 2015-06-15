@@ -25,6 +25,7 @@
     background-color: #fff;
     padding: 15px;
     max-width: 420px;
+    overflow-y: auto;
 }
 
 /* Das Glyphicon für das Minimieren */

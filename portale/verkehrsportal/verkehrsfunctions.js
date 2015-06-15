@@ -3,7 +3,8 @@ define([
     "eventbus",
     "config",
     "modules/layer/list",
-    "openlayers"
+    "openlayers",
+    'bootstrap/alert'
 ], function (Backbone, EventBus, Config, LayerList, ol) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({

@@ -6,13 +6,22 @@ define([
     'config',
     'modules/formular/grenznachweis',
     'text!modules/formular/grenznachweis.html',
-    'text!modules/formular/grenznachweis.css',
+    'text!modules/formular/grenznachweis.css'
 ], function ($, _, Backbone, EventBus, Config, grenznachweismodel, grenznachweistemplate, grenznachweiscss) {
 
+    "use strict";
     var formularView = Backbone.View.extend({
         id: 'formularWin',
         className: 'win-body',
         initialize: function (modelname, title, symbol) {
+            this.$el.css({
+                'max-height': window.innerHeight - 100 - 30 //100 aus win-max und 30 wegen padding
+            });
+            $(window).resize($.proxy(function () {
+                this.$el.css({
+                    'max-height': window.innerHeight - 100 - 30 //100 aus win-max und 30 wegen padding
+                });
+            }, this));
             if (modelname === 'grenznachweis') {
                 this.model = grenznachweismodel;
                 this.template = _.template(grenznachweistemplate);
@@ -23,7 +32,7 @@ define([
                 symbol: symbol,
                 classname: modelname
             });
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.model.on("change:isCollapsed render invalid change:isCurrentWin", this.render, this);
         },
         events: {
             //anonymisierte Events
@@ -32,7 +41,8 @@ define([
             'click input[type=radio]': 'click',
             'click input[type=checkbox]': 'click',
             'click button': 'click',
-            'click a' : 'click'
+            'click a' : 'click',
+            'focusout' : 'focusout'
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
@@ -54,6 +64,13 @@ define([
         click: function (evt) {
             if (evt.target.id) {
                 this.model.click(evt);
+                this.render();
+            }
+        },
+        focusout: function (evt) {
+            if (evt.target.id) {
+                this.model.focusout(evt);
+                this.render();
             }
         }
     });

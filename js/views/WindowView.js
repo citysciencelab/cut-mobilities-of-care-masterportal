@@ -19,6 +19,14 @@ define([
                 this.$el.draggable({
                     containment: "#map"
                 });
+                this.$el.css({
+                    'max-height': window.innerHeight - 100 //100 fixer Wert für navbar &co.
+                });
+                $(window).resize($.proxy(function () {
+                    this.$el.css({
+                        'max-height': window.innerHeight - 100 //100 fixer Wert für navbar &co.
+                    });
+                }, this));
             },
             events: {
                 "click .win-minimize": "minimize",
@@ -63,6 +71,5 @@ define([
                 EventBus.trigger("onlyActivateGFI");
             }
         });
-
         return WindowView;
     });
