@@ -12,6 +12,7 @@ define ([
          */
         defaults: {
             startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+            resolutions: [66.14579761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105],
             startResolution: 15.874991427504629,
             startCenter: [565874, 5934140],
             units: "m",
@@ -24,6 +25,7 @@ define ([
         initialize: function () {
             this.setStartExtent();
             this.setStartResolution();
+            this.setResolutions();
             this.setStartCenter();
             this.setProjection();
             this.setView();
@@ -61,6 +63,15 @@ define ([
         /**
          *
          */
+        setResolutions: function () {
+            if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
+                this.set("resolutions", Config.view.resolutions);
+            }
+        },
+
+        /**
+         *
+         */
         setStartCenter: function () {
             if (Config.view.center && _.isArray(Config.view.resolution) && Config.view.extent.length === 2) {
                 this.set("startCenter", Config.view.resolution);
@@ -91,7 +102,7 @@ define ([
                 center: Config.view.center,
                 extent: this.get("startExtent"),
                 resolution: this.get("startResolution"),
-                resolutions: [66.14579761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105]
+                resolutions: this.get("resolutions")
             });
 
             this.set("view", view);
