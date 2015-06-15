@@ -111,7 +111,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.searchBar === true) {
-                    require(["views/SearchbarView"], function (SearchbarView) {
+                    require(["modules/searchbar/view"], function (SearchbarView) {
                         new SearchbarView();
                     });
                 }
