@@ -402,9 +402,10 @@ define([
                 this.get("isSearchReady").set("layerSearch", false);
                 _.each(this.get("layers"), function (layer) {
                     var layerName = layer.name.replace(/ /g, ""),
-                        metaName = layer.metaName.replace(/ /g, "");
+                        metaName;
 
                     if (layer.metaName !== undefined) {
+                        metaName = layer.metaName.replace(/ /g, "");
                         if (layerName.search(this.get("searchStringRegExp")) !== -1 || metaName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", layer);
                         }
