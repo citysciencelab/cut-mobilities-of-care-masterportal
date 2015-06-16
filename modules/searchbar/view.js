@@ -260,12 +260,19 @@ define([
                     EventBus.trigger("showLayerInTree", hit.model);
                     evt.stopPropagation();
                 }
+                else if (hit.type === "Olympiastandort") {
+                    zoomLevel = 5;
+                    this.model.get("marker").setPosition(hit.coordinate);
+                    $("#searchMarker").css("display", "block");
+                    $(".dropdown-menu-search").hide();
+                    EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
+                }
                 else if (hit.type === "festgestellt" || hit.type === "im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
                     var typeName = (hit.type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
-                    propertyName = (hit.type === "festgestellt") ? "planrecht" : "plan";
+                        propertyName = (hit.type === "festgestellt") ? "planrecht" : "plan";
 
                     $.ajax({
-                        url: this.model.get("bPlanURL"),
+                        url: Config.searchBar.getFeatures[0].url,
                         data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + hit.name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>",
                         type: "POST",
                         context: this, // model

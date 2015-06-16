@@ -51,8 +51,10 @@ define([
                 searchString: "", // der aktuelle String in der Suchmaske
                 hitList: [],
                 layers: [],
+                olympia: [],
+                bPlans: [],
                 houseNumbers: [],
-                isOnlyOneStreet: false, // Wenn true --> Hausnummernsuche startet
+                // isOnlyOneStreet: false, // Wenn true --> Hausnummernsuche startet
                 onlyOneStreetName: "", // speichert den Namen der Straße, wenn die Straßensuche nur noch eine Treffer zurückgibt.
                 gazetteerURL: Config.searchBar.gazetteerURL(),
                 marker: new ol.Overlay({
@@ -75,20 +77,17 @@ define([
 
                 this.set("isSearchReady", new SearchReady());
 
-                // Prüfen ob BPlan-Suche konfiguriert ist. Wenn ja --> B-Pläne laden(bzw. die Namen der B-Pläne) und notwendige Attrbiute setzen
-                if (Config.bPlan !== undefined) {
-                    this.set("bPlanURL", Config.bPlan.url());
-                    this.set("bPlans", []);
-                    this.get("isSearchReady").set("bPlanSearch", false);
-                    this.getBPlans();
+                if (Config.searchBar.getFeatures !== undefined) {
+                    this.getWFSFeatures();
                 }
+
                 // Initiale Suche query=...
                 if (Config.searchBar.initString !== undefined) {
                     if (Config.searchBar.initString.search(",") !== -1) {
                         var splitInitString = Config.searchBar.initString.split(",");
 
                         this.set("onlyOneStreetName", splitInitString[0]);
-                        this.set("isOnlyOneStreet", true);
+                        // this.set("isOnlyOneStreet", true);
                         this.set("searchString", splitInitString[0] + " " + splitInitString[1]);
                     }
                     else {
@@ -114,10 +113,6 @@ define([
             */
             setSearchString: function (value) {
                 this.set("searchString", value);
-                // NOTE hier muss ich nochmal bei. Stichwort "Backspacetaste gedrückt lassen"
-                if (value === "" || value.length < 3) {
-                    this.set("isOnlyOneStreet", false);
-                }
             },
 
             /**
@@ -156,13 +151,33 @@ define([
                     this.searchStreets();
                     this.searchDistricts();
                     this.searchInFeatures();
+                    if (_.has(Config.searchBar, "getFeatures") === true) {
+                        this.searchInOlympiaFeatures();
+                        this.searchInBPlans();
+                    }
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
                     }
-                    if (_.has(Config, "bPlan") === true) {
-                        this.searchInBPlans();
-                    }
                 }
+            },
+
+            /**
+             * @description Führt einen HTTP-GET-Request aus.
+             *
+             * @param {String} url - A string containing the URL to which the request is sent
+             * @param {String} data - Data to be sent to the server
+             * @param {function} successFunction - A function to be called if the request succeeds
+             * @param {boolean} asyncBool - asynchroner oder synchroner Request
+             */
+            getXML: function (url, data, successFunction, asyncBool) {
+                $.ajax({
+                    url: url,
+                    data: data,
+                    context: this,
+                    async: asyncBool,
+                    type: "GET",
+                    success: successFunction
+                });
             },
 
             /**
@@ -171,14 +186,7 @@ define([
             searchStreets: function () {
                 if (this.get("isSearchReady").get("streetSearch") === true) {
                     this.get("isSearchReady").set("streetSearch", false);
-                    // Prüft ob der Suchstring ein Teilstring vom Straßennamen ist. Und ob zurzeit nur eine Straße vorhanden ist.
-                    if (this.get("isOnlyOneStreet") === true && this.get("onlyOneStreetName").search(this.get("searchStringRegExp")) !== -1) {
-                        // Damit die Straßensuche auch funktioniert wenn nach Hausnummern gesucht wird.
-                        this.getXML("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getStreets);
-                    }
-                    else {
-                        this.getXML("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets);
-                    }
+                    this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
                 }
             },
 
@@ -204,26 +212,15 @@ define([
                     });
                 }, this);
 
-                // Marker - wurde mehr als eine Straße gefunden
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
-                    // Prüft ob der Suchstring ein Teilstring vom Straßennamen ist. Wenn nicht, dann wird die Hausnummernsuche ausgeführt.
-                    if (this.get("onlyOneStreetName").search(this.get("searchStringRegExp")) === -1) {
-                        this.searchInHouseNumbers();
-                        this.set("isOnlyOneStreet", true);
-                    }
-                    else {
-                           this.set("isOnlyOneStreet", false);
-                    }
+                    this.searchInHouseNumbers();
                 }
-                else {
-                    this.set("isOnlyOneStreet", false);
-                    this.get("isSearchReady").set("numberSearch", true);
+                else if (hits.length === 0) {
+                    this.searchInHouseNumbers();
                 }
                 this.get("isSearchReady").set("streetSearch", true);
             },
-
-
 
             /**
              * [getHouseNumbers description]
@@ -271,7 +268,7 @@ define([
             */
             searchHouseNumbers: function () {
                 this.get("isSearchReady").set("numberSearch", false);
-                this.getXML("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers);
+                this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
             },
 
             searchInHouseNumbers: function () {
@@ -280,45 +277,13 @@ define([
                 this.get("isSearchReady").set("numberSearch", false);
                 _.each(this.get("houseNumbers"), function (houseNumber) {
                     address = houseNumber.name.replace(/ /g, "");
+
                     // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
                     if (address.search(this.get("searchStringRegExp")) !== -1) {
                         this.pushHits("hitList", houseNumber);
                     }
                 }, this);
                 this.get("isSearchReady").set("numberSearch", true);
-            },
-
-            /**
-             * [getXML description]
-             * @param  {[type]} storedquery [description]
-             * @param  {[type]} func        [description]
-             */
-            getXML: function (storedQuery, successFunction) {
-                $.ajax({
-                    url: this.get("gazetteerURL"),
-                    data: storedQuery,
-                    context: this,
-                    async: true,
-                    type: "GET",
-                    success: successFunction
-                });
-            },
-
-            /**
-             * [postXML description]
-             * @param  {[type]} xmlString       [description]
-             * @param  {[type]} successFunction [description]
-             */
-            postXML: function (xmlString, successFunction) {
-                $.ajax({
-                    url: this.get("bPlanURL"),
-                    context: this,
-                    contentType: "text/xml",
-                    async: false,
-                    type: "POST",
-                    data: xmlString,
-                    success: successFunction
-                });
             },
 
             /**
@@ -356,7 +321,7 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    this.getXML("StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts);
+                    this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
                 }
             },
 
@@ -396,7 +361,7 @@ define([
                     flurstuecksnummer = this.get("searchString").slice(4);
                 }
                 gemarkung = this.get("searchString").slice(0, 4);
-                this.getXML("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel);
+                this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                 this.get("isSearchReady").set("parcelSearch", true);
             },
 
@@ -453,38 +418,6 @@ define([
                 this.get("isSearchReady").set("layerSearch", true);
             },
 
-            getBPlanss: function (data) {
-                var hits = $("gml\\:featureMember,featureMember", data),
-                    name;
-
-                _.each(hits, function (hit) {
-                    name = $(hit).find(this.get("namespaceBPlan"))[0].textContent;
-                    // "Hitlist-Objekte"
-                    this.pushHits("bPlans", {
-                        name: name.trim(),
-                        type: this.get("bplantyp"),
-                        glyphicon: "glyphicon-picture",
-                        id: name.replace(/ /g, "") + "BPlan"
-                    });
-                }, this);
-            },
-
-            /**
-            *
-            */
-            getBPlans: function () {
-                var xmlString = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:imverfahren'><wfs:PropertyName>app:plan</wfs:PropertyName></wfs:Query></wfs:GetFeature>";
-
-                this.set("bplantyp", "im Verfahren");
-                this.set("namespaceBPlan", "app\\:plan, plan");
-                this.postXML(xmlString, this.getBPlanss);
-
-                this.set("bplantyp", "festgestellt");
-                this.set("namespaceBPlan", "app\\:planrecht, planrecht");
-                xmlString = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:hh_hh_planung_festgestellt'><wfs:PropertyName>app:planrecht</wfs:PropertyName></wfs:Query></wfs:GetFeature>";
-                this.postXML(xmlString, this.getBPlanss);
-            },
-
             /**
              *
              *
@@ -516,6 +449,95 @@ define([
                     }
                 });
                 this.pushHits("features", featureArray);
+            },
+
+            /**
+             * [getFeaturesFromWFS description]
+             */
+            getWFSFeatures: function () {
+                _.each(Config.searchBar.getFeatures, function (element) {
+                    if (element.filter === "olympia") {
+                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForOlympia, false);
+                    }
+                    else if (element.filter === "bplan") {
+                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
+                    }
+                }, this);
+            },
+
+            getFeaturesForBPlan: function (data) {
+                var hits = $("wfs\\:member,member", data),
+                    name,
+                    type;
+
+                _.each(hits, function (hit) {
+                    if ($(hit).find("app\\:planrecht, planrecht")[0] !== undefined) {
+                        name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
+                        type = "festgestellt";
+                    }
+                    else {
+                        name = $(hit).find("app\\:plan, plan")[0].textContent;
+                        type = "im Verfahren";
+                    }
+                    // "Hitlist-Objekte"
+                    this.pushHits("bPlans", {
+                        name: name.trim(),
+                        type: type,
+                        glyphicon: "glyphicon-picture",
+                        id: name.replace(/ /g, "") + "BPlan"
+                    });
+                }, this);
+            },
+
+            /**
+             * success-Funktion für die Olympiastandorte
+             * @param  {xml} data - getFeature-Request
+             */
+            getFeaturesForOlympia: function (data) {
+                var hits = $("wfs\\:member,member", data),
+                    coordinate,
+                    position,
+                    hitType,
+                    hitName;
+
+                _.each(hits, function (hit) {
+                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                    if ($(hit).find("app\\:allenutzun, allenutzun")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
+                        hitName = $(hit).find("app\\:allenutzun, allenutzun")[0].textContent;
+                        hitType = $(hit).find("app\\:staette, staette")[0].textContent;
+                        this.pushHits("olympia", {
+                            name: hitName,
+                            type: "Olympiastandort",
+                            coordinate: coordinate,
+                            glyphicon: "glyphicon-fire",
+                            id: hitName.replace(/ /g, "") + "Olympia"
+                        });
+                    }
+                }, this);
+            },
+
+            /**
+            *
+            */
+            searchInOlympiaFeatures: function () {
+                this.get("isSearchReady").set("wfsFeatureSearch", false);
+                _.each(this.get("olympia"), function (feature) {
+                    _.each(feature.name.split(","), function (ele) {
+                        var eleName = ele.replace(/ /g, "");
+                        // Prüft ob der Suchstring ein Teilstring vom Feature ist
+                        if (eleName.search(this.get("searchStringRegExp")) !== -1) {
+                            this.pushHits("hitList", {
+                                name: ele,
+                                type: "Olympiastandort",
+                                coordinate: feature.coordinate,
+                                glyphicon: "glyphicon-fire",
+                                id: feature.id
+                            });
+                        }
+                    }, this);
+                }, this);
+                this.get("isSearchReady").set("wfsFeatureSearch", true);
             },
 
             /**
