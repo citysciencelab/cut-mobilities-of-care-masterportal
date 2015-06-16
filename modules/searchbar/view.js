@@ -365,7 +365,7 @@ define([
                     searchVector.setVisible(true);
                     searchVector.getSource().addFeature(feature);
                 }
-                else if (hit.type === "Adresse" || hit.type === "Stadtteil") {
+                else if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort") {
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                 }
