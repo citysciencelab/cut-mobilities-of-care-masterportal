@@ -200,7 +200,7 @@ define([
             deleteSearchString: function () {
                 this.model.setSearchString("");
                 this.focusOnEnd($("#searchInput"));
-                EventBus.trigger("removeOverlay", this.model.get("marker"));
+                this.hideMarker();
                 searchVector.getSource().clear();
             },
 
@@ -353,6 +353,7 @@ define([
             *
             */
             showMarker: function (evt) {
+                // console.log(evt);
                 var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
