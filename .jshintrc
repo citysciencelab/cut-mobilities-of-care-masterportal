@@ -39,6 +39,7 @@
     "predef": [
         "define",
         "require",
-        "_"
+        "_",
+        "JSON"
     ]
 }
