@@ -77,7 +77,8 @@ define([
                         origin: [
                             442800,
                             5809000
-                        ]
+                        ],
+                        tileSize: parseInt(this.get("tilesize"), 10)
                     })
                 }));
             }
