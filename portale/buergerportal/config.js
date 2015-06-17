@@ -41,7 +41,7 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Stadtteil",
+            placeholder: "Suche Adresse, Sportarten",
             gazetteerURL: function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             },
