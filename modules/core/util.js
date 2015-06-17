@@ -31,6 +31,12 @@ define([
             else {
                 return "";
             }
+        },
+        showLoader: function () {
+            $("#loader").show();
+        },
+        hideLoader: function () {
+            $("#loader").hide();
         }
     });
 
