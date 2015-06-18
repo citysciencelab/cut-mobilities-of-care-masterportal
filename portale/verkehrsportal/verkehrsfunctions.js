@@ -74,6 +74,7 @@ define([
                     this.set("eventAttribution", "");
                 }
             });
+            this.refreshVerkehrsmeldung();
         },
         refreshVerkehrsmeldung: function () {
             var url = this.get("url");
