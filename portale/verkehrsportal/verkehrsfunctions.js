@@ -4,13 +4,13 @@ define([
     "config",
     "modules/layer/list",
     "openlayers",
-    'bootstrap/alert'
-], function (Backbone, EventBus, Config, LayerList, ol) {
+    "jquery",
+    "bootstrap/alert"
+], function (Backbone, EventBus, Config, LayerList, ol, $) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
         initialize: function () {
             var url;
-
             EventBus.on("aktualisiereverkehrsnetz", this.refreshVerkehrssituation, this);
             _.each(LayerList.models, function (layerdef) {
                 if (layerdef.id === "45") {
@@ -22,12 +22,13 @@ define([
                 }
             });
             this.set("url", url);
+            this.refreshVerkehrsmeldung();
         },
         refreshVerkehrssituation: function (attributions, layer) {
             if (!layer) {
                 return;
             }
-            var newEventValue = "",
+            var newEventValue = "";
             postmessage = "<wfs:GetFeature xmlns:wfs='http://www.opengis.net/wfs' service='WFS' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>";
 
             postmessage += "<wfs:Query typeName='feature:bab_vkl' srsName='epsg:25832'>";
@@ -73,12 +74,15 @@ define([
                     this.set("eventAttribution", "");
                 }
             });
+        },
+        refreshVerkehrsmeldung: function () {
+            var url = this.get("url");
             // diese Abfrage zeigt im Bedarfsfall eine Meldung
             $.ajax({
                 url: url,
                 data: "SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0",
                 async: true,
-                context: layer,
+                context: this,
                 success: function (data) {
                     var wfsReader = new ol.format.WFS({
                         featureNS: "http://www.deegree.org/app",
@@ -91,7 +95,6 @@ define([
                         datum = feature.get("stand");
 
                         if (hinweis && datum) {
-                            newEventValue = newEventValue + "<p class='alert alert-danger'><strong>" + hinweis + "</strong></p>";
                             var html = "<div class='alert alert-warning alert-dismissible' role='alert' style='position: absolute; left: 25%; bottom: 50px;width: 50%;'>";
 
                             html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times";
