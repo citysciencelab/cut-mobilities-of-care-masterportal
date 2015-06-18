@@ -97,7 +97,10 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.print === true) {
-                        require(["views/PrintView"], function (PrintView) {
+                        // require(["views/PrintView"], function (PrintView) {
+                        //     new PrintView();
+                        // });
+                        require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }

@@ -39,7 +39,7 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Stadtteil",
+            placeholder: "Suche Adresse, Stadtteil, Themen",
             gazetteerURL: function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
@@ -58,6 +58,7 @@ define(function () {
                 return "http://wscd0096:8680/mapfish_print_2.0/";
             },
             title: "Freie und Hansestadt Hamburg - Atlas",
+            outputFilename: "Ausdruck FHH - Atlas",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"

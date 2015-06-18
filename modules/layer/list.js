@@ -366,7 +366,7 @@ define([
         *
         */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger("layerForPrint", this.getVisibleWMSLayer());
+            EventBus.trigger("sendVisibleWMSLayer", this.getVisibleWMSLayer());
         },
         /**
         *
