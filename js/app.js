@@ -72,7 +72,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                 });
                 if (Config.menu.tools === true) {
                     if (Config.tools.coord === true) {
-                        require(["views/CoordPopupView"], function (CoordPopupView) {
+                        require(["modules/coordpopup/view"], function (CoordPopupView) {
                             new CoordPopupView();
                         });
                     }

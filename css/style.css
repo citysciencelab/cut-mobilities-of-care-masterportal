@@ -18,7 +18,6 @@
 @import "../modules/scaleline/style.css";
 @import "../modules/menubar/style.css";
 @import "measure.css";
-@import "coordpopup.css";
 @import "../modules/layerselection/style.css";
 @import "../modules/footer/style.css";
 @import "../modules/quickhelp/style.css";
@@ -28,3 +27,4 @@
 @import "../modules/layer/style.css";
 @import "../modules/baselayercatalog/style.css";
 @import "../modules/treefilter/style.css";
+@import "../modules/coordpopup/style.css";

@@ -1,6 +1,5 @@
 .popover {
     padding: 0px;
-    min-width:350px;
     max-width:450px;
 }
 
@@ -52,7 +51,7 @@
 .gfi-content {
     font-size: 12px;
     max-height: 400px;
-    min-width: 100%;
+    min-width:350px;
     overflow-y: auto;
 }
 
