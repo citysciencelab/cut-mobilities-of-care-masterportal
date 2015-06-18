@@ -5,6 +5,8 @@ define(function () {
             center: [565874, 5934140],
             resolution: 5.2916638091682096,
             resolutions: [
+                66.14579761460263,
+                26.458319045841044,
                 15.874991427504629,
                 10.583327618336419,
                 5.2916638091682096,
@@ -21,8 +23,8 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
-            {id: "8001,8002", visible: true, name: "Olympiastandorte"}
-            // {id: "8002", visible: false}
+            {id: "8001,8002", visible: true, name: "Olympiastandorte"},
+            {id: "8011", visible: false, name: "Planzeichnung"}
         ],
         menubar: true,
         scaleLine: true,
