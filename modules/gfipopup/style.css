@@ -28,7 +28,6 @@
     float: left;
     padding: 6px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
-    max-width: 66%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
