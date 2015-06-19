@@ -172,6 +172,7 @@ define([
             EventBus.on("getInspireFolder", this.sendInspireFolder, this);
             EventBus.on("getOpendataFolder", this.sendOpendataFolder, this);
             EventBus.on("displayInTree", this.displayInTree, this);
+            EventBus.on("getAllLayer", this.sendAllLayer, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
@@ -365,7 +366,7 @@ define([
         *
         */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger("layerForPrint", this.getVisibleWMSLayer());
+            EventBus.trigger("sendVisibleWMSLayer", this.getVisibleWMSLayer());
         },
         /**
         *
@@ -378,6 +379,12 @@ define([
          */
         sendAllSelectedLayer: function () {
             EventBus.trigger("sendAllSelectedLayer", this.getAllSelectedLayer());
+        },
+        /**
+         *
+         */
+        sendAllLayer: function () {
+            EventBus.trigger("sendAllLayer", this.getAllLayer());
         },
         /**
         * Gibt alle sichtbaren Layer zurück.

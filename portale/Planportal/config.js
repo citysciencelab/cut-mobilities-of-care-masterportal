@@ -51,13 +51,27 @@ define(function () {
             placeholder: "Suche Adresse, Bebauungsplan",
             gazetteerURL: function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            },
+            getFeatures: [
+                {
+                    url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                    typeName: "hh_hh_planung_festgestellt",
+                    propertyName: "planrecht",
+                    filter: "bplan"
+                },
+                {
+                    url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                    typeName: "imverfahren",
+                    propertyName: "plan",
+                    filter: "bplan"
+                }
+            ]
         },
-        bPlan: {
-            url: function () {
-                    return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
-            }
-		},
+        // bPlan: {
+        //     url: function () {
+        //             return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
+        //     }
+		// },
         tools: {
             gfi: true,
             measure: true,

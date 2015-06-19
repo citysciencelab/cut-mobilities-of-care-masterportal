@@ -21,15 +21,14 @@ define([
                 }
             },
             render: function () {
+                var attr = this.model.toJSON();
+
                 this.stopListening();
                 this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
                 this.listenToOnce(this.model, "change:selected", this.render);
                 // this.listenToOnce(this.model, "change:visibility", this.toggleStyle);
                 this.listenToOnce(this.model, "change:selected", this.toggleStyle);
-
                 this.delegateEvents();
-
-                var attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
                 this.toggleStyle();
                 return this;
@@ -55,5 +54,6 @@ define([
                 this.model.get("parentView").toggleStyle();
             }
         });
+
         return NodeLayerView;
     });

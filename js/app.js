@@ -72,7 +72,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                 });
                 if (Config.menu.tools === true) {
                     if (Config.tools.coord === true) {
-                        require(["views/CoordPopupView"], function (CoordPopupView) {
+                        require(["modules/coordpopup/view"], function (CoordPopupView) {
                             new CoordPopupView();
                         });
                     }
@@ -97,7 +97,10 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.print === true) {
-                        require(["views/PrintView"], function (PrintView) {
+                        // require(["views/PrintView"], function (PrintView) {
+                        //     new PrintView();
+                        // });
+                        require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
@@ -111,7 +114,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.searchBar === true) {
-                    require(["views/SearchbarView"], function (SearchbarView) {
+                    require(["modules/searchbar/view"], function (SearchbarView) {
                         new SearchbarView();
                     });
                 }
