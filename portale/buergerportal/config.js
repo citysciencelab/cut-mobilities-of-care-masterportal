@@ -24,6 +24,17 @@ define(function () {
             {id: "453", visible: true},
             {id: "452", visible: false},
             {id: "8003,8004", visible: true, name: "Olympiastandorte"},
+            {id:
+             [
+                {
+                    id: "8033"
+                },
+                {
+                    id: "8044"
+                }
+             ],
+             visible: true, name: "Olympiastandorte_pikto", styles: ["style_olympia_komplexe_piktogramme", "style_olympia_gebaeude_piktrogramme"]
+            },
             {id: "8011", visible: false, name: "Planzeichnung"}
         ],
         menubar: true,
