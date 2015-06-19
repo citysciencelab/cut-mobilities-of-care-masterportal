@@ -23,7 +23,7 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
-            {id: "8001,8002", visible: true, name: "Olympiastandorte"},
+            {id: "8003,8004", visible: true, name: "Olympiastandorte"},
             {id: "8011", visible: false, name: "Planzeichnung"}
         ],
         menubar: true,

@@ -11,6 +11,14 @@
     border-top: 1px solid #e5e5e5;
 }
 
+.in > .nav > li {
+    /*border-bottom: 1px dashed rgb(215, 215, 215);*/
+}
+
+.in > .menubarlgv {
+    background: rgb(245, 245, 245);
+}
+
 .nav > li {
     border-left: 1px solid #fff;
     border-right: 1px solid #e5e5e5;

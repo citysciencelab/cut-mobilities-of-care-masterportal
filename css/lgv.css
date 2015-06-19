@@ -23,8 +23,9 @@ html, body {
     html, body {
         font-size: 16px;
     }
-    .menuitem{
+    .menuitem {
         font-size: 16px !important;
+        margin-left: 15px !important;
     }
     .dropdown-menu {
         font-size: 18px;
