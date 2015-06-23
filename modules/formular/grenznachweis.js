@@ -34,7 +34,7 @@ define([
             kundennummer: '',
             errors: {},
             activatedInteraction: false,
-            weiterButton: {enabled: false, name: 'weiter'},
+            weiterButton: {enabled: true, name: 'weiter'},
             zurueckButton: {enabled: false, name: 'zurück'},
             activeDIV: 'beschreibung' //beschreibung oder kundendaten
         },
@@ -57,6 +57,9 @@ define([
         },
         // Fenstermanagement-Events
         prepWindow: function () {
+            if ($('#searchInput') && $('#searchInput').val() != '') {
+                this.set('lage', $('#searchInput').val());
+            }
         },
         resetWindow: function () {
         },
@@ -83,74 +86,85 @@ define([
         },
         validate: function (attributes, identifier) {
             var errors = {};
-            if (identifier.validate === 'auftragsnummer') {
-                if (this.validators.maxLength(attributes.auftragsnummer, 12) === false) {
-                    errors.auftragsnummer = "Maximallänge 12 Zeichen überschritten";
-                }
-            }
-            if (identifier.validate === 'lage') {
-                if (this.validators.minLength(attributes.lage, 3) === false) {
-                    errors.lage = "Lagebeschreibung notwendig";
-                }
-            }
-            if (identifier.validate === 'zweck') {
-                if (attributes.zweckGebaeudeeinmessung === false && attributes.zweckGebaeudeabsteckung === false && attributes.zweckLageplan === false && attributes.zweckSonstiges === false) {
-                    errors.zweck = "Min. ein Feld muss markiert sein.";
-                }
-            }
-            if (identifier.validate === 'kundennummer') {
-                if (errors.kundennummer !== '') {
-                    if (this.validators.pattern(attributes.kundennummer, '[^0-9\]') === true || attributes.kundennummer.length !== 6) {
-                        errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
+            if (identifier.validate === true) {
+                if (this.get('activeDIV') === 'kundendaten') {
+                    if (attributes.nutzungsbedingungakzeptiert === false) {
+                        errors.nutzungsbedingungakzeptiert = "Zustimmung ist obligatorisch.";
+                    }
+                    if (attributes.gebuehrenordnungakzeptiert === false) {
+                        errors.gebuehrenordnungakzeptiert = "Kenntnisnahme ist obligatorisch.";
+                    }
+                } else {
+                    if (this.validators.maxLength(attributes.auftragsnummer, 12) === false) {
+                        errors.auftragsnummer = "Maximallänge 12 Zeichen überschritten";
+                    }
+                    if (this.validators.minLength(attributes.lage, 3) === false) {
+                        errors.lage = "Lagebeschreibung notwendig";
+                    }
+                    if (attributes.zweckGebaeudeeinmessung === false && attributes.zweckGebaeudeabsteckung === false && attributes.zweckLageplan === false && attributes.zweckSonstiges === false) {
+                        errors.zweck = "Min. ein Feld muss markiert sein.";
+                    }
+                    if (this.get('source').getFeatures().length === 0 || this.get('activatedInteraction') === true) {
+                        errors.source = "Umringe erfassen und beenden.";
                     }
                 }
-            }
-            if (identifier.validate === 'kundenname1') {
-                if (this.validators.pattern(attributes.kundenname, '[0-9\]') === true) {
-                    errors.kundenname = "Alphanumerischer Wert erwartet.";
+            } else {
+                if (identifier.validate === 'lage') {
+                    if (this.validators.minLength(attributes.lage, 3) === false) {
+                        errors.lage = "Lagebeschreibung notwendig";
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenname2' || identifier.validate === true) {
-                if (this.validators.minLength(attributes.kundenname, 3) === false) {
-                    errors.kundenname = "Name notwendig.";
+                if (identifier.validate === 'zweck') {
+                    if (attributes.zweckGebaeudeeinmessung === false && attributes.zweckGebaeudeabsteckung === false && attributes.zweckLageplan === false && attributes.zweckSonstiges === false) {
+                        errors.zweck = "Min. ein Feld muss markiert sein.";
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenadresse' || identifier.validate === true) {
-                if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
-                    errors.kundenadresse = "Adressangabe notwendig.";
+                if (identifier.validate === 'kundennummer') {
+                    if (errors.kundennummer !== '') {
+                        if (this.validators.pattern(attributes.kundennummer, '[^0-9\]') === true || attributes.kundennummer.length !== 6) {
+                            errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
+                        }
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenplz' || identifier.validate === true) {
-                if (this.validators.pattern(attributes.kundenplz, '[^0-9\]') === true || attributes.kundenplz.length !== 5) {
-                    errors.kundenplz = "Numerischer Wert der Länge 5 erwartet.";
+                if (identifier.validate === 'kundenname1') {
+                    if (this.validators.pattern(attributes.kundenname, '[0-9\]') === true) {
+                        errors.kundenname = "Alphanumerischer Wert erwartet.";
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenort' || identifier.validate === true) {
-                if (this.validators.pattern(attributes.kundenort, '[0-9\]') === true || this.validators.minLength(attributes.kundenort, 3) === false) {
-                    errors.kundenort = "Alphanumerischer Wert erwartet.";
+                if (identifier.validate === 'kundenname2' || identifier.validate === true) {
+                    if (this.validators.minLength(attributes.kundenname, 3) === false) {
+                        errors.kundenname = "Name notwendig.";
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenemail' || identifier.validate === true) {
-                if (this.validators.minLength(attributes.kundenort, 1) === false || attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
-                    errors.kundenemail = "Syntax inkorrekt.";
+                if (identifier.validate === 'kundenadresse' || identifier.validate === true) {
+                    if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
+                        errors.kundenadresse = "Adressangabe notwendig.";
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenfestnetz' || identifier.validate === true) {
-                if (this.validators.pattern(attributes.kundenfestnetz, '[^0-9\-/]') === true) {
-                    errors.kundenfestnetz = "Numerischer Wert erwartet.";
+                if (identifier.validate === 'kundenplz' || identifier.validate === true) {
+                    if (this.validators.pattern(attributes.kundenplz, '[^0-9\]') === true || attributes.kundenplz.length !== 5) {
+                        errors.kundenplz = "Numerischer Wert der Länge 5 erwartet.";
+                    }
                 }
-            }
-            if (identifier.validate === 'kundenmobilfunk' || identifier.validate === true) {
-                if (this.validators.pattern(attributes.kundenmobilfunk, '[^0-9\-/]') === true) {
-                    errors.kundenmobilfunk = "Numerischer Wert erwartet.";
+                if (identifier.validate === 'kundenort' || identifier.validate === true) {
+                    if (this.validators.pattern(attributes.kundenort, '[0-9\]') === true || this.validators.minLength(attributes.kundenort, 3) === false) {
+                        errors.kundenort = "Alphanumerischer Wert erwartet.";
+                    }
                 }
-            }
-            if (identifier.validate === true) {
-                if (attributes.nutzungsbedingungakzeptiert === false) {
-                    errors.nutzungsbedingungakzeptiert = "Zustimmung ist obligatorisch.";
+                if (identifier.validate === 'kundenemail' || identifier.validate === true) {
+                    if (this.validators.minLength(attributes.kundenort, 1) === false || attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
+                        errors.kundenemail = "Syntax inkorrekt.";
+                    }
                 }
-                if (attributes.gebuehrenordnungakzeptiert === false) {
-                    errors.gebuehrenordnungakzeptiert = "Kenntnisnahme ist obligatorisch.";
+                if (identifier.validate === 'kundenfestnetz' || identifier.validate === true) {
+                    if (this.validators.pattern(attributes.kundenfestnetz, '[^0-9\-/]') === true) {
+                        errors.kundenfestnetz = "Numerischer Wert erwartet.";
+                    }
+                }
+                if (identifier.validate === 'kundenmobilfunk' || identifier.validate === true) {
+                    if (this.validators.pattern(attributes.kundenmobilfunk, '[^0-9\-/]') === true) {
+                        errors.kundenmobilfunk = "Numerischer Wert erwartet.";
+                    }
                 }
             }
             // return die Errors
@@ -163,7 +177,6 @@ define([
         focusout: function (evt) {
             if (evt.target.id === 'lagebeschreibung') {
                 this.set('lage', evt.target.value, {validate: 'lage'});
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'kundennummer') {
                 this.set('kundennummer', evt.target.value, {validate: 'kundennummer'});
             } else if (evt.target.id === 'kundenname') {
@@ -181,15 +194,12 @@ define([
         keyup: function (evt) {
             if (evt.target.id === 'lagebeschreibung') {
                 this.set('lage', evt.target.value);
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'auftragsnummer') {
                 this.set('auftragsnummer', evt.target.value, {validate: 'auftragsnummer'});
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'kundennummer') {
                 this.set('kundennummer', evt.target.value);
             } else if (evt.target.id === 'freitext') {
                 this.set('freitext', evt.target.value);
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'kundenname') {
                 this.set('kundenname', evt.target.value, {validate: 'kundenname1'});
             } else if (evt.target.id === 'kundenfirma') {
@@ -211,21 +221,16 @@ define([
         click: function (evt) {
             if (evt.target.id === 'zweckGebaeudeeinmessung') {
                 this.set('zweckGebaeudeeinmessung', evt.target.checked, {validate: 'zweck'});
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'zweckGebaeudeabsteckung') {
                 this.set('zweckGebaeudeabsteckung', evt.target.checked, {validate: 'zweck'});
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'zweckLageplan') {
                 this.set('zweckLageplan', evt.target.checked, {validate: 'zweck'});
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'zweckSonstiges') {
                 this.set('zweckSonstiges', evt.target.checked, {validate: 'zweck'});
-                this.checkInputBestelldaten();
             } else if (evt.target.id === 'weiter') {
                 this.changeZurueckButton(true, 'zurück');
                 if (this.get('activeDIV') === 'beschreibung') {
-                    this.set('activeDIV', 'kundendaten');
-                    this.changeWeiterButton(true, 'Gebührenpflichtig bestellen');
+                    this.checkInputBestelldaten();
                 } else if (this.get('activeDIV') === 'kundendaten') {
                     this.checkInputKundendaten();
                 }
@@ -234,6 +239,7 @@ define([
                     this.changeWeiterButton(true, 'weiter');
                     this.set('activeDIV', 'beschreibung');
                     this.changeZurueckButton(false, 'zurück');
+                    this.trigger('render');
                 }
             } else if (evt.target.id === 'setgeometrie') {
                 this.toggleDrawInteraction();
@@ -245,6 +251,7 @@ define([
                 $("#anrede3").removeClass('active');
                 $("#" + evt.target.parentElement.id).addClass('active');
                 this.set('kundenanrede', evt.target.textContent);
+                this.trigger('render');
             } else if (evt.target.id === 'nutzungsbedingungen') {
                 if (evt.target.checked === true) {
                     $('#nutzungsbedingungentext').removeClass('alert-danger');
@@ -275,26 +282,16 @@ define([
             }
         },
         checkInputBestelldaten: function () {
-            var checker = true;
-            if (this.get('source').getFeatures().length === 0) {
-                checker = false;
-            }
-            if (this.get('lage') === '') {
-                checker = false;
-            }
-            if (this.get('zweckGebaeudeabsteckung') === false && this.get('zweckGebaeudeeinmessung') === false && this.get('zweckLageplan') === false && this.get('zweckSonstiges') === false) {
-                checker = false;
-            }
-            // weiter oder abbruch?
+            var checker = this.isValid();
             if (checker === true) {
-                this.changeWeiterButton(true, 'weiter');
-            } else {
-                this.changeWeiterButton(false, 'weiter');
+                this.set('activeDIV', 'kundendaten');
+                this.changeWeiterButton(true, 'Gebührenpflichtig bestellen');
+                this.trigger('render');
             }
         },
         transmitOrder: function () {
             // kopiere Attributwerte in für den FME-Prozess taugliche Form
-            var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str;
+            var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str, url;
             if (this.get('zweckGebaeudeeinmessung') === true) {
                 zweckGebaeudeeinmessung = 'ja';
             } else {
@@ -423,8 +420,13 @@ define([
             request_str += '  </wps:Input>';
             request_str += '</wps:DataInputs>';
             request_str += '</wps:Execute>';
+            if (Config.layerConf.indexOf('fhhnet') > -1) {
+                url = '/geofos/deegree-wps/services/wps';
+            } else {
+                url = '/gateway-hamburg/OGCFassade/HH_WPS.aspx';
+            }
             $.ajax({
-                url: '/gateway-hamburg/OGCFassade/HH_WPS.aspx?Request=Execute&Service=WPS&Version=1.0.0&Identifier=grenznachweis_communicator.fmw',
+                url: url + '?Request=Execute&Service=WPS&Version=1.0.0&Identifier=grenznachweis_communicator.fmw',
                 data: request_str,
                 headers: {
                     "Content-Type": "text/xml; charset=UTF-8"
@@ -432,6 +434,10 @@ define([
                 context: this,
                 method: "POST",
                 success: function (data, jqXHR) {
+                    this.set('auftragsnummer', '');
+                    this.set('lage', '');
+                    this.set('freitext', '');
+                    this.removeAllGeometries();
                     EventBus.trigger('collapseWindow', this);
                     $("#loader").hide();
                     this.removeAllGeometries();
@@ -539,7 +545,6 @@ define([
                 $("#setgeometrie").removeClass('btn-default');
                 $("#setgeometrie").addClass('btn-primary');
             }
-            this.checkInputBestelldaten();
         }
     });
 
