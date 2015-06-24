@@ -119,6 +119,10 @@ define([
                             errors.kundenfirma = "Firmenname erwartet.";
                         }
                     }
+                    // Bei Kundendaten werden auch Bestelldaten rudimentär geprüft, weil diese nach erfolgreicher Übermittlung gelöscht werden und so eine Doppelbestellung mit leeren Werten möglich wäre.
+                    if (this.get('source').getFeatures().length === 0 || this.validators.minLength(attributes.lage, 3) === false) {
+                        errors.bestelldaten = "Gehen Sie zurück, um neue Bestelldaten einzugeben.";
+                    }
                 } else {
                     if (this.validators.maxLength(attributes.auftragsnummer, 12) === false) {
                         errors.auftragsnummer = "Maximallänge 12 Zeichen überschritten";
@@ -458,25 +462,35 @@ define([
                 },
                 context: this,
                 method: "POST",
-                success: function (data, jqXHR) {
-                    this.set('auftragsnummer', '');
-                    this.set('lage', '');
-                    this.set('freitext', '');
-                    this.removeAllGeometries();
+                success: function (data, status) {
+                    //Unicherheit, wie getElementsByTagName auf allen Browsern arbeitet. Mit Opera, IE klappt es so. Deshalb Fehlermeldung nur wenn es sicher ist.
+                    if (data.getElementsByTagName('jobStatus') !== undefined && data.getElementsByTagName('jobStatus')[0].textContent === 'FME_FAILURE') {
+                        this.showErrorMessage();
+                    } else {
+                        this.showSuccessMessage();
+                        this.set('auftragsnummer', '');
+                        this.set('lage', '');
+                        this.set('freitext', '');
+                        this.removeAllGeometries();
+                    }
                     EventBus.trigger('collapseWindow', this);
                     $("#loader").hide();
-                    this.removeAllGeometries();
-                    var div = '<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihr Auftrag wurde erfolgreich übermittelt.</strong> Sie erhalten in Kürze eine E-Mail an die angegebene Adresse.</div>';
-                    $("body").append(div);
                 },
                 error: function (data, jqXHR) {
                     $("#loader").hide();
                     EventBus.trigger('collapseWindow', this);
-                    var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihr Auftrag wurde leider nicht übermittelt.</strong> Bitte versuchen Sie es später erneut.</div>';
-                    $("body").append(div);
+                    this.showErrorMessage();
                 }
             });
             $('#loader').show();
+        },
+        showErrorMessage: function () {
+            var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihr Auftrag wurde leider nicht übermittelt.</strong> Bitte versuchen Sie es später erneut.</div>';
+            $("body").append(div);
+        },
+        showSuccessMessage: function () {
+            var div = '<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihr Auftrag wurde erfolgreich übermittelt.</strong> Sie erhalten in Kürze eine E-Mail an die angegebene Adresse.</div>';
+            $("body").append(div);
         },
         buildJSONGeom: function () {
             var featurearray = [];

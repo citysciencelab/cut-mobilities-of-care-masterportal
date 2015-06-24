@@ -188,5 +188,8 @@
                 <button id="weiter" type="button" class="btn btn-primary <% if (weiterButton.enabled === false) {print (' disabled')} else {print (' enabled')}; %>"><%=weiterButton.name%></button>
             </div>
         </div>
+        <% if (errors.bestelldaten !== undefined) { %>
+            <span id="bestelldatenError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext formulargroup"><%= errors.bestelldaten %></span>
+        <% } %>
     </div>
 </div>
