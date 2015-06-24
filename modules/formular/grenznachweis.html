@@ -103,10 +103,13 @@
                 <span id="kundennameError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.kundenname %></span>
             <% } %>
             <% if (kundenanrede === 'Firma') { %>
-                <div class="formulargroup input-group">
+                <div class="formulargroup input-group  <% if (errors.kundenfirma !== undefined) print('has-error') %>">
                     <span class="input-group-addon grenznachweisfirma" id="basic-addon1">Firma*</span>
                     <input id="kundenfirma" type="text" class="form-control" placeholder="Firmenname" aria-describedby="basic-addon1" value="<%=kundenfirma%>">
                 </div>
+                <% if (errors.kundenfirma !== undefined) { %>
+                    <span id="kundenfirmaError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.kundenfirma %></span>
+                <% } %>
             <% } %>
             <div class="formulargroup input-group  <% if (errors.kundenadresse !== undefined) print('has-error') %>">
                 <span class="input-group-addon" id="basic-addon1">Adresse*</span>

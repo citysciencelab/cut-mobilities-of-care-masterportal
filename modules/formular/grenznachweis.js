@@ -94,6 +94,31 @@ define([
                     if (attributes.gebuehrenordnungakzeptiert === false) {
                         errors.gebuehrenordnungakzeptiert = "Kenntnisnahme ist obligatorisch.";
                     }
+                    if (attributes.kundennummer !== '') {
+                        if (this.validators.pattern(attributes.kundennummer, '[^0-9\]') === true || attributes.kundennummer.length !== 6) {
+                            errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
+                        }
+                    }
+                    if (this.validators.minLength(attributes.kundenname, 3) === false) {
+                        errors.kundenname = "Name notwendig.";
+                    }
+                    if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
+                        errors.kundenadresse = "Adressangabe notwendig.";
+                    }
+                    if (this.validators.pattern(attributes.kundenplz, '[^0-9\]') === true || attributes.kundenplz.length !== 5) {
+                        errors.kundenplz = "Numerischer Wert der Länge 5 erwartet.";
+                    }
+                    if (this.validators.minLength(attributes.kundenemail, 1) === false || attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
+                        errors.kundenemail = "Syntax inkorrekt.";
+                    }
+                    if (this.validators.pattern(attributes.kundenort, '[0-9\]') === true || this.validators.minLength(attributes.kundenort, 3) === false) {
+                        errors.kundenort = "Alphanumerischer Wert erwartet.";
+                    }
+                    if (this.get('kundenanrede') === 'Firma') {
+                        if (this.validators.minLength(attributes.kundenfirma , 2) === false) {
+                            errors.kundenfirma = "Firmenname erwartet.";
+                        }
+                    }
                 } else {
                     if (this.validators.maxLength(attributes.auftragsnummer, 12) === false) {
                         errors.auftragsnummer = "Maximallänge 12 Zeichen überschritten";
@@ -120,7 +145,7 @@ define([
                     }
                 }
                 if (identifier.validate === 'kundennummer') {
-                    if (errors.kundennummer !== '') {
+                    if (attributes.kundennummer !== '') {
                         if (this.validators.pattern(attributes.kundennummer, '[^0-9\]') === true || attributes.kundennummer.length !== 6) {
                             errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
                         }
@@ -152,7 +177,7 @@ define([
                     }
                 }
                 if (identifier.validate === 'kundenemail' || identifier.validate === true) {
-                    if (this.validators.minLength(attributes.kundenort, 1) === false || attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
+                    if (attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
                         errors.kundenemail = "Syntax inkorrekt.";
                     }
                 }
