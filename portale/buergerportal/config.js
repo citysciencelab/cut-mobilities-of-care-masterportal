@@ -24,6 +24,7 @@ define(function () {
             {id: "453", visible: true},
             {id: "452", visible: false},
             {id: "8003,8004", visible: true, name: "Olympiastandorte"},
+            {id: "8045", visible: false},
             {id:
              [
                 {
