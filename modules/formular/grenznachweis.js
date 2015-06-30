@@ -494,7 +494,13 @@ define([
             $("body").append(div);
         },
         showSuccessMessage: function () {
-            var div = '<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihr Auftrag wurde erfolgreich übermittelt.</strong> Sie erhalten in Kürze eine E-Mail an die angegebene Adresse.</div>';
+            var ergMsg, div;
+            if (this.get('auftragsnummer') !== '') {
+                ergMsg = 'mit der Auftragsnummer: ' + this.get('auftragsnummer') + ' ';
+            } else {
+                ergMsg = '';
+            }
+            div = '<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihre Bestellung ' + ergMsg + 'wurde an unser Funktionspostfach übermittelt.</strong> Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826-5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag!</div>';
             $("body").append(div);
         },
         buildJSONGeom: function () {
