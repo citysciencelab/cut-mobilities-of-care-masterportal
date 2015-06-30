@@ -502,19 +502,21 @@ define([
                     hitName;
 
                 _.each(hits, function (hit) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:allenutzun, allenutzun")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                        hitName = $(hit).find("app\\:allenutzun, allenutzun")[0].textContent;
-                        hitType = $(hit).find("app\\:staette, staette")[0].textContent;
-                        this.pushHits("olympia", {
-                            name: hitName,
-                            type: "Olympiastandort",
-                            coordinate: coordinate,
-                            glyphicon: "glyphicon-fire",
-                            id: hitName.replace(/ /g, "") + "Olympia"
-                        });
-                    }
+                   if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                        position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                        coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                        if ($(hit).find("app\\:allenutzun, allenutzun")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
+                            hitName = $(hit).find("app\\:allenutzun, allenutzun")[0].textContent;
+                            hitType = $(hit).find("app\\:staette, staette")[0].textContent;
+                            this.pushHits("olympia", {
+                                name: hitName,
+                                type: "Olympiastandort",
+                                coordinate: coordinate,
+                                glyphicon: "glyphicon-fire",
+                                id: hitName.replace(/ /g, "") + "Olympia"
+                            });
+                        }
+                   }
                 }, this);
             },
 
