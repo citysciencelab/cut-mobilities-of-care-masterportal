@@ -8,7 +8,7 @@ define([
 
     var view = Backbone.View.extend({
         tagName: "li",
-        className : "list-group-item",
+        className: "list-group-item",
         template: _.template(Template),
         templateSetting: _.template(SettingTemplate),
         templateButton: _.template("<div class='layer-toggle-button pull-right' data-toggle='tooltip' data-placement='bottom' title='Einstellungen'><span class='glyphicon glyphicon-cog rotate'></span></div>"),
@@ -16,7 +16,7 @@ define([
             "click .glyphicon-plus-sign": "upTransparence",
             "click .glyphicon-minus-sign": "downTransparence",
             "click .glyphicon-info-sign": "openMetadata",
-            "click .glyphicon-check, .glyphicon-unchecked, .layer-name": "toggleVisibility",
+            "click .glyphicon-check, .glyphicon-unchecked, div.layer-name": "toggleVisibility",
             "click .glyphicon-arrow-up": "moveModelUp",
             "click .glyphicon-arrow-down": "moveModelDown",
             "click .layer-toggle-button": "toggleSettings",
