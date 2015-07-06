@@ -64,13 +64,11 @@ define([
         click: function (evt) {
             if (evt.target.id) {
                 this.model.click(evt);
-                this.render();
             }
         },
         focusout: function (evt) {
             if (evt.target.id) {
                 this.model.focusout(evt);
-                this.render();
             }
         }
     });

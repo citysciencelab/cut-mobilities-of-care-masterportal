@@ -2,7 +2,7 @@
     <div class="panel-body">
         <div class="beschreibunggrenznachweis" <% if (activeDIV==='kundendaten') {print ('style="display:none;"');} %> >
             <div class="form-group <% if (errors.auftragsnummer !== undefined) print('has-error') %>">
-                <p class="formularhead">Auftragsnummer</p>
+                <p class="formularhead">Ihre Auftragsnummer</p>
                 <input id="auftragsnummer" type="text" class="form-control" title="Hier können Sie Ihre Auftragsnummer zur Identifikation angeben. " placeholder="Ihre Auftragsnummer" aria-describedby="sizing-addon2" value="<%=auftragsnummer%>">
                 <% if (errors.auftragsnummer !== undefined) { %>
                     <span id="auftragsnummerError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.auftragsnummer %></span>
@@ -10,7 +10,7 @@
             </div>
             <div class="form-group <% if (errors.lage !== undefined) print('has-error') %>">
                 <p class="formularhead2">Lagebeschreibung*</p>
-                <textarea id="lagebeschreibung" class="form-control" title="Bitte geben Sie eine Lagebezeichnung über Gemarkung/Flurstück oder über Straße/Hausnummer an." placeholder="Wo benötigen Sie Grenzpunkte?" maxlength=300 rows=2 aria-describedby="sizing-addon2"><%=lage%></textarea>
+                <textarea id="lagebeschreibung" class="form-control" title="Bitte geben Sie eine Lagebezeichnung über Gemarkung/Flurstück oder über Straße/Hausnummer an." placeholder="Flurstücks- und / oder Lagebezeichnung" maxlength=300 rows=2 aria-describedby="sizing-addon2"><%=lage%></textarea>
                 <% if (errors.lage !== undefined) { %>
                     <span id="lageError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.lage %></span>
                 <% } %>
@@ -76,6 +76,9 @@
                     <button id="removegeometrie" type="button" class="btn btn-default" <% if (source.getFeatures().length === 0) {print ('disabled')}; %> >alle löschen</button>
                 </div>
             </div>
+            <% if (errors.source !== undefined) { %>
+                <span id="sourceError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.source %></span>
+            <% } %>
         </div>
 
         <div class="kundendatengrenznachweis" <% if (activeDIV==='beschreibung') {print ('style="display:none;"');} %> >
@@ -99,10 +102,15 @@
             <% if (errors.kundenname !== undefined) { %>
                 <span id="kundennameError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.kundenname %></span>
             <% } %>
-            <div class="formulargroup input-group">
-                <span class="input-group-addon" id="basic-addon1">Firma</span>
-                <input id="kundenfirma" type="text" class="form-control" placeholder="Firmenname" aria-describedby="basic-addon1" value="<%=kundenfirma%>">
-            </div>
+            <% if (kundenanrede === 'Firma') { %>
+                <div class="formulargroup input-group  <% if (errors.kundenfirma !== undefined) print('has-error') %>">
+                    <span class="input-group-addon grenznachweisfirma" id="basic-addon1">Firma*</span>
+                    <input id="kundenfirma" type="text" class="form-control" placeholder="Firmenname" aria-describedby="basic-addon1" value="<%=kundenfirma%>">
+                </div>
+                <% if (errors.kundenfirma !== undefined) { %>
+                    <span id="kundenfirmaError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext"><%= errors.kundenfirma %></span>
+                <% } %>
+            <% } %>
             <div class="formulargroup input-group  <% if (errors.kundenadresse !== undefined) print('has-error') %>">
                 <span class="input-group-addon" id="basic-addon1">Adresse*</span>
                 <input id="kundenadresse" type="text" class="form-control" placeholder="Straße und Hausnummer" aria-describedby="basic-addon1" value="<%=kundenadresse%>">
@@ -150,7 +158,7 @@
                         <input id="nutzungsbedingungen" type="checkbox" aria-label="..."<% if (nutzungsbedingungakzeptiert === true) {print (' checked')}; %>>
                     </span>
                     <p id="nutzungsbedingungentext" class="form-control">Ich akzeptiere die
-                        <a target="_blank" href="http://www.hamburg.de/contentblob/350818/data/nutzungsbedingungen.pdf" class="navbar-link">Nutzungsbedingungen</a>.
+                        <a target="_blank" href="http://www.hamburg.de/contentblob/350818/data/nutzungsbedingungen.pdf">Nutzungsbedingungen</a>.
                     </p>
                 </div><!-- /input-group -->
                 <% if (errors.nutzungsbedingungakzeptiert !== undefined) { %>
@@ -161,7 +169,7 @@
                         <input id="gebuehrenordnung" type="checkbox" aria-label="..."<% if (gebuehrenordnungakzeptiert === true) {print (' checked')}; %>>
                     </span>
                     <p id="gebuehrenordnungtext" class="form-control">Ich nehme die
-                        <a target="_blank" href="http://www.hamburg.de/contentblob/322288/data/d-gebuehrenordnung.pdf" class="navbar-link">Gebührenordnung</a> zur Kenntnis.
+                        <a target="_blank" href="http://www.hamburg.de/contentblob/322288/data/d-gebuehrenordnung.pdf">Gebührenordnung</a> zur Kenntnis.
                     </p>
                 </div><!-- /input-group -->
                 <% if (errors.gebuehrenordnungakzeptiert !== undefined) { %>
@@ -180,5 +188,8 @@
                 <button id="weiter" type="button" class="btn btn-primary <% if (weiterButton.enabled === false) {print (' disabled')} else {print (' enabled')}; %>"><%=weiterButton.name%></button>
             </div>
         </div>
+        <% if (errors.bestelldaten !== undefined) { %>
+            <span id="bestelldatenError" class="col-xs-8 col-xs-offset-5 grenznachweiserrortext formulargroup"><%= errors.bestelldaten %></span>
+        <% } %>
     </div>
 </div>

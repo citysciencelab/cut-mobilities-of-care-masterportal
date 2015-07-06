@@ -20,7 +20,7 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            resolution: 15.874991427504629,
+            resolution: 2.6458319045841048,
             resolutions : [
                 66.14579761460263,
                 26.458319045841044,
@@ -33,7 +33,7 @@ define(function () {
                 0.2645831904584105,
                 0.13229159522920525
             ],
-            scale: 60000, // für print.js benötigt
+            scale: 10000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
         /**
@@ -54,7 +54,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: "../components/lgv-config/services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}
@@ -102,7 +102,7 @@ define(function () {
         */
         layerIDs: [
             {id: '453', visible: true},
-            {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396', visible: false, name: 'Alkis Liegenschaftskarte'},
+            {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396', visible: true, name: 'Alkis Liegenschaftskarte'},
             {id: '2295,2296', visible: true, name: 'Alkis Grenznachweis'},
         ],
         /**
@@ -212,9 +212,9 @@ define(function () {
             gfi: false,
             measure: true,
             print: true,
-            coord: true,
-            draw: true,
-            active: "draw"
+            coord: false,
+            draw: false,
+            active: ""
         },
         /**
         * @memberof config

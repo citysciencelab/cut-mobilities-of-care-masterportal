@@ -56,8 +56,7 @@ define([
         },
         appendItemToMenubar: function (obj) {
             var html = "<li>";
-
-            html += "<a href='#' class='menuitem ' + obj.classname + ''>";
+            html += "<a href='#' class='menuitem " + obj.classname + "'>";
             html += "<span class='' + obj.symbol + ''></span>&nbsp;" + obj.title;
             html += "</a>";
             html += "</li>";
