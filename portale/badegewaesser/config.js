@@ -4,7 +4,7 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
+            resolution: 66.14579761460263, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
@@ -42,7 +42,7 @@ define(function () {
         menubar: true,
         mouseHover: true,
         scaleLine: true,
-        isMenubarVisible: true,
+        isMenubarVisible: false,
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,
