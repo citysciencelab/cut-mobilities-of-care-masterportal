@@ -51,7 +51,7 @@ define(function () {
                  }
              ],
 
-             name: 'Mehrere Dienste', visible: false, opacity:"50"
+             name: 'Mehrere Dienste', visible: false, transparence:"50"
 
             },
             {id: '2056', visible: false, style: '2056', clusterDistance: 30, styleField :'kategorie'},
@@ -61,7 +61,7 @@ define(function () {
             {id: '356', visible: false, style: '356', clusterDistance: 30, styleField :'kategorie'},
             {id: '2060', visible: false, style: '2060', clusterDistance: 30, styleField :'kategorie'},
             {id: '2054', visible: false, style: '2054', clusterDistance: 30, styleField :'kategorie'},
-            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', opacity:"70"},
+            {id: '2058', visible: true, style: '2058', clusterDistance: 30, styleField :'kategorie', transparence:"70"},
             {id: '566', visible: false},
             {
                 id: '1711',

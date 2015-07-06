@@ -52,14 +52,13 @@ define([
         postInit: function () {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
-
-            if (this.get("opacity")) {
-                this.set("transparence", parseInt(this.get("opacity"), 10));
+            if (this.get("transparence")) {
+                this.set("transparence", parseInt(this.get("transparence"), 10));
             }
             else {
                  this.set("transparence", 0);
             }
-            this.updateOpacity();
+            // this.updateOpacity();
             // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
             this.setAttributions();
             this.unset("datasets");
@@ -189,7 +188,7 @@ define([
         updateOpacity: function () {
             var opacity = (100 - this.get("transparence")) / 100;
             this.get("layer").setOpacity(opacity);
-            this.set({opacity: opacity});
+            this.set("opacity", opacity);
         },
         /**
          * wird in WFSLayer und GroupLayer überschrieben
