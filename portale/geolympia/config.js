@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: false,
         view: {
             center: [565874, 5934140],
@@ -23,21 +24,10 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
-            {id:
-             [
-                {
-                    id: "8033"
-                },
-                {
-                    id: "8044"
-                }
-             ],
-             visible: true, name: "Organisationsflächen", styles: ["style_olympia_komplexe_piktogramme", "style_olympia_gebaeude_piktrogramme"]
-            },
-            // hier fehlt der Layer 'Olympic City', den Nicole zuschickebn wollte
-            {id: "8003,8004", visible: true, name: "Olympiastandorte"},
-            {id: "8045", visible: false},
-            {id: "8011", visible: false, name: "Planzeichnung"}
+            {id: "1", visible: true},
+            {id: "7999", visible: true},
+            {id: "2", visible: true},
+            {id: "7798", visible: true, style: "7798", styleField: "piktogramm", clusterDistance: 50}
         ],
         menubar: true,
         scaleLine: true,
