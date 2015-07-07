@@ -437,7 +437,7 @@ define([
                 var featureArray = [];
 
                 _.each(layermodels, function (layer) {
-                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "") {
+                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
                         var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
 
                         if (imageSrc) {
