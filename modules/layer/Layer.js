@@ -32,10 +32,6 @@ define([
 
             this.set("settings", false);
 
-            // EventBus.on("currentMapScale", function () {
-            //     console.log(8);
-            // });
-
             this.listenTo(this, "change:visibility", this.setVisibility);
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
@@ -242,7 +238,7 @@ define([
                 }
             }
             // Für Group-Layer
-            else {
+            else if (this.get("backbonelayers") !== undefined) {
                 if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
                 }
@@ -250,6 +246,10 @@ define([
                     this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
                 }
             }
+            else {
+                // für olympia-portal --> hat keine metadaten!!
+            }
+
         },
         moveUp: function () {
             this.collection.moveModelUp(this);
