@@ -67,8 +67,8 @@ define([
                             modelsArray[index].name = element.name;
                         }
                         // Transparenz für WMS/WFS
-                        if (_.has(element, "opacity")) {
-                            modelsArray[index].opacity = element.opacity;
+                        if (_.has(element, "transparence")) {
+                            modelsArray[index].transparence = element.transparence;
                         }
                         // default: Layer ist nicht sichtbar
                         if (_.has(element, "visible")) {
@@ -122,8 +122,8 @@ define([
                             styles: element.styles // Styles der Childlayer
                         };
                         // Transparenz für Group-Model
-                        if (_.has(element, "opacity")) {
-                            groupModel.opacity = element.opacity;
+                        if (_.has(element, "transparence")) {
+                            groupModel.transparence = element.transparence;
                         }
                         var modelChildren = [];
                         // Childlayerattributierung
