@@ -261,6 +261,9 @@ define([
             else if (params.url.indexOf("http://wscd0095") !== -1) {
                 url = params.url.replace("http://wscd0095", "/geofos");
             }
+            else if (params.url.indexOf("http://wscd0096") !== -1) {
+                url = params.url.replace("http://wscd0096", "/wscd0096");
+            }
             else if (params.url.indexOf("http://hmbtg.geronimus.info") !== -1) {
                 url = params.url.replace("http://hmbtg.geronimus.info", "/hmbtg");
             }
@@ -290,7 +293,7 @@ define([
                 async: false,
                 type: "GET",
                 context: this, // das model
-                success: function (data) {
+                success: function (data) {//console.log(data);
                     var gfiList = [];
                     // ESRI
                     if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
