@@ -258,6 +258,9 @@ define([
             else if (this.get("url").indexOf("http://wsca0620.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = this.get("url").replace("http://wsca0620.fhhnet.stadt.hamburg.de", "/wsca0620");
             }
+            else if (this.get("url").indexOf("http://wscd0096") !== -1) {
+                newURL = this.get("url").replace("http://wscd0096", "/wscd0096");
+            }
             // ab hier Internet
 			else if (this.get("url").indexOf("http://extmap.hbt.de") !== -1) {
                 newURL = this.get("url").replace("http://extmap.hbt.de", "/extmap");
@@ -267,6 +270,9 @@ define([
             }
 			else if (this.get("url").indexOf("http://geodienste-hamburg.de") !== -1) {
                 newURL = this.get("url").replace("http://geodienste-hamburg.de", "/geodienste-hamburg");
+            }
+            else {
+                newURL = this.get("url");
             }
 
             this.set("url", newURL);
