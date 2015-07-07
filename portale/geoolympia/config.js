@@ -23,8 +23,6 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
-            {id: "8003,8004", visible: true, name: "Olympiastandorte"},
-            {id: "8045", visible: false},
             {id:
              [
                 {
@@ -34,8 +32,11 @@ define(function () {
                     id: "8044"
                 }
              ],
-             visible: true, name: "Olympiastandorte_pikto", styles: ["style_olympia_komplexe_piktogramme", "style_olympia_gebaeude_piktrogramme"]
+             visible: true, name: "Organisationsflächen", styles: ["style_olympia_komplexe_piktogramme", "style_olympia_gebaeude_piktrogramme"]
             },
+            // hier fehlt der Layer 'Olympic City', den Nicole zuschickebn wollte
+            {id: "8003,8004", visible: true, name: "Olympiastandorte"},
+            {id: "8045", visible: false},
             {id: "8011", visible: false, name: "Planzeichnung"}
         ],
         menubar: true,
