@@ -13,8 +13,8 @@ Da das git-Protokoll von unserer Firewall geblockt wird, git sagen, dass es, bei
 Proxies setzen:
 
 ```
-# git config --global http.proxy http://wall.lit.hamburg.de:80
-# git config --global https.proxy http://wall.lit.hamburg.de:80
+# git config --global http.proxy <proxy-url:port>
+# git config --global https.proxy <proxy-url:port>
 ```
 
 ### python in PATH
@@ -67,8 +67,8 @@ npm config set cache D:\npm-cache
 in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 
 ```
-# npm config set proxy http://wall.lit.hamburg.de:80
-# npm config set https-proxy http://wall.lit.hamburg.de:80
+# npm config set proxy <proxy-url:port>
+# npm config set https-proxy <proxy-url:port>
 ```
 
 #### npm-Pakete global als Admin installieren
@@ -107,7 +107,7 @@ In der Admin-cmd global installieren
 Unser Repository irgendwohin klonen. Zurzeit noch das lokale auf G:.
 
 ```
-# git clone G:\AG_GeoDaten_Anwendungen\Projekte\Master-Portal\lgv.git
+# git clone https://bitbucket.org/lgv-g12/lgv.git
 ```
 
 Dann in das erstellte Verzeichnis wechseln.
