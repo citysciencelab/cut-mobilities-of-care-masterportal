@@ -27,10 +27,10 @@
     "requirejs-text": "~2.0.14",
     "underscore": "~1.8.2",
     "jquery-ui": "~1.11.4",
-    "lgv-config": "G:/AG_GeoDaten_Anwendungen/Projekte/Master-Portal/lgv-config.git#latest"
+    "lgv-config": "https://bitbucket.org/lgv-g12/lgv-config.git#latest"
 
   },
   "devDependencies": {
-    "build-config": "G:/AG_GeoDaten_Anwendungen/Projekte/Master-Portal/build-config.git#latest"
+    "build-config": "https://bitbucket.org/lgv-g12/build-config.git#latest"
   }
 }
