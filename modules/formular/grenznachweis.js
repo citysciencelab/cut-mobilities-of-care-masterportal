@@ -5,9 +5,9 @@ define([
     'config',
     'openlayers',
     'modules/cookie/view',
+    'modules/restReader/collection',
     'bootstrap/alert'
-], function (_, Backbone, EventBus, Config, ol, cookie) {
-
+], function (_, Backbone, EventBus, Config, ol, cookie, RestColl) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -36,9 +36,14 @@ define([
             activatedInteraction: false,
             weiterButton: {enabled: true, name: 'weiter'},
             zurueckButton: {enabled: false, name: 'zurück'},
-            activeDIV: 'beschreibung' //beschreibung oder kundendaten
+            activeDIV: 'beschreibung', //beschreibung oder kundendaten
+            wpsurl: ''
         },
         initialize: function () {
+            EventBus.on("sendRestReaderServiceByID", function (response) {
+                this.set('wpsurl', response[0].get('url'));
+            }, this);
+            EventBus.trigger("wantRestReaderServiceByID", Config.wpsID);
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source")
@@ -454,13 +459,8 @@ define([
             request_str += '  </wps:Input>';
             request_str += '</wps:DataInputs>';
             request_str += '</wps:Execute>';
-            if (Config.layerConf.indexOf('fhhnet') > -1) {
-                url = '/geofos/deegree-wps/services/wps';
-            } else {
-                url = '/gateway-hamburg/OGCFassade/HH_WPS.aspx';
-            }
             $.ajax({
-                url: url + '?Request=Execute&Service=WPS&Version=1.0.0&Identifier=grenznachweis_communicator.fmw',
+                url: this.get('wpsurl') + '?Request=Execute&Service=WPS&Version=1.0.0',
                 data: request_str,
                 headers: {
                     "Content-Type": "text/xml; charset=UTF-8"
@@ -468,7 +468,6 @@ define([
                 context: this,
                 method: "POST",
                 success: function (data, status) {
-                    //Unicherheit, wie getElementsByTagName auf allen Browsern arbeitet. Mit Opera, IE klappt es so. Deshalb Fehlermeldung nur wenn es sicher ist.
                     if (data.getElementsByTagName('jobStatus') !== undefined && data.getElementsByTagName('jobStatus')[0].textContent === 'FME_FAILURE') {
                         this.showErrorMessage();
                     } else {
