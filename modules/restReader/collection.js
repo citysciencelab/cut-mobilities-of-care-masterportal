@@ -10,8 +10,6 @@ define([
         url: Util.getPath(Config.restConf),
         model: Model,
         initialize: function () {
-            EventBus.on("wantAllRestReaderServices", this.wantAllRestReaderServices, this);
-            EventBus.on("wantRestReaderServiceByID", this.wantRestReaderServiceByID, this);
             this.fetch({
                 cache: false,
                 async: false,
@@ -27,12 +25,6 @@ define([
         },
         getServiceById: function (id) {
             return this.where({id: id});
-        },
-        wantRestReaderServiceByID: function (id) {
-            EventBus.trigger("sendRestReaderServiceByID", this.getServiceById(id));
-        },
-        wantAllRestReaderServices: function () {
-            EventBus.trigger("sendAllRestReaderServices", this.getAllServices());
         }
     });
 
