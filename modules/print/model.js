@@ -2,8 +2,9 @@ define([
     "backbone",
     "modules/core/util",
     "eventbus",
-    "config"
-], function (Backbone, Util, EventBus, Config) {
+    "config",
+    'modules/restReader/collection',
+], function (Backbone, Util, EventBus, Config, RestReader) {
 
     var model = Backbone.Model.extend({
 
@@ -22,7 +23,14 @@ define([
         /**
          *
          */
-        url: Config.proxyURL + "?url=" + Config.print.url() + "master/info.json",
+        url: function () {
+            var resp, printurl;
+            resp = RestReader.getServiceById(Config.print.printID);
+            if (resp[0] && resp[0].get('url')) {
+                this.set('printurl', resp[0].get('url'));
+            }
+            return Config.proxyURL + "?url=" + this.get('printurl') + "/master/info.json";
+        },
 
         /**
          *
@@ -201,21 +209,21 @@ define([
             if (this.get("hasPrintGFIParams") === true && Config.print.gfi === true) {
                 switch (this.get("gfiParams").length) {
                     case 4: {
-                        this.set("createURL", Config.print.url() + "/master_gfi_4/create.json");
+                        this.set("createURL", this.get('printurl') + "/master_gfi_4/create.json");
                         break;
                     }
                     case 5: {
-                        this.set("createURL", Config.print.url() + "/master_gfi_5/create.json");
+                        this.set("createURL", this.get('printurl') + "/master_gfi_5/create.json");
                         break;
                     }
                     case 6: {
-                        this.set("createURL", Config.print.url() + "/master_gfi_6/create.json");
+                        this.set("createURL", this.get('printurl') + "/master_gfi_6/create.json");
                         break;
                     }
                 }
             }
             else {
-                this.set("createURL", Config.print.url() + "/master/create.json");
+                this.set("createURL", this.get('printurl') + "/master/create.json");
             }
         },
 
