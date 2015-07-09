@@ -204,9 +204,7 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: function () {
-                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-                },
+            printID: "99999",
             title: "Grenznchweis",
             gfi: false
         },
