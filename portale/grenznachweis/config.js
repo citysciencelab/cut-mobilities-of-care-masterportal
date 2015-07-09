@@ -58,6 +58,12 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
+        * @desc Pfad zur JSON für sonstige Dienste mit REST-Schnittstelle.
+        */
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        /**
+        * @memberof config
+        * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
         styleConf: "../components/lgv-config/style.json",
@@ -105,6 +111,12 @@ define(function () {
             {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396', visible: true, name: 'Alkis Liegenschaftskarte'},
             {id: '2295,2296', visible: true, name: 'Alkis Grenznachweis'},
         ],
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc ID der WPS-Definition in restConf
+        */
+        wpsID: '99998',
         /**
         * @memberof config
         * @type {Boolean}
