@@ -438,6 +438,7 @@ define([
 
                 _.each(layermodels, function (layer) {
                     if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
+
                         var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
 
                         if (imageSrc) {
@@ -459,6 +460,9 @@ define([
                 _.each(Config.searchBar.getFeatures, function (element) {
                     if (element.filter === "olympia") {
                         this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForOlympia, false);
+                    }
+                    else if (element.filter === "paralympia") {
+                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForParalympia, false);
                     }
                     else if (element.filter === "bplan") {
                         this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
@@ -505,8 +509,8 @@ define([
                    if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
                         position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                         coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                        if ($(hit).find("app\\:allenutzun, allenutzun")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                            hitName = $(hit).find("app\\:allenutzun, allenutzun")[0].textContent;
+                        if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
+                            hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
                             hitType = $(hit).find("app\\:staette, staette")[0].textContent;
                             this.pushHits("olympia", {
                                 name: hitName,
@@ -514,6 +518,36 @@ define([
                                 coordinate: coordinate,
                                 glyphicon: "glyphicon-fire",
                                 id: hitName.replace(/ /g, "") + "Olympia"
+                            });
+                        }
+                   }
+                }, this);
+            },
+
+            /**
+             * success-Funktion für die Paralympiastandorte
+             * @param  {xml} data - getFeature-Request
+             */
+            getFeaturesForParalympia: function (data) {
+                var hits = $("wfs\\:member,member", data),
+                    coordinate,
+                    position,
+                    hitType,
+                    hitName;
+
+                _.each(hits, function (hit) {
+                   if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                        position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                        coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                        if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
+                            hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
+                            hitType = $(hit).find("app\\:staette, staette")[0].textContent;
+                            this.pushHits("olympia", {
+                                name: hitName,
+                                type: "Paralympiastandort",
+                                coordinate: coordinate,
+                                glyphicon: "glyphicon-fire",
+                                id: hitName.replace(/ /g, "") + "Paralympia"
                             });
                         }
                    }
@@ -532,7 +566,7 @@ define([
                         if (eleName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", {
                                 name: ele,
-                                type: "Olympiastandort",
+                                type: feature.type,
                                 coordinate: feature.coordinate,
                                 glyphicon: "glyphicon-fire",
                                 id: feature.id
