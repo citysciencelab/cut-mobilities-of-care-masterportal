@@ -241,7 +241,6 @@ define([
             var url, data, pgfi = [];
             // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
             if (params.url.search(location.host) === -1) {
-                console.log(params.url);
                 if (params.url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
                     url = params.url.replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
                 }
