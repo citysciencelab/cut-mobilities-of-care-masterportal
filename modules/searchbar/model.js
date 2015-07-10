@@ -454,10 +454,10 @@ define([
             getWFSFeatures: function () {
                 _.each(Config.searchBar.getFeatures, function (element) {
                     if (element.filter === "olympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForOlympia, false);
+                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
                     }
                     else if (element.filter === "paralympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForParalympia, false);
+                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
                     }
                     else if (element.filter === "bplan") {
                         this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
