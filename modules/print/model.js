@@ -4,8 +4,9 @@ define([
     "eventbus",
     "config",
     'modules/restReader/collection',
-], function (Backbone, Util, EventBus, Config, RestReader) {
-
+    'modules/core/mapView'
+], function (Backbone, Util, EventBus, Config, RestReader, mapView) {
+    "use strict";
     var model = Backbone.Model.extend({
 
         /**
@@ -16,7 +17,7 @@ define([
             printTitle: Config.print.title,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
-            currentMapScale: Config.view.scale, // akuteller Maßstab
+            currentMapScale: mapView.get('startScale'), // aktueller Maßstab wird in mapView gesetzt.
             currentMapCenter: Config.view.center // aktuelle Zentrumkoordinate
         },
 
@@ -24,7 +25,7 @@ define([
          *
          */
         url: function () {
-            var resp, printurl;
+            var resp;
             resp = RestReader.getServiceById(Config.print.printID);
             if (resp[0] && resp[0].get('url')) {
                 this.set('printurl', resp[0].get('url'));
@@ -49,7 +50,7 @@ define([
             this.on("change:isCurrentWin", this.setActive, this);
             this.on("change:currentLayout change:currentScale change:isActive", this.updatePrintPage, this);
 
-            EventBus.on("winParams", this.setStatus, this),
+            EventBus.on("winParams", this.setStatus, this);
             EventBus.on("sendVisibleWMSLayer", this.setLayerToPrint, this);
             EventBus.on("gfiForPrint", this.setGFIToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
@@ -64,8 +65,7 @@ define([
             if (args[2] === "print") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-            }
-            else {
+            } else {
                 this.set("isCurrentWin", false);
             }
         },
@@ -96,8 +96,7 @@ define([
             this.set("layerToPrint", []);
             if (_.has(Config, "tree") === true) {
                 EventBus.trigger("getSelectedVisibleWMSLayer");
-            }
-            else {
+            } else {
                 EventBus.trigger("getVisibleWMSLayer");
             }
             if (Config.tools.draw === true) {
@@ -221,8 +220,7 @@ define([
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 this.set("createURL", this.get('printurl') + "/master/create.json");
             }
         },
@@ -265,6 +263,5 @@ define([
             this.set(attribute, _.flatten(tempArray));
         }
     });
-
-        return model;
+    return model;
 });

@@ -5,8 +5,7 @@ define(function () {
         allowParametricURL: false,
         view: {
             center: [565874, 5934140], // Rathausmarkt
-            resolution: 26.458319045841044, // // 1:100.000
-            scale: 100000 // für print.js benötigt
+            resolution: 26.458386250105834 // // 1:100.000
         },
         //layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
         layerConf: locations.baseUrl + '../diensteapiINTERNET.json',

@@ -19,9 +19,7 @@ define(function () {
         * @property {Number}  scale - Der initiale Maßstab.
         */
         view: {
-            center: [562674, 5940033],// Eimsbüttel
-            resolution: 15.874991427504629,// 1:60.000
-            scale: 60000 // für print.js benötigt
+            center: [562674, 5940033]// Eimsbüttel
         },
         /**
         * @memberof config

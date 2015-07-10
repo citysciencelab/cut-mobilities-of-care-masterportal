@@ -18,9 +18,7 @@ define(function () {
         * @property {Number}  scale - Beschreibung.
         */
         view: {
-            center: [565874, 5934140],
-            resolution: 15.874991427504629,
-            scale: 60000 // für print.js benötigt
+            center: [565874, 5934140]
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",

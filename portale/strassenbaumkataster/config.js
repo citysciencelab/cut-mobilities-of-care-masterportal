@@ -3,8 +3,7 @@ define(function () {
         allowParametricURL: false,
         view: {
             center: [565874, 5934140],
-            resolution: 5.2916638091682096,
-            scale: 20000 // für print.js benötigt
+            resolution: 5.2916772500211667
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
