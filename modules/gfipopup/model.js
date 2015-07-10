@@ -286,7 +286,7 @@ define([
             }
 
             // Für B-Pläne wird Feature_Count auf 3 gesetzt
-            if (params.name === "Festgestellte Bebauungspläne") {
+            if (params.name === "Festgestellte Bebauungspläne" || params.name === "Sportstätten") {
                 data = "FEATURE_COUNT=3";
             }
             else {
