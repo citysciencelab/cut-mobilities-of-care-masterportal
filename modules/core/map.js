@@ -48,8 +48,7 @@ define([
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
-
-                // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
+            // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
             if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
                 var startx = 0,
                     starty = 0;

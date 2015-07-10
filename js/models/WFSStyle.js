@@ -12,7 +12,7 @@ define([
             imagepath: Util.getPath(Config.wfsImgPath),
             subclass: "Icon",
             // für Icon
-            imagename: "unknown.png",
+            imagename: "blank.png",
             imagewidth: 1,
             imageheight: 1,
             imagescale: 1,

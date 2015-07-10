@@ -85,7 +85,6 @@ define([
                 if (Config.searchBar.initString !== undefined) {
                     if (Config.searchBar.initString.search(",") !== -1) {
                         var splitInitString = Config.searchBar.initString.split(",");
-
                         this.set("onlyOneStreetName", splitInitString[0]);
                         // this.set("isOnlyOneStreet", true);
                         this.set("searchString", splitInitString[0] + " " + splitInitString[1]);
@@ -102,9 +101,7 @@ define([
                 else {
                     this.set("quickHelp", false);
                 }
-
                 EventBus.trigger("addOverlay", this.get("marker"));
-                EventBus.trigger("getVisibleWFSLayer");
                 EventBus.trigger("getAllLayer");
             },
 
@@ -434,19 +431,17 @@ define([
             */
             getFeaturesForSearch: function (layermodels) {
                 this.set("features", []);
-                var featureArray = [];
-
+                var featureArray = [], imageSrc;
                 _.each(layermodels, function (layer) {
                     if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
-
-                        var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
-
-                        if (imageSrc) {
-                            var features = layer.get("source").getFeatures();
-
-                            _.each(features, function (feature) {
-                                featureArray.push({name: feature.get("name"), type: "Krankenhaus", coordinate: feature.getGeometry().getCoordinates(), imageSrc: imageSrc, id: feature.get("name").replace(/ /g, "") + layer.get("name")});
-                            });
+                        if (layer.get("layer").getStyle()[0]) {
+                            imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
+                            if (imageSrc) {
+                                var features = layer.get("layer").getSource().getFeatures();
+                                _.each(features, function (feature) {
+                                    featureArray.push({name: feature.get("name"), type: "Krankenhaus", coordinate: feature.getGeometry().getCoordinates(), imageSrc: imageSrc, id: feature.get("name").replace(/ /g, "") + layer.get("name")});
+                                });
+                            }
                         }
                     }
                 });

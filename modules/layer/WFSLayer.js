@@ -58,7 +58,6 @@ define([
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable")
                             }));
-                            this.get("layer").setVisible(true);
                             this.reload();
                         } else {
                             var src = new ol.source.Vector({
@@ -80,7 +79,6 @@ define([
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable")
                             }));
-                            this.get("layer").setVisible(true);
                             this.reload();
                         }
                         this.get("layer").id = this.get("id");
@@ -123,7 +121,6 @@ define([
             }
         },
         setVisibility: function () {
-            EventBus.trigger("returnBackboneLayerForSearchbar", this);
             var visibility = this.get("visibility");
             this.toggleEventAttribution(visibility);
             if (visibility === true) {
@@ -131,8 +128,7 @@ define([
                     this.updateData();
                 }
                 this.get("layer").setVisible(true);
-            }
-            else {
+            } else {
                 this.get("layer").setVisible(false);
             }
         },

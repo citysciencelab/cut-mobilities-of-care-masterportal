@@ -52,9 +52,9 @@ define(function () {
         },
         startUpModul: '',
         searchBar: {
-            placeholder: "Adresssuche",
+            placeholder: "Suche nach Straße oder Krankenhausname",
             gazetteerURL: function () {
-                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         print: {
