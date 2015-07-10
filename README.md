@@ -128,7 +128,7 @@ liest package.json.
 # bower install
 ```
 
-liest bower.json. Installiert unter anderem Ordner das Repo build-config nach /components, wo einige grunt-tasks enthalten sind. Außerdem das Repo lgv-config mit services.json und style.json. Beide liegen neben dem lgv.git Repo im Master-Portal-Projekt-Ordner.
+liest bower.json. Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config) nach /components, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
 
 ## Grunt Tasks ausführen
 

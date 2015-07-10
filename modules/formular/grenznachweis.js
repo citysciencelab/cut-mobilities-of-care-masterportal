@@ -7,7 +7,7 @@ define([
     'modules/cookie/view',
     'modules/restReader/collection',
     'bootstrap/alert'
-], function (_, Backbone, EventBus, Config, ol, cookie, RestColl) {
+], function (_, Backbone, EventBus, Config, ol, cookie, RestReader) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -40,10 +40,35 @@ define([
             wpsurl: ''
         },
         initialize: function () {
-            EventBus.on("sendRestReaderServiceByID", function (response) {
-                this.set('wpsurl', response[0].get('url'));
-            }, this);
-            EventBus.trigger("wantRestReaderServiceByID", Config.wpsID);
+            // lese WPS-Url aus JSON ein
+            var resp, newURL;
+            resp = RestReader.getServiceById(Config.wpsID);
+            if (resp[0] && resp[0].get('url')) {
+                // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
+                if (resp[0].get('url').indexOf("http://geofos.fhhnet.stadt.hamburg.de") !== -1) {
+                    newURL = resp[0].get('url').replace("http://geofos.fhhnet.stadt.hamburg.de", "/geofos");
+                }
+                else if (resp[0].get('url').indexOf("http://geofos") !== -1) {
+                    newURL = resp[0].get('url').replace("http://geofos", "/geofos");
+                }
+                else if (resp[0].get('url').indexOf("http://wscd0095") !== -1) {
+                    newURL = resp[0].get('url').replace("http://wscd0095", "/geofos");
+                }
+                else if (this.get("url").indexOf("http://wscd0096") !== -1) {
+                    newURL = resp[0].get('url').replace("http://wscd0096", "/wscd0096");
+                }
+                // ab hier Internet
+                else if (resp[0].get('url').indexOf("http://gateway.hamburg.de") !== -1) {
+                    newURL = resp[0].get('url').replace("http://gateway.hamburg.de", "/gateway-hamburg");
+                }
+                else if (resp[0].get('url').indexOf("http://geodienste-hamburg.de") !== -1) {
+                    newURL = resp[0].get('url').replace("http://geodienste-hamburg.de", "/geodienste-hamburg");
+                }
+                else {
+                    newURL = resp[0].get('url');
+                }
+                this.set('wpsurl', newURL);
+            }
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source")

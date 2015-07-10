@@ -19,9 +19,7 @@ define(function () {
         * @property {Number}  scale - Der initiale Maßstab.
         */
         view: {
-            center: [562674, 5940033],// Eimsbüttel
-            resolution: 15.874991427504629,// 1:60.000
-            scale: 60000 // für print.js benötigt
+            center: [562674, 5940033]// Eimsbüttel
         },
         /**
         * @memberof config
@@ -46,6 +44,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf:"../components/lgv-config/style.json",
         /**
         * @memberof config
@@ -197,9 +196,7 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: function () {
-                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-            },
+            printID: "99999",
             title: "Gesundheits- & Pflegekonferenz Eimsbüttel",
             gfi: false
         },

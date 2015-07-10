@@ -4,16 +4,14 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [565874, 5934140], // Rathausmarkt
-            resolution: 66.14579761460263, // 1:60.000
-            scale: 60000 // für print.js benötigt
+            resolution: 66.145965625264583 // 1:250.000
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99997",
             title: "Badegewässer-Portal",
             gfi: false
         },

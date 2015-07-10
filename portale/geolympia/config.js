@@ -8,6 +8,7 @@ define(function () {
             scale: 20000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet-olympia.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         layerIDs: [
             {id: "453", visible: true},
@@ -101,9 +102,7 @@ define(function () {
             active: "gfi"
         },
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99997",
             title: "Bürgerportal Olympia",
             gfi: true
         },

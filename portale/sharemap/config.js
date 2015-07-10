@@ -2,11 +2,10 @@ define(function () {
     var config = {
         allowParametricURL: true,
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
-            scale: 60000 // für print.js benötigt
+            center: [565874, 5934140] // Rathausmark
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         categoryConf: "../components/lgv-config/category.json",
         layerIDs:
         [
@@ -49,9 +48,7 @@ define(function () {
         orientation: true,
         poi: false,
         print: {
-            url: function () {
-                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-            },
+            printID: "99999",
             title: "Hamburg",
             gfi: false
         },
