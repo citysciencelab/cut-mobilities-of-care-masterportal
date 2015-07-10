@@ -5,18 +5,6 @@ define(function () {
         view: {
             center: [565874, 5934140],
             resolution: 5.2916638091682096,
-            resolutions: [
-                66.14579761460263,
-                26.458319045841044,
-                15.874991427504629,
-                10.583327618336419,
-                5.2916638091682096,
-                2.6458319045841048,
-                1.3229159522920524,
-                0.6614579761460262,
-                0.2645831904584105,
-                0.13229159522920525
-            ],
             scale: 20000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet-olympia.json",
@@ -24,13 +12,51 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
+            {id:
+             [
+                {
+                    id: "1935",
+                    name: "Bus1"
+                },
+                {
+                    id: "1935",
+                    name: "Bus2"
+                }
+             ],
+             visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+            },
+            {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
+            {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
             {id: "1", visible: true},
             {id: "7999", visible: true},
-            {id: "2", visible: true},
-            {id: "7798", visible: true, style: "7798", styleField: "piktogramm", clusterDistance: 50}
+            {id:
+             [
+                 {
+                     id: "4"
+                 },
+                 {
+                     id: "3"
+                 }
+             ],
+             name: "Nachnutzung", visible: false
+            },
+            {id:
+             [
+                 {
+                     id: "2"
+                 },
+                 {
+                     id: "3"
+                 }
+             ],
+             name: "Sportstätte", visible: true
+            },
+            {id: "7797", visible: false, style: "7797", styleField: "piktogramm", clusterDistance: 60, mouseHoverField: "piktogramm"},
+            {id: "7798", visible: true, style: "7798", styleField: "piktogramm", clusterDistance: 50, mouseHoverField: "piktogramm"}
         ],
         menubar: true,
         scaleLine: true,
+        mouseHover: true,
         isMenubarVisible: true,
         menu: {
             viewerName: "GeoViewer",
@@ -41,7 +67,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: "",
@@ -52,23 +78,23 @@ define(function () {
             },
             getFeatures: [
                 {
-                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
-                    typeName: "olympia_komplexe",
-                    propertyName: "staette,art,allenutzun,center_geom",
-                    filter: "olympia"
+                    url: "/wscd0096/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                    typeName: "olympia_sportarten_paralympic",
+                    propertyName: "staette,art,piktogramm,geom",
+                    filter: "paralympia"
                 },
                 {
-                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
-                    typeName: "olympia_gebaeude",
-                    propertyName: "staette,art,allenutzun,center_geom",
+                    url: "/wscd0096/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                    typeName: "olympia_sportarten",
+                    propertyName: "staette,art,piktogramm,geom",
                     filter: "olympia"
                 }
             ]
         },
         tools: {
             gfi: true,
-            measure: false,
-            print: true,
+            measure: true,
+            print: false,
             coord: true,
             draw: false,
             orientation: false,
