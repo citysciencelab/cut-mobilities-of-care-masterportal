@@ -226,35 +226,71 @@ define([
                 return element.getVisible() === true;
             });
             _.each(layersVisible, function (element) {
-                var gfiAttributes = element.get("gfiAttributes");
+                if (element.get("typ") !== "GROUP") {
+                    var gfiAttributes = element.get("gfiAttributes");
 
-                if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
-                    if (element.getProperties().typ === "WMS") {
-                        var gfiURL = element.getSource().getGetFeatureInfoUrl(
-                            coordinate, resolution, projection,
-                            {INFO_FORMAT: "text/xml"}
-                        );
+                    if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
+                        if (element.getProperties().typ === "WMS") {
+                            var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                                coordinate, resolution, projection,
+                                {INFO_FORMAT: "text/xml"}
+                            );
 
-                        gfiParams.push({
-                            typ: "WMS",
-                            scale: scale,
-                            url: gfiURL,
-                            name: element.get("name"),
-                            attributes: gfiAttributes,
-                            routable: element.get("routable")
-                        });
+                            gfiParams.push({
+                                typ: "WMS",
+                                scale: scale,
+                                url: gfiURL,
+                                name: element.get("name"),
+                                attributes: gfiAttributes,
+                                routable: element.get("routable")
+                            });
+                        }
+                        else if (element.getProperties().typ === "WFS") {
+                            gfiParams.push({
+                                typ: "WFS",
+                                scale: scale,
+                                source: element.getSource(),
+                                style: element.getStyle(),
+                                name: element.get("name"),
+                                attributes: gfiAttributes,
+                                routable: element.get("routable")
+                            });
+                        }
                     }
-                    else if (element.getProperties().typ === "WFS") {
-                        gfiParams.push({
-                            typ: "WFS",
-                            scale: scale,
-                            source: element.getSource(),
-                            style: element.getStyle(),
-                            name: element.get("name"),
-                            attributes: gfiAttributes,
-                            routable: element.get("routable")
-                        });
-                    }
+                }
+                else {
+                    element.getLayers().forEach(function (layer) {
+                        var gfiAttributes = layer.get("gfiAttributes");
+
+                        if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
+                            if (layer.getProperties().typ === "WMS") {
+                                var gfiURL = layer.getSource().getGetFeatureInfoUrl(
+                                    coordinate, resolution, projection,
+                                    {INFO_FORMAT: "text/xml"}
+                                );
+
+                                gfiParams.push({
+                                    typ: "WMS",
+                                    scale: scale,
+                                    url: gfiURL,
+                                    name: layer.get("name"),
+                                    attributes: gfiAttributes,
+                                    routable: layer.get("routable")
+                                });
+                            }
+                            else if (layer.getProperties().typ === "WFS") {
+                                gfiParams.push({
+                                    typ: "WFS",
+                                    scale: scale,
+                                    source: layer.getSource(),
+                                    style: layer.getStyle(),
+                                    name: layer.get("name"),
+                                    attributes: gfiAttributes,
+                                    routable: layer.get("routable")
+                                });
+                            }
+                        }
+                    });
                 }
             });
             EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
