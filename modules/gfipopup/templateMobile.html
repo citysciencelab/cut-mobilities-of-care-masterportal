@@ -39,7 +39,7 @@
                   </td>
               <% } else { %>
                   <td colspan="2">
-                      <strong><%= key + ':</br>' %></strong>
+                      <strong><%= key + '</br>' %></strong>
                       <% if (value.search('.html') !== -1) { %>
                           <a href="<%= value%>" target="_blank">Link</a>
                       <% } else if (value.substr(0, 7) == 'http://') { %>

@@ -260,7 +260,7 @@ define([
                     EventBus.trigger("showLayerInTree", hit.model);
                     evt.stopPropagation();
                 }
-                else if (hit.type === "Olympiastandort") {
+                else if (hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
                     zoomLevel = 5;
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
@@ -366,7 +366,7 @@ define([
                     searchVector.setVisible(true);
                     searchVector.getSource().addFeature(feature);
                 }
-                else if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort") {
+                else if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                 }

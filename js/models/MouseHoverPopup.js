@@ -23,6 +23,7 @@ define([
             EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
             EventBus.on("setMap", this.checkLayersAndRegisterEvent, this); // initieren. Wird in Map.js getriggert, nachdem dort auf getMap reagiert wurde.
+
             EventBus.trigger("getMap", this);
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
@@ -48,6 +49,7 @@ define([
                         wfslistlayer = _.find(wfsList, function (listlayer) {
                         return listlayer.layerId === layerId;
                     });
+
                     if (wfslistlayer) {
                         wfslistlayer.layer = layer;
                     }
@@ -107,53 +109,44 @@ define([
         */
         checkForEachFeatureAtPixel: function (evt, map) {
             var pFeatureArray = [];
-            map.forEachFeatureAtPixel(evt.pixel, function (selection, layer) {
-                if (!layer || !selection) {
-                    return;
-                }
-                var selProps = selection.getProperties();
+
+            var featuresAtPixel = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                    return {
+                        feature: feature,
+                        layer: layer
+                    };
+            });
+
+            if (featuresAtPixel !== undefined) {
+                var selProps = featuresAtPixel.feature.getProperties();
+                // Cluster-Features
                 if (selProps.features) {
                     var list = selProps.features;
+
                     _.each(list, function (element) {
                         pFeatureArray.push({
                             attributes: element.getProperties(),
-                            layerId: layer.id
+                            layerId: featuresAtPixel.layer.id
                         });
                     });
                 }
                 else {
                     pFeatureArray.push({
                         attributes: selProps,
-                        layerId: layer.id
+                        layerId: featuresAtPixel.layer.id
                     });
                 }
-            }, this, function (layer) {
-                var wfsList = this.get("wfsList");
-                if (wfsList) {
-                    var found = _.find(wfsList, function (layerlist) {
-                        return layerlist.layerId === layer.id;
-                    });
-                    if (found) {
-                        return layer;
+                if (pFeatureArray.length > 0) {
+                    if (this.get("oldSelection") === "") {
+                        this.set("oldSelection", pFeatureArray);
+                        this.prepMouseHoverFeature(pFeatureArray);
                     }
                     else {
-                        return null;
-                    }
-                }
-                else {
-                    return null;
-                }
-            }, this);
-            if (pFeatureArray.length > 0) {
-                if (this.get("oldSelection") === "") {
-                    this.set("oldSelection", pFeatureArray);
-                    this.prepMouseHoverFeature(pFeatureArray);
-                }
-                else {
-                    if (this.compareArrayOfObjects(pFeatureArray, this.get("oldSelection")) === false) {
-                        this.destroyPopup(pFeatureArray);
-                        this.set("oldSelection", pFeatureArray);
-                            this.prepMouseHoverFeature(pFeatureArray);
+                        if (this.compareArrayOfObjects(pFeatureArray, this.get("oldSelection")) === false) {
+                            this.destroyPopup(pFeatureArray);
+                            this.set("oldSelection", pFeatureArray);
+                                this.prepMouseHoverFeature(pFeatureArray);
+                        }
                     }
                 }
             }
@@ -161,6 +154,7 @@ define([
                 this.removeMouseHoverFeatureIfSet();
             }
         },
+
         compareArrayOfObjects: function (arr1, arr2) {
             if (arr1.length !== arr2.length) {
                 return false;
@@ -168,12 +162,14 @@ define([
             for (var i = 0; i < arr1.length; i++) {
                 var obj1 = arr1[i],
                     obj2 = arr2[i];
+
                 if (_.isEqual(obj1, obj2) === false) {
                     return false;
                 }
             }
             return true;
         },
+
         /**
         * Diese Funktion prüft ob mhpresult = "" und falls nicht
         * wird MouseHover destroyt
@@ -192,6 +188,7 @@ define([
             var wfsList = this.get("wfsList"),
                 value = "",
                 coord = [];
+
             if (pFeatureArray.length > 0) {
                 // für jedes gehoverte Feature...
                 _.each(pFeatureArray, function (element) {
@@ -201,8 +198,10 @@ define([
                     var listEintrag = _.find(wfsList, function (ele) {
                         return ele.layerId = element.layerId;
                     });
+
                     if (listEintrag) {
                         var mouseHoverField = listEintrag.fieldname;
+
                         if (mouseHoverField) {
                             if (_.has(element.attributes, mouseHoverField)) {
                                 value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
@@ -236,5 +235,6 @@ define([
             }
         }
     });
+
     return new MouseHoverPopup();
 });
