@@ -65,6 +65,12 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
+        * @desc Pfad zur json mit Druck- und WPS-Dienst
+        */
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        /**
+        * @memberof config
+        * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
         styleConf: "../components/lgv-config/style.json",
@@ -236,9 +242,7 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: function () {
-                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-                },
+            printID: "99999",
             title: "Master",
             gfi: false
         },

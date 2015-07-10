@@ -8,12 +8,11 @@ define(function () {
             scale: 60000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99997",
             title: "Badegewässer-Portal",
             gfi: false
         },

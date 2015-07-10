@@ -9,7 +9,8 @@ define(function () {
             resolution: 15.874991427504629, // 1:60.000
             scale: 60000 // für print.js benötigt
         },
-        layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiInternet.json'),
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         layerIDs: [
             {id: '453', visible: false},
             {id: '682', visible: false},
@@ -123,14 +124,7 @@ define(function () {
             active: 'gfi'
         },
         print: {
-            url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
-            },
+            printID: "99999",
             title: 'Geotourismus',
             gfi: false
         },

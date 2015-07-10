@@ -7,6 +7,7 @@ define(function () {
             scale: 20000 // für print.js benötigt
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         layerIDs: [
             {id: "453", visible: true},
             {id: "94", visible: false},
@@ -48,9 +49,7 @@ define(function () {
             active: "gfi"
         },
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99999",
             title: "Strassenbaum-Online",
             gfi: true
         },

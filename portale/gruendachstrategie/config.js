@@ -10,6 +10,7 @@ define(function () {
         },
         //layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
         layerConf: locations.baseUrl + '../diensteapiINTERNET.json',
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: locations.baseUrl + '../style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
         // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
@@ -46,14 +47,7 @@ define(function () {
             }
         },
         print: {
-            url: function () {
-                if (locations.fhhnet) {
-                    return locations.host + ":8680/mapfish_print_2.0/";
-                }
-                else {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
-            },
+            printID: "99999",
             title: 'Gründachstrategie',
             gfi: false
         },

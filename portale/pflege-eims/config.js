@@ -46,6 +46,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf:"../components/lgv-config/style.json",
         /**
         * @memberof config
@@ -197,9 +198,7 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: function () {
-                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-            },
+            printID: "99999",
             title: "Gesundheits- & Pflegekonferenz Eimsbüttel",
             gfi: false
         },
