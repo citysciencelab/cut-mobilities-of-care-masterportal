@@ -18,11 +18,10 @@ define(function () {
         * @property {Number}  scale - Beschreibung.
         */
         view: {
-            center: [565874, 5934140],
-            resolution: 15.874991427504629,
-            scale: 60000 // für print.js benötigt
+            center: [565874, 5934140]
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         /**
@@ -117,9 +116,7 @@ define(function () {
         * @property {Boolean}  gfi - Beschreibung.
         */
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99997",
             title: 'Gewässerunterhaltung',
             gfi: false
         },

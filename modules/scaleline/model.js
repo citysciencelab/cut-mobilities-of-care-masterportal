@@ -1,9 +1,10 @@
 define([
     "backbone",
     "eventbus",
-    "config"
-], function (Backbone, EventBus, Config) {
-
+    "config",
+    "modules/core/mapView"
+], function (Backbone, EventBus, Config, mapView) {
+    "use strict";
     var ScaleLine = Backbone.Model.extend({
 
         /**
@@ -13,7 +14,7 @@ define([
             EventBus.on("currentMapScale", this.setScaleValue, this);
             this.listenTo(this, "change:scaleValue", this.setScale);
             this.listenTo(this, "change:scale", this.setReflength);
-            this.setScaleValue(Config.view.scale);
+            this.setScaleValue(mapView.get('startScale'));
         },
 
         /**
@@ -34,8 +35,7 @@ define([
 
             if (this.get("scaleValue") >= 1000) {
                 scale = "Maßstab = 1: " + scaleValue.substring(0, scaleValue.length - 3) + "." + scaleValue.substring(scaleValue.length - 3);
-            }
-            else {
+            } else {
                 scale = "Maßstab = 1: " + scaleValue;
             }
             this.set("scale", scale);
@@ -53,8 +53,7 @@ define([
 
             if (reflengthval >= 1000) {
                 reflength = (reflengthval / 1000).toString() + " km";
-            }
-            else {
+            } else {
                 reflength = reflengthval.toString() + " m";
             }
             this.set("reflength", reflength);

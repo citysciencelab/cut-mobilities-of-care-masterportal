@@ -4,21 +4,11 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [561210, 5932600],
-            resolution: 15.874991427504629, // 1:60.000
-            scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
         layerConf: '../components/lgv-config/services-fhhnet.json',
         categoryConf: '../components/lgv-config/category.json',
         styleConf: '../components/lgv-config/style.json',
-        print: {
-            url: function () {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
-            ,
-            title: "Verkehrsportal",
-            gfi: false
-        },
         proxyURL: '/cgi-bin/proxy.cgi',
         layerIDs: [
             {id: '453', visible: true},

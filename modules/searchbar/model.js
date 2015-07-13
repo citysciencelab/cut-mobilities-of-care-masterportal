@@ -85,7 +85,6 @@ define([
                 if (Config.searchBar.initString !== undefined) {
                     if (Config.searchBar.initString.search(",") !== -1) {
                         var splitInitString = Config.searchBar.initString.split(",");
-
                         this.set("onlyOneStreetName", splitInitString[0]);
                         // this.set("isOnlyOneStreet", true);
                         this.set("searchString", splitInitString[0] + " " + splitInitString[1]);
@@ -102,9 +101,7 @@ define([
                 else {
                     this.set("quickHelp", false);
                 }
-
                 EventBus.trigger("addOverlay", this.get("marker"));
-                EventBus.trigger("getVisibleWFSLayer");
                 EventBus.trigger("getAllLayer");
             },
 
@@ -434,18 +431,17 @@ define([
             */
             getFeaturesForSearch: function (layermodels) {
                 this.set("features", []);
-                var featureArray = [];
-
+                var featureArray = [], imageSrc;
                 _.each(layermodels, function (layer) {
-                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "") {
-                        var imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
-
-                        if (imageSrc) {
-                            var features = layer.get("source").getFeatures();
-
-                            _.each(features, function (feature) {
-                                featureArray.push({name: feature.get("name"), type: "Krankenhaus", coordinate: feature.getGeometry().getCoordinates(), imageSrc: imageSrc, id: feature.get("name").replace(/ /g, "") + layer.get("name")});
-                            });
+                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
+                        if (layer.get("layer").getStyle()[0]) {
+                            imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
+                            if (imageSrc) {
+                                var features = layer.get("layer").getSource().getFeatures();
+                                _.each(features, function (feature) {
+                                    featureArray.push({name: feature.get("name"), type: "Krankenhaus", coordinate: feature.getGeometry().getCoordinates(), imageSrc: imageSrc, id: feature.get("name").replace(/ /g, "") + layer.get("name")});
+                                });
+                            }
                         }
                     }
                 });
@@ -458,7 +454,10 @@ define([
             getWFSFeatures: function () {
                 _.each(Config.searchBar.getFeatures, function (element) {
                     if (element.filter === "olympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForOlympia, false);
+                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
+                    }
+                    else if (element.filter === "paralympia") {
+                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
                     }
                     else if (element.filter === "bplan") {
                         this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
@@ -505,8 +504,8 @@ define([
                    if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
                         position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                         coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                        if ($(hit).find("app\\:allenutzun, allenutzun")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                            hitName = $(hit).find("app\\:allenutzun, allenutzun")[0].textContent;
+                        if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
+                            hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
                             hitType = $(hit).find("app\\:staette, staette")[0].textContent;
                             this.pushHits("olympia", {
                                 name: hitName,
@@ -514,6 +513,36 @@ define([
                                 coordinate: coordinate,
                                 glyphicon: "glyphicon-fire",
                                 id: hitName.replace(/ /g, "") + "Olympia"
+                            });
+                        }
+                   }
+                }, this);
+            },
+
+            /**
+             * success-Funktion für die Paralympiastandorte
+             * @param  {xml} data - getFeature-Request
+             */
+            getFeaturesForParalympia: function (data) {
+                var hits = $("wfs\\:member,member", data),
+                    coordinate,
+                    position,
+                    hitType,
+                    hitName;
+
+                _.each(hits, function (hit) {
+                   if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                        position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                        coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                        if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
+                            hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
+                            hitType = $(hit).find("app\\:staette, staette")[0].textContent;
+                            this.pushHits("olympia", {
+                                name: hitName,
+                                type: "Paralympiastandort",
+                                coordinate: coordinate,
+                                glyphicon: "glyphicon-fire",
+                                id: hitName.replace(/ /g, "") + "Paralympia"
                             });
                         }
                    }
@@ -532,7 +561,7 @@ define([
                         if (eleName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", {
                                 name: ele,
-                                type: "Olympiastandort",
+                                type: feature.type,
                                 coordinate: feature.coordinate,
                                 glyphicon: "glyphicon-fire",
                                 id: feature.id

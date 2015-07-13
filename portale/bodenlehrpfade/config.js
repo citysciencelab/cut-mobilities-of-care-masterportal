@@ -3,10 +3,10 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [571174, 5929140], // Rathausmarkt
-            resolution: 5.2916638091682096, // 1:20.000
-            scale: 60000 // für print.js benötigt
+            resolution: 5.2916772500211667 // 1:20.000
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         // categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         layerIDs:
@@ -65,9 +65,7 @@ define(function () {
         orientation: true,
         poi: false,
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99997",
             title: "Bodenschutz-Portal",
             gfi: false
         },

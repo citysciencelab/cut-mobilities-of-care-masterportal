@@ -27,20 +27,19 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            resolution: 15.874991427504629,
-            scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769],
+            resolution: 2.2645838625010583,
             resolutions : [
-                66.14579761460263,
-                26.458319045841044,
-                15.874991427504629,
-                10.583327618336419,
-                5.2916638091682096,
-                2.6458319045841048,
-                1.3229159522920524,
-                0.6614579761460262,
-                0.2645831904584105,
-                0.13229159522920525
+                66.145965625264583,
+                26.458386250105834,
+                15.875031750063500,
+                10.583354500042333,
+                5.2916772500211667,
+                2.6458386250105834,
+                1.3229193125052917,
+                0.6614596562526458,
+                0.2645838625010583,
+                0.1322919312505292
             ],
         },
         /**
@@ -62,6 +61,12 @@ define(function () {
         * @desc Pfad zur DienstAPI.
         */
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Pfad zur json mit Druck- und WPS-Dienst
+        */
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}
@@ -236,9 +241,7 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: function () {
-                return "http://geofos.fhhnet.stadt.hamburg.de/mapfish_print_2.0/";
-                },
+            printID: "99999",
             title: "Master",
             gfi: false
         },

@@ -15,16 +15,13 @@ define(function () {
             {id: "452", visible: false}
         ],
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
-            scale: 60000 // für print.js benötigt
+            center: [565874, 5934140] // Rathausmarkt
         },
         layerConf: "../components/lgv-config/services-fhhnet-olympia.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-            },
+            printID: "99999",
             title: "Olympia-Portal",
             gfi: false
         },

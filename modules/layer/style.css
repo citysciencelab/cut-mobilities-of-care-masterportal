@@ -1,5 +1,5 @@
 .layer-content {
-    /*width: 24em;*/
+    /*width: 22em;*/
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     /*padding-right: 8px;*/
     color: #777;
@@ -15,6 +15,9 @@
 }
 
 @media (min-width: 768px) {
+    .layer-content {
+        width: 22em;
+    }
     .layer-content > .layer-name {
         padding: 2px 0;
     }

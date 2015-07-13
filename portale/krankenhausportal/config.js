@@ -4,11 +4,10 @@ define(function () {
     var config = {
         wfsImgPath: "../components/lgv-config/img/",
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 15.874991427504629, // 1:60.000
-            scale: 60000 // für print.js benötigt
+            center: [565874, 5934140] // Rathausmarkt
         },
         layerConf: '../components/lgv-config/services-fhhnet.json',
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         categoryConf: '../components/lgv-config/category.json',
         styleConf: '../components/lgv-config/style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
@@ -53,16 +52,13 @@ define(function () {
         },
         startUpModul: '',
         searchBar: {
-            placeholder: "Adresssuche",
+            placeholder: "Suche nach Straße oder Krankenhausname",
             gazetteerURL: function () {
-                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         print: {
-            url: function () {
-                    return "http://geoportal-hamburg.de/mapfish_print_2.0/";
-                }
-            ,
+            printID: "99999",
             title: "Verkehrsportal",
             gfi: false
         },
