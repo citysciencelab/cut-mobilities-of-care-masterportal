@@ -185,7 +185,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Adresse",
             gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
 
         },
