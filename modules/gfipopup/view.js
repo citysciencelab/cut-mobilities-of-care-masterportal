@@ -103,14 +103,11 @@ define([
          *
          */
         render: function () {
-            var uniqueId = _.uniqueId("video");
-
-            if (_.has(this.model.get("gfiContent")[0], "video") && this.model.get("isStreamingLibLoaded") === false) {
-                this.model.loadStreamingLibsAndStartStreaming();
+            // Erzeuge für Video
+            if (_.has(this.model.get("gfiContent")[0], "video")) {
+                this.model.set("uniqueId", _.uniqueId("video"));
             }
-            this.model.set("uniqueId", uniqueId);
             var attr = this.model.toJSON();
-
             this.$el.html(this.template(attr));
             $(this.model.get("element")).popover({
                 placement: function () {
@@ -125,8 +122,9 @@ define([
                 content: this.$el
             });
             this.model.showPopup();
-            if (_.has(this.model.get("gfiContent")[0], "video") && this.model.get("isStreamingLibLoaded") === true) {
-                this.model.starteStreaming(uniqueId);
+            // Starte Streaming des Videos über Id
+            if (_.has(this.model.get("gfiContent")[0], "video")) {
+                this.model.starteStreaming(this.model.get('uniqueId'));
             }
             EventBus.trigger("closeMouseHoverPopup", this);
             EventBus.trigger("GFIPopupVisibility", true);

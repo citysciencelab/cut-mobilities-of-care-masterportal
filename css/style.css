@@ -2,6 +2,7 @@
 
 @import "fonts.css";
 @import "../components/bootstrap/dist/css/bootstrap.css";
+@import "../components/video.js/dist/video-js/video-js.css";
 @import "../_libs/openlayers/v3.5.0/ol.css";
 @import "lgv.css";
 @import "searchbar.css";
