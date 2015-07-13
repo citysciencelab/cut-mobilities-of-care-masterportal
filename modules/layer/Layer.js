@@ -3,11 +3,13 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "config"
-], function (_, Backbone, ol, EventBus, Config) {
+    "config",
+    "modules/searchbar/model"
+], function (_, Backbone, ol, EventBus, Config, Searchbar) {
     /**
     * Bereitstellung des Layers
     */
+    "use strict";
     var Layer = Backbone.Model.extend({
         defaults: {
             selected: false
@@ -40,8 +42,7 @@ define([
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
                 this.postInit();
-            }
-            else {
+            } else {
                 this.postInit();
             }
         },
@@ -50,9 +51,8 @@ define([
             this.setAttributionLayer();
             if (this.get("transparence")) {
                 this.set("transparence", parseInt(this.get("transparence"), 10));
-            }
-            else {
-                 this.set("transparence", 0);
+            } else {
+                this.set("transparence", 0);
             }
             // this.updateOpacity();
             // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
@@ -77,23 +77,21 @@ define([
             EventBus.trigger("getVisibleWFSLayer"); //übernehme WFS in Searchbar
         },
         setAttributions: function () {
-            var datasets = this.get("datasets");
+            var datasets = this.get("datasets"), dataset;
             if (datasets) {
                 if (datasets[0] !== undefined) {
-                    var dataset = this.get("datasets")[0];
+                    dataset = this.get("datasets")[0];
                     this.set("metaID", dataset.md_id);
                     this.set("metaName", dataset.md_name);
                     if (dataset.kategorie_opendata.length > 1) {
                         this.set("kategorieOpendata", dataset.kategorie_opendata);
-                    }
-                    else {
+                    } else {
                         this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
                     }
                     // besser auf type kontrollieren (Array oder String)
                     if (dataset.kategorie_inspire.length > 1) {
                         this.set("kategorieInspire", dataset.kategorie_inspire);
-                    }
-                    else {
+                    } else {
                         this.set("kategorieInspire", dataset.kategorie_inspire[0]);
                     }
                 }
@@ -104,20 +102,20 @@ define([
         * ein Object. Das Object wird an die WMSLayer, WFSLayer zurückgegeben.
         */
         convertGFIAttributes: function () {
+            var gfiAttributList, gfiAttribute, value, newKey, gfiAttributes, key;
             if (this.get("gfiAttributes")) {
                 if (this.get("gfiAttributes").toUpperCase() === "SHOWALL" || this.get("gfiAttributes").toUpperCase() === "IGNORE") {
                     return this.get("gfiAttributes");
-                }
-                else {
-                    var gfiAttributList = this.get("gfiAttributes").split(","),
-                        gfiAttributes = {};
+                } else {
+                    gfiAttributList = this.get("gfiAttributes").split(",");
+                    gfiAttributes = {};
                     _.each(gfiAttributList, function (gfiAttributeConfig) {
-                        var gfiAttribute = gfiAttributeConfig.split(":"),
-                            key = [];
+                        gfiAttribute = gfiAttributeConfig.split(":");
+                        key = [];
                         key.push(gfiAttribute[0].trim());
-                        var value = [];
+                        value = [];
                         value.push(gfiAttribute[1].trim());
-                        var newKey = _.object(key, value);
+                        newKey = _.object(key, value);
                         _.extend(gfiAttributes, newKey);
                     });
                     return gfiAttributes;
@@ -127,11 +125,9 @@ define([
         setScaleRange: function () {
             if (this.get("currentScale") <= parseInt(this.get("maxScale"), 10) && this.get("currentScale") >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
-            }
-            else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
+            } else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
                 this.set("isInScaleRange", true);
-            }
-            else {
+            } else {
                 this.set("isInScaleRange", false);
             }
         },
@@ -141,22 +137,19 @@ define([
         toggleVisibility: function () {
             if (this.get("visibility") === true) {
                 this.set({visibility: false});
-            }
-            else if (this.get("visibility") === false) {
+            } else if (this.get("visibility") === false) {
                 this.set({visibility: true});
             }
         },
         toggleSelected: function () {
             if (this.get("selected") === true) {
                 this.set({selected: false});
-            }
-            else {
+            } else {
                 this.set({selected: true});
             }
             if (this.get("layerType") === "nodeChildLayer") {
                 this.get("parentView").checkSelectedOfAllChildren();
-            }
-            else {
+            } else {
                 // noch komisch
                 if (this.get("parentView") !== undefined) {
                     this.get("parentView").toggleStyle();
@@ -199,8 +192,7 @@ define([
             if (this.get("selected") === true) {
                 this.set("visibility", true);
                 EventBus.trigger("addModelToSelectionList", this);
-            }
-            else {
+            } else {
                 this.set("visibility", false);
                 EventBus.trigger("removeModelFromSelectionList", this);
             }
@@ -211,8 +203,7 @@ define([
         toggleSettings: function () {
             if (this.get("settings") === true) {
                 this.set({settings: false});
-            }
-            else {
+            } else {
                 this.set({settings: true});
             }
         },
@@ -220,8 +211,7 @@ define([
             if (_.has(this, "EventAttribution")) {
                 if (value === true) {
                     EventBus.trigger("startEventAttribution", this);
-                }
-                else {
+                } else {
                     EventBus.trigger("stopEventAttribution", this);
                 }
             }
@@ -233,24 +223,18 @@ define([
             if (this.get("url") !== undefined) {
                 if (this.get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
-                }
-                else {
+                } else {
                     this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
                 }
-            }
-            // Für Group-Layer
-            else if (this.get("backbonelayers") !== undefined) {
+            } else if (this.get("backbonelayers") !== undefined) { // Für Group-Layer
                 if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                }
-                else {
+                } else {
                     this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
                 }
-            }
-            else {
+            } else {
                 // für olympia-portal --> hat keine metadaten!!
             }
-
         },
         moveUp: function () {
             this.collection.moveModelUp(this);
