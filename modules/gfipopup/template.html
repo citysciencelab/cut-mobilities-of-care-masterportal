@@ -63,7 +63,7 @@
                     <a href="<%= value%>" target="_blank">Link</a>
                 <% } else if (value.substr(0, 7) == 'http://') { %>
                     <% if (value.search(/\.jpg/i) !== -1 || value.search(/\.png/i) !== -1) { %>
-                        <a href="<%= value%>" target="_blank"><img height="150" src="<%= value%>"></a>
+                        <a href="<%= value%>" target="_blank"><img height="150px" src="<%= value + '?ver=' + uniqueId %>"/></a>
                     <% } else { %>
                         <a href="<%= value%>" target="_blank">Link</a>
                     <% } %>
