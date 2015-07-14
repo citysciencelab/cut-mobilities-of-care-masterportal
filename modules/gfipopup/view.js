@@ -105,7 +105,7 @@ define([
         render: function () {
             // Erzeuge für Video
             if (_.has(this.model.get("gfiContent")[0], "video")) {
-                this.model.set("uniqueId", _.uniqueId("video"));
+                this.model.set("uniqueId", _.uniqueId("gfi"));
             }
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
