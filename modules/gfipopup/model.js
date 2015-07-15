@@ -4,8 +4,9 @@ define([
     "openlayers",
     "config",
     "bootstrap/popover",
-    "videojs"
-], function (Backbone, EventBus, ol, Config, Popover, VideoJS) {
+    "videojs",
+    "modules/gfipopup/imgView"
+], function (Backbone, EventBus, ol, Config, Popover, VideoJS, ImgView) {
 
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -32,7 +33,6 @@ define([
                 })
             })
         },
-
         /**
          *
          */
@@ -78,7 +78,6 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         setGFIParams: function (params) {
-            this.get("routeLayer").getSource().clear();
             $("#loader").show();
             this.set("wfsCoordinate", []);
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
@@ -107,13 +106,12 @@ define([
                     });
                 }
             }
+            pContent = this.replaceValuesWithObjects(pContent);
             if (pContent.length > 0) {
                 var position;
-
                 if (this.get("wfsCoordinate").length > 0) {
                     position = this.get("wfsCoordinate");
-                }
-                else {
+                } else {
                     position = params[1];
                 }
                 this.get("gfiOverlay").setPosition(position);
@@ -127,6 +125,18 @@ define([
                 EventBus.trigger("closeGFIParams", this);
             }
             $("#loader").hide();
+        },
+        replaceValuesWithObjects: function (pContent) {
+            _.each(pContent, function(element, index) {
+                _.each(element, function (val, key) {
+                    if (key === 'Bild') {
+                        val = new ImgView(val);
+                        element[key]=val;
+                    }
+                });
+                pContent[index] = element;
+            });
+            return pContent;
         },
         /**
          *
@@ -378,6 +388,7 @@ define([
          * Enfernt den "Route-Layer" von der Karte.
          */
         clearRoute: function () {
+            this.get("routeLayer").getSource().clear();
             EventBus.trigger("removeLayer", this.get("routeLayer"));
         },
 
