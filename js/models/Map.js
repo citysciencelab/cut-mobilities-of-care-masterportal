@@ -92,29 +92,29 @@ define([
                 }));
 
                 // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
-				if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf('android') != -1) {
-					var startx = 0;
-					var starty = 0;
-					this.get('map').getViewport().addEventListener('touchstart', function(e){
-						var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
-						startx = parseInt(touchobj.clientX); // get x position of touch point relative to left edge of browser
-						e.preventDefault();
-					}, false);
-					this.get('map').getViewport().addEventListener('touchend', function(e){
-						var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
-						// Calculate if there was "significant" movement of the finger
-						var movementX = Math.abs(startx-touchobj.clientX);
-						var movementY = Math.abs(starty-touchobj.clientY);
-						if(movementX < 5 || movementY < 5) {
-							var x = _.values(_.pick(touchobj, 'pageX'))[0];
-							var y = _.values(_.pick(touchobj, 'pageY'))[0];
-							var coordinates = this.get('map').getCoordinateFromPixel([x,y]);
-                            // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
-							this.setGFIParams({coordinate: coordinates});
-						}
-						//e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
-					}.bind(this),false);
-				}
+//				if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf('android') != -1) {
+//					var startx = 0;
+//					var starty = 0;
+//					this.get('map').getViewport().addEventListener('touchstart', function(e){
+//						var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
+//						startx = parseInt(touchobj.clientX); // get x position of touch point relative to left edge of browser
+//						e.preventDefault();
+//					}, false);
+//					this.get('map').getViewport().addEventListener('touchend', function(e){
+//						var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
+//						// Calculate if there was "significant" movement of the finger
+//						var movementX = Math.abs(startx-touchobj.clientX);
+//						var movementY = Math.abs(starty-touchobj.clientY);
+//						if(movementX < 5 || movementY < 5) {
+//							var x = _.values(_.pick(touchobj, 'pageX'))[0];
+//							var y = _.values(_.pick(touchobj, 'pageY'))[0];
+//							var coordinates = this.get('map').getCoordinateFromPixel([x,y]);
+//                            // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
+//							this.setGFIParams({coordinate: coordinates});
+//						}
+//						//e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
+//					}.bind(this),false);
+//				}
 
                 // Dieses Attribut brauche ich wirklich für die ScaleLine
                 this.get('map').DOTS_PER_INCH = DOTS_PER_INCH;
