@@ -1,8 +1,7 @@
 define([
-    "backbone"
-], function (Backbone) {
+    "backboneradio"
+], function (Radio) {
+    var GeoAPI = this.GeoAPI = Radio.channel("GeoAPI");
 
-    var GeoAPI = this.GeoAPI = _.extend({}, Backbone.Events);
-
-    return GeoAPI;
+    return GeoAPI; // http://underscorejs.org/#extend
 });
