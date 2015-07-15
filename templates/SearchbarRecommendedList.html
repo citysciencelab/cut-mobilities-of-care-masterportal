@@ -1,7 +1,0 @@
-<% _.each(recommendedList, function (hit, index) { %>
-    <% if (hit.glyphicon !== undefined) { %>
-        <li id="<%= hit.id %>" class="list-group-item hit"><span class="glyphicon <%= hit.glyphicon %>"></span><span><%= hit.name %></span><small><%= hit.type %></small></li>
-    <% } else { %>
-        <li id="<%= hit.id %>" class="list-group-item hit"><img src="<%= hit.imageSrc %>"><span><%= hit.name %></span><small><%= hit.type %></small></li>
-    <% } %>
-<% }); %>

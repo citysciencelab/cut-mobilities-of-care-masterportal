@@ -1,13 +1,13 @@
 define([
-    "underscore",
     "backbone",
     "openlayers",
-    "eventbus"
-], function (_, Backbone, ol, EventBus) {
+    "eventbus",
+    "geoapi"
+], function (Backbone, ol, EventBus, GeoAPI) {
 
     var Draw = Backbone.Model.extend({
 
-        "defaults": {
+        defaults: {
             source: new ol.source.Vector(),
             types: [
                 { name: "Point", value: "Point" },
@@ -46,7 +46,7 @@ define([
             selectedStrokeWidth: 1
         },
 
-        "initialize": function () {
+        initialize: function () {
             EventBus.on("winParams", this.setStatus, this);
             EventBus.on("getDrawlayer", this.getLayer, this);
             this.on("change:selectedType change:style", this.createInteraction, this);
@@ -58,7 +58,7 @@ define([
             EventBus.trigger("addLayer", this.get("layer"));
         },
 
-        "setStatus": function (args) {
+        setStatus: function (args) {
             if (args[2] === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
@@ -71,14 +71,15 @@ define([
             }
         },
 
-        "createInteraction": function () {
+        createInteraction: function () {
             EventBus.trigger("removeInteraction", this.get("draw"));
-            this.set('draw', new ol.interaction.Draw({
-                source: this.get('source'),
+            this.set("draw", new ol.interaction.Draw({
+                source: this.get("source"),
                 type: this.get("selectedType"),
                 style: this.get("style")
             }));
             this.get("draw").on("drawend", function (evt) {
+                GeoAPI.trigger("getDrawCoords", evt.feature.getGeometry().getCoordinates());
                 evt.feature.setStyle(this.get("style"));
             }, this);
             EventBus.trigger("addInteraction", this.get("draw"));
@@ -88,26 +89,26 @@ define([
          * Setzt den Typ der Geometrie (Point, LineString oder Polygon).
          * @param {String} value - Typ der Geometrie
          */
-        "setType": function (value) {
+        setType: function (value) {
             this.set("selectedType", value);
             if (this.get("selectedType") !== "Point") {
                 this.set("selectedRadius", 6);
             }
         },
 
-        "setColor": function (value) {
+        setColor: function (value) {
             this.set("selectedColor", value);
         },
 
-        "setPointRadius": function (value) {
+        setPointRadius: function (value) {
             this.set("selectedRadius", parseInt(value, 10));
         },
 
-        "setStrokeWidth": function (value) {
+        setStrokeWidth: function (value) {
             this.set("selectedStrokeWidth", parseInt(value, 10));
         },
 
-        "setStyle": function () {
+        setStyle: function () {
             var style = new ol.style.Style({
                 fill: new ol.style.Fill({
                     color: this.get("selectedColor")
@@ -123,18 +124,19 @@ define([
                      })
                 })
             });
+
             this.set("style", style);
         },
 
         /**
          * Löscht alle Geometrien und die dazugehörigen MeasureTooltips.
          */
-        "deleteFeatures": function () {
+        deleteFeatures: function () {
             // lösche alle Geometrien
             this.get("source").clear();
         },
 
-        "getLayer": function () {
+        getLayer: function () {
             EventBus.trigger("sendDrawLayer", this.get("layer"));
         }
     });

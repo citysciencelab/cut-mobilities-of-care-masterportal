@@ -1,15 +1,13 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'text!templates/Draw.html',
-    'models/Draw',
-    'eventbus'
-], function ($, _, Backbone, DrawTemplate, Draw, EventBus) {
+    "backbone",
+    "text!modules/draw/template.html",
+    "modules/draw/model",
+    "eventbus"
+], function (Backbone, DrawTemplate, Draw, EventBus) {
 
     var DrawView = Backbone.View.extend({
         model: Draw,
-        className: 'win-body',
+        className: "win-body",
         template: _.template(DrawTemplate),
         events: {
             "change .drawType": "setType",
@@ -22,30 +20,31 @@ define([
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
         },
 
-        "setType": function (evt) {
+        setType: function (evt) {
             this.model.setType(evt.target.value);
             this.render();
         },
 
-        "setColor": function (evt) {
+        setColor: function (evt) {
             this.model.setColor(evt.target.value);
         },
 
-        "setPointRadius": function (evt) {
+        setPointRadius: function (evt) {
             this.model.setPointRadius(evt.target.value);
         },
 
-        "setStrokeWidth": function (evt) {
+        setStrokeWidth: function (evt) {
             this.model.setStrokeWidth(evt.target.value);
         },
 
-        "deleteFeatures": function () {
+        deleteFeatures: function () {
             this.model.deleteFeatures();
         },
 
-        "render": function () {
+        render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 var attr = this.model.toJSON();
+
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();

@@ -1,8 +1,6 @@
 define([
-    'underscore',
-    'backbone'
-], function (_, Backbone) {
-
+    "backbone"
+], function (Backbone) {
     /**
      * @exports EventBus
      * @classdesc Dieses Modul gibt ein Objekt vom Typ Backbone.Events zurück. Damit ist es möglich
@@ -27,5 +25,6 @@ define([
      * @see {@link http://www.sethmcl.com/cross-view-communication-with-backbonejs-None.html}
      */
     var EventBus = {};
-    return _.extend(EventBus, Backbone.Events);  // http://underscorejs.org/#extend
+
+    return _.extend(EventBus, Backbone.Events); // http://underscorejs.org/#extend
 });
