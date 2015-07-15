@@ -9,33 +9,17 @@
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
         _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
-            if (_.isObject(value)) {
-                return;
-            }
     %>
     <tr>
-        <% if(key === 'video'){ %>
-            <% if( !navigator.userAgent.match(/Android/i) && !navigator.userAgent.match(/webOS/i) && !navigator.userAgent.match(/iPhone/i) && !navigator.userAgent.match(/iPad/i)
-                 && !navigator.userAgent.match(/iPod/i) && !navigator.userAgent.match(/BlackBerry/i) && !navigator.userAgent.match(/Windows Phone/i)) { %>
-                <td colspan="2" >
-                   <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="300" height="300" style="margin-left:auto; margin-right:auto;">
-                       <source src="<%=value%>"/>
-                   </video>
-                </td>
-            <% } %>
+        <% if(key === 'video'){%>
+            <td colspan="2" >
+               <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="300" height="300" style="margin-left:auto; margin-right:auto;">
+                   <source src="<%=value%>"/>
+               </video>
+            </td>
         <% } else if(key === 'Bild'){%>
             <td colspan="2" >
-               <% if (value.search('.html') !== -1) { %>
-                    <a href="<%= value%>" target="_blank">Link</a>
-                <% } else if (value.substr(0, 7) == 'http://') { %>
-                    <% if (value.search(/\.jpg/i) !== -1 || value.search(/\.png/i) !== -1 ) { %>
-                        <a href="<%= value%>" target="_blank"><img width="250px" src="<%= value%>"/></a>
-                    <% } else { %>
-                        <a href="<%= value%>" target="_blank">Link</a>
-                    <% } %>
-                <% } else { %>
-                    <%= value %>
-                <% } %>
+               <% print (value.el.innerHTML); %>
             </td>
             <% } else if(value.match(/Min/i) && value.match(/km/i)) {%>
                 <td>
@@ -47,33 +31,20 @@
                         <span style='float:right; top:3px;' class='glyphicon glyphicon-road' aria-hidden='true'></span>
                     </button>
                 </td>
-            <% } else {
-           if( !navigator.userAgent.match(/Android/i) && !navigator.userAgent.match(/webOS/i) && !navigator.userAgent.match(/iPhone/i) && !navigator.userAgent.match(/iPad/i)
-                 && !navigator.userAgent.match(/iPod/i) && !navigator.userAgent.match(/BlackBerry/i) && !navigator.userAgent.match(/Windows Phone/i)) {%>
-            <td>
-                <strong><%= key + ''%></strong>
-            </td>
-           <% } %>
-            <td>
-                <% if( navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)
-                 || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {%>
-                    <strong><%= key + ':</br>' %></strong>
-                <% } %>
-                <% if (value.search('.html') !== -1) { %>
-                    <a href="<%= value%>" target="_blank">Link</a>
-                <% } else if (value.substr(0, 7) == 'http://') { %>
-                    <% if (value.search(/\.jpg/i) !== -1 || value.search(/\.png/i) !== -1) { %>
-                        <a href="<%= value%>" target="_blank"><img height="150" src="<%= value%>"></a>
-                    <% } else { %>
+            <% } else { %>
+                <td>
+                    <strong><%= key + ''%></strong>
+                </td>
+                <td>
+                    <% if (value.search('.html') !== -1 || value.substr(0, 7) == 'http://') { %>
                         <a href="<%= value%>" target="_blank">Link</a>
+                    <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+                        <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+                    <% } else { %>
+                        <%= value %>
                     <% } %>
-                <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                    <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-                <% } else { %>
-                    <%= value %>
-                <% } %>
-            </td>
-        <% } %>
+                </td>
+            <% } %>
     </tr>
     <% })}; %>
     </table>

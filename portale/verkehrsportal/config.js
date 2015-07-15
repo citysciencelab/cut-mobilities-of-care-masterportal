@@ -95,6 +95,7 @@ define(function () {
             coord: true,
             active: 'gfi'
         },
+        gfiImgReloadTime: 20000,
         orientation: true,
         poi: true
     }
