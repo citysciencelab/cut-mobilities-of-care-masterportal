@@ -3,8 +3,9 @@ define([
     "eventbus",
     "openlayers",
     "config",
-    "bootstrap/popover"
-], function (Backbone, EventBus, ol, Config) {
+    "bootstrap/popover",
+    "videojs"
+], function (Backbone, EventBus, ol, Config, Popover, VideoJS) {
 
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -19,18 +20,17 @@ define([
             gfiCounter: 0,
             isCollapsed: false,
             isVisible: false,
-            isStreamingLibLoaded: false,
             routeLayer: new ol.layer.Vector({
-                            source: new ol.source.Vector({
-                                projection: ol.proj.get("EPSG:25832")
-                            }),
-                            style: new ol.style.Style({
-                                stroke: new ol.style.Stroke({
-                                    color: "blue",
-                                    width: 5
-                                })
-                            })
-                        })
+                source: new ol.source.Vector({
+                    projection: ol.proj.get("EPSG:25832")
+                }),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "blue",
+                        width: 5
+                    })
+                })
+            })
         },
 
         /**
@@ -41,30 +41,16 @@ define([
             this.listenTo(this, "change:isPopupVisible", this.sendGFIForPrint);
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
+            EventBus.on("streamVideoByID", this.starteStreaming, this); // trigger in map.js
 //            EventBus.on("getGFIForPrint", this.sendGFIForPrint, this);
         },
 
-        /**
-         * Diese Funktion lädt die erforderlichen Scripte und CSS nur im Bedarfsfall, wenn ein Video
-         * wiedergegeben werden soll.
-         */
-        loadStreamingLibsAndStartStreaming: function () {
-            if (!navigator.userAgent.match(/Android/i) || !navigator.userAgent.match(/webOS/i) || !navigator.userAgent.match(/iPhone/i) || !navigator.userAgent.match(/iPad/i) ||
-                !navigator.userAgent.match(/iPod/i) || !navigator.userAgent.match(/BlackBerry/i) || !navigator.userAgent.match(/Windows Phone/i)) {
-                $("head").append($("<link rel='stylesheet' href='/libs/video-js/video-js.css' type='text/css' media='screen' />"));
-                $.getScript("/libs/video-js/video.dev.js", function () {
-                    videojs.options.flash.swf = "/libs/video-js/video-js.swf";
-                    this.set("isStreamingLibLoaded", true);
-                    this.starteStreaming(this.get("uniqueId"));
-                }.bind(this));
-            }
-        },
         /**
          * Diese Funktion startet das Video unter der übergebenen id
          */
         starteStreaming: function (id) {
             if (document.getElementById(id)) {
-                vjs(id, {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function() {
+                VideoJS(id, {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function() {
 //                    console.log("loaded");
                 });
             }

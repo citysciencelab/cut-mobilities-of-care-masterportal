@@ -10,6 +10,7 @@ require.config({
         text: "../components/requirejs-text/text",
         bootstrap: "../components/bootstrap/js",
         proj4: "../components/proj4/dist/proj4",
+        videojs: "../components/video.js/dist/video-js/video",
         eventbus: "EventBus",
         geoapi: "GeoAPI",
         views: "views",
@@ -18,8 +19,7 @@ require.config({
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
         app: "app",
         templates: "../templates",
-        modules: "../modules",
-        videojs: "../_libs/video-js/video.dev"
+        modules: "../modules"
     },
     shim: {
         bootstrap: {
