@@ -92,7 +92,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                         });
                     }
                     if (Config.tools.draw === true) {
-                        require(["views/DrawView"], function (DrawView) {
+                        require(["modules/draw/view"], function (DrawView) {
                             new DrawView();
                         });
                     }
