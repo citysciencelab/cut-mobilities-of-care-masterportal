@@ -4,7 +4,7 @@ define([
     'openlayers',
     'eventbus',
     'config',
-    'models/SearchBar'
+    'modules/searchbar/model'
 ], function (_, Backbone, ol, EventBus, Config, Searchbar) {
 
     var RoutingModel = Backbone.Model.extend({
