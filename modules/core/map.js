@@ -256,6 +256,14 @@ define([
                             });
                         }
                     }
+                    else if (element.getProperties().typ === "GeoJSON") {
+                        gfiParams.push({
+                            typ: "GeoJSON",
+                            scale: scale,
+                            source: element.getSource(),
+                            name: element.get("name")
+                        });
+                    }
                 }
                 else {
                     element.getLayers().forEach(function (layer) {
