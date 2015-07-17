@@ -1,9 +1,8 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus",
-    "geoapi"
-], function (Backbone, ol, EventBus, GeoAPI) {
+    "eventbus"
+], function (Backbone, ol, EventBus) {
 
     var Draw = Backbone.Model.extend({
 
@@ -52,6 +51,10 @@ define([
             this.on("change:selectedType change:style", this.createInteraction, this);
             this.on("change:selectedColor change:selectedRadius change:selectedStrokeWidth", this.setStyle, this);
 
+            this.listenTo(this, {
+                "change:drawendCoords": this.triggerDrawendCoords
+            });
+
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source")
             }));
@@ -79,10 +82,20 @@ define([
                 style: this.get("style")
             }));
             this.get("draw").on("drawend", function (evt) {
-                GeoAPI.trigger("getDrawCoords", evt.feature.getGeometry().getCoordinates());
+                this.setDrawendCoords(evt.feature.getGeometry());
                 evt.feature.setStyle(this.get("style"));
             }, this);
             EventBus.trigger("addInteraction", this.get("draw"));
+        },
+
+        setDrawendCoords: function (geom) {
+            var geoJSON = new ol.format.GeoJSON();
+
+            this.set("drawendCoords", geoJSON.writeGeometry(geom));
+        },
+
+        triggerDrawendCoords: function () {
+            EventBus.trigger("getDrawendCoords", this.get("drawendCoords"));
         },
 
         /**
