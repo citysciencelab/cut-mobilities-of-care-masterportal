@@ -96,6 +96,9 @@ define([
                     }
                 }
             }
+            else {
+                this.set("metaID", null);
+            }
         },
         /**
         * diese Funktion liest den übergebenen String gfiAttributes ein und erzeugt daraus
