@@ -3,10 +3,11 @@ define([
     "modules/layer/wmslayer",
     "modules/layer/wfslayer",
     "modules/layer/grouplayer",
+    "modules/layer/GeoJSONLayer",
     "config",
     "eventbus",
     "modules/core/util"
-    ], function (Backbone, WMSLayer, WFSLayer, GroupLayer, Config, EventBus, Util) {
+], function (Backbone, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus, Util) {
 
     var LayerList = Backbone.Collection.extend({
         // URL der DiensteAPI
@@ -20,6 +21,9 @@ define([
             }
             else if (attrs.typ === "GROUP") {
                 return new GroupLayer(attrs, options);
+            }
+            else if (attrs.typ === "GeoJSON") {
+                return new GeoJSONLayer(attrs, options);
             }
         },
         parse: function (response) {
@@ -38,8 +42,9 @@ define([
                 _.each(configIDs, function (element, index) {
                     // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                     if (_.has(element, "id") && _.isString(element.id)) {
-                        var layers = element.id.split(",");
-                        var layerinfos = _.findWhere(response, {id: layers[0]});
+                        var layers = element.id.split(","),
+                            layerinfos = _.findWhere(response, {id: layers[0]});
+
                         if (layerinfos) {
                             modelsArray.push(layerinfos);
                         }
@@ -100,8 +105,10 @@ define([
                         // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
                         if (layers.length > 1) {
                             var layerList = "";
+
                             _.each(layers, function (layer) {
                                 var obj = _.findWhere(response, {id: layer});
+
                                 layerList += "," + obj.layers;
                             });
                             modelsArray[index].layers = layerList.slice(1, layerList.length);
@@ -129,6 +136,7 @@ define([
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
+
                             if (layerinfos) {
                                 modelChildren.push(layerinfos);
                             }
@@ -174,10 +182,18 @@ define([
             EventBus.on("displayInTree", this.displayInTree, this);
             EventBus.on("getAllLayer", this.sendAllLayer, this);
 
+            this.listenTo(EventBus, {
+                "addFeatures": this.addFeatures,
+                "removeFeatures": this.removeFeatures
+            });
+
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
-            this.listenTo(this, "add", this.addLayerToMap);
-            this.listenTo(this, "remove", this.removeLayerFromMap);
+
+            this.listenTo(this, {
+                "add": this.addLayerToMap,
+                "remove": this.removeLayerFromMap
+            });
 
             this.fetch({
                 cache: false,
@@ -196,6 +212,34 @@ define([
                 }
             });
         },
+
+        /**
+         *
+         */
+        addFeatures: function (name, features) {
+            var model = this.findWhere({name: name});
+
+            if (model !== undefined) {
+                model.addFeatures(features);
+            }
+            else {
+                this.add({
+                    typ: "GeoJSON",
+                    name: name,
+                    features: features
+                });
+            }
+        },
+
+        /**
+         *
+         */
+        removeFeatures: function (name) {
+            var model = this.findWhere({name: name});
+
+            model.removeFeatures();
+        },
+
         /**
          * FNP, LAPRO und etc. werden zu einem Model zusammengefasst. Layer die gruppiert werden sollen, werden über Config.tree.groupLayer gesteuert.
          */
@@ -203,18 +247,18 @@ define([
             // Iteriert über die Metadaten-ID's aus der Config
             _.each(Config.tree.groupLayerByID, function (id) {
                 // Alle Models mit der Metadaten-ID
-                var modelsByID = this.where({"metaID": id, "cache": false});
-                // Der Parameter "layers" aus allen Models wird in einer Variable als String gespeichert.
-                var layerList = "";
+                var modelsByID = this.where({"metaID": id, "cache": false}),
+                    layerList = ""; // Der Parameter "layers" aus allen Models wird in einer Variable als String gespeichert.
+
                 _.each(modelsByID, function (model) {
-                    layerList +=  "," + model.get("layers");
+                    layerList += "," + model.get("layers");
                 });
                 // Layer aus einem Dienst können unterschiedliche Scales haben (z.B. ALKIS).
                 // Daher wird das Model mit dem niedrigsten und das mit dem höchsten Wert gesucht.
                 var minScaleModel = _.min(modelsByID, function (model) {
                     return model.get("minScale");
-                });
-                var maxScaleModel = _.max(modelsByID, function (model) {
+                }),
+                maxScaleModel = _.max(modelsByID, function (model) {
                     return model.get("maxScale");
                 });
                 // Die Parameter "maxScale", "minScale", "layers" und "name" werden beim ersten Model aus der Liste überschrieben.
@@ -313,7 +357,7 @@ define([
         getLayerByProperty: function (key, value) {
             return this.filter(function (model) {
                 if (model.get("isbaselayer") === false) {
-                    if (typeof model.get(key) === "object") { //console.log(model.get(key));
+                    if (typeof model.get(key) === "object") { // console.log(model.get(key));
                         return _.contains(model.get(key), value);
                     }
                     else {
@@ -458,6 +502,9 @@ define([
          * @param {Backbone.Model} model - Layer-Model
          */
         addLayerToMap: function (model) {
+            // console.log(model);
+            // console.log(this.indexOf(model));
+            // console.log(model.get("source").getFeatures());
             EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
         },
         /**
