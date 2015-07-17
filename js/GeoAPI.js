@@ -1,4 +1,4 @@
-define("GeoAPI", [
+define("geoapi", [
     "backbone",
     "eventbus"
 ], function (Backbone, EventBus) {
