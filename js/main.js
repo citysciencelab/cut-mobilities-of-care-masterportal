@@ -1,7 +1,7 @@
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: "../_libs/openlayers/v3.5.0/ol",
+        openlayers: "../_libs/openlayers/v3.5.0/ol-debug",
         jquery: "../components/jquery/dist/jquery",
         jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore",
@@ -35,5 +35,5 @@ require.config({
     urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(["app"], function () {
+define(["app", "GeoAPI"], function () {
 });
