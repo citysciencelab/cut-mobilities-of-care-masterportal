@@ -13,7 +13,9 @@ define([
             id: '',
             zufallszahl: '',
             url: '',
-            gfiImgReloadTime: 0
+            gfiImgReloadTime: 0,
+            checkInterval: '',
+            reloadInterval: ''
         },
         /**
          *
@@ -22,17 +24,38 @@ define([
             this.set('id', _.uniqueId("img"));
             this.set('zufallszahl', Math.floor(Math.random() * (20000 - 0 + 1)) + 0);
             if (Config.gfiImgReloadTime && Config.gfiImgReloadTime > 0) {
-                var that = this;
                 this.set('gfiImgReloadTime', Config.gfiImgReloadTime);
-                setInterval(function() {
-                    that.refreshImg();
-                }, Config.gfiImgReloadTime);
+                this.set('reloadInterval', setInterval(function() {
+                    this.set('zufallszahl', Math.floor(Math.random() * (20000 - 0 + 1)) + 0);
+                }.bind(this), this.get('gfiImgReloadTime')));
+            }
+            this.listenTo(this, "change:zufallszahl", this.reloadImage);
+        },
+        reloadImage: function() {
+            var img= document.getElementById(this.get('id'));
+            if (img) {
+                img.src = img.src.split('?')[0] + '?' + this.get('zufallszahl');
+                this.checkImage();
             }
         },
-        refreshImg: function() {
-            var img= document.getElementById(this.get('id'));
-            this.set('zufallszahl', Math.floor(Math.random() * (20000 - 0 + 1)) + 0);
-            img.src = img.src.split('?')[0] + '?' + this.get('zufallszahl');
+        checkImage: function () {
+            window.clearInterval(this.get('checkInterval')); //altes Interval löschen
+            this.set('checkInterval', setInterval(function() {
+                if (document.getElementById(this.get('id')).complete) {
+                    if (document.getElementById(this.get('id')).naturalWidth !== 0) {
+                        window.clearInterval(this.get('checkInterval'));
+                    } else {
+                        this.reloadImage();
+                    }
+                }
+            }.bind(this), 1000));
+        },
+        remove: function () {
+            console.log('destroy Model');
+            this.unbind();
+            this.clear({silent:true});
+            window.clearInterval(this.get('checkInterval'));
+            window.clearInterval(this.get('reloadInterval'));
         }
     });
     return ImgModel;
