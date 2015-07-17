@@ -78,6 +78,7 @@ define([
         },
         setAttributions: function () {
             var datasets = this.get("datasets"), dataset;
+
             if (datasets) {
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
@@ -96,8 +97,9 @@ define([
                     }
                 }
             }
-            else {
-                this.set("metaID", null);
+            // sollte noch besser gelöst werden, gab Probleme mit dem FHH-Atlas
+            else if (this.get("typ") === "GeoJSON") {
+                this.set("metaURL", null);
             }
         },
         /**
