@@ -50,7 +50,7 @@ define([
          */
         starteStreaming: function (id) {
             if (document.getElementById(id)) {
-                VideoJS(id, {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function() {
+                VideoJS(id, {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function () {
 //                    console.log("loaded");
                 });
             }
@@ -90,11 +90,14 @@ define([
             for (var i = 0; i < sortedParams.length; i += 1) {
                 if (sortedParams[i].typ === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
-                    // console.log(gfiContent);
                 }
                 else if (sortedParams[i].typ === "WFS") {
                     gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].attributes);
                 }
+                else if (sortedParams[i].typ === "GeoJSON") {
+                    gfiContent = this.setGeoJSONPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
+                }
+
                 if (gfiContent !== undefined) {
                     _.each(gfiContent, function (content) {
                         pContent.push(content);
@@ -109,9 +112,11 @@ define([
             pContent = this.replaceValuesWithObjects(pContent);
             if (pContent.length > 0) {
                 var position;
+
                 if (this.get("wfsCoordinate").length > 0) {
                     position = this.get("wfsCoordinate");
-                } else {
+                }
+                else {
                     position = params[1];
                 }
                 this.get("gfiOverlay").setPosition(position);
@@ -127,21 +132,47 @@ define([
             $("#loader").hide();
         },
         replaceValuesWithObjects: function (pContent) {
-            _.each(pContent, function(element, index) {
+            _.each(pContent, function (element, index) {
                 _.each(element, function (val, key) {
-                    if (key === 'Bild') {
+                    if (key === "Bild") {
                         val = new ImgView(val);
-                        element[key]=val;
+
+                        element[key] = val;
                     }
                 });
                 pContent[index] = element;
             });
             return pContent;
         },
+
+        setGeoJSONPopupContent: function (source, coordinate, scale) {
+
+            var feature = source.getClosestFeatureToCoordinate(coordinate),
+                pMaxDist = 0.002 * scale, // 1 cm um Klickpunkt forEachFeatureInExtent
+                pExtent = feature.getGeometry().getExtent(),
+                pX = coordinate[0],
+                pY = coordinate[1],
+                pMinX = pExtent[0] - pMaxDist,
+                pMaxX = pExtent[2] + pMaxDist,
+                pMinY = pExtent[1] - pMaxDist,
+                pMaxY = pExtent[3] + pMaxDist;
+                // console.log(_.omit(feature.getProperties(), function (value) {
+                //     return _.isObject(value);
+                // }));
+                // console.log(feature.get("gfiAttributes"));
+            if (pX < pMinX || pX > pMaxX || pY < pMinY || pY > pMaxY) {
+                return;
+            }
+            else {
+                return [feature.get("gfiAttributes")];
+            }
+        },
+
         /**
          *
          */
         setWFSPopupContent: function (pSourceAllFeatures, pLayerStyle, pCoordinate, pScale, attributes) {
+            console.log(5);
             // NOTE: Hier werden die Features auf ihre Sichtbarkeit untersucht, bevor das nächstgelegene Feature zurückgegeben wird
             var pSource = new ol.source.Vector;
 
@@ -295,7 +326,7 @@ define([
                 async: false,
                 type: "GET",
                 context: this, // das model
-                success: function (data) {//console.log(data);
+                success: function (data) { // console.log(data);
                     var gfiList = [];
                     // ESRI
                     if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
