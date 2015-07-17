@@ -19,6 +19,7 @@ define([
             this.model = new ImgModel();
             this.model.set('url', url);
             this.render();
+            this.listenTo(this.model, "change:reloadVersuch", this.checkReloadVersuch);
             this.model.set('zufallszahl', Math.floor(Math.random() * (20000 - 0 + 1)) + 0);
             this.model.checkImage();
         },
@@ -37,6 +38,11 @@ define([
             this.unbind();
             this.model.destroy();
             Backbone.View.prototype.remove.call(this);
+        },
+        checkReloadVersuch: function () {
+            if (this.model.get('reloadVersuch') > this.model.get('reloadMaxVersuche')) {
+                this.remove();
+            }
         }
     });
 
