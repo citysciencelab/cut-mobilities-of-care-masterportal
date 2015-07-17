@@ -189,11 +189,8 @@ define([
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
             this.on("change:visibility", this.sendAllVisibleLayer, this);
-
-            this.listenTo(this, {
-                "add": this.addLayerToMap,
-                "remove": this.removeLayerFromMap
-            });
+            this.listenTo(this, "add", this.addLayerToMap);
+            this.listenTo(this, "remove", this.removeLayerFromMap);
 
             this.fetch({
                 cache: false,
@@ -213,9 +210,6 @@ define([
             });
         },
 
-        /**
-         *
-         */
         addFeatures: function (name, features) {
             var model = this.findWhere({name: name});
 
