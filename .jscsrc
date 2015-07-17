@@ -4,7 +4,6 @@
     "disallowMultipleLineBreaks": true,
     "disallowMultipleSpaces": true,
     "disallowNewlineBeforeBlockStatements": true,
-    "disallowQuotedKeysInObjects": true,
     "disallowSpaceAfterObjectKeys": true,
     "disallowSpaceBeforePostfixUnaryOperators": true,
     "disallowSpacesInsideArrayBrackets": "nested",
