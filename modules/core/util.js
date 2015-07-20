@@ -26,6 +26,10 @@ define([
                 if (path.indexOf("/") === 0) {
                     baseUrl = "";
                 }
+                else if (path.indexOf("http") === 0) {
+                    baseUrl = "";
+                    console.log(path);
+                }
                 return baseUrl + path;
             }
             else {
