@@ -60,6 +60,14 @@ define([
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
+            // destroye child-Objekte, wie img
+            _.each(this.get('gfiContent'), function(layer) {
+                _.each(layer, function(child) {
+                    if (_.isObject(child)) {
+                        child.remove();
+                    }
+                });
+            });
             this.get("element").popover("destroy");
             this.set("isPopupVisible", false);
             this.unset("coordinate", {silent: true});
