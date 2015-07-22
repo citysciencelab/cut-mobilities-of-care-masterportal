@@ -60,10 +60,11 @@ define([
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            // destroye child-Objekte, wie img
+            // destroye child-Views/Templates, z.B. imgTemplate
             _.each(this.get('gfiContent'), function(layer) {
                 _.each(layer, function(child) {
-                    if (_.isObject(child)) {
+                    // only call remove on Backbone.View objects or extended Backbone.View objects
+                    if (child instanceof Backbone.View) {
                         child.remove();
                     }
                 });
@@ -180,7 +181,6 @@ define([
          *
          */
         setWFSPopupContent: function (pSourceAllFeatures, pLayerStyle, pCoordinate, pScale, attributes) {
-            console.log(5);
             // NOTE: Hier werden die Features auf ihre Sichtbarkeit untersucht, bevor das nächstgelegene Feature zurückgegeben wird
             var pSource = new ol.source.Vector;
 
