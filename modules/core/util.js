@@ -26,6 +26,9 @@ define([
                 if (path.indexOf("/") === 0) {
                     baseUrl = "";
                 }
+                else if (path.indexOf("http") === 0) {
+                    baseUrl = "";
+                }
                 return baseUrl + path;
             }
             else {
