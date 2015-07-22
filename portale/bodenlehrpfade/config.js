@@ -28,8 +28,8 @@ define(function () {
         },
         {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
         {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-        {id: "2284", visible: true, name: "Lehrpfad"},
-        {id: "2283", visible: true, name: "Tafeln"}
+        {id: "2284,2401", visible: true, name: "Lehrpfad"},
+        {id: "2283,2402", visible: true, name: "Tafeln"}
         ],
         menubar: true,
         mouseHover: false,
