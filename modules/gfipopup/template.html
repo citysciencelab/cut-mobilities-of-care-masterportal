@@ -9,7 +9,9 @@
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
         _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
-    %>
+            if (_.isObject(value)) {
+                  return;
+              } %>
     <tr>
         <% if(key === 'video'){%>
             <td colspan="2" >
