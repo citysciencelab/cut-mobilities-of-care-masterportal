@@ -3,9 +3,9 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "config",
-    "modules/searchbar/model"
-], function (_, Backbone, ol, EventBus, Config, Searchbar) {
+    "config"
+    // "modules/searchbar/model"
+], function (_, Backbone, ol, EventBus, Config) {
     /**
     * Bereitstellung des Layers
     */
@@ -74,7 +74,6 @@ define([
             EventBus.trigger("removeLayer", this.get("layer"));
             this.setAttributionLayer();
             EventBus.trigger("addLayer", this.get("layer"));
-            EventBus.trigger("getVisibleWFSLayer"); //übernehme WFS in Searchbar
         },
         setAttributions: function () {
             var datasets = this.get("datasets"), dataset;

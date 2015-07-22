@@ -103,6 +103,7 @@ define([
                 }
                 EventBus.trigger("addOverlay", this.get("marker"));
                 EventBus.trigger("getAllLayer");
+                EventBus.trigger("getVisibleWFSLayer");
             },
 
             /**
