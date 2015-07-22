@@ -4,9 +4,8 @@ define(function () {
         view: {
             center: [565874, 5934140] // Rathausmarkt
         },
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
+        // layerConf: "../components/lgv-config/services-internet.json",
+        layerConf: "http://87.106.67.159/lgv-config/services-internet.json",
         layerIDs:
         [
         {id: "453", visible: true},
@@ -33,7 +32,8 @@ define(function () {
         {id: "1247", visible: false, name: "Berufsschulen"},
         {id: "1303", visible: false, name: "Hochschulen"}
         ],
-        styleConf: "../components/lgv-config/style.json",
+        // styleConf: "../components/lgv-config/style.json",
+        styleConf: "http://87.106.67.159/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
@@ -55,6 +55,7 @@ define(function () {
             placeholder: "Suche Adresse, Stadtteil",
             gazetteerURL: function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                // return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
