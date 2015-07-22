@@ -3,7 +3,7 @@ define("geoapi", [
     "eventbus"
 ], function (Backbone, EventBus) {
 
-    var GeoAPI = this.GeoAPI = _.extend({}, Backbone.Events);
+    var GeoAPI = parent.GeoAPI = _.extend({}, Backbone.Events);
 
     /**
      * [on description]
