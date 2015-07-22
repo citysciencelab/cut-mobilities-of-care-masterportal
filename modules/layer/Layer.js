@@ -1,11 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "openlayers",
     "eventbus",
     "config"
-    // "modules/searchbar/model"
-], function (_, Backbone, ol, EventBus, Config) {
+], function (Backbone, ol, EventBus, Config) {
     /**
     * Bereitstellung des Layers
     */
@@ -29,15 +27,12 @@ define([
             }
 
             // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
-            this.set("currentScale", Config.view.scale);
-            this.setScaleRange();
-
+            EventBus.on("currentMapScale", this.setScaleRange, this);
             this.set("settings", false);
 
             this.listenTo(this, "change:visibility", this.setVisibility);
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
-            this.listenTo(this, "change:currentScale", this.setScaleRange);
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
@@ -126,8 +121,8 @@ define([
                 }
             }
         },
-        setScaleRange: function () {
-            if (this.get("currentScale") <= parseInt(this.get("maxScale"), 10) && this.get("currentScale") >= parseInt(this.get("minScale"), 10)) {
+        setScaleRange: function (scale) {
+            if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
             } else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
                 this.set("isInScaleRange", true);
