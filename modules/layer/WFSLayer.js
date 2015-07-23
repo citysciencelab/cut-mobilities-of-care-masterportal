@@ -193,7 +193,7 @@ define([
         setClusterStyleForStyleField: function () {
             var styleId = this.get('styleId');
             var styleField = this.get('styleField');
-            this.set("style", function (feature, resolution) {
+            this.set("style", function (feature) {
                 var size = feature.get("features").length;
                 var stylelistmodel;
                 if (size > 1) {
@@ -214,7 +214,7 @@ define([
         setClusterStyle: function () {
             var styleId = this.get('styleId');
             var stylelistmodel = StyleList.returnModelById(styleId)
-            this.set("style", function (feature, resolution) {
+            this.set("style", function (feature) {
                 return stylelistmodel.getClusterStyle(feature);
             });
         },

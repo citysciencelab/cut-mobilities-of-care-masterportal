@@ -10,7 +10,6 @@ define([
 ], function (Backbone, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus, Util) {
 
     var LayerList = Backbone.Collection.extend({
-        // URL der DiensteAPI
         url: Util.getPath(Config.layerConf),
         model: function (attrs, options) {
             if (attrs.typ === "WMS") {
@@ -36,74 +35,19 @@ define([
             }
             // Ansonsten Layer über ID
             else if (_.has(Config, "layerIDs")) {
-                var configIDs = Config.layerIDs,
-                    modelsArray = [];
+                var modelsArray = [];
 
-                _.each(configIDs, function (element, index) {
-                    // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
+                _.each(Config.layerIDs, function (element) {
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(","),
                             layerinfos = _.findWhere(response, {id: layers[0]});
 
-                        if (layerinfos) {
-                            modelsArray.push(layerinfos);
-                        }
-                        else {
-                            alert ("Layerbeschreibung " + layers[0] + " nicht verfügbar.");
-                            return;
-                        }
-                        // default: Layer ist nicht routable, Punktabfrage kann nicht fürs Routing benutzt werden
-                        if (_.has(element, "routable")) {
-                            modelsArray[index].routable = element.routable;
-                        }
-                        else {
-                            modelsArray[index].routable = false;
-                        }
-                        // default: Layer wird im Themenbaum angezeigt
-                        if (_.has(element, "displayInTree")) {
-                            modelsArray[index].displayInTree = element.displayInTree;
-                        }
-                        else {
-                            modelsArray[index].displayInTree = true;
-                        }
-                        // WMS-Styles
-                        if (_.has(element, "styles")) {
-                            modelsArray[index].styles = element.styles;
-                            modelsArray[index].name = element.name;
-                        }
-                        // Transparenz für WMS/WFS
-                        if (_.has(element, "transparence")) {
-                            modelsArray[index].transparence = element.transparence;
-                        }
-                        // default: Layer ist nicht sichtbar
-                        if (_.has(element, "visible")) {
-                            modelsArray[index].visibility = element.visible;
-                        }
-                        else {
-                            modelsArray[index].visibility = false;
-                        }
-                        // Name aus Config statt aus Capabilities
-                        if (_.has(element, "name")) {
-                            modelsArray[index].name = element.name;
-                        }
-                        // MinScale aus Config statt aus JSON
-                        if (_.has(element, "minScale")) {
-                            modelsArray[index].minScale = element.minScale;
-                        }
-                        // MaxScale aus Config statt aus JSON
-                        if (_.has(element, "maxScale")) {
-                            modelsArray[index].maxScale = element.maxScale;
-                        }
-                        //
-                        if (_.has(element, "kategorieCustom")) {
-                            modelsArray[index].kategorieCustom = element.kategorieCustom;
-                        }
-                        //
-                        if (_.has(element, "subfolder")) {
-                            modelsArray[index].subfolder = element.subfolder;
+                        // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
+                        if (layers.length === 1) {
+                            modelsArray.push(_.extend(layerinfos, element));
                         }
                         // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
-                        if (layers.length > 1) {
+                        else if (layers.length > 1) {
                             var layerList = "";
 
                             _.each(layers, function (layer) {
@@ -111,55 +55,32 @@ define([
 
                                 layerList += "," + obj.layers;
                             });
-                            modelsArray[index].layers = layerList.slice(1, layerList.length);
+                            layerinfos.layers = layerList.slice(1, layerList.length);
                             if (!_.has(element, "name")) {
-                                modelsArray[index].name = modelsArray[index].datasets[0].md_name;
+                                layerinfos.name = layerinfos.datasets[0].md_name;
                             }
-                            else {
-                                modelsArray[index].name = element.name;
-                            }
+                            modelsArray.push(_.extend(layerinfos, element));
                         }
                     }
                     // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
                     else if (_.has(element, "id") && _.isArray(element.id)) {
                         var groupModel = {
-                            id: _.uniqueId("grouplayer_"),
-                            name: element.name,
                             typ: "GROUP",
-                            styles: element.styles // Styles der Childlayer
+                            layerdefinitions: []
                         };
-                        // Transparenz für Group-Model
-                        if (_.has(element, "transparence")) {
-                            groupModel.transparence = element.transparence;
-                        }
-                        var modelChildren = [];
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
-
                             if (layerinfos) {
-                                modelChildren.push(layerinfos);
+                                groupModel.layerdefinitions.push(layerinfos);
                             }
                             else {
                                 alert ("Layerbeschreibung " + childlayer.id + " nicht verfügbar.");
                                 return;
                             }
                         });
-                        groupModel.layerdefinitions = modelChildren;
-                        // default: Layer wird im Themenbaum angezeigt
-                        if (_.has(element, "displayInTree")) {
-                            groupModel.displayInTree = element.displayInTree;
-                        }
-                        else {
-                            groupModel.displayInTree = true;
-                        }
-                        // default: Layer ist nicht sichtbar
-                        if (_.has(element, "visible")) {
-                            groupModel.visibility = element.visible;
-                        }
-                        else {
-                            groupModel.visibility = false;
-                        }
+                        groupModel = _.extend(groupModel, element);
+                        groupModel.id = _.uniqueId("grouplayer_");
                         modelsArray.push(groupModel);
                     }
                 });
@@ -495,8 +416,7 @@ define([
         },
 
         getBaseLayer: function () {
-            var baseLayerIDList = _.pluck(Config.baseLayerIDs, "id"),
-                layerlist = [];
+            var layerlist = [];
 
             _.each(Config.baseLayerIDs, function (baseLayer) {
                 var model = this.findWhere({"id": baseLayer.id});

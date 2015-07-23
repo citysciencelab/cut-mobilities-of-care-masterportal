@@ -180,7 +180,6 @@ define([
          *
          */
         setWFSPopupContent: function (pSourceAllFeatures, pLayerStyle, pCoordinate, pScale, attributes) {
-            console.log(5);
             // NOTE: Hier werden die Features auf ihre Sichtbarkeit untersucht, bevor das nächstgelegene Feature zurückgegeben wird
             var pSource = new ol.source.Vector;
 

@@ -61,6 +61,8 @@ define([
             this.setMetadataURL();
 
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
+            // Warum gibt es eigentlich visible und visibility????
+            this.set("visibility", this.get("visible"));
             this.get("layer").setVisible(this.get("visibility"));
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
