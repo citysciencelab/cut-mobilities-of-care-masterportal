@@ -51,6 +51,7 @@ define([
                     visibleLayer.push(element);
                 }
             });
+
             return visibleLayer;
         },
         getVisibleLayer: function () {
@@ -58,8 +59,9 @@ define([
                 legendParams = [],
                 groupArray = [],
                 layeridarray = [];
-
+console.log(layers);
             _.each(layers, function (element) {
+                console.log(element);
                 if (element.get("typ") === "WFS") {
                     layeridarray.push(element.get("id"));
 
@@ -74,19 +76,16 @@ define([
                     });
                 }
                 else if (element.get("typ") === "WMS") {
-                    if (element.get("displayInTree") === true) {
-                        layeridarray.push(element.get("id"));
-                        legendParams.push({
-                            typ: "WMS",
-                            layerID: element.get("id"),
-                            source: element.get("url"),
-                            name: element.get("name"),
-                            legendURL: element.get("legendURL"),
-
-                            layers: element.get("layers"),
-                            styles: element.get("styles")
-                        });
-                    }
+                    layeridarray.push(element.get("id"));
+                    legendParams.push({
+                        typ: "WMS",
+                        layerID: element.get("id"),
+                        source: element.get("url"),
+                        name: element.get("name"),
+                        legendURL: element.get("legendURL"),
+                        layers: element.get("layers"),
+                        styles: element.get("styles")
+                    });
                 }
                 else if (element.get("typ") === "GROUP") {
                     groupArray = [];
@@ -114,7 +113,8 @@ define([
                     });
                 }
             });
-
+console.log(layeridarray);
+console.log(legendParams);
             this.model.set("layeridArray", layeridarray);
             this.model.set("params", legendParams);
             this.model.setAttributions();
