@@ -59,9 +59,9 @@ define([
                 legendParams = [],
                 groupArray = [],
                 layeridarray = [];
-console.log(layers);
+
             _.each(layers, function (element) {
-                console.log(element);
+
                 if (element.get("typ") === "WFS") {
                     layeridarray.push(element.get("id"));
 
@@ -113,8 +113,7 @@ console.log(layers);
                     });
                 }
             });
-console.log(layeridarray);
-console.log(legendParams);
+
             this.model.set("layeridArray", layeridarray);
             this.model.set("params", legendParams);
             this.model.setAttributions();
