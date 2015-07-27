@@ -28,7 +28,7 @@ define([
          */
         setNodeLayer: function () {
             _.each(this.get("layerIDs"), function (element) {
-                this.push("layers", {id: element.id, kategorieCustom: this.get("node"), visible: element.visible});
+                this.push("layers", {id: element.id, kategorieCustom: this.get("node"), visible: element.visible, transparence: element.transparence});
             }, this);
         },
 
