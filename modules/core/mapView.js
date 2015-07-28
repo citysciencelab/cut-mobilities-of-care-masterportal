@@ -98,7 +98,7 @@ define([
          */
         setStartCenter: function () {
             if (Config.view.center && _.isArray(Config.view.resolution) && Config.view.extent.length === 2) {
-                this.set("startCenter", Config.view.resolution);
+                this.set("startCenter", Config.view.center);
             }
         },
 
@@ -136,7 +136,7 @@ define([
         setView: function () {
             var view = new ol.View({
                 projection: this.get("projection"),
-                center: Config.view.center,
+                center: this.get("startCenter"),
                 extent: this.get("startExtent"),
                 resolution: this.get("startResolution"),
                 resolutions: this.get("resolutions")
