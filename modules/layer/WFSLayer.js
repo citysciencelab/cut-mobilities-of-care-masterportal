@@ -8,17 +8,7 @@ define([
     "collections/stylelist"
 
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
-    // Definition der Projektion EPSG:25832
-    ol.proj.addProjection(new ol.proj.Projection({
-        code: "EPSG:25832",
-        units: "m",
-        extent: [265948.8191, 6421521.2254, 677786.3629, 7288831.7014],
-        axisOrientation: "enu", // default
-        global: false // default
-    }));
-    var proj25832 = ol.proj.get("EPSG:25832");
 
-    proj25832.setExtent([265948.8191, 6421521.2254, 677786.3629, 7288831.7014]);
     /**
      *
      */
@@ -42,13 +32,15 @@ define([
                             featureNS: this.get("featureNS"),
                             featureType: this.get("featureType")
                         });
+
                         if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
                             var src = new ol.source.Vector({
-                                projection: proj25832,
+                                projection: this.get("projection"),
                                 attributions: this.get("olAttribution")
                             });
+
                             src.addFeatures(wfsReader.readFeatures(data));
-                            this.set('source', src);
+                            this.set("source", src);
                             this.styling();
                             this.set("layer", new ol.layer.Vector({
                                 source: this.get("source"),
@@ -59,17 +51,20 @@ define([
                                 routable: this.get("routable")
                             }));
                             this.reload();
-                        } else {
+                        }
+                        else {
                             var src = new ol.source.Vector({
-                                projection: proj25832,
+                                projection: this.get("projection"),
                                 attributions: this.get("olAttribution")
                             });
+
                             src.addFeatures(wfsReader.readFeatures(data));
                             var cluster = new ol.source.Cluster({
                                 source: src,
                                 distance: this.get("clusterDistance")
                             });
-                            this.set('source', cluster);
+
+                            this.set("source", cluster);
                             this.styling();
                             this.set("layer", new ol.layer.Vector({
                                 source: this.get("source"),
@@ -95,11 +90,12 @@ define([
         },
         setAttributionLayerSource: function () {
             // Nur einmalig und nicht beim reload.
-            if (this.get('layer') === undefined) {
-                var id = this.get("id");
-                var layerIDs = _.find(Config.layerIDs, function (num) {
-                    return num.id === id;
-                });
+            if (this.get("layer") === undefined) {
+                var id = this.get("id"),
+                    layerIDs = _.find(Config.layerIDs, function (num) {
+                        return num.id === id;
+                    });
+
                 this.set("styleId", layerIDs.style);
                 this.set("clusterDistance", layerIDs.clusterDistance);
                 this.set("searchField", layerIDs.searchField);
@@ -112,7 +108,7 @@ define([
          */
         setAttributionLayer: function () {
             // Dummy-Layer, damit initialize des Layer durchläuft. Nur einmalig und nicht beim reload.
-            if (this.get('layer') === undefined) {
+            if (this.get("layer") === undefined) {
                 this.set("layer", new ol.layer.Vector({
                     source: new ol.source.Vector(),
                     visible: false
@@ -122,13 +118,15 @@ define([
         },
         setVisibility: function () {
             var visibility = this.get("visibility");
+
             this.toggleEventAttribution(visibility);
             if (visibility === true) {
                 if (this.get("layer").getSource().getFeatures().length === 0) {
                     this.updateData();
                 }
                 this.get("layer").setVisible(true);
-            } else {
+            }
+            else {
                 this.get("layer").setVisible(false);
             }
         },
@@ -137,7 +135,7 @@ define([
             if (this.get("styleField") && this.get("styleField") !== "") {
                 if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
                     if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        //TODO
+                        // TODO
                     }
                     else {
                         this.setSimpleStyleForStyleField();
@@ -145,7 +143,7 @@ define([
                 }
                 else {
                     if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        //TODO
+                        // TODO
                     }
                     else {
                         this.setClusterStyleForStyleField();
@@ -172,17 +170,20 @@ define([
             }
         },
         setSimpleCustomLabeledStyle: function () {
-            var styleId = this.get('styleId');
-            var styleLabelField = this.get("styleLabelField");
+            var styleId = this.get("styleId"),
+                styleLabelField = this.get("styleLabelField");
+
             this.set("style", function (feature) {
-                var stylelistmodel = StyleList.returnModelById(styleId);
-                var label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
+                var stylelistmodel = StyleList.returnModelById(styleId),
+                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
+
                 return stylelistmodel.getCustomLabeledStyle(label);
             });
         },
         setSimpleStyleForStyleField: function () {
-            var styleId = this.get('styleId');
-            var styleField = this.get('styleField');
+            var styleId = this.get("styleId"),
+                styleField = this.get("styleField");
+
             this.set("style", function (feature) {
                 var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
                     stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
@@ -191,30 +192,35 @@ define([
             });
         },
         setClusterStyleForStyleField: function () {
-            var styleId = this.get('styleId');
-            var styleField = this.get('styleField');
-            this.set("style", function (feature, resolution) {
-                var size = feature.get("features").length;
-                var stylelistmodel;
+            var styleId = this.get("styleId"),
+                styleField = this.get("styleField");
+
+            this.set("style", function (feature) {
+                var size = feature.get("features").length,
+                    stylelistmodel;
+
                 if (size > 1) {
                     stylelistmodel = StyleList.returnModelById(styleId + "_cluster");
                 }
                 if (!stylelistmodel) {
                     var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
+
                     stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
                 }
                 return stylelistmodel.getClusterStyle(feature);
             });
         },
         setSimpleStyle: function () {
-            var styleId = this.get('styleId');
-            var stylelistmodel = StyleList.returnModelById(styleId);
+            var styleId = this.get("styleId"),
+                stylelistmodel = StyleList.returnModelById(styleId);
+
             this.set("style", stylelistmodel.getSimpleStyle());
         },
         setClusterStyle: function () {
-            var styleId = this.get('styleId');
-            var stylelistmodel = StyleList.returnModelById(styleId)
-            this.set("style", function (feature, resolution) {
+            var styleId = this.get("styleId"),
+                stylelistmodel = StyleList.returnModelById(styleId);
+
+            this.set("style", function (feature) {
                 return stylelistmodel.getClusterStyle(feature);
             });
         },
@@ -260,13 +266,13 @@ define([
                     newURL = this.get("url").replace("http://wscd0096", "/wscd0096");
                 }
                 // ab hier Internet
-    			else if (this.get("url").indexOf("http://extmap.hbt.de") !== -1) {
+                else if (this.get("url").indexOf("http://extmap.hbt.de") !== -1) {
                     newURL = this.get("url").replace("http://extmap.hbt.de", "/extmap");
                 }
-    			else if (this.get("url").indexOf("http://gateway.hamburg.de") !== -1) {
+                else if (this.get("url").indexOf("http://gateway.hamburg.de") !== -1) {
                     newURL = this.get("url").replace("http://gateway.hamburg.de", "/gateway-hamburg");
                 }
-    			else if (this.get("url").indexOf("http://geodienste-hamburg.de") !== -1) {
+                else if (this.get("url").indexOf("http://geodienste-hamburg.de") !== -1) {
                     newURL = this.get("url").replace("http://geodienste-hamburg.de", "/geodienste-hamburg");
                 }
                 else {
@@ -288,7 +294,7 @@ define([
                 data += "&SRSNAME=" + this.get("srsname");
             }
             else {
-                data += "&SRSNAME=EPSG:25832";
+                data += "&SRSNAME=" + this.get("projection").getCode();
             }
             this.set("data", data);
         }

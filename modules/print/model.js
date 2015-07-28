@@ -56,6 +56,8 @@ define([
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
             EventBus.on("currentMapCenter", this.setCurrentMapCenter, this);
             EventBus.on("currentMapScale", this.setCurrentMapScale, this);
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
         },
 
         /**
@@ -173,7 +175,7 @@ define([
         setSpecification: function () {
             var specification = {
                 layout: $("#layoutField option:selected").html(),
-                srs: "EPSG:25832",
+                srs: this.get("projection").getCode(),
                 units: "m",
                 outputFilename: this.get("outputFilename"),
                 outputFormat: "pdf",
@@ -261,7 +263,12 @@ define([
 
             tempArray.push(value);
             this.set(attribute, _.flatten(tempArray));
+        },
+
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
+
     return model;
 });

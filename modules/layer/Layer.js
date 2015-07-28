@@ -38,13 +38,15 @@ define([
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
             this.listenTo(this, "change:currentScale", this.setScaleRange);
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
                 this.postInit();
             } else {
                 this.postInit();
-            }
+            };
         },
         postInit: function () {
             this.setAttributionLayerSource();
@@ -246,7 +248,11 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
+
     return Layer;
 });
