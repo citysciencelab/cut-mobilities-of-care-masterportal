@@ -20,18 +20,7 @@ define([
             gfiURLs: [],
             gfiCounter: 0,
             isCollapsed: false,
-            isVisible: false,
-            routeLayer: new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    projection: ol.proj.get("EPSG:25832")
-                }),
-                style: new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: "blue",
-                        width: 5
-                    })
-                })
-            })
+            isVisible: false
         },
         /**
          *
@@ -39,12 +28,28 @@ define([
         initialize: function () {
             this.set("element", this.get("gfiOverlay").getElement());
             this.listenTo(this, "change:isPopupVisible", this.sendGFIForPrint);
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("streamVideoByID", this.starteStreaming, this); // trigger in map.js
-//            EventBus.on("getGFIForPrint", this.sendGFIForPrint, this);
+//          EventBus.on("getGFIForPrint", this.sendGFIForPrint, this);
+            this.setRouteLayer();
         },
 
+        setRouteLayer: function () {
+            this.set("routeLayer", new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    projection: this.get("projection")
+                }),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "blue",
+                        width: 5
+                    })
+                })
+            }));
+        },
         /**
          * Diese Funktion startet das Video unter der übergebenen id
          */
@@ -483,6 +488,10 @@ define([
 
             EventBus.trigger("addLayer", this.get("routeLayer"));
             EventBus.trigger("zoomToExtent", feature.getGeometry().getExtent());
+        },
+
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
 

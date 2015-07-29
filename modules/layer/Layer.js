@@ -26,6 +26,10 @@ define([
             this.set("settings", false);
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
+
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
+
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
@@ -96,7 +100,6 @@ define([
                 this.set("metaURL", null);
             }
         },
-
         setScaleRange: function (scale) {
             if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
@@ -230,6 +233,9 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
 

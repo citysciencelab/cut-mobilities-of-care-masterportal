@@ -3,9 +3,8 @@ define([
     'backbone',
     'openlayers',
     'eventbus',
-    'config',
-    'modules/searchbar/model'
-], function (_, Backbone, ol, EventBus, Config, Searchbar) {
+    'config'
+], function (_, Backbone, ol, EventBus, Config) {
 
     var RoutingModel = Backbone.Model.extend({
         defaults: {
@@ -22,8 +21,10 @@ define([
             bbox: ''
         },
         initialize: function () {
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
-                this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=EPSG:25832');
+                this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=' + this.get("projection").getCode());
             }
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             EventBus.on('setMap', this.setMap, this);
@@ -123,8 +124,8 @@ define([
         },
         geosearchByBKG: function (value, target) {
             $.ajax({
-                url: '/bkg_geosearch',
-                data: 'srsName=EPSG:25832&count=1&outputformat=json&query=' + value,
+                url: "/bkg_geosearch",
+                data: "srsName=" + this.get("projection").getCode() + "&count=1&outputformat=json&query=" + value,
                 context: this,  // das model
                 async: true,
                 type: "GET",
@@ -226,6 +227,9 @@ define([
             var position = olFeature.getGeometry().getLastCoordinate();
             this.get('mhpOverlay').setPosition([position[0] + 7, position[1] - 7]);
             EventBus.trigger('addOverlay', this.get('mhpOverlay'));
+        },
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
 
