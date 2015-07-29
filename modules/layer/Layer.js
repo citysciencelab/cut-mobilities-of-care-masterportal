@@ -33,9 +33,6 @@ define([
             this.listenTo(this, "change:visibility", this.setVisibility);
             this.listenTo(this, "change:transparence", this.updateOpacity);
 
-            EventBus.on("mapView:replyProjection", this.setProjection, this);
-            EventBus.trigger("mapView:requestProjection");
-
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
@@ -266,9 +263,6 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
-        },
-        setProjection: function (proj) {
-            this.set("projection", proj);
         }
     });
 

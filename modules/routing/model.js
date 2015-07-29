@@ -24,7 +24,7 @@ define([
             EventBus.on("mapView:replyProjection", this.setProjection, this);
             EventBus.trigger("mapView:requestProjection");
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
-                this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=' + this.get("projection").getCode());
+                this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=' + Config.view.epsg);
             }
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             EventBus.on('setMap', this.setMap, this);
@@ -125,7 +125,7 @@ define([
         geosearchByBKG: function (value, target) {
             $.ajax({
                 url: "/bkg_geosearch",
-                data: "srsName=" + this.get("projection").getCode() + "&count=1&outputformat=json&query=" + value,
+                data: "srsName=" + Config.view.epsg + "&count=1&outputformat=json&query=" + value,
                 context: this,  // das model
                 async: true,
                 type: "GET",

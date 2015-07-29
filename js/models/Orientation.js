@@ -4,8 +4,9 @@ define([
     'eventbus',
     'openlayers',
     'proj4',
-    'collections/stylelist'
-], function (_, Backbone, EventBus, ol, proj4, StyleList) {
+    'collections/stylelist',
+    "config"
+], function (_, Backbone, EventBus, ol, proj4, StyleList, Config) {
 
     var Orientation = Backbone.Model.extend({
         defaults: {
@@ -23,7 +24,7 @@ define([
             var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get('EPSG:4326')});
             geolocation.on('change', function(evt) {
                 var position = geolocation.getPosition();
-                this.set('newCenter', proj4(proj4('EPSG:4326'), proj4(this.get("projection").getCode()), position));
+                this.set('newCenter', proj4(proj4('EPSG:4326'), proj4(Config.view.epsg), position));
                 EventBus.trigger('setCenter', this.get('newCenter'), 6);
                 EventBus.trigger('setGeolocation', [this.get('newCenter'), position]);
                 var marker = this.get('marker');
