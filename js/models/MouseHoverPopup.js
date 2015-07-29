@@ -108,9 +108,8 @@ define([
         * Selektion angestpßen.
         */
         checkForEachFeatureAtPixel: function (evt, map) {
-            var pFeatureArray = [];
-
-            var featuresAtPixel = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            var pFeatureArray = [],
+                featuresAtPixel = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                     return {
                         feature: feature,
                         layer: layer
@@ -118,21 +117,20 @@ define([
             });
 
             if (featuresAtPixel !== undefined) {
-                var selProps = featuresAtPixel.feature.getProperties();
+                var selFeature = featuresAtPixel.feature;
                 // Cluster-Features
-                if (selProps.features) {
-                    var list = selProps.features;
-
+                if (selFeature.getProperties().features) {
+                    var list = selFeature.getProperties().features;
                     _.each(list, function (element) {
                         pFeatureArray.push({
-                            attributes: element.getProperties(),
+                            feature: element,
                             layerId: featuresAtPixel.layer.id
                         });
                     });
                 }
                 else {
                     pFeatureArray.push({
-                        attributes: selProps,
+                        feature: selFeature,
                         layerId: featuresAtPixel.layer.id
                     });
                 }
@@ -187,45 +185,35 @@ define([
         prepMouseHoverFeature: function (pFeatureArray) {
             var wfsList = this.get("wfsList"),
                 value = "",
-                coord = [];
+                coord;
 
             if (pFeatureArray.length > 0) {
                 // für jedes gehoverte Feature...
                 _.each(pFeatureArray, function (element) {
+                    var featureProperties = element.feature.getProperties(),
+                        featureGeometry = element.feature.getGeometry(),
+                        listEintrag = _.find(wfsList, function (ele) {
+                            return ele.layerId = element.layerId;
+                    });
+
                     if (value !== "") {
                         value = value + "</br></br>";
                     }
-                    var listEintrag = _.find(wfsList, function (ele) {
-                        return ele.layerId = element.layerId;
-                    });
 
                     if (listEintrag) {
                         var mouseHoverField = listEintrag.fieldname;
 
                         if (mouseHoverField) {
-                            if (_.has(element.attributes, mouseHoverField)) {
-                                value = value + _.values(_.pick(element.attributes, mouseHoverField))[0];
-                                if (coord.length === 0) {
-                                        if (element.attributes.geom) {
-                                        coord.push(element.attributes.geom.getFirstCoordinate()[0]);
-                                        coord.push(element.attributes.geom.getFirstCoordinate()[1]);
-                                    }
-                                    else if (element.attributes.the_geom) {
-                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[0]);
-                                        coord.push(element.attributes.the_geom.getFirstCoordinate()[1]);
-                                    }
-                                    else if (element.attributes.geometry) {
-                                        coord.push(element.attributes.geometry.getFirstCoordinate()[0]);
-                                        coord.push(element.attributes.geometry.getFirstCoordinate()[1]);
-                                    }
-                                    else {
-                                        console.error("Unbekanntes Geometrieformat");
-                                    }
+                            if (_.has(featureProperties, mouseHoverField)) {
+                                value = value + _.values(_.pick(featureProperties, mouseHoverField))[0];
+                                if (!coord) {
+                                    coord = featureGeometry.getCoordinates();
                                 }
                             }
                         }
                     }
                 }, this);
+
                 if (value !== "") {
                     this.get("mhpOverlay").setPosition(coord);
                     this.get("mhpOverlay").setOffset([45, -60]);
