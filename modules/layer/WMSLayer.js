@@ -36,16 +36,7 @@ define([
                 VERSION: version,
                 TRANSPARENT: this.get("transparent").toString()
             };
-            if (version === "1.1.1" || version === "1.1.0" || version === "1.0.0") {
-                params = _.extend(params, {
-                    SRS: this.get("projection").getCode()
-                });
-            }
-            else {
-                params = _.extend(params, {
-                    CRS: this.get("projection").getCode()
-                });
-            }
+
             if (this.get("styles") && this.get("styles") !== "" && this.get("styles") !== "nicht vorhanden") {
                 params = _.extend(params, {
                     STYLES: this.get("styles")
