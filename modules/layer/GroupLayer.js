@@ -39,7 +39,6 @@ define([
             });
             this.set("layers", layers);
             this.set("backbonelayers", backbonelayers);
-
         },
         setVisibility: function () {
             var visibility = this.get("visibility");

@@ -50,7 +50,6 @@ define([
                 placeholder: Config.searchBar.placeholder,
                 searchString: "", // der aktuelle String in der Suchmaske
                 hitList: [],
-                layers: [],
                 olympia: [],
                 bPlans: [],
                 houseNumbers: [],
@@ -85,6 +84,7 @@ define([
                 if (Config.searchBar.initString !== undefined) {
                     if (Config.searchBar.initString.search(",") !== -1) {
                         var splitInitString = Config.searchBar.initString.split(",");
+
                         this.set("onlyOneStreetName", splitInitString[0]);
                         // this.set("isOnlyOneStreet", true);
                         this.set("searchString", splitInitString[0] + " " + splitInitString[1]);
@@ -422,6 +422,7 @@ define([
              *
              */
             getLayerForSearch: function (layerModels) {
+                this.set("layers", []);
                 _.each(layerModels, function (model) {
                     this.pushHits("layers", {name: model.get("name"), metaName: model.get("metaName"), type: "Thema", glyphicon: "glyphicon-list", id: model.get("id"), model: model});
                 }, this);
@@ -432,13 +433,16 @@ define([
             */
             getFeaturesForSearch: function (layermodels) {
                 this.set("features", []);
-                var featureArray = [], imageSrc;
+                var featureArray = [],
+                    imageSrc;
+
                 _.each(layermodels, function (layer) {
                     if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
                         if (layer.get("layer").getStyle()[0]) {
                             imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
                             if (imageSrc) {
                                 var features = layer.get("layer").getSource().getFeatures();
+
                                 _.each(features, function (feature) {
                                     featureArray.push({name: feature.get("name"), type: "Krankenhaus", coordinate: feature.getGeometry().getCoordinates(), imageSrc: imageSrc, id: feature.get("name").replace(/ /g, "") + layer.get("name")});
                                 });

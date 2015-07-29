@@ -71,6 +71,7 @@ define([
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
+
                             if (layerinfos) {
                                 groupModel.layerdefinitions.push(layerinfos);
                             }
@@ -167,6 +168,7 @@ define([
             // Iteriert über die ID's aus der Config
             _.each(Config.tree.groupBaseLayerByID, function (ids) {
                 firstModel = this.get(ids[0]).clone();
+                                // console.log(firstModel);
                 _.each(ids, function (id) {
                     modelByID = this.get(id);
                     layerList += "," + modelByID.get("layers");
@@ -174,16 +176,28 @@ define([
                     maxScale.push(parseInt(modelByID.get("maxScale"), 10));
                     this.remove(modelByID);
                 }, this);
+
                 firstModel.set("maxScale", _.max(maxScale));
                 firstModel.set("minScale", _.min(minScale));
                 firstModel.set("layers", layerList.slice(1, layerList.length));
-                firstModel.set("kategorieOpendata", undefined);
-                firstModel.set("baselayer", true);
+                firstModel.set("isbaselayer", true);
                 this.add(firstModel);
                 firstModel.reload();
+                // console.log(firstModel);
             }, this);
         },
 
+        deleteByID: function () {
+            var modelByID;
+
+            // Iteriert über die ID's aus der Config
+            _.each(Config.tree.groupBaseLayerByID, function (ids) {
+                _.each(ids, function (id) {
+                    modelByID = this.get(id);
+                    this.remove(modelByID);
+                }, this);
+            }, this);
+        },
         /**
          * FNP, LAPRO und etc. werden zu einem Model zusammengefasst. Layer die gruppiert werden sollen, werden über Config.tree.groupLayer gesteuert.
          */
@@ -231,8 +245,18 @@ define([
                     categoryAttribute = "kategorieOpendata";
                     // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
                     modelsByCategory = this.filter(function (element) {
+                        return (typeof element.get(categoryAttribute) === "object" && element.get("isbaselayer") !== true);
+                    });
+                    break;
+                }
+                case "inspire": {
+                    // Name für das Model-Attribut für die entsprechende Kategorie
+                    categoryAttribute = "kategorieInspire";
+                    // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
+                    modelsByCategory = this.filter(function (element) {
                         return (typeof element.get(categoryAttribute) === "object" && element.get("baselayer") !== true);
                     });
+                    break;
                 }
             }
             // Iteriert über die Models
@@ -420,6 +444,7 @@ define([
 
             _.each(Config.baseLayerIDs, function (baseLayer) {
                 var model = this.findWhere({"id": baseLayer.id});
+
                 if (_.has(baseLayer, "name")) {
                     model.set("name", baseLayer.name);
                 }
@@ -491,10 +516,49 @@ define([
             return _.uniq(this.pluck("kategorieOpendata"));
         },
         sendInspireFolder: function () {
-            EventBus.trigger("sendInspireFolder", this.getInspireFolder());
+            this.fetch({
+                reset: true,
+                cache: false,
+                async: false,
+                error: function () {
+                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
+                },
+                success: function (collection) {
+                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
+                    if (_.has(Config, "tree") && Config.tree.custom === false) {
+                        // collection.mergeByID();
+                        collection.deleteByID();
+                        collection.mergeByMetaID();
+                        collection.resetModels();
+                    }
+                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
+                    collection.cloneByStyle();
+                    EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
+                    EventBus.trigger("sendAllLayer", collection.getAllLayer());
+                }
+            });
         },
         sendOpendataFolder: function () {
-            EventBus.trigger("sendOpendataFolder", this.getOpendataFolder());
+            this.fetch({
+                reset: true,
+                cache: false,
+                async: false,
+                error: function () {
+                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
+                },
+                success: function (collection) {
+                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
+                    if (_.has(Config, "tree") && Config.tree.custom === false) {
+                        collection.deleteByID();
+                        collection.mergeByMetaID();
+                        collection.resetModels();
+                    }
+                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
+                    collection.cloneByStyle();
+                    EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
+                    EventBus.trigger("sendAllLayer", collection.getAllLayer());
+                }
+            });
         }
     });
 
