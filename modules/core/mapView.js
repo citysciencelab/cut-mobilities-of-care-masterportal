@@ -130,6 +130,8 @@ define([
             // attach epsg and projection object to Config.view for further access by other modules
             Config.view.epsg = proj.getCode();
             Config.view.proj = proj;
+
+            this.set("projection", proj);
         },
 
         /**
