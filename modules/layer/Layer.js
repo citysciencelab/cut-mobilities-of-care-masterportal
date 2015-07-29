@@ -1,11 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "openlayers",
     "eventbus",
-    "config",
-    "modules/searchbar/model"
-], function (_, Backbone, ol, EventBus, Config, Searchbar) {
+    "config"
+], function (Backbone, ol, EventBus, Config) {
     /**
     * Bereitstellung des Layers
     */
@@ -29,31 +27,31 @@ define([
             }
 
             // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
-            this.set("currentScale", Config.view.scale);
-            this.setScaleRange();
-
+            EventBus.on("currentMapScale", this.setScaleRange, this);
             this.set("settings", false);
 
             this.listenTo(this, "change:visibility", this.setVisibility);
-
             this.listenTo(this, "change:transparence", this.updateOpacity);
-            this.listenTo(this, "change:currentScale", this.setScaleRange);
+
             EventBus.on("mapView:replyProjection", this.setProjection, this);
             EventBus.trigger("mapView:requestProjection");
+
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
                 EventBus.trigger("setAttributionToLayer", this);
                 this.postInit();
-            } else {
+            }
+            else {
                 this.postInit();
-            };
+            }
         },
         postInit: function () {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             if (this.get("transparence")) {
                 this.set("transparence", parseInt(this.get("transparence"), 10));
-            } else {
+            }
+            else {
                 this.set("transparence", 0);
             }
             // this.updateOpacity();
@@ -68,6 +66,8 @@ define([
             this.setMetadataURL();
 
             // Default Visibility ist false. In LayerList wird visibility nach config.js gesetzt.
+            // Warum gibt es eigentlich visible und visibility????
+            this.set("visibility", this.get("visible"));
             this.get("layer").setVisible(this.get("visibility"));
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
@@ -76,10 +76,10 @@ define([
             EventBus.trigger("removeLayer", this.get("layer"));
             this.setAttributionLayer();
             EventBus.trigger("addLayer", this.get("layer"));
-            EventBus.trigger("getVisibleWFSLayer"); //übernehme WFS in Searchbar
         },
         setAttributions: function () {
-            var datasets = this.get("datasets"), dataset;
+            var datasets = this.get("datasets"),
+                dataset;
 
             if (datasets) {
                 if (datasets[0] !== undefined) {
@@ -88,13 +88,15 @@ define([
                     this.set("metaName", dataset.md_name);
                     if (dataset.kategorie_opendata.length > 1) {
                         this.set("kategorieOpendata", dataset.kategorie_opendata);
-                    } else {
+                    }
+                    else {
                         this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
                     }
                     // besser auf type kontrollieren (Array oder String)
                     if (dataset.kategorie_inspire.length > 1) {
                         this.set("kategorieInspire", dataset.kategorie_inspire);
-                    } else {
+                    }
+                    else {
                         this.set("kategorieInspire", dataset.kategorie_inspire[0]);
                     }
                 }
@@ -110,10 +112,12 @@ define([
         */
         convertGFIAttributes: function () {
             var gfiAttributList, gfiAttribute, value, newKey, gfiAttributes, key;
+
             if (this.get("gfiAttributes")) {
                 if (this.get("gfiAttributes").toUpperCase() === "SHOWALL" || this.get("gfiAttributes").toUpperCase() === "IGNORE") {
                     return this.get("gfiAttributes");
-                } else {
+                }
+                else {
                     gfiAttributList = this.get("gfiAttributes").split(",");
                     gfiAttributes = {};
                     _.each(gfiAttributList, function (gfiAttributeConfig) {
@@ -129,12 +133,14 @@ define([
                 }
             }
         },
-        setScaleRange: function () {
-            if (this.get("currentScale") <= parseInt(this.get("maxScale"), 10) && this.get("currentScale") >= parseInt(this.get("minScale"), 10)) {
+        setScaleRange: function (scale) {
+            if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
-            } else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
+            }
+            else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
                 this.set("isInScaleRange", true);
-            } else {
+            }
+            else {
                 this.set("isInScaleRange", false);
             }
         },
@@ -144,19 +150,22 @@ define([
         toggleVisibility: function () {
             if (this.get("visibility") === true) {
                 this.set({visibility: false});
-            } else if (this.get("visibility") === false) {
+            }
+            else if (this.get("visibility") === false) {
                 this.set({visibility: true});
             }
         },
         toggleSelected: function () {
             if (this.get("selected") === true) {
                 this.set({selected: false});
-            } else {
+            }
+            else {
                 this.set({selected: true});
             }
             if (this.get("layerType") === "nodeChildLayer") {
                 this.get("parentView").checkSelectedOfAllChildren();
-            } else {
+            }
+            else {
                 // noch komisch
                 if (this.get("parentView") !== undefined) {
                     this.get("parentView").toggleStyle();
@@ -184,6 +193,7 @@ define([
          */
         updateOpacity: function () {
             var opacity = (100 - this.get("transparence")) / 100;
+
             this.get("layer").setOpacity(opacity);
             this.set("opacity", opacity);
         },
@@ -192,6 +202,7 @@ define([
          */
         setVisibility: function () {
             var visibility = this.get("visibility");
+
             this.get("layer").setVisible(visibility);
             this.toggleEventAttribution(visibility);
         },
@@ -199,7 +210,8 @@ define([
             if (this.get("selected") === true) {
                 this.set("visibility", true);
                 EventBus.trigger("addModelToSelectionList", this);
-            } else {
+            }
+            else {
                 this.set("visibility", false);
                 EventBus.trigger("removeModelFromSelectionList", this);
             }
@@ -210,7 +222,8 @@ define([
         toggleSettings: function () {
             if (this.get("settings") === true) {
                 this.set({settings: false});
-            } else {
+            }
+            else {
                 this.set({settings: true});
             }
         },
@@ -218,7 +231,8 @@ define([
             if (_.has(this, "EventAttribution")) {
                 if (value === true) {
                     EventBus.trigger("startEventAttribution", this);
-                } else {
+                }
+                else {
                     EventBus.trigger("stopEventAttribution", this);
                 }
             }
@@ -230,16 +244,20 @@ define([
             if (this.get("url") !== undefined) {
                 if (this.get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
-                } else {
+                }
+                else {
                     this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
                 }
-            } else if (this.get("backbonelayers") !== undefined) { // Für Group-Layer
+            }
+            else if (this.get("backbonelayers") !== undefined) { // Für Group-Layer
                 if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                } else {
+                }
+                else {
                     this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
                 }
-            } else {
+            }
+            else {
                 // für olympia-portal --> hat keine metadaten!!
             }
         },

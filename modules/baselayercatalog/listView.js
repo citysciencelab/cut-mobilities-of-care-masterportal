@@ -21,9 +21,6 @@ define([
         addBaseLayer: function (baselayer) {
             var nodeView;
 
-            if (baselayer.get("id") === "453") {
-                baselayer.set("visibility", true);
-            }
             nodeView = new BaseLayerView({model: baselayer});
             this.$el.append(nodeView.render().el);
         }

@@ -1,15 +1,19 @@
 define([
     "backbone",
     "modules/layer/list",
-    "config"
-], function (Backbone, LayerList, Config) {
+    "eventbus"
+], function (Backbone, LayerList, EventBus) {
 
     var List = Backbone.Collection.extend({
-        initialize: function () {
-            var baseLayerIDList = _.pluck(Config.baseLayerIDs, "id");
 
-            _.each(baseLayerIDList, function (baseLayerID) {
-                this.add(LayerList.findWhere({id: baseLayerID}));
+        initialize: function () {
+            EventBus.on("sendBaseLayer", this.addBaseLayer, this);
+            EventBus.trigger("getBaseLayer");
+        },
+
+        addBaseLayer: function (baselayer) {
+            _.each(baselayer, function (layer) {
+                this.add(layer);
             }, this);
         }
     });

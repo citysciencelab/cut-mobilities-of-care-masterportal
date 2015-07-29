@@ -3,8 +3,9 @@ define([
     "underscore",
     "backbone",
     "text!modules/layerselection/template.html",
-    "text!modules/layerselection/templateSettings.html"
-], function ($, _, Backbone, Template, SettingTemplate) {
+    "text!modules/layerselection/templateSettings.html",
+    "eventbus"
+], function ($, _, Backbone, Template, SettingTemplate, EventBus) {
 
     var view = Backbone.View.extend({
         tagName: "li",
@@ -70,6 +71,10 @@ define([
             this.$(".glyphicon-cog").toggleClass("rotate");
         },
         toggleStyle: function () {
+            // kleiner Workaround damit sich die Resolution aktualisiert
+            EventBus.trigger("setZoomLevelUp");
+            EventBus.trigger("setZoomLevelDown");
+
             if (this.model.get("isInScaleRange") === true) {
                 this.$el.css("color", "rgb(150, 150, 150)");
             }

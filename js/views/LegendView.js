@@ -51,6 +51,7 @@ define([
                     visibleLayer.push(element);
                 }
             });
+
             return visibleLayer;
         },
         getVisibleLayer: function () {
@@ -60,6 +61,7 @@ define([
                 layeridarray = [];
 
             _.each(layers, function (element) {
+
                 if (element.get("typ") === "WFS") {
                     layeridarray.push(element.get("id"));
 
@@ -74,19 +76,16 @@ define([
                     });
                 }
                 else if (element.get("typ") === "WMS") {
-                    if (element.get("displayInTree") === true) {
-                        layeridarray.push(element.get("id"));
-                        legendParams.push({
-                            typ: "WMS",
-                            layerID: element.get("id"),
-                            source: element.get("url"),
-                            name: element.get("name"),
-                            legendURL: element.get("legendURL"),
-
-                            layers: element.get("layers"),
-                            styles: element.get("styles")
-                        });
-                    }
+                    layeridarray.push(element.get("id"));
+                    legendParams.push({
+                        typ: "WMS",
+                        layerID: element.get("id"),
+                        source: element.get("url"),
+                        name: element.get("name"),
+                        legendURL: element.get("legendURL"),
+                        layers: element.get("layers"),
+                        styles: element.get("styles")
+                    });
                 }
                 else if (element.get("typ") === "GROUP") {
                     groupArray = [];
