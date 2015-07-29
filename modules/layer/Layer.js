@@ -96,33 +96,7 @@ define([
                 this.set("metaURL", null);
             }
         },
-        /**
-        * diese Funktion liest den übergebenen String gfiAttributes ein und erzeugt daraus
-        * ein Object. Das Object wird an die WMSLayer, WFSLayer zurückgegeben.
-        */
-        convertGFIAttributes: function () {
-            var gfiAttributList, gfiAttribute, value, newKey, gfiAttributes, key;
 
-            if (this.get("gfiAttributes")) {
-                if (this.get("gfiAttributes").toUpperCase() === "SHOWALL" || this.get("gfiAttributes").toUpperCase() === "IGNORE") {
-                    return this.get("gfiAttributes");
-                }
-                else {
-                    gfiAttributList = this.get("gfiAttributes").split(",");
-                    gfiAttributes = {};
-                    _.each(gfiAttributList, function (gfiAttributeConfig) {
-                        gfiAttribute = gfiAttributeConfig.split(":");
-                        key = [];
-                        key.push(gfiAttribute[0].trim());
-                        value = [];
-                        value.push(gfiAttribute[1].trim());
-                        newKey = _.object(key, value);
-                        _.extend(gfiAttributes, newKey);
-                    });
-                    return gfiAttributes;
-                }
-            }
-        },
         setScaleRange: function (scale) {
             if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
