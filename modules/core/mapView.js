@@ -97,7 +97,7 @@ define([
          *
          */
         setStartCenter: function () {
-            if (Config.view.center && _.isArray(Config.view.resolution) && Config.view.extent.length === 2) {
+            if (Config.view.center && _.isArray(Config.view.center)) {
                 this.set("startCenter", Config.view.center);
             }
         },
