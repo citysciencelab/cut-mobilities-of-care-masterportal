@@ -7,8 +7,6 @@ define([
     'collections/stylelist'
 ], function (_, Backbone, EventBus, ol, proj4, StyleList) {
 
-    proj4.defs("EPSG:25832","+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-
     var Orientation = Backbone.Model.extend({
         defaults: {
             'marker' :  new ol.Overlay({positioning: 'center-center', stopEvent: false}),
@@ -18,12 +16,14 @@ define([
             EventBus.on('setOrientation', this.setOrientation, this);
             EventBus.on('getPOI', this.getPOI, this);
             EventBus.on('sendVisibleWFSLayerPOI', this.getPOIParams, this);
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
         },
         setOrientation: function (btn) {
             var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get('EPSG:4326')});
             geolocation.on('change', function(evt) {
                 var position = geolocation.getPosition();
-                this.set('newCenter',proj4(proj4('EPSG:4326'), proj4('EPSG:25832'), position));
+                this.set('newCenter', proj4(proj4('EPSG:4326'), proj4(this.get("projection").getCode()), position));
                 EventBus.trigger('setCenter', this.get('newCenter'), 6);
                 EventBus.trigger('setGeolocation', [this.get('newCenter'), position]);
                 var marker = this.get('marker');
@@ -62,6 +62,9 @@ define([
                 }, this);
             }, this);
             EventBus.trigger('showPOIModal');
+        },
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
 

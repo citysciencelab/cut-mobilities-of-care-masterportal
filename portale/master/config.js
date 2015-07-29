@@ -18,12 +18,13 @@ define(function () {
         allowParametricURL: true,
         /**
         * @memberof config
-        * @desc Die initiale Zentrums-Koordinate und die Resolution
-        * @property {Array}  center - Die initiale Zentrumskoordinate.
+        * @desc Optionale Konfigurations-Einstellungen für die Map View
+        * @property {Array}  center - Die initiale Zentrumskoordinate. Default ist [565874, 5934140]
         * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
         * @property {Number}  scale - Der initiale Maßstab.
-        * @property {Array}  extent - Der ol.view.extent der Karte
-        * @property {Array}  resolutions - Optional die Resolutions der Karte. Default 1:25000 - 1:1000
+        * @property {Array}  extent - Der ol.view.extent der Karte. Default ist [510000.0, 5850000.0, 625000.4, 6000000.0]
+        * @property {Array}  resolutions - Die Resolutions der Karte. Default 1:250000 - 1:1000
+        * @property {Array}  epsg - Der EPSG-Code. Default ist EPSG:25832
         */
         view: {
             center: [565874, 5934140],
@@ -41,6 +42,7 @@ define(function () {
                 0.2645838625010583,
                 0.1322919312505292
             ],
+            epsg: "EPSG:25832"
         },
         /**
         * @memberof config

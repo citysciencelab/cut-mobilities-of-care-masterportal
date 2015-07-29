@@ -6,8 +6,6 @@ define([
     "bootstrap/popover"
 ], function (Backbone, EventBus, ol, proj4) {
 
-    proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-
     var CoordPopup = Backbone.Model.extend({
         initialize: function () {
             EventBus.on("setPositionCoordPopup", this.setPosition, this);
@@ -16,6 +14,8 @@ define([
             }));
             this.set("element", this.get("coordOverlay").getElement());
             EventBus.trigger("addOverlay", this.get("coordOverlay"));
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
         },
         destroyPopup: function () {
             this.get("element").popover("destroy");
@@ -26,7 +26,10 @@ define([
         setPosition: function (coordinate) {
             this.get("coordOverlay").setPosition(coordinate);
             this.set("coordinateUTM", coordinate);
-            this.set("coordinateGeo", ol.coordinate.toStringHDMS(proj4(proj4("EPSG:25832"), proj4("EPSG:4326"), this.get("coordinateUTM"))));
+            this.set("coordinateGeo", ol.coordinate.toStringHDMS(proj4(proj4(this.get("projection").getCode()), proj4("EPSG:4326"), this.get("coordinateUTM"))));
+        },
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
 
