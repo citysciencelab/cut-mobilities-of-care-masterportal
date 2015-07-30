@@ -175,7 +175,7 @@ define([
         setSpecification: function () {
             var specification = {
                 layout: $("#layoutField option:selected").html(),
-                srs: this.get("projection").getCode(),
+                srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
                 outputFormat: "pdf",

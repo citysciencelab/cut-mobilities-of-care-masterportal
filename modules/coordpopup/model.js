@@ -3,8 +3,9 @@ define([
     "eventbus",
     "openlayers",
     "proj4",
+    "config",
     "bootstrap/popover"
-], function (Backbone, EventBus, ol, proj4) {
+], function (Backbone, EventBus, ol, proj4, Config) {
 
     var CoordPopup = Backbone.Model.extend({
         initialize: function () {
@@ -26,7 +27,7 @@ define([
         setPosition: function (coordinate) {
             this.get("coordOverlay").setPosition(coordinate);
             this.set("coordinateUTM", coordinate);
-            this.set("coordinateGeo", ol.coordinate.toStringHDMS(proj4(proj4(this.get("projection").getCode()), proj4("EPSG:4326"), this.get("coordinateUTM"))));
+            this.set("coordinateGeo", ol.coordinate.toStringHDMS(proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.get("coordinateUTM"))));
         },
         setProjection: function (proj) {
             this.set("projection", proj);

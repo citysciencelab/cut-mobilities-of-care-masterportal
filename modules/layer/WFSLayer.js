@@ -6,7 +6,6 @@ define([
     "config",
     "modules/layer/Layer",
     "collections/stylelist"
-
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
 
     /**
@@ -35,7 +34,6 @@ define([
 
                         if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
                             var src = new ol.source.Vector({
-                                projection: this.get("projection"),
                                 attributions: this.get("olAttribution")
                             });
 
@@ -54,7 +52,6 @@ define([
                         }
                         else {
                             var src = new ol.source.Vector({
-                                projection: this.get("projection"),
                                 attributions: this.get("olAttribution")
                             });
 
@@ -227,6 +224,9 @@ define([
         buildGetRequest: function () {
             var newURL;
 
+            EventBus.on("mapView:replyProjection", this.setProjection, this);
+            EventBus.trigger("mapView:requestProjection");
+
             if (this.get("url").search(location.host) === -1) {
                 // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
                 if (this.get("url").indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
@@ -294,9 +294,12 @@ define([
                 data += "&SRSNAME=" + this.get("srsname");
             }
             else {
-                data += "&SRSNAME=" + this.get("projection").getCode();
+                data += "&SRSNAME=" + Config.view.epsg;
             }
             this.set("data", data);
+        },
+        setProjection: function (proj) {
+            this.set("projection", proj);
         }
     });
 
