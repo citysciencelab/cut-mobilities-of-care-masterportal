@@ -3,7 +3,7 @@ define([
     'backbone',
     'openlayers',
     'config',
-    'collections/stylelist',
+    'collections/StyleList',
     'modules/layer/list',
     "bootstrap/modal"
 ], function (_, Backbone, ol, Config, StyleList, Layerlist) {
