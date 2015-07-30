@@ -5,10 +5,8 @@ define([
     "eventbus",
     "config",
     "modules/layer/Layer",
-    "collections/stylelist",
-    "modules/core/mapView"
-
-], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, mapView) {
+    "collections/stylelist"
+], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
 
     /**
      *
