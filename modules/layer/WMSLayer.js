@@ -98,7 +98,8 @@ define([
                     typ: this.get("typ"),
                     gfiAttributes: this.get("gfiAttributes"),
                     legendURL: this.get("legendURL"),
-                    routable: this.get("routable")
+                    routable: this.get("routable"),
+                    infoFormat: this.get("infoFormat")
             };
 
             if (this.get("singleTile") !== true) {
