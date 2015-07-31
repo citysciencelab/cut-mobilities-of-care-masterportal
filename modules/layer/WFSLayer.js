@@ -5,7 +5,7 @@ define([
     "eventbus",
     "config",
     "modules/layer/Layer",
-    "collections/stylelist"
+    "collections/StyleList"
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList) {
 
     /**

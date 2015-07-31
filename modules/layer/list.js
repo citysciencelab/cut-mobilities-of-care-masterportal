@@ -1,8 +1,8 @@
 define([
     "backbone",
-    "modules/layer/wmslayer",
-    "modules/layer/wfslayer",
-    "modules/layer/grouplayer",
+    "modules/layer/WMSLayer",
+    "modules/layer/WFSLayer",
+    "modules/layer/GroupLayer",
     "modules/layer/GeoJSONLayer",
     "config",
     "eventbus",
