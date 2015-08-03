@@ -232,7 +232,7 @@ define([
                         if (element.getProperties().typ === "WMS") {
                             var gfiURL = element.getSource().getGetFeatureInfoUrl(
                                 coordinate, resolution, projection,
-                                {INFO_FORMAT: "text/xml"}
+                                {INFO_FORMAT: element.get("infoFormat") || "text/xml"}
                             );
 
                             gfiParams.push({
@@ -273,7 +273,7 @@ define([
                             if (layer.getProperties().typ === "WMS") {
                                 var gfiURL = layer.getSource().getGetFeatureInfoUrl(
                                     coordinate, resolution, projection,
-                                    {INFO_FORMAT: "text/xml"}
+                                    {INFO_FORMAT: layer.get("infoFormat") || "text/xml"}
                                 );
 
                                 gfiParams.push({
