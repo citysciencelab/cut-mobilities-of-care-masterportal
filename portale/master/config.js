@@ -192,7 +192,7 @@ define(function () {
         * @property {Boolean}  searchBar - Die Suchfunktion.
         * @property {Boolean}  layerTree - Der Themenbaum
         * @property {Boolean}  helpButton - Der Hilfe-Button.
-        * @property {Boolean}  contactButton - Der Kontakt-Button.
+        * @property {Object}  contactButton - Der Kontakt-Button. {on: true|false, email: string}. Default für email ist LGVGeoPortal-Hilfe@gv.hamburg.de
         * @property {Boolean}  tools - Die Werkzeuge
         * @property {Boolean}  treeFilter - Der Filter für die Straßenbäume.
         * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
@@ -204,7 +204,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: true,

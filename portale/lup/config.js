@@ -52,7 +52,7 @@ define(function () {
             searchBar: false,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "heinz.schmidt@kreis-lup.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
