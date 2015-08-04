@@ -48,7 +48,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         /**
         * @memberof config
@@ -164,9 +164,9 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse",
+            placeholder: "Suche nach Adresse, Stadtteil",
             gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                    return  "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
 
@@ -178,10 +178,8 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            url: function () {
-                return "http://wscd0096:8680/mapfish_print_2.0/";
-                },
-            title: "Lärmkarte Straßenverkehr",
+            printID: "99999",
+            title: "Lärmkarte-Straßenverkehr",
             gfi: false
         },
         /**
