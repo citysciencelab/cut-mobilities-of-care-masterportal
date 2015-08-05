@@ -5,8 +5,9 @@ define([
     "config",
     "bootstrap/popover",
     "videojs",
-    "modules/gfipopup/imgView"
-], function (Backbone, EventBus, ol, Config, Popover, VideoJS, ImgView) {
+    "modules/gfipopup/imgView",
+    "modules/core/util"
+], function (Backbone, EventBus, ol, Config, Popover, VideoJS, ImgView, Util) {
 
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -279,47 +280,9 @@ define([
         },
         setWMSPopupContent: function (params) {
             var url, data, pgfi = [];
-            // Umwandeln der diensteAPI-URLs in lokale URL gemäß httpd.conf
+
             if (params.url.search(location.host) === -1) {
-                if (params.url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
-                }
-                else if (params.url.indexOf("http://bsu-ims.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://bsu-ims.fhhnet.stadt.hamburg.de", "/bsu-ims");
-                }
-                else if (params.url.indexOf("http://bsu-ims") !== -1) {
-                    url = params.url.replace("http://bsu-ims", "/bsu-ims");
-                }
-                else if (params.url.indexOf("http://bsu-uio.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://bsu-uio.fhhnet.stadt.hamburg.de", "/bsu-uio");
-                }
-                else if (params.url.indexOf("http://geofos.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://geofos.fhhnet.stadt.hamburg.de", "/geofos");
-                }
-                else if (params.url.indexOf("http://geofos") !== -1) {
-                    url = params.url.replace("http://geofos", "/geofos");
-                }
-                else if (params.url.indexOf("http://wscd0095") !== -1) {
-                    url = params.url.replace("http://wscd0095", "/geofos");
-                }
-                else if (params.url.indexOf("http://wscd0096") !== -1) {
-                    url = params.url.replace("http://wscd0096", "/wscd0096");
-                }
-                else if (params.url.indexOf("http://hmbtg.geronimus.info") !== -1) {
-                    url = params.url.replace("http://hmbtg.geronimus.info", "/hmbtg");
-                }
-                else if (params.url.indexOf("http://lgvfds01.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://lgvfds01.fhhnet.stadt.hamburg.de", "/lgvfds01");
-                }
-                else if (params.url.indexOf("http://lgvfds02.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://lgvfds02.fhhnet.stadt.hamburg.de", "/lgvfds02");
-                }
-                else if (params.url.indexOf("http://wsca0620.fhhnet.stadt.hamburg.de") !== -1) {
-                    url = params.url.replace("http://wsca0620.fhhnet.stadt.hamburg.de", "/wsca0620");
-                }
-                else if (params.url.indexOf("http://geodienste-hamburg.de") !== -1) {
-                    url = params.url.replace("http://geodienste-hamburg.de", "/geodienste-hamburg");
-                }
+                url = Util.getProxyURL(params.url);
             }
             else {
                 url = params.url;
@@ -339,83 +302,84 @@ define([
                 async: false,
                 type: "GET",
                 context: this, // das model
-                success: function (data) { // console.log(data);
-                    var gfiList = [];
-                    // ESRI
-                    if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
-                        _.each(data.getElementsByTagName("FIELDS"), function (element) {
-                            gfiList.push(element.attributes);
-                        });
-                        // gfiList.push(data.getElementsByTagName("FIELDS")[0].attributes);
-                    }
-                    // deegree
-                    else if (data.getElementsByTagName("gml:featureMember")[0] !== undefined) {
-                        _.each(data.getElementsByTagName("gml:featureMember"), function (element) {
-                            var nodeList = element.childNodes[0].nextSibling.childNodes;
+                success: function (data) {
+                    var gfiList = [],
+                        gfiFormat ,
+                        gfiFeatures;
 
-                            gfiList.push(_.filter(nodeList, function (element) {
-                                return element.nodeType === 1;
-                            }));
-                        });
+                    // handle non text/xml responses arriving as string
+                    if (_.isString(data)) {
+                        data = $.parseXML(data);
                     }
-                    // deegree alle auf WebKit basierenden Browser (Chrome, Safari)
-                    else if (data.getElementsByTagName("featureMember")[0] !== undefined) {
-                        _.each(data.getElementsByTagName("featureMember"), function (element) {
-                            var nodeList = element.childNodes[0].nextSibling.childNodes;
 
-                            gfiList.push(_.filter(nodeList, function (element) {
-                                return element.nodeType === 1;
-                            }));
+                    // parse result, try built-in ol-format first
+                    gfiFormat = new ol.format.WMSGetFeatureInfo();
+                    gfiFeatures = gfiFormat.readFeatures(data, {
+                        dataProjection: Config.view.projection
+                    });
+
+                    // ESRI is not parsed by the ol-format
+                    if (_.isEmpty(gfiFeatures)) {
+                        if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
+                            _.each(data.getElementsByTagName("FIELDS"), function (element) {
+                                var gfi = {};
+
+                                _.each(element.attributes, function (attribute) {
+                                    var key = attribute.localName;
+
+                                    if (this.isValidValue(attribute.value)) {
+                                        gfi[key] = attribute.value;
+                                    }
+                                    else if (this.isValidValue(attribute.textContent)) {
+                                        gfi[key] = attribute.textContent;
+                                    }
+                                }, this);
+
+                                gfiList.push(gfi);
+                            }, this);
+                        }
+                    }
+                    // OS (deegree, UMN, Geoserver) is parsed by ol-format
+                    else {
+                        _.each(gfiFeatures, function (feature) {
+                            gfiList.push(feature.getProperties());
                         });
                     }
+
                     if (gfiList) {
                         _.each(gfiList, function (element) {
-                            var gfi = {};
+                            var preGfi = {},
+                                gfi = {};
+
+                            // get rid of invalid keys and keys with invalid values; trim values
+                            _.each(element, function (value, key) {
+                                if (this.isValidKey(key) && this.isValidValue(value)) {
+                                    preGfi[key] = value.trim();
+                                }
+                            }, this);
 
                             if (params.attributes === "showAll") {
-                                _.each(element, function (element) {
-                                    var attribute = element.localName.substring(0, 1).toUpperCase() + element.localName.substring(1).replace("_", " ");
+                                // beautify keys
+                                _.each(preGfi, function (value, key) {
+                                    var key;
 
-                                    if (element.value && element.value !== "") {
-                                        gfi[attribute] = element.value.trim();
-                                    }
-                                    else if (element.textContent && element.textContent !== "") {
-                                        gfi[attribute] = element.textContent.trim();
-                                    }
-                                });
+                                    key = this.beautifyString(key);
+                                    gfi[key] = value;
+                                }, this);
                             }
                             else {
-                                _.each(params.attributes, function (value, key) {
-                                    var node = _.find(element, function (node) {
-                                        return node.localName === key;
-                                    });
-
-                                    if (node) {
-                                        var nodevalue;
-
-                                        if (node.value && node.value !== "" && node.value !== "Null") {
-                                            nodevalue = node.value.trim();
-                                        }
-                                        else if (node.textContent && node.textContent !== "" && node.textContent !== "Null") {
-                                            nodevalue = node.textContent.trim();
-                                        }
-                                        if (nodevalue) {
-                                            var key = [],
-                                                val = [],
-                                                newgfi;
-
-                                            key.push(value);
-                                            val.push(nodevalue);
-                                            newgfi = _.object(key, val);
-                                            gfi = _.extend(gfi, newgfi);
-                                        }
+                                // map object keys to gfiAttributes from layer model
+                                _.each(preGfi, function (value, key) {
+                                    key = params.attributes[key];
+                                    if (key) {
+                                        gfi[key] = value;
                                     }
                                 });
                             }
                             if (_.isEmpty(gfi) !== true) {
                                 pgfi.push(gfi);
                             }
-                        });
+                        }, this);
                     }
                 },
                 error: function (jqXHR, textStatus) {
@@ -423,6 +387,25 @@ define([
                 }
             });
             return pgfi;
+        },
+        isValidKey: function (key) {
+            var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID"];
+
+            if (_.indexOf(invalidKeys, key.toUpperCase()) !== -1) {
+                return false;
+            }
+            return true;
+        },
+        /** helper function: check, if str has a valid value */
+        isValidValue: function (str) {
+            if (str && _.isString(str) && str !== "" && str.toUpperCase() !== "NULL") {
+                return true;
+            }
+            return false;
+        },
+        /** helper function: first letter upperCase, _ becomes " " */
+        beautifyString: function (str) {
+                return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         sendGFIForPrint: function () {
             EventBus.trigger("gfiForPrint", [this.get("gfiContent")[0], this.get("isPopupVisible")]);

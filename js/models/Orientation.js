@@ -4,7 +4,7 @@ define([
     'eventbus',
     'openlayers',
     'proj4',
-    'collections/stylelist',
+    'collections/StyleList',
     "config"
 ], function (_, Backbone, EventBus, ol, proj4, StyleList, Config) {
 

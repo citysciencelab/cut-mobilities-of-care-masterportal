@@ -4,8 +4,8 @@ define([
     "eventbus",
     "config",
     "modules/layer/Layer",
-    "modules/layer/wmslayer",
-    "modules/layer/wfslayer"
+    "modules/layer/WMSLayer",
+    "modules/layer/WFSLayer"
 ], function (Backbone, ol, EventBus, Config, Layer, WMSLayer, WFSLayer) {
 
     /**

@@ -1,7 +1,7 @@
 define([
     "underscore",
     "backbone",
-    "models/wfsstyle",
+    "models/WFSStyle",
     "config",
     "modules/core/util"
 ], function (_, Backbone, WFSStyle, Config, Util) {

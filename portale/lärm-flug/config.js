@@ -19,7 +19,7 @@ define(function () {
         * @property {Array}  extent - Der ol.view.extent der Karte
         */
         view: {
-            center: [565874, 5934140],
+            center: [565686, 5942986], //Flughafen
             resolution: 15.874991427504629,
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
@@ -43,7 +43,7 @@ define(function () {
         * @desc Pfad zur DienstAPI.
         */
         layerConf: "../components/lgv-config/services-internet.json",
-        /**
+            /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
@@ -92,8 +92,9 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
             {id: "452", visible: false},
-            {id: "95", visible: false, name:"Lärm Straßenverkehr Nacht 2012"},     //Lärm_night_2012
-            {id: "96", visible: false, name:"Lärm Straßenverkehr Tag 2012"}      //Lärm_den_2012
+            {id: "2413,2415", visible: false, name:'Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)'},
+            {id: "2412,2415", visible: false, name:'Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)'},
+            {id: "2414,2416", visible: false, name:'Nacht-Schutzzonen mit Isolinien LAeq in dB(A)'}
 
         ],
         /**
@@ -166,11 +167,13 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
             gazetteerURL: function () {
-                    return  "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                    return   "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+
             }
         },
 
-                         /**
+
+                 /**
         * @memberof config
         * @desc Konfiguration für den Druckdienst.
         * @property {String}  url - Die Druckdienst-URL
@@ -179,7 +182,7 @@ define(function () {
         */
         print: {
             printID: "99999",
-            title: "Lärmkarte-Straßenverkehr",
+            title: "Lärmschutzbereiche Flughafen Hamburg",
             gfi: false
         },
         /**

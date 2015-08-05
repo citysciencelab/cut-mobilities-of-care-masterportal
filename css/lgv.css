@@ -51,8 +51,6 @@ html, body {
     }
 }
 
-}
-
 @media (min-height:200px){
     #tree {
         max-height:160px;
