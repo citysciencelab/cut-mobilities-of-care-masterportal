@@ -54,6 +54,13 @@ define([
                 }
             });
         },
+        returnAllModelsById: function (layerId) {
+            return _.filter(this.models, function (slmodel) {
+                if (slmodel.attributes.layerId === layerId) {
+                    return slmodel;
+                }
+            });
+        },
         returnModelById: function (layerId) {
             return _.find(this.models, function (slmodel) {
                 if (slmodel.attributes.layerId === layerId) {
