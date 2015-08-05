@@ -1,8 +1,10 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/attribution/view"], function ($, Config, AttView) {
+define("app", ["jquery", "config", "modules/attribution/view", "modules/core/util"], function ($, Config, AttView, Util) {
     "use strict";
+
+    Util.showLoader();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
         require(["modules/parametricURL/model"], function (ParametricURL) {
@@ -135,7 +137,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
                 if (Config.menu.legend === true) {
-                    require(["views/LegendView"], function (LegendView) {
+                    require(["modules/legend/view"], function (LegendView) {
                         new LegendView();
                     });
                 }
@@ -146,7 +148,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                 }
                 if ($.isArray(Config.menu.formular)) {
                     $.each(Config.menu.formular, function (name, obj) {
-                        if (obj.title !== '' && obj.symbol !== '' && obj.modelname !== '') {
+                        if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
                             require(["modules/formular/view"], function (FormularView) {
                                 new FormularView(obj.modelname, obj.title, obj.symbol);
                             });
@@ -154,10 +156,7 @@ define("app", ["jquery", "config", "modules/attribution/view"], function ($, Con
                     });
                 }
             });
-
         }
-        $(function () {
-            $("#loader").hide();
-        });
+    Util.hideLoader();
     });
 });
