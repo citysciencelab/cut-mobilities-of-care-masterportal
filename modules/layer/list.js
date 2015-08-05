@@ -451,6 +451,9 @@ define([
                 if (_.has(baseLayer, "visible")) {
                     model.set("visibility", baseLayer.visible);
                 }
+                if (_.has(baseLayer, "singleTile")) {
+                    model.set("singleTile", baseLayer.singleTile);
+                }
                 layerlist.push(model);
             }, this);
 
