@@ -52,6 +52,9 @@ define([
             EventBus.on("setCenter", this.setCenter, this);
             EventBus.on("setZoomLevelUp", this.setZoomLevelUp, this);
             EventBus.on("setZoomLevelDown", this.setZoomLevelDown, this);
+            EventBus.on("getCurrentMapScale", function () {
+                EventBus.trigger("sendCurrentMapScale", Math.round(this.getScale()));
+            }, this);
         },
 
         /**

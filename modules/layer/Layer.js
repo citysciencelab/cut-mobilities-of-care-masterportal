@@ -10,19 +10,24 @@ define([
     "use strict";
     var Layer = Backbone.Model.extend({
         defaults: {
-            selected: false
+            selected: false,
+            visibility: false
         },
         initialize: function () {
 
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
             this.listenTo(this, "change:visibility", this.setVisibility);
-            // NOTE wenn displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
+            // NOTE wen#n displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             // if (this.get("displayInTree") === false) {
             //     this.set("gfiAttributes", false);
             // }
 
             // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
             EventBus.on("currentMapScale", this.setScaleRange, this);
+            // Geht schöner...
+            EventBus.once("sendCurrentMapScale", this.setScaleRange, this);
+            EventBus.trigger("getCurrentMapScale");
+
             this.set("settings", false);
 
             this.listenTo(this, "change:transparence", this.updateOpacity);
