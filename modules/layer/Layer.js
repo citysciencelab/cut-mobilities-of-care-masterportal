@@ -17,6 +17,8 @@ define([
 
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
             this.listenTo(this, "change:visibility", this.setVisibility);
+            this.listenTo(this, "change:minResolution", this.setMinResoForLayer);
+            this.listenTo(this, "change:maxResolution", this.setMaxResoForLayer);
             // NOTE wen#n displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             // if (this.get("displayInTree") === false) {
             //     this.set("gfiAttributes", false);
@@ -103,6 +105,10 @@ define([
             }
         },
         setScaleRange: function (scale) {
+            if (this.get("id") === "453") {
+                console.log(this);
+            }
+
             if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
             }
@@ -235,6 +241,12 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        setMinResoForLayer: function () {
+            this.get("layer").setMinResolution(this.get("minResolution"));
+        },
+        setMaxResoForLayer: function () {
+            this.get("layer").setMaxResolution(this.get("maxResolution"));
         }
     });
 

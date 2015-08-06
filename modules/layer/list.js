@@ -445,16 +445,7 @@ define([
             _.each(Config.baseLayerIDs, function (baseLayer) {
                 var model = this.findWhere({"id": baseLayer.id});
 
-                if (_.has(baseLayer, "name")) {
-                    model.set("name", baseLayer.name);
-                }
-                if (_.has(baseLayer, "visible")) {
-                    model.set("visibility", baseLayer.visible);
-                }
-                if (_.has(baseLayer, "singleTile")) {
-                    model.set("singleTile", baseLayer.singleTile);
-                }
-                layerlist.push(model);
+                layerlist.push(model.set(baseLayer));
             }, this);
 
             return layerlist;
