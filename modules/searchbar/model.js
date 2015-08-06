@@ -50,6 +50,7 @@ define([
                 placeholder: Config.searchBar.placeholder,
                 searchString: "", // der aktuelle String in der Suchmaske
                 hitList: [],
+                nodes: [],
                 olympia: [],
                 bPlans: [],
                 houseNumbers: [],
@@ -73,6 +74,7 @@ define([
                 EventBus.on("sendVisibleWFSLayer", this.getFeaturesForSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
                 EventBus.on("sendAllLayer", this.getLayerForSearch, this);
+                EventBus.on("sendNodeChild", this.getNodesForSearch, this);
 
                 this.set("isSearchReady", new SearchReady());
 
@@ -155,6 +157,7 @@ define([
                     }
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
+                        this.searchInNodes();
                     }
                 }
             },
@@ -394,6 +397,21 @@ define([
             },
 
             /**
+             *
+             */
+            searchInNodes: function () {
+                this.get("isSearchReady").set("nodeSearch", false);
+                _.each(this.get("nodes"), function (node) {
+                    var nodeName = node.name.replace(/ /g, "");
+
+                    if (nodeName.search(this.get("searchStringRegExp")) !== -1) {
+                        this.pushHits("hitList", node);
+                    }
+                }, this);
+                this.get("isSearchReady").set("nodeSearch", true);
+            },
+
+            /**
             *
             */
             searchInLayers: function () {
@@ -423,9 +441,20 @@ define([
              */
             getLayerForSearch: function (layerModels) {
                 this.set("layers", []);
+                // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategroien enthalten ist
+                layerModels = _.uniq(layerModels, function (model) {
+                    return model.get("name");
+                });
                 _.each(layerModels, function (model) {
                     this.pushHits("layers", {name: model.get("name"), metaName: model.get("metaName"), type: "Thema", glyphicon: "glyphicon-list", id: model.get("id"), model: model});
                 }, this);
+            },
+
+            /**
+             *
+             */
+            getNodesForSearch: function (node) {
+                this.pushHits("nodes", {name: node.get("name"), type: "Thema", glyphicon: "glyphicon-list", id: node.cid, model: node});
             },
 
             /**

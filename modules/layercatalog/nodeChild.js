@@ -18,6 +18,7 @@ define([
             },
 
             initialize: function () {
+                EventBus.trigger("sendNodeChild", this);
                 this.setNestedViews();
             },
 
