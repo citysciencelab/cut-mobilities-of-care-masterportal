@@ -5,7 +5,6 @@
 @import "../components/video.js/dist/video-js/video-js.css";
 @import "../_libs/openlayers/v3.5.0/ol.css";
 @import "lgv.css";
-@import "searchbar.css";
 @import "togglebutton.css";
 @import "../modules/gfipopup/style.css";
 @import "panel.css";
@@ -30,3 +29,4 @@
 @import "../modules/treefilter/style.css";
 @import "../modules/coordpopup/style.css";
 @import "../modules/legend/style.css";
+@import "../modules/searchbar/style.css";

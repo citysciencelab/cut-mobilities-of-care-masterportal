@@ -54,6 +54,7 @@ define([
                 "click .btn-deleteSearch": "deleteSearchString",
                 "click .btn-search": "renderHitList",
                 "click .list-group-item.hit": "zoomTo",
+                "click .list-group-item.results": "renderHitList",
                 "mouseover .list-group-item.hit": "showMarker",
                 "mouseleave .list-group-item.hit": "hideMarker",
                 "click .list-group-item.type": "collapseHits",

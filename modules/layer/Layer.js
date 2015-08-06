@@ -105,10 +105,6 @@ define([
             }
         },
         setScaleRange: function (scale) {
-            if (this.get("id") === "453") {
-                console.log(this);
-            }
-
             if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
                 this.set("isInScaleRange", true);
             }

@@ -6,3 +6,6 @@
         <li id="<%= hit.id %>" class="list-group-item hit"><img src="<%= hit.imageSrc %>"><span><%= hit.name %></span><small><%= hit.type %></small></li>
     <% } %>
 <% }); %>
+<% if (hitList.length >= 5) { %>
+    <li class="list-group-item results"><div><span>Alle Treffer anzeigen</span><span class="glyphicon glyphicon-play-circle"></span></div></li>
+<% } %>
