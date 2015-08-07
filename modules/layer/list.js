@@ -105,6 +105,7 @@ define([
             }
         },
         initialize: function () {
+            EventBus.on("initFolder", this.getInitFolder, this);
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
             EventBus.on("getModelById", this.sendModelByID, this);
             EventBus.on("setVisible", this.setVisibleByID, this);
@@ -518,6 +519,14 @@ define([
          */
         removeLayerFromMap: function (model) {
            EventBus.trigger("removeLayer", model.get("layer"));
+        },
+        getInitFolder: function () {
+            if (Config.tree.orderBy === "opendata") {
+                EventBus.trigger("sendInitFolder", this.getOpendataFolder());
+            }
+            else if (Config.tree.orderBy === "inspire") {
+                EventBus.trigger("sendInitFolder", this.getInspireFolder());
+            }
         },
         getInspireFolder: function () {
             return _.uniq(this.pluck("kategorieInspire"));
