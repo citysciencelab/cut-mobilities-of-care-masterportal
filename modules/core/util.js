@@ -43,19 +43,38 @@ define([
         },
         /** Umwandeln der services*.json-URLs in lokale Proxy-URL*/
         getProxyURL: function (url) {
+            console.log(url);
             var newURL;
 
             if (url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
+                //remove ports here, are handled in proxy conf
+                newURL = newURL.replace(":8399", "");
+            }
+            else if (url.indexOf("http://wsca0620.fhhnet.stadt.hamburg.de") !== -1) {
+                newURL = url.replace("http://wsca0620.fhhnet.stadt.hamburg.de", "/wsca0620");
+                //remove ports here, are handled in proxy conf
+                newURL = newURL.replace(":8399", "");
             }
             else if (url.indexOf("http://bsu-ims.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://bsu-ims.fhhnet.stadt.hamburg.de", "/bsu-ims");
+                //remove ports here, are handled in proxy conf
+                newURL = newURL.replace(":8080", "");
             }
             else if (url.indexOf("http://bsu-ims") !== -1) {
                 newURL = url.replace("http://bsu-ims", "/bsu-ims");
+                //remove ports here, are handled in proxy conf
+                newURL = newURL.replace(":8080", "");
             }
             else if (url.indexOf("http://bsu-uio.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://bsu-uio.fhhnet.stadt.hamburg.de", "/bsu-uio");
+                //remove ports here, are handled in proxy conf
+                newURL = newURL.replace(":8083", "");
+            }
+            else if (url.indexOf("http://bsu-uio") !== -1) {
+                newURL = url.replace("http://bsu-uio", "/bsu-uio");
+                //remove ports here, are handled in proxy conf
+                newURL = newURL.replace(":8083", "");
             }
             else if (url.indexOf("http://geofos.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://geofos.fhhnet.stadt.hamburg.de", "/geofos");
@@ -74,9 +93,6 @@ define([
             }
             else if (url.indexOf("http://lgvfds02.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://lgvfds02.fhhnet.stadt.hamburg.de", "/lgvfds02");
-            }
-            else if (url.indexOf("http://wsca0620.fhhnet.stadt.hamburg.de") !== -1) {
-                newURL = url.replace("http://wsca0620.fhhnet.stadt.hamburg.de", "/wsca0620");
             }
             else if (url.indexOf("http://wscd0096") !== -1) {
                 newURL = url.replace("http://wscd0096", "/wscd0096");
