@@ -45,6 +45,13 @@ define(function () {
             epsg: "EPSG:25832"
         },
         /**
+        * customModules
+        * @memberof config
+        * @type {Array}
+        * @desc lädt die Module
+        */
+        // customModules: ["customModule1", "customModule2"]
+        /**
         * @memberof config
         * @type {String}
         * @desc zeigt einen Footer-Bereich an

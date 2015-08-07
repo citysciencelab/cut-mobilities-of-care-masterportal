@@ -10,6 +10,7 @@ define(function () {
         categoryConf: '../components/lgv-config/category.json',
         styleConf: '../components/lgv-config/style.json',
         proxyURL: '/cgi-bin/proxy.cgi',
+        customModules: ["../portale/verkehrsportal/verkehrsfunctions"],
         layerIDs: [
             {id: '453', visible: true},
             {id: '452', visible: false},
