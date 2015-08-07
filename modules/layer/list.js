@@ -28,9 +28,25 @@ define([
         parse: function (response) {
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config, "tree") && Config.tree.custom === false) {
+                var wmsLayer,
+                    cacheLayer,
+                    cacheLayerIDs = [];
+
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
-                return _.filter(_.where(response, {typ: "WMS", cache: false}), function (element) {
+                wmsLayer =  _.filter(_.where(response, {typ: "WMS"}), function (element) {
                     return element.datasets.length > 0;
+                });
+                // Layer die als Cache vorhanden sind
+                cacheLayer = _.where(wmsLayer, {cache: true});
+                // Datensatz-IDs der Caches
+                _.each(cacheLayer, function (layer) {
+                    cacheLayerIDs.push(layer.datasets[0].md_id);
+                });
+                // Datensaetze die im Cache schon dargestellt werden, werden entfernt
+                return _.reject(wmsLayer, function (element) {
+                    if (_.contains(cacheLayerIDs, element.datasets[0].md_id) && element.cache === false) {
+                        return element;
+                    }
                 });
             }
             // Ansonsten Layer über ID
