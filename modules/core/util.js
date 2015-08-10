@@ -43,7 +43,6 @@ define([
         },
         /** Umwandeln der services*.json-URLs in lokale Proxy-URL*/
         getProxyURL: function (url) {
-            console.log(url);
             var newURL;
 
             if (url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
