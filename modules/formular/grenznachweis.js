@@ -154,8 +154,8 @@ define([
                         errors.bestelldaten = "Gehen Sie zurück, um neue Bestelldaten einzugeben.";
                     }
                 } else {
-                    if (this.validators.maxLength(attributes.auftragsnummer, 12) === false) {
-                        errors.auftragsnummer = "Maximallänge 12 Zeichen überschritten";
+                    if (this.validators.maxLength(attributes.auftragsnummer, 18) === false) {
+                        errors.auftragsnummer = "Maximallänge 18 Zeichen überschritten";
                     }
                     if (this.validators.minLength(attributes.lage, 3) === false) {
                         errors.lage = "Lagebeschreibung notwendig";
