@@ -20,10 +20,8 @@ define([
             this.collection.forEach(this.addTreeNode, this);
         },
         addTreeNode: function (node) {
-            if (node.get("layerList").length > 0) {
-                var nodeView = new NodeView({model: node});
-                this.$el.append(nodeView.render().el);
-            }
+            var nodeView = new NodeView({model: node});
+            this.$el.append(nodeView.render().el);
         }
     });
     return listView;

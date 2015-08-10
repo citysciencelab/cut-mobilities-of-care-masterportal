@@ -16,7 +16,7 @@ define([
             // Listener auf den EventBus.
             this.listenTo(EventBus, {
                 "showLayerInTree": this.showLayerInTree,
-                "sendFolderNames sendCustomFolderNames": this.createNodes
+                "sendNodeNames sendCustomFolderNames": this.createNodes
             });
 
             // Initial werden die Namen für die 1.Ordnerebene geholt.
@@ -24,7 +24,7 @@ define([
                 EventBus.trigger("getCustomFolderNames");
             }
             else {
-                EventBus.trigger("getFolderNames");
+                EventBus.trigger("getNodeNames");
             }
         },
 
@@ -47,7 +47,7 @@ define([
             $(".nav li:first-child").addClass("open");
             this.forEach(function (element) {
                 if (model.get("type") !== undefined && model.get("type") === "nodeChild") {
-                    if (model.get("children")[0].get("kategorieOpendata") === element.get("folder") || model.get("children")[0].get("kategorieInspire") === element.get("folder") || model.get("children")[0].get("kategorieCustom") === element.get("folder")) {
+                    if (model.get("children")[0].get("kategorieOpendata") === element.get("name") || model.get("children")[0].get("kategorieInspire") === element.get("name") || model.get("children")[0].get("kategorieCustom") === element.get("name")) {
                         element.set("isExpanded", true);
                         model.set("isExpanded", true);
                         _.each(model.get("children"), function (child) {
@@ -58,7 +58,7 @@ define([
                     }
                 }
                 else {
-                    if (model.get("kategorieOpendata") === element.get("folder") || model.get("kategorieInspire") === element.get("folder") || model.get("kategorieCustom") === element.get("folder")) {
+                    if (model.get("kategorieOpendata") === element.get("name") || model.get("kategorieInspire") === element.get("name") || model.get("kategorieCustom") === element.get("name")) {
                         element.set("isExpanded", true);
                         _.each(element.get("childViews"), function (view) {
                             if (view.model.get("name") === model.get("metaName") || view.model.get("name") === model.get("subfolder")) {

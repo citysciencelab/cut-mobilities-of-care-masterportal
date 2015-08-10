@@ -42,7 +42,7 @@ define([
          * Übergibt aus allen Models die Werte aus dem Attribute "node" als Array.
          */
          sendCustomFolderNames: function () {
-            EventBus.trigger("sendCustomFolderNames", this.pluck("node"));
+            EventBus.trigger("sendCustomFolderNames", _.without(this.pluck("node"), undefined));
         }
     });
 

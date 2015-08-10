@@ -10,35 +10,31 @@ define([
 
     var TreeNode = Backbone.Model.extend({
 
+        // Layer die direkt unterhalb der Node liegen, werden in die Variable "nodeLayer" geschrieben und
+        // alle Layer die zu einer Child-Node unterhalb dieser Node gehören, in die Variable "nodeChildLayer".
         defaults: {
             isExpanded: false,
             isStyled: false,
-            nodeLayer: [], // Alle Layer die direkt unterhalb der Node liegen
-            nodeChildLayer: [] // Alle Layer die zu einer Child-Node unterhalb der Node gehören
+            nodeLayer: [],
+            nodeChildLayer: []
         },
 
         initialize: function () {
-            this.listenTo(this, "change:layerList", this.setChildren);
-            this.setLayerList();
-            this.setSortedLayerList();
-            this.setNestedViews();
+            this.listenToOnce(this, {
+                "change:layerList": this.setChildren,
+                "change:children": this.setSortedLayerList,
+                "change:sortedLayerList": this.setNestedViews
+            });
+
+            this.listenToOnce(EventBus, {
+                "sendLayerForNode": this.setLayerList
+            });
+
+            EventBus.trigger("getLayerForNode", this.get("category"), this.get("name"));
         },
 
-        /**
-         * Alle Layer bzw. Layer-Models die zu dieser Node(Kategorie) gehören.
-         */
+        // Alle Layer bzw. Layer-Models die zu dieser Node gehören
         setLayerList: function (layerList) {
-            var layerList;
-
-            if (this.get("category") === "opendata") {
-                layerList = LayerList.getLayerByProperty("kategorieOpendata", this.get("name"));
-            }
-            else if (this.get("category") === "inspire") {
-                layerList = LayerList.getLayerByProperty("kategorieInspire", this.get("name"));
-            }
-            else {
-                layerList = LayerList.getLayerByProperty("kategorieCustom", this.get("name"));
-            }
             this.set("layerList", layerList);
         },
 
@@ -168,7 +164,7 @@ define([
                 }
                 else {
                     // Layer zum Attribut "nodeLayer" hinzugefügt
-                    this.push("nodeLayer", {type: "nodeLayer", name: layerListByID[0].get("name"), layer: layerListByID[0]});
+                    this.push("nodeLayer", {type: "nodeLayer", name: layerListByID[0].get("metaName"), layer: layerListByID[0]});
                 }
             }, this);
         },
