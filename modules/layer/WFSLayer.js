@@ -6,7 +6,8 @@ define([
     "config",
     "modules/layer/Layer",
     "collections/StyleList",
-    "modules/core/util"
+    "modules/core/util",
+    "modules/core/mapView"
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
 
     /**
