@@ -80,9 +80,9 @@ define([
                         alert("Fehlermeldung beim Laden von Daten: \n" + e.message);
                     }
                 },
-                error: function (data) {
+                error: function (jqXHR, errorText, error) {
                     $("#loader").hide();
-                    alert("Fehler beim Laden von Daten: \n" + data.responseText);
+                    alert("Fehler beim Laden von Daten: \n" + errorText + error);
                 }
             });
         },
