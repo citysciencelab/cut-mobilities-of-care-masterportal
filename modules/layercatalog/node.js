@@ -1,11 +1,12 @@
 define([
     "backbone",
     "config",
+    "eventbus",
     "modules/layer/list",
     "modules/layercatalog/nodeChild",
     "modules/layercatalog/viewNodeChild",
     "modules/layercatalog/viewNodeLayer"
-    ], function (Backbone, Config, LayerList, NodeChild, NodeChildView, NodeLayerView) {
+], function (Backbone, Config, EventBus, LayerList, NodeChild, NodeChildView, NodeLayerView) {
 
     var TreeNode = Backbone.Model.extend({
 
@@ -26,17 +27,17 @@ define([
         /**
          * Alle Layer bzw. Layer-Models die zu dieser Node(Kategorie) gehören.
          */
-        setLayerList: function () {
+        setLayerList: function (layerList) {
             var layerList;
 
-            if (this.get("thema") === "opendata") {
-                layerList = LayerList.getLayerByProperty("kategorieOpendata", this.get("folder"));
+            if (this.get("category") === "opendata") {
+                layerList = LayerList.getLayerByProperty("kategorieOpendata", this.get("name"));
             }
-            else if (this.get("thema") === "inspire") {
-                layerList = LayerList.getLayerByProperty("kategorieInspire", this.get("folder"));
+            else if (this.get("category") === "inspire") {
+                layerList = LayerList.getLayerByProperty("kategorieInspire", this.get("name"));
             }
             else {
-                layerList = LayerList.getLayerByProperty("kategorieCustom", this.get("folder"));
+                layerList = LayerList.getLayerByProperty("kategorieCustom", this.get("name"));
             }
             this.set("layerList", layerList);
         },

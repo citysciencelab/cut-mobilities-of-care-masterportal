@@ -105,7 +105,6 @@ define([
             }
         },
         initialize: function () {
-            EventBus.on("initFolder", this.getInitFolder, this);
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
             EventBus.on("getModelById", this.sendModelByID, this);
             EventBus.on("setVisible", this.setVisibleByID, this);
@@ -124,7 +123,8 @@ define([
 
             this.listenTo(EventBus, {
                 "addFeatures": this.addFeatures,
-                "removeFeatures": this.removeFeatures
+                "removeFeatures": this.removeFeatures,
+                "getFolderNames": this.sendFolderNames
             });
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
@@ -334,6 +334,7 @@ define([
                 });
             });
         },
+
         /**
         * [getLayerByProperty description]
         * @param {[type]} key   [description]
@@ -520,12 +521,12 @@ define([
         removeLayerFromMap: function (model) {
            EventBus.trigger("removeLayer", model.get("layer"));
         },
-        getInitFolder: function () {
+        sendFolderNames: function () {
             if (Config.tree.orderBy === "opendata") {
-                EventBus.trigger("sendInitFolder", this.getOpendataFolder());
+                EventBus.trigger("sendFolderNames", this.getOpendataFolder());
             }
             else if (Config.tree.orderBy === "inspire") {
-                EventBus.trigger("sendInitFolder", this.getInspireFolder());
+                EventBus.trigger("sendFolderNames", this.getInspireFolder());
             }
         },
         getInspireFolder: function () {
@@ -552,7 +553,8 @@ define([
                     }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
-                    EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
+                    collection.sendFolderNames();
+                    // EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
                     EventBus.trigger("sendAllLayer", collection.getAllLayer());
                 }
             });
@@ -574,7 +576,8 @@ define([
                     }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
-                    EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
+                    collection.sendFolderNames();
+                    // EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
                     EventBus.trigger("sendAllLayer", collection.getAllLayer());
                 }
             });
