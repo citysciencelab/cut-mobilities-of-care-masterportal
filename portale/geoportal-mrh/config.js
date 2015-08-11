@@ -1,11 +1,11 @@
 define(function () {
     var config = {
-        title: "Geoportal GDI-MRH",
+        title: "Geoportal der Metropolregion Hamurg",
         tree: {
-            custom: false,
+            custom:false,
             orderBy: "opendata",
             filter: true,
-            //groupBaseLayerByID: [],
+            groupBaseLayerByID: [],
 
             groupLayerByID:[]
         },
@@ -45,7 +45,7 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Themen",
+            placeholder: "Suchen nach Adresse, Thema",
             gazetteerURL: function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
