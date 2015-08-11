@@ -18,10 +18,14 @@ define("app", ["jquery", "config", "modules/attribution/view", "modules/core/uti
         });
     }
 
-    // TODO Über Config-Parameter steuern. In Config-Pfad(e) angeben und diesen dann laden
-    require(["../portale/verkehrsportal/verkehrsfunctions"], function (Vf) {
-        new Vf();
-    });
+    // load customModules from config
+    if (Config.customModules) {
+        _.each(Config.customModules, function (element) {
+            require([element], function (CustomModule) {
+                new CustomModule();
+            });
+         });
+    }
 
     if (Config.attributions && Config.attributions === true) {
         new AttView();
