@@ -13,7 +13,6 @@ define(function () {
             {id: "0", visible: true},       //WebAtlas
             {id: "1", visible: false},       //WebAtlas_grau
             {id: "2", visible: false},      //Luftbilder
-            {id: "3", visible: false},      //Leerer Hintergrund
             {id: "4", visible: false}       //1:5000
         ],
         footer: true,

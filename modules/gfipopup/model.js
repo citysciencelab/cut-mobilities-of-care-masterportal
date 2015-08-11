@@ -151,7 +151,6 @@ define([
                 _.each(element, function (val, key) {
                     if (key === "Bild") {
                         val = new ImgView(val);
-
                         element[key] = val;
                     }
                 });

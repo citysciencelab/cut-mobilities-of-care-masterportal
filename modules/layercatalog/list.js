@@ -8,15 +8,12 @@ define([
     var TreeList = Backbone.Collection.extend({
         initialize: function () {
             EventBus.on("showLayerInTree", this.showLayerInTree, this);
-            EventBus.on("sendOpendataFolder sendInspireFolder sendCustomNodes", this.createNodes, this);
-            if (Config.tree.orderBy === "opendata") {
-                EventBus.trigger("getOpendataFolder");
-            }
-            else if (Config.tree.orderBy === "inspire") {
-                EventBus.trigger("getInspireFolder");
+            EventBus.on("sendOpendataFolder sendInspireFolder sendCustomNodes sendInitFolder", this.createNodes, this);
+            if (_.has(Config, "tree") && Config.tree.custom === true) {
+                EventBus.trigger("getCustomNodes");
             }
             else {
-                EventBus.trigger("getCustomNodes");
+                EventBus.trigger("initFolder");
             }
         },
         createNodes: function (folders) {
