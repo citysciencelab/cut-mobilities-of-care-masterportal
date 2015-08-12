@@ -24,7 +24,6 @@ define([
         initialize: function () {
             $("#popovermin").remove();
             this.listenTo(this.model, "change:coordinate", this.render);
-            // this.listenTo(this.model, "change:gfiContent", this.routingButton);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
