@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/Measure.html',
-    'models/Measure',
+    'text!modules/measure/template.html',
+    'modules/measure/model',
     'eventbus'
 ], function ($, _, Backbone, MeasureTemplate, Measure, EventBus) {
 
