@@ -2,8 +2,8 @@ define([
     "jquery",
     "underscore",
     "backbone",
-    "text!modules/gfipopup/imgTemplate.html",
-    "modules/gfipopup/imgModel",
+    "text!modules/gfipopup/img/template.html",
+    "modules/gfipopup/img/model",
     "eventbus"
 ], function ($, _, Backbone, ImgTemplate, ImgModel, EventBus) {
     var ImgView = Backbone.View.extend({
