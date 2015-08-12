@@ -1,4 +1,4 @@
-# LGV Master-Portal
+# LGV, Master-Portal
 
 ## lokale Entwicklungsumgebung einrichten
 
