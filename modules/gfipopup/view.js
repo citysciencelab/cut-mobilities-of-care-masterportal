@@ -23,24 +23,15 @@ define([
          */
         initialize: function () {
             $("#popovermin").remove();
-            // EventBus.on("setMap", this.setMap, this);
             this.listenTo(this.model, "change:coordinate", this.render);
             // this.listenTo(this.model, "change:gfiContent", this.routingButton);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
-        /**
-         * Sichert Map für Route
-         */
-        setMap: function (map) {
-            this.model.set("map", map);
-        },
         setRoutingDestination: function () {
             EventBus.trigger("setRoutingDestination", this.model.get("coordinate"));
         },
         startShowingRoute: function (evt) {
-            // hole Map nur, wenn Route angezeigt werden soll
-            EventBus.trigger("getMap", this);
             // lösche alte Route
             this.model.clearRoute();
             var gesuchteRoute = evt.currentTarget.value;

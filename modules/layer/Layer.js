@@ -11,7 +11,8 @@ define([
     var Layer = Backbone.Model.extend({
         defaults: {
             selected: false,
-            visibility: false
+            visibility: false,
+            metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
 

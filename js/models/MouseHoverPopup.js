@@ -121,6 +121,7 @@ define([
                 // Cluster-Features
                 if (selFeature.getProperties().features) {
                     var list = selFeature.getProperties().features;
+
                     _.each(list, function (element) {
                         pFeatureArray.push({
                             feature: element,
@@ -216,7 +217,7 @@ define([
 
                 if (value !== "") {
                     this.get("mhpOverlay").setPosition(coord);
-                    this.get("mhpOverlay").setOffset([45, -60]);
+                    this.get("mhpOverlay").setOffset([65, -15]);
                     this.set("mhpcoordinates", coord);
                     this.set("mhpresult", value);
                 }
