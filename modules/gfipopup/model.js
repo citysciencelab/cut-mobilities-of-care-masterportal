@@ -5,7 +5,7 @@ define([
     "config",
     "bootstrap/popover",
     "videojs",
-    "modules/gfipopup/imgView",
+    "modules/gfipopup/img/view",
     "modules/core/util"
 ], function (Backbone, EventBus, ol, Config, Popover, VideoJS, ImgView, Util) {
 

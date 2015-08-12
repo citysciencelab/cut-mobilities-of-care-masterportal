@@ -105,7 +105,6 @@ define([
             }
         },
         initialize: function () {
-            EventBus.on("initFolder", this.getInitFolder, this);
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
             EventBus.on("getModelById", this.sendModelByID, this);
             EventBus.on("setVisible", this.setVisibleByID, this);
@@ -124,7 +123,9 @@ define([
 
             this.listenTo(EventBus, {
                 "addFeatures": this.addFeatures,
-                "removeFeatures": this.removeFeatures
+                "removeFeatures": this.removeFeatures,
+                "getNodeNames": this.sendNodeNames,
+                "getLayerForNode": this.sendLayerForNode
             });
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
@@ -334,6 +335,7 @@ define([
                 });
             });
         },
+
         /**
         * [getLayerByProperty description]
         * @param {[type]} key   [description]
@@ -520,19 +522,34 @@ define([
         removeLayerFromMap: function (model) {
            EventBus.trigger("removeLayer", model.get("layer"));
         },
-        getInitFolder: function () {
+        sendNodeNames: function () {
             if (Config.tree.orderBy === "opendata") {
-                EventBus.trigger("sendInitFolder", this.getOpendataFolder());
+                EventBus.trigger("sendNodeNames", this.getOpendataFolder());
             }
             else if (Config.tree.orderBy === "inspire") {
-                EventBus.trigger("sendInitFolder", this.getInspireFolder());
+                EventBus.trigger("sendNodeNames", this.getInspireFolder());
             }
         },
+        sendLayerForNode: function (category, nodeName) {
+            // model.get("isbaselayer") === false
+            if (category === "opendata") {
+                EventBus.trigger("sendLayerForNode", this.where({kategorieOpendata: nodeName, isbaselayer: false}));
+                // console.log(this.where({kategorieOpendata: nodeName}));
+            }
+            else if (category === "inspire") {
+                EventBus.trigger("sendLayerForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
+            }
+            else {
+                // console.log(nodeName);
+                EventBus.trigger("sendLayerForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
+            }
+            // console.log(category + " " + nodeName);
+        },
         getInspireFolder: function () {
-            return _.uniq(this.pluck("kategorieInspire"));
+            return _.uniq(_.flatten(this.pluck("kategorieInspire")));
         },
         getOpendataFolder: function () {
-            return _.uniq(this.pluck("kategorieOpendata"));
+            return _.uniq(_.flatten(this.pluck("kategorieOpendata")));
         },
         sendInspireFolder: function () {
             this.fetch({
@@ -552,7 +569,8 @@ define([
                     }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
-                    EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
+                    collection.sendNodeNames();
+                    // EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
                     EventBus.trigger("sendAllLayer", collection.getAllLayer());
                 }
             });
@@ -574,7 +592,8 @@ define([
                     }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
-                    EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
+                    collection.sendNodeNames();
+                    // EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
                     EventBus.trigger("sendAllLayer", collection.getAllLayer());
                 }
             });
