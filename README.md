@@ -1,4 +1,4 @@
-# LGV G12 Master
+# LGV, Master-Portal
 
 ## lokale Entwicklungsumgebung einrichten
 
