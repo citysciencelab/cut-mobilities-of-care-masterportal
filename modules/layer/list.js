@@ -35,6 +35,7 @@ define([
 
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
                 wmsLayer = _.filter(_.where(response, {typ: "WMS"}), function (element) {
+
                     // für WMS-Layer mit mehr als 1 Datensatz: erzeuge pro Datensatz 1 zusätzlichen Layer
                     if (element.datasets.length > 1) {
                         _.each(element.datasets, function (ds, key) {
@@ -42,15 +43,14 @@ define([
 
                             layer.id = layer.id + "_" + key;
                             layer.datasets = [ds];
-                            console.log(ds);
                             datasetLayer.push(layer);
                         });
                     }
-                    // wms layer mit mehr als 1 Datensatz werden oben behandelt
+                    // wms layer mit mehr als 1 Datensatz werden oben behandelt, layer mit 0 Datensätzen wollen wir nicht
                     return element.datasets.length === 1;
                 });
 
-                // füge die zusätzlich pro Datensatz erzeugten WMSLayer hinzu
+                // füge die zusätzlich pro Datensatz erzeugten Layer hinzu
                 _.each(datasetLayer, function (layer) {
                     wmsLayer.push(layer);
                 });
