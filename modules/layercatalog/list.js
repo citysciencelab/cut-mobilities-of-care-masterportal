@@ -6,28 +6,48 @@ define([
     ], function (Backbone, Node, Config, EventBus) {
 
     var TreeList = Backbone.Collection.extend({
+
+        model: Node,
+
+        // Die Collection wird nach dem Modelattribut "name" sortiert.
+        comparator: "name",
+
         initialize: function () {
-            EventBus.on("showLayerInTree", this.showLayerInTree, this);
-            EventBus.on("sendOpendataFolder sendInspireFolder sendCustomNodes sendInitFolder", this.createNodes, this);
+            // Listener auf den EventBus.
+            this.listenTo(EventBus, {
+                "showLayerInTree": this.showLayerInTree,
+                "sendNodeNames sendCustomFolderNames": this.createNodes
+            });
+
+            // Initial werden die Namen für die 1.Ordnerebene geholt.
             if (_.has(Config, "tree") && Config.tree.custom === true) {
-                EventBus.trigger("getCustomNodes");
+                EventBus.trigger("getCustomFolderNames");
             }
             else {
-                EventBus.trigger("initFolder");
+                EventBus.trigger("getNodeNames");
             }
         },
-        createNodes: function (folders) {
-            this.reset(null);
-            _.each(folders.sort(), function (folder) {
-                this.add(new Node({folder: folder, thema: Config.tree.orderBy}));
+
+        // Erstellt die Ordner der 1.Ebene der entsprechenden Kategorie.
+        // Die Ordnernamen (folders) kommen von layer/list.
+        createNodes: function (folderNames) {
+            var nodes = [];
+
+            _.each(folderNames, function (folderName) {
+                nodes.push({name: folderName, category: Config.tree.orderBy});
             }, this);
+            // Alte Models werden entfernt, neue hinzugefügt.
+            // http://backbonejs.org/#Collection-reset
+            this.reset(nodes);
         },
+
+        //
         showLayerInTree: function (model) {
             // öffnet den Tree
             $(".nav li:first-child").addClass("open");
             this.forEach(function (element) {
                 if (model.get("type") !== undefined && model.get("type") === "nodeChild") {
-                    if (model.get("children")[0].get("kategorieOpendata") === element.get("folder") || model.get("children")[0].get("kategorieInspire") === element.get("folder") || model.get("children")[0].get("kategorieCustom") === element.get("folder")) {
+                    if (model.get("children")[0].get("kategorieOpendata") === element.get("name") || model.get("children")[0].get("kategorieInspire") === element.get("name") || model.get("children")[0].get("kategorieCustom") === element.get("name")) {
                         element.set("isExpanded", true);
                         model.set("isExpanded", true);
                         _.each(model.get("children"), function (child) {
@@ -38,7 +58,7 @@ define([
                     }
                 }
                 else {
-                    if (model.get("kategorieOpendata") === element.get("folder") || model.get("kategorieInspire") === element.get("folder") || model.get("kategorieCustom") === element.get("folder")) {
+                    if (model.get("kategorieOpendata") === element.get("name") || model.get("kategorieInspire") === element.get("name") || model.get("kategorieCustom") === element.get("name")) {
                         element.set("isExpanded", true);
                         _.each(element.get("childViews"), function (view) {
                             if (view.model.get("name") === model.get("metaName") || view.model.get("name") === model.get("subfolder")) {

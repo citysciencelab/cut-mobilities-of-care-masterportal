@@ -15,7 +15,7 @@ define([
          * Ruft initial die Funktion "fetchTreeConfig" auf.
          */
         initialize: function () {
-            EventBus.on("getCustomNodes", this.sendCustomNodes, this);
+            EventBus.on("getCustomFolderNames", this.sendCustomFolderNames, this);
             EventBus.on("fetchTreeConfig", this.fetchTreeConfig, this);
             this.fetchTreeConfig();
         },
@@ -38,11 +38,11 @@ define([
         },
 
         /**
-         * Feuert das Event "sendCustomNodes" ab.
+         * Feuert das Event "sendCustomFolderNames" ab.
          * Übergibt aus allen Models die Werte aus dem Attribute "node" als Array.
          */
-         sendCustomNodes: function () {
-            EventBus.trigger("sendCustomNodes", this.pluck("node"));
+         sendCustomFolderNames: function () {
+            EventBus.trigger("sendCustomFolderNames", _.without(this.pluck("node"), undefined));
         }
     });
 
