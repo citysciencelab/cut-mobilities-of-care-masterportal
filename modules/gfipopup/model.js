@@ -136,6 +136,7 @@ define([
         },
 
         replaceValuesWithObjects: function (pContent) {
+            console.log(pContent);
             _.each(pContent, function (element, index) {
                 _.each(element, function (val, key) {
                     if (key === "Bild") {
@@ -145,6 +146,7 @@ define([
                         val = new VideoView(val);
                         element[key] = val;
                     }
+                    console.log(val);
                 });
                 pContent[index] = element;
             });
