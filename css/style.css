@@ -17,7 +17,6 @@
 @import "window.css";
 @import "../modules/scaleline/style.css";
 @import "../modules/menubar/style.css";
-@import "measure.css";
 @import "../modules/layerselection/style.css";
 @import "../modules/footer/style.css";
 @import "../modules/quickhelp/style.css";
@@ -30,3 +29,4 @@
 @import "../modules/coordpopup/style.css";
 @import "../modules/legend/style.css";
 @import "../modules/searchbar/style.css";
+@import "../modules/measure/style.css";

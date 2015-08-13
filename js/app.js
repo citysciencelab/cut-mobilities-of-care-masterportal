@@ -93,7 +93,7 @@ define("app", ["jquery", "config", "modules/attribution/view", "modules/core/uti
                         });
                     }
                     if (Config.tools.measure === true) {
-                        require(["views/MeasureView"], function (MeasureView) {
+                        require(["modules/measure/view"], function (MeasureView) {
                             new MeasureView();
                         });
                     }
