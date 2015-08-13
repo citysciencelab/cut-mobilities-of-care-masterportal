@@ -15,9 +15,11 @@ define([
             "remove": "destroy"
         },
 
-        initialize: function (url) {
+        initialize: function (ueberschrift, buttontext, route) {
             this.model = new RoutingModel();
-            this.model.set('url', url);
+            this.model.set('ueberschrift', ueberschrift);
+            this.model.set('buttontext', buttontext);
+            this.model.set('route', route);
             this.render();
         },
         /**

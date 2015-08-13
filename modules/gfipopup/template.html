@@ -19,16 +19,8 @@
             <td colspan="2" >
                <% print (value.el.innerHTML); %>
             </td>
-        <% } else if(_.isObject(value) === false && value.match(/Min/i) && value.match(/km/i)) { %>
-            <td>
-                <strong><%= key + ':'%></strong>
-            </td>
-            <td>
-                <button id='RouteZeigenButton' title='Schnellste Route zeigen' value='<%= key %>' style='min-width: 130px; width:100%' type='button' class='btn btn-info btn-sm'>
-                    <span style='float:left;' class='' aria-hidden='true'><%= value %></span>
-                    <span style='float:right; top:3px;' class='glyphicon glyphicon-road' aria-hidden='true'></span>
-                </button>
-            </td>
+        <% } else if(key.indexOf('Route') === 0) { %>
+            <% print (value.el.innerHTML); %>
         <% } else if(_.isObject(value) === false) { %>
             <td>
                 <strong><%= key + ''%></strong>

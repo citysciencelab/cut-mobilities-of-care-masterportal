@@ -6,8 +6,9 @@ define([
     "bootstrap/popover",
     "modules/gfipopup/img/view",
     "modules/gfipopup/video/view",
+    "modules/gfipopup/routing/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, Util) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, Util) {
 
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -134,19 +135,35 @@ define([
             }
             $("#loader").hide();
         },
-
+        /**
+         * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
+         * gesteuert werden.
+         * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
+         * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
+         */
         replaceValuesWithObjects: function (pContent) {
-            console.log(pContent);
             _.each(pContent, function (element, index) {
-                _.each(element, function (val, key) {
+                var lastroutenval, lastroutenkey;
+                _.each(element, function (val, key, list) {
                     if (key === "Bild") {
                         val = new ImgView(val);
                         element[key] = val;
                     } else if (key === "video") {
                         val = new VideoView(val);
                         element[key] = val;
+                    } else if (_.isObject(val) === false && val.indexOf('Min, ') !== -1 && val.indexOf('km') !== -1) {
+                        // Dienst liefert erst key=Flughafen Hamburg mit val=24 Min., 28km ohne Route
+                        lastroutenval=val;
+                        lastroutenkey=key;
+                        element[key] = '#';
+                    } else if (key.indexOf('Route') === 0) {
+                        // Nächstes element des Objects ist die Route
+                        val = new RoutingView(lastroutenkey, lastroutenval, val);
+                        element[key] = val;
                     }
-                    console.log(val);
+                    element = _.omit(element, function(value, key, obj) {
+                        return value === '#';
+                    });
                 });
                 pContent[index] = element;
             });
