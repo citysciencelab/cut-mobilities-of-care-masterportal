@@ -93,10 +93,6 @@ define([
          *
          */
         render: function () {
-            // Erzeuge für Video
-            if (_.has(this.model.get("gfiContent")[0], "video")) {
-                this.model.set("uniqueId", _.uniqueId("gfi"));
-            }
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $(this.model.get("element")).popover({
@@ -112,10 +108,6 @@ define([
                 content: this.$el
             });
             this.model.showPopup();
-            // Starte Streaming des Videos über Id
-            if (_.has(this.model.get("gfiContent")[0], "video")) {
-                this.model.starteStreaming(this.model.get('uniqueId'));
-            }
             EventBus.trigger("closeMouseHoverPopup", this);
             EventBus.trigger("GFIPopupVisibility", true);
         },

@@ -4,10 +4,10 @@ define([
     "openlayers",
     "config",
     "bootstrap/popover",
-    "videojs",
     "modules/gfipopup/img/view",
+    "modules/gfipopup/video/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, VideoJS, ImgView, Util) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, Util) {
 
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -33,8 +33,6 @@ define([
             EventBus.trigger("mapView:requestProjection");
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
-            EventBus.on("streamVideoByID", this.starteStreaming, this); // trigger in map.js
-//          EventBus.on("getGFIForPrint", this.sendGFIForPrint, this);
             this.setRouteLayer();
         },
 
@@ -50,16 +48,6 @@ define([
                     })
                 })
             }));
-        },
-        /**
-         * Diese Funktion startet das Video unter der übergebenen id
-         */
-        starteStreaming: function (id) {
-            if (document.getElementById(id)) {
-                VideoJS(id, {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function () {
-//                    console.log("loaded");
-                });
-            }
         },
 
         /**
@@ -146,11 +134,15 @@ define([
             }
             $("#loader").hide();
         },
+
         replaceValuesWithObjects: function (pContent) {
             _.each(pContent, function (element, index) {
                 _.each(element, function (val, key) {
                     if (key === "Bild") {
                         val = new ImgView(val);
+                        element[key] = val;
+                    } else if (key === "video") {
+                        val = new VideoView(val);
                         element[key] = val;
                     }
                 });

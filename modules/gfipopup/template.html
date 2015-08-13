@@ -13,9 +13,7 @@
     <tr>
         <% if(key === 'video'){%>
             <td colspan="2" >
-               <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="300" height="300" style="margin-left:auto; margin-right:auto;">
-                   <source src="<%=value%>"/>
-               </video>
+                <% print (value.el.innerHTML); %>
             </td>
         <% } else if(key === 'Bild'){ %>
             <td colspan="2" >
