@@ -1,9 +1,8 @@
 define([
     "backbone",
     "text!modules/draw/template.html",
-    "modules/draw/model",
-    "eventbus"
-], function (Backbone, DrawTemplate, Draw, EventBus) {
+    "modules/draw/model"
+], function (Backbone, DrawTemplate, Draw) {
 
     var DrawView = Backbone.View.extend({
         model: Draw,
@@ -18,6 +17,19 @@ define([
         },
         initialize: function () {
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
+        },
+
+        render: function () {
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+                var attr = this.model.toJSON();
+
+                this.$el.html("");
+                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.delegateEvents();
+            }
+            else {
+                this.undelegateEvents();
+            }
         },
 
         setType: function (evt) {
@@ -39,19 +51,6 @@ define([
 
         deleteFeatures: function () {
             this.model.deleteFeatures();
-        },
-
-        render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
-            }
-            else {
-                this.undelegateEvents();
-            }
         }
     });
 

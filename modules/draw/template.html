@@ -5,7 +5,7 @@
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm drawType">
                 <% _.each(types, function (type) { %>
-                    <option value="<%= type.value %>" <% if (selectedType === type.value) { print ("SELECTED")} %>><%= type.name %></option>
+                    <option value="<%= type %>" <% if (selectedType === type) { print ("SELECTED")} %>><%= type %></option>
                 <% }); %>
             </select>
         </div>
@@ -16,7 +16,7 @@
             <div class="col-md-7 col-sm-7">
                 <select class="form-control input-sm drawPointRadius">
                     <% _.each(pointRadiuses, function (pointRadius) { %>
-                        <option value="<%= pointRadius.value %>" <% if (selectedRadius === pointRadius.value) { print ("SELECTED")} %>><%= pointRadius.name %></option>
+                        <option value="<%= pointRadius.value %>" <% if (radius === pointRadius.value) { print ("SELECTED")} %>><%= pointRadius.name %></option>
                     <% }); %>
                 </select>
             </div>
@@ -38,8 +38,8 @@
         <label class="col-md-5 col-sm-5 control-label">Farbe</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm drawColor">
-                <% _.each(colors, function (color) { %>
-                    <option value="<%= color.value %>" <% if (selectedColor === color.value) { print ("SELECTED")} %>><%= color.name %></option>
+                <% _.each(colors, function (element) { %>
+                    <option value="<%= element.value %>" <% if (color === element.value) { print ("SELECTED")} %>><%= element.name %></option>
                 <% }); %>
             </select>
         </div>

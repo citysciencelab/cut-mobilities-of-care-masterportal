@@ -29,19 +29,39 @@ define([
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config, "tree") && Config.tree.custom === false) {
                 var wmsLayer,
+                    datasetLayer = [],
                     cacheLayer,
                     cacheLayerIDs = [];
 
                 // nur vom Typ WMS die einem Datensatz zugeordnet sind
-                wmsLayer =  _.filter(_.where(response, {typ: "WMS"}), function (element) {
-                    return element.datasets.length > 0;
+                wmsLayer = _.filter(_.where(response, {typ: "WMS"}), function (element) {
+
+                    // für WMS-Layer mit mehr als 1 Datensatz: erzeuge pro Datensatz 1 zusätzlichen Layer
+                    if (element.datasets.length > 1) {
+                        _.each(element.datasets, function (ds, key) {
+                            var layer = _.clone(element);
+
+                            layer.id = layer.id + "_" + key;
+                            layer.datasets = [ds];
+                            datasetLayer.push(layer);
+                        });
+                    }
+                    // wms layer mit mehr als 1 Datensatz werden oben behandelt, layer mit 0 Datensätzen wollen wir nicht
+                    return element.datasets.length === 1;
                 });
+
+                // füge die zusätzlich pro Datensatz erzeugten Layer hinzu
+                _.each(datasetLayer, function (layer) {
+                    wmsLayer.push(layer);
+                });
+
                 // Layer die als Cache vorhanden sind
                 cacheLayer = _.where(wmsLayer, {cache: true});
                 // Datensatz-IDs der Caches
                 _.each(cacheLayer, function (layer) {
                     cacheLayerIDs.push(layer.datasets[0].md_id);
                 });
+
                 // Datensaetze die im Cache schon dargestellt werden, werden entfernt
                 return _.reject(wmsLayer, function (element) {
                     if (_.contains(cacheLayerIDs, element.datasets[0].md_id) && element.cache === false) {
