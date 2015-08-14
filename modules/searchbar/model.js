@@ -441,9 +441,10 @@ define([
              */
             getLayerForSearch: function (layerModels) {
                 this.set("layers", []);
-                // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategroien enthalten ist
+                // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
+                // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
                 layerModels = _.uniq(layerModels, function (model) {
-                    return model.get("name");
+                    return model.get("name") + model.get("metaID");
                 });
                 _.each(layerModels, function (model) {
                     this.pushHits("layers", {name: model.get("name"), metaName: model.get("metaName"), type: "Thema", glyphicon: "glyphicon-list", id: model.get("id"), model: model});
