@@ -104,8 +104,8 @@ define([
                     this.set("quickHelp", false);
                 }
                 EventBus.trigger("addOverlay", this.get("marker"));
-                EventBus.trigger("getAllLayer");
-                EventBus.trigger("getVisibleWFSLayer");
+                EventBus.trigger("layerlist:getAllOverlayer");
+                EventBus.trigger("layerlist:getAllVisibleWFSLayer");
             },
 
             /**
