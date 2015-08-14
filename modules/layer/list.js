@@ -105,33 +105,33 @@ define([
             }
         },
         initialize: function () {
-            EventBus.on("updateStyleByID", this.updateStyleByID, this);
-            EventBus.on("getModelById", this.sendModelByID, this);
-            EventBus.on("setVisible", this.setVisibleByID, this);
-            EventBus.on("getVisibleWFSLayer", this.sendVisibleWFSLayer, this);
-            EventBus.on("getVisibleWFSLayerPOI", this.sendVisibleWFSLayerPOI, this);
-            EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
-            EventBus.on("getVisibleWMSLayer", this.sendVisibleWMSLayer, this);
-            EventBus.on("getAllVisibleLayer", this.sendAllVisibleLayer, this);
-            EventBus.on("getAllSelectedLayer", this.sendAllSelectedLayer, this);
-            EventBus.on("currentMapScale", this.setMapScaleForAll, this);
-            EventBus.on("getInspireFolder", this.sendInspireFolder, this);
-            EventBus.on("getOpendataFolder", this.sendOpendataFolder, this);
-            EventBus.on("displayInTree", this.displayInTree, this);
-            EventBus.on("getAllLayer", this.sendAllLayer, this);
-            EventBus.on("getBaseLayer", this.sendBaseLayer, this);
 
             this.listenTo(EventBus, {
+                "layerlist:getAllOverlayer": this.sendAllLayer,
+                "layerlist:getAllBaselayer": this.sendBaseLayer,
+                "layerlist:getAllVisible": this.sendAllVisibleLayer,
+                "layerlist:getAllVisibleWMSLayer": this.sendVisibleWMSLayer,
+                "layerlist:getAllVisibleWFSLayer": this.sendVisibleWFSLayer,
+                "layerlist:getLayerByID": this.sendModelByID,
+                "layerlist:setVisibilityByID": this.setVisibilityByID,
                 "addFeatures": this.addFeatures,
                 "removeFeatures": this.removeFeatures,
                 "getNodeNames": this.sendNodeNames,
-                "getLayerForNode": this.sendLayerForNode
+                "getLayerForNode": this.sendLayerForNode,
+                "layerlist:updateStyleByID": this.updateStyleByID,
+                "layerlist:displayInTreeByID": this.displayInTreeByID,
+                "layerlist:getInspireFolder": this.sendInspireFolder,
+                "layerlist:getOpendataFolder": this.sendOpendataFolder
             });
 
-            this.on("change:visibility", this.sendVisibleWFSLayer, this);
-            this.on("change:visibility", this.sendAllVisibleLayer, this);
-            this.listenTo(this, "add", this.addLayerToMap);
-            this.listenTo(this, "remove", this.removeLayerFromMap);
+            this.listenTo(this, {
+                "add": this.addLayerToMap,
+                "remove": this.removeLayerFromMap,
+                "change:visibility": function () {
+                    this.sendVisibleWFSLayer();
+                    this.sendAllVisibleLayer();
+                }
+            });
 
             this.fetch({
                 cache: false,
@@ -150,6 +150,69 @@ define([
                     collection.cloneByStyle();
                 }
             });
+        },
+
+        /**
+         * Triggert das Event "map:addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).
+         */
+        addLayerToMap: function (model) {
+            EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+        },
+
+        // Gibt ein Array von allen Layern zurück, die den Attributen im übergebenen Object entsprechen.
+        getLayersWhere: function (object) {
+            return this.where(object);
+        },
+
+        // Gibt alle Layer zurück, die kein Baselayer sind.
+        getAllOverlayer: function () {
+            var layerList,
+                baseLayerIDList = _.pluck(this.getAllBaselayer(), "id");
+
+            layerList = _.filter(this.models, function (model) {
+                return _.contains(baseLayerIDList, model.id) === false;
+            });
+
+            return layerList;
+        },
+
+        // Gibt alle Baselayer zurück.
+        getAllBaselayer: function () {
+            var layerlist = [];
+
+            _.each(Config.baseLayer, function (layer) {
+                var model = this.findWhere({"id": layer.id});
+
+                model.set("isbaselayer", true);
+                layerlist.push(model.set(layer));
+            }, this);
+
+            return layerlist;
+        },
+
+        // Gibt alle sichtbaren Layer zurück.
+        // getAllVisible: function () {
+        //     return this.where({visibility: true});
+        // },
+
+        // Gibt alle sichtbaren WMS-Layer zurück.
+        // getAllVisibleWMSLayer: function () {
+        //     return this.where({visibility: true, typ: "WMS"});
+        // },
+
+        // Gibt alle sichtbaren WFS-Layer zurück.
+        // getAllVisibleWFSLayer: function () {
+        //     return this.where({visibility: true, typ: "WFS"});
+        // },
+
+        // Gibt den Layer zur ID zurück.
+        getLayerByID: function (id) {
+            return this.get(id);
+        },
+
+        // Setzt die Sichtbarkeit für einen Layer.
+        setVisibilityByID: function (id, bool) {
+            this.getLayerByID(id).set("visibility", bool);
         },
 
         addFeatures: function (name, features) {
@@ -232,10 +295,10 @@ define([
                 // Layer aus einem Dienst können unterschiedliche Scales haben (z.B. ALKIS).
                 // Daher wird das Model mit dem niedrigsten und das mit dem höchsten Wert gesucht.
                 var minScaleModel = _.min(modelsByID, function (model) {
-                    return model.get("minScale");
+                    return parseInt(model.get("minScale"), 10);
                 }),
                 maxScaleModel = _.max(modelsByID, function (model) {
-                    return model.get("maxScale");
+                    return parseInt(model.get("maxScale"), 10);
                 });
                 // Die Parameter "maxScale", "minScale", "layers" und "name" werden beim ersten Model aus der Liste überschrieben.
                 modelsByID[0].set("layers", layerList.slice(1, layerList.length));
@@ -372,15 +435,8 @@ define([
         sendModelByID: function (arg) {
             EventBus.trigger("sendModelByID", this.get(arg));
         },
-        /**
-        *
-        * args[0] = id, args[1] = visibility(bool)
-        */
-        setVisibleByID: function (args) {
-            this.get(args[0]).set("visibility", args[1]);
-            // this.get(args[0]).get("layer").setVisible(args[1]);
-        },
-        displayInTree: function (args) {
+
+        displayInTreeByID: function (args) {
             this.get(args[0]).set("displayInTree", args[1]);
             // this.get(args[0]).get("layer").setVisible(args[1]);
         },
@@ -388,90 +444,30 @@ define([
         *
         */
         sendVisibleWFSLayer: function () {
-            EventBus.trigger("sendVisibleWFSLayer", this.getVisibleWFSLayer());
-        },
-        sendVisibleWFSLayerPOI: function () {
-            EventBus.trigger("sendVisibleWFSLayerPOI", this.getVisibleWFSLayer());
+            EventBus.trigger("sendVisibleWFSLayer", this.getLayersWhere({visibility: true, typ: "WFS"}));
         },
         /**
         *
         */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger("sendVisibleWMSLayer", this.getVisibleWMSLayer());
+            EventBus.trigger("sendVisibleWMSLayer", this.getLayersWhere({visibility: true, typ: "WMS"}));
         },
         /**
         *
         */
         sendAllVisibleLayer: function () {
-            EventBus.trigger("sendAllVisibleLayer", this.getAllVisibleLayer());
+            EventBus.trigger("sendAllVisibleLayer", this.getLayersWhere({visibility: true}));
         },
-        /**
-         *
-         */
-        sendAllSelectedLayer: function () {
-            EventBus.trigger("sendAllSelectedLayer", this.getAllSelectedLayer());
-        },
+
         /**
          *
          */
         sendAllLayer: function () {
-            EventBus.trigger("sendAllLayer", this.getAllLayer());
-        },
-        /**
-        * Gibt alle sichtbaren Layer zurück.
-        *
-        */
-        getVisibleWMSLayer: function () {
-            return this.where({visibility: true, typ: "WMS"});
-        },
-        /**
-        * Gibt alle sichtbaren WFS-Layer zurück.
-        *
-        */
-        getVisibleWFSLayer: function () {
-            return this.where({visibility: true, typ: "WFS"});
-        },
-        /**
-        * Gibt alle sichtbaren Layer zurück.
-        *
-        */
-        getAllVisibleLayer: function () {
-            return this.where({visibility: true});
-        },
-        /**
-         * Gibt alle selektierten Layer zurück.
-         */
-        getAllSelectedLayer: function () {
-            return this.where({selected: true});
-        },
-
-        /**
-         * Alle Layer außer Baselayer --> wird unteranderem für die Themensuche gebraucht
-         */
-        getAllLayer: function () {
-            var baseLayerIDList = _.pluck(Config.baseLayerIDs, "id");
-
-            return _.filter(this.models, function (model) {
-                if (!_.contains(baseLayerIDList, model.id)) {
-                    return model;
-                }
-            });
-        },
-
-        getBaseLayer: function () {
-            var layerlist = [];
-
-            _.each(Config.baseLayerIDs, function (baseLayer) {
-                var model = this.findWhere({"id": baseLayer.id});
-
-                layerlist.push(model.set(baseLayer));
-            }, this);
-
-            return layerlist;
+            EventBus.trigger("sendAllLayer", this.getAllOverlayer());
         },
 
         sendBaseLayer: function () {
-            EventBus.trigger("sendBaseLayer", this.getBaseLayer());
+            EventBus.trigger("sendBaseLayer", this.getAllBaselayer());
         },
 
         /**
@@ -571,7 +567,7 @@ define([
                     collection.cloneByStyle();
                     collection.sendNodeNames();
                     // EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
-                    EventBus.trigger("sendAllLayer", collection.getAllLayer());
+                    EventBus.trigger("sendAllLayer", collection.getAllOverlayer());
                 }
             });
         },
@@ -594,7 +590,7 @@ define([
                     collection.cloneByStyle();
                     collection.sendNodeNames();
                     // EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
-                    EventBus.trigger("sendAllLayer", collection.getAllLayer());
+                    EventBus.trigger("sendAllLayer", collection.getAllOverlayer());
                 }
             });
         }
