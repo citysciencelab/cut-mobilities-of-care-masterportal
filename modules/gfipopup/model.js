@@ -1,4 +1,6 @@
 define([
+    "jquery",
+    "underscore",
     "backbone",
     "eventbus",
     "openlayers",
@@ -8,8 +10,8 @@ define([
     "modules/gfipopup/video/view",
     "modules/gfipopup/routing/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, Util) {
-
+], function ($, _, Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, Util) {
+    "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
          *
@@ -30,40 +32,13 @@ define([
         initialize: function () {
             this.set("element", this.get("gfiOverlay").getElement());
             this.listenTo(this, "change:isPopupVisible", this.sendGFIForPrint);
-            EventBus.on("mapView:replyProjection", this.setProjection, this);
-            EventBus.trigger("mapView:requestProjection");
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
-            this.setRouteLayer();
         },
-
-        setRouteLayer: function () {
-            this.set("routeLayer", new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    projection: this.get("projection")
-                }),
-                style: new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: "blue",
-                        width: 5
-                    })
-                })
-            }));
-        },
-
         /**
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            // destroye child-Views/Templates, z.B. imgTemplate
-            _.each(this.get('gfiContent'), function(layer) {
-                _.each(layer, function(child) {
-                    // only call remove on Backbone.View objects or extended Backbone.View objects
-                    if (child instanceof Backbone.View) {
-                        child.remove();
-                    }
-                });
-            });
             this.get("element").popover("destroy");
             this.set("isPopupVisible", false);
             this.unset("coordinate", {silent: true});
@@ -89,16 +64,16 @@ define([
                 gfiContent,
                 pContent = [],
                 pTitles = [],
-                pRoutables = [];
+                i,
+                pRoutables = [],
+                position;
 
-            for (var i = 0; i < sortedParams.length; i += 1) {
+            for (i = 0; i < sortedParams.length; i += 1) {
                 if (sortedParams[i].typ === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
-                }
-                else if (sortedParams[i].typ === "WFS") {
+                } else if (sortedParams[i].typ === "WFS") {
                     gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].attributes);
-                }
-                else if (sortedParams[i].typ === "GeoJSON") {
+                } else if (sortedParams[i].typ === "GeoJSON") {
                     gfiContent = this.setGeoJSONPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
                 }
 
@@ -115,12 +90,9 @@ define([
             }
             pContent = this.replaceValuesWithObjects(pContent);
             if (pContent.length > 0) {
-                var position;
-
                 if (this.get("wfsCoordinate").length > 0) {
                     position = this.get("wfsCoordinate");
-                }
-                else {
+                } else {
                     position = params[1];
                 }
                 this.get("gfiOverlay").setPosition(position);
@@ -129,44 +101,63 @@ define([
                 this.set("gfiRoutables", pRoutables);
                 this.set("gfiCounter", pContent.length);
                 this.set("coordinate", position);
-            }
-            else {
+            } else {
                 EventBus.trigger("closeGFIParams", this);
             }
             $("#loader").hide();
         },
         /**
          * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
-         * gesteuert werden.
+         * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
          * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
          * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
          */
         replaceValuesWithObjects: function (pContent) {
             _.each(pContent, function (element, index) {
-                var lastroutenval, lastroutenkey;
-                _.each(element, function (val, key, list) {
+                var children = [],
+                    lastroutenval,
+                    lastroutenkey;
+                _.each(element, function (val, key) {
                     if (key === "Bild") {
-                        val = new ImgView(val);
-                        element[key] = val;
+                        var imgView = new ImgView(val);
+                        element[key] = '#';
+                        children.push({
+                            key: imgView.model.get('id'),
+                            val: imgView
+                        });
                     } else if (key === "video") {
-                        val = new VideoView(val);
-                        element[key] = val;
+                        var videoView = new VideoView(val);
+                        element[key] = '#';
+                        children.push({
+                            key: videoView.model.get('id'),
+                            val: videoView
+                        });
                     } else if (_.isObject(val) === false && val.indexOf('Min, ') !== -1 && val.indexOf('km') !== -1) {
                         // Dienst liefert erst key=Flughafen Hamburg mit val=24 Min., 28km ohne Route
-                        lastroutenval=val;
-                        lastroutenkey=key;
+                        lastroutenval = val;
+                        lastroutenkey = key;
                         element[key] = '#';
                     } else if (key.indexOf('Route') === 0) {
                         // Nächstes element des Objects ist die Route
-                        val = new RoutingView(lastroutenkey, lastroutenval, val);
-                        element[key] = val;
+                        var routingView = new RoutingView(lastroutenkey, lastroutenval, val);
+                        children.push({
+                            key: routingView.model.get('id'),
+                            val: routingView
+                        });
+                        element[key] = '#';
                     }
-                    element = _.omit(element, function(value, key, obj) {
+                    //lösche leere Dummy-Einträge wieder raus.
+                    element = _.omit(element, function (value) {
                         return value === '#';
                     });
-                });
+                }, this);
+                if (children.length > 0) {
+                    _.extend(element, {
+                        children: children
+                    });
+                }
                 pContent[index] = element;
-            });
+            }, this);
             return pContent;
         },
 
@@ -187,23 +178,21 @@ define([
                 // console.log(feature.get("gfiAttributes"));
             if (pX < pMinX || pX > pMaxX || pY < pMinY || pY > pMaxY) {
                 return;
-            }
-            else {
+            } else {
                 return [feature.get("gfiAttributes")];
             }
         },
-
         /**
          *
          */
         setWFSPopupContent: function (pSourceAllFeatures, pLayerStyle, pCoordinate, pScale, attributes) {
             // NOTE: Hier werden die Features auf ihre Sichtbarkeit untersucht, bevor das nächstgelegene Feature zurückgegeben wird
-            var pSource = new ol.source.Vector;
+            var pSource = new ol.source.Vector(),
+                pFeatures;
 
             if (pLayerStyle) {
                 pSource.addFeatures(pSourceAllFeatures.getFeatures());
-            }
-            else {
+            } else {
                 pSource.addFeatures(_.filter(pSourceAllFeatures.getFeatures(), function (feature) {
                     if (feature.getStyle()) {
                         if (feature.getStyle()[0].image_.getSrc() !== "../../img/blank.png") {
@@ -212,7 +201,7 @@ define([
                     }
                 }));
             }
-            var pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
+            pFeatures = pSource.getClosestFeatureToCoordinate(pCoordinate);
 
             if (!pFeatures) {
                 return;
@@ -229,8 +218,7 @@ define([
 
             if (pX < pMinX || pX > pMaxX || pY < pMinY || pY > pMaxY) {
                 return;
-            }
-            else {
+            } else {
                 this.set("wfsCoordinate", pFeatures.getGeometry().getFirstCoordinate());
                 var pQueryFeatures = [];
 
@@ -238,8 +226,7 @@ define([
                     _.each(pFeatures.getProperties().features, function (element) {
                         pQueryFeatures.push(element);
                     });
-                }
-                else {
+                } else {
                     pQueryFeatures.push(pFeatures);
                 }
                 var pgfi = [];
@@ -266,8 +253,7 @@ define([
                             newgfi = _.object(keyArray, valArray);
                             gfi = _.extend(gfi, newgfi);
                         });
-                    }
-                    else {
+                    } else {
                         _.each(attributes, function (value, key) {
                             var pAttributeValue = _.values(_.pick(pAttributes, key))[0];
 
@@ -293,16 +279,14 @@ define([
 
             if (params.url.search(location.host) === -1) {
                 url = Util.getProxyURL(params.url);
-            }
-            else {
+            } else {
                 url = params.url;
             }
 
             // Für B-Pläne wird Feature_Count auf 3 gesetzt
             if (params.name === "Festgestellte Bebauungspläne" || params.name === "Sportstätten") {
                 data = "FEATURE_COUNT=3";
-            }
-            else {
+            } else {
                 data = "";
             }
 
@@ -339,8 +323,7 @@ define([
 
                                     if (this.isValidValue(attribute.value)) {
                                         gfi[key] = attribute.value;
-                                    }
-                                    else if (this.isValidValue(attribute.textContent)) {
+                                    } else if (this.isValidValue(attribute.textContent)) {
                                         gfi[key] = attribute.textContent;
                                     }
                                 }, this);
@@ -348,9 +331,7 @@ define([
                                 gfiList.push(gfi);
                             }, this);
                         }
-                    }
-                    // OS (deegree, UMN, Geoserver) is parsed by ol-format
-                    else {
+                    } else { // OS (deegree, UMN, Geoserver) is parsed by ol-format
                         _.each(gfiFeatures, function (feature) {
                             gfiList.push(feature.getProperties());
                         });
@@ -376,8 +357,7 @@ define([
                                     key = this.beautifyString(key);
                                     gfi[key] = value;
                                 }, this);
-                            }
-                            else {
+                            } else {
                                 // map object keys to gfiAttributes from layer model
                                 _.each(preGfi, function (value, key) {
                                     key = params.attributes[key];
@@ -415,76 +395,10 @@ define([
         },
         /** helper function: first letter upperCase, _ becomes " " */
         beautifyString: function (str) {
-                return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
+            return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         sendGFIForPrint: function () {
             EventBus.trigger("gfiForPrint", [this.get("gfiContent")[0], this.get("isPopupVisible")]);
-        },
-
-        /**
-         * Enfernt den "Route-Layer" von der Karte.
-         */
-        clearRoute: function () {
-            this.get("routeLayer").getSource().clear();
-            EventBus.trigger("removeLayer", this.get("routeLayer"));
-        },
-
-        /**
-         * Zeigt die ausgewählte Route.
-         * @param  {String} target - Ziel der Route
-         */
-        showRoute: function (target) {
-            var gfiWithRoute,
-                route,
-                feature;
-
-            // Wählt der Route für das Ziel aus
-            switch (target) {
-                case "AD Horster Dreieck": {
-                    route = "Route6";
-                    break;
-                }
-                case "AD Buchholzer Dreieck": {
-                    route = "Route5";
-                    break;
-                }
-                case "AD HH-Nordwest": {
-                    route = "Route4";
-                    break;
-                }
-                case "Hafen AS HH-Waltershof": {
-                    route = "Route3";
-                    break;
-                }
-                case "Arenen AS HH-Volkspark": {
-                    route = "Route2";
-                    break;
-                }
-                case "Flughafen Hamburg": {
-                    route = "Route1";
-                    break;
-                }
-            }
-
-            // GFI welches die Routen enthält
-            gfiWithRoute = _.find(this.get("gfiContent"), function (element) {
-                return element[route] !== undefined;
-            });
-
-            // Feature mit der gesuchten Route
-            feature = new ol.Feature({
-                geometry: gfiWithRoute[route],
-                name: target
-            });
-            this.get("routeLayer").getSource().clear();
-            this.get("routeLayer").getSource().addFeature(feature);
-
-            EventBus.trigger("addLayer", this.get("routeLayer"));
-            EventBus.trigger("zoomToExtent", feature.getGeometry().getExtent());
-        },
-
-        setProjection: function (proj) {
-            this.set("projection", proj);
         }
     });
 

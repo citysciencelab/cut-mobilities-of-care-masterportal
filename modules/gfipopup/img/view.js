@@ -3,9 +3,9 @@ define([
     "underscore",
     "backbone",
     "text!modules/gfipopup/img/template.html",
-    "modules/gfipopup/img/model",
-    "eventbus"
-], function ($, _, Backbone, ImgTemplate, ImgModel, EventBus) {
+    "modules/gfipopup/img/model"
+], function ($, _, Backbone, ImgTemplate, ImgModel) {
+    "use strict";
     var ImgView = Backbone.View.extend({
         template: _.template(ImgTemplate),
         /**
@@ -37,7 +37,6 @@ define([
         destroy: function () {
             this.unbind();
             this.model.destroy();
-            Backbone.View.prototype.remove.call(this);
         },
         checkReloadVersuch: function () {
             if (this.model.get('reloadVersuch') > this.model.get('reloadMaxVersuche')) {

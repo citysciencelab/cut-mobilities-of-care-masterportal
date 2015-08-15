@@ -4,8 +4,10 @@ define([
     "backbone",
     "text!modules/gfipopup/video/template.html",
     "modules/gfipopup/video/model",
-    "eventbus"
-], function ($, _, Backbone, VideoTemplate, VideoModel, EventBus) {
+    "eventbus",
+    "modules/core/util"
+], function ($, _, Backbone, VideoTemplate, VideoModel, EventBus, Util) {
+    "use strict";
     var VideoView = Backbone.View.extend({
         template: _.template(VideoTemplate),
         /**
@@ -14,11 +16,17 @@ define([
         events: {
             "remove": "destroy"
         },
-
+        /**
+         * Video nur im Desktop-Modus
+         */
         initialize: function (url) {
             this.model = new VideoModel();
             this.model.set('url', url);
-            this.render();
+            if (!Util.isAny()) {
+                this.render();
+            } else {
+                this.$el.html('');
+            }
         },
         /**
          *
@@ -26,7 +34,6 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-//            this.model.starteStreaming();
         },
         /**
          * Removed das Video-Objekt vollständig.
@@ -35,7 +42,6 @@ define([
         destroy: function () {
             this.unbind();
             this.model.destroy();
-            Backbone.View.prototype.remove.call(this);
         }
     });
 

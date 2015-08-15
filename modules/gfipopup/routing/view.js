@@ -6,13 +6,15 @@ define([
     "modules/gfipopup/routing/model",
     "eventbus"
 ], function ($, _, Backbone, VideoTemplate, RoutingModel, EventBus) {
+    "use strict";
     var RoutingView = Backbone.View.extend({
         template: _.template(VideoTemplate),
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
          */
         events: {
-            "remove": "destroy"
+            "remove": "destroy",
+            "click": "startShowingRoute"
         },
 
         initialize: function (ueberschrift, buttontext, route) {
@@ -21,6 +23,14 @@ define([
             this.model.set('buttontext', buttontext);
             this.model.set('route', route);
             this.render();
+        },
+
+        startShowingRoute: function (evt) {
+            // lösche alte Route
+            this.model.clearRoute();
+            var gesuchteRoute = evt.currentTarget.value;
+            this.model.showRoute(gesuchteRoute);
+            EventBus.trigger("showGFIParams");
         },
         /**
          *
@@ -36,7 +46,6 @@ define([
         destroy: function () {
             this.unbind();
             this.model.destroy();
-            Backbone.View.prototype.remove.call(this);
         }
     });
 
