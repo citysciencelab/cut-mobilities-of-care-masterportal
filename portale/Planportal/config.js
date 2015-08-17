@@ -11,7 +11,7 @@ define(function () {
         [
         {id: "453", visible: true},
         {id: "94", visible: false, name: "Luftbilder"},
-        {id: "365", visible: true},
+        {id: "1392", visible: true},
         {id: "1750", visible: false},
         // {id: "522,521,523,524,525,526,527,528,529,530,531,532,533,534,535,536", visible: false},
         {id: "1747", visible: false, name: "Flächennutzungsplan (FNP) ab 1:10000"},
