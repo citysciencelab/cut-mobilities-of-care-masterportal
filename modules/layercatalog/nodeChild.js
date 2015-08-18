@@ -28,7 +28,7 @@ define([
             setNestedViews: function () {
                 var nestedViews = [];
                 _.each(this.get("children"), function (child) {
-                    child.set("layerType", "nodeChildLayer");
+                    child.set("type", "nodeChildLayer");
                     // child.set("parentNode", this);
                     var nodeChildLayer = new NodeChildLayerView({model: child});
                     nestedViews.push(nodeChildLayer);

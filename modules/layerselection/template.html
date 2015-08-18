@@ -6,5 +6,13 @@
         <span class="glyphicon glyphicon-unchecked pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer einschalten"></span>
     <% } %>
     <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
-    <div class="layer-name"><%= name %></div>
+    <% if (isbaselayer === true) { %>
+        <div class="layer-name"><%= name %></div>
+    <% }
+    else if (type === "nodeLayer") { %>
+        <div class="layer-name"><%= metaName %></div>
+    <% }
+    else  { %>
+        <div class="layer-name"><%= name %></div>
+    <% } %>
 </div>
