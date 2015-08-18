@@ -1,5 +1,5 @@
 .layer-catalog-list {
-    max-height: 400px;
+    max-height: 410px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     overflow-y: auto;
     overflow-x: hidden;
@@ -8,6 +8,10 @@
 }
 
 /***** Catalog - Node *****/
+.node {
+    padding: 8px 15px;
+}
+
 .node-content {
     width: 24em;
 }

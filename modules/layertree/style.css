@@ -4,10 +4,10 @@
 }
 
 .dropdown-tree > div, .dropdown-tree > form {
-    background-color: rgb(189, 189, 189);
+    background-color: rgb(200, 200, 200);
     color: #fff;
-    border: 1px solid #fff;
-    padding: 6px;
+    border-bottom: 1px solid #fff;
+    padding: 4px 6px;
     min-width: 380px;
 }
 
