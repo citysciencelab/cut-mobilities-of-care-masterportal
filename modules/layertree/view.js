@@ -32,6 +32,9 @@ define([
             },
             setSelection: function (evt) {
                 this.model.setSelection(evt.target.value);
+                $(".layer-catalog-list").show("slow");
+                $(".layer-catalog-label > .glyphicon").addClass("glyphicon-triangle-bottom");
+                $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-triangle-right");
             },
             toggleCatalog: function () {
                 $(".layer-catalog-list").toggle("slow");
