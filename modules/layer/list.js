@@ -190,7 +190,6 @@ define([
             });
 
             _.each(layerList, function (layer) {
-                console.log(layer);
                 _.each(layer.datasets, function (ds, key) {
                     var newLayer = _.clone(layer);
 
