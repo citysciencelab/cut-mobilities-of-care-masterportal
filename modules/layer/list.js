@@ -72,14 +72,18 @@ define([
                     if (_.has(Config, "tree") && Config.tree.custom === false) {
                         this.sendNodeNames();
                     }
+                    EventBus.trigger("layerlist:updateOverlayerSelection");
                 }
             });
             this.fetchLayer();
         },
 
+        // Holt sich die Layer aus der services-*.json.
+        // Zuvor werden die Geofachdaten aus der Auswahl gelöscht.
         fetchLayer: function () {
+            EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true, "isbaselayer": false}));
+
             this.fetch({
-                reset: true,
                 cache: false,
                 async: false,
                 error: function () {
@@ -348,7 +352,7 @@ define([
                     categoryAttribute = "kategorieInspire";
                     // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
                     modelsByCategory = this.filter(function (element) {
-                        return (typeof element.get(categoryAttribute) === "object" && element.get("baselayer") !== true);
+                        return (typeof element.get(categoryAttribute) === "object" && element.get("isbaselayer") !== true);
                     });
                     break;
                 }
@@ -357,7 +361,7 @@ define([
             _.each(modelsByCategory, function (element) {
                 var categories = element.get(categoryAttribute);
                 // Iteriert über die Kategorien
-                _.each(categories, function (category) {
+                _.each(categories, function (category, index) {
                     // Model wird kopiert
                     var cloneModel = element.clone();
                     // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt

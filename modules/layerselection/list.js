@@ -8,7 +8,7 @@ define([
         initialize: function () {
             // EventBus Listener
             EventBus.on("addModelToSelectionList", this.addModelToList, this);
-            EventBus.on("removeModelFromSelectionList", this.removeModelFromList, this);
+            EventBus.on("removeModelFromSelectionList", this.remove, this);
             EventBus.on("getSelectedVisibleWMSLayer", this.sendVisibleWMSLayer, this);
             // Eigene Listener
             this.listenTo(this, "add", this.addLayerToMap);
@@ -25,13 +25,6 @@ define([
             else {
                 this.add(model, {at: 0});
             }
-        },
-        /**
-         * Löscht ein Model aus der Collection.
-         * @param {Backbone.Model} model - Layer-Model
-         */
-        removeModelFromList: function (model) {
-            this.remove(model);
         },
         /**
          * Triggert das Event "addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).

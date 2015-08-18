@@ -62,6 +62,7 @@ define([
                 }
                 else {
                     this.set("isSelected", true);
+                    this.set("isExpanded", true);
                 }
             },
             toggleSelectedChildren: function () {
