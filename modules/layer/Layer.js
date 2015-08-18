@@ -133,7 +133,7 @@ define([
             else {
                 this.set({selected: true});
             }
-            if (this.get("layerType") === "nodeChildLayer") {
+            if (this.get("type") === "nodeChildLayer") {
                 this.get("parentView").checkSelectedOfAllChildren();
             }
             else {
