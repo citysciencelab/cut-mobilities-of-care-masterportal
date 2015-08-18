@@ -86,7 +86,7 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},     //Karte
             {id: "452", visible: false},    //Luftbild
-            {id: "364", visible: false},    //Stadtteile
+            {id: "2425", visible: false},    //Stadtteile
             {id: "1933", visible: false},   //Haltestellen
             {id:
                 [
