@@ -11,7 +11,7 @@ define([
         className: "modal bs-example-modal-sm legend fade in",
         template: _.template(LegendTemplate),
         initialize: function () {
-            EventBus.trigger("getAllVisibleLayer");
+            EventBus.trigger("layerlist:getVisiblelayerList");
 
             this.listenTo(this.model, {
                 "change:legendParams": this.render

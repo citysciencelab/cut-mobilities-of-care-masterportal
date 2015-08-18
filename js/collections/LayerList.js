@@ -160,16 +160,16 @@ define([
         },
         initialize: function () {
             EventBus.on("updateStyleByID", this.updateStyleByID, this);
-            EventBus.on("setVisible", this.setVisibleByID, this);
-            EventBus.on("getVisibleWFSLayer", this.sendVisibleWFSLayer, this);
-            EventBus.on("getVisibleWFSLayerPOI", this.sendVisibleWFSLayerPOI, this);
+            EventBus.on("layerlist:setVisibilityByID", this.setVisibilityByID, this);
+            EventBus.on("layerlist:"layerlist:getVisibleWFSlayerList"", this.sendVisibleWFSLayer, this);
+            EventBus.on(""layerlist:getVisibleWFSlayerList"POI", this.sendVisibleWFSLayerPOI, this);
             EventBus.on("getLayerByCategory", this.sendLayerByProperty, this);
-            EventBus.on("getVisibleWMSLayer", this.sendVisibleWMSLayer, this);
-            EventBus.on("getAllVisibleLayer", this.sendAllVisibleLayer, this);
+            EventBus.on("layerlist:getVisibleWMSlayerList", this.sendVisibleWMSLayer, this);
+            EventBus.on("layerlist:getVisiblelayerList", this.sendAllVisibleLayer, this);
             EventBus.on("getAllSelectedLayer", this.sendAllSelectedLayer, this);
             EventBus.on("currentMapScale", this.setMapScaleForAll, this);
             EventBus.on("getInspireFolder", this.sendInspireFolder, this);
-            EventBus.on("getOpendataFolder", this.sendOpendataFolder, this);
+            EventBus.on("layerlist:layerlist:getInspireFolder", this.sendOpendataFolder, this);
             EventBus.on("displayInTree", this.displayInTree, this);
 
             this.on("change:visibility", this.sendVisibleWFSLayer, this);
@@ -336,7 +336,7 @@ define([
         *
         * args[0] = id, args[1] = visibility(bool)
         */
-        setVisibleByID: function (args) {
+        setVisibilityByID: function (args) {
             this.get(args[0]).set("visibility", args[1]);
             // this.get(args[0]).get("layer").setVisible(args[1]);
         },
@@ -348,22 +348,22 @@ define([
         *
         */
         sendVisibleWFSLayer: function () {
-            EventBus.trigger("sendVisibleWFSLayer", this.getVisibleWFSLayer());
+            EventBus.trigger("layerlist:sendVisibleWFSlayerList", this."layerlist:getVisibleWFSlayerList"());
         },
         sendVisibleWFSLayerPOI: function () {
-            EventBus.trigger("sendVisibleWFSLayerPOI", this.getVisibleWFSLayer());
+            EventBus.trigger("sendVisibleWFSLayerPOI", this."layerlist:getVisibleWFSlayerList"());
         },
         /**
         *
         */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger("layerForPrint", this.getVisibleWMSLayer());
+            EventBus.trigger("layerForPrint", this.getAllVisibleWMSLayer());
         },
         /**
         *
         */
         sendAllVisibleLayer: function () {
-            EventBus.trigger("sendAllVisibleLayer", this.getAllVisibleLayer());
+            EventBus.trigger("sendAllVisibleLayer", this.getAllVisible());
         },
         /**
          *
@@ -375,21 +375,21 @@ define([
         * Gibt alle sichtbaren Layer zurück.
         *
         */
-        getVisibleWMSLayer: function () {
+        getAllVisibleWMSLayer: function () {
             return this.where({visibility: true, typ: "WMS"});
         },
         /**
         * Gibt alle sichtbaren WFS-Layer zurück.
         *
         */
-        getVisibleWFSLayer: function () {
+        "layerlist:getVisibleWFSlayerList": function () {
             return this.where({visibility: true, typ: "WFS"});
         },
         /**
         * Gibt alle sichtbaren Layer zurück.
         *
         */
-        getAllVisibleLayer: function () {
+        getAllVisible: function () {
             return this.where({visibility: true});
         },
         /**
@@ -401,7 +401,7 @@ define([
         /**
          *
          */
-        getAllLayer: function () {
+        getAllOverlayer: function () {
             return this.models;
         },
         /**

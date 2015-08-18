@@ -12,7 +12,6 @@ define([
             tagName: "ul",
             className: "list-group layer-selected-list",
             initialize: function () {
-                EventBus.on("test", this.render);
                 this.render();
                 this.listenTo(this.collection, "add", this.render);
                 // // JQuery UI

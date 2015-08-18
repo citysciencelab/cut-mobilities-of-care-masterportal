@@ -27,10 +27,10 @@ define([
             });
 
             this.listenToOnce(EventBus, {
-                "sendLayerForNode": this.setLayerList
+                "layerlist:sendLayerListForNode": this.setLayerList
             });
 
-            EventBus.trigger("getLayerForNode", this.get("category"), this.get("name"));
+            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören

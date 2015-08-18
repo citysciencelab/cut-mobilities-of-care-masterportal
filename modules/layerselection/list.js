@@ -89,7 +89,7 @@ define([
          * Triggert das Event "layerForPrint". Übergibt alle Models die ausgewählt und sichtbar sind.
          */
         sendVisibleWMSLayer: function () {
-            EventBus.trigger("sendVisibleWMSLayer", this.where({typ: "WMS", selected: true, visibility: true}));
+            EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({typ: "WMS", selected: true, visibility: true}));
         }
     });
 

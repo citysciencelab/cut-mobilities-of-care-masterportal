@@ -71,9 +71,9 @@ define([
                 this.on("change:searchString", this.setSearchStringRegExp, this);
                 this.on("change:searchString", this.checkStringAndSearch, this);
                 this.on("change:onlyOneStreetName", this.searchHouseNumbers, this);
-                EventBus.on("sendVisibleWFSLayer", this.getFeaturesForSearch, this);
+                EventBus.on("layerlist:sendVisibleWFSlayerList", this.getFeaturesForSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
-                EventBus.on("sendAllLayer", this.getLayerForSearch, this);
+                EventBus.on("layerlist:sendOverlayerList", this.getLayerForSearch, this);
                 EventBus.on("sendNodeChild", this.getNodesForSearch, this);
 
                 this.set("isSearchReady", new SearchReady());
@@ -104,8 +104,8 @@ define([
                     this.set("quickHelp", false);
                 }
                 EventBus.trigger("addOverlay", this.get("marker"));
-                EventBus.trigger("layerlist:getAllOverlayer");
-                EventBus.trigger("layerlist:getAllVisibleWFSLayer");
+                EventBus.trigger("layerlist:getOverlayerList");
+                EventBus.trigger("layerlist:getVisibleWFSlayerList");
             },
 
             /**
@@ -420,7 +420,7 @@ define([
                     var layerName = layer.name.replace(/ /g, ""),
                         metaName;
 
-                    if (layer.metaName !== undefined) {
+                    if (layer.metaName !== null) {
                         metaName = layer.metaName.replace(/ /g, "");
                         if (layerName.search(this.get("searchStringRegExp")) !== -1 || metaName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", layer);

@@ -25,49 +25,93 @@ define([
                 return new GeoJSONLayer(attrs, options);
             }
         },
+
+        initialize: function () {
+            this.listenTo(EventBus, {
+                "layerlist:getOverlayerList": function () {
+                    EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
+                },
+                "layerlist:getBaselayerList": function () {
+                    EventBus.trigger("layerlist:sendBaselayerList", this.where({isbaselayer: true}));
+                },
+                "layerlist:getVisiblelayerList": function () {
+                    EventBus.trigger("layerlist:sendVisiblelayerList", this.where({visibility: true}));
+                },
+                "layerlist:getVisibleWMSlayerList": function () {
+                    EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({visibility: true, typ: "WMS"}));
+                },
+                "layerlist:getVisibleWFSlayerList": function () {
+                    EventBus.trigger("layerlist:sendVisibleWFSlayerList", this.where({visibility: true, typ: "WFS"}));
+                },
+                "layerlist:getLayerByID": function (id) {
+                    EventBus.trigger("layerlist:sendLayerByID", this.get(id));
+                },
+                "layerlist:setVisibilityByID": this.setVisibilityByID,
+                "layerlist:updateStyleByID": this.updateStyleByID,
+                "layerlist:displayInTreeByID": this.displayInTreeByID,
+                "getNodeNames": this.sendNodeNames,
+                "layerlist:getLayerListForNode": this.sendLayerListForNode,
+                "layerlist:getInspireFolder": this.fetchLayer,
+                "layerlist:getOpendataFolder": this.fetchLayer,
+                "addFeatures": this.addFeatures,
+                "removeFeatures": this.removeFeatures
+            });
+            this.listenTo(this, {
+                "add": function (model) {
+                    EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                },
+                "remove": function (model) {
+                    EventBus.trigger("removeLayer", model.get("layer"));
+                },
+                "change:visibility": function () {
+                    EventBus.trigger("layerlist:sendVisibleWFSlayerList", this.where({visibility: true, typ: "WFS"}));
+                    EventBus.trigger("layerlist:sendVisiblelayerList", this.where({visibility: true}));
+                },
+                "sync": function () {
+                    EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
+                    if (_.has(Config, "tree") && Config.tree.custom === false) {
+                        this.sendNodeNames();
+                    }
+                }
+            });
+            this.fetchLayer();
+        },
+
+        fetchLayer: function () {
+            this.fetch({
+                reset: true,
+                cache: false,
+                async: false,
+                error: function () {
+                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
+                },
+                success: function (collection) {
+                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
+                    if (_.has(Config, "tree") && Config.tree.custom === false) {
+                        collection.resetModels();
+                    }
+                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
+                    collection.cloneByStyle();
+                }
+            });
+        },
+
         parse: function (response) {
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config, "tree") && Config.tree.custom === false) {
-                var wmsLayer,
-                    datasetLayer = [],
-                    cacheLayer,
-                    cacheLayerIDs = [];
-
-                // nur vom Typ WMS die einem Datensatz zugeordnet sind
-                wmsLayer = _.filter(_.where(response, {typ: "WMS"}), function (element) {
-
-                    // für WMS-Layer mit mehr als 1 Datensatz: erzeuge pro Datensatz 1 zusätzlichen Layer
-                    if (element.datasets.length > 1) {
-                        _.each(element.datasets, function (ds, key) {
-                            var layer = _.clone(element);
-
-                            layer.id = layer.id + "_" + key;
-                            layer.datasets = [ds];
-                            datasetLayer.push(layer);
-                        });
-                    }
-                    // wms layer mit mehr als 1 Datensatz werden oben behandelt, layer mit 0 Datensätzen wollen wir nicht
-                    return element.datasets.length === 1;
+                // nur vom Typ WMS
+                response = _.where(response, {typ: "WMS"});
+                // nur Layer die min. einen Datensatz zugeordnet sind
+                response = _.filter(response, function (element) {
+                    element.isbaselayer = false;
+                    return element.datasets.length > 0;
                 });
-
-                // füge die zusätzlich pro Datensatz erzeugten Layer hinzu
-                _.each(datasetLayer, function (layer) {
-                    wmsLayer.push(layer);
-                });
-
-                // Layer die als Cache vorhanden sind
-                cacheLayer = _.where(wmsLayer, {cache: true});
-                // Datensatz-IDs der Caches
-                _.each(cacheLayer, function (layer) {
-                    cacheLayerIDs.push(layer.datasets[0].md_id);
-                });
-
-                // Datensaetze die im Cache schon dargestellt werden, werden entfernt
-                return _.reject(wmsLayer, function (element) {
-                    if (_.contains(cacheLayerIDs, element.datasets[0].md_id) && element.cache === false) {
-                        return element;
-                    }
-                });
+                response = this.deleteLayersIncludeCache(response);
+                response = this.mergeLayerByIDs(response);
+                response = this.mergeLayerByMetaIDs(response);
+                this.setBaseLayer(response);
+                response = this.createLayerPerDatasate(response);
+                return response;
             }
             // Ansonsten Layer über ID
             else if (_.has(Config, "layerIDs")) {
@@ -124,215 +168,165 @@ define([
                 return modelsArray;
             }
         },
-        initialize: function () {
 
-            this.listenTo(EventBus, {
-                "layerlist:getAllOverlayer": this.sendAllLayer,
-                "layerlist:getAllBaselayer": this.sendBaseLayer,
-                "layerlist:getAllVisible": this.sendAllVisibleLayer,
-                "layerlist:getAllVisibleWMSLayer": this.sendVisibleWMSLayer,
-                "layerlist:getAllVisibleWFSLayer": this.sendVisibleWFSLayer,
-                "layerlist:getLayerByID": this.sendModelByID,
-                "layerlist:setVisibilityByID": this.setVisibilityByID,
-                "addFeatures": this.addFeatures,
-                "removeFeatures": this.removeFeatures,
-                "getNodeNames": this.sendNodeNames,
-                "getLayerForNode": this.sendLayerForNode,
-                "layerlist:updateStyleByID": this.updateStyleByID,
-                "layerlist:displayInTreeByID": this.displayInTreeByID,
-                "layerlist:getInspireFolder": this.sendInspireFolder,
-                "layerlist:getOpendataFolder": this.sendOpendataFolder
+        // Entfernt alle Layer, die bereits im Cache dargestellt werden.
+        deleteLayersIncludeCache: function (response) {
+            var cacheLayerMetaIDs = [],
+                cacheLayer = _.where(response, {cache: true});
+
+            _.each(cacheLayer, function (layer) {
+                cacheLayerMetaIDs.push(layer.datasets[0].md_id);
             });
 
-            this.listenTo(this, {
-                "add": this.addLayerToMap,
-                "remove": this.removeLayerFromMap,
-                "change:visibility": function () {
-                    this.sendVisibleWFSLayer();
-                    this.sendAllVisibleLayer();
-                }
-            });
-
-            this.fetch({
-                cache: false,
-                async: false,
-                error: function () {
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
-                },
-                success: function (collection) {
-                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (_.has(Config, "tree") && Config.tree.custom === false) {
-                        collection.mergeByID();
-                        collection.mergeByMetaID();
-                        collection.resetModels();
-                    }
-                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
-                    collection.cloneByStyle();
-                }
+            return _.reject(response, function (element) {
+                return _.contains(cacheLayerMetaIDs, element.datasets[0].md_id) && element.cache === false;
             });
         },
 
-        /**
-         * Triggert das Event "map:addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).
-         */
-        addLayerToMap: function (model) {
-            EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
-        },
-
-        // Gibt ein Array von allen Layern zurück, die den Attributen im übergebenen Object entsprechen.
-        getLayersWhere: function (object) {
-            return this.where(object);
-        },
-
-        // Gibt alle Layer zurück, die kein Baselayer sind.
-        getAllOverlayer: function () {
-            var layerList,
-                baseLayerIDList = _.pluck(this.getAllBaselayer(), "id");
-
-            layerList = _.filter(this.models, function (model) {
-                return _.contains(baseLayerIDList, model.id) === false;
+        // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt.
+        createLayerPerDatasate: function (response) {
+            var layerList = _.filter(response, function (element) {
+                return element.datasets.length > 1;
             });
 
-            return layerList;
+            _.each(layerList, function (layer) {
+                console.log(layer);
+                _.each(layer.datasets, function (ds, key) {
+                    var newLayer = _.clone(layer);
+
+                    newLayer.id = layer.id + "_" + key;
+                    newLayer.datasets = [ds];
+                    response.push(newLayer);
+                });
+            });
+            return response;
         },
 
-        // Gibt alle Baselayer zurück.
-        getAllBaselayer: function () {
-            var layerlist = [];
+        // Layer mit gleicher Metadaten-ID werden zu einem neuem Layer zusammengefasst.
+        // Layer die gruppiert werden sollen, werden über Config.tree.metaIDsForMerge gesteuert.
+        // Die zusammenfassenden alten Layer werden rausgefiltert.
+        mergeLayerByMetaIDs: function (response) {
+            var newLayer;
 
-            _.each(Config.baseLayer, function (layer) {
-                var model = this.findWhere({"id": layer.id});
+            _.each(Config.tree.metaIDsForMerge, function (metaID) {
+                var layersByID = _.filter(response, function (layer) {
+                    return layer.datasets[0].md_id === metaID;
+                });
 
-                model.set("isbaselayer", true);
-                layerlist.push(model.set(layer));
+                newLayer = _.clone(layersByID[0]);
+                newLayer.name = layersByID[0].datasets[0].md_name;
+                newLayer.layers = _.pluck(layersByID, "layers").toString();
+                newLayer.maxScale = _.max(_.pluck(layersByID, "maxScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                newLayer.minScale = _.min(_.pluck(layersByID, "minScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                response = _.difference(response, layersByID);
+                response.push(newLayer);
+            });
+            return response;
+        },
+
+        // Mehrere Layer werden zu einem neuem Layer über ihre ID zusammengefasst.
+        // Layer die gruppiert werden sollen, werden über Config.tree.layerIDsForMerge gesteuert.
+        // Die zusammenfassenden alten Layer werden entfernt.
+        mergeLayerByIDs: function (response) {
+            _.each(Config.tree.layerIDsForMerge, function (layerIDs) {
+                var layersByID,
+                    newLayer;
+
+                layersByID = _.filter(response, function (layer) {
+                    return _.contains(layerIDs, layer.id);
+                });
+                newLayer = _.clone(layersByID[0]);
+                newLayer.layers = _.pluck(layersByID, "layers").toString();
+                newLayer.maxScale = _.max(_.pluck(layersByID, "maxScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                newLayer.minScale = _.min(_.pluck(layersByID, "minScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                response = _.difference(response, layersByID);
+                response.push(newLayer);
+            });
+            return response;
+        },
+
+        // Hier werden die Geobasisdaten gesetzt. Wird über Config.baseLayer gesteuert.
+        setBaseLayer: function (response) {
+            var baseLayerIDs = _.pluck(Config.baseLayer, "id"),
+                layersByID;
+
+            layersByID = _.filter(response, function (layer) {
+                return _.contains(baseLayerIDs, layer.id);
+            });
+            _.each(layersByID, function (layer) {
+                var baseLayer = _.findWhere(Config.baseLayer, {"id": layer.id});
+
+                layer = _.extend(layer, baseLayer);
+                layer.isbaselayer = true;
+            });
+        },
+
+        // Hier werden Layer verarbeitet für die es nur eine ID gibt, aber mehrere Styles. Zum Beipsiel der HVV-Dienst.
+        // Wenn ein Model mehr als einen Style hat, wird pro Style ein neues Model erzeugt. Die ID setzt sich aus dem Style und der ID des "alten" Models zusammen.
+        // Das "alte" Model wird danach, wenn es sich dabei um ein "Singel-Model" handelt, gelöscht. "Gruppen-Models" werden lediglich aktualisiert.
+        cloneByStyle: function () {
+            // "Single" - Layer die mehrere Styles haben
+            var modelsByStyle = this.filter(function (model) {
+                return typeof model.get("styles") === "object" && model.get("typ") === "WMS";
+            });
+
+            // Iteriert über die Models
+            _.each(modelsByStyle, function (model) {
+                // Iteriert über die Styles
+                _.each(model.get("styles"), function (style, index) {
+                    // Model wird kopiert
+                    var cloneModel = model.clone();
+                    // Die Attribute name und die ID werden für das kopierte Model gesetzt
+                    cloneModel.set("name", model.get("name")[index]);
+                    cloneModel.set("id", model.get("id") + model.get("styles")[index]);
+                    // Die Source vom Model/Layer bekommt ein Update(neuen Style)
+                    cloneModel.get("source").updateParams({STYLES: model.get("styles")[index]});
+                    // Model wird der Collection hinzugefügt
+                    this.add(cloneModel, {merge: true, at: this.indexOf(model)});
+                }, this);
             }, this);
+            // Die ursprüngliche Models werden gelöscht
+            this.remove(modelsByStyle);
 
-            return layerlist;
-        },
+            // Groupen-Layer deren Childlayer sich nur im Style unterscheiden
+            var modelsByStyle = this.filter(function (model) {
+                return typeof model.get("styles") === "object" && model.get("typ") === "GROUP";
+            });
 
-        // Gibt alle sichtbaren Layer zurück.
-        // getAllVisible: function () {
-        //     return this.where({visibility: true});
-        // },
-
-        // Gibt alle sichtbaren WMS-Layer zurück.
-        // getAllVisibleWMSLayer: function () {
-        //     return this.where({visibility: true, typ: "WMS"});
-        // },
-
-        // Gibt alle sichtbaren WFS-Layer zurück.
-        // getAllVisibleWFSLayer: function () {
-        //     return this.where({visibility: true, typ: "WFS"});
-        // },
-
-        // Gibt den Layer zur ID zurück.
-        getLayerByID: function (id) {
-            return this.get(id);
+            // Iteriert über die Models
+            _.each(modelsByStyle, function (model) {
+                // Iteriert über die Childlayer
+                model.get("layer").getLayers().forEach(function (layer, index) {
+                    // Das STYLES-Attribut der Source wird überschrieben
+                    layer.getSource().updateParams({STYLES: model.get("styles")[index]});
+                });
+            });
         },
 
         // Setzt die Sichtbarkeit für einen Layer.
         setVisibilityByID: function (id, bool) {
-            this.getLayerByID(id).set("visibility", bool);
+            this.get(id).set("visibility", bool);
         },
 
-        addFeatures: function (name, features) {
-            var model = this.findWhere({name: name});
-
-            if (model !== undefined) {
-                model.addFeatures(features);
-            }
-            else {
-                this.add({
-                    typ: "GeoJSON",
-                    name: name,
-                    features: features
-                });
-            }
+        // Aktualisiert den Style vom Layer bzw. den Parameter "SLD_BODY".
+        updateStyleByID: function (args) {
+            this.get(args[0]).get("source").updateParams({SLD_BODY: args[1]});
+            this.get(args[0]).set("SLDBody", args[1]); // listener im Model --> updateParams
         },
 
-        /**
-         *
-         */
-        removeFeatures: function (name) {
-            var model = this.findWhere({name: name});
-
-            model.removeFeatures();
+        // Setzt den Parameter "displayInTree".
+        displayInTreeByID: function (args) {
+            this.get(args[0]).set("displayInTree", args[1]);
         },
 
-        mergeByID: function () {
-            var modelByID,
-                firstModel,
-                minScale = [],
-                maxScale = [],
-                layerList = "";
-
-            // Iteriert über die ID's aus der Config
-            _.each(Config.tree.groupBaseLayerByID, function (ids) {
-                firstModel = this.get(ids[0]).clone();
-                                // console.log(firstModel);
-                _.each(ids, function (id) {
-                    modelByID = this.get(id);
-                    layerList += "," + modelByID.get("layers");
-                    minScale.push(parseInt(modelByID.get("minScale"), 10));
-                    maxScale.push(parseInt(modelByID.get("maxScale"), 10));
-                    this.remove(modelByID);
-                }, this);
-
-                firstModel.set("maxScale", _.max(maxScale));
-                firstModel.set("minScale", _.min(minScale));
-                firstModel.set("layers", layerList.slice(1, layerList.length));
-                firstModel.set("isbaselayer", true);
-                this.add(firstModel);
-                firstModel.reload();
-                // console.log(firstModel);
-            }, this);
-        },
-
-        deleteByID: function () {
-            var modelByID;
-
-            // Iteriert über die ID's aus der Config
-            _.each(Config.tree.groupBaseLayerByID, function (ids) {
-                _.each(ids, function (id) {
-                    modelByID = this.get(id);
-                    this.remove(modelByID);
-                }, this);
-            }, this);
-        },
-        /**
-         * FNP, LAPRO und etc. werden zu einem Model zusammengefasst. Layer die gruppiert werden sollen, werden über Config.tree.groupLayer gesteuert.
-         */
-        mergeByMetaID: function () {
-            // Iteriert über die Metadaten-ID's aus der Config
-            _.each(Config.tree.groupLayerByID, function (id) {
-                // Alle Models mit der Metadaten-ID
-                var modelsByID = this.where({"metaID": id, "cache": false}),
-                    layerList = ""; // Der Parameter "layers" aus allen Models wird in einer Variable als String gespeichert.
-
-                _.each(modelsByID, function (model) {
-                    layerList += "," + model.get("layers");
-                });
-                // Layer aus einem Dienst können unterschiedliche Scales haben (z.B. ALKIS).
-                // Daher wird das Model mit dem niedrigsten und das mit dem höchsten Wert gesucht.
-                var minScaleModel = _.min(modelsByID, function (model) {
-                    return parseInt(model.get("minScale"), 10);
-                }),
-                maxScaleModel = _.max(modelsByID, function (model) {
-                    return parseInt(model.get("maxScale"), 10);
-                });
-                // Die Parameter "maxScale", "minScale", "layers" und "name" werden beim ersten Model aus der Liste überschrieben.
-                modelsByID[0].set("layers", layerList.slice(1, layerList.length));
-                modelsByID[0].set("name", modelsByID[0].get("metaName"));
-                modelsByID[0].set("maxScale", maxScaleModel.get("maxScale"));
-                modelsByID[0].set("minScale", minScaleModel.get("minScale"));
-                // Das erste Model aus der Liste wird kopiert.
-                var firstModel = modelsByID[0].clone();
-                // Die Liste der Models wird aus der Collection gelöscht.
-                this.remove(modelsByID);
-                // Das kopierte Model wird zur Collection hinzugefügt.
-                this.add(firstModel);
-            }, this);
-        },
         /**
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.
          * Das "alte" Model das alle Kategorien enthält wird gelöscht. Damit ist jedes Model einer bestimmten Kategorie zugeordnet.
@@ -377,131 +371,8 @@ define([
                 this.remove(element);
             }, this);
         },
-        /**
-         * Hier werden Layer verarbeitet für die es nur eine ID gibt, aber mehrere Styles. Zum Beipsiel der HVV-Dienst.
-         * Wenn ein Model mehr als einen Style hat, wird pro Style ein neues Model erzeugt. Die ID setzt sich aus dem Style und der ID des "alten" Models zusammen.
-         * Das "alte" Model wird danach, wenn es sich dabei um ein "Singel-Model" handelt, gelöscht. "Gruppen-Models" werden lediglich aktualisiert.
-         */
-        cloneByStyle: function () {
-            // "Single" - Layer die mehrere Styles haben
-            var modelsByStyle = this.filter(function (model) {
-                return typeof model.get("styles") === "object" && model.get("typ") === "WMS";
-            });
-            // Iteriert über die Models
-            _.each(modelsByStyle, function (model) {
-                // Iteriert über die Styles
-                _.each(model.get("styles"), function (style, index) {
-                    // Model wird kopiert
-                    var cloneModel = model.clone();
-                    // Die Attribute name und die ID werden für das kopierte Model gesetzt
-                    cloneModel.set("name", model.get("name")[index]);
-                    cloneModel.set("id", model.get("id") + model.get("styles")[index]);
-                    // Die Source vom Model/Layer bekommt ein Update(neuen Style)
-                    cloneModel.get("source").updateParams({STYLES: model.get("styles")[index]});
-                    // Model wird der Collection hinzugefügt
-                    this.add(cloneModel, {merge: true, at: this.indexOf(model)});
-                }, this);
-            }, this);
-            // Die ursprüngliche Models werden gelöscht
-            this.remove(modelsByStyle);
 
-            // Groupen-Layer deren Childlayer sich nur im Style unterscheiden
-            var modelsByStyle = this.filter(function (model) {
-                return typeof model.get("styles") === "object" && model.get("typ") === "GROUP";
-            });
-            // Iteriert über die Models
-            _.each(modelsByStyle, function (model) {
-                // Iteriert über die Childlayer
-                model.get("layer").getLayers().forEach(function (layer, index) {
-                    // Das STYLES-Attribut der Source wird überschrieben
-                    layer.getSource().updateParams({STYLES: model.get("styles")[index]});
-                });
-            });
-        },
-
-        /**
-        * [getLayerByProperty description]
-        * @param {[type]} key   [description]
-        * @param {[type]} value [description]
-        */
-        getLayerByProperty: function (key, value) {
-            return this.filter(function (model) {
-                if (model.get("isbaselayer") === false) {
-                    if (typeof model.get(key) === "object") { // console.log(model.get(key));
-                        return _.contains(model.get(key), value);
-                    }
-                    else {
-                        // else noch nicht getestet
-                        return model.get(key) === value;
-                    }
-                }
-            });
-        },
-        sendLayerByProperty: function (key, value) {
-            EventBus.trigger("sendLayerByProperty", this.getLayerByProperty(key, value));
-        },
-        /**
-        * Aktualisiert den Style vom Layer mit SLD_BODY.
-        * SLD_BODY wird hier gesetzt. Wird in Print.js für das Drucken von gefilterten Objekten gebraucht.
-        * args[0] = id, args[1] = SLD_Body
-        */
-        updateStyleByID: function (args) {
-            this.get(args[0]).get("source").updateParams({SLD_BODY: args[1]});
-            this.get(args[0]).set("SLDBody", args[1]);
-        },
-        /**
-         *
-         */
-        sendModelByID: function (arg) {
-            EventBus.trigger("sendModelByID", this.get(arg));
-        },
-
-        displayInTreeByID: function (args) {
-            this.get(args[0]).set("displayInTree", args[1]);
-            // this.get(args[0]).get("layer").setVisible(args[1]);
-        },
-        /**
-        *
-        */
-        sendVisibleWFSLayer: function () {
-            EventBus.trigger("sendVisibleWFSLayer", this.getLayersWhere({visibility: true, typ: "WFS"}));
-        },
-        /**
-        *
-        */
-        sendVisibleWMSLayer: function () {
-            EventBus.trigger("sendVisibleWMSLayer", this.getLayersWhere({visibility: true, typ: "WMS"}));
-        },
-        /**
-        *
-        */
-        sendAllVisibleLayer: function () {
-            EventBus.trigger("sendAllVisibleLayer", this.getLayersWhere({visibility: true}));
-        },
-
-        /**
-         *
-         */
-        sendAllLayer: function () {
-            EventBus.trigger("sendAllLayer", this.getAllOverlayer());
-        },
-
-        sendBaseLayer: function () {
-            EventBus.trigger("sendBaseLayer", this.getAllBaselayer());
-        },
-
-        /**
-         *
-         */
-         setMapScaleForAll: function (scale) {
-             this.forEach(function (model) {
-                 model.set("currentScale", scale);
-             });
-        },
-        /**
-         * Schiebt das Model in der Collection eine Position nach oben.
-         * @param {Backbone.Model} model - Layer-Model
-         */
+        // Schiebt das Model in der Collection eine Position nach oben.
          moveModelUp: function (model) {
             var fromIndex = this.indexOf(model),
                 toIndex = fromIndex + 1;
@@ -511,11 +382,9 @@ define([
                 this.add(model, {at: toIndex});
             }
         },
-        /**
-         * Schiebt das Model in der Collection eine Position nach unten.
-         * @param {Backbone.Model} model - Layer-Model
-         */
-         moveModelDown: function (model) {
+
+        // Schiebt das Model in der Collection eine Position nach unten.
+        moveModelDown: function (model) {
             var fromIndex = this.indexOf(model),
                 toIndex = fromIndex - 1;
 
@@ -524,20 +393,7 @@ define([
                 this.add(model, {at: toIndex});
             }
         },
-        /**
-         * Triggert das Event "addLayerToIndex". Übergibt das "layer"-Attribut und den Index vom Model (ol.layer).
-         * @param {Backbone.Model} model - Layer-Model
-         */
-        addLayerToMap: function (model) {
-            EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
-        },
-        /**
-         * Triggert das Event "removeLayer". Übergibt das "layer"-Attribut vom Model (ol.layer).
-         * @param {Backbone.Model} model - Layer-Model
-         */
-        removeLayerFromMap: function (model) {
-           EventBus.trigger("removeLayer", model.get("layer"));
-        },
+
         sendNodeNames: function () {
             if (Config.tree.orderBy === "opendata") {
                 EventBus.trigger("sendNodeNames", this.getOpendataFolder());
@@ -546,20 +402,16 @@ define([
                 EventBus.trigger("sendNodeNames", this.getInspireFolder());
             }
         },
-        sendLayerForNode: function (category, nodeName) {
-            // model.get("isbaselayer") === false
+        sendLayerListForNode: function (category, nodeName) {
             if (category === "opendata") {
-                EventBus.trigger("sendLayerForNode", this.where({kategorieOpendata: nodeName, isbaselayer: false}));
-                // console.log(this.where({kategorieOpendata: nodeName}));
+                EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieOpendata: nodeName, isbaselayer: false}));
             }
             else if (category === "inspire") {
-                EventBus.trigger("sendLayerForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
+                EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
             }
             else {
-                // console.log(nodeName);
-                EventBus.trigger("sendLayerForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
+                EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
             }
-            // console.log(category + " " + nodeName);
         },
         getInspireFolder: function () {
             return _.uniq(_.flatten(this.pluck("kategorieInspire")));
@@ -567,52 +419,26 @@ define([
         getOpendataFolder: function () {
             return _.uniq(_.flatten(this.pluck("kategorieOpendata")));
         },
-        sendInspireFolder: function () {
-            this.fetch({
-                reset: true,
-                cache: false,
-                async: false,
-                error: function () {
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
-                },
-                success: function (collection) {
-                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (_.has(Config, "tree") && Config.tree.custom === false) {
-                        // collection.mergeByID();
-                        collection.deleteByID();
-                        collection.mergeByMetaID();
-                        collection.resetModels();
-                    }
-                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
-                    collection.cloneByStyle();
-                    collection.sendNodeNames();
-                    // EventBus.trigger("sendInspireFolder", collection.getInspireFolder());
-                    EventBus.trigger("sendAllLayer", collection.getAllOverlayer());
-                }
-            });
+
+        addFeatures: function (name, features) {
+            var model = this.findWhere({name: name});
+
+            if (model !== undefined) {
+                model.addFeatures(features);
+            }
+            else {
+                this.add({
+                    typ: "GeoJSON",
+                    name: name,
+                    features: features
+                });
+            }
         },
-        sendOpendataFolder: function () {
-            this.fetch({
-                reset: true,
-                cache: false,
-                async: false,
-                error: function () {
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
-                },
-                success: function (collection) {
-                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (_.has(Config, "tree") && Config.tree.custom === false) {
-                        collection.deleteByID();
-                        collection.mergeByMetaID();
-                        collection.resetModels();
-                    }
-                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
-                    collection.cloneByStyle();
-                    collection.sendNodeNames();
-                    // EventBus.trigger("sendOpendataFolder", collection.getOpendataFolder());
-                    EventBus.trigger("sendAllLayer", collection.getAllOverlayer());
-                }
-            });
+
+        removeFeatures: function (name) {
+            var model = this.findWhere({name: name});
+
+            model.removeFeatures();
         }
     });
 

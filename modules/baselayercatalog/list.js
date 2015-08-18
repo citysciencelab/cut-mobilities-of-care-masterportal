@@ -7,8 +7,8 @@ define([
     var List = Backbone.Collection.extend({
 
         initialize: function () {
-            EventBus.on("sendBaseLayer", this.addBaseLayer, this);
-            EventBus.trigger("getBaseLayer");
+            EventBus.on("layerlist:sendBaselayerList", this.addBaseLayer, this);
+            EventBus.trigger("layerlist:getBaselayerList");
         },
 
         addBaseLayer: function (baselayer) {
