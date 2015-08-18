@@ -12,6 +12,7 @@ define(function () {
             metaIDsForMerge: [
                 "B6A59A2B-2D40-4676-9094-0EB73039ED34", // Geobasiskarten
                 "38575F13-7FA2-4F26-973F-EDED24D937E5", // Landesgrundbesitzverzeichnis
+                "CD1AA43B-9C7E-4E85-B0A3-8619101D0517", // Landesgrundbesitzverzeichnis FHHNet
                 "757A328B-415C-4E5A-A696-353ABDC80419", // ParkraumGIS
                 "335B680C-CA3E-4FE9-BC05-641BA565E366", // Lärmminderungsplanung, Fluglärm
                 "3EE8938B-FF9E-467B-AAA2-8534BB505580", // Bauschutzbereich § 12 LuftVG Hamburg
