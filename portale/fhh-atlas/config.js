@@ -23,8 +23,8 @@ define(function () {
             {id: "453", visibility: false, minResolution: 0.2645838625010583, minScale: "1000"},
             {id: "8", visibility: false},
             {id: "717", visibility: true, minResolution: 0.2645838625010583, minScale: "1000"},
-            {id: "368", visibility: false, name: "ALKIS farbig"},
-            {id: "149", visibility: false, name: "ALKIS grau-blau"}
+            {id: "368", visibility: false, name: "ALKIS farbig", maxResolution: 5.2916772500211667, maxScale: "10000"},
+            {id: "149", visibility: false, name: "ALKIS grau-blau", maxResolution: 5.2916772500211667, maxScale: "10000"}
         ],
         footer: true,
         quickHelp: true,
