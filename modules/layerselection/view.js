@@ -4,13 +4,15 @@ define([
     "backbone",
     "text!modules/layerselection/template.html",
     "text!modules/layerselection/templateSettings.html",
+    "text!modules/layerselection/templateAttribution.html",
     "eventbus"
-], function ($, _, Backbone, Template, SettingTemplate, EventBus) {
+], function ($, _, Backbone, Template, SettingTemplate, AttributionTempate, EventBus) {
 
     var view = Backbone.View.extend({
         tagName: "li",
         className: "list-group-item",
         template: _.template(Template),
+        templateAttribution: _.template(AttributionTempate),
         templateSetting: _.template(SettingTemplate),
         templateButton: _.template("<div class='layer-toggle-button pull-right' data-toggle='tooltip' data-placement='bottom' title='Einstellungen'><span class='glyphicon glyphicon-cog rotate'></span></div>"),
         events: {
@@ -40,6 +42,13 @@ define([
             }
             else {
                 this.$(".layer-toggle-button").after(this.template(attr));
+            }
+            if (this.model.get("visibility") === true && this.model.get("layerAttribution") !== "nicht vorhanden") {
+                $("#" + this.model.get("id")).remove();
+                $("#hinweise").append(this.templateAttribution(attr));
+            }
+            else {
+                $("#" + this.model.get("id")).remove();
             }
             this.toggleStyle();
             return this;
