@@ -19,6 +19,7 @@ define([
             this.listenTo(this, "change:visibility", this.setVisibility);
             this.listenTo(this, "change:minResolution", this.setMinResoForLayer);
             this.listenTo(this, "change:maxResolution", this.setMaxResoForLayer);
+            this.listenTo(this, "change:SLDBody", this.updateSourceSLDBody);
             // NOTE wen#n displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
             // if (this.get("displayInTree") === false) {
             //     this.set("gfiAttributes", false);

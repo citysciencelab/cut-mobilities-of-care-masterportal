@@ -62,7 +62,7 @@ define([
         },
         setListenerForVisibility: function (model) {
             model.listenTo(model, "change:visibility", function () {
-                EventBus.trigger("layerlist:setVisibilityByID", "2298", model.get("visibility"));
+                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": model.get("visibility")});
             });
         },
         parse: function (response) {
@@ -260,20 +260,16 @@ define([
             }
         },
         updateStyleByID: function () {
-            EventBus.trigger("layerlist:updateStyleByID", ["182", this.get("SLDBody")]);
+            EventBus.trigger("layerlist:setAttributionsByID", "182", {"SLDBody": this.get("SLDBody")});
             if (this.get("isFilter") === true) {
-                EventBus.trigger("layerlist:displayInTreeByID", ["2297", false]);
-                EventBus.trigger("layerlist:displayInTreeByID", ["182", true]);
-                EventBus.trigger("layerlist:setVisibilityByID", "2297", false);
-                EventBus.trigger("layerlist:setVisibilityByID", "182", true);
-                EventBus.trigger("layerlist:setVisibilityByID", "2298", true);
+                EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": false, "visibility": false});
+                EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": true, "visibility": true});
+                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": true});
             }
             else {
-                EventBus.trigger("layerlist:displayInTreeByID", ["2297", true]);
-                EventBus.trigger("layerlist:displayInTreeByID", ["182", false]);
-                EventBus.trigger("layerlist:setVisibilityByID", "2297", true);
-                EventBus.trigger("layerlist:setVisibilityByID", "182", false);
-                EventBus.trigger("layerlist:setVisibilityByID", "2298", false);
+                EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": true, "visibility": true});
+                EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": false, "visibility": false});
+                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": false});
             }
         },
         removeFilter: function () {

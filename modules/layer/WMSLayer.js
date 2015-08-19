@@ -110,6 +110,10 @@ define([
             else {
                 this.set("layer", new ol.layer.Image(layerobjects));
             }
+        },
+
+        updateSourceSLDBody: function () {
+            this.get("source").updateParams({SLD_BODY: this.get("SLDBody")});
         }
     });
 

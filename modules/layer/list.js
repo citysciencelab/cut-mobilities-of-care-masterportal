@@ -46,9 +46,9 @@ define([
                 "layerlist:getLayerByID": function (id) {
                     EventBus.trigger("layerlist:sendLayerByID", this.get(id));
                 },
-                "layerlist:setVisibilityByID": this.setVisibilityByID,
-                "layerlist:updateStyleByID": this.updateStyleByID,
-                "layerlist:displayInTreeByID": this.displayInTreeByID,
+                "layerlist:setAttributionsByID": function (id, attrs) {
+                    this.get(id).set(attrs);
+                },
                 "getNodeNames": this.sendNodeNames,
                 "layerlist:getLayerListForNode": this.sendLayerListForNode,
                 "layerlist:getInspireFolder": this.fetchLayer,
@@ -314,22 +314,6 @@ define([
             });
         },
 
-        // Setzt die Sichtbarkeit für einen Layer.
-        setVisibilityByID: function (id, bool) {
-            this.get(id).set("visibility", bool);
-        },
-
-        // Aktualisiert den Style vom Layer bzw. den Parameter "SLD_BODY".
-        updateStyleByID: function (args) {
-            this.get(args[0]).get("source").updateParams({SLD_BODY: args[1]});
-            this.get(args[0]).set("SLDBody", args[1]); // listener im Model --> updateParams
-        },
-
-        // Setzt den Parameter "displayInTree".
-        displayInTreeByID: function (args) {
-            this.get(args[0]).set("displayInTree", args[1]);
-        },
-
         /**
          * Wenn ein Model mehr als einer Kategorie zugeordnet ist, wird pro Kategorie ein Model erzeugt.
          * Das "alte" Model das alle Kategorien enthält wird gelöscht. Damit ist jedes Model einer bestimmten Kategorie zugeordnet.
@@ -361,7 +345,7 @@ define([
             _.each(modelsByCategory, function (element) {
                 var categories = element.get(categoryAttribute);
                 // Iteriert über die Kategorien
-                _.each(categories, function (category, index) {
+                _.each(categories, function (category) {
                     // Model wird kopiert
                     var cloneModel = element.clone();
                     // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt
