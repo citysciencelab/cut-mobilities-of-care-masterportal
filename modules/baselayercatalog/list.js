@@ -16,7 +16,10 @@ define([
         },
 
         addBaseLayer: function (baselayer) {
-            _.each(baselayer, function (layer) {
+            baselayer = _.sortBy(baselayer, function (layer) {
+                return layer.get("name");
+            });
+            _.each(baselayer.sort(), function (layer) {
                 this.add(layer);
             }, this);
         },
