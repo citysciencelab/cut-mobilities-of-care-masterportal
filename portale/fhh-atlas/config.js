@@ -20,9 +20,9 @@ define(function () {
             ]
         },
         baseLayer: [
-            {id: "453", visibility: true, minResolution: 0.2645838625010583, minScale: "1000"},
+            {id: "453", visibility: false, minResolution: 0.2645838625010583, minScale: "1000"},
             {id: "8", visibility: false},
-            {id: "717", visibility: false},
+            {id: "717", visibility: true, minResolution: 0.2645838625010583, minScale: "1000"},
             {id: "368", visibility: false, name: "ALKIS farbig"},
             {id: "149", visibility: false, name: "ALKIS grau-blau"}
         ],
