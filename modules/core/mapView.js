@@ -24,6 +24,7 @@ define([
                 0.2645838625010583, // 1:1000
                 0.13229159522920521
             ],
+            zoomLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // zoomLevel 1 = 1:250000
             startResolution: 15.875031750063500,
             startCenter: [565874, 5934140],
             units: "m",
@@ -39,7 +40,6 @@ define([
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
                 }
             });
-
             this.setStartExtent();
             this.setStartResolution();
             this.setStartScale();
@@ -73,12 +73,13 @@ define([
             }
         },
 
-        /**
-         *
-         */
+        // Setzt die initiale Resolution.
         setStartResolution: function () {
             if (Config.view.resolution && _.isNumber(Config.view.resolution)) {
                 this.set("startResolution", Config.view.resolution);
+            }
+            if (_.has(Config.view, "zoomLevel")) {
+                this.set("startResolution", this.get("resolutions")[Config.view.zoomLevel - 1]);
             }
         },
         /**
