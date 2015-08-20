@@ -108,11 +108,12 @@ define([
                 // nur Layer die min. einen Datensatz zugeordnet sind
                 response = _.filter(response, function (element) {
                     element.isbaselayer = false;
-                    return element.datasets.length > 0;
+                    return element.datasets.length > 0 ;
                 });
+                response = this.deleteLayersByMetaID(response);
                 response = this.deleteLayersIncludeCache(response);
-                response = this.mergeLayerByIDs(response);
-                response = this.mergeLayerByMetaIDs(response);
+                response = this.mergeLayersByIDs(response);
+                response = this.mergeLayersByMetaID(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDatasate(response);
                 return response;
@@ -173,6 +174,13 @@ define([
             }
         },
 
+        // Entfernt Layer über ihre MetadatenID. Wird über Config.tree.metaIDsForIgnore gesteuert.
+        deleteLayersByMetaID: function (response) {
+            return _.reject(response, function (element) {
+                return _.contains(Config.tree.metaIDsForIgnore, element.datasets[0].md_id);
+            });
+        },
+
         // Entfernt alle Layer, die bereits im Cache dargestellt werden.
         deleteLayersIncludeCache: function (response) {
             var cacheLayerMetaIDs = [],
@@ -208,7 +216,7 @@ define([
         // Layer mit gleicher Metadaten-ID werden zu einem neuem Layer zusammengefasst.
         // Layer die gruppiert werden sollen, werden über Config.tree.metaIDsForMerge gesteuert.
         // Die zusammenfassenden alten Layer werden rausgefiltert.
-        mergeLayerByMetaIDs: function (response) {
+        mergeLayersByMetaID: function (response) {
             var newLayer;
 
             _.each(Config.tree.metaIDsForMerge, function (metaID) {
@@ -234,7 +242,7 @@ define([
         // Mehrere Layer werden zu einem neuem Layer über ihre ID zusammengefasst.
         // Layer die gruppiert werden sollen, werden über Config.tree.layerIDsForMerge gesteuert.
         // Die zusammenfassenden alten Layer werden entfernt.
-        mergeLayerByIDs: function (response) {
+        mergeLayersByIDs: function (response) {
             _.each(Config.tree.layerIDsForMerge, function (layerIDs) {
                 var layersByID,
                     newLayer;
