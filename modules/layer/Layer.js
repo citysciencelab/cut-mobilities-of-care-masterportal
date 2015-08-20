@@ -20,6 +20,7 @@ define([
             });
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
             this.listenTo(this, "change:visibility", this.setVisibility);
+            this.listenTo(this, "change:visibility", this.toggleLayerInformation);
             // this.listenTo(this, "change:minResolution", this.setMinResoForLayer);
             // this.listenTo(this, "change:maxResolution", this.setMaxResoForLayer);
             this.listenTo(this, "change:SLDBody", this.updateSourceSLDBody);
@@ -215,6 +216,17 @@ define([
                 }
             }
         },
+        toggleLayerInformation: function () {
+            if (this.get("layerAttribution") !== "nicht vorhanden") {
+                if (this.get("visibility") === true) {
+                    EventBus.trigger("layerinformation:add", {"name": this.get("name"), "text": this.get("layerAttribution"), "id": this.get("id")});
+                }
+                else {
+                    EventBus.trigger("layerinformation:remove", this.get("id"));
+                }
+            }
+        },
+
         openMetadata: function () {
             window.open(this.get("metaURL"), "_blank");
         },

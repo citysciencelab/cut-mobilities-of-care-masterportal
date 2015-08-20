@@ -43,13 +43,6 @@ define([
             else {
                 this.$(".layer-toggle-button").after(this.template(attr));
             }
-            if (this.model.get("visibility") === true && this.model.get("layerAttribution") !== "nicht vorhanden") {
-                $("#" + this.model.get("id")).remove();
-                $("#hinweise").append(this.templateAttribution(attr));
-            }
-            else {
-                $("#" + this.model.get("id")).remove();
-            }
             this.toggleStyle();
             return this;
         },
