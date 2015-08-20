@@ -17,7 +17,6 @@ define([
          */
         setAttributionLayerSource: function () {
             EventBus.trigger("mapView:getResolutions");
-
             var version,
                 format,
                 params;

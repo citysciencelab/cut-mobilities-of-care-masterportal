@@ -15,7 +15,7 @@ define([
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
-            this.listenTo(EventBus, {
+            this.listenToOnce(EventBus, {
                 "mapView:sendResolutions": this.setResolutions
             });
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
@@ -43,6 +43,7 @@ define([
                 this.postInit();
             }
         },
+
         postInit: function () {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
