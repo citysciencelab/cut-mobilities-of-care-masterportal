@@ -2,7 +2,7 @@
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
 * Jedes Dokument wird mit einer leeren Zeile beendet
-* [***EditorConfig***](http://editorconfig.org/) und [***JSHint***](http://jshint.com/docs/options) werden eingesetzt, um die Konventionen leichter einhalten zu können
+* [***EditorConfig***](http://editorconfig.org/), [***JSCS***](http://jscs.info/) und [***JSHint***](http://jshint.com/docs/options) werden eingesetzt, um die Konventionen leichter einhalten zu können
 
 ### Whitespace
 * Soft Intends (Spaces) statt Tabs
