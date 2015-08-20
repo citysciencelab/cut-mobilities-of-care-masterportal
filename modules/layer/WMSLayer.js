@@ -8,10 +8,16 @@ define([
 
     var WMSLayer = Layer.extend({
 
+        setResolutions: function (resolutions) {
+            this.set("resolutions", resolutions);
+        },
+
         /**
          *
          */
         setAttributionLayerSource: function () {
+            EventBus.trigger("mapView:getResolutions");
+
             var version,
                 format,
                 params;
@@ -49,18 +55,7 @@ define([
                     gutter: this.get("gutter"),
                     params: params,
                     tileGrid: new ol.tilegrid.TileGrid({
-                        resolutions: [
-                            66.14614761460263,
-                            26.458319045841044,
-                            15.874991427504629,
-                            10.583327618336419,
-                            5.2916638091682096,
-                            2.6458319045841048,
-                            1.3229159522920524,
-                            0.6614579761460262,
-                            0.2645831904584105,
-                            0.13229159522920521
-                        ],
+                        resolutions: this.get("resolutions"),
                         origin: [
                             442800,
                             5809000
@@ -74,18 +69,7 @@ define([
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
                     params: params,
-                    resolutions: [
-                        66.14614761460263,
-                        26.458319045841044,
-                        15.874991427504629,
-                        10.583327618336419,
-                        5.2916638091682096,
-                        2.6458319045841048,
-                        1.3229159522920524,
-                        0.6614579761460262,
-                        0.2645831904584105,
-                        0.13229159522920521
-                    ]
+                    resolutions: this.get("resolutions")
                 }));
             }
         },

@@ -15,6 +15,9 @@ define([
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
+            this.listenTo(EventBus, {
+                "mapView:sendResolutions": this.setResolutions
+            });
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
             this.listenTo(this, "change:visibility", this.setVisibility);
             // this.listenTo(this, "change:minResolution", this.setMinResoForLayer);

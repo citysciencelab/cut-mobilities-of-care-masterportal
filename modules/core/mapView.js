@@ -34,6 +34,12 @@ define([
          *
          */
         initialize: function () {
+            this.listenTo(EventBus, {
+                "mapView:getResolutions": function () {
+                    EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
+                }
+            });
+
             this.setStartExtent();
             this.setStartResolution();
             this.setStartScale();
