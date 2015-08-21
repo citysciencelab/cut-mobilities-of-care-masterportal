@@ -231,7 +231,7 @@ define([
             window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (this.get("url") !== undefined) {
+            if (this.get("url") !== undefined && this.has("link") === false) {
                 if (this.get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
                 }
@@ -239,7 +239,7 @@ define([
                     this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
                 }
             }
-            else if (this.get("backbonelayers") !== undefined) { // Für Group-Layer
+            else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
                 if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                     this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
                 }
@@ -248,7 +248,8 @@ define([
                 }
             }
             else {
-                // für olympia-portal --> hat keine metadaten!!
+                // für olympia-portal --> hat keine metadaten!! Es wird auf ein PDF verlinkt.
+                this.set("metaURL", this.get("link"));
             }
         },
         moveUp: function () {
