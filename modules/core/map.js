@@ -3,9 +3,8 @@ define([
     "openlayers",
     "config",
     "modules/core/mapView",
-    "modules/layer/list",
     "eventbus"
-], function (Backbone, ol, Config, MapView, LayerList, EventBus) {
+], function (Backbone, ol, Config, MapView, EventBus) {
 
     var Map = Backbone.Model.extend({
 
@@ -74,12 +73,6 @@ define([
                     }
                     // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
                 }.bind(this), false);
-            }
-
-            if (_.has(Config, "tree") === false) {
-                _.each(LayerList.pluck("layer"), function (layer) {
-                    this.get("map").addLayer(layer);
-                }, this);
             }
         },
 

@@ -60,22 +60,12 @@ define([
 
             /**
              * Gibt die initiale Resolution (Zoomlevel) zurück.
-             * Ist der Parameter 'zoomLevel' vorhanden wird die passende Resolution zurückgegeben, ansonsten der Standardwert.
+             * Ist der Parameter 'zoomLevel' vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
              */
-            if (_.has(result, 'ZOOMLEVEL')) {
-                var value = _.values(_.pick(result, 'ZOOMLEVEL'))[0];
-                var resolutions = {
-                    '1': 66.14614761460263,  // 1:250:000
-                    '2': 26.458319045841044, // 1:100.000
-                    '3': 15.874991427504629, // 1:60.000
-                    '4': 10.583327618336419, // 1:40.000
-                    '5': 5.2916638091682096, // 1:20.000
-                    '6': 2.6458319045841048, // 1:10.000
-                    '7': 1.3229159522920524, // 1:5.000
-                    '8': 0.6614579761460262, // 1:2.500
-                    '9': 0.2645831904584105  // 1:1.000
-                };
-                Config.view.resolution = resolutions[value];
+            if (_.has(result, "ZOOMLEVEL")) {
+                var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
+
+                Config.view.zoomLevel = value;
             }
 
             /**

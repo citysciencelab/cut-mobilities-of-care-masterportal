@@ -15,14 +15,15 @@ define([
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
+            this.listenToOnce(EventBus, {
+                "mapView:sendResolutions": this.setResolutions
+            });
             this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
             this.listenTo(this, "change:visibility", this.setVisibility);
-            this.listenTo(this, "change:minResolution", this.setMinResoForLayer);
-            this.listenTo(this, "change:maxResolution", this.setMaxResoForLayer);
-            // NOTE wen#n displayInTree auf false steht, ist auch keine GFI-Abfrage möglich. Brauche ich so für treefilter (sd)
-            // if (this.get("displayInTree") === false) {
-            //     this.set("gfiAttributes", false);
-            // }
+            this.listenTo(this, "change:visibility", this.toggleLayerInformation);
+            // this.listenTo(this, "change:minResolution", this.setMinResoForLayer);
+            // this.listenTo(this, "change:maxResolution", this.setMaxResoForLayer);
+            this.listenTo(this, "change:SLDBody", this.updateSourceSLDBody);
 
             // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
             EventBus.on("currentMapScale", this.setScaleRange, this);
@@ -43,6 +44,7 @@ define([
                 this.postInit();
             }
         },
+
         postInit: function () {
             this.setAttributionLayerSource();
             this.setAttributionLayer();
@@ -63,6 +65,12 @@ define([
             // setzen der MetadatenURL, vlt. besser in layerlist??
             this.setMetadataURL();
 
+            if (this.has("minResolution")) {
+                this.setMinResoForLayer();
+            }
+            if (this.has("maxResolution")) {
+                this.setMaxResoForLayer();
+            }
             if (this.get("visible") !== undefined) {
                 this.set("visibility", this.get("visible"));
             }
@@ -208,6 +216,17 @@ define([
                 }
             }
         },
+        toggleLayerInformation: function () {
+            if (this.get("layerAttribution") !== "nicht vorhanden") {
+                if (this.get("visibility") === true) {
+                    EventBus.trigger("layerinformation:add", {"name": this.get("name"), "text": this.get("layerAttribution"), "id": this.get("id")});
+                }
+                else {
+                    EventBus.trigger("layerinformation:remove", this.get("id"));
+                }
+            }
+        },
+
         openMetadata: function () {
             window.open(this.get("metaURL"), "_blank");
         },

@@ -1,0 +1,21 @@
+.layerinformations {
+    position: absolute;
+    font-size: 11px;
+    right: 8px;
+    bottom: 22px;"
+}
+
+.layerinformation {
+    padding: 8px;
+    margin-bottom: 4px;
+}
+
+.layerinformation > span {
+    float: right;
+    margin-left: 10px;
+}
+
+.layerinformation > span:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
