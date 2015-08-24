@@ -24,7 +24,7 @@ define([
                 var attr = this.model.toJSON();
 
                 this.stopListening();
-                this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
+                // this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
                 this.listenToOnce(this.model, "change:selected", this.render);
                 // this.listenToOnce(this.model, "change:visibility", this.toggleStyle);
                 this.listenToOnce(this.model, "change:selected", this.toggleStyle);

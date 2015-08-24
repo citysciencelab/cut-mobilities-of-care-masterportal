@@ -2,9 +2,8 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "config",
     "modules/layer/Layer"
-], function (Backbone, ol, EventBus, Config, Layer) {
+], function (Backbone, ol, EventBus, Layer) {
 
     var WMSLayer = Layer.extend({
 
@@ -13,6 +12,7 @@ define([
             this.set("resolutions", resolutions);
         },
 
+        // Setzt die minimale Resolution für den Layer
         setMinResolution: function () {
             var minScale = parseInt(this.get("minScale"), 10),
                 index,
@@ -33,6 +33,7 @@ define([
             this.get("layer").setMinResolution(this.get("minResolution"));
         },
 
+        // Setzt die maximale Resolution für den Layer
         setMaxResolution: function () {
             var maxScale = parseInt(this.get("maxScale"), 10),
                 index,

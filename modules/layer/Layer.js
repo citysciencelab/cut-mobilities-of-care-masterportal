@@ -11,6 +11,7 @@ define([
     var Layer = Backbone.Model.extend({
         defaults: {
             selected: false,
+            settings: false,
             visibility: false,
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
@@ -24,23 +25,23 @@ define([
                 "mapView:sendViewResolution": this.setViewResolution
             });
 
-            this.listenTo(this, {
-                "change:viewResolution": this.setIsResolutionInRange,
-                "change:visibility": this.setVisibility,
+            this.listenToOnce(this, {
                 "change:layer": function () {
                     this.setMinResolution();
                     this.setMaxResolution();
                 }
             });
 
-            this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
-            this.listenTo(this, "change:visibility", this.toggleLayerInformation);
-
-            this.listenTo(this, "change:SLDBody", this.updateSourceSLDBody);
-
-            this.set("settings", false);
-
-            this.listenTo(this, "change:transparence", this.updateOpacity);
+            this.listenTo(this, {
+                "change:viewResolution": this.setIsResolutionInRange,
+                "change:visibility": function () {
+                    this.setVisibility();
+                    this.toggleLayerInformation();
+                },
+                "change:transparence": this.updateOpacity,
+                "change:selected": this.toggleToSelectionLayerList,
+                "change:SLDBody": this.updateSourceSLDBody
+            });
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
