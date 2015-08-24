@@ -1,5 +1,4 @@
 define([
-    'underscore',
     'backbone',
     'eventbus',
     'config',
@@ -8,7 +7,7 @@ define([
     'modules/restReader/collection',
     'modules/core/util',
     'bootstrap/alert'
-], function (_, Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
+], function (Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -66,7 +65,7 @@ define([
         },
         // Fenstermanagement-Events
         prepWindow: function () {
-            if ($('#searchInput') && $('#searchInput').val() != '') {
+            if ($('#searchInput') && $('#searchInput').val() !== '') {
                 this.set('lage', $('#searchInput').val());
             }
         },
@@ -124,7 +123,7 @@ define([
                         errors.kundenort = "Alphanumerischer Wert erwartet.";
                     }
                     if (this.get('kundenanrede') === 'Firma') {
-                        if (this.validators.minLength(attributes.kundenfirma , 2) === false) {
+                        if (this.validators.minLength(attributes.kundenfirma, 2) === false) {
                             errors.kundenfirma = "Firmenname erwartet.";
                         }
                     }
@@ -329,7 +328,7 @@ define([
         },
         transmitOrder: function () {
             // kopiere Attributwerte in für den FME-Prozess taugliche Form
-            var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str, url;
+            var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str;
             if (this.get('zweckGebaeudeeinmessung') === true) {
                 zweckGebaeudeeinmessung = 'ja';
             } else {
@@ -471,7 +470,7 @@ define([
                 },
                 context: this,
                 method: "POST",
-                success: function (data, status) {
+                success: function (data) {
                     if (data.getElementsByTagName('jobStatus') !== undefined && data.getElementsByTagName('jobStatus')[0].textContent === 'FME_FAILURE') {
                         this.showErrorMessage();
                     } else {
@@ -484,7 +483,7 @@ define([
                     EventBus.trigger('collapseWindow', this);
                     $("#loader").hide();
                 },
-                error: function (data, jqXHR) {
+                error: function () {
                     $("#loader").hide();
                     EventBus.trigger('collapseWindow', this);
                     this.showErrorMessage();
@@ -499,16 +498,16 @@ define([
         showSuccessMessage: function () {
             var ergMsg, div;
             if (this.get('auftragsnummer') !== '') {
-                ergMsg = 'mit der Auftragsnummer: ' + this.get('auftragsnummer') + ' ';
+                ergMsg = 'mit der Auftragsnummer ' + this.get('auftragsnummer') + ' ';
             } else {
                 ergMsg = '';
             }
-            div = '<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihre Bestellung ' + ergMsg + 'wurde an unser Funktionspostfach übermittelt.</strong> Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826-5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag!</div>';
+            div = '<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; left: 25%; bottom: 50%;width: 50%;"><button type="button" class="close" data-dismiss="alert"  aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Ihre Bestellung ' + ergMsg + 'wurde an unser Funktionspostfach übermittelt.</strong></br>Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen.Wir danken für Ihren Auftrag! Sie erhalten umgehend eine E-Mail mit den Bestelldetails.</div>';
             $("body").append(div);
         },
         buildJSONGeom: function () {
             var featurearray = [];
-            _.each(this.get('source').getFeatures(), function (item, index, array) {
+            _.each(this.get('source').getFeatures(), function (item, index) {
                 var geom, feature;
                 geom = item.getGeometry();
                 feature = {
