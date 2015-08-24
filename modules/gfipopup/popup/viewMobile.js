@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/gfipopup/templateMobile.html",
-    "modules/gfipopup/model",
+    "text!modules/gfipopup/popup/templateMobile.html",
+    "modules/gfipopup/popup/model",
     "eventbus",
     "bootstrap/modal"
 ], function (Backbone, Template, GFIPopup, EventBus) {
