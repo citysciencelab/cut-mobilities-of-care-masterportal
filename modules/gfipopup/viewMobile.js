@@ -1,12 +1,10 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "text!modules/gfipopup/templateMobile.html",
     "modules/gfipopup/model",
     "eventbus",
     "bootstrap/modal"
-], function ($, _, Backbone, Template, GFIPopup, EventBus) {
+], function (Backbone, Template, GFIPopup, EventBus) {
     "use strict";
     var GFIPopupView = Backbone.View.extend({
         model: GFIPopup,

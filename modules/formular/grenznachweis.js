@@ -1,6 +1,4 @@
 define([
-    'jquery',
-    'underscore',
     'backbone',
     'eventbus',
     'config',
@@ -9,7 +7,7 @@ define([
     'modules/restReader/collection',
     'modules/core/util',
     'bootstrap/alert'
-], function ($, _, Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
+], function (Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {

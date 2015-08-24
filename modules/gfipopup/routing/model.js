@@ -1,10 +1,8 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "openlayers",
     "eventbus"
-], function ($, _, Backbone, ol, EventBus) {
+], function (Backbone, ol, EventBus) {
     "use strict";
     var RoutingModel = Backbone.Model.extend({
         /**

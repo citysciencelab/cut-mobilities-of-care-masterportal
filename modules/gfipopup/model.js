@@ -1,6 +1,4 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "eventbus",
     "openlayers",
@@ -10,7 +8,7 @@ define([
     "modules/gfipopup/video/view",
     "modules/gfipopup/routing/view",
     "modules/core/util"
-], function ($, _, Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, Util) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, Util) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**

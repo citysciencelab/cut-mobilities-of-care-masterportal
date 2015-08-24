@@ -1,11 +1,9 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "text!modules/gfipopup/routing/template.html",
     "modules/gfipopup/routing/model",
     "eventbus"
-], function ($, _, Backbone, VideoTemplate, RoutingModel, EventBus) {
+], function (Backbone, VideoTemplate, RoutingModel, EventBus) {
     "use strict";
     var RoutingView = Backbone.View.extend({
         template: _.template(VideoTemplate),

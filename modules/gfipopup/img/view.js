@@ -1,10 +1,8 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "text!modules/gfipopup/img/template.html",
     "modules/gfipopup/img/model"
-], function ($, _, Backbone, ImgTemplate, ImgModel) {
+], function (Backbone, ImgTemplate, ImgModel) {
     "use strict";
     var ImgView = Backbone.View.extend({
         template: _.template(ImgTemplate),
