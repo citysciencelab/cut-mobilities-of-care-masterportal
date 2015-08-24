@@ -21,7 +21,7 @@ define(function () {
 
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},    //Karte
-            {id: "452", visible: false},                      //Luftbild       
+            {id: "452", visible: false},                      //Luftbild
             {id: "1727", visible: true, name:"Kooperationsprojekte mit Hamburger Nachbargemeinden u. -kreisen"}
 
         ],

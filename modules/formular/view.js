@@ -1,14 +1,11 @@
 define([
-    'jquery',
-    'underscore',
     'backbone',
     'eventbus',
     'config',
     'modules/formular/grenznachweis',
     'text!modules/formular/grenznachweis.html',
     'text!modules/formular/grenznachweis.css'
-], function ($, _, Backbone, EventBus, Config, grenznachweismodel, grenznachweistemplate, grenznachweiscss) {
-
+], function (Backbone, EventBus, Config, grenznachweismodel, grenznachweistemplate, grenznachweiscss) {
     "use strict";
     var formularView = Backbone.View.extend({
         id: 'formularWin',

@@ -9,42 +9,21 @@
     <table class="table table-condensed table-hover">
     <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
         _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
-             %>
-    <tr>
-        <% if(key === 'video'){%>
-            <td colspan="2" >
-               <video id="<%=uniqueId%>" class="video-js vjs-default-skin" width="300" height="300" style="margin-left:auto; margin-right:auto;">
-                   <source src="<%=value%>"/>
-               </video>
-            </td>
-        <% } else if(key === 'Bild'){ %>
-            <td colspan="2" >
-               <% print (value.el.innerHTML); %>
-            </td>
-        <% } else if(_.isObject(value) === false && value.match(/Min/i) && value.match(/km/i)) { %>
-            <td>
-                <strong><%= key + ':'%></strong>
-            </td>
-            <td>
-                <button id='RouteZeigenButton' title='Schnellste Route zeigen' value='<%= key %>' style='min-width: 130px; width:100%' type='button' class='btn btn-info btn-sm'>
-                    <span style='float:left;' class='' aria-hidden='true'><%= value %></span>
-                    <span style='float:right; top:3px;' class='glyphicon glyphicon-road' aria-hidden='true'></span>
-                </button>
-            </td>
-        <% } else if(_.isObject(value) === false) { %>
-            <td>
-                <strong><%= key + ''%></strong>
-            </td>
-            <td>
-                <% if (value.search('.html') !== -1 || value.substr(0, 7) == 'http://') { %>
-                    <a href="<%= value%>" target="_blank">Link</a>
-                <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                    <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-                <% } else { %>
-                    <%= value %>
-                <% } %>
-            </td>
-        <% } %>
+            if (_.isString(key) === false || _.isString(value)=== false) return;
+        %>
+    <tr colspan="2">
+        <td>
+            <strong><%= key + ''%></strong>
+        </td>
+        <td>
+            <% if (value.search('.html') !== -1 || value.substr(0, 7) == 'http://') { %>
+                <a href="<%= value%>" target="_blank">Link</a>
+            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
+            <% } else { %>
+                <%= value %>
+            <% } %>
+        </td>
     </tr>
     <% })}; %>
     </table>
