@@ -48,7 +48,8 @@ define([
                                 typ: this.get("typ"),
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
-                                routable: this.get("routable")
+                                routable: this.get("routable"),
+                                gfiTemplateName: this.get('gfiTemplateName'),
                             }));
                             this.reload();
                         }
@@ -71,7 +72,8 @@ define([
                                 typ: this.get("typ"),
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
-                                routable: this.get("routable")
+                                routable: this.get("routable"),
+                                gfiTemplateName: this.get('gfiTemplateName')
                             }));
                             this.reload();
                         }

@@ -34,7 +34,8 @@ define([
             this.set("settings", false);
             // Setze 'gfiTemplate' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder 'default'
             this.set('gfiTemplateName', this.get('gfiTemplateName') || 'default');
-
+            // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
+            this.set('routable', this.get('routable') || false);
             // Tranparenz
             this.listenTo(this, "change:transparence", this.updateOpacity);
 

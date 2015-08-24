@@ -83,7 +83,8 @@ define([
                     typ: this.get("typ"),
                     gfiAttributes: this.get("gfiAttributes"),
                     legendURL: this.get("legendURL"),
-                    routable: this.get("routable"),
+                    routable: this.get("routable") || 'hgfd',
+                    gfiTemplateName: this.get('gfiTemplateName') || 'jhgfd',
                     infoFormat: this.get("infoFormat")
             };
 
