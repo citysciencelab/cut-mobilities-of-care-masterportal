@@ -51,7 +51,7 @@ define([
             this.on("change:currentLayout change:currentScale change:isActive", this.updatePrintPage, this);
 
             EventBus.on("winParams", this.setStatus, this);
-            EventBus.on("sendVisibleWMSLayer", this.setLayerToPrint, this);
+            EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("gfiForPrint", this.setGFIToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
             EventBus.on("currentMapCenter", this.setCurrentMapCenter, this);
@@ -99,7 +99,7 @@ define([
             if (_.has(Config, "tree") === true) {
                 EventBus.trigger("getSelectedVisibleWMSLayer");
             } else {
-                EventBus.trigger("getVisibleWMSLayer");
+                EventBus.trigger("layerlist:getVisibleWMSlayerList");
             }
             if (Config.tools.draw === true) {
                 EventBus.trigger("getDrawlayer");

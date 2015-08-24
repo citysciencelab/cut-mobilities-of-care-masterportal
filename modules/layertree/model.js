@@ -19,10 +19,10 @@ define([
             sendSelection: function () {
                 Config.tree.orderBy = this.get("currentSelection");
                 if (this.get("currentSelection") === "opendata") {
-                    EventBus.trigger("getOpendataFolder");
+                    EventBus.trigger("layerlist:getOpendataFolder");
                 }
                 else if (this.get("currentSelection") === "inspire") {
-                    EventBus.trigger("getInspireFolder");
+                    EventBus.trigger("layerlist:getInspireFolder");
                 }
                 else {
                     EventBus.trigger("getCustomNodes");

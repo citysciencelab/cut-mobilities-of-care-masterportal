@@ -217,7 +217,7 @@ define([
 
                 if (value !== "") {
                     this.get("mhpOverlay").setPosition(coord);
-                    this.get("mhpOverlay").setOffset([65, -15]);
+                    this.get("mhpOverlay").setOffset([10, -15]);
                     this.set("mhpcoordinates", coord);
                     this.set("mhpresult", value);
                 }

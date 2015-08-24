@@ -45,6 +45,10 @@ define([
         showLayerInTree: function (model) {
             // öffnet den Tree
             $(".nav li:first-child").addClass("open");
+            // öffnet die Geofachdaten
+            $(".layer-catalog-list").show();
+            $(".layer-catalog-label > .glyphicon").addClass("glyphicon-triangle-bottom");
+            $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-triangle-right");
             this.forEach(function (element) {
                 if (model.get("type") !== undefined && model.get("type") === "nodeChild") {
                     if (model.get("children")[0].get("kategorieOpendata") === element.get("name") || model.get("children")[0].get("kategorieInspire") === element.get("name") || model.get("children")[0].get("kategorieCustom") === element.get("name")) {

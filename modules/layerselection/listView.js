@@ -3,18 +3,17 @@ define([
     "backbone",
     "modules/layerselection/list",
     "modules/layerselection/view",
-    "eventbus",
     "jqueryui/sortable"
-], function (_, Backbone, List, View, EventBus) {
+], function (_, Backbone, List, View) {
 
         var listView = Backbone.View.extend({
             collection: new List(),
             tagName: "ul",
             className: "list-group layer-selected-list",
             initialize: function () {
-                EventBus.on("test", this.render);
                 this.render();
                 this.listenTo(this.collection, "add", this.render);
+                this.listenTo(this.collection, "remove", this.render);
                 // // JQuery UI
                 this.$el.sortable({
                     start: function (evt, ui) {

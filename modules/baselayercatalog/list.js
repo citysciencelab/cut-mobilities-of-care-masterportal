@@ -1,20 +1,35 @@
 define([
     "backbone",
-    "modules/layer/list",
     "eventbus"
-], function (Backbone, LayerList, EventBus) {
+], function (Backbone, EventBus) {
 
     var List = Backbone.Collection.extend({
 
         initialize: function () {
-            EventBus.on("sendBaseLayer", this.addBaseLayer, this);
-            EventBus.trigger("getBaseLayer");
+            this.listenToOnce(EventBus, {
+                "layerlist:sendBaselayerList": this.addBaseLayer
+            });
+            this.listenTo(EventBus, {
+                "layerlist:updateBaselayerSelection": this.updateBaseLayerSelection
+            });
+            EventBus.trigger("layerlist:getBaselayerList");
         },
 
         addBaseLayer: function (baselayer) {
-            _.each(baselayer, function (layer) {
+            baselayer = _.sortBy(baselayer, function (layer) {
+                return layer.get("name");
+            });
+            _.each(baselayer.sort(), function (layer) {
                 this.add(layer);
             }, this);
+        },
+
+        updateBaseLayerSelection: function () {
+            var layerlist = this.where({"selected": true});
+
+            _.each(layerlist, function (layer) {
+                EventBus.trigger("addModelToSelectionList", layer);
+            });
         }
     });
 

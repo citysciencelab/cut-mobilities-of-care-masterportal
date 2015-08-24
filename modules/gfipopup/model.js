@@ -281,10 +281,14 @@ define([
                 url = params.url;
             }
 
-            // Für B-Pläne wird Feature_Count auf 3 gesetzt
+            // Für B-Pläne wird Feature_Count auf 3 gesetzt --> besser über ID (hier aber nicht vorhanden)
             if (params.name === "Festgestellte Bebauungspläne" || params.name === "Sportstätten") {
                 data = "FEATURE_COUNT=3";
-            } else {
+            }
+            else if (params.name === "SUB Umringe Historischer Karten") {
+                data = "FEATURE_COUNT=30";
+            }
+            else {
                 data = "";
             }
 

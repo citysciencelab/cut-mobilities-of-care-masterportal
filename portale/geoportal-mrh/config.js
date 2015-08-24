@@ -5,11 +5,11 @@ define(function () {
             custom:false,
             orderBy: "opendata",
             filter: true,
-            groupBaseLayerByID: [],
+            layerIDsForMerge: [],
 
-            groupLayerByID:[]
+            metaIDsForMerge:[]
         },
-        baseLayerIDs: [
+        baseLayer: [
             {id: "0", visible: true},       //WebAtlas
             {id: "1", visible: false},       //WebAtlas_grau
             {id: "2", visible: false},      //Luftbilder

@@ -15,7 +15,7 @@ define([
 
         initialize: function () {
             this.listenTo(EventBus, {
-                "sendAllVisibleLayer": this.setLayerList,
+                "layerlist:sendVisiblelayerList": this.setLayerList,
                 "toggleLegendWin": this.createLegend
             });
 

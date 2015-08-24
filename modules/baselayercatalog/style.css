@@ -6,6 +6,7 @@
 .base-layer {
     color: rgb(150, 150, 150);
     font-size: 14px;
+    padding: 8px 15px;
 }
 
 .base-layer-content > .layer-name {

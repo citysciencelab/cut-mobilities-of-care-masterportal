@@ -25,8 +25,8 @@ define([
         url: Util.getPath(Config.treeConf),
         initialize: function () {
             EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
-            EventBus.once("sendModelByID", this.setListenerForVisibility, this);
-            EventBus.trigger("getModelById", "182");
+            EventBus.once("layerlist:sendLayerByID", this.setListenerForVisibility, this);
+            EventBus.trigger("layerlist:getLayerByID", "182");
             this.listenTo(this, "change:searchCategoryString", this.setCategoryArray);
             this.listenTo(this, "change:treeCategory", this.setTypeArray);
             this.listenTo(this, "change:searchTypeString", this.setTypeArray);
@@ -62,7 +62,7 @@ define([
         },
         setListenerForVisibility: function (model) {
             model.listenTo(model, "change:visibility", function () {
-                EventBus.trigger("setVisible", ["2298", model.get("visibility")]);
+                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": model.get("visibility")});
             });
         },
         parse: function (response) {
@@ -260,20 +260,16 @@ define([
             }
         },
         updateStyleByID: function () {
-            EventBus.trigger("updateStyleByID", ["182", this.get("SLDBody")]);
+            EventBus.trigger("layerlist:setAttributionsByID", "182", {"SLDBody": this.get("SLDBody")});
             if (this.get("isFilter") === true) {
-                EventBus.trigger("displayInTree", ["2297", false]);
-                EventBus.trigger("displayInTree", ["182", true]);
-                EventBus.trigger("setVisible", ["2297", false]);
-                EventBus.trigger("setVisible", ["182", true]);
-                EventBus.trigger("setVisible", ["2298", true]);
+                EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": false, "visibility": false});
+                EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": true, "visibility": true});
+                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": true});
             }
             else {
-                EventBus.trigger("displayInTree", ["2297", true]);
-                EventBus.trigger("displayInTree", ["182", false]);
-                EventBus.trigger("setVisible", ["2297", true]);
-                EventBus.trigger("setVisible", ["182", false]);
-                EventBus.trigger("setVisible", ["2298", false]);
+                EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": true, "visibility": true});
+                EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": false, "visibility": false});
+                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": false});
             }
         },
         removeFilter: function () {

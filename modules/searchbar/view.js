@@ -230,8 +230,13 @@ define([
                     hit = _.findWhere(this.model.get("hitList"), {id: hitID});
                 }
                 // NOTE switch case wäre angebracht
+                if (hit.model.get("type") === "nodeLayer") {
+                    $("#searchInput").val(hit.metaName);
+                }
+                else {
+                    $("#searchInput").val(hit.name);
+                }
 
-                $("#searchInput").val(hit.name);
                 if (hit.type === "Straße") {
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
                         extent,
