@@ -4,10 +4,10 @@ define([
     "openlayers",
     "config",
     "bootstrap/popover",
-    "modules/gfipopup/img/view",
-    "modules/gfipopup/video/view",
-    "modules/gfipopup/routing/view",
-    "modules/gfipopup/routable/view",
+    "modules/gfipopup/gfiObjects/img/view",
+    "modules/gfipopup/gfiObjects/video/view",
+    "modules/gfipopup/gfiObjects/routing/view",
+    "modules/gfipopup/gfiObjects/routable/view",
     "modules/core/util"
 ], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, Util) {
     "use strict";

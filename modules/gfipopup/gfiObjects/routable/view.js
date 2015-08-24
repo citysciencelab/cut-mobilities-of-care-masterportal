@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/gfipopup/routable/template.html",
-    "modules/gfipopup/routable/model",
+    "text!modules/gfipopup/gfiObjects/routable/template.html",
+    "modules/gfipopup/gfiObjects/routable/model",
     "eventbus"
 ], function (Backbone, VideoTemplate, RoutableModel, EventBus) {
     "use strict";
