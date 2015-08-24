@@ -230,7 +230,7 @@ define([
                     hit = _.findWhere(this.model.get("hitList"), {id: hitID});
                 }
                 // NOTE switch case wäre angebracht
-                if (hit.model.get("type") === "nodeLayer") {
+                if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
                     $("#searchInput").val(hit.metaName);
                 }
                 else {
