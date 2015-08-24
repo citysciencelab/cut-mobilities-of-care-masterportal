@@ -7,8 +7,9 @@ define([
     "modules/gfipopup/img/view",
     "modules/gfipopup/video/view",
     "modules/gfipopup/routing/view",
+    "modules/gfipopup/routable/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, Util) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, Util) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -65,7 +66,7 @@ define([
                 i,
                 pRoutables = [],
                 position;
-
+            // Abfrage jedes Layers und ablegen in pContents
             for (i = 0; i < sortedParams.length; i += 1) {
                 if (sortedParams[i].ol_layer.get('typ') === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
@@ -80,13 +81,23 @@ define([
                         pContent.push(content);
                         pTitles.push(sortedParams[i].name);
                         // Nur wenn Config.menu.routing==true, werden die einzelnen Routable-Informationen ausgewertet und im Template abgefragt
-                        if (Config.menu.routing && Config.menu.routing === true) {
-                            pRoutables.push(sortedParams[i].ol_layer.get('routable'));
+                        if (Config.menu.routing && Config.menu.routing === true && sortedParams[i].ol_layer.get('routable') === true) {
+                            if (this.get("wfsCoordinate").length > 0) {
+                                pRoutables.push(new RoutableView(this.get("wfsCoordinate")));
+                            }
+                            else {
+                                pRoutables.push(new RoutableView(params[1]));
+                            }
                         }
-                    });
+                        else {
+                            pRoutables.push(false);
+                        }
+                    }, this);
                 }
             }
+            // Ersetzen von keywords mit Objekten
             pContent = this.replaceValuesWithObjects(pContent);
+            // Abspeichern der gesammelten Informationen
             if (pContent.length > 0) {
                 if (this.get("wfsCoordinate").length > 0) {
                     position = this.get("wfsCoordinate");
@@ -399,6 +410,25 @@ define([
         },
         sendGFIForPrint: function () {
             EventBus.trigger("gfiForPrint", [this.get("gfiContent")[0], this.get("isPopupVisible")]);
+        },
+        /**
+         * Alle children und Routable-Button im gfiContent müssen hier removed werden.
+         * Das gfipopup.model wird nicht removed - nur reset.
+         */
+        removeChildObjects: function () {
+            _.each(this.get('gfiContent'), function (element) {
+                if (_.has(element, 'children')) {
+                    var children = _.values(_.pick(element, 'children'))[0];
+                    _.each(children, function (child) {
+                        child.val.remove();
+                    }, this);
+                }
+            }, this);
+            _.each(this.get('gfiRoutables'), function (element) {
+                if (_.isObject(element) === true) {
+                    element.remove();
+                }
+            }, this);
         }
     });
 

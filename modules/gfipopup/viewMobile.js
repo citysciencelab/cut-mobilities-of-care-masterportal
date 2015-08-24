@@ -13,8 +13,7 @@ define([
         events: {
             "click .gfi-mobile-close": "closeModal",
             "click .pager-right": "renderNext",
-            "click .pager-left": "renderPrevious",
-            "click #setRoutingDestination": "setRoutingDestination"
+            "click .pager-left": "renderPrevious"
         },
 
         /**
@@ -31,6 +30,7 @@ define([
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             this.appendChildren(); //vor $el.modal (reisezeiten)
+            this.appendRoutableButton();
             this.$el.modal({
                 show: true,
                 backdrop: "static"
@@ -54,15 +54,6 @@ define([
                 this.model.set("gfiCounter", this.model.get("gfiCounter") + 1);
             }
         },
-
-        /**
-         *
-         */
-        setRoutingDestination: function () {
-            EventBus.trigger("setRoutingDestination", this.model.get("coordinate"));
-            this.closeModal();
-        },
-
         /**
          *
          */
@@ -88,18 +79,21 @@ define([
             }
         },
         /**
-         * Alle children im gfi-mobil-Content müssen hier removed werden.
-         * Das gfipopup.model wird nicht removed - nur reset.
+         * Fügt den Button dem gfiContent hinzu
+         */
+        appendRoutableButton: function () {
+            if (this.model.get('gfiRoutables') && this.model.get('gfiRoutables').length > 0) {
+                var rb = this.model.get('gfiRoutables')[this.model.get('gfiRoutables').length - this.model.get('gfiCounter')];
+                if (rb) {
+                    $('.gfi-mobile-content').append(rb.$el);
+                }
+            }
+        },
+        /**
+         *
          */
         removeChildren: function () {
-            _.each(this.model.get('gfiContent'), function (element) {
-                if (_.has(element, 'children')) {
-                    var children = _.values(_.pick(element, 'children'))[0];
-                    _.each(children, function (child) {
-                        child.val.remove();
-                    }, this);
-                }
-            }, this);
+            this.model.removeChildObjects();
         }
     });
 

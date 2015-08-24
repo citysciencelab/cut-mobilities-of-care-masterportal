@@ -12,8 +12,7 @@ define([
             "click .gfi-close": "destroy",
             "click .gfi-toggle": "minMaximizePop",
             "click .pager-right": "renderNext",
-            "click .pager-left": "renderPrevious",
-            "click #setRoutingDestination": "setRoutingDestination"
+            "click .pager-left": "renderPrevious"
         },
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
@@ -23,9 +22,6 @@ define([
             this.listenTo(this.model, "change:coordinate", this.render);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
-        },
-        setRoutingDestination: function () {
-            EventBus.trigger("setRoutingDestination", this.model.get("coordinate"));
         },
         /**
          * Toggle des Popovers in minimiert oder maximiert
@@ -73,6 +69,7 @@ define([
             EventBus.trigger("closeMouseHoverPopup", this);
             EventBus.trigger("GFIPopupVisibility", true);
             this.appendChildren();
+            this.appendRoutableButton();
         },
         /**
          *
@@ -117,18 +114,21 @@ define([
             }
         },
         /**
-         * Alle children im gfiContent müssen hier removed werden.
-         * Das gfipopup.model wird nicht removed - nur reset.
+         * Fügt den Button dem gfiContent hinzu
+         */
+        appendRoutableButton: function () {
+            if (this.model.get('gfiRoutables') && this.model.get('gfiRoutables').length > 0) {
+                var rb = this.model.get('gfiRoutables')[this.model.get('gfiRoutables').length - this.model.get('gfiCounter')];
+                if (rb) {
+                    $('.gfi-content').append(rb.$el);
+                }
+            }
+        },
+        /**
+         *
          */
         removeChildren: function () {
-            _.each(this.model.get('gfiContent'), function (element) {
-                if (_.has(element, 'children')) {
-                    var children = _.values(_.pick(element, 'children'))[0];
-                    _.each(children, function (child) {
-                        child.val.remove();
-                    }, this);
-                }
-            }, this);
+            this.model.removeChildObjects();
         }
     });
 
