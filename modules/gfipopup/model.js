@@ -67,11 +67,11 @@ define([
                 position;
 
             for (i = 0; i < sortedParams.length; i += 1) {
-                if (sortedParams[i].typ === "WMS") {
+                if (sortedParams[i].ol_layer.get('typ') === "WMS") {
                     gfiContent = this.setWMSPopupContent(sortedParams[i]);
-                } else if (sortedParams[i].typ === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].attributes);
-                } else if (sortedParams[i].typ === "GeoJSON") {
+                } else if (sortedParams[i].ol_layer.get('typ') === "WFS") {
+                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].ol_layer.get('gfiAttributes'));
+                } else if (sortedParams[i].ol_layer.get('typ') === "GeoJSON") {
                     gfiContent = this.setGeoJSONPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
                 }
 
@@ -81,7 +81,7 @@ define([
                         pTitles.push(sortedParams[i].name);
                         // Nur wenn Config.menu.routing==true, werden die einzelnen Routable-Informationen ausgewertet und im Template abgefragt
                         if (Config.menu.routing && Config.menu.routing === true) {
-                            pRoutables.push(sortedParams[i].routable);
+                            pRoutables.push(sortedParams[i].ol_layer.get('routable'));
                         }
                     });
                 }
@@ -274,7 +274,6 @@ define([
         },
         setWMSPopupContent: function (params) {
             var url, data, pgfi = [];
-
             if (params.url.search(location.host) === -1) {
                 url = Util.getProxyURL(params.url);
             } else {
@@ -350,8 +349,7 @@ define([
                                     preGfi[key] = value.trim();
                                 }
                             }, this);
-
-                            if (params.attributes === "showAll") {
+                            if (params.ol_layer.get('gfiAttributes') === "showAll") {
                                 // beautify keys
                                 _.each(preGfi, function (value, key) {
                                     var key;
@@ -362,7 +360,7 @@ define([
                             } else {
                                 // map object keys to gfiAttributes from layer model
                                 _.each(preGfi, function (value, key) {
-                                    key = params.attributes[key];
+                                    key = params.ol_layer.get('gfiAttributes')[key];
                                     if (key) {
                                         gfi[key] = value;
                                     }
