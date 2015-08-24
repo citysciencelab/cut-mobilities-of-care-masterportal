@@ -38,8 +38,24 @@ define([
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
+                },
+                "mapView:getResolution": function () {
+                    EventBus.trigger("mapView:sendViewResolution", this.get("resolution"));
+                },
+                "mapView:getViewStartResolution": function () {
+                    EventBus.trigger("mapView:sendViewStartResolution", this.get("startResolution"));
+                },
+                "mapView:getMapScale": function () {
+                    EventBus.trigger("mapView:sendMapScale", Math.round(this.getScale()));
                 }
             });
+
+            this.listenTo(this, {
+                "change:resolution": function () {
+                    EventBus.trigger("mapView:sendViewResolution", this.get("resolution"));
+                }
+            });
+
             this.setStartExtent();
             this.setStartResolution();
             this.setStartScale();
@@ -49,8 +65,9 @@ define([
             this.setView();
 
             // View listener
-            this.get("view").on("change:resolution", function () {
+            this.get("view").on("change:resolution", function (evt) {
                 EventBus.trigger("currentMapScale", Math.round(this.getScale()));
+                this.setResolution(evt);
             }, this);
             this.get("view").on("change:center", function () {
                 EventBus.trigger("currentMapCenter", this.get("view").getCenter());
@@ -62,6 +79,10 @@ define([
             EventBus.on("getCurrentMapScale", function () {
                 EventBus.trigger("sendCurrentMapScale", Math.round(this.getScale()));
             }, this);
+        },
+
+        setResolution: function (evt) {
+            this.set("resolution", evt.target.get(evt.key));
         },
 
         /**

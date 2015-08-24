@@ -30,7 +30,7 @@ define([
             this.$el.append(this.templateButton);
             this.listenTo(this.model, "change:visibility change:transparence change:settings", this.render);
             this.listenTo(this.model, "change:selected", this.remove);
-            this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
+            this.listenTo(this.model, "change:isResolutionInRange", this.toggleStyle);
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -73,7 +73,7 @@ define([
             this.$(".glyphicon-cog").toggleClass("rotate");
         },
         toggleStyle: function () {
-            if (this.model.get("isInScaleRange") === true) {
+            if (this.model.get("isResolutionInRange") === true) {
                 this.$el.css("color", "rgb(150, 150, 150)");
             }
             else {

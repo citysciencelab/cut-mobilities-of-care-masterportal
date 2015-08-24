@@ -16,20 +16,27 @@ define([
         },
         initialize: function () {
             this.listenToOnce(EventBus, {
-                "mapView:sendResolutions": this.setResolutions
+                "mapView:sendResolutions": this.setResolutions,
+                "mapView:sendViewStartResolution": this.setViewResolution
             });
-            this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
-            this.listenTo(this, "change:visibility", this.setVisibility);
-            this.listenTo(this, "change:visibility", this.toggleLayerInformation);
-            // this.listenTo(this, "change:minResolution", this.setMinResoForLayer);
-            // this.listenTo(this, "change:maxResolution", this.setMaxResoForLayer);
-            this.listenTo(this, "change:SLDBody", this.updateSourceSLDBody);
 
-            // Steuert ob ein Layer aktviert/sichtbar werden kann. Grau dargestellte können nicht sichtbar geschaltet werden.
-            EventBus.on("currentMapScale", this.setScaleRange, this);
-            // Geht schöner...
-            EventBus.once("sendCurrentMapScale", this.setScaleRange, this);
-            EventBus.trigger("getCurrentMapScale");
+            this.listenTo(EventBus, {
+                "mapView:sendViewResolution": this.setViewResolution
+            });
+
+            this.listenTo(this, {
+                "change:viewResolution": this.setIsResolutionInRange,
+                "change:visibility": this.setVisibility,
+                "change:layer": function () {
+                    this.setMinResolution();
+                    this.setMaxResolution();
+                }
+            });
+
+            this.listenTo(this, "change:selected", this.toggleToSelectionLayerList);
+            this.listenTo(this, "change:visibility", this.toggleLayerInformation);
+
+            this.listenTo(this, "change:SLDBody", this.updateSourceSLDBody);
 
             this.set("settings", false);
 
@@ -43,6 +50,7 @@ define([
             else {
                 this.postInit();
             }
+            EventBus.trigger("mapView:getViewStartResolution");
         },
 
         postInit: function () {
@@ -65,12 +73,6 @@ define([
             // setzen der MetadatenURL, vlt. besser in layerlist??
             this.setMetadataURL();
 
-            if (this.has("minResolution")) {
-                this.setMinResoForLayer();
-            }
-            if (this.has("maxResolution")) {
-                this.setMaxResoForLayer();
-            }
             if (this.get("visible") !== undefined) {
                 this.set("visibility", this.get("visible"));
             }
@@ -110,17 +112,6 @@ define([
             // sollte noch besser gelöst werden, gab Probleme mit dem FHH-Atlas
             else if (this.get("typ") === "GeoJSON") {
                 this.set("metaURL", null);
-            }
-        },
-        setScaleRange: function (scale) {
-            if (scale <= parseInt(this.get("maxScale"), 10) && scale >= parseInt(this.get("minScale"), 10)) {
-                this.set("isInScaleRange", true);
-            }
-            else if (this.get("typ") === "WFS" || this.get("typ") === "GROUP") {
-                this.set("isInScaleRange", true);
-            }
-            else {
-                this.set("isInScaleRange", false);
             }
         },
         /**
@@ -257,12 +248,6 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
-        },
-        setMinResoForLayer: function () {
-            this.get("layer").setMinResolution(this.get("minResolution"));
-        },
-        setMaxResoForLayer: function () {
-            this.get("layer").setMaxResolution(this.get("maxResolution"));
         }
     });
 

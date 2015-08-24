@@ -8,8 +8,67 @@ define([
 
     var WMSLayer = Layer.extend({
 
+        // Setzt die Resolutions für das TileGrid.
         setResolutions: function (resolutions) {
             this.set("resolutions", resolutions);
+        },
+
+        setMinResolution: function () {
+            var minScale = parseInt(this.get("minScale"), 10),
+                index,
+                unionScales,
+                scales = [250000, 100000, 60000, 40000, 20000, 10000, 5000, 2500, 1000, 500];
+
+            if (_.contains(scales, minScale)) {
+                index = _.indexOf(scales, minScale);
+            }
+            else {
+                unionScales = _.union(scales, [minScale]);
+                unionScales = _.sortBy(unionScales, function (number) {
+                    return -number;
+                });
+                index = _.indexOf(unionScales, minScale) - 1;
+            }
+            this.set("minResolution", this.get("resolutions")[index]);
+            this.get("layer").setMinResolution(this.get("minResolution"));
+        },
+
+        setMaxResolution: function () {
+            var maxScale = parseInt(this.get("maxScale"), 10),
+                index,
+                unionScales,
+                scales = [250000, 100000, 60000, 40000, 20000, 10000, 5000, 2500, 1000, 500];
+
+            if (_.contains(scales, maxScale)) {
+                index = _.indexOf(scales, maxScale);
+            }
+            else if (maxScale === 350000) {
+                index = 0;
+            }
+            else {
+                 unionScales = _.union(scales, [maxScale]);
+                 unionScales = _.sortBy(unionScales, function (number) {
+                     return -number;
+                 });
+                index = _.indexOf(unionScales, maxScale);
+            }
+            this.set("maxResolution", this.get("resolutions")[index]);
+            this.get("layer").setMaxResolution(this.get("maxResolution"));
+        },
+
+        // Setzt die aktuelle Resolution.
+        setViewResolution: function (resolution) {
+            this.set("viewResolution", resolution);
+        },
+
+        // Prüft ob der Layer in der aktuellen Resolution zu sehen ist und setzt den Parameter "isResolutionInRange".
+        setIsResolutionInRange: function () {
+            if (this.get("viewResolution") < this.get("maxResolution") && this.get("viewResolution") >= this.get("minResolution")) {
+                this.set("isResolutionInRange", true);
+            }
+            else {
+                this.set("isResolutionInRange", false);
+            }
         },
 
         /**
