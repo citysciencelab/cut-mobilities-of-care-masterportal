@@ -32,7 +32,10 @@ define([
             EventBus.trigger("getCurrentMapScale");
 
             this.set("settings", false);
+            // Setze 'gfiTemplate' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder 'default'
+            this.set('gfiTemplateName', this.get('gfiTemplateName') || 'default');
 
+            // Tranparenz
             this.listenTo(this, "change:transparence", this.updateOpacity);
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
