@@ -18,7 +18,9 @@ define([
         initialize: function () {
             this.listenToOnce(EventBus, {
                 "mapView:sendResolutions": this.setResolutions,
-                "mapView:sendViewStartResolution": this.setViewResolution
+                "mapView:sendViewStartResolution": this.setViewResolution,
+                "mapView:sendMinResolution": this.setMinResolution,
+                "mapView:sendMaxResolution": this.setMaxResolution
             });
 
             this.listenTo(EventBus, {
@@ -27,8 +29,8 @@ define([
 
             this.listenToOnce(this, {
                 "change:layer": function () {
-                    this.setMinResolution();
-                    this.setMaxResolution();
+                    EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
+                    EventBus.trigger("mapView:getMaxResolution", this.get("maxScale"));
                 }
             });
 

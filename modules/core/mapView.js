@@ -22,7 +22,7 @@ define([
                 1.3229193125052917, // 1:5000
                 0.6614596562526458, // 1:2500
                 0.2645838625010583, // 1:1000
-                0.13229159522920521
+                0.13229159522920521 // 1:500
             ],
             zoomLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // zoomLevel 1 = 1:250000
             startResolution: 15.875031750063500,
@@ -47,6 +47,12 @@ define([
                 },
                 "mapView:getMapScale": function () {
                     EventBus.trigger("mapView:sendMapScale", Math.round(this.getScale()));
+                },
+                "mapView:getMinResolution": function (scale) {
+                    EventBus.trigger("mapView:sendMinResolution", this.getResolution(scale));
+                },
+                "mapView:getMaxResolution": function (scale) {
+                    EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
                 }
             });
 
@@ -217,6 +223,15 @@ define([
                 scale = resolution * mpu * 39.37 * dpi;
 
             return scale;
+        },
+
+        getResolution: function (scale) {
+            var units = this.get("units"),
+                mpu = ol.proj.METERS_PER_UNIT[units],
+                dpi = this.get("DOTS_PER_INCH"),
+                resolution = scale / (mpu * 39.37 * dpi);
+
+            return resolution;
         },
 
         /**

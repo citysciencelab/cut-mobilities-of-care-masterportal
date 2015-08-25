@@ -13,48 +13,15 @@ define([
         },
 
         // Setzt die minimale Resolution für den Layer
-        setMinResolution: function () {
-            var minScale = parseInt(this.get("minScale"), 10),
-                index,
-                unionScales,
-                scales = [250000, 100000, 60000, 40000, 20000, 10000, 5000, 2500, 1000, 500];
-
-            if (_.contains(scales, minScale)) {
-                index = _.indexOf(scales, minScale);
-            }
-            else {
-                unionScales = _.union(scales, [minScale]);
-                unionScales = _.sortBy(unionScales, function (number) {
-                    return -number;
-                });
-                index = _.indexOf(unionScales, minScale) - 1;
-            }
-            this.set("minResolution", this.get("resolutions")[index]);
-            this.get("layer").setMinResolution(this.get("minResolution"));
+        setMinResolution: function (resolution) {
+            resolution = Math.floor(resolution * 100000000000000) / 100000000000000;
+            this.get("layer").setMinResolution(resolution);
         },
 
         // Setzt die maximale Resolution für den Layer
-        setMaxResolution: function () {
-            var maxScale = parseInt(this.get("maxScale"), 10),
-                index,
-                unionScales,
-                scales = [250000, 100000, 60000, 40000, 20000, 10000, 5000, 2500, 1000, 500];
-
-            if (_.contains(scales, maxScale)) {
-                index = _.indexOf(scales, maxScale);
-            }
-            else if (maxScale === 350000) {
-                index = 0;
-            }
-            else {
-                 unionScales = _.union(scales, [maxScale]);
-                 unionScales = _.sortBy(unionScales, function (number) {
-                     return -number;
-                 });
-                index = _.indexOf(unionScales, maxScale);
-            }
-            this.set("maxResolution", this.get("resolutions")[index]);
-            this.get("layer").setMaxResolution(this.get("maxResolution"));
+        setMaxResolution: function (resolution) {
+            resolution = Math.floor(resolution * 100000000000) / 100000000000 + 0.00000000001;
+            this.get("layer").setMaxResolution(resolution);
         },
 
         // Setzt die aktuelle Resolution.
@@ -64,7 +31,10 @@ define([
 
         // Prüft ob der Layer in der aktuellen Resolution zu sehen ist und setzt den Parameter "isResolutionInRange".
         setIsResolutionInRange: function () {
-            if (this.get("viewResolution") < this.get("maxResolution") && this.get("viewResolution") >= this.get("minResolution")) {
+            var maxResolution = this.get("layer").getMaxResolution(),
+                minResolution = this.get("layer").getMinResolution();
+
+            if (this.get("viewResolution") < maxResolution && this.get("viewResolution") >= minResolution) {
                 this.set("isResolutionInRange", true);
             }
             else {
