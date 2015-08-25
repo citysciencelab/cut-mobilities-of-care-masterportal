@@ -1,33 +1,14 @@
 <div class="gfi-header">
     <span class="glyphicon glyphicon-info-sign gfi-icon"></span>
-    <span class="gfi-title" title="<%= gfiTitles[gfiContent.length-gfiCounter] %>"><%= gfiTitles[gfiContent.length-gfiCounter] %></span>
+    <span class="gfi-title"></span>
     <span class="glyphicon glyphicon-remove gfi-close"></span>
     <span class="glyphicon glyphicon-minus gfi-toggle"></span>
 </div>
 
 <div class="gfi-content">
-    <table class="table table-condensed table-hover">
-    <% if(gfiContent[gfiContent.length-gfiCounter] !== undefined) {
-        _.each(gfiContent[gfiContent.length-gfiCounter], function(value, key) {
-            if (_.isString(key) === false || _.isString(value)=== false) return;
-        %>
-    <tr colspan="2">
-        <td>
-            <strong><%= key + ''%></strong>
-        </td>
-        <td>
-            <% if (value.search('.html') !== -1 || value.substr(0, 7) == 'http://') { %>
-                <a href="<%= value%>" target="_blank">Link</a>
-            <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
-                <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value%></a>
-            <% } else { %>
-                <%= value %>
-            <% } %>
-        </td>
-    </tr>
-    <% })}; %>
-    </table>
+
 </div>
+
 <% if(gfiContent.length > 1) { %>
 <div class="modal-footer gfi-footer">
       <div class="pager-left <% if(gfiCounter-gfiContent.length === 0) {print (' disabled') }%>">

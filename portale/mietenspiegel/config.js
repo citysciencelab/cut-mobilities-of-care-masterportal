@@ -102,7 +102,8 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false}
+            {id: "452", visible: false},
+            {id: '1711', visible: true, style: '1711'}
         ],
         /**
         * @memberof config

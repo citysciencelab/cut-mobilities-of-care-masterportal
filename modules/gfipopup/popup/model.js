@@ -8,8 +8,9 @@ define([
     "modules/gfipopup/gfiObjects/video/view",
     "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view",
+    "modules/gfipopup/templates/default/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, Util) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTemplateView, Util) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -63,111 +64,48 @@ define([
                 gfiContent,
                 pContent = [],
                 pTitles = [],
-                i,
-                pRoutables = [],
-                position;
-            // Abfrage jedes Layers und ablegen in pContents
-            for (i = 0; i < sortedParams.length; i += 1) {
-                if (sortedParams[i].ol_layer.get('typ') === "WMS") {
-                    gfiContent = this.setWMSPopupContent(sortedParams[i]);
-                } else if (sortedParams[i].ol_layer.get('typ') === "WFS") {
-                    gfiContent = this.setWFSPopupContent(sortedParams[i].source, sortedParams[i].style, params[1], sortedParams[i].scale, sortedParams[i].ol_layer.get('gfiAttributes'));
-                } else if (sortedParams[i].ol_layer.get('typ') === "GeoJSON") {
-                    gfiContent = this.setGeoJSONPopupContent(sortedParams[i].source, params[1], sortedParams[i].scale);
+                position = params[1],
+                positionGFI = params[1],
+                templateView;
+            // Abfrage jedes Layers der von der map übermittelt wurde.
+            _.each(sortedParams, function(visibleLayer, index, list) {
+                gfiContent = null;
+                switch (visibleLayer.ol_layer.get('typ')) {
+                    case 'WMS':
+                        gfiContent = this.setWMSPopupContent(visibleLayer);
+                        break;
+                    case 'WFS':
+                        gfiContent = this.setWFSPopupContent(visibleLayer.source, visibleLayer.style, position, visibleLayer.scale, visibleLayer.ol_layer.get('gfiAttributes'));
+                        positionGFI = this.get("wfsCoordinate");
+                        break;
+                    case 'GeoJSON':
+                        gfiContent = this.setGeoJSONPopupContent(visibleLayer.source, position, visibleLayer.scale);
+                        break;
                 }
-
-                if (gfiContent !== undefined) {
-                    _.each(gfiContent, function (content) {
-                        pContent.push(content);
-                        pTitles.push(sortedParams[i].name);
-                        // Nur wenn Config.menu.routing==true, werden die einzelnen Routable-Informationen ausgewertet und im Template abgefragt
-                        if (Config.menu.routing && Config.menu.routing === true && sortedParams[i].ol_layer.get('routable') === true) {
-                            if (this.get("wfsCoordinate").length > 0) {
-                                pRoutables.push(new RoutableView(this.get("wfsCoordinate")));
-                            }
-                            else {
-                                pRoutables.push(new RoutableView(params[1]));
-                            }
-                        }
-                        else {
-                            pRoutables.push(false);
-                        }
-                    }, this);
-                }
-            }
-            // Ersetzen von keywords mit Objekten
-            pContent = this.replaceValuesWithObjects(pContent);
+                // Erzeugen eines TemplateModels anhand 'gfiTemplateName'
+                _.each(gfiContent, function(layerresponse, index, list) {
+                    switch (visibleLayer.ol_layer.get('gfiTemplateName')) {
+                        case 'mietenspiegel':
+                            alert ('not yet implemented');
+                        default:
+                            templateView = new DefaultTemplateView(layerresponse);
+                            break;
+                    }
+                    pContent.push(templateView);
+                    pTitles.push(visibleLayer.name);
+                }, this);
+            }, this);
             // Abspeichern der gesammelten Informationen
             if (pContent.length > 0) {
-                if (this.get("wfsCoordinate").length > 0) {
-                    position = this.get("wfsCoordinate");
-                } else {
-                    position = params[1];
-                }
-                this.get("gfiOverlay").setPosition(position);
+                this.get("gfiOverlay").setPosition(positionGFI);
                 this.set("gfiContent", pContent);
                 this.set("gfiTitles", pTitles);
-                this.set("gfiRoutables", pRoutables);
                 this.set("gfiCounter", pContent.length);
-                this.set("coordinate", position);
+                this.set("coordinate", positionGFI);
             } else {
                 EventBus.trigger("closeGFIParams", this);
             }
             $("#loader").hide();
-        },
-        /**
-         * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
-         * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
-         * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
-         * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
-         */
-        replaceValuesWithObjects: function (pContent) {
-            _.each(pContent, function (element, index) {
-                var children = [],
-                    lastroutenval,
-                    lastroutenkey;
-                _.each(element, function (val, key) {
-                    if (key === "Bild") {
-                        var imgView = new ImgView(val);
-                        element[key] = '#';
-                        children.push({
-                            key: imgView.model.get('id'),
-                            val: imgView
-                        });
-                    } else if (key === "video") {
-                        var videoView = new VideoView(val);
-                        element[key] = '#';
-                        children.push({
-                            key: videoView.model.get('id'),
-                            val: videoView
-                        });
-                    } else if (_.isObject(val) === false && val.indexOf('Min, ') !== -1 && val.indexOf('km') !== -1) {
-                        // Dienst liefert erst key=Flughafen Hamburg mit val=24 Min., 28km ohne Route
-                        lastroutenval = val;
-                        lastroutenkey = key;
-                        element[key] = '#';
-                    } else if (key.indexOf('Route') === 0) {
-                        // Nächstes element des Objects ist die Route
-                        var routingView = new RoutingView(lastroutenkey, lastroutenval, val);
-                        children.push({
-                            key: routingView.model.get('id'),
-                            val: routingView
-                        });
-                        element[key] = '#';
-                    }
-                    //lösche leere Dummy-Einträge wieder raus.
-                    element = _.omit(element, function (value) {
-                        return value === '#';
-                    });
-                }, this);
-                if (children.length > 0) {
-                    _.extend(element, {
-                        children: children
-                    });
-                }
-                pContent[index] = element;
-            }, this);
-            return pContent;
         },
 
         setGeoJSONPopupContent: function (source, coordinate, scale) {
@@ -181,10 +119,6 @@ define([
                 pMaxX = pExtent[2] + pMaxDist,
                 pMinY = pExtent[1] - pMaxDist,
                 pMaxY = pExtent[3] + pMaxDist;
-                // console.log(_.omit(feature.getProperties(), function (value) {
-                //     return _.isObject(value);
-                // }));
-                // console.log(feature.get("gfiAttributes"));
             if (pX < pMinX || pX > pMaxX || pY < pMinY || pY > pMaxY) {
                 return;
             } else {
@@ -215,7 +149,7 @@ define([
             if (!pFeatures) {
                 return;
             }
-            // 1 cm um Klickpunkt forEachFeatureInExtent
+            // 10 mm um Klickpunkt forEachFeatureInExtent
             var pMaxDist = 0.01 * pScale,
                 pExtent = pFeatures.getGeometry().getExtent(),
                 pX = pCoordinate[0],
@@ -412,22 +346,12 @@ define([
             EventBus.trigger("gfiForPrint", [this.get("gfiContent")[0], this.get("isPopupVisible")]);
         },
         /**
-         * Alle children und Routable-Button im gfiContent müssen hier removed werden.
+         * Alle childTemplates im gfiContent müssen hier removed werden.
          * Das gfipopup.model wird nicht removed - nur reset.
          */
         removeChildObjects: function () {
             _.each(this.get('gfiContent'), function (element) {
-                if (_.has(element, 'children')) {
-                    var children = _.values(_.pick(element, 'children'))[0];
-                    _.each(children, function (child) {
-                        child.val.remove();
-                    }, this);
-                }
-            }, this);
-            _.each(this.get('gfiRoutables'), function (element) {
-                if (_.isObject(element) === true) {
-                    element.remove();
-                }
+                element.remove();
             }, this);
         }
     });
