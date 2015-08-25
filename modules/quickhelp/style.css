@@ -51,3 +51,23 @@
 .quick-help-window > .content h3 {
     margin-top: 0;
 }
+
+.inhalt > a {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid silver;
+    float: left;
+    background: #e7e7e7;
+    text-decoration: none;
+    color: #777;
+}
+
+.inhalt > a:hover {
+    background: rgb(200, 200, 200);
+    cursor: pointer;
+}
+
+#allgemein {
+    clear: both;
+    padding-top: 15px;
+}

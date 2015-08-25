@@ -11,7 +11,7 @@
     min-width: 380px;
 }
 
-.layer-catalog-label, .layer-selection-label, .base-layer-selection {
+.layer-catalog-label, .layer-selection-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-right {
     cursor: pointer;
 }
 
@@ -38,7 +38,6 @@
     transition: .5s;
     padding: 6px;
     font-size: 14px;
-    cursor: pointer;
 }
 
 .rotate-pin-back {
@@ -46,5 +45,19 @@
     transition: .5s;
     padding: 6px;
     font-size: 14px;
+}
+
+.rotate-pin:hover, .rotate-pin-back:hover {
+    opacity: 0.6;
     cursor: pointer;
+}
+
+.base-layer-selection > .glyphicon-question-sign {
+    margin-right: 2px;
+    /*opacity: 0.6;*/
+}
+
+.base-layer-selection > .glyphicon-question-sign:hover {
+    opacity: 0.6;
+    cursor: pointer;;
 }

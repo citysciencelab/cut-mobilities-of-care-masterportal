@@ -2,8 +2,9 @@ define([
     "underscore",
     "backbone",
     "modules/layertree/model",
-    "text!modules/layertree/template.html"
-], function (_, Backbone, LayerTree, LayerTreeTemplate) {
+    "text!modules/layertree/template.html",
+    "eventbus"
+], function (_, Backbone, LayerTree, LayerTreeTemplate, EventBus) {
 
         var TreeView = Backbone.View.extend({
             model: new LayerTree(),
@@ -13,6 +14,9 @@ define([
                 "change select": "setSelection",
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
+                "click .base-layer-selection > .glyphicon-question-sign": function () {
+                    EventBus.trigger("showWindowHelp", "tree");
+                },
                 "click .layer-catalog-label": "toggleCatalog",
                 "click .layer-selection-label": "toggleSelection",
                 "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer"

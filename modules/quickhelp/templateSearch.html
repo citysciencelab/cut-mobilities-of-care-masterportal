@@ -5,7 +5,14 @@
         <span class="glyphicon glyphicon-print pull-right"></span>
     </div>
     <div class="content container-fluid">
-        <h3>Allgemein</h3>
+        <div class="inhalt">
+            <a href="#allgemein">Allgemeines</a>
+            <a href="#adresse">Adresssuche</a>
+            <a href="#hausnummer">Suche nach allen Hausnummern einer Straße</a>
+            <a href="#themen">Suche nach Themen / Geo-Daten</a>
+            <a href="#flurstueck">Flurstückssuche</a>
+        </div>
+        <h3 id="allgemein">Allgemeines</h3>
         <div class="row">
             <p class="col-md-12">
                 Es müssen mindestens drei Buchstaben in die Suchmaske eingegeben werden <strong>(1)</strong>, um Vorschläge zu erhalten.
@@ -26,34 +33,34 @@
         </div>
         <div class="row">
             <p class="col-md-6">
-                <img class="img-responsive img-thumbnai" src="<% print (util.getPath('../img/allgemein_2.png')) %>">
+                <img class="img-responsive img-thumbnail" src="<% print (util.getPath('../img/allgemein_2.png')) %>">
             </p>
             <p class="col-md-6">
                 <img class="img-responsive img-thumbnail" src="<% print (util.getPath('../img/allgemein_3.png')) %>">
             </p>
         </div>
-        <h3>Adresssuche</h3>
+        <h3 id="adresse">Adresssuche</h3>
         <div class="row">
             <p class="col-md-12">
                 Geben Sie die gesuchte Adresse in die Suchmaske ein. Durch drücken die Enter-/Returntaste bzw. der Lupe oder durch einen Mausklick auf die Adresse in der Vorschlagsliste, zoomt die Karte zur gesuchten Adresse.
                 Zusätzlich wird die geanue Position die Adresse durch ein Icon auf der Karte angezeigt.
             </p>
         </div>
-        <h3>Suche nach allen Hausnummern einer Straße</h3>
+        <h3 id="hausnummer">Suche nach allen Hausnummern einer Straße</h3>
         <div class="row">
             <p class="col-md-12">
-                Geben Sie die entsprechende Straße vollständig in die Suchmaske ein. Erweitern Sie den Namen der Straße um ein Leerzeichen. Dadurch wird die Hausnummernsuche ausgeführt und die Vorschlagsliste füllt sich mit Adressen.
+                Geben Sie die entsprechende Straße in die Suchmaske ein. Sobald die Adresssuche als Ergebnis nur noch eine Straße findet, wird automatisch die Hausnummernsuche ausgeführt und die Vorschlagsliste füllt sich mit Adressen.
                 Durch drücken die Enter-/Returntaste bzw. der Lupe, werden alle Hausnummern der Straße aufgelistet.
             </p>
         </div>
-        <h3>Suche nach Themen / Geo-Daten</h3>
+        <h3 id="themen">Suche nach Themen / Geo-Daten</h3>
         <div class="row">
             <p class="col-md-12">
                 Mit der Themensuche können Sie Suchbegriffe eingeben (z.B. Schutzgebiete, Wahlen, Wohnungsbau usw.) und nach verfügbaren Geodaten zu diesem Thema suchen. Wenn Sie ein Resultat auswählen, wird es dirket in der
                 Karte dargestellt.
             </p>
         </div>
-        <h3>Flurstückssuche</h3>
+        <h3 id="flurstueck">Flurstückssuche</h3>
         <div class="row">
             <p class="col-md-12">
                 Über die Flurstrücksnummer und die Gemarkungsnummer können Sie nach Flurstücken suchen. Geben Sie einfach die Gemarkungsnummer gefolgt von der Flurstücksnummer <strong>(1)</strong> (mit oder ohne Leerzeichen) in die

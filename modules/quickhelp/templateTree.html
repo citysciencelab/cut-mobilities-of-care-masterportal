@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+    <div class="header">
+        <span class="title">Hilfe - Themenbaum</span>
+        <span class="glyphicon glyphicon-remove pull-right"></span>
+        <span class="glyphicon glyphicon-print pull-right"></span>
+    </div>
+    <div class="content container-fluid">
+        <div class="inhalt">
+            <a href="#allgemein">Allgemeines</a>
+            <a href="#adresse">Wie baut sich der Themenbaum unter Fachdaten auf?</a>
+            <a href="#hausnummer">Was ist die Auswahl?</a>
+        </div>
+        <h3 id="allgemein">Allgemein</h3>
+        <div class="row">
+            <p class="col-md-12">
+                Der Themenbaum ist gegliedert in Hintergrundkarten, einen Katalog an Fachdaten und die aktuelle Auswahl an Kartenebenen.
+            </p>
+        </div>
+        <h3>Wie baut sich der Themenbaum unter Geofachdaten auf?</h3>
+        <div class="row">
+            <p class="col-md-12">
+                Der FHH-Atlas stellt alle Kartenebenen (Layer) dar, denen ein Datensatz im Hamburger Metadatenkatalog (HMDK) zugeordnet ist. Die Zuordnung nimmt LGV in Absprache mit den Fachdatenhaltern vor. Die den Kartenebenen zugeordneten Datensätze steuern den automatisierten Aufbau des Themenbaums im FHH-Atlas:
+                Die Oberkategorien des Themenbaums ergeben sich aus den OpenData-Kategorien (z.B. Bevölkerung, Gesundheit), die den Datensätzen im HMDK zugeordnet wurden (s. Bild unten).  Jeder Datensatz taucht in ‚seiner‘ OpenData-Kategorie auf. Zurzeit muss für die Auswahl einer OpenData-Kategorie der Datensatz auch als OpenData veröffentlicht werden. Diese Restriktion wird bald  aufgehoben. Ist einem Datensatz keine OpenData-Kategorie zugeordnet, wird der Datensatz in der Kategorie Sonstiges angezeigt.  Alternativ kann der Baum auch nach den INSPIRE-Kategorien aufgebaut werden.
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/themen.png')) %>">
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                Die Ebene unterhalb der Oberkategorien stellt einen Datensatz aus dem HMDK dar.
+                Sind einem Datensatz mehrere Kartenebenen zugeordnet, wird ein Ordner erzeugt. Der Ordner heißt so wie der Datensatz im HMDK (z.B. Verkehrszählstellen Hamburg, s. Bild unten). Innerhalb des Ordners finden sich dann die einzelnen Kartenebenen, die dem Datensatz zugeordnet sind (z.B. Bedarfszählstelle, s. Bild unten). (Für Fachleute: Die Kartenebenen heißen in der Regel so, wie sie im zugehörigen Kartendienst heißen, d.h. wie sie im zugrundeliegenden Kartendokument benannt wurden.)
+                Ist einem Datensatz genau eine Kartenebene zugeordnet, wird ein einfacher Eintrag im Themenbaum erzeugt. Der einfache Eintrag heißt ebenfalls so wie der Datensatz im HMDK (z.B. Aktuelle Baustellen, s. Bild unten).
+                Für jeden Layer können über den i-Button so die zugehörigen Metadaten zu Datensätzen aufgerufen werden.
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/themen_2.png')) %>">
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                Der Themenbaum wird täglich auf Basis der Informationen im HMDK erzeugt und aktualisiert.
+                Falls ‚Ihr‘ Datensatz also nicht in der richtigen Kategorie auftaucht, können Sie das selbst ändern. Sie passen im zugehörigen HMDK-Eintrag einfach die OpenData-Kategorie an und am nächsten Tag taucht der Datensatz in der richtigen Kategorie im FHH-Atlas auf. Falls die ‚Ihrem‘ Datensatz zugeordneten Kartenebenen nicht korrekt sind, wenden Sie sich bitte an GVGeoportal@gv.hamburg.de.
+            </p>
+        </div>
+        <h3>Was ist die Auswahl?</h3>
+        <div class="row">
+            <p class="col-md-12">
+                Die aus den über 1000 im Themenbaum verfügbaren Kartenebenen ausgewählten werden in der Auswahl angezeigt. Hier kann ihre Darstellungsreihenfolge durch Drag and Drop geändert werden. In den Einstellungen jeder Kartenebene kann ihre Transparenz beeinflusst werden. Die Darstellungsreihenfolge kann hier ebenfalls über die Pfeile eingestellt werden. Natürlich kann der Layer sichtbar und unsichtbar gestellt und aus der Auswahl entfernt werden. In der Auswahl wird außerdem angezeigt, wenn eine Kartenebene im aktuellen Maßstab nicht angezeigt werden kann. Der Eintrag ist dann ausgegraut.
+            </p>
+        </div>
+</div>
