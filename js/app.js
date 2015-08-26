@@ -1,7 +1,7 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/attribution/view", "modules/core/util"], function ($, Config, AttView, Util) {
+define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Util) {
     "use strict";
 
     Util.showLoader();
@@ -28,7 +28,9 @@ define("app", ["jquery", "config", "modules/attribution/view", "modules/core/uti
     }
 
     if (Config.attributions && Config.attributions === true) {
-        new AttView();
+        require(["modules/attribution/view"], function (AttView) {
+            new AttView();
+        });
     }
 
     require([

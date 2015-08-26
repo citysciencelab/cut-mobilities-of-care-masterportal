@@ -11,11 +11,9 @@ define([
             attribution: ""
         },
         initialize: function () {
-            this.listenTo(this, "change:alreadySet", this.addAttributionControl);
             EventBus.on("startEventAttribution", this.startEventAttribution, this); // Beim erneuten sichtbar schalten des Layers wird die Funktion wieder ausgeführt
             EventBus.on("stopEventAttribution", this.stopEventAttribution, this); // Beim ausschalten des Layers wird die Funktion ausgeführt
             EventBus.on("setAttributionToLayer", this.checkLayer, this);
-            EventBus.on("setMap", this.addAttributionControl, this);
         },
         /*
         * Diese Funktion wird für jeden Backbone-Layer ausgeführt und startet
@@ -32,6 +30,7 @@ define([
 
                 if (_.isArray(layerattributions) && layerattributions.length > 0) {
                     layer.set("olAttribution", layerattributions);
+                    this.addAttributionControl();
                 }
                 this.checkConfigForEventAttribution(layer);
             }
@@ -95,7 +94,7 @@ define([
             clearInterval(event);
             layer.EventAttribution.Event = "";
         },
-        addAttributionControl: function (map) {
+        addAttributionControl: function () {
             if (this.get("alreadySet") === false) {
                 var attribution = new ol.control.Attribution({
                     collapsible: true,
@@ -110,7 +109,7 @@ define([
             }
         },
         checkAPIforAttribution: function (layer) {
-            if (layer.get("layerAttribution") && layer.get("layerAttribution") != "" && layer.get("layerAttribution") != "nicht vorhanden") {
+            if (layer.get("layerAttribution") && layer.get("layerAttribution") !== "" && layer.get("layerAttribution") !== "nicht vorhanden") {
                 var attribution = layer.get("layerAttribution");
             }
             if (attribution) {
@@ -134,7 +133,7 @@ define([
         },
         returnConfig: function (layer) {
             var config = _.find(Config.layerIDs, function (layerdef) {
-                if (layerdef.styles && layerdef.styles != "") {
+                if (layerdef.styles && layerdef.styles !== "") {
                     var checkid = layerdef.id + "_" + layerdef.styles;
                 }
                 else {
@@ -152,7 +151,7 @@ define([
 
                 _.each(configs, function (gruppenlayer) {
                    _.each(gruppenlayer.id, function (layerdef) {
-                       if (layerdef.styles && layerdef.styles != "") {
+                       if (layerdef.styles && layerdef.styles !== "") {
                             var checkid = layerdef.id + "_" + layerdef.styles;
                         }
                         else {

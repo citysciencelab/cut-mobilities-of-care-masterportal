@@ -36,10 +36,7 @@ define([
 
             this.listenTo(this, {
                 "change:viewResolution": this.setIsResolutionInRange,
-                "change:visibility": function () {
-                    this.setVisibility();
-                    this.toggleLayerInformation();
-                },
+                "change:visibility": this.setVisibility,
                 "change:transparence": this.updateOpacity,
                 "change:selected": this.toggleToSelectionLayerList,
                 "change:SLDBody": this.updateSourceSLDBody

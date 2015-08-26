@@ -39,6 +39,7 @@ define(function () {
             {id: "368", visibility: false, name: "ALKIS farbig", maxScale: "10000"},
             {id: "149", visibility: false, name: "ALKIS grau-blau", maxScale: "10000"}
         ],
+        attributions: true,
         footer: true,
         quickHelp: true,
         allowParametricURL: true,
