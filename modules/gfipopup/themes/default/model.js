@@ -4,9 +4,8 @@ define([
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
     "modules/gfipopup/gfiObjects/routing/view",
-    "modules/gfipopup/gfiObjects/routable/view",
-    "modules/core/util"
-], function (Backbone, Config, ImgView, VideoView, RoutingView, RoutableView, Util) {
+    "modules/gfipopup/gfiObjects/routable/view"
+], function (Backbone, Config, ImgView, VideoView, RoutingView, RoutableView) {
     "use strict";
     var GFIContentDefaultModel = Backbone.Model.extend({
         /**
