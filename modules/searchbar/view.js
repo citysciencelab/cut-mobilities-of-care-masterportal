@@ -238,6 +238,7 @@ define([
                 }
 
                 if (hit.type === "Straße") {
+                    console.log(hit.coordinate);
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
                         extent,
                         format = new ol.format.WKT(),

@@ -170,7 +170,7 @@ define([
              * @param {function} successFunction - A function to be called if the request succeeds
              * @param {boolean} asyncBool - asynchroner oder synchroner Request
              */
-            getXML: function (url, data, successFunction, asyncBool) {
+            sendRequest: function (url, data, successFunction, asyncBool) {
                 $.ajax({
                     url: url,
                     data: data,
@@ -181,14 +181,40 @@ define([
                 });
             },
 
+            getBKGStreets: function (data) {
+                console.log(data);
+                var hits = data.features;
+                _.each(hits, function (hit) {
+                    var coordinates = "";
+                    _.each(hit.properties.bbox.coordinates[0], function (point) {
+                        coordinates += point[0] + " " + point[1] + " ";
+                    });
+                    coordinates = coordinates.trim();
+
+                    this.pushHits("hitList", {
+                        name: hit.properties.text,
+                        type: "Straße",
+                        coordinate: coordinates,
+                        glyphicon: "glyphicon-road",
+                        id: hit.properties.strasse + " Straße"
+                    });
+                }, this);
+                 this.get("isSearchReady").set("streetSearch", true);
+            },
+
+
             /**
             *
             */
             searchStreets: function () {
                 if (this.get("isSearchReady").get("streetSearch") === true) {
                     this.get("isSearchReady").set("streetSearch", false);
-                    this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
+
+                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
+                    this.sendRequest("/bkg_geosearch", "query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Strasse)" + "&filter=(plz:2*)" + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg, this.getBKGStreets,true);
                 }
+
             },
 
             /**
@@ -269,7 +295,7 @@ define([
             */
             searchHouseNumbers: function () {
                 this.get("isSearchReady").set("numberSearch", false);
-                this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
+                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
             },
 
             searchInHouseNumbers: function () {
@@ -322,7 +348,7 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
                 }
             },
 
@@ -362,7 +388,7 @@ define([
                     flurstuecksnummer = this.get("searchString").slice(4);
                 }
                 gemarkung = this.get("searchString").slice(0, 4);
-                this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                 this.get("isSearchReady").set("parcelSearch", true);
             },
 
@@ -489,13 +515,13 @@ define([
             getWFSFeatures: function () {
                 _.each(Config.searchBar.getFeatures, function (element) {
                     if (element.filter === "olympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
+                        this.sendRequest(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
                     }
                     else if (element.filter === "paralympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
+                        this.sendRequest(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
                     }
                     else if (element.filter === "bplan") {
-                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
+                        this.sendRequest(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
                     }
                 }, this);
             },
