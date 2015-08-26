@@ -8,7 +8,7 @@ define([
     "modules/gfipopup/gfiObjects/video/view",
     "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view",
-    "modules/gfipopup/templates/default/view",
+    "modules/gfipopup/themes/default/view",
     "modules/core/util"
 ], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTemplateView, Util) {
     "use strict";
@@ -76,15 +76,15 @@ define([
                         break;
                     case 'WFS':
                         gfiContent = this.setWFSPopupContent(visibleLayer.source, visibleLayer.style, position, visibleLayer.scale, visibleLayer.ol_layer.get('gfiAttributes'));
-                        positionGFI = this.get("wfsCoordinate");
+                        if (this.get("wfsCoordinate").length > 0) positionGFI = this.get("wfsCoordinate");
                         break;
                     case 'GeoJSON':
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.source, position, visibleLayer.scale);
                         break;
                 }
-                // Erzeugen eines TemplateModels anhand 'gfiTemplateName'
+                // Erzeugen eines TemplateModels anhand 'gfiTheme'
                 _.each(gfiContent, function(layerresponse, index, list) {
-                    switch (visibleLayer.ol_layer.get('gfiTemplateName')) {
+                    switch (visibleLayer.ol_layer.get('gfiTheme')) {
                         case 'mietenspiegel':
                             alert ('not yet implemented');
                         default:

@@ -33,7 +33,7 @@ define([
 
             this.set("settings", false);
             // Setze 'gfiTemplate' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder 'default'
-            this.set('gfiTemplateName', this.get('gfiTemplateName') || 'default');
+            this.set('gfiTheme', this.get('gfiTheme') || 'default');
             // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
             this.set('routable', this.get('routable') || false);
             // Tranparenz

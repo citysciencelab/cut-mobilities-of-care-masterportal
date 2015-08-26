@@ -49,7 +49,7 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTemplateName: this.get('gfiTemplateName'),
+                                gfiTheme: this.get('gfiTheme'),
                             }));
                             this.reload();
                         }
@@ -73,7 +73,7 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTemplateName: this.get('gfiTemplateName')
+                                gfiTheme: this.get('gfiTheme')
                             }));
                             this.reload();
                         }

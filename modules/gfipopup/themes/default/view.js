@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/gfipopup/templates/default/template.html",
-    "modules/gfipopup/templates/default/model",
+    "text!modules/gfipopup/themes/default/template.html",
+    "modules/gfipopup/themes/default/model",
     "eventbus"
 ], function (Backbone, GFIContentDefaultTemplate, GFIContentDefaultModel, EventBus) {
     "use strict";
