@@ -115,7 +115,7 @@ define([
                 response = this.mergeLayersByIDs(response);
                 response = this.mergeLayersByMetaID(response);
                 this.setBaseLayer(response);
-                response = this.createLayerPerDatasate(response);
+                response = this.createLayerPerDataset(response);
                 return response;
             }
             // Ansonsten Layer über ID
@@ -196,7 +196,7 @@ define([
         },
 
         // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt.
-        createLayerPerDatasate: function (response) {
+        createLayerPerDataset: function (response) {
             var layerList = _.filter(response, function (element) {
                 return element.datasets.length > 1;
             });
@@ -210,7 +210,9 @@ define([
                     response.push(newLayer);
                 });
             });
-            return response;
+            return _.filter(response, function (element) {
+                return element.datasets.length === 1;
+            });
         },
 
         // Layer mit gleicher Metadaten-ID werden zu einem neuem Layer zusammengefasst.
