@@ -16,7 +16,6 @@ define([
          */
         initialize: function (layerresponse) {
             this.model.set('gfiContent', layerresponse);
-            this.model.replaceValuesWithChildObjects();
             this.render();
         },
         /**
@@ -53,12 +52,12 @@ define([
          * Fügt den Button dem gfiContent hinzu
          */
         appendRoutableButton: function () {
-//            if (this.model.get('gfiRoutables') && this.model.get('gfiRoutables').length > 0) {
-//                var rb = this.model.get('gfiRoutables')[this.model.get('gfiRoutables').length - this.model.get('gfiCounter')];
-//                if (rb) {
-//                    $('.gfi-content').append(rb.$el);
-//                }
-//            }
+            if (this.model.get('gfiRoutables') && this.model.get('gfiRoutables').length > 0) {
+                var rb = this.model.get('gfiRoutables')[this.model.get('gfiRoutables').length - this.model.get('gfiCounter')];
+                if (rb) {
+                    $('.gfi-content').append(rb.$el);
+                }
+            }
         }
     });
 

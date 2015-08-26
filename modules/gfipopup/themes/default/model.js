@@ -21,6 +21,7 @@ define([
          *
          */
         initialize: function () {
+            this.replaceValuesWithChildObjects();
         },
         /**
          * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
