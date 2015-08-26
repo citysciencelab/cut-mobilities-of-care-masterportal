@@ -29,7 +29,8 @@ define([
          *
          */
         destroy: function () {
-            this.model.removeChildObjects();
+            this.unbind();
+            this.model.destroy();
         },
         /**
          * Alle Children werden dem gfi-content appended. Eine Übernahme in dessen table ist nicht HTML-konform (<div> kann nicht in <table>).

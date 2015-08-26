@@ -88,7 +88,7 @@ define([
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
-        removeChildObjects: function () {
+        destroy: function () {
             _.each(this.get('gfiContent'), function (element) {
                 if (_.has(element, 'children')) {
                     var children = _.values(_.pick(element, 'children'))[0];
