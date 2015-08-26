@@ -1,27 +1,40 @@
 define([
     "backbone",
-    "eventbus",
-    "openlayers",
     "config",
-    "bootstrap/popover",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
     "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, Util) {
+], function (Backbone, Config, ImgView, VideoView, RoutingView, RoutableView, Util) {
     "use strict";
     var GFIContentDefaultModel = Backbone.Model.extend({
         /**
          *
          */
         defaults: {
+            routable: null,
+            children: null
         },
         /**
          *
          */
-        initialize: function () {
+        initialize: function (layer, response) {
+            this.set('id', _.uniqueId("defaultTheme"));
+            this.set('layer', layer);
+            this.set('gfiContent', response);
             this.replaceValuesWithChildObjects();
+            this.checkRoutable();
+        },
+        /**
+         * Prüft, ob der Button zum Routen angezeigt werden soll
+         */
+        checkRoutable: function () {
+            if (Config.menu.routing && Config.menu.routing === true) {
+                if (this.get('layer').ol_layer.get('routable') === true) {
+                    this.set('routable', new RoutableView());
+                }
+            }
         },
         /**
          * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
@@ -69,14 +82,12 @@ define([
                 });
             }, this);
             if (children.length > 0) {
-                _.extend(element, {
-                    children: children
-                });
+                this.set('children', children);
             }
             this.set('gfiContent', element);
         },
         /**
-         * Alle children und Routable-Button im gfiContent müssen hier removed werden.
+         * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
         removeChildObjects: function () {
             _.each(this.get('gfiContent'), function (element) {
@@ -95,5 +106,5 @@ define([
         }
     });
 
-    return new GFIContentDefaultModel();
+    return GFIContentDefaultModel;
 });

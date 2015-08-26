@@ -88,7 +88,7 @@ define([
                         case 'mietenspiegel':
                             alert ('not yet implemented');
                         default:
-                            templateView = new DefaultTemplateView(layerresponse);
+                            templateView = new DefaultTemplateView(visibleLayer, layerresponse);
                             break;
                     }
                     pContent.push(templateView);

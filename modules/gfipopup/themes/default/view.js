@@ -6,7 +6,6 @@ define([
 ], function (Backbone, GFIContentDefaultTemplate, GFIContentDefaultModel, EventBus) {
     "use strict";
     var GFIContentDefaultView = Backbone.View.extend({
-        model: GFIContentDefaultModel,
         template: _.template(GFIContentDefaultTemplate),
         events: {
             "remove": "destroy"
@@ -14,8 +13,8 @@ define([
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
          */
-        initialize: function (layerresponse) {
-            this.model.set('gfiContent', layerresponse);
+        initialize: function (layer, response) {
+            this.model = new GFIContentDefaultModel(layer, response);
             this.render();
         },
         /**
@@ -34,29 +33,23 @@ define([
             this.model.removeChildObjects();
         },
         /**
-         * Alle Children des gfiContent werden dem gfi-content appended. Eine Übernahme in dessen table ist nicht HTML-konform (<div> kann nicht in <table>).
+         * Alle Children werden dem gfi-content appended. Eine Übernahme in dessen table ist nicht HTML-konform (<div> kann nicht in <table>).
          * Nur $.append, $.replaceWith usw. sorgen für einen korrekten Zusammenbau eines <div>. Mit element.val.el.innerHTML wird HTML nur kopiert, sodass Events
          * nicht im view ankommen.
          */
         appendChildren: function () {
-            var gfiContent = this.model.get('gfiContent'),
-                children;
-            if (_.has(gfiContent, 'children')) {
-                children = _.values(_.pick(gfiContent, 'children'))[0];
-                _.each(children, function (element) {
-                    this.$el.append(element.val.$el);
-                }, this);
-            }
+            var children = this.model.get('children');
+            _.each(children, function (element) {
+                this.$el.append(element.val.$el);
+            }, this);
         },
         /**
          * Fügt den Button dem gfiContent hinzu
          */
         appendRoutableButton: function () {
-            if (this.model.get('gfiRoutables') && this.model.get('gfiRoutables').length > 0) {
-                var rb = this.model.get('gfiRoutables')[this.model.get('gfiRoutables').length - this.model.get('gfiCounter')];
-                if (rb) {
-                    $('.gfi-content').append(rb.$el);
-                }
+            if (this.model.get('routable') !== null) {
+                var rb = this.model.get('routable');
+                this.$el.append(rb.$el);
             }
         }
     });
