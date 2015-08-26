@@ -1,8 +1,7 @@
 define([
-    "underscore",
     "backbone",
     "eventbus"
-], function (_, Backbone, EventBus) {
+], function (Backbone, EventBus) {
 
     var list = Backbone.Collection.extend({
         initialize: function () {
@@ -14,16 +13,26 @@ define([
             this.listenTo(this, "add", this.addLayerToMap);
             this.listenTo(this, "remove", this.removeLayerFromMap);
         },
-        /**
-         * Fügt der Collection ein Model hinzu.
-         * @param {Backbone.Model} model - Layer-Model
-         */
+
+        // Fügt der Collection ein Model hinzu. Layer werden immer ans Ende hinzugefügt, der erste Baselayer an den Anfang.
+        // Zusätzliche Baselayer werden immer über dem am höchsten platzierten Baselayer eingefügt.
         addModelToList: function (model) {
             if (model.get("isbaselayer") === false) {
                 this.add(model);
             }
             else {
-                this.add(model, {at: 0});
+                var highestIndex = [],
+                    baselayerList = this.where({isbaselayer: true});
+
+                if (baselayerList.length) {
+                    _.each(baselayerList, function (baselayer) {
+                        highestIndex.push(this.indexOf(baselayer));
+                    }, this);
+                    this.add(model, {at: _.max(highestIndex) + 1});
+                }
+                else {
+                    this.add(model, {at: 0});
+                }
             }
         },
         /**
