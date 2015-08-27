@@ -9,8 +9,9 @@ define([
     "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view",
     "modules/gfipopup/themes/default/view",
+    "modules/gfipopup/themes/mietenspiegel/view",
     "modules/core/util"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTemplateView, Util) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTheme, MietenspiegelTheme, Util) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -86,9 +87,10 @@ define([
                 _.each(gfiContent, function(layerresponse, index, list) {
                     switch (visibleLayer.ol_layer.get('gfiTheme')) {
                         case 'mietenspiegel':
-                            alert ('not yet implemented');
+                            templateView = new MietenspiegelTheme(visibleLayer, layerresponse);
+                            break;
                         default:
-                            templateView = new DefaultTemplateView(visibleLayer, layerresponse);
+                            templateView = new DefaultTheme(visibleLayer, layerresponse);
                             break;
                     }
                     pContent.push(templateView);
