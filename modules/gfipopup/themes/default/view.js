@@ -12,8 +12,8 @@ define([
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
          */
-        initialize: function (layer, response) {
-            this.model = new GFIContentDefaultModel(layer, response);
+        initialize: function (layer, response, position) {
+            this.model = new GFIContentDefaultModel(layer, response, position);
             this.render();
         },
         /**

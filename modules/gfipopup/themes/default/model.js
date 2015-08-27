@@ -18,10 +18,11 @@ define([
         /**
          *
          */
-        initialize: function (layer, response) {
+        initialize: function (layer, response, position) {
             this.set('id', _.uniqueId("defaultTheme"));
             this.set('layer', layer);
             this.set('gfiContent', response);
+            this.set('position', position);
             this.replaceValuesWithChildObjects();
             this.checkRoutable();
         },
@@ -31,7 +32,7 @@ define([
         checkRoutable: function () {
             if (Config.menu.routing && Config.menu.routing === true) {
                 if (this.get('layer').ol_layer.get('routable') === true) {
-                    this.set('routable', new RoutableView());
+                    this.set('routable', new RoutableView(this.get('position')));
                 }
             }
         },

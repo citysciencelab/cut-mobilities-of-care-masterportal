@@ -90,7 +90,7 @@ define([
                             templateView = new MietenspiegelTheme(visibleLayer, layerresponse);
                             break;
                         default:
-                            templateView = new DefaultTheme(visibleLayer, layerresponse);
+                            templateView = new DefaultTheme(visibleLayer, layerresponse, positionGFI);
                             break;
                     }
                     pContent.push(templateView);
