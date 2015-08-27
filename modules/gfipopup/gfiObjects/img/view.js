@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/gfipopup/img/template.html",
-    "modules/gfipopup/img/model"
+    "text!modules/gfipopup/gfiObjects/img/template.html",
+    "modules/gfipopup/gfiObjects/img/model"
 ], function (Backbone, ImgTemplate, ImgModel) {
     "use strict";
     var ImgView = Backbone.View.extend({

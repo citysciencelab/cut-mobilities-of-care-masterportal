@@ -90,7 +90,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         });
                     }
                     if (Config.tools.gfi === true) {
-                        require(["modules/gfipopup/view", "modules/gfipopup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
+                        require(["modules/gfipopup/popup/view", "modules/gfipopup/popup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
                             if (Util.isAny()) {
                                 new MobileGFIPopupView();
                             }

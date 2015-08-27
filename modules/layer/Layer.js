@@ -41,6 +41,13 @@ define([
                 "change:selected": this.toggleToSelectionLayerList,
                 "change:SLDBody": this.updateSourceSLDBody
             });
+            this.set("settings", false);
+            // Setze 'gfiTemplate' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder 'default'
+            this.set('gfiTheme', this.get('gfiTheme') || 'default');
+            // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
+            this.set('routable', this.get('routable') || false);
+            // Tranparenz
+            this.listenTo(this, "change:transparence", this.updateOpacity);
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
