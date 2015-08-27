@@ -429,7 +429,7 @@ define([
                         if (layer.model.get("type") === "nodeLayer" && metaName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", layer);
                         }
-                        else if (layer.model.get("type") === "childNodeLayer" && layerName.search(this.get("searchStringRegExp")) !== -1) {
+                        else if (metaName.search(this.get("searchStringRegExp")) !== -1 || layerName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", layer);
                         }
                     }
