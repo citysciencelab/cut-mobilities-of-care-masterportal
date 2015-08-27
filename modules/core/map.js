@@ -220,7 +220,6 @@ define([
             _.each(layersVisible, function (element) {
                 if (element.get("typ") !== "GROUP") {
                     var gfiAttributes = element.get("gfiAttributes");
-
                     if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                         if (element.getProperties().typ === "WMS") {
                             var gfiURL = element.getSource().getGetFeatureInfoUrl(
@@ -233,8 +232,7 @@ define([
                                 scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
-                                attributes: gfiAttributes,
-                                routable: element.get("routable")
+                                ol_layer: element
                             });
                         }
                         else if (element.getProperties().typ === "WFS") {
@@ -244,8 +242,7 @@ define([
                                 source: element.getSource(),
                                 style: element.getStyle(),
                                 name: element.get("name"),
-                                attributes: gfiAttributes,
-                                routable: element.get("routable")
+                                ol_layer: element
                             });
                         }
                     }
@@ -274,8 +271,7 @@ define([
                                     scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
-                                    attributes: gfiAttributes,
-                                    routable: layer.get("routable")
+                                    ol_layer: element
                                 });
                             }
                             else if (layer.getProperties().typ === "WFS") {
@@ -285,8 +281,7 @@ define([
                                     source: layer.getSource(),
                                     style: layer.getStyle(),
                                     name: layer.get("name"),
-                                    attributes: gfiAttributes,
-                                    routable: layer.get("routable")
+                                    ol_layer: element
                                 });
                             }
                         }

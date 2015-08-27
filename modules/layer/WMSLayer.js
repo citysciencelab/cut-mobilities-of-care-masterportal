@@ -114,6 +114,7 @@ define([
                     gfiAttributes: this.get("gfiAttributes"),
                     legendURL: this.get("legendURL"),
                     routable: this.get("routable"),
+                    gfiTheme: this.get('gfiTheme'),
                     infoFormat: this.get("infoFormat")
             };
 

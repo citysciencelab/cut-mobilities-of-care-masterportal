@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/gfipopup/video/template.html",
-    "modules/gfipopup/video/model",
+    "text!modules/gfipopup/gfiObjects/video/template.html",
+    "modules/gfipopup/gfiObjects/video/model",
     "eventbus",
     "modules/core/util"
 ], function (Backbone, VideoTemplate, VideoModel, EventBus, Util) {
