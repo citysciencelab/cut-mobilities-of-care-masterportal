@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        geoAPI: true,
         allowParametricURL: true,
         view: {
             center: [565874, 5934140] // Rathausmarkt

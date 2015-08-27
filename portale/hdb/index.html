@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../../css/style.css">
     <script type="text/javascript" data-main="../../js/main" src="../../components/requirejs/require.js"></script>
     <script type="text/javascript">
-        require(["app"], function () {
+        require(["app", "geoapi"], function () {
             GeoAPI.on("getDrawendCoords", function(coordinates) {
                 console.log(coordinates);
             });

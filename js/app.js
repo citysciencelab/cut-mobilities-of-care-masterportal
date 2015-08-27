@@ -33,6 +33,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         });
     }
 
+    if (Config.geoAPI && Config.geoAPI === true) {
+        require(["geoapi"], function () {
+        });
+    }
+
     require([
         "modules/core/map",
         "config",
