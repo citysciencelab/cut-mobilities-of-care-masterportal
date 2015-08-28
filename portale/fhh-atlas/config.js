@@ -12,6 +12,16 @@ define(function () {
                 ["713", "714", "715", "716"],
                 ["1043", "1044", "1045", "1046"]
             ],
+            layerIDsToStyle: [
+                {
+                    "id": "1933",
+                    "styles": "geofox_stations"
+                },
+                {
+                    "id": "1935",
+                    "styles": ["geofox-bus", "geofox_BusName", "geofox-bahn"]
+                }
+            ],
             metaIDsForMerge: [
                 "38575F13-7FA2-4F26-973F-EDED24D937E5", // Landesgrundbesitzverzeichnis
                 "CD1AA43B-9C7E-4E85-B0A3-8619101D0517", // Landesgrundbesitzverzeichnis FHHNet
