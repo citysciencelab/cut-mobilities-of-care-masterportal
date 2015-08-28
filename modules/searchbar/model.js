@@ -56,7 +56,6 @@ define([
                 houseNumbers: [],
                 // isOnlyOneStreet: false, // Wenn true --> Hausnummernsuche startet
                 onlyOneStreetName: "", // speichert den Namen der Straße, wenn die Straßensuche nur noch eine Treffer zurückgibt.
-                gazetteerURL: Config.searchBar.gazetteerURL(),
                 marker: new ol.Overlay({
                     positioning: "bottom-center",
                     element: $("#searchMarker"), // Element aus der index.html
@@ -77,6 +76,7 @@ define([
                 EventBus.on("sendNodeChild", this.getNodesForSearch, this);
 
                 this.set("isSearchReady", new SearchReady());
+                this.set("useBKGSearch", Config.searchBar.useBKGSearch);
 
                 if (Config.searchBar.getFeatures !== undefined) {
                     this.getWFSFeatures();
@@ -181,11 +181,52 @@ define([
                 });
             },
 
+            /**
+             * @description Führt einen HTTP-GET-Request auf den BKG Dienst aus.
+             * Reicht den Context durch umm auch aus dem View callbar zu sein
+
+             * @param {String} data - Data to be sent to the server
+             * @param {function} successFunction - A function to be called if the request succeeds
+             * @param {context} gibt den Context weiter
+             */
+            sendSearchRequestToBKG: function (data, successFunction, context) {
+                $.ajax({
+                    url: Config.searchBar.bkgSearchURL,
+                    data: data,
+                    context: this,
+                    type: "GET",
+                    success: function (result) {
+                        successFunction(result, context);
+                    }
+                });
+            },
+
+            pushStreetSuggestions: function (data) {
+                if (data.length === 1) {
+                    this.searchHouseNumbers();
+                }
+                else {
+                    _.each(data, function (hit) {
+                        // var text = hit.suggestion.substring(0, hit.suggestion.indexOf(","));
+                        this.pushHits("hitList", {
+                            name: hit.suggestion,
+                            type: "Straße",
+                            glyphicon: "glyphicon-road",
+                            id: hit.suggestion + " Straße"
+                        });
+                    }, this);
+
+                }
+                this.get("isSearchReady").set("streetSearch", true);
+                this.get("isSearchReady").set("numberSearch", true);
+            },
+
             getBKGStreets: function (data) {
-                console.log(data);
                 var hits = data.features;
+
                 _.each(hits, function (hit) {
                     var coordinates = "";
+
                     _.each(hit.properties.bbox.coordinates[0], function (point) {
                         coordinates += point[0] + " " + point[1] + " ";
                     });
@@ -210,9 +251,14 @@ define([
                 if (this.get("isSearchReady").get("streetSearch") === true) {
                     this.get("isSearchReady").set("streetSearch", false);
 
-                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
-                    this.sendRequest("/bkg_geosearch", "query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Strasse)" + "&filter=(plz:2*)" + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg, this.getBKGStreets,true);
+                    if (Config.searchBar.useBKGSearch) {
+                        this.sendRequest(Config.searchBar.bkgSuggestURL, "count=15&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Strasse)" + "&bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                        Config.view.epsg, this.pushStreetSuggestions, true);
+                    }
+                    else {
+                        this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
+                    }
+
                 }
 
             },
@@ -238,7 +284,6 @@ define([
                         id: hitName.replace(/ /g, "") + "Straße"
                     });
                 }, this);
-
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
                     this.searchInHouseNumbers();
@@ -295,7 +340,13 @@ define([
             */
             searchHouseNumbers: function () {
                 this.get("isSearchReady").set("numberSearch", false);
-                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
+                if (Config.searchBar.useBKGSearch) {
+                    this.sendRequest(Config.searchBar.bkgSuggestURL, "count=15&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Haus)" + "&bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg, this.pushStreetSuggestions, true);
+                }
+                else {
+                    this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
+                }
             },
 
             searchInHouseNumbers: function () {
@@ -348,7 +399,7 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
                 }
             },
 
@@ -388,7 +439,7 @@ define([
                     flurstuecksnummer = this.get("searchString").slice(4);
                 }
                 gemarkung = this.get("searchString").slice(0, 4);
-                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                 this.get("isSearchReady").set("parcelSearch", true);
             },
 

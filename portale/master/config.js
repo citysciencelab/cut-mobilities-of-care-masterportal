@@ -232,9 +232,11 @@ define(function () {
         */
         searchBar: {
             placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+            bkgSuggestURL: "/bkg_suggest",
+            bkgSearchURL: "/bkg_geosearch",
+            bbox: "454591,5809000,700000,6075769",
+            useBKGSearch: true
         },
 
         bPlan: {

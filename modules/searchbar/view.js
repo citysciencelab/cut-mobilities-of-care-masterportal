@@ -238,18 +238,23 @@ define([
                 }
 
                 if (hit.type === "Straße") {
-                    console.log(hit.coordinate);
-                    var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
-                        extent,
-                        format = new ol.format.WKT(),
-                        feature = format.readFeature(wkt);
+                    if (this.model.get("useBKGSearch")) {
+                        this.model.sendSearchRequestToBKG("count=15&query=" + hit.name + "&filter=(typ:Strasse)&outputformat=json&srsName=" +
+                        Config.view.epsg, this.zoomToBKGSearchResult, this);
+                    }
+                    else {
+                        var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
+                            extent,
+                            format = new ol.format.WKT(),
+                            feature = format.readFeature(wkt);
 
-                    searchVector.getSource().clear();
-                    searchVector.getSource().addFeature(feature);
-                    searchVector.setVisible(true);
-                    extent = feature.getGeometry().getExtent();
-                    EventBus.trigger("zoomToExtent", extent);
-                    $(".dropdown-menu-search").hide();
+                        searchVector.getSource().clear();
+                        searchVector.getSource().addFeature(feature);
+                        searchVector.setVisible(true);
+                        extent = feature.getGeometry().getExtent();
+                        EventBus.trigger("zoomToExtent", extent);
+                        $(".dropdown-menu-search").hide();
+                    }
                 }
                 else if (hit.type === "Krankenhaus") {
                     $(".dropdown-menu-search").hide();
@@ -356,11 +361,36 @@ define([
                 }
             },
 
+            zoomToBKGSearchResult: function (result, context) {
+                var coordinates = "";
+                _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
+                    coordinates += point[0] + " " + point[1] + " ";
+                });
+                coordinates = coordinates.trim();
+                var wkt = context.getWKTFromString("POLYGON", coordinates),
+                            extent,
+                            format = new ol.format.WKT(),
+                            feature = format.readFeature(wkt);
+
+                    searchVector.getSource().clear();
+                    searchVector.getSource().addFeature(feature);
+                    searchVector.setVisible(true);
+                    extent = feature.getGeometry().getExtent();
+                    EventBus.trigger("zoomToExtent", extent);
+                    $(".dropdown-menu-search").hide();
+            },
+
+
             /**
             *
             */
             showMarker: function (evt) {
-                // console.log(evt);
+
+                // when der BKG search verwendet wird, dann werden mit den Vorschlägen keine Koordinaten gesendet,
+                // deswegen ist dann eine Markeranzeige nicht möglich.
+                if (this.model.get("useBKGSearch")) {
+                    return;
+                }
                 var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
