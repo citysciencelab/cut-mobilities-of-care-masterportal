@@ -1,15 +1,15 @@
 define([
     "backbone",
     "text!modules/gfipopup/themes/mietenspiegel/template.html",
-    "modules/gfipopup/themes/mietenspiegel/model",
+    //"modules/gfipopup/themes/mietenspiegel/model",
     "eventbus"
-], function (Backbone, GFITemplate, GFIModel, EventBus) {
+], function (Backbone, GFITemplate, EventBus) {
     "use strict";
     var GFIContentMietenspiegelView = Backbone.View.extend({
         /*
          + Die Mietenspiegel-View öffnet sich auf jede GFI-Abfrage. Sein Model hingegen bleibt konstant.
          */
-        model: GFIModel,
+        //model: GFIModel,
         template: _.template(GFITemplate),
         events: {
             "remove": "destroy"
