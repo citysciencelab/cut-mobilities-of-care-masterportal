@@ -71,7 +71,7 @@ define([
             // Abfrage jedes Layers der von der map übermittelt wurde.
             _.each(sortedParams, function(visibleLayer, index, list) {
                 gfiContent = null;
-                switch (visibleLayer.typ) {
+                switch (visibleLayer.ol_layer.get('typ')) {
                     case 'WMS':
                         gfiContent = this.setWMSPopupContent(visibleLayer);
                         break;
