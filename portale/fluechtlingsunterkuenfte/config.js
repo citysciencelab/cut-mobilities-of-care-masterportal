@@ -106,9 +106,11 @@ define(function () {
             {id: "1112,1113,1114,1115,1116,1117", name: "RISE-Fördergebiete", visible: false},
             {id: "2097", visible: false},
             {id: "1585", visible: false},
-            {id: "1", visible: true},
+            {id: "4,5", visible: true, name: "BWVI Reserveliste"},
+            {id: "6,7", visible: true, name: "Rathausvorlage BUE"},
             {id: "2", visible: true},
-            {id: "3", visible: true}
+            {id: "3", visible: true},
+            {id: "1", visible: true}
         ],
         /**
         * @memberof config
