@@ -81,13 +81,13 @@ define(function () {
             },
             getFeatures: [
                 {
-                    url: "/wscd0096/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
                     typeName: "olympia_sportarten_paralympic",
                     propertyName: "staette,art,piktogramm,geom",
                     filter: "paralympia"
                 },
                 {
-                    url: "/wscd0096/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
                     typeName: "olympia_sportarten",
                     propertyName: "staette,art,piktogramm,geom",
                     filter: "olympia"
