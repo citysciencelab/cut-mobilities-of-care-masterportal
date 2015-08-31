@@ -141,7 +141,7 @@ define([
                                 layerList += "," + obj.layers;
                             });
                             layerinfos.layers = layerList.slice(1, layerList.length);
-                            if (!_.has(element, "name")) {
+                            if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
                                 layerinfos.name = layerinfos.datasets[0].md_name;
                             }
                             modelsArray.push(_.extend(layerinfos, element));
