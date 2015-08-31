@@ -29,6 +29,8 @@ define(function () {
             {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
             {id: "1", visible: true},
+            {id: "7995", visible: false},
+            {id: "7996", visible: false},
             {id: "7999", visible: true},
             {id:
              [
@@ -79,13 +81,13 @@ define(function () {
             },
             getFeatures: [
                 {
-                    url: "/wscd0096/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
                     typeName: "olympia_sportarten_paralympic",
                     propertyName: "staette,art,piktogramm,geom",
                     filter: "paralympia"
                 },
                 {
-                    url: "/wscd0096/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
                     typeName: "olympia_sportarten",
                     propertyName: "staette,art,piktogramm,geom",
                     filter: "olympia"
