@@ -29,6 +29,8 @@ define(function () {
             {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
             {id: "1", visible: true},
+            {id: "7995", visible: false},
+            {id: "7996", visible: false},
             {id: "7999", visible: true},
             {id:
              [
