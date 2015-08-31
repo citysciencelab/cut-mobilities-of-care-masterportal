@@ -1,7 +1,10 @@
 define([
     "backbone",
     "config",
-    "modules/core/util"
+    "modules/core/util",
+    "bootstrap/dropdown",
+    "bootstrap/button",
+    "bootstrap/collapse"
 ], function (Backbone, Config, Util) {
     "use strict";
     var GFIModel = Backbone.Model.extend({
@@ -15,12 +18,31 @@ define([
             msHerausgeber: '',
             msHinweis: '',
             msTitel: '',
-            msMerkmaleText: []
+            msMerkmaleText: [],
+            msMerkmale: {},
+            msMittelwert: '',
+            msSpanneMin: '',
+            msSpanneMax: '',
+            msDatensaetze: '> 30'
         },
-
+        /*
+         * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
+         * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.
+         */
         initialize: function () {
-            this.ladeDaten();
+            var ms = _.find(Config.layerIDs, function(layer) {
+                if (_.values(_.pick(layer, 'gfiTheme'))[0] === 'mietenspiegel') {
+                    return true;
+                }
+            });
+            if (ms) {
+                this.ladeDaten();
+                this.calculateMerkmale();
+            }
         },
+        /*
+         * Lese Mietenspiegel-Daten aus.
+         */
         ladeDaten: function() {
             // lade Mietenspiegel-Metadaten
             $.ajax({
@@ -32,7 +54,8 @@ define([
                 context: this,
                 success: function (data) {
                     this.set('mietenspiegel-metadaten', data);
-                    this.set('msErhebungsstand', $(data).find('erhebungsstand').text());
+                    var datum = $(data).find('erhebungsstand').text().split('-');
+                    this.set('msErhebungsstand', datum[2] + '.' + datum[1] + '.' + datum[0]);
                     this.set('msHerausgeber', $(data).find('herausgeber').text());
                     this.set('msHinweis', $(data).find('hinweis').text());
                     this.set('msTitel', $(data).find('titel').text());
@@ -72,12 +95,61 @@ define([
                 }
             });
         },
+        /*
+         * Bestimmt alle Inhalte der Comboboxen für die Merkmale anhand der ausgelesenen Daten.
+         */
+        calculateMerkmale: function() {
+            var daten = this.get('msDaten'),
+                merkmalnamen = _.object(_.keys(daten[0].merkmale), []);
+            var merkmale = _.map(daten, function(value, key){
+                return value.merkmale;
+            });
+            var merkmaleReduced = _.mapObject(merkmalnamen, function(value, key) {
+                return _.unique(_.pluck(merkmale, key));
+            });
+            this.set('msMerkmale', merkmaleReduced);
+        },
+        /*
+         * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten
+         */
+        calculateVergleichsmiete: function(merkmale) {
+            var vergleichsmiete = _.find(this.get('msDaten'), function(item) {
+                var tester = [], uniq;
+                _.each(merkmale, function(merkmal, index, list) {
+                    var result = _.values(_.pick(item.merkmale, merkmal.name))[0];
+                    if (result === merkmal.value) {
+                        tester.push(true);
+                    } else {
+                        tester.push(false);
+                    }
+                });
+                uniq = _.uniq(tester);
+                if (uniq.length === 1 && uniq[0] === true) {
+                    return item;
+                }
+            }, this);
+            if (vergleichsmiete) {
+                this.set('msMittelwert', vergleichsmiete.mittelwert.toString());
+                this.set('msSpanneMin', vergleichsmiete.spanne_min.toString());
+                this.set('msSpanneMax', vergleichsmiete.spanne_max.toString());
+                if (vergleichsmiete.datensaetze > 0) {
+                    this.set('msDatensaetze', vergleichsmiete.datensaetze);
+                } else {
+                    this.set('msDatensaetze', '> 30');
+                }
+            } else {
+                this.set('msMittelwert', '-');
+                this.set('msSpanneMin', '-');
+                this.set('msSpanneMax', '-');
+                this.set('msDatensaetze', '-');
+            }
+        },
         reset: function (layer, response) {
-            this.set('id', _.uniqueId("defaultTheme"));
+            this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
             this.set('gfiContent', response);
         }
     });
 
-    return new GFIModel();
+    return new GFIModel;
 });

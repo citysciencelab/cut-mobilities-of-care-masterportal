@@ -1,10 +1,75 @@
-<table class="table table-condensed table-hover no-margin">
-<tr colspan="2">
-    <td>
-        <strong>Wohnlage</strong>
-    </td>
-    <td>
-        test
-    </td>
-</tr>
-</table>
+<!DOCTYPE html>
+<div class="panel panel-default no-margin">
+    <div class="panel-heading">
+        <h3 class="panel-title text-center">Merkmale der Vergleichsmiete</h3>
+    </div>
+    <div class="panel-body no-margin">
+        <% _.each (msMerkmale, function (value, key) { %>
+        <div class="row">
+            <div class="col-md-6">
+                <strong><%= key %>:</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-2">
+                <% if (key === 'Wohnlage') { %>
+                    <p class="text-right mswohnlage">Normale Wohnlage</p>
+                <% } else { %>
+                    <select class="form-control input-sm msmerkmal" id="<%=key%>">
+                        <option>bitte wählen</option>
+                        <%
+                           _.each(value, function(item) {
+                        %>
+                            <option><%= item %> </option>
+                        <%
+                           });
+                        %>
+                    </select>
+                <% } %>
+            </div>
+        </div>
+        <% });%>
+    </div>
+    <div class="panel-heading">
+        <h3 class="panel-title text-center"><%= msTitel %></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Mittelwert:</strong>
+            </div>
+            <div class="col-md-6 msmittelwert">
+                -
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Spanne Min.:</strong>
+            </div>
+            <div class="col-md-6 msspannemin">
+                -
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Spanne Max.:</strong>
+            </div>
+            <div class="col-md-6 msspannemax">
+                -
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Datensätze:</strong>
+            </div>
+            <div class="col-md-6 msdatensaetze">
+                > 30
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <strong>Herausgeber: </strong><%= msHerausgeber %></br></br>
+        <strong>Erhebungsstand: </strong><%= msErhebungsstand %></br></br>
+        <strong>Hinweis: </strong><%= msHinweis %></br></br>
+    </div>
+</div>
