@@ -32,6 +32,7 @@ define(function () {
             {id: "7995", visible: false},
             {id: "7996", visible: false},
             {id: "7999", visible: true},
+            {id: "2403", visible: false, style: "51", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
             {id:
              [
                  {
