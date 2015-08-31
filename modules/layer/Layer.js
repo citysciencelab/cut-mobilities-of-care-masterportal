@@ -96,7 +96,7 @@ define([
             var datasets = this.get("datasets"),
                 dataset;
 
-            if (datasets) {
+            if (datasets && datasets.length > 0) {
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
                     this.set("metaID", dataset.md_id);
