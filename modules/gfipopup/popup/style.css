@@ -54,7 +54,7 @@
 
 .gfi-content {
     font-size: 12px;
-    max-height: 400px;
+    max-height: 66%;
     min-width:350px;
     overflow-y: auto;
 }
