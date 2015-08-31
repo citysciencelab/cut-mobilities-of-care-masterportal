@@ -22,7 +22,7 @@ define([
          */
         changedMerkmal: function(evt) {
             if (evt) {
-                $(evt.target.parentElement).append('<p class="text-right mswohnlage">Normale Wohnlage</p>');
+//                $(evt.target.parentElement).append('<p class="text-right mswohnlage">Normale Wohnlage</p>');
                 var merkmale = [];
                 merkmale.push({
                     name: 'Wohnlage',
@@ -34,7 +34,7 @@ define([
                         value: $(this).val()
                     });
                 });
-                $(evt.target).remove();
+//                $(evt.target).remove();
                 this.model.calculateVergleichsmiete(merkmale);
             }
         },

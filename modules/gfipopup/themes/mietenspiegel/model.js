@@ -13,17 +13,18 @@ define([
          */
         defaults: {
             readyState: false,
-            msDaten: [],
-            msErhebungsstand: '',
-            msHerausgeber: '',
-            msHinweis: '',
-            msTitel: '',
-            msMerkmaleText: [],
-            msMerkmale: {},
-            msMittelwert: '',
-            msSpanneMin: '',
-            msSpanneMax: '',
-            msDatensaetze: '> 30'
+            msDaten: [], //alle Mietenspiegel-Daten
+            msErhebungsstand: '', //fixe Metadaten
+            msHerausgeber: '', //fixe Metadaten
+            msHinweis: '', //fixe Metadaten
+            msTitel: '', //fixe Metadaten
+            msMerkmaleText: [], //Array der Merkmalsnamen
+            msMerkmale: {}, // Merkmale mit möglichen Werten als Objekt
+            msMittelwert: '', //Ergebnis
+            msSpanneMin: '', //Ergebnis
+            msSpanneMax: '', //Ergebnis
+            msDatensaetze: '> 30', //Ergebnis
+            msWohnlage: 'Normale Wohnlage' //per GFI ausgelesene Wohnlage
         },
         /*
          * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
