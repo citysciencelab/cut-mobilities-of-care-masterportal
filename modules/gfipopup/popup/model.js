@@ -80,7 +80,7 @@ define([
                         if (this.get("wfsCoordinate").length > 0) positionGFI = this.get("wfsCoordinate");
                         break;
                     case 'GeoJSON':
-                        gfiContent = this.setGeoJSONPopupContent(visibleLayer.source, position, visibleLayer.scale);
+                        gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         break;
                 }
                 // Erzeugen eines TemplateModels anhand 'gfiTheme'
@@ -110,22 +110,13 @@ define([
             $("#loader").hide();
         },
 
-        setGeoJSONPopupContent: function (source, coordinate, scale) {
+        setGeoJSONPopupContent: function (feature) {
+            var featureList = [];
 
-            var feature = source.getClosestFeatureToCoordinate(coordinate),
-                pMaxDist = 0.002 * scale, // 1 cm um Klickpunkt forEachFeatureInExtent
-                pExtent = feature.getGeometry().getExtent(),
-                pX = coordinate[0],
-                pY = coordinate[1],
-                pMinX = pExtent[0] - pMaxDist,
-                pMaxX = pExtent[2] + pMaxDist,
-                pMinY = pExtent[1] - pMaxDist,
-                pMaxY = pExtent[3] + pMaxDist;
-            if (pX < pMinX || pX > pMaxX || pY < pMinY || pY > pMaxY) {
-                return;
-            } else {
-                return [feature.get("gfiAttributes")];
-            }
+            _.each(feature.getProperties().features, function (feature) {
+                featureList.push(feature.get("gfiAttributes"));
+            });
+            return featureList;
         },
         /**
          *

@@ -247,12 +247,19 @@ define([
                         }
                     }
                     else if (element.getProperties().typ === "GeoJSON") {
-                        gfiParams.push({
-                            typ: "GeoJSON",
-                            scale: scale,
-                            source: element.getSource(),
-                            name: element.get("name")
-                        });
+                        var pixel = this.get("map").getEventPixel(evt.originalEvent),
+                            hit = this.get("map").hasFeatureAtPixel(pixel);
+
+                        if (hit === true) {
+                            this.get("map").forEachFeatureAtPixel(evt.pixel, function (feature) {
+                                gfiParams.push({
+                                    typ: "GeoJSON",
+                                    feature: feature,
+                                    name: element.get("name"),
+                                    ol_layer: element
+                                });
+                            });
+                        }
                     }
                 }
                 else {
@@ -287,7 +294,7 @@ define([
                         }
                     });
                 }
-            });
+            }, this);
             EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
         },
         zoomToExtent: function (extent) {
