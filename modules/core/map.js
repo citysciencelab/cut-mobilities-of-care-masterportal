@@ -278,7 +278,7 @@ define([
                                     scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
-                                    ol_layer: element
+                                    ol_layer: layer
                                 });
                             }
                             else if (layer.getProperties().typ === "WFS") {
@@ -288,7 +288,7 @@ define([
                                     source: layer.getSource(),
                                     style: layer.getStyle(),
                                     name: layer.get("name"),
-                                    ol_layer: element
+                                    ol_layer: layer
                                 });
                             }
                         }
