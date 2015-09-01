@@ -165,7 +165,7 @@ define([
             });
             // Index vom ersten VectorLayer in der Layerlist
             index = _.indexOf(layerList, firstVectorLayer);
-            if (index !== -1) {
+            if (index !== -1 && _.has(firstVectorLayer, "id") === false) {
                 // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
                 this.get("map").getLayers().insertAt(index, layer);
             }
