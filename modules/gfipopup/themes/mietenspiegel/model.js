@@ -24,7 +24,10 @@ define([
             msSpanneMin: '', //Ergebnis
             msSpanneMax: '', //Ergebnis
             msDatensaetze: '> 30', //Ergebnis
-            msWohnlage: 'Normale Wohnlage' //per GFI ausgelesene Wohnlage
+            msWohnlage: 'unbekannte Wohnlage', //per GFI ausgelesene Wohnlage
+            msStrasse: '',
+            msPLZ: '',
+            msStadtteil: ''
         },
         /*
          * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
@@ -32,14 +35,31 @@ define([
          */
         initialize: function () {
             var ms = _.find(Config.layerIDs, function(layer) {
-                if (_.values(_.pick(layer, 'gfiTheme'))[0] === 'mietenspiegel') {
-                    return true;
-                }
+                return _.values(_.pick(layer, 'gfiTheme'))[0] === 'mietenspiegel'
             });
             if (ms) {
                 this.ladeDaten();
                 this.calculateMerkmale();
             }
+        },
+        /*
+         * Wird aus View gerufen und gibt Liste möglicher Merkmale zurück
+         */
+        returnValidMerkmale: function (merkmalId, setted) {
+            var daten = this.get('msDaten'),
+                merkmale,
+                merkmaleReduced,
+                possibleValues;
+            merkmale = _.map(daten, function(value, key){
+                return value.merkmale;
+            });
+            merkmaleReduced = _.filter(merkmale, function (value, index, list) {
+                return _.isMatch(value, setted);
+            });
+            possibleValues = _.map(merkmaleReduced, function(merkmal) {
+                return _.values(_.pick(merkmal, merkmalId))[0];
+            });
+            return _.unique(possibleValues);
         },
         /*
          * Lese Mietenspiegel-Daten aus.
@@ -98,6 +118,7 @@ define([
         },
         /*
          * Bestimmt alle Inhalte der Comboboxen für die Merkmale anhand der ausgelesenen Daten.
+         * Wird nicht mehr genutzt, da returnValidMerkmale
          */
         calculateMerkmale: function() {
             var daten = this.get('msDaten'),
@@ -111,44 +132,51 @@ define([
             this.set('msMerkmale', merkmaleReduced);
         },
         /*
-         * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten
+         * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten.
          */
         calculateVergleichsmiete: function(merkmale) {
-            var vergleichsmiete = _.find(this.get('msDaten'), function(item) {
-                var tester = [], uniq;
-                _.each(merkmale, function(merkmal, index, list) {
-                    var result = _.values(_.pick(item.merkmale, merkmal.name))[0];
-                    if (result === merkmal.value) {
-                        tester.push(true);
-                    } else {
-                        tester.push(false);
-                    }
-                });
-                uniq = _.uniq(tester);
-                if (uniq.length === 1 && uniq[0] === true) {
-                    return item;
-                }
-            }, this);
-            if (vergleichsmiete) {
-                this.set('msMittelwert', vergleichsmiete.mittelwert.toString());
-                this.set('msSpanneMin', vergleichsmiete.spanne_min.toString());
-                this.set('msSpanneMax', vergleichsmiete.spanne_max.toString());
-                if (vergleichsmiete.datensaetze > 0) {
-                    this.set('msDatensaetze', vergleichsmiete.datensaetze);
-                } else {
-                    this.set('msDatensaetze', '> 30');
-                }
-            } else {
+             var daten = this.get('msDaten'),
+                vergleichsmiete;
+            vergleichsmiete = _.filter(daten, function (value, index, list) {
+                return _.isMatch(value.merkmale, merkmale);
+            });
+            if (vergleichsmiete.length !== 1) {
                 this.set('msMittelwert', '-');
                 this.set('msSpanneMin', '-');
                 this.set('msSpanneMax', '-');
                 this.set('msDatensaetze', '-');
+                this.trigger('hideErgebnisse');
+            } else {
+                this.set('msMittelwert', vergleichsmiete[0].mittelwert.toString());
+                this.set('msSpanneMin', vergleichsmiete[0].spanne_min.toString());
+                this.set('msSpanneMax', vergleichsmiete[0].spanne_max.toString());
+                if (vergleichsmiete[0].datensaetze > 0) {
+                    this.set('msDatensaetze', vergleichsmiete[0].datensaetze);
+                } else {
+                    this.set('msDatensaetze', '> 30');
+                }
+                this.trigger('showErgebnisse');
             }
         },
         reset: function (layer, response) {
             this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
-            this.set('gfiContent', response);
+            if (response['Wohnlage typ'] === 'normal') {
+                this.set('msWohnlage', 'Normale Wohnlage');
+            } else if (response['Wohnlage typ'] === 'gut') {
+                this.set('msWohnlage', 'Gute Wohnlage');
+            } else {
+                this.set('msWohnlage', 'unbekannte Wohnlage');
+            }
+            if (response['Hausnummer zusatz']) {
+                this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer + response['Hausnummer zusatz']);
+            } else if (response.Hausnummer) {
+                this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer);
+            } else {
+                this.set('msStrasse', response.Strasse);
+            }
+            this.set('msPLZ', response.Plz + ' Hamburg');
+            this.set('msStadtteil', response.Stadtteil);
         }
     });
 

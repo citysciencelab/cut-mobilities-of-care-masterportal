@@ -13,28 +13,81 @@ define([
         template: _.template(GFITemplate),
         events: {
             "remove": "destroy",
-            "change .msmerkmal": "changedMerkmal"
+            "change .msmerkmal": "changedMerkmal",
+            "click #msreset": "reset"
+        },
+        reset: function() {
+            this.render();
+            this.focusNextMerkmal(0);
         },
         /**
-         * Übergibt alle select
          * Hier muss eine Reihenfolge abgearbeitet werden, bevor die Berechnung gestartet wird.
-         * Die Angaben unter Wohnfläche sind verwirrend.
          */
         changedMerkmal: function(evt) {
+            var id;
             if (evt) {
-//                $(evt.target.parentElement).append('<p class="text-right mswohnlage">Normale Wohnlage</p>');
-                var merkmale = [];
-                merkmale.push({
-                    name: 'Wohnlage',
-                    value: $(".mswohnlage").text()
+                $(".msmerkmal").each(function(index) {
+                    if ($(this).attr('id') === evt.target.id) {
+                        id = index + 1;
+                    }
                 });
-                $(".msmerkmal").each(function() {
-                    merkmale.push({
-                        name: $(this).attr('id'),
-                        value: $(this).val()
+                if (id) {
+                    this.focusNextMerkmal(id);
+                }
+            }
+        },
+        /*
+         * Erzeugt eine Liste mit gewählten Merkmalen
+         */
+        returnMerkmaleListe: function() {
+            var merkmale = _.object(['Wohnlage'], [$(".mswohnlage").text()]);
+            $(".msmerkmal").each(function() {
+                if (this.value !== '-1') { // = bitte wählen
+                    merkmale = _.extend(merkmale, _.object([$(this).attr('id')], [$(this).find("option:selected").text()]));
+                }
+            });
+            return merkmale;
+        },
+        /*
+         * Combobox mit Werten füllen. Initial leer.
+         */
+        fillMerkmaleInCombobox: function(comboboxId) {
+            var merkmale = this.returnMerkmaleListe(),
+                validMerkmale = this.model.returnValidMerkmale(comboboxId, merkmale);
+            // Combobox erst leeren
+            $(".msmerkmal").each(function() {
+                if ($(this).attr('id') === comboboxId) {
+                    $(this).find('option').each(function() {
+                        if (this.value !== '-1') { // = bitte wählen
+                            $(this).remove();
+                        }
                     });
-                });
-//                $(evt.target).remove();
+                }
+            });
+            // dann füllen
+            _.each(validMerkmale, function(val, index) {
+                document.getElementById(comboboxId).add(new Option(val, index));
+            });
+        },
+        /*
+         * Diese Combobox der Merkmale disablen und darauf folgende enablen.
+         * Startet fillMerkmaleInCombobox;  //index in ComboboxArray
+         */
+        focusNextMerkmal: function(activateIndex) {
+            var id,
+                merkmale;
+            $(".msmerkmal").each(function(index) {
+                if (activateIndex === index) {
+                    $(this).removeAttr('disabled');
+                    id = $(this).attr('id');
+                } else {
+                    $(this).prop('disabled', true);
+                }
+            });
+            if (id) {
+                this.fillMerkmaleInCombobox(id);
+            } else {
+                merkmale = this.returnMerkmaleListe();
                 this.model.calculateVergleichsmiete(merkmale);
             }
         },
@@ -47,16 +100,20 @@ define([
             this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
             this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
             this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
+            this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
+            this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
             if (this.model.get('readyState') === true) {
                 this.model.reset (layer, response);
                 this.render();
             }
         },
         /*
-         * initiale Berechnung der Werte
+         * Wenn GFI-Popup gerendert wurde. --> initialzize der View
          */
         popupRendered: function (resp) {
-            if (resp === true) this.changedMerkmal();
+            if (resp === true) {
+                this.focusNextMerkmal(0);
+            }
         },
         changedMittelwert: function() {
             $(".msmittelwert").text(this.model.get('msMittelwert').toString());
@@ -69,6 +126,14 @@ define([
         },
         changedDatensaetze: function() {
             $(".msdatensaetze").text(this.model.get('msDatensaetze').toString());
+        },
+        showErgebnisse: function() {
+            $("#msergdiv").show();
+            $("#msmetadaten").hide();
+        },
+        hideErgebnisse: function() {
+            $("#msergdiv").hide();
+            $("#msmetadaten").show();
         },
         /**
          *
