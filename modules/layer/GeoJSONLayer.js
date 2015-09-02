@@ -56,7 +56,7 @@ define([
 
             this.set("layer", new ol.layer.Group({
                 typ: this.get("typ"),
-                layers: [new ol.layer.Vector(pointParams), new ol.layer.Vector(polygonParams)],
+                layers: [new ol.layer.Vector(polygonParams), new ol.layer.Vector(pointParams)],
                 name: this.get("name")
             }));
 
