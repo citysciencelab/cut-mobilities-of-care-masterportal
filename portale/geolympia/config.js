@@ -13,11 +13,54 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
-            {id: "6002,6001,6000", visible: false, name: "Erreichbarkeit der Sportstätten mit dem Auto"},
-            {id: "6008,6007,6006", visible: false, name: "Erreichbarkeit der Sportstätten mit dem Rad"},
-            {id: "6005,6004,6003", visible: false, name: "Erreichbarkeit der Sportstätten zu Fuss"},
+            // {id: "6002,6001,6000", visible: false, name: "Erreichbarkeit der Sportstätten mit dem Auto"},
+            // {id: "6008,6007,6006", visible: false, name: "Erreichbarkeit der Sportstätten mit dem Rad"},
+            // {id: "6005,6004,6003", visible: false, name: "Erreichbarkeit der Sportstätten zu Fuss"},
+            {id:
+             [
+                {
+                    id: "6002"
+                },
+                {
+                    id: "6001"
+                },
+                {
+                    id: "6000"
+                }
+             ],
+             visible: false, name: "Erreichbarkeit der Sportstätten zu Fuss"
+            },
+            {id:
+             [
+                {
+                    id: "6005"
+                },
+                {
+                    id: "6004"
+                },
+                {
+                    id: "6003"
+                }
+             ],
+             visible: false, name: "Erreichbarkeit der Sportstätten mit dem Rad"
+            },
+            {id:
+             [
+                {
+                    id: "6008"
+                },
+                {
+                    id: "6007"
+                },
+                {
+                    id: "6006"
+                }
+             ],
+             visible: false, name: "Erreichbarkeit der Sportstätten mit dem Auto"
+            },
             {id: "2092", visible: false},
             {id: "1", visible: true},
+
             {id:
              [
                 {
