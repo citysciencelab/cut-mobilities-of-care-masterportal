@@ -71,22 +71,22 @@ define([
             // Abfrage jedes Layers der von der map übermittelt wurde.
             _.each(sortedParams, function(visibleLayer, index, list) {
                 gfiContent = null;
-                switch (visibleLayer.ol_layer.get('typ')) {
-                    case 'WMS':
+                switch (visibleLayer.ol_layer.get("typ")) {
+                    case "WMS":
                         gfiContent = this.setWMSPopupContent(visibleLayer);
                         break;
-                    case 'WFS':
-                        gfiContent = this.setWFSPopupContent(visibleLayer.source, visibleLayer.style, position, visibleLayer.scale, visibleLayer.ol_layer.get('gfiAttributes'));
+                    case "WFS":
+                        gfiContent = this.setWFSPopupContent(visibleLayer.source, visibleLayer.style, position, visibleLayer.scale, visibleLayer.ol_layer.get("gfiAttributes"));
                         if (this.get("wfsCoordinate").length > 0) positionGFI = this.get("wfsCoordinate");
                         break;
-                    case 'GeoJSON':
+                    case "GeoJSON":
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         break;
                 }
                 // Erzeugen eines TemplateModels anhand 'gfiTheme'
                 _.each(gfiContent, function(layerresponse, index, list) {
-                    switch (visibleLayer.ol_layer.get('gfiTheme')) {
-                        case 'mietenspiegel':
+                    switch (visibleLayer.ol_layer.get("gfiTheme")) {
+                        case "mietenspiegel":
                             templateView = new MietenspiegelTheme(visibleLayer, layerresponse);
                             break;
                         default:
