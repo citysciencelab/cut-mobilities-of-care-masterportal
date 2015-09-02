@@ -113,9 +113,14 @@ define([
         setGeoJSONPopupContent: function (feature) {
             var featureList = [];
 
-            _.each(feature.getProperties().features, function (feature) {
-                featureList.push(feature.get("gfiAttributes"));
-            });
+            if (_.has(feature.getProperties(), "gfiAttributes")) {
+                featureList.push(feature.getProperties().gfiAttributes);
+            }
+            else {
+                _.each(feature.getProperties().features, function (feature) {
+                    featureList.push(feature.get("gfiAttributes"));
+                });
+            }
             return featureList;
         },
         /**
