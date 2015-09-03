@@ -48,7 +48,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: "../components/lgv-config/services-internet-mietenspiegel.json",
+        layerConf: "../components/lgv-config/services-internet.json",
         /**
         * @memberof config
         * @type {String}
@@ -103,7 +103,7 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
             {id: "452", visible: false},
-            {id: '99999', visible: true, gfiTheme: 'mietenspiegel'}
+            {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
         ],
         /**
         * @memberof config
