@@ -177,7 +177,11 @@ define([
                     context: this,
                     async: asyncBool,
                     type: "GET",
-                    success: successFunction
+                    success: successFunction,
+                    timeout: 6000,
+                    error: function () {
+                        console.log(url + " unreachable");
+                    }
                 });
             },
 
@@ -197,6 +201,10 @@ define([
                     type: "GET",
                     success: function (result) {
                         successFunction(result, context);
+                    },
+                    timeout: 6000,
+                    error: function () {
+                        console.log(data + " unreachable");
                     }
                 });
             },
@@ -218,7 +226,7 @@ define([
 
                 }
                 this.get("isSearchReady").set("streetSearch", true);
-                this.get("isSearchReady").set("numberSearch", true);
+               // this.get("isSearchReady").set("numberSearch", true);
             },
 
             getBKGStreets: function (data) {
