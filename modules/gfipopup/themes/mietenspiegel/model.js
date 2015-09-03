@@ -1,7 +1,10 @@
 define([
     "backbone",
     "config",
-    "modules/core/util"
+    "modules/core/util",
+    "bootstrap/dropdown",
+    "bootstrap/button",
+    "bootstrap/collapse"
 ], function (Backbone, Config, Util) {
     "use strict";
     var GFIModel = Backbone.Model.extend({
@@ -10,17 +13,57 @@ define([
          */
         defaults: {
             readyState: false,
-            msDaten: [],
-            msErhebungsstand: '',
-            msHerausgeber: '',
-            msHinweis: '',
-            msTitel: '',
-            msMerkmaleText: []
+            msDaten: [], //alle Mietenspiegel-Daten
+            msErhebungsstand: '', //fixe Metadaten
+            msHerausgeber: '', //fixe Metadaten
+            msHinweis: '', //fixe Metadaten
+            msTitel: '', //fixe Metadaten
+            msMerkmaleText: [], //Array der Merkmalsnamen
+            msMerkmale: {}, // Merkmale mit möglichen Werten als Objekt
+            msMittelwert: '', //Ergebnis
+            msSpanneMin: '', //Ergebnis
+            msSpanneMax: '', //Ergebnis
+            msDatensaetze: '> 30', //Ergebnis
+            msWohnlage: 'unbekannte Wohnlage', //per GFI ausgelesene Wohnlage
+            msStrasse: '',
+            msPLZ: '',
+            msStadtteil: ''
         },
-
+        /*
+         * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
+         * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.
+         */
         initialize: function () {
-            this.ladeDaten();
+            var ms = _.find(Config.layerIDs, function(layer) {
+                return _.values(_.pick(layer, 'gfiTheme'))[0] === 'mietenspiegel'
+            });
+            if (ms) {
+                this.ladeDaten();
+                this.calculateMerkmale();
+            }
         },
+        /*
+         * Wird aus View gerufen und gibt Liste möglicher Merkmale zurück
+         */
+        returnValidMerkmale: function (merkmalId, setted) {
+            var daten = this.get('msDaten'),
+                merkmale,
+                merkmaleReduced,
+                possibleValues;
+            merkmale = _.map(daten, function(value, key){
+                return value.merkmale;
+            });
+            merkmaleReduced = _.filter(merkmale, function (value, index, list) {
+                return _.isMatch(value, setted);
+            });
+            possibleValues = _.map(merkmaleReduced, function(merkmal) {
+                return _.values(_.pick(merkmal, merkmalId))[0];
+            });
+            return _.unique(possibleValues);
+        },
+        /*
+         * Lese Mietenspiegel-Daten aus.
+         */
         ladeDaten: function() {
             // lade Mietenspiegel-Metadaten
             $.ajax({
@@ -32,7 +75,8 @@ define([
                 context: this,
                 success: function (data) {
                     this.set('mietenspiegel-metadaten', data);
-                    this.set('msErhebungsstand', $(data).find('erhebungsstand').text());
+                    var datum = $(data).find('erhebungsstand').text().split('-');
+                    this.set('msErhebungsstand', datum[2] + '.' + datum[1] + '.' + datum[0]);
                     this.set('msHerausgeber', $(data).find('herausgeber').text());
                     this.set('msHinweis', $(data).find('hinweis').text());
                     this.set('msTitel', $(data).find('titel').text());
@@ -72,12 +116,69 @@ define([
                 }
             });
         },
+        /*
+         * Bestimmt alle Inhalte der Comboboxen für die Merkmale anhand der ausgelesenen Daten.
+         * Wird nicht mehr genutzt, da returnValidMerkmale
+         */
+        calculateMerkmale: function() {
+            var daten = this.get('msDaten'),
+                merkmalnamen = _.object(_.keys(daten[0].merkmale), []);
+            var merkmale = _.map(daten, function(value, key){
+                return value.merkmale;
+            });
+            var merkmaleReduced = _.mapObject(merkmalnamen, function(value, key) {
+                return _.unique(_.pluck(merkmale, key));
+            });
+            this.set('msMerkmale', merkmaleReduced);
+        },
+        /*
+         * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten.
+         */
+        calculateVergleichsmiete: function(merkmale) {
+             var daten = this.get('msDaten'),
+                vergleichsmiete;
+            vergleichsmiete = _.filter(daten, function (value, index, list) {
+                return _.isMatch(value.merkmale, merkmale);
+            });
+            if (vergleichsmiete.length !== 1) {
+                this.set('msMittelwert', '-');
+                this.set('msSpanneMin', '-');
+                this.set('msSpanneMax', '-');
+                this.set('msDatensaetze', '-');
+                this.trigger('hideErgebnisse');
+            } else {
+                this.set('msMittelwert', vergleichsmiete[0].mittelwert.toString());
+                this.set('msSpanneMin', vergleichsmiete[0].spanne_min.toString());
+                this.set('msSpanneMax', vergleichsmiete[0].spanne_max.toString());
+                if (vergleichsmiete[0].datensaetze > 0) {
+                    this.set('msDatensaetze', vergleichsmiete[0].datensaetze);
+                } else {
+                    this.set('msDatensaetze', '> 30');
+                }
+                this.trigger('showErgebnisse');
+            }
+        },
         reset: function (layer, response) {
-            this.set('id', _.uniqueId("defaultTheme"));
+            this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
-            this.set('gfiContent', response);
+            if (response['Wohnlage typ'] === 'normal') {
+                this.set('msWohnlage', 'Normale Wohnlage');
+            } else if (response['Wohnlage typ'] === 'gut') {
+                this.set('msWohnlage', 'Gute Wohnlage');
+            } else {
+                this.set('msWohnlage', 'unbekannte Wohnlage');
+            }
+            if (response['Hausnummer zusatz']) {
+                this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer + response['Hausnummer zusatz']);
+            } else if (response.Hausnummer) {
+                this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer);
+            } else {
+                this.set('msStrasse', response.Strasse);
+            }
+            this.set('msPLZ', response.Plz + ' Hamburg');
+            this.set('msStadtteil', response.Stadtteil);
         }
     });
 
-    return new GFIModel();
+    return new GFIModel;
 });

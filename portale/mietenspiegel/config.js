@@ -48,7 +48,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
         /**
         * @memberof config
         * @type {String}
@@ -103,7 +103,7 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
             {id: "452", visible: false},
-            {id: '1711', visible: true, style: '1711', gfiTheme: 'mietenspiegel'}
+            {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
         ],
         /**
         * @memberof config
@@ -175,7 +175,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Adresse",
             gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
 
