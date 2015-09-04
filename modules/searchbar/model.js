@@ -193,10 +193,31 @@ define([
              * @param {function} successFunction - A function to be called if the request succeeds
              * @param {context} gibt den Context weiter
              */
-            sendSearchRequestToBKG: function (data, successFunction, context) {
+            sendSearchRequestToBKG: function (searchstring, successFunction, context) {
+                var value = searchstring;
+                var parts = value.split(/[.,\/ -]/);
+                var plz = _.find(parts, function(val) {
+                    return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
+                });
+                var hsnr = _.find(parts, function(val) {
+                    return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
+                });
+                var query = "&query=" + value;
+
+                if(plz || hsnr){
+                    query += "&filter="
+                }
+                if (hsnr) {
+                    query += "(typ:Haus) AND haus:(" + hsnr + ")";
+                }
+                 if (plz) {
+                    query += " AND plz:(" + plz + ")";
+                }
+
                 $.ajax({
                     url: Config.searchBar.bkgSearchURL,
-                    data: data,
+                    data: "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg + "&count=15" + query,
                     context: this,
                     type: "GET",
                     success: function (result) {
@@ -204,14 +225,88 @@ define([
                     },
                     timeout: 6000,
                     error: function () {
-                        console.log(data + " unreachable");
+                        console.log(url + " unreachable");
                     }
                 });
             },
 
+            suggestByBKG: function (value) {
+
+            var parts = value.split(/[.,\/ -]/);
+            if (this.get('bbox') !== '') {
+                value = value + this.get('bbox');
+            }
+            if (value.indexOf('&filter=') === -1) {
+                var plz = _.find(parts, function(val) {
+                    return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
+                });
+                var hsnr = _.find(parts, function(val) {
+                    return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
+                });
+                if (plz) {
+                    value = value + '&filter=(plz:' + plz + ')';
+                    if (hsnr) {
+                        value = value + ' AND (typ:Haus) AND haus:(' + hsnr + '*)';
+                    }
+                    else {
+                        value = value + ' AND (typ:Strasse OR typ:Ort OR typ:Geoname)';
+                    }
+                }
+                else {
+                    if (hsnr) {
+                        value = value + '&filter=(typ:Haus) AND haus:(' + hsnr + '*)';
+                    }
+                    else {
+                        value = value + '&filter=(typ:Strasse OR typ:Ort OR typ:Geoname)';
+                    }
+                }
+            }
+
+            $.ajax({
+                url: '/bkg_suggest',
+                data: 'count=15&query=' + value,
+                context: this,  //das Model
+                async: true,
+                type: "GET",
+                success: function (data) {
+                     _.each(data, function (hit) {
+                        // var text = hit.suggestion.substring(0, hit.suggestion.indexOf(","));
+                        this.pushHits("hitList", {
+                            name: hit.suggestion,
+                            type: "Straße",
+                            glyphicon: "glyphicon-road",
+                            id: hit.suggestion + " Straße"
+                        });
+                    }, this);
+                    this.get("isSearchReady").set("streetSearch", true);
+                },
+                error: function (error) {
+                    alert ('Adressabfrage fehlgeschlagen: ' + error.statusText);
+                },
+                timeout: 3000
+            });
+        },
+
             pushStreetSuggestions: function (data) {
                 if (data.length === 1) {
-                    this.searchHouseNumbers();
+                    var value = data[0].suggestion;
+                    var parts = value.split(/[.,\/ -]/);
+                    var plz = _.find(parts, function(val) {
+                        return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
+                    });
+                    var hsnr = _.find(parts, function(val) {
+                        return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
+                    });
+                    var query = "&query=" + data[0].suggestion + "&filter=(typ:Haus) ";
+                    if(plz){
+                        query += "AND plz:(" + plz + ")";
+                    }
+                    if(hsnr){
+                        query += "AND haus:(" + hsnr + ")";
+                    }
+
+                    this.sendRequest(Config.searchBar.bkgSuggestURL, "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg + "&count=15" + query, this.pushHouseSuggestions, true);
                 }
                 else {
                     _.each(data, function (hit) {
@@ -226,7 +321,6 @@ define([
 
                 }
                 this.get("isSearchReady").set("streetSearch", true);
-               // this.get("isSearchReady").set("numberSearch", true);
             },
 
             getBKGStreets: function (data) {
@@ -260,8 +354,9 @@ define([
                     this.get("isSearchReady").set("streetSearch", false);
 
                     if (Config.searchBar.useBKGSearch) {
-                        this.sendRequest(Config.searchBar.bkgSuggestURL, "count=15&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Strasse)" + "&bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
-                        Config.view.epsg, this.pushStreetSuggestions, true);
+                        this.suggestByBKG(encodeURIComponent(this.get("searchString")));
+                        // this.sendRequest(Config.searchBar.bkgSuggestURL, "count=15&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Strasse)" + "&bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                        // Config.view.epsg, this.pushStreetSuggestions, true);
                     }
                     else {
                         this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
@@ -300,6 +395,19 @@ define([
                     this.searchInHouseNumbers();
                 }
                 this.get("isSearchReady").set("streetSearch", true);
+            },
+
+            pushHouseSuggestions: function (data) {
+                _.each(data, function (hit) {
+                        // var text = hit.suggestion.substring(0, hit.suggestion.indexOf(","));
+                        this.pushHits("hitList", {
+                            name: hit.suggestion,
+                            type: "Adresse",
+                            glyphicon: "glyphicon-road",
+                            id: hit.suggestion + " Haus"
+                        });
+                }, this);
+                this.get("isSearchReady").set("numberSearch", true);
             },
 
             /**
@@ -347,12 +455,8 @@ define([
             *
             */
             searchHouseNumbers: function () {
-                this.get("isSearchReady").set("numberSearch", false);
-                if (Config.searchBar.useBKGSearch) {
-                    this.sendRequest(Config.searchBar.bkgSuggestURL, "count=15&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Haus)" + "&bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg, this.pushStreetSuggestions, true);
-                }
-                else {
+                if (!Config.searchBar.useBKGSearch){
+                    this.get("isSearchReady").set("numberSearch", false);
                     this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
                 }
             },
@@ -407,7 +511,12 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    if (Config.searchBar.useBKGSearch) {
+                        this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    }
+                    else {
+                        this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    }
                 }
             },
 
