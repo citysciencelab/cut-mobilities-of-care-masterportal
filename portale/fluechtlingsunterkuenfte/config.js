@@ -108,7 +108,9 @@ define(function () {
             {id: "1585", visible: false},
             {id: "1", visible: true},
             {id: "2", visible: true},
-            {id: "3", visible: true}
+            {id: "3", visible: true},
+            {id: "4", visible: true},
+            {id: "5", visible: true}
         ],
         /**
         * @memberof config
