@@ -8,6 +8,12 @@
 
     <link rel="stylesheet" href="../../css/style.css">
     <script type="text/javascript" data-main="../../js/main" src="../../components/requirejs/require.js"></script>
+    <script type="text/javascript">
+        function hideWindow () {
+             document.getElementById("startUpWindow").style.display = "none";
+             document.getElementById("blackWindow").style.display = "none";
+        }
+    </script>
 
 </head>
 <body>
@@ -20,5 +26,38 @@
     <div id="popup"></div>
     <div id="gfipopup"></div>
     <div id="searchMarker" class="glyphicon glyphicon-map-marker"></div>
+    <div id="blackWindow" style="z-index: 2400; height: 100%; width: 100%; background-color: black; opacity: 0.4; position: absolute; top: 0;"></div>
+    <div id="startUpWindow" class="alert alert-info alert-dismissible" style="position: absolute; top: 10%; z-index: 2500; max-width: 600px; left: 50%; margin-left: -300px; color: rgb(100,100,100); font-size: 13px;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen" onclick="hideWindow();"><span aria-hidden="true">&times;</span></button>
+        <h3>Wir haben den FHH-Atlas grundlegend überarbeitet</h3>
+        <br>
+        <p>
+            <h4>Die wichtigsten Neuerungen auf einen Blick</h4>
+            <ul>
+                <li>In den dargestellten Kartenebenen (Layern) kann gesucht werden.</li>
+                <li>Für jede Kartenebene kann der zugehörige Eintrag im Hamburger Metadatenkatalog aufgerufen werden.</li>
+                <li>Es werden deutlich mehr Kartenebenen als im alten FHH-Atlas dargestellt. Ganz genau alle, denen ein Datensatz im Hamburger Metadatenkatalog (HMDK) zugeordnet ist (zurzeit über 1000). Die Zuordnung von Kartenebenen zu Datensätzen nimmt LGV auf Basis der von den Fachdatenhaltern erteilten Informationen vor. Alle Kartenebenen, die im alten FHH-Atlas enthalten waren, sind auch im Neuen zu finden.</li>
+                <li>Der Themenbaum wird täglich automatisiert auf Basis von Informationen aus dem HMDK erzeugt. </li>
+                <li>Jede Kartenebene kann transparent geschaltet werden.</li>
+                <li>Die Reihenfolge der Kartenebene lässt sich durch den Nutzer anpassen.</li>
+                <li>Layer in einem Ordner können über eine Checkbox gleichzeitig alle an bzw. alle ausgeschaltet werden.</li>
+            </ul>
+        </p>
+        <br>
+        <p>
+            <h4>Und noch ein wichtiger Hinweis an die Fachdatenhalter</h4>
+        </p>
+        <p>
+            Die Einordnung der Kartenebenen in den Themenbaum erfolgt über die Open Data-Kategorien des zugeordneten Datensatzes (z.B. Bevölkerung, Gesundheit). Diese Kategorien können im HMDK gepflegt werde.  Jeder Datensatz taucht in ‚seiner‘Kategorie auf. Prüfen Sie also bitte, ob die Kategorie Ihres Datensatzes korrekt ist.
+            Zurzeit muss für die Auswahl einer OpenData-Kategorie der Datensatz auch als Open Data veröffentlicht werden. Diese Restriktion wird bald durch eine Weiterentwicklung der Erfassungsoberfläche des HMDK aufgehoben. Die Auswahl einer Open Data- Kategorie kann dann unabhängig von der Veröffentlichung als Open Data erfolgen. Ist einem Datensatz keine Kategorie zugeordnet, wird der Datensatz in der Kategorie Sonstiges angezeigt.
+            Wir haben uns für die Open Data-Kategorien entschieden, da die Daten im Transparenzportal ebenfalls nach diesen Kategorien geordnet werden und viele Datensätze schon entsprechend kategorisiert wurden.
+        </p>
+        <br>
+        <br>
+        <p style="float: left;">
+            <strong>Hinweis! </strong><a href="http://geofos.fhhnet.stadt.hamburg.de/fhh-atlas_alt/">Den alten FHH-Atlas finden Sie für eine Übergangszeit hier!</a>
+        </p>
+        <button type="button" class="btn btn-info btn-sm" style="float: right" onclick="hideWindow();">Schließen</button>
+    </div>
 </body>
 </html>
