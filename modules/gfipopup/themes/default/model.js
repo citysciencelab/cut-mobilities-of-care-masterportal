@@ -27,6 +27,12 @@ define([
             this.checkRoutable();
         },
         /**
+         * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
+         */
+        returnPrintContent: function() {
+            return this.get('gfiContent');
+        },
+        /**
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
         checkRoutable: function () {

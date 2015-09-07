@@ -29,6 +29,24 @@ define([
             msPLZ: '',
             msStadtteil: ''
         },
+        /**
+         * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
+         */
+        returnPrintContent: function() {
+            var ms = {
+                "Strasse" : this.get('msStrasse'),
+                "Stadtteil" : this.get('msStadtteil'),
+                "Ort" : this.get('msPLZ') + ' Hamburg',
+                "Kategorie" : this.get('msWohnlage')
+            };
+            $(".msmerkmal").each(function(element) {
+                if (this.value !== '-1') { // = bitte wählen
+                    ms = _.extend(ms, _.object([$(this).attr('id')], [$(this).find("option:selected").text()]));
+                }
+            });
+            console.log(ms);
+            return ms;
+        },
         /*
          * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
          * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.

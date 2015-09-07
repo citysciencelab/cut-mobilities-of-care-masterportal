@@ -51,6 +51,7 @@ define([
             this.on("change:currentLayout change:currentScale change:isActive", this.updatePrintPage, this);
 
             EventBus.on("winParams", this.setStatus, this);
+            EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("gfiForPrint", this.setGFIToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
@@ -104,7 +105,7 @@ define([
             if (Config.tools.draw === true) {
                 EventBus.trigger("getDrawlayer");
             }
-            this.setSpecification();
+            this.sendGFIForPrint();
         },
 
         /**
@@ -198,12 +199,17 @@ define([
             }
             this.set("specification", specification);
         },
-
+        /**
+        * Abfrage an popupmodel starten.
+        */
+        sendGFIForPrint: function() {
+            EventBus.trigger('sendGFIForPrint');
+        },
         /**
         * [[Description]]
         * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
         */
-        setGFIToPrint: function (values) {
+        receiveGFIForPrint: function (values) {
             this.set("gfiParams", _.pairs(values[0]));
             this.set("gfiTitle", values[1]);
             this.set("hasPrintGFIParams", values[2]);
@@ -228,6 +234,7 @@ define([
             } else {
                 this.set("createURL", this.get('printurl') + "/master/create.json");
             }
+            this.setSpecification();
         },
 
         /**
