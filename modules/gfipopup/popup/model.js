@@ -341,8 +341,9 @@ define([
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         sendGFIForPrint: function () {
-            var attr = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
-                title = this.get("gfiTitles")[this.get("gfiCounter") - 1],
+            var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
+                attr = printContent[0],
+                title = printContent[1],
                 visible= this.get("isPopupVisible");
             EventBus.trigger("receiveGFIForPrint", [attr, title, visible]);
         },

@@ -23,6 +23,7 @@ define([
             this.set('layer', layer);
             this.set('gfiContent', response);
             this.set('position', position);
+            this.set('gfiTitel', layer.ol_layer.get('name'));
             this.replaceValuesWithChildObjects();
             this.checkRoutable();
         },
@@ -30,7 +31,8 @@ define([
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
          */
         returnPrintContent: function() {
-            return this.get('gfiContent');
+            return [this.get('gfiContent'),
+                    this.get('gfiTitel')];
         },
         /**
          * Prüft, ob der Button zum Routen angezeigt werden soll

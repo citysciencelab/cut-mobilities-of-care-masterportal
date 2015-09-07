@@ -45,7 +45,7 @@ define([
                 }
             });
             console.log(ms);
-            return ms;
+            return [ms, 'Mietenspiegel-Auswertung'];
         },
         /*
          * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
