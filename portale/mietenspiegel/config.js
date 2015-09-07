@@ -192,9 +192,10 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            printID: "99999",
-            title: "Daten des Hamburger Mietenspiegel",
-            gfi: false
+            printID: "99997",
+            title: "Freie und Hansestadt Hamburg - Mietenspiegel",
+            outputFilename: "Ausdruck Hamburger Mietenspiegel",
+            gfi: true
         },
         /**
         * @memberof config
