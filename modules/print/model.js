@@ -194,9 +194,8 @@ define([
                 _.each(_.flatten(this.get("gfiParams")), function (element, index) {
                     specification.pages[0]["attr_" + index] = element;
                 }, this);
-                specification.pages[0].layerName = $(".gfi-title").text();
+                specification.pages[0].layerName = this.get("gfiTitle");
             }
-
             this.set("specification", specification);
         },
 
@@ -206,7 +205,8 @@ define([
         */
         setGFIToPrint: function (values) {
             this.set("gfiParams", _.pairs(values[0]));
-            this.set("hasPrintGFIParams", values[1]);
+            this.set("gfiTitle", values[1]);
+            this.set("hasPrintGFIParams", values[2]);
             if (this.get("hasPrintGFIParams") === true && Config.print.gfi === true) {
                 switch (this.get("gfiParams").length) {
                     case 4: {
@@ -220,6 +220,9 @@ define([
                     case 6: {
                         this.set("createURL", this.get('printurl') + "/master_gfi_6/create.json");
                         break;
+                    }
+                    default: {
+                        this.set("createURL", this.get('printurl') + "/master/create.json");
                     }
                 }
             } else {
