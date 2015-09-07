@@ -13,6 +13,54 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true},
             {id: "452", visible: false},
+            // {id: "6002,6001,6000", visible: false, name: "Erreichbarkeit der Sportstätten mit dem Auto"},
+            // {id: "6008,6007,6006", visible: false, name: "Erreichbarkeit der Sportstätten mit dem Rad"},
+            // {id: "6005,6004,6003", visible: false, name: "Erreichbarkeit der Sportstätten zu Fuss"},
+            {id:
+             [
+                {
+                    id: "6002"
+                },
+                {
+                    id: "6001"
+                },
+                {
+                    id: "6000"
+                }
+             ],
+             visible: false, name: "Erreichbarkeit der Sportstätten zu Fuss"
+            },
+            {id:
+             [
+                {
+                    id: "6005"
+                },
+                {
+                    id: "6004"
+                },
+                {
+                    id: "6003"
+                }
+             ],
+             visible: false, name: "Erreichbarkeit der Sportstätten mit dem Rad"
+            },
+            {id:
+             [
+                {
+                    id: "6008"
+                },
+                {
+                    id: "6007"
+                },
+                {
+                    id: "6006"
+                }
+             ],
+             visible: false, name: "Erreichbarkeit der Sportstätten mit dem Auto"
+            },
+            {id: "2092", visible: false},
+            {id: "1", visible: true},
+
             {id:
              [
                 {
@@ -28,11 +76,11 @@ define(function () {
             },
             {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
             {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-            {id: "1", visible: true},
             {id: "7995", visible: false},
             {id: "7996", visible: false},
             {id: "7999", visible: true},
-            {id: "2403", visible: false, style: "51", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
+            {id: "2403", visible: false, style: "51", clusterDistance: 40},
+            {id: "52", visible: false, style: "52", clusterDistance: 30, styleField: "situation"},
             {id:
              [
                  {
@@ -58,6 +106,7 @@ define(function () {
             {id: "7797", visible: false, style: "7797", styleField: "piktogramm", clusterDistance: 60, mouseHoverField: "piktogramm"},
             {id: "7798", visible: true, style: "7798", styleField: "piktogramm", clusterDistance: 50, mouseHoverField: "piktogramm"}
         ],
+        attributions: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,

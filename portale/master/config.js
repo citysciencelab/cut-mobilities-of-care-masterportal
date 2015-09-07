@@ -7,6 +7,12 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
+        * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=
+        */
+        metadatenURL: "",
+        /**
+        * @memberof config
+        * @type {String}
         * @desc Pfad zum img-Ordner für WFS-Styles
         */
         wfsImgPath: "../components/lgv-config/img/",
