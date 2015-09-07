@@ -44,7 +44,21 @@ define([
                     ms = _.extend(ms, _.object([$(this).attr('id')], [$(this).find("option:selected").text()]));
                 }
             });
-            console.log(ms);
+            if (this.get('msMittelwert') !== '') {
+                ms = _.extend(ms, _.object(['Mittelwert'], [this.get('msMittelwert').toString()]));
+            }
+            if (this.get('msSpanneMin') !== '') {
+                ms = _.extend(ms, _.object(['Spanne Min.'], [this.get('msSpanneMin').toString()]));
+            }
+            if (this.get('msSpanneMax') !== '') {
+                ms = _.extend(ms, _.object(['Spanne Max'], [this.get('msSpanneMax').toString()]));
+            }
+            if (this.get('msDatensaetze') !== '') {
+                ms = _.extend(ms, _.object(['Datensätze'], [this.get('msDatensaetze').toString()]));
+            }
+            ms = _.extend(ms, _.object(['Herausgeber'], [this.get('msHerausgeber')]));
+            ms = _.extend(ms, _.object(['Erhebungsstand'], [this.get('msErhebungsstand')]));
+            ms = _.extend(ms, _.object(['Hinweis'], [this.get('msHinweis')]));
             return [ms, 'Mietenspiegel-Auswertung'];
         },
         /*
