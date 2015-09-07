@@ -28,7 +28,7 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            resolution: 2.2645838625010583
+            resolution: 2.6458386250105834 // 1:10000
         },
         /**
         * @memberof config
