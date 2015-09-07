@@ -32,7 +32,6 @@ define([
          */
         initialize: function () {
             this.set("element", this.get("gfiOverlay").getElement());
-            this.listenTo(this, "change:isPopupVisible", this.sendGFIForPrint);
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
         },
@@ -43,6 +42,7 @@ define([
             this.get("element").popover("destroy");
             this.set("isPopupVisible", false);
             this.unset("coordinate", {silent: true});
+            this.sendGFIForPrint();
         },
         /**
          * Zeigt das Popup.
@@ -53,6 +53,7 @@ define([
             });
             this.get("element").popover("show");
             this.set("isPopupVisible", true);
+            this.sendGFIForPrint();
         },
         /**
          * params: [0] = Objekt mit name und url; [1] = Koordinate
@@ -341,7 +342,7 @@ define([
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         sendGFIForPrint: function () {
-            EventBus.trigger("gfiForPrint", [this.get("gfiContent")[0].model.attributes.gfiContent, this.get("isPopupVisible")]);
+            EventBus.trigger("gfiForPrint", [this.get("gfiContent")[this.get("gfiCounter") - 1].model.attributes.gfiContent, this.get("isPopupVisible")]);
         },
         /**
          * Alle childTemplates im gfiContent müssen hier removed werden.
