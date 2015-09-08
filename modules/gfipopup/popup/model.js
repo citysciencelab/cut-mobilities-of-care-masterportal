@@ -341,11 +341,14 @@ define([
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         sendGFIForPrint: function () {
-            var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
+            if (this.get('isPopupVisible') === true) {
+                var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
                 attr = printContent[0],
-                title = printContent[1],
-                visible= this.get("isPopupVisible");
-            EventBus.trigger("receiveGFIForPrint", [attr, title, visible]);
+                title = printContent[1];
+                EventBus.trigger("receiveGFIForPrint", [attr, title, true]);
+            } else {
+                EventBus.trigger("receiveGFIForPrint", [null, null, false]);
+            }
         },
         /**
          * Alle childTemplates im gfiContent müssen hier removed werden.
