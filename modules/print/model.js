@@ -263,24 +263,9 @@ define([
             this.set("gfiParams", _.pairs(values[0]));
             this.set("gfiTitle", values[1]);
             this.set("printGFIPosition", values[2]);
-            if (this.get("printGFIPosition") !== null && Config.print.gfi === true) {
-                switch (this.get("gfiParams").length) {
-                    case 4: {
-                        this.set("createURL", this.get('printurl') + "/master_gfi_4/create.json");
-                        break;
-                    }
-                    case 5: {
-                        this.set("createURL", this.get('printurl') + "/master_gfi_5/create.json");
-                        break;
-                    }
-                    case 6: {
-                        this.set("createURL", this.get('printurl') + "/master_gfi_6/create.json");
-                        break;
-                    }
-                    default: {
-                        this.set("createURL", this.get('printurl') + "/master/create.json");
-                    }
-                }
+            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+            if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get('gfiParams').length > 0) {
+                this.set("createURL", this.get('printurl') + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             } else {
                 this.set("createURL", this.get('printurl') + "/master/create.json");
             }
@@ -300,6 +285,9 @@ define([
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 success: this.openPDF,
+                error: function (error) {
+                    alert ("Druck fehlgeschlagen: " + error.statusText);
+                },
                 complete: Util.hideLoader,
                 beforeSend: Util.showLoader
             });
