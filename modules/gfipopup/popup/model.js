@@ -345,9 +345,9 @@ define([
                 var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
                 attr = printContent[0],
                 title = printContent[1];
-                EventBus.trigger("receiveGFIForPrint", [attr, title, true]);
+                EventBus.trigger("receiveGFIForPrint", [attr, title, this.get("coordinate")]);
             } else {
-                EventBus.trigger("receiveGFIForPrint", [null, null, false]);
+                EventBus.trigger("receiveGFIForPrint", [null, null, null]);
             }
         },
         /**
