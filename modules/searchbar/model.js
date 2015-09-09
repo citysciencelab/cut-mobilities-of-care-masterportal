@@ -148,13 +148,18 @@ define([
                     this.searchParcel();
                 }
                 else if (this.get("searchString").length >= 3) {
-                    this.searchStreets();
-                    this.searchDistricts();
-                    this.searchInFeatures();
-                    if (_.has(Config.searchBar, "getFeatures") === true) {
-                        this.searchInOlympiaFeatures();
-                        this.searchInBPlans();
+                    if (Config.searchBar.useBKGSearch) {
+                        this.suggestByBKG();
                     }
+                    else {
+                        this.searchStreets();
+                        this.searchDistricts();
+                    }
+                    if (_.has(Config.searchBar, "getFeatures") === true) {
+                            this.searchInOlympiaFeatures();
+                            this.searchInBPlans();
+                        }
+                    this.searchInFeatures();
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
                         this.searchInNodes();
@@ -184,41 +189,18 @@ define([
                     }
                 });
             },
-
             /**
-             * @description Führt einen HTTP-GET-Request auf den BKG Dienst aus.
-             * Reicht den Context durch umm auch aus dem View callbar zu sein
-
-             * @param {String} data - Data to be sent to the server
-             * @param {function} successFunction - A function to be called if the request succeeds
-             * @param {context} gibt den Context weiter
-             */
-            sendSearchRequestToBKG: function (searchstring, successFunction, context) {
-                var value = searchstring;
-                var parts = value.split(/[.,\/ -]/);
-                var plz = _.find(parts, function(val) {
-                    return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
-                });
-                var hsnr = _.find(parts, function(val) {
-                    return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
-                });
-                var query = "&query=" + value;
-
-                if(plz || hsnr){
-                    query += "&filter="
-                }
-                if (hsnr) {
-                    query += "(typ:Haus) AND haus:(" + hsnr + ")";
-                }
-                 if (plz) {
-                    query += " AND plz:(" + plz + ")";
-                }
-
+            * @description Führt einen HTTP-GET-Request aus. Ermöglicht einen Parameter an die success function zu übergeben
+            * wird benötigt um vom view aus einen Request auszuführen und den View als Context übergeben zu können
+            *
+            *
+            **/
+            sendSearchRequestFromView: function (url, data, successFunction, asyncBool, context) {
                 $.ajax({
-                    url: Config.searchBar.bkgSearchURL,
-                    data: "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg + "&count=15" + query,
+                    url: url,
+                    data: data,
                     context: this,
+                    async: asyncBool,
                     type: "GET",
                     success: function (result) {
                         successFunction(result, context);
@@ -230,119 +212,30 @@ define([
                 });
             },
 
-            suggestByBKG: function (value) {
+            suggestByBKG: function () {
 
-            var parts = value.split(/[.,\/ -]/);
-            if (this.get('bbox') !== '') {
-                value = value + this.get('bbox');
-            }
-            if (value.indexOf('&filter=') === -1) {
-                var plz = _.find(parts, function(val) {
-                    return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
-                });
-                var hsnr = _.find(parts, function(val) {
-                    return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
-                });
-                if (plz) {
-                    value = value + '&filter=(plz:' + plz + ')';
-                    if (hsnr) {
-                        value = value + ' AND (typ:Haus) AND haus:(' + hsnr + '*)';
-                    }
-                    else {
-                        value = value + ' AND (typ:Strasse OR typ:Ort OR typ:Geoname)';
-                    }
+                if (Config.searchBar.useBKGSearch) {
+                    this.get("isSearchReady").set("suggestByBKG", false);
+                    var request = "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg + "&count=15" + '&query="' + encodeURIComponent(this.get("searchString")) + '"';
+
+                    this.sendRequest(Config.searchBar.bkgSuggestURL, request, this.pushSuggestions, true);
                 }
-                else {
-                    if (hsnr) {
-                        value = value + '&filter=(typ:Haus) AND haus:(' + hsnr + '*)';
-                    }
-                    else {
-                        value = value + '&filter=(typ:Strasse OR typ:Ort OR typ:Geoname)';
-                    }
-                }
-            }
-
-            $.ajax({
-                url: '/bkg_suggest',
-                data: 'count=15&query=' + value,
-                context: this,  //das Model
-                async: true,
-                type: "GET",
-                success: function (data) {
-                     _.each(data, function (hit) {
-                        // var text = hit.suggestion.substring(0, hit.suggestion.indexOf(","));
-                        this.pushHits("hitList", {
-                            name: hit.suggestion,
-                            type: "Straße",
-                            glyphicon: "glyphicon-road",
-                            id: hit.suggestion + " Straße"
-                        });
-                    }, this);
-                    this.get("isSearchReady").set("streetSearch", true);
-                },
-                error: function (error) {
-                    alert ('Adressabfrage fehlgeschlagen: ' + error.statusText);
-                },
-                timeout: 3000
-            });
-        },
-
-            pushStreetSuggestions: function (data) {
-                if (data.length === 1) {
-                    var value = data[0].suggestion;
-                    var parts = value.split(/[.,\/ -]/);
-                    var plz = _.find(parts, function(val) {
-                        return parseInt(val) && parseInt(val) >= 10000 && parseInt(val) <= 99999;
-                    });
-                    var hsnr = _.find(parts, function(val) {
-                        return parseInt(val) && parseInt(val) >= 1 && parseInt(val) <= 999;
-                    });
-                    var query = "&query=" + data[0].suggestion + "&filter=(typ:Haus) ";
-                    if(plz){
-                        query += "AND plz:(" + plz + ")";
-                    }
-                    if(hsnr){
-                        query += "AND haus:(" + hsnr + ")";
-                    }
-
-                    this.sendRequest(Config.searchBar.bkgSuggestURL, "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg + "&count=15" + query, this.pushHouseSuggestions, true);
-                }
-                else {
-                    _.each(data, function (hit) {
-                        // var text = hit.suggestion.substring(0, hit.suggestion.indexOf(","));
-                        this.pushHits("hitList", {
-                            name: hit.suggestion,
-                            type: "Straße",
-                            glyphicon: "glyphicon-road",
-                            id: hit.suggestion + " Straße"
-                        });
-                    }, this);
-
-                }
-                this.get("isSearchReady").set("streetSearch", true);
             },
 
-            getBKGStreets: function (data) {
-                var hits = data.features;
-
-                _.each(hits, function (hit) {
-                    var coordinates = "";
-
-                    _.each(hit.properties.bbox.coordinates[0], function (point) {
-                        coordinates += point[0] + " " + point[1] + " ";
-                    });
-                    coordinates = coordinates.trim();
-
-                    this.pushHits("hitList", {
-                        name: hit.properties.text,
-                        type: "Straße",
-                        coordinate: coordinates,
-                        glyphicon: "glyphicon-road",
-                        id: hit.properties.strasse + " Straße"
-                    });
-                }, this);
-                 this.get("isSearchReady").set("streetSearch", true);
+            pushSuggestions: function (data) {
+                _.each(data, function (hit) {
+                        if (hit.score > 0.6) {
+                            this.pushHits("hitList", {
+                                name: hit.suggestion,
+                                type: "Geosearch Ergebnis",
+                                bkg: true,
+                                glyphicon: "glyphicon-road",
+                                id: hit.suggestion
+                            });
+                        }
+                    }, this);
+                this.get("isSearchReady").set("suggestByBKG", true);
             },
 
 
@@ -352,16 +245,7 @@ define([
             searchStreets: function () {
                 if (this.get("isSearchReady").get("streetSearch") === true) {
                     this.get("isSearchReady").set("streetSearch", false);
-
-                    if (Config.searchBar.useBKGSearch) {
-                        this.suggestByBKG(encodeURIComponent(this.get("searchString")));
-                        // this.sendRequest(Config.searchBar.bkgSuggestURL, "count=15&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:Strasse)" + "&bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
-                        // Config.view.epsg, this.pushStreetSuggestions, true);
-                    }
-                    else {
                         this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
-                    }
-
                 }
 
             },
@@ -395,19 +279,6 @@ define([
                     this.searchInHouseNumbers();
                 }
                 this.get("isSearchReady").set("streetSearch", true);
-            },
-
-            pushHouseSuggestions: function (data) {
-                _.each(data, function (hit) {
-                        // var text = hit.suggestion.substring(0, hit.suggestion.indexOf(","));
-                        this.pushHits("hitList", {
-                            name: hit.suggestion,
-                            type: "Adresse",
-                            glyphicon: "glyphicon-road",
-                            id: hit.suggestion + " Haus"
-                        });
-                }, this);
-                this.get("isSearchReady").set("numberSearch", true);
             },
 
             /**
@@ -455,10 +326,8 @@ define([
             *
             */
             searchHouseNumbers: function () {
-                if (!Config.searchBar.useBKGSearch){
                     this.get("isSearchReady").set("numberSearch", false);
                     this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
-                }
             },
 
             searchInHouseNumbers: function () {
@@ -806,6 +675,12 @@ define([
             */
             createRecommendedList: function () {
                 this.set("isHitListReady", false);
+                if (Config.searchBar.useBKGSearch) {
+                    this.set("recommendedList", this.get("hitList"));
+                    this.set("isHitListReady", true);
+                    return;
+                }
+
                 if (this.get("hitList").length > 5) {
                     var numbers = [];
 
