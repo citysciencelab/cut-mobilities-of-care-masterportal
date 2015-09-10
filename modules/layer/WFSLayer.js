@@ -48,7 +48,8 @@ define([
                                 typ: this.get("typ"),
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
-                                routable: this.get("routable")
+                                routable: this.get("routable"),
+                                gfiTheme: this.get('gfiTheme'),
                             }));
                             this.reload();
                         }
@@ -71,7 +72,8 @@ define([
                                 typ: this.get("typ"),
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
-                                routable: this.get("routable")
+                                routable: this.get("routable"),
+                                gfiTheme: this.get('gfiTheme')
                             }));
                             this.reload();
                         }
@@ -79,6 +81,8 @@ define([
                     }
                     catch (e) {
                         alert("Fehlermeldung beim Laden von Daten: \n" + e.message);
+                        console.log(e);
+                        console.log(data);
                     }
                 },
                 error: function (jqXHR, errorText, error) {

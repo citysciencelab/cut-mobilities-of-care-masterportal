@@ -28,7 +28,7 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            resolution: 2.2645838625010583
+            resolution: 2.6458386250105834 // 1:10000
         },
         /**
         * @memberof config
@@ -48,7 +48,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
         /**
         * @memberof config
         * @type {String}
@@ -102,7 +102,8 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false}
+            {id: "452", visible: false},
+            {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
         ],
         /**
         * @memberof config
@@ -174,7 +175,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Adresse",
             gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
 
@@ -191,9 +192,10 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            printID: "99999",
-            title: "Daten des Hamburger Mietenspiegel",
-            gfi: false
+            printID: "99997",
+            title: "Freie und Hansestadt Hamburg - Mietenspiegel",
+            outputFilename: "Ausdruck Hamburger Mietenspiegel",
+            gfi: true
         },
         /**
         * @memberof config

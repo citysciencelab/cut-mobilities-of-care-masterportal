@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/gfipopup/template.html",
-    "modules/gfipopup/model",
+    "text!modules/gfipopup/popup/template.html",
+    "modules/gfipopup/popup/model",
     "eventbus"
 ], function (Backbone, GFIPopupTemplate, GFIPopup, EventBus) {
     "use strict";
@@ -12,8 +12,7 @@ define([
             "click .gfi-close": "destroy",
             "click .gfi-toggle": "minMaximizePop",
             "click .pager-right": "renderNext",
-            "click .pager-left": "renderPrevious",
-            "click #setRoutingDestination": "setRoutingDestination"
+            "click .pager-left": "renderPrevious"
         },
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
@@ -23,9 +22,6 @@ define([
             this.listenTo(this.model, "change:coordinate", this.render);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
-        },
-        setRoutingDestination: function () {
-            EventBus.trigger("setRoutingDestination", this.model.get("coordinate"));
         },
         /**
          * Toggle des Popovers in minimiert oder maximiert
@@ -58,6 +54,8 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
+            this.$el.find('.gfi-content').append(this.model.get('gfiContent')[this.model.get('gfiCounter') - 1].$el);
+            this.$el.find('.gfi-title').text(this.model.get('gfiTitles')[this.model.get('gfiCounter') - 1]);
             $(this.model.get("element")).popover({
                 placement: function () {
                     if (this.getPosition().top > window.innerHeight / 2) {
@@ -72,7 +70,6 @@ define([
             this.model.showPopup();
             EventBus.trigger("closeMouseHoverPopup", this);
             EventBus.trigger("GFIPopupVisibility", true);
-            this.appendChildren();
         },
         /**
          *
@@ -96,39 +93,16 @@ define([
          *
          */
         destroy: function () {
-            this.removeChildren();
+            this.removeTemplateModels();
             $("#popovermin").remove();
             this.model.destroyPopup();
             EventBus.trigger("GFIPopupVisibility", false);
         },
         /**
-         * Alle Children des gfiContent werden dem gfi-content appended. Eine Übernahme in dessen table ist nicht HTML-konform (<div> kann nicht in <table>).
-         * Nur $.append, $.replaceWith usw. sorgen für einen korrekten Zusammenbau eines <div>. Mit element.val.el.innerHTML wird HTML nur kopiert, sodass Events
-         * nicht im view ankommen.
+         *
          */
-        appendChildren: function () {
-            var gfiContent = this.model.get('gfiContent')[this.model.get('gfiContent').length - this.model.get('gfiCounter')],
-                children;
-            if (_.has(gfiContent, 'children')) {
-                children = _.values(_.pick(gfiContent, 'children'))[0];
-                _.each(children, function (element) {
-                    $('.gfi-content').append(element.val.$el);
-                }, this);
-            }
-        },
-        /**
-         * Alle children im gfiContent müssen hier removed werden.
-         * Das gfipopup.model wird nicht removed - nur reset.
-         */
-        removeChildren: function () {
-            _.each(this.model.get('gfiContent'), function (element) {
-                if (_.has(element, 'children')) {
-                    var children = _.values(_.pick(element, 'children'))[0];
-                    _.each(children, function (child) {
-                        child.val.remove();
-                    }, this);
-                }
-            }, this);
+        removeTemplateModels: function () {
+            this.model.removeChildObjects();
         }
     });
 

@@ -1,3 +1,7 @@
+.no-margin {
+    margin: 0;
+}
+
 .popover {
     padding: 0px;
     max-width:450px;
@@ -50,7 +54,7 @@
 
 .gfi-content {
     font-size: 12px;
-    max-height: 400px;
+    max-height: 66%;
     min-width:350px;
     overflow-y: auto;
 }

@@ -165,7 +165,7 @@ define([
             });
             // Index vom ersten VectorLayer in der Layerlist
             index = _.indexOf(layerList, firstVectorLayer);
-            if (index !== -1) {
+            if (index !== -1 && _.has(firstVectorLayer, "id") === false) {
                 // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
                 this.get("map").getLayers().insertAt(index, layer);
             }
@@ -220,7 +220,6 @@ define([
             _.each(layersVisible, function (element) {
                 if (element.get("typ") !== "GROUP") {
                     var gfiAttributes = element.get("gfiAttributes");
-
                     if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                         if (element.getProperties().typ === "WMS") {
                             var gfiURL = element.getSource().getGetFeatureInfoUrl(
@@ -233,8 +232,7 @@ define([
                                 scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
-                                attributes: gfiAttributes,
-                                routable: element.get("routable")
+                                ol_layer: element
                             });
                         }
                         else if (element.getProperties().typ === "WFS") {
@@ -244,18 +242,24 @@ define([
                                 source: element.getSource(),
                                 style: element.getStyle(),
                                 name: element.get("name"),
-                                attributes: gfiAttributes,
-                                routable: element.get("routable")
+                                ol_layer: element
                             });
                         }
                     }
                     else if (element.getProperties().typ === "GeoJSON") {
-                        gfiParams.push({
-                            typ: "GeoJSON",
-                            scale: scale,
-                            source: element.getSource(),
-                            name: element.get("name")
-                        });
+                        var pixel = this.get("map").getEventPixel(evt.originalEvent),
+                            hit = this.get("map").hasFeatureAtPixel(pixel);
+
+                        if (hit === true) {
+                            this.get("map").forEachFeatureAtPixel(evt.pixel, function (feature) {
+                                gfiParams.push({
+                                    typ: "GeoJSON",
+                                    feature: feature,
+                                    name: element.get("name"),
+                                    ol_layer: element
+                                });
+                            });
+                        }
                     }
                 }
                 else {
@@ -274,8 +278,7 @@ define([
                                     scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
-                                    attributes: gfiAttributes,
-                                    routable: layer.get("routable")
+                                    ol_layer: layer
                                 });
                             }
                             else if (layer.getProperties().typ === "WFS") {
@@ -285,14 +288,13 @@ define([
                                     source: layer.getSource(),
                                     style: layer.getStyle(),
                                     name: layer.get("name"),
-                                    attributes: gfiAttributes,
-                                    routable: layer.get("routable")
+                                    ol_layer: layer
                                 });
                             }
                         }
                     });
                 }
-            });
+            }, this);
             EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
         },
         zoomToExtent: function (extent) {

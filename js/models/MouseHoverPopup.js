@@ -115,8 +115,8 @@ define([
                         layer: layer
                     };
             });
-
-            if (featuresAtPixel !== undefined) {
+            // featuresAtPixel.layer !== null --> kleiner schneller Hack da sonst beim zeichnen die ganze Zeit versucht wird ein Popup zu zeigen?? SD 01.09.2015
+            if (featuresAtPixel !== undefined && featuresAtPixel.layer !== null) {
                 var selFeature = featuresAtPixel.feature;
                 // Cluster-Features
                 if (selFeature.getProperties().features) {

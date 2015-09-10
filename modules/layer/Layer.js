@@ -36,14 +36,18 @@ define([
 
             this.listenTo(this, {
                 "change:viewResolution": this.setIsResolutionInRange,
-                "change:visibility": function () {
-                    this.setVisibility();
-                    this.toggleLayerInformation();
-                },
+                "change:visibility": this.setVisibility,
                 "change:transparence": this.updateOpacity,
                 "change:selected": this.toggleToSelectionLayerList,
                 "change:SLDBody": this.updateSourceSLDBody
             });
+            this.set("settings", false);
+            // Setze 'gfiTemplate' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder 'default'
+            this.set('gfiTheme', this.get('gfiTheme') || 'default');
+            // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
+            this.set('routable', this.get('routable') || false);
+            // Tranparenz
+            this.listenTo(this, "change:transparence", this.updateOpacity);
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
@@ -92,7 +96,7 @@ define([
             var datasets = this.get("datasets"),
                 dataset;
 
-            if (datasets) {
+            if (datasets && datasets.length > 0) {
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
                     this.set("metaID", dataset.md_id);
@@ -225,25 +229,29 @@ define([
             window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (this.get("url") !== undefined && this.has("link") === false) {
-                if (this.get("url").search("geodienste") !== -1) {
-                    this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            if (Config.metadatenURL && Config.metadatenURL !== '') {
+                this.set("metaURL", Config.metadatenURL + this.get("metaID"));
+            } else {
+                if (this.get("url") !== undefined && this.has("link") === false) {
+                    if (this.get("url").search("geodienste") !== -1) {
+                        this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                    }
+                    else {
+                        this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                    }
+                }
+                else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
+                    if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
+                        this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                    }
+                    else {
+                        this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                    }
                 }
                 else {
-                    this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
+                    // für olympia-portal --> hat keine metadaten!! Es wird auf ein PDF verlinkt.
+                    this.set("metaURL", this.get("link"));
                 }
-            }
-            else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
-                if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
-                    this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                }
-                else {
-                    this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                }
-            }
-            else {
-                // für olympia-portal --> hat keine metadaten!! Es wird auf ein PDF verlinkt.
-                this.set("metaURL", this.get("link"));
             }
         },
         moveUp: function () {

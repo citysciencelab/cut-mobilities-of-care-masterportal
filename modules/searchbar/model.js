@@ -400,8 +400,12 @@ define([
              *
              */
             searchInNodes: function () {
+                var nodes = _.uniq(this.get("nodes"), function (node) {
+                    return node.name;
+                });
+
                 this.get("isSearchReady").set("nodeSearch", false);
-                _.each(this.get("nodes"), function (node) {
+                _.each(nodes, function (node) {
                     var nodeName = node.name.replace(/ /g, "");
 
                     if (nodeName.search(this.get("searchStringRegExp")) !== -1) {
@@ -422,7 +426,10 @@ define([
 
                     if (layer.metaName !== null) {
                         metaName = layer.metaName.replace(/ /g, "");
-                        if (layerName.search(this.get("searchStringRegExp")) !== -1 || metaName.search(this.get("searchStringRegExp")) !== -1) {
+                        if (layer.model.get("type") === "nodeLayer" && metaName.search(this.get("searchStringRegExp")) !== -1) {
+                            this.pushHits("hitList", layer);
+                        }
+                        else if (metaName.search(this.get("searchStringRegExp")) !== -1 || layerName.search(this.get("searchStringRegExp")) !== -1) {
                             this.pushHits("hitList", layer);
                         }
                     }

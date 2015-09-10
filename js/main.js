@@ -34,5 +34,5 @@ require.config({
     urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(["app", "geoapi"], function () {
+define(["app"], function () {
 });

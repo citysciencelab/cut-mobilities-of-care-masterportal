@@ -20,12 +20,8 @@ define([
                         ui.item.startPos = ui.item.index();
                     },
                     update: function (evt, ui) {
-                        if (ui.item.startPos - ui.item.index() < 0) {
-                            ui.item.trigger("movemodel", ui.item.startPos - ui.item.index());
-                        }
-                        else {
-                            ui.item.trigger("movemodel", ui.item.startPos + ui.item.index());
-                        }
+                        ui.item.trigger("movemodel", ui.item.startPos - ui.item.index());
+                        ui.item.trigger("movemodel", ui.item.startPos - ui.item.index());
                     }
                 });
             },

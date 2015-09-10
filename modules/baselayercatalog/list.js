@@ -19,7 +19,8 @@ define([
             baselayer = _.sortBy(baselayer, function (layer) {
                 return layer.get("name");
             });
-            _.each(baselayer.sort(), function (layer) {
+
+            _.each(baselayer, function (layer) {
                 this.add(layer);
             }, this);
         },

@@ -6,7 +6,7 @@
 @import "../_libs/openlayers/v3.5.0/ol.css";
 @import "lgv.css";
 @import "togglebutton.css";
-@import "../modules/gfipopup/style.css";
+@import "../modules/gfipopup/popup/style.css";
 @import "panel.css";
 @import "glyphiconbutton.css";
 @import "orientation.css";
