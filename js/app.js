@@ -43,7 +43,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         "config",
         "jquery"
     ], function (Map, Config, $) {
-        new Map();
+        if (!Config.mapUnvisible || Config.mapUnvisible === false) {
+            new Map('map');
+        } else {
+            new Map('unvisiblemap');
+        }
 
         if (Config.footer && Config.footer === true) {
             require(["modules/footer/view"], function (FooterView) {
@@ -78,8 +82,10 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         if (Config.menubar === true) {
             require(["modules/menubar/view", "views/ToggleButtonView", "views/ZoomButtonsView"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
                 new MenubarView();
-                new ToggleButtonView();
-                new ZoomButtonsView();
+                if (!Config.mapUnvisible || Config.mapUnvisible === false) {
+                    new ToggleButtonView();
+                    new ZoomButtonsView();
+                }
                 require(["views/WindowView"], function (WindowView) {
                     new WindowView();
                 });
@@ -168,6 +174,6 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 }
             });
         }
-    Util.hideLoader();
     });
+    Util.hideLoader();
 });
