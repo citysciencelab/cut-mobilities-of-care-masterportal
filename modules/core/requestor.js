@@ -10,7 +10,7 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         requestFeatures: function (params) {
-            $("#loader").show();
+            Util.showLoader();
             this.set("wfsCoordinate", []);
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], "name"),
@@ -40,7 +40,7 @@ define([
                     ol_layer: visibleLayer.ol_layer
                 });
             }, this);
-            $("#loader").hide();
+            Util.hideLoader();
             return [pContent, positionGFI];
         },
 
