@@ -95,8 +95,6 @@ define([
          * Wird aufgerufen wenn die View erzeugt wird.
          */
         initialize: function (layer, response) {
-            console.log(layer);
-            console.log(response);
             EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
             this.listenTo(this.model, "change:msMittelwert", this.changedMittelwert);
             this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
