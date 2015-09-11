@@ -216,9 +216,6 @@ define([
             */
             zoomTo: function (evt) {
                 var zoomLevel, hitID, hit;
-
-
-
                 if (_.has(evt, "cid")) { // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
                     if (Config.searchBar.initString.search(",") !== -1) {
                         hit = this.model.get("hitList")[1]; // initial Suche Adresse mit Hausnummer
@@ -240,7 +237,7 @@ define([
                 }
 
                  if (hit.bkg === true) {
-                        var request = "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
+                        var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
                         Config.view.epsg + "&count=15" + "&query=" + hit.name;
 
                         this.model.sendSearchRequestFromView(Config.searchBar.bkgSearchURL, request, this.zoomToBKGSearchResult, true, this);
@@ -367,24 +364,29 @@ define([
             },
 
             zoomToBKGSearchResult: function (result, context) {
-                console.log(result);
-                console.log(context);
-                var coordinates = "";
-                _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
-                    coordinates += point[0] + " " + point[1] + " ";
-                });
-                coordinates = coordinates.trim();
-                var wkt = context.getWKTFromString("POLYGON", coordinates),
-                            extent,
-                            format = new ol.format.WKT(),
-                            feature = format.readFeature(wkt);
+                if (result.features[0].properties.typ === "Haus") {
+                     EventBus.trigger("setCenter", result.features[0].properties.bbox.coordinates, 5);
+                    context.model.get("marker").setPosition(result.features[0].properties.bbox.coordinates);
+                    $("#searchMarker").css("display", "block");
+                }
+                else {
+                    var coordinates = "";
+                    _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
+                        coordinates += point[0] + " " + point[1] + " ";
+                    });
+                    coordinates = coordinates.trim();
+                    var wkt = context.getWKTFromString("POLYGON", coordinates),
+                                extent,
+                                format = new ol.format.WKT(),
+                                feature = format.readFeature(wkt);
 
-                    searchVector.getSource().clear();
-                    searchVector.getSource().addFeature(feature);
-                    searchVector.setVisible(true);
-                    extent = feature.getGeometry().getExtent();
-                    EventBus.trigger("zoomToExtent", extent);
-                    $(".dropdown-menu-search").hide();
+                        searchVector.getSource().clear();
+                        searchVector.getSource().addFeature(feature);
+                        searchVector.setVisible(true);
+                        extent = feature.getGeometry().getExtent();
+                        EventBus.trigger("zoomToExtent", extent);
+                }
+                $(".dropdown-menu-search").hide();
             },
 
 

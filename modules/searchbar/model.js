@@ -216,8 +216,8 @@ define([
 
                 if (Config.searchBar.useBKGSearch) {
                     this.get("isSearchReady").set("suggestByBKG", false);
-                    var request = "bbox=" + Config.searchBar.bbox + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg + "&count=15" + '&query="' + encodeURIComponent(this.get("searchString")) + '"';
+                    var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg + '&query=' + encodeURIComponent(this.get("searchString")) + "&filter=(typ:*)";
 
                     this.sendRequest(Config.searchBar.bkgSuggestURL, request, this.pushSuggestions, true);
                 }
@@ -228,7 +228,7 @@ define([
                         if (hit.score > 0.6) {
                             this.pushHits("hitList", {
                                 name: hit.suggestion,
-                                type: "Geosearch Ergebnis",
+                                type: "Ortssuche",
                                 bkg: true,
                                 glyphicon: "glyphicon-road",
                                 id: hit.suggestion
@@ -676,7 +676,19 @@ define([
             createRecommendedList: function () {
                 this.set("isHitListReady", false);
                 if (Config.searchBar.useBKGSearch) {
-                    this.set("recommendedList", this.get("hitList"));
+                    if (this.get("hitList").length > 5) {
+                        var suggestList = this.get("hitList");
+                        var split = _.partition(suggestList, function(obj) {
+                            return (obj.bkg === true);
+                        });
+
+                        var shortHitlist = _.first(split[0], 5);
+                        var shortHitlist2 = _.first(split[1], 5);
+                        this.set("recommendedList", _.union(shortHitlist2,shortHitlist));
+                    }
+                    else {
+                        this.set("recommendedList", this.get("hitList"));
+                    }
                     this.set("isHitListReady", true);
                     return;
                 }
@@ -701,8 +713,10 @@ define([
                     this.set("recommendedList", this.get("hitList"));
                 }
                 this.set("isHitListReady", true);
+               // this.trigger("change:isHitListReady");
             }
         });
+
 
         return new Searchbar();
     });
