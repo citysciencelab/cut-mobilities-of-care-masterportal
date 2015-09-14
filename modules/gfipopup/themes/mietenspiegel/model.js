@@ -25,9 +25,9 @@ define([
             msSpanneMax: '', //Ergebnis
             msDatensaetze: '> 30', //Ergebnis
             msWohnlage: 'unbekannte Wohnlage', //per GFI ausgelesene Wohnlage
-            msStrasse: '',
-            msPLZ: '',
-            msStadtteil: ''
+            msStrasse: '-',
+            msPLZ: '-',
+            msStadtteil: '-'
         },
         /**
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
@@ -193,22 +193,24 @@ define([
         reset: function (layer, response) {
             this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
-            if (response['Wohnlage typ'] === 'normal') {
-                this.set('msWohnlage', 'Normale Wohnlage');
-            } else if (response['Wohnlage typ'] === 'gut') {
-                this.set('msWohnlage', 'Gute Wohnlage');
-            } else {
-                this.set('msWohnlage', 'unbekannte Wohnlage');
+            if (response) {
+                if (response['Wohnlage typ'] === 'normal') {
+                    this.set('msWohnlage', 'Normale Wohnlage');
+                } else if (response['Wohnlage typ'] === 'gut') {
+                    this.set('msWohnlage', 'Gute Wohnlage');
+                } else {
+                    this.set('msWohnlage', 'unbekannte Wohnlage');
+                }
+                if (response['Hausnummer zusatz']) {
+                    this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer + response['Hausnummer zusatz']);
+                } else if (response.Hausnummer) {
+                    this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer);
+                } else {
+                    this.set('msStrasse', response.Strasse);
+                }
+                this.set('msPLZ', response.Plz + ' Hamburg');
+                this.set('msStadtteil', response.Stadtteil);
             }
-            if (response['Hausnummer zusatz']) {
-                this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer + response['Hausnummer zusatz']);
-            } else if (response.Hausnummer) {
-                this.set('msStrasse', response.Strasse + ' ' + response.Hausnummer);
-            } else {
-                this.set('msStrasse', response.Strasse);
-            }
-            this.set('msPLZ', response.Plz + ' Hamburg');
-            this.set('msStadtteil', response.Stadtteil);
         }
     });
 
