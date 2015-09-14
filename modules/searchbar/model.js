@@ -77,6 +77,12 @@ define([
 
                 this.set("isSearchReady", new SearchReady());
                 this.set("useBKGSearch", Config.searchBar.useBKGSearch);
+                if(_.isFunction(Config.searchBar.gazetteerURL)) {
+                    this.set("gazetteerURL", Config.searchBar.gazetteerURL());
+                }
+                else {
+                    this.set("gazetteerURL", Config.searchBar.gazetteerURL);
+                }
 
                 if (Config.searchBar.getFeatures !== undefined) {
                     this.getWFSFeatures();
@@ -245,7 +251,7 @@ define([
             searchStreets: function () {
                 if (this.get("isSearchReady").get("streetSearch") === true) {
                     this.get("isSearchReady").set("streetSearch", false);
-                        this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
+                        this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
                 }
 
             },
@@ -327,7 +333,7 @@ define([
             */
             searchHouseNumbers: function () {
                     this.get("isSearchReady").set("numberSearch", false);
-                    this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
+                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
             },
 
             searchInHouseNumbers: function () {
@@ -380,7 +386,7 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
                 }
             },
 
@@ -420,7 +426,7 @@ define([
                     flurstuecksnummer = this.get("searchString").slice(4);
                 }
                 gemarkung = this.get("searchString").slice(0, 4);
-                this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                 this.get("isSearchReady").set("parcelSearch", true);
             },
 
