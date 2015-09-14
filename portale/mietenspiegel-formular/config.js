@@ -178,7 +178,7 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse",
+            placeholder: "Adresse eingeben",
             gazetteerURL: function () {
                     return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
