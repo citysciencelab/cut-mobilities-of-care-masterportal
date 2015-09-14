@@ -157,6 +157,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new RoutingView();
                     });
                 }
+                if (Config.menu.addWMS === true) {
+                    require(["modules/addwms/view"], function (AddWMSView) {
+                        new AddWMSView();
+                    });
+                }
                 if ($.isArray(Config.menu.formular)) {
                     $.each(Config.menu.formular, function (name, obj) {
                         if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {

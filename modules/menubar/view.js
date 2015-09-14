@@ -27,6 +27,7 @@ define([
             "click .filterWfsFeature": "activateWfsFilter",
             "click .legend": "activateLegend",
             "click .routingModul": "activateRoutingModul",
+            "click .addWMS" : "activateAddWMSModul",
             "click .wfsFeatureFilter": "activateWfsFeatureFilter"
         },
         render: function () {
@@ -77,6 +78,9 @@ define([
         },
         activateRoutingModul: function () {
             EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
+        },
+        activateAddWMSModul: function () {
+            EventBus.trigger("toggleWin", ["addwms", "AddWMS", "glyphicon-road"]);
         },
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
