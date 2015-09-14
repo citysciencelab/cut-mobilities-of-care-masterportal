@@ -43,11 +43,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         "config",
         "jquery"
     ], function (Map, Config, $) {
-        if (!Config.mapUnvisible || Config.mapUnvisible === false) {
-            new Map('map');
-        } else {
-            new Map('unvisiblemap');
-        }
+        new Map();
 
         if (Config.footer && Config.footer === true) {
             require(["modules/footer/view"], function (FooterView) {
