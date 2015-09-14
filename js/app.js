@@ -80,7 +80,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         }
 
         if (Config.menubar === true) {
-            require(["modules/menubar/view", "views/ToggleButtonView", "modules/zoombuttons/view"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
+            require(["modules/menubar/view", "modules/togglebutton/view", "modules/zoombuttons/view"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
                 new MenubarView();
                 new ToggleButtonView();
                 new ZoomButtonsView();
