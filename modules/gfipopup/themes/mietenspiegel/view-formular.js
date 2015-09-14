@@ -18,8 +18,15 @@ define([
             "click #msreset": "reset"
         },
         reset: function() {
+            this.model.set('msMittelwert', '-');
+            this.model.set('msSpanneMin', '-');
+            this.model.set('msSpanneMax', '-');
+            this.model.set('msDatensaetze', '> 30');
+            this.model.set('msWohnlage', 'unbekannte Wohnlage');
+            this.model.set('msStrasse', '-');
+            this.model.set('msPLZ', '-');
+            this.model.set('msStadtteil', '-');
             this.render();
-            this.focusNextMerkmal(0);
             EventBus.trigger('searchInput:setFocus', this);
         },
         /**
