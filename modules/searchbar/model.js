@@ -380,12 +380,7 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    if (Config.searchBar.useBKGSearch) {
-                        this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
-                    }
-                    else {
-                        this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
-                    }
+                    this.sendRequest(Config.searchBar.gazetteerURL, "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
                 }
             },
 

@@ -9,22 +9,6 @@ define([
     "config"
     ], function (Backbone, ol, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config) {
 
-        var searchVector = new ol.layer.Vector({
-            source: new ol.source.Vector(),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "#08775f",
-                    lineDash: [8],
-                    width: 4
-                }),
-                fill: new ol.style.Fill({
-                    color: "rgba(8, 119, 95, 0.3)"
-                })
-            })
-        });
-
-        EventBus.trigger("addLayer", searchVector);
-
         var SearchbarView = Backbone.View.extend({
             model: Searchbar,
             id: "searchbar",
@@ -202,7 +186,6 @@ define([
                 this.model.setSearchString("");
                 this.focusOnEnd($("#searchInput"));
                 this.hideMarker();
-                searchVector.getSource().clear();
             },
 
             checkInitString: function (evt) {
@@ -249,10 +232,6 @@ define([
                         extent,
                         format = new ol.format.WKT(),
                         feature = format.readFeature(wkt);
-
-                    searchVector.getSource().clear();
-                    searchVector.getSource().addFeature(feature);
-                    searchVector.setVisible(true);
                     extent = feature.getGeometry().getExtent();
                     EventBus.trigger("zoomToExtent", extent);
                     $(".dropdown-menu-search").hide();
@@ -347,11 +326,6 @@ define([
                             var format = new ol.format.WKT(),
                             extent,
                             feature = format.readFeature(wkt);
-
-                            searchVector.getSource().clear();
-                            searchVector.getSource().addFeature(feature);
-                            searchVector.setVisible(true);
-                            // console.log(feature.getGeometry().getExtent());
                             extent = feature.getGeometry().getExtent();
                             EventBus.trigger("zoomToExtent", extent);
                             $(".dropdown-menu-search").hide();
@@ -370,6 +344,7 @@ define([
                     $("#searchMarker").css("display", "block");
                 }
                 else {
+                    context.hideMarker();
                     var coordinates = "";
                     _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
                         coordinates += point[0] + " " + point[1] + " ";
@@ -379,12 +354,8 @@ define([
                                 extent,
                                 format = new ol.format.WKT(),
                                 feature = format.readFeature(wkt);
-
-                        searchVector.getSource().clear();
-                        searchVector.getSource().addFeature(feature);
-                        searchVector.setVisible(true);
-                        extent = feature.getGeometry().getExtent();
-                        EventBus.trigger("zoomToExtent", extent);
+                    extent = feature.getGeometry().getExtent();
+                    EventBus.trigger("zoomToExtent", extent);
                 }
                 $(".dropdown-menu-search").hide();
             },
@@ -407,10 +378,6 @@ define([
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
                     format = new ol.format.WKT(),
                     feature = format.readFeature(wkt);
-
-                    searchVector.getSource().clear();
-                    searchVector.setVisible(true);
-                    searchVector.getSource().addFeature(feature);
                 }
                 else if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
                     this.model.get("marker").setPosition(hit.coordinate);
@@ -424,7 +391,6 @@ define([
             hideMarker: function () {
                 if ($(".dropdown-menu-search").css("display") === "block") {
                     $("#searchMarker").css("display", "none");
-                    searchVector.setVisible(false);
                     // this.zoomTo(evt);
                 }
                 // else {
