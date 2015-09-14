@@ -12,7 +12,7 @@
 @import "orientation.css";
 @import "copyright.css";
 @import "../modules/attribution/style.css";
-@import "zoombuttons.css";
+@import "../modules/zoombuttons/style.css";
 @import "routingwin.css";
 @import "window.css";
 @import "../modules/scaleline/style.css";

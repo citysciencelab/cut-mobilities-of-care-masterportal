@@ -80,12 +80,10 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         }
 
         if (Config.menubar === true) {
-            require(["modules/menubar/view", "views/ToggleButtonView", "views/ZoomButtonsView"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
+            require(["modules/menubar/view", "views/ToggleButtonView", "modules/zoombuttons/view"], function (MenubarView, ToggleButtonView, ZoomButtonsView) {
                 new MenubarView();
-                if (!Config.mapUnvisible || Config.mapUnvisible === false) {
-                    new ToggleButtonView();
-                    new ZoomButtonsView();
-                }
+                new ToggleButtonView();
+                new ZoomButtonsView();
                 require(["views/WindowView"], function (WindowView) {
                     new WindowView();
                 });
