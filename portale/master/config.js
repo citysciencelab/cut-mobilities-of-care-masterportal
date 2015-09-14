@@ -223,6 +223,8 @@ define(function () {
             wfsFeatureFilter: true,
             legend: true,
             routing: true
+            routing: true,
+            addWMS: true
         },
         /**
         * @memberof config
