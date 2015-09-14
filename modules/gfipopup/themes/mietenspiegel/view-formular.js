@@ -8,6 +8,7 @@ define([
     var GFIContentMietenspiegelView = Backbone.View.extend({
         /*
          + Die Mietenspiegel-View öffnet sich auf jede GFI-Abfrage. Sein Model hingegen bleibt konstant.
+         * Diese View unterscheidet sich von view.js in der methode 'reset' und durch disabled listeners
          */
         model: GFIModel,
         template: _.template(GFITemplate),
@@ -19,6 +20,7 @@ define([
         reset: function() {
             this.render();
             this.focusNextMerkmal(0);
+            EventBus.trigger('searchInput:setFocus', this);
         },
         /**
          * Hier muss eine Reihenfolge abgearbeitet werden, bevor die Berechnung gestartet wird.
