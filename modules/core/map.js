@@ -19,7 +19,7 @@ define([
         /**
         *
         */
-        initialize: function (mapdivname) {
+        initialize: function () {
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
             EventBus.on("removeLayer", this.removeLayer, this);
@@ -42,7 +42,7 @@ define([
             this.set("map", new ol.Map({
                 logo: null,
                 renderer: "canvas",
-                target: mapdivname,
+                target: "map",
                 view: this.get("view"),
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})

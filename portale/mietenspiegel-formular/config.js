@@ -5,10 +5,6 @@ define(function () {
     */
     var config = {
         /**
-         * Steuert, ob die Map unvisible geladen werden soll.
-        */
-        mapUnvisible: true,
-        /**
         * @memberof config
         * @type {String}
         * @desc Pfad zum img-Ordner für WFS-Styles
