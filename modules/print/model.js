@@ -202,6 +202,7 @@ define([
          */
         setGFIPos: function() {
             var position = this.get('printGFIPosition');
+            position[0] = position[0] + 0.25; //Verbesserung der Punktlage im Print
             if (position !== null) {
                 this.push("layerToPrint", {
                     type: "Vector",
@@ -263,6 +264,7 @@ define([
             this.set("gfiParams", _.pairs(values[0]));
             this.set("gfiTitle", values[1]);
             this.set("printGFIPosition", values[2]);
+            console.log(values[2]);
             // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
             if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get('gfiParams').length > 0) {
                 this.set("createURL", this.get('printurl') + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
