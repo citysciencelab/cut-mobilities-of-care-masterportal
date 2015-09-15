@@ -23,7 +23,7 @@ define([
             msMittelwert: '', //Ergebnis
             msSpanneMin: '', //Ergebnis
             msSpanneMax: '', //Ergebnis
-            msDatensaetze: '> 30', //Ergebnis
+            msDatensaetze: '', //Ergebnis
             msWohnlage: 'unbekannte Wohnlage', //per GFI ausgelesene Wohnlage
             msStrasse: '-',
             msPLZ: '-',
@@ -190,10 +190,17 @@ define([
                 this.trigger('showErgebnisse');
             }
         },
+        defaultErgebnisse: function() {
+            this.set('msMittelwert', '');
+            this.set('msSpanneMin', '');
+            this.set('msSpanneMax', '');
+            this.set('msDatensaetze', '');
+        },
         reset: function (layer, response, coordinate) {
             this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
             this.set('coordinate', coordinate);
+            this.defaultErgebnisse();
             if (response) {
                 if (response['Wohnlage typ'] === 'normal') {
                     this.set('msWohnlage', 'Normale Wohnlage');

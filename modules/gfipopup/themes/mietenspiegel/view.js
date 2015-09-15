@@ -17,6 +17,7 @@ define([
             "click #msreset": "reset"
         },
         reset: function() {
+            this.model.defaultErgebnisse();
             this.render();
             this.focusNextMerkmal(0);
         },
