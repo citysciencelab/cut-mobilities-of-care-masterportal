@@ -190,9 +190,10 @@ define([
                 this.trigger('showErgebnisse');
             }
         },
-        reset: function (layer, response) {
+        reset: function (layer, response, coordinate) {
             this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
+            this.set('coordinate', coordinate);
             if (response) {
                 if (response['Wohnlage typ'] === 'normal') {
                     this.set('msWohnlage', 'Normale Wohnlage');
