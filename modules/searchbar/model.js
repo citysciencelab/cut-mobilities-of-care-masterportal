@@ -77,7 +77,7 @@ define([
 
                 this.set("isSearchReady", new SearchReady());
                 this.set("useBKGSearch", Config.searchBar.useBKGSearch);
-                if(_.isFunction(Config.searchBar.gazetteerURL)) {
+                if (_.isFunction(Config.searchBar.gazetteerURL)) {
                     this.set("gazetteerURL", Config.searchBar.gazetteerURL());
                 }
                 else {
@@ -223,7 +223,7 @@ define([
                 if (Config.searchBar.useBKGSearch) {
                     this.get("isSearchReady").set("suggestByBKG", false);
                     var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg + '&query=' + encodeURIComponent(this.get("searchString")) + "&filter=(typ:*)";
+                    Config.view.epsg + "&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:*)";
 
                     this.sendRequest(Config.searchBar.bkgSuggestURL, request, this.pushSuggestions, true);
                 }
@@ -678,14 +678,17 @@ define([
                 this.set("isHitListReady", false);
                 if (Config.searchBar.useBKGSearch) {
                     if (this.get("hitList").length > 5) {
-                        var suggestList = this.get("hitList");
-                        var split = _.partition(suggestList, function(obj) {
+                        var suggestList = this.get("hitList"),
+                        //bkg Ergebnisse von anderen trennen
+                        split = _.partition(suggestList, function (obj) {
                             return (obj.bkg === true);
-                        });
+                        }),
+                        //Beide Listen kürzen und anschließend wieder vereinigen
+                        //Damit aus beiden Ergebnistypen gleichviele angezeigt werden
+                        shortHitlist = _.first(split[0], 5),
+                        shortHitlist2 = _.first(split[1], 5);
 
-                        var shortHitlist = _.first(split[0], 5);
-                        var shortHitlist2 = _.first(split[1], 5);
-                        this.set("recommendedList", _.union(shortHitlist2,shortHitlist));
+                        this.set("recommendedList", _.union(shortHitlist2, shortHitlist));
                     }
                     else {
                         this.set("recommendedList", this.get("hitList"));
@@ -714,10 +717,8 @@ define([
                     this.set("recommendedList", this.get("hitList"));
                 }
                 this.set("isHitListReady", true);
-               // this.trigger("change:isHitListReady");
             }
         });
-
 
         return new Searchbar();
     });

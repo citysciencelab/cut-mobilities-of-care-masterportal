@@ -346,6 +346,7 @@ define([
                 else {
                     context.hideMarker();
                     var coordinates = "";
+
                     _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
                         coordinates += point[0] + " " + point[1] + " ";
                     });
@@ -354,6 +355,7 @@ define([
                                 extent,
                                 format = new ol.format.WKT(),
                                 feature = format.readFeature(wkt);
+
                     extent = feature.getGeometry().getExtent();
                     EventBus.trigger("zoomToExtent", extent);
                 }
