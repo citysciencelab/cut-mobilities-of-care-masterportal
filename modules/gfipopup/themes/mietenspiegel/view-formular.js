@@ -103,7 +103,7 @@ define([
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
          */
-        initialize: function (layer, response) {
+        initialize: function (layer, response, coordinate) {
             EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
             this.listenTo(this.model, "change:msMittelwert", this.changedMittelwert);
             this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
@@ -112,7 +112,7 @@ define([
 //            this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
 //            this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
             if (this.model.get('readyState') === true) {
-                this.model.reset (layer, response);
+                this.model.reset (layer, response, coordinate);
                 this.render();
             }
         },
