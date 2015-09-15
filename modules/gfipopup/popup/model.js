@@ -66,7 +66,7 @@ define([
                 _.each(layer.content, function(content, index, list) {
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel":
-                            templateView = new MietenspiegelTheme(layer.ol_layer, content);
+                            templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
                             break;
                         default:
                             templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
