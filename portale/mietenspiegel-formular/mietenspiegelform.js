@@ -9,7 +9,15 @@ define([
     "modules/core/util",
     "bootstrap/alert"
 ], function (Backbone, EventBus, Config, LayerList, MSView, Requestor, MapView, Util, Alert) {
-
+    /*
+     * Im Mietenspiegel-Formular-Portal wird die <div id='map'> mit display = none; geladen. Stattdessen wird in der index.html ein <div id='mietenspiegel-formular> angelegt und in dieses wird
+     * das Template des Mietenspiegerls leicht angepasst eingefügt. Die map ruft initial keine Dienste ab weil display=none, dennoch stehen alle ol-Funktionen, Config, etc.
+     * zur Verfügung. Der Einstieg ins Portal muss Mangels map über dieses CustomModule geschehen, in dem die view des Mietenspiegel-Themes (leicht angepasst, daher mietenspiegel/view-formular)
+     * geladen und dem <div> appended wird. Die Searchbar wird ebenfalls geladen und liefert die Adresssuche. Diese feuert ein Event "setCenter", wenn eine Hausnummernsuche erfolgreich war.
+     * Dieses Event wird hier behandelt und die Geokoordinate der gesuchten Adresse wird zur Abfrage der Wohnlagen verwendet. Das Abfragen des Dienstes erfolgt nun über ein requestor.js.
+     *
+     * Da dieses Formular schmal ist und über einen iFrame eingebunden wird, liegt die SearchBar links wie bei mobiler Ausspielung.
+     */
     var formular = Backbone.Model.extend({
         defaults: {
             msLayer: '',
@@ -39,6 +47,7 @@ define([
          */
         newSearch: function(marker) {
             Util.showLoader();
+            $('#noWohnlageMsg').remove();
             var response = this.requestMietenspiegel(marker),
                 layers = response[0],
                 layer = layers[0],
@@ -47,7 +56,7 @@ define([
             if (feature) {
                 var msWin = new MSView(this.get('msLayer'), feature);
             } else {
-                var html = "<div class='alert alert-info alert-dismissible' role='alert'>";
+                var html = "<div id='noWohnlageMsg' class='alert alert-info alert-dismissible' role='alert'>";
                 html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times";
                 html += "</span></button>";
                 html += "An der gesuchten Adresse liegen <strong>keine Wohnlagendaten</strong> vor.";
