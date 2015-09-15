@@ -20,6 +20,7 @@ define([
         initialize: function () {
             $("#popovermin").remove();
             this.listenTo(this.model, "change:coordinate", this.render);
+            EventBus.on("gfipopup:rerender", this.rerender, this);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
@@ -47,6 +48,23 @@ define([
                     EventBus.trigger("showGFIParams", this);
                 });
             }
+        },
+        /*
+         * Zeichnet Popup mit vorhandenem content neu
+         */
+        rerender: function() {
+            $(this.model.get("element")).popover({
+                placement: function () {
+                    if (this.getPosition().top > window.innerHeight / 2) {
+                        return "top";
+                    } else {
+                        return "bottom";
+                    }
+                },
+                html: true,
+                content: this.$el.find('.gfi-content')
+            });
+            this.model.showPopup();
         },
         /**
          *

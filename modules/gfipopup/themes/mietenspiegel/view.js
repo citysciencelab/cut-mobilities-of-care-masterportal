@@ -129,13 +129,13 @@ define([
         },
         showErgebnisse: function() {
             $("#msergdiv").show();
-            console.log($("#msergdiv").height());
-            console.log($("#msmetadaten").height());
             $("#msmetadaten").hide();
+            EventBus.trigger('gfipopup:rerender', this);
         },
         hideErgebnisse: function() {
             $("#msergdiv").hide();
             $("#msmetadaten").show();
+            EventBus.trigger('gfipopup:rerender', this);
         },
         /**
          *
