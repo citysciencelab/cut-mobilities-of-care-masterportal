@@ -77,7 +77,7 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Stadtteil, Themen",
+            placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
             gazetteerURL: function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
