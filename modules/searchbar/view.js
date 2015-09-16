@@ -98,6 +98,15 @@ define([
                             $(".dropdown-menu-search").hide();
                             EventBus.trigger("setCenter", hit.coordinate, 7);
                         }
+
+                        if (_.contains(types, "Parcel")) {
+                            var hit = _.findWhere(this.model.get("hitList"), {type: "Parcel"});
+
+                            this.model.get("marker").setPosition(hit.coordinate);
+                            $("#searchMarker").css("display", "block");
+                            $(".dropdown-menu-search").hide();
+                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                        }
                     }
                     else {
                         this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
