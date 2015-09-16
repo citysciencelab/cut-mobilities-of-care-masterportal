@@ -225,7 +225,7 @@ define(function () {
         * @type {Boolean}
         * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
         */
-        orientation: true,
+        orientation: false,
         /**
         * @memberof config
         * @type {Boolean}
