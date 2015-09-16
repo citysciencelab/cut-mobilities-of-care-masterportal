@@ -94,7 +94,7 @@ define(function () {
             active: "gfi"
         },
         print: {
-            printID: "99997",
+            printID: "99999",
             title: "Freie und Hansestadt Hamburg - Atlas",
             outputFilename: "Ausdruck FHH - Atlas",
             gfi: false
