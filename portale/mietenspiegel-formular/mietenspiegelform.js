@@ -65,7 +65,7 @@ define([
                 var msWin = new MSView(this.get("msLayer"), "");
                 msWin.$el.prepend(html);
             }
-            $("'#mietenspiegel-formular").empty();
+            $("#mietenspiegel-formular").empty();
             $("#mietenspiegel-formular").append(msWin.$el);
             msWin.focusNextMerkmal(0);
             Util.hideLoader();
