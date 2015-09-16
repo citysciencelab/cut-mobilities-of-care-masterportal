@@ -20,7 +20,7 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
-            //extent:[],
+            extent: [454591, 5809000, 700000, 6075769],
             resolution: 66.145965625264583
         },
         layerConf: "../components/lgv-config/services-mrh.json",
@@ -45,9 +45,10 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+            bkgSuggestURL: "/bkg_suggest",
+            bkgSearchURL: "/bkg_geosearch",
+            useBKGSearch: true
         },
         tools: {
             gfi: true,
