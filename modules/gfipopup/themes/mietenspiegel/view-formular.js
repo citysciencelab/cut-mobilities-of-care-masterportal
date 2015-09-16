@@ -18,16 +18,10 @@ define([
             "click #msreset": "reset"
         },
         reset: function() {
-            this.model.set('msMittelwert', '-');
-            this.model.set('msSpanneMin', '-');
-            this.model.set('msSpanneMax', '-');
-            this.model.set('msDatensaetze', '> 30');
-            this.model.set('msWohnlage', 'unbekannte Wohnlage');
-            this.model.set('msStrasse', '-');
-            this.model.set('msPLZ', '-');
-            this.model.set('msStadtteil', '-');
+            this.model.defaultErgebnisse();
             this.render();
             EventBus.trigger('searchInput:setFocus', this);
+            this.focusNextMerkmal(0);
         },
         /**
          * Hier muss eine Reihenfolge abgearbeitet werden, bevor die Berechnung gestartet wird.
@@ -112,7 +106,7 @@ define([
 //            this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
 //            this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
             if (this.model.get('readyState') === true) {
-                this.model.reset (layer, response, coordinate);
+                this.model.newWindow (layer, response, coordinate);
                 this.render();
             }
         },
