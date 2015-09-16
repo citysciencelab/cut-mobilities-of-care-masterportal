@@ -20,19 +20,24 @@ define([
                 position = params[1],
                 positionGFI = params[1];
             // Abfrage jedes Layers der von der map übermittelt wurde.
-            _.each(sortedParams, function(visibleLayer, index, list) {
+            _.each(sortedParams, function (visibleLayer, index, list) {
                 gfiContent = null;
                 switch (visibleLayer.ol_layer.get("typ")) {
-                    case "WMS":
+                    case "WMS": {
                         gfiContent = this.setWMSPopupContent(visibleLayer);
                         break;
-                    case "WFS":
+                    }
+                    case "WFS": {
                         gfiContent = this.setWFSPopupContent(visibleLayer.source, visibleLayer.style, position, visibleLayer.scale, visibleLayer.ol_layer.get("gfiAttributes"));
-                        if (this.get("wfsCoordinate").length > 0) positionGFI = this.get("wfsCoordinate");
+                        if (this.get("wfsCoordinate").length > 0) {
+                            positionGFI = this.get("wfsCoordinate");
+                        };
                         break;
-                    case "GeoJSON":
+                    }
+                    case "GeoJSON": {
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         break;
+                    }
                 }
                 pContent.push({
                     content: gfiContent,

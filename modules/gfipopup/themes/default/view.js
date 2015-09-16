@@ -38,7 +38,7 @@ define([
          * nicht im view ankommen.
          */
         appendChildren: function () {
-            var children = this.model.get('children');
+            var children = this.model.get("children");
             _.each(children, function (element) {
                 this.$el.append(element.val.$el);
             }, this);
@@ -47,8 +47,8 @@ define([
          * Fügt den Button dem gfiContent hinzu
          */
         appendRoutableButton: function () {
-            if (this.model.get('routable') !== null) {
-                var rb = this.model.get('routable');
+            if (this.model.get("routable") !== null) {
+                var rb = this.model.get("routable");
                 this.$el.append(rb.$el);
             }
         }

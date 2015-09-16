@@ -8,14 +8,14 @@ define([
          *
          */
         defaults: {
-            coordinate: ''
+            coordinate: ""
         },
         /**
          *
          */
         initialize: function (coord) {
-            this.set('id', _.uniqueId("routableButton"));
-            this.set('coordinate', coord);
+            this.set("id", _.uniqueId("routableButton"));
+            this.set("coordinate", coord);
         },
         setRoutingDestination: function () {
             EventBus.trigger("setRoutingDestination", this.get("coordinate"));

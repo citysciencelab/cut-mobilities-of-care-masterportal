@@ -16,20 +16,20 @@ define([
             "change .msmerkmal": "changedMerkmal",
             "click #msreset": "reset"
         },
-        reset: function() {
+        reset: function () {
             this.model.defaultErgebnisse();
             this.render();
-            EventBus.trigger('gfipopup:rerender', this);
+            EventBus.trigger ("gfipopup:rerender", this);
             this.focusNextMerkmal(0);
         },
         /**
          * Hier muss eine Reihenfolge abgearbeitet werden, bevor die Berechnung gestartet wird.
          */
-        changedMerkmal: function(evt) {
+        changedMerkmal: function (evt) {
             var id;
             if (evt) {
-                $(".msmerkmal").each(function(index) {
-                    if ($(this).attr('id') === evt.target.id) {
+                $(".msmerkmal").each(function (index) {
+                    if ($(this).attr("id") === evt.target.id) {
                         id = index + 1;
                     }
                 });
@@ -41,11 +41,11 @@ define([
         /*
          * Erzeugt eine Liste mit gewählten Merkmalen
          */
-        returnMerkmaleListe: function() {
-            var merkmale = _.object(['Wohnlage'], [$(".mswohnlage").text()]);
-            $(".msmerkmal").each(function() {
-                if (this.value !== '-1') { // = bitte wählen
-                    merkmale = _.extend(merkmale, _.object([$(this).attr('id')], [$(this).find("option:selected").text()]));
+        returnMerkmaleListe: function () {
+            var merkmale = _.object(["Wohnlage"], [$(".mswohnlage").text()]);
+            $(".msmerkmal").each(function () {
+                if (this.value !== "-1") { // = bitte wählen
+                    merkmale = _.extend(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
                 }
             });
             return merkmale;
@@ -53,21 +53,21 @@ define([
         /*
          * Combobox mit Werten füllen. Initial leer.
          */
-        fillMerkmaleInCombobox: function(comboboxId) {
+        fillMerkmaleInCombobox: function (comboboxId) {
             var merkmale = this.returnMerkmaleListe(),
                 validMerkmale = this.model.returnValidMerkmale(comboboxId, merkmale);
             // Combobox erst leeren
-            $(".msmerkmal").each(function() {
-                if ($(this).attr('id') === comboboxId) {
-                    $(this).find('option').each(function() {
-                        if (this.value !== '-1') { // = bitte wählen
+            $(".msmerkmal").each(function () {
+                if ($(this).attr("id") === comboboxId) {
+                    $(this).find("option").each(function () {
+                        if (this.value !== "-1") { // = bitte wählen
                             $(this).remove();
                         }
                     });
                 }
             });
             // dann füllen
-            _.each(validMerkmale, function(val, index) {
+            _.each(validMerkmale, function (val, index) {
                 document.getElementById(comboboxId).add(new Option(val, index));
             });
         },
@@ -75,20 +75,22 @@ define([
          * Diese Combobox der Merkmale disablen und darauf folgende enablen.
          * Startet fillMerkmaleInCombobox;  //index in ComboboxArray
          */
-        focusNextMerkmal: function(activateIndex) {
+        focusNextMerkmal: function (activateIndex) {
             var id,
                 merkmale;
-            $(".msmerkmal").each(function(index) {
+            $(".msmerkmal").each (function (index) {
                 if (activateIndex === index) {
-                    $(this).removeAttr('disabled');
-                    id = $(this).attr('id');
-                } else {
-                    $(this).prop('disabled', true);
+                    $(this).removeAttr("disabled");
+                    id = $(this).attr("id");
+                }
+                else {
+                    $(this).prop("disabled", true);
                 }
             });
             if (id) {
                 this.fillMerkmaleInCombobox(id);
-            } else {
+            }
+            else {
                 merkmale = this.returnMerkmaleListe();
                 this.model.calculateVergleichsmiete(merkmale);
             }
@@ -104,7 +106,7 @@ define([
             this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
             this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
             this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
-            if (this.model.get('readyState') === true) {
+            if (this.model.get("readyState") === true) {
                 this.model.newWindow (layer, response, coordinate);
                 this.render();
             }
@@ -117,24 +119,24 @@ define([
                 this.focusNextMerkmal(0);
             }
         },
-        changedMittelwert: function() {
-            $(".msmittelwert").text(this.model.get('msMittelwert').toString());
+        changedMittelwert: function () {
+            $(".msmittelwert").text(this.model.get("msMittelwert").toString());
         },
-        changedSpanneMin: function() {
-            $(".msspannemin").text(this.model.get('msSpanneMin').toString());
+        changedSpanneMin: function () {
+            $(".msspannemin").text(this.model.get("msSpanneMin").toString());
         },
-        changedSpanneMax: function() {
-            $(".msspannemax").text(this.model.get('msSpanneMax').toString());
+        changedSpanneMax: function () {
+            $(".msspannemax").text(this.model.get("msSpanneMax").toString());
         },
-        changedDatensaetze: function() {
-            $(".msdatensaetze").text(this.model.get('msDatensaetze').toString());
+        changedDatensaetze: function () {
+            $(".msdatensaetze").text(this.model.get("msDatensaetze").toString());
         },
-        showErgebnisse: function() {
+        showErgebnisse: function () {
             $("#msergdiv").show();
             $("#msmetadaten").hide();
-            EventBus.trigger('gfipopup:rerender', this);
+            EventBus.trigger("gfipopup:rerender", this);
         },
-        hideErgebnisse: function() {
+        hideErgebnisse: function () {
             $("#msergdiv").hide();
             $("#msmetadaten").show();
 
@@ -150,7 +152,7 @@ define([
          *
          */
         destroy: function () {
-        },
+        }
     });
 
     return GFIContentMietenspiegelView;

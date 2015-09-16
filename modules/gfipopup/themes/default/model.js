@@ -19,11 +19,11 @@ define([
          *
          */
         initialize: function (layer, content, position) {
-            this.set('id', _.uniqueId("defaultTheme"));
-            this.set('layer', layer);
-            this.set('gfiContent', content);
-            this.set('position', position);
-            this.set('gfiTitel', layer.get('name'));
+            this.set("id", _.uniqueId("defaultTheme"));
+            this.set("layer", layer);
+            this.set("gfiContent", content);
+            this.set("position", position);
+            this.set("gfiTitel", layer.get("name"));
             this.replaceValuesWithChildObjects();
             this.checkRoutable();
         },
@@ -31,16 +31,16 @@ define([
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
          */
         returnPrintContent: function() {
-            return [this.get('gfiContent'),
-                    this.get('gfiTitel')];
+            return [this.get("gfiContent"),
+                    this.get("gfiTitel")];
         },
         /**
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
         checkRoutable: function () {
             if (Config.menu.routing && Config.menu.routing === true) {
-                if (this.get('layer').get('routable') === true) {
-                    this.set('routable', new RoutableView(this.get('position')));
+                if (this.get("layer").get("routable") === true) {
+                    this.set("routable", new RoutableView(this.get("position")));
                 }
             }
         },
@@ -51,62 +51,65 @@ define([
          * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
          */
         replaceValuesWithChildObjects: function () {
-            var element = this.get('gfiContent'),
+            var element = this.get("gfiContent"),
                 children = [],
                 lastroutenval,
                 lastroutenkey;
             _.each(element, function (val, key) {
                 if (key === "Bild") {
                     var imgView = new ImgView(val);
-                    element[key] = '#';
+                    element[key] = "#";
                     children.push({
-                        key: imgView.model.get('id'),
+                        key: imgView.model.get("id"),
                         val: imgView
                     });
-                } else if (key === "video") {
+                }
+                else if (key === "video") {
                     var videoView = new VideoView(val);
-                    element[key] = '#';
+                    element[key] = "#";
                     children.push({
-                        key: videoView.model.get('id'),
+                        key: videoView.model.get("id"),
                         val: videoView
                     });
-                } else if (_.isObject(val) === false && val.indexOf('Min, ') !== -1 && val.indexOf('km') !== -1) {
+                }
+                else if (_.isObject(val) === false && val.indexOf("Min, ") !== -1 && val.indexOf("km") !== -1) {
                     // Dienst liefert erst key=Flughafen Hamburg mit val=24 Min., 28km ohne Route
                     lastroutenval = val;
                     lastroutenkey = key;
-                    element[key] = '#';
-                } else if (key.indexOf('Route') === 0) {
+                    element[key] = "#";
+                }
+                else if (key.indexOf("Route") === 0) {
                     // Nächstes element des Objects ist die Route
                     var routingView = new RoutingView(lastroutenkey, lastroutenval, val);
                     children.push({
-                        key: routingView.model.get('id'),
+                        key: routingView.model.get("id"),
                         val: routingView
                     });
-                    element[key] = '#';
+                    element[key] = "#";
                 }
-                //lösche leere Dummy-Einträge wieder raus.
+                // lösche leere Dummy-Einträge wieder raus.
                 element = _.omit(element, function (value) {
-                    return value === '#';
+                    return value === "#";
                 });
             }, this);
             if (children.length > 0) {
-                this.set('children', children);
+                this.set("children", children);
             }
-            this.set('gfiContent', element);
+            this.set("gfiContent", element);
         },
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
         destroy: function () {
-            _.each(this.get('gfiContent'), function (element) {
-                if (_.has(element, 'children')) {
-                    var children = _.values(_.pick(element, 'children'))[0];
+            _.each(this.get("gfiContent"), function (element) {
+                if (_.has(element, "children")) {
+                    var children = _.values(_.pick(element, "children"))[0];
                     _.each(children, function (child) {
                         child.val.remove();
                     }, this);
                 }
             }, this);
-            _.each(this.get('gfiRoutables'), function (element) {
+            _.each(this.get("gfiRoutables"), function (element) {
                 if (_.isObject(element) === true) {
                     element.remove();
                 }

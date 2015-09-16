@@ -62,15 +62,17 @@ define([
                 pTitles = [],
                 templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
-            _.each(features, function(layer, index, list) {
-                _.each(layer.content, function(content, index, list) {
+            _.each(features, function (layer, index, list) {
+                _.each(layer.content, function (content, index, list) {
                     switch (layer.ol_layer.get("gfiTheme")) {
-                        case "mietenspiegel":
+                        case "mietenspiegel": {
                             templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
                             break;
-                        default:
+                        }
+                        default: {
                             templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
                             break;
+                        }
                     }
                     pContent.push(templateView);
                     pTitles.push(layer.name);
@@ -84,17 +86,19 @@ define([
                 this.set("gfiTitles", pTitles);
                 this.set("gfiCounter", pContent.length);
                 this.set("coordinate", coordinate);
-            } else {
+            }
+            else {
                 EventBus.trigger("closeGFIParams", this);
             }
         },
         sendGFIForPrint: function () {
-            if (this.get('isPopupVisible') === true) {
+            if (this.get("isPopupVisible") === true) {
                 var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
-                attr = printContent[0],
-                title = printContent[1];
+                    attr = printContent[0],
+                    title = printContent[1];
                 EventBus.trigger("receiveGFIForPrint", [attr, title, this.get("coordinate")]);
-            } else {
+            }
+            else {
                 EventBus.trigger("receiveGFIForPrint", [null, null, null]);
             }
         },
@@ -103,7 +107,7 @@ define([
          * Das gfipopup.model wird nicht removed - nur reset.
          */
         removeChildObjects: function () {
-            _.each(this.get('gfiContent'), function (element) {
+            _.each(this.get("gfiContent"), function (element) {
                 element.remove();
             }, this);
         }
