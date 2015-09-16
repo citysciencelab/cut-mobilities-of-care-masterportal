@@ -173,10 +173,7 @@ define([
                 return _.isMatch(value.merkmale, merkmale);
             });
             if (vergleichsmiete.length !== 1) {
-                this.set('msMittelwert', '-');
-                this.set('msSpanneMin', '-');
-                this.set('msSpanneMax', '-');
-                this.set('msDatensaetze', '-');
+                this.defaultErgebnisse();
                 this.trigger('hideErgebnisse');
             } else {
                 this.set('msMittelwert', vergleichsmiete[0].mittelwert.toString());
@@ -196,7 +193,7 @@ define([
             this.set('msSpanneMax', '');
             this.set('msDatensaetze', '');
         },
-        reset: function (layer, response, coordinate) {
+        newWindow: function (layer, response, coordinate) {
             this.set('id', _.uniqueId("mietenspiegelTheme"));
             this.set('layer', layer);
             this.set('coordinate', coordinate);

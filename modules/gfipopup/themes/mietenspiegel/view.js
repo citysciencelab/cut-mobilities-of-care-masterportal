@@ -19,6 +19,7 @@ define([
         reset: function() {
             this.model.defaultErgebnisse();
             this.render();
+            EventBus.trigger('gfipopup:rerender', this);
             this.focusNextMerkmal(0);
         },
         /**
@@ -104,7 +105,7 @@ define([
             this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
             this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
             if (this.model.get('readyState') === true) {
-                this.model.reset (layer, response, coordinate);
+                this.model.newWindow (layer, response, coordinate);
                 this.render();
             }
         },
@@ -136,7 +137,7 @@ define([
         hideErgebnisse: function() {
             $("#msergdiv").hide();
             $("#msmetadaten").show();
-            EventBus.trigger('gfipopup:rerender', this);
+
         },
         /**
          *
