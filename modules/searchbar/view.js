@@ -33,6 +33,7 @@ define([
             template: _.template(SearchbarTemplate),
             initialize: function () {
                 EventBus.on("searchInput:setFocus", this.setFocus);
+                EventBus.on("searchInput:deleteSearchString", this.deleteSearchString);
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.checkInitString);
