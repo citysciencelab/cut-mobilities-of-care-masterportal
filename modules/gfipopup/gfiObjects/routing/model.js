@@ -14,7 +14,7 @@ define([
          *
          */
         initialize: function () {
-            this.set('id', _.uniqueId("routenbutton"));
+            this.set("id", _.uniqueId("routenbutton"));
             EventBus.on("mapView:replyProjection", this.setProjection, this);
             EventBus.trigger("mapView:requestProjection");
             this.createRouteLayer();
@@ -51,9 +51,8 @@ define([
          * @param  {String} target - Ziel der Route
          */
         showRoute: function (target) {
-            var feature;
-            feature = new ol.Feature({
-                geometry: this.get('route'),
+            var feature = new ol.Feature({
+                geometry: this.get("route"),
                 name: target
             });
             this.get("routeLayer").getSource().clear();

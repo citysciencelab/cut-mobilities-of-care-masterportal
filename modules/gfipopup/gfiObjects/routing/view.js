@@ -14,15 +14,13 @@ define([
             "remove": "destroy",
             "click": "startShowingRoute"
         },
-
         initialize: function (ueberschrift, buttontext, route) {
             this.model = new RoutingModel();
-            this.model.set('ueberschrift', ueberschrift);
-            this.model.set('buttontext', buttontext);
-            this.model.set('route', route);
+            this.model.set("ueberschrift", ueberschrift);
+            this.model.set("buttontext", buttontext);
+            this.model.set("route", route);
             this.render();
         },
-
         startShowingRoute: function (evt) {
             // lösche alte Route
             this.model.clearRoute();
@@ -46,6 +44,5 @@ define([
             this.model.destroy();
         }
     });
-
     return RoutingView;
 });

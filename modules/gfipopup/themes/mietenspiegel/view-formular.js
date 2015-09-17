@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "text!modules/gfipopup/themes/mietenspiegel/template.html",
+    "text!modules/gfipopup/themes/mietenspiegel/template-formular.html",
     "modules/gfipopup/themes/mietenspiegel/model",
     "eventbus"
 ], function (Backbone, GFITemplate, GFIModel, EventBus) {
@@ -8,6 +8,7 @@ define([
     var GFIContentMietenspiegelView = Backbone.View.extend({
         /*
          + Die Mietenspiegel-View öffnet sich auf jede GFI-Abfrage. Sein Model hingegen bleibt konstant.
+         * Diese View unterscheidet sich von view.js in der methode 'reset' und durch disabled listeners
          */
         model: GFIModel,
         template: _.template(GFITemplate),
@@ -19,7 +20,7 @@ define([
         reset: function () {
             this.model.defaultErgebnisse();
             this.render();
-            EventBus.trigger ("gfipopup:rerender", this);
+            EventBus.trigger("searchInput:setFocus", this);
             this.focusNextMerkmal(0);
         },
         /**
@@ -78,7 +79,7 @@ define([
         focusNextMerkmal: function (activateIndex) {
             var id,
                 merkmale;
-            $(".msmerkmal").each (function (index) {
+            $(".msmerkmal").each(function (index) {
                 if (activateIndex === index) {
                     $(this).removeAttr("disabled");
                     id = $(this).attr("id");
@@ -104,8 +105,8 @@ define([
             this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
             this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
             this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
-            this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
-            this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
+//            this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
+//            this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
             if (this.model.get("readyState") === true) {
                 this.model.newWindow (layer, response, coordinate);
                 this.render();
@@ -134,12 +135,10 @@ define([
         showErgebnisse: function () {
             $("#msergdiv").show();
             $("#msmetadaten").hide();
-            EventBus.trigger("gfipopup:rerender", this);
         },
         hideErgebnisse: function () {
             $("#msergdiv").hide();
             $("#msmetadaten").show();
-
         },
         /**
          *
