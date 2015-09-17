@@ -9,22 +9,6 @@ define([
     "config"
     ], function (Backbone, ol, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config) {
 
-        var searchVector = new ol.layer.Vector({
-            source: new ol.source.Vector(),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "#08775f",
-                    lineDash: [8],
-                    width: 4
-                }),
-                fill: new ol.style.Fill({
-                    color: "rgba(8, 119, 95, 0.3)"
-                })
-            })
-        });
-
-        EventBus.trigger("addLayer", searchVector);
-
         var SearchbarView = Backbone.View.extend({
             model: Searchbar,
             id: "searchbar",
@@ -108,6 +92,15 @@ define([
 
                         if (_.contains(types, "Straße") && _.contains(types, "Adresse")) {
                             var hit = _.findWhere(this.model.get("hitList"), {type: "Adresse"});
+
+                            this.model.get("marker").setPosition(hit.coordinate);
+                            $("#searchMarker").css("display", "block");
+                            $(".dropdown-menu-search").hide();
+                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                        }
+
+                        if (_.contains(types, "Parcel")) {
+                            var hit = _.findWhere(this.model.get("hitList"), {type: "Parcel"});
 
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
@@ -202,7 +195,6 @@ define([
                 this.model.setSearchString("");
                 this.focusOnEnd($("#searchInput"));
                 this.hideMarker();
-                searchVector.getSource().clear();
             },
 
             checkInitString: function (evt) {
@@ -216,7 +208,6 @@ define([
             */
             zoomTo: function (evt) {
                 var zoomLevel, hitID, hit;
-
                 if (_.has(evt, "cid")) { // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
                     if (Config.searchBar.initString.search(",") !== -1) {
                         hit = this.model.get("hitList")[1]; // initial Suche Adresse mit Hausnummer
@@ -237,18 +228,23 @@ define([
                     $("#searchInput").val(hit.name);
                 }
 
+                 if (hit.bkg === true) {
+                        var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
+                        Config.view.epsg + "&count=15" + "&query=" + hit.name;
+
+                        this.model.sendSearchRequestFromView(Config.searchBar.bkgSearchURL, request, this.zoomToBKGSearchResult, true, this);
+                 }
+
                 if (hit.type === "Straße") {
+
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
                         extent,
                         format = new ol.format.WKT(),
                         feature = format.readFeature(wkt);
-
-                    searchVector.getSource().clear();
-                    searchVector.getSource().addFeature(feature);
-                    searchVector.setVisible(true);
                     extent = feature.getGeometry().getExtent();
                     EventBus.trigger("zoomToExtent", extent);
                     $(".dropdown-menu-search").hide();
+
                 }
                 else if (hit.type === "Krankenhaus") {
                     $(".dropdown-menu-search").hide();
@@ -339,11 +335,6 @@ define([
                             var format = new ol.format.WKT(),
                             extent,
                             feature = format.readFeature(wkt);
-
-                            searchVector.getSource().clear();
-                            searchVector.getSource().addFeature(feature);
-                            searchVector.setVisible(true);
-                            // console.log(feature.getGeometry().getExtent());
                             extent = feature.getGeometry().getExtent();
                             EventBus.trigger("zoomToExtent", extent);
                             $(".dropdown-menu-search").hide();
@@ -355,11 +346,42 @@ define([
                 }
             },
 
+            zoomToBKGSearchResult: function (result, context) {
+                if (result.features[0].properties.typ === "Haus") {
+                     EventBus.trigger("setCenter", result.features[0].properties.bbox.coordinates, 5);
+                    context.model.get("marker").setPosition(result.features[0].properties.bbox.coordinates);
+                    $("#searchMarker").css("display", "block");
+                }
+                else {
+                    context.hideMarker();
+                    var coordinates = "";
+
+                    _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
+                        coordinates += point[0] + " " + point[1] + " ";
+                    });
+                    coordinates = coordinates.trim();
+                    var wkt = context.getWKTFromString("POLYGON", coordinates),
+                                extent,
+                                format = new ol.format.WKT(),
+                                feature = format.readFeature(wkt);
+
+                    extent = feature.getGeometry().getExtent();
+                    EventBus.trigger("zoomToExtent", extent);
+                }
+                $(".dropdown-menu-search").hide();
+            },
+
+
             /**
             *
             */
             showMarker: function (evt) {
-                // console.log(evt);
+
+                // when der BKG search verwendet wird, dann werden mit den Vorschlägen keine Koordinaten gesendet,
+                // deswegen ist dann eine Markeranzeige nicht möglich.
+                if (this.model.get("useBKGSearch")) {
+                    return;
+                }
                 var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
@@ -367,10 +389,6 @@ define([
                     var wkt = this.getWKTFromString("POLYGON", hit.coordinate),
                     format = new ol.format.WKT(),
                     feature = format.readFeature(wkt);
-
-                    searchVector.getSource().clear();
-                    searchVector.setVisible(true);
-                    searchVector.getSource().addFeature(feature);
                 }
                 else if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
                     this.model.get("marker").setPosition(hit.coordinate);
@@ -384,7 +402,6 @@ define([
             hideMarker: function () {
                 if ($(".dropdown-menu-search").css("display") === "block") {
                     $("#searchMarker").css("display", "none");
-                    searchVector.setVisible(false);
                     // this.zoomTo(evt);
                 }
                 // else {
