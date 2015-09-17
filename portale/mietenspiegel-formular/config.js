@@ -215,7 +215,7 @@ define(function () {
         tools: {
             gfi: false,
             measure: false,
-            print: true,
+            print: false,
             coord: false,
             draw: false,
             active: "gfi"
