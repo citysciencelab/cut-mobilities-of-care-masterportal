@@ -13,18 +13,18 @@ define([
          */
         defaults: {
             readyState: false,
-            msDaten: [],//alle Mietenspiegel-Daten
-            msErhebungsstand: "",//fixe Metadaten
-            msHerausgeber: "",//fixe Metadaten
-            msHinweis: "",//fixe Metadaten
-            msTitel: "", //fixe Metadaten
-            msMerkmaleText: [], //Array der Merkmalsnamen
+            msDaten: [],// alle Mietenspiegel-Daten
+            msErhebungsstand: "",// fixe Metadaten
+            msHerausgeber: "",// fixe Metadaten
+            msHinweis: "",// fixe Metadaten
+            msTitel: "", // fixe Metadaten
+            msMerkmaleText: [], // Array der Merkmalsnamen
             msMerkmale: {}, // Merkmale mit möglichen Werten als Objekt
-            msMittelwert: "", //Ergebnis
-            msSpanneMin: "", //Ergebnis
-            msSpanneMax: "", //Ergebnis
-            msDatensaetze: "", //Ergebnis
-            msWohnlage: "unbekannte Wohnlage", //per GFI ausgelesene Wohnlage
+            msMittelwert: "", // Ergebnis
+            msSpanneMin: "", // Ergebnis
+            msSpanneMax: "", // Ergebnis
+            msDatensaetze: "", // Ergebnis
+            msWohnlage: "unbekannte Wohnlage", // per GFI ausgelesene Wohnlage
             msStrasse: "-",
             msPLZ: "-",
             msStadtteil: "-"
@@ -99,20 +99,31 @@ define([
         ladeDaten: function () {
             // lade Mietenspiegel-Metadaten
             $.ajax({
-                url: Util.getProxyURL("http://wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel"),
+                url: Util.getProxyURL("/wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel"),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=app:mietenspiegel_metadaten",
                 async: false,
                 type: "GET",
                 dataType: "xml",
                 context: this,
                 success: function (data) {
-                    this.set("mietenspiegel-metadaten", data);
-                    var datum = $(data).find("erhebungsstand").text().split("-");
-                    this.set("msErhebungsstand", datum[2] + "." + datum[1] + "." + datum[0]);
-                    this.set("msHerausgeber", $(data).find("herausgeber").text());
-                    this.set("msHinweis", $(data).find("hinweis").text());
-                    this.set("msTitel", $(data).find("titel").text());
-                    this.set("msMerkmaleText", $(data).find("merkmaletext").text().split("|"));
+                    var datum;
+
+                    if (!Util.isInternetExplorer()) {
+                        datum = $(data).find("erhebungsstand").text().split("-")
+                        this.set("msErhebungsstand", datum[2] + "." + datum[1] + "." + datum[0]);
+                        this.set("msHerausgeber", $(data).find("herausgeber").text());
+                        this.set("msHinweis", $(data).find("hinweis").text());
+                        this.set("msTitel", $(data).find("titel").text());
+                        this.set("msMerkmaleText", $(data).find("merkmaletext").text().split("|"));
+                    }
+                    else {
+                        datum = data.childNodes[0].getElementsByTagName("app:erhebungsstand")[0].textContent.split("-");
+                        this.set("msErhebungsstand", datum[2] + "." + datum[1] + "." + datum[0]);
+                        this.set("msHerausgeber", data.childNodes[0].getElementsByTagName("app:herausgeber")[0].textContent);
+                        this.set("msHinweis", data.childNodes[0].getElementsByTagName("app:hinweis")[0].textContent);
+                        this.set("msTitel", data.childNodes[0].getElementsByTagName("app:titel")[0].textContent);
+                        this.set("msMerkmaleText", data.childNodes[0].getElementsByTagName("app:merkmaletext")[0].textContent.split("|"));
+                    }
                 },
                 error: function (jqXHR, errorText, error) {
                     alert("Fehler beim Laden von Daten: \n" + errorText + error);
@@ -120,23 +131,51 @@ define([
             });
             // Lade Mietenspiegel-Daten
             $.ajax({
-                url: Util.getProxyURL("http://wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel"),
+                url: Util.getProxyURL("/wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel"),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=app:mietenspiegel_daten",
                 async: false,
                 type: "GET",
+                cache: false,
+                dataType: "xml",
                 context: this,
                 success: function (data) {
                     var daten = [],
                         keys = this.get("msMerkmaleText");
-                    $(data).find("mietenspiegel_daten").each(function (index, value) {
-                        daten.push({
-                            mittelwert: parseFloat($(value).find("mittelwert").text()),
-                            spanne_min: parseFloat($(value).find("spanne_min").text()),
-                            spanne_max: parseFloat($(value).find("spanne_max").text()),
-                            datensaetze: parseInt($(value).find("datensaetze").text()),
-                            merkmale: _.object(keys, $(value).find("merkmale").text().split("|"))
+
+                    if (!Util.isInternetExplorer()) {
+                        $(data).find("mietenspiegel_daten").each(function (index, value) {
+                            daten.push({
+                                mittelwert: parseFloat($(value).find("mittelwert").text()),
+                                spanne_min: parseFloat($(value).find("spanne_min").text()),
+                                spanne_max: parseFloat($(value).find("spanne_max").text()),
+                                datensaetze: parseInt($(value).find("datensaetze").text()),
+                                merkmale: _.object(keys, $(value).find("merkmale").text().split("|"))
+                            });
                         });
-                    });
+                    }
+                    else {
+                        _.each(data.childNodes[0].getElementsByTagName("app:mietenspiegel_daten"), function (element, index) {
+                            var mittelwert = parseFloat(element.getElementsByTagName("app:mittelwert")[0].textContent),
+                                spanne_min = parseFloat(element.getElementsByTagName("app:spanne_min")[0].textContent),
+                                spanne_max = parseFloat(element.getElementsByTagName("app:spanne_max")[0].textContent),
+                                datensaetze,
+                                merkmale = element.getElementsByTagName("app:merkmale")[0].textContent;
+
+                            if (element.getElementsByTagName("app:datensaetze")[0]) {
+                                datensaetze = parseFloat(element.getElementsByTagName("app:datensaetze")[0].textContent);
+                            }
+                            else {
+                                datensaetze = "";
+                            }
+                            daten.push({
+                                mittelwert: mittelwert,
+                                spanne_min: spanne_min,
+                                spanne_max: spanne_max,
+                                datensaetze: datensaetze,
+                                merkmale: _.object(keys, merkmale.split("|"))
+                            });
+                        });
+                    }
                     this.set("msDaten", daten);
                     // Prüfe den Ladevorgang
                     if (daten.length > 0 && this.get("msTitel") !== "") {
