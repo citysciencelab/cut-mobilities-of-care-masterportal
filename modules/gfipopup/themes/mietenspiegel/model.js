@@ -13,6 +13,7 @@ define([
          */
         defaults: {
             readyState: false,
+            msURL: "/wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel", // URL unter der der Mietenspiegel-WFS antwortet
             msDaten: [],// alle Mietenspiegel-Daten
             msErhebungsstand: "",// fixe Metadaten
             msHerausgeber: "",// fixe Metadaten
@@ -99,10 +100,11 @@ define([
         ladeDaten: function () {
             // lade Mietenspiegel-Metadaten
             $.ajax({
-                url: Util.getProxyURL("/wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel"),
+                url: this.get("msURL"),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=app:mietenspiegel_metadaten",
                 async: false,
                 type: "GET",
+                cache: false,
                 dataType: "xml",
                 context: this,
                 success: function (data) {
@@ -131,7 +133,7 @@ define([
             });
             // Lade Mietenspiegel-Daten
             $.ajax({
-                url: Util.getProxyURL("/wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel"),
+                url: this.get("msURL"),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=app:mietenspiegel_daten",
                 async: false,
                 type: "GET",
