@@ -19,6 +19,20 @@ define([
         isAny: function () {
             return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
         },
+        isInternetExplorer: function () {
+            if (/MSIE 9/i.test(navigator.userAgent)) {
+                return "IE9";
+            }
+            else if (/MSIE 10/i.test(navigator.userAgent)) {
+                return "IE10";
+            }
+            else if (/rv:11.0/i.test(navigator.userAgent)) {
+                return "IE11";
+            }
+            else {
+                return false;
+            }
+        },
         getPath: function (path) {
             var baseUrl = Require.toUrl("").split("?")[0];
 

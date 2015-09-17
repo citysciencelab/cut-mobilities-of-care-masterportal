@@ -19,11 +19,12 @@ define([
          */
         initialize: function (url) {
             this.model = new VideoModel();
-            this.model.set('url', url);
+            this.model.set("url", url);
             if (!Util.isAny()) {
                 this.render();
-            } else {
-                this.$el.html('');
+            }
+            else {
+                this.$el.html("");
             }
         },
         /**
