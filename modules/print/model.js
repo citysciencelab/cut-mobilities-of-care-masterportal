@@ -51,8 +51,8 @@ define([
             this.on("change:currentLayout change:currentScale change:isActive", this.updatePrintPage, this);
 
             EventBus.on("winParams", this.setStatus, this);
+            EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
-            EventBus.on("gfiForPrint", this.setGFIToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
             EventBus.on("currentMapCenter", this.setCurrentMapCenter, this);
             EventBus.on("currentMapScale", this.setCurrentMapScale, this);
@@ -104,9 +104,8 @@ define([
             if (Config.tools.draw === true) {
                 EventBus.trigger("getDrawlayer");
             }
-            this.setSpecification();
+            this.sendGFIForPrint();
         },
-
         /**
         *
         */
@@ -190,41 +189,88 @@ define([
                 ]
             };
 
-            if (this.get("hasPrintGFIParams") === true) {
+            if (this.get("printGFIPosition") !== null) {
                 _.each(_.flatten(this.get("gfiParams")), function (element, index) {
                     specification.pages[0]["attr_" + index] = element;
                 }, this);
-                specification.pages[0].layerName = $(".gfi-title").text();
+                specification.pages[0].layerName = this.get("gfiTitle");
             }
-
             this.set("specification", specification);
         },
-
+        /**
+         * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
+         */
+        setGFIPos: function() {
+            var position = this.get('printGFIPosition');
+            position[0] = position[0] + 0.25; //Verbesserung der Punktlage im Print
+            if (position !== null) {
+                this.push("layerToPrint", {
+                    type: "Vector",
+                    styleProperty: 'styleId',
+                    styles: {
+                        0: {
+                            fill: false,
+                            pointRadius: 8,
+                            stroke: true,
+                            strokeColor: '#ff0000',
+                            strokeWidth: 3
+                        },
+                        1: {
+                            fill: true,
+                            pointRadius: 1,
+                            fillColor: '#000000',
+                            stroke: false
+                        }
+                    },
+                    geoJson: {
+                        type: "FeatureCollection",
+                        features:[
+                            {
+                                type: "Feature",
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: position
+                                },
+                                properties: {
+                                    styleId: 0
+                                }
+                            },{
+                                type: "Feature",
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: position
+                                },
+                                properties: {
+                                    styleId: 1
+                                }
+                            }
+                        ]
+                    }
+                });
+            }
+            this.setSpecification();
+        },
+        /**
+        * Abfrage an popupmodel starten.
+        */
+        sendGFIForPrint: function() {
+            EventBus.trigger('sendGFIForPrint');
+        },
         /**
         * [[Description]]
         * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
         */
-        setGFIToPrint: function (values) {
+        receiveGFIForPrint: function (values) {
             this.set("gfiParams", _.pairs(values[0]));
-            this.set("hasPrintGFIParams", values[1]);
-            if (this.get("hasPrintGFIParams") === true && Config.print.gfi === true) {
-                switch (this.get("gfiParams").length) {
-                    case 4: {
-                        this.set("createURL", this.get('printurl') + "/master_gfi_4/create.json");
-                        break;
-                    }
-                    case 5: {
-                        this.set("createURL", this.get('printurl') + "/master_gfi_5/create.json");
-                        break;
-                    }
-                    case 6: {
-                        this.set("createURL", this.get('printurl') + "/master_gfi_6/create.json");
-                        break;
-                    }
-                }
+            this.set("gfiTitle", values[1]);
+            this.set("printGFIPosition", values[2]);
+            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+            if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get('gfiParams').length > 0) {
+                this.set("createURL", this.get('printurl') + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             } else {
                 this.set("createURL", this.get('printurl') + "/master/create.json");
             }
+            this.setGFIPos();
         },
 
         /**
@@ -240,6 +286,9 @@ define([
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 success: this.openPDF,
+                error: function (error) {
+                    alert ("Druck fehlgeschlagen: " + error.statusText);
+                },
                 complete: Util.hideLoader,
                 beforeSend: Util.showLoader
             });

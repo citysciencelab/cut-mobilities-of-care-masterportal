@@ -31,6 +31,13 @@ define(function () {
             resolution: 2.6458386250105834 // 1:10000
         },
         /**
+        * customModules
+        * @memberof config
+        * @type {Array}
+        * @desc lädt die Module
+        */
+        customModules: ["../portale/mietenspiegel-formular/mietenspiegelform"],
+        /**
         * @memberof config
         * @type {String}
         * @desc zeigt einen Footer-Bereich an
@@ -101,8 +108,6 @@ define(function () {
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
             {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
         ],
         /**
@@ -122,7 +127,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/ScaleLineView.js geladen. Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
         */
-        scaleLine: true,
+        scaleLine: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -151,13 +156,13 @@ define(function () {
         menu: {
             viewerName: "Mietenspiegel HH",
             searchBar: true,
-            layerTree: true,
+            layerTree: false,
             helpButton: false,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
+            tools: false,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: false
         },
         /**
@@ -173,7 +178,7 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse",
+            placeholder: "Adresse eingeben",
             gazetteerURL: function () {
                     return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
@@ -208,9 +213,9 @@ define(function () {
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
-            gfi: true,
+            gfi: false,
             measure: false,
-            print: true,
+            print: false,
             coord: false,
             draw: false,
             active: "gfi"
@@ -220,7 +225,7 @@ define(function () {
         * @type {Boolean}
         * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
         */
-        orientation: true,
+        orientation: false,
         /**
         * @memberof config
         * @type {Boolean}

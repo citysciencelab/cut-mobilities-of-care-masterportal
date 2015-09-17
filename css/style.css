@@ -5,14 +5,14 @@
 @import "../components/video.js/dist/video-js/video-js.css";
 @import "../_libs/openlayers/v3.5.0/ol.css";
 @import "lgv.css";
-@import "togglebutton.css";
+@import "../modules/togglebutton/style.css";
 @import "../modules/gfipopup/popup/style.css";
 @import "panel.css";
 @import "glyphiconbutton.css";
 @import "orientation.css";
 @import "copyright.css";
 @import "../modules/attribution/style.css";
-@import "zoombuttons.css";
+@import "../modules/zoombuttons/style.css";
 @import "routingwin.css";
 @import "window.css";
 @import "../modules/scaleline/style.css";

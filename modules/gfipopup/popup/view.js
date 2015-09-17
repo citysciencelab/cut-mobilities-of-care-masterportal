@@ -20,6 +20,7 @@ define([
         initialize: function () {
             $("#popovermin").remove();
             this.listenTo(this.model, "change:coordinate", this.render);
+            EventBus.on("gfipopup:rerender", this.rerender, this);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
@@ -35,7 +36,8 @@ define([
                 $("#popovermin").fadeOut(500, function () {
                     $("#popovermin").remove();
                 });
-            } else {
+            }
+            else {
                 overlay.setPosition(undefined);
                 html = "<div id='popovermin' class='popover-min'>";
                 html += "<span class='glyphicon glyphicon-info-sign gfi-icon'></span>";
@@ -48,19 +50,38 @@ define([
                 });
             }
         },
+        /*
+         * Zeichnet Popup mit vorhandenem content neu
+         */
+        rerender: function () {
+            $(this.model.get("element")).popover({
+                placement: function () {
+                    if (this.getPosition().top > window.innerHeight / 2) {
+                        return "top";
+                    }
+                    else {
+                        return "bottom";
+                    }
+                },
+                html: true,
+                content: this.$el.find(".gfi-content")
+            });
+            this.model.showPopup();
+        },
         /**
          *
          */
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-            this.$el.find('.gfi-content').append(this.model.get('gfiContent')[this.model.get('gfiCounter') - 1].$el);
-            this.$el.find('.gfi-title').text(this.model.get('gfiTitles')[this.model.get('gfiCounter') - 1]);
+            this.$el.find(".gfi-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el);
+            this.$el.find(".gfi-title").text(this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1]);
             $(this.model.get("element")).popover({
                 placement: function () {
                     if (this.getPosition().top > window.innerHeight / 2) {
                         return "top";
-                    } else {
+                    }
+                    else {
                         return "bottom";
                     }
                 },

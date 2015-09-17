@@ -16,6 +16,8 @@ define([
             className: "navbar-form col-xs-9",
             template: _.template(SearchbarTemplate),
             initialize: function () {
+                EventBus.on("searchInput:setFocus", this.setFocus);
+                EventBus.on("searchInput:deleteSearchString", this.deleteSearchString);
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.checkInitString);
@@ -119,7 +121,12 @@ define([
                     }
                 }
             },
-
+            /*
+             * Methose, um den Focus über den EventBus in SearchInput zu legen
+             */
+            setFocus: function() {
+                $('#searchInput').focus();
+            },
             /**
             *
             */
