@@ -229,9 +229,15 @@ define([
             window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL && Config.metadatenURL !== '') {
+
+            if (Config.metadatenURL === "ignore") {
+                // hack
+                this.set("metaURL", null);
+            }
+            else if (Config.metadatenURL && Config.metadatenURL !== "") {
                 this.set("metaURL", Config.metadatenURL + this.get("metaID"));
-            } else {
+            }
+            else {
                 if (this.get("url") !== undefined && this.has("link") === false) {
                     if (this.get("url").search("geodienste") !== -1) {
                         this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));

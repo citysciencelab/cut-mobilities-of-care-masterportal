@@ -1,6 +1,7 @@
 define(function () {
     var config = {
         title: "Geoportal der Metropolregion Hamurg",
+        metadatenURL: "ignore",
         tree: {
             custom:false,
             orderBy: "opendata",
@@ -53,14 +54,14 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: true,
             orientation: false,
             active: "gfi"
         },
         print: {
-            printID: "99997",
+            printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
             outputFilename: "Ausdruck Geoportal GDI-MRH",
             gfi: false
