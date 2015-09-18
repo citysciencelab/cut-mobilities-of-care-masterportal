@@ -16,8 +16,9 @@ define([
             className: "navbar-form col-xs-9",
             template: _.template(SearchbarTemplate),
             initialize: function () {
-                EventBus.on("searchInput:setFocus", this.setFocus);
-                EventBus.on("searchInput:deleteSearchString", this.deleteSearchString);
+                EventBus.on("searchInput:setFocus", this.setFocus, this);
+
+                EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.checkInitString);
@@ -124,8 +125,8 @@ define([
             /*
              * Methose, um den Focus über den EventBus in SearchInput zu legen
              */
-            setFocus: function() {
-                $('#searchInput').focus();
+            setFocus: function () {
+                $("#searchInput").focus();
             },
             /**
             *
@@ -215,6 +216,7 @@ define([
             */
             zoomTo: function (evt) {
                 var zoomLevel, hitID, hit;
+
                 if (_.has(evt, "cid")) { // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
                     if (Config.searchBar.initString.search(",") !== -1) {
                         hit = this.model.get("hitList")[1]; // initial Suche Adresse mit Hausnummer
