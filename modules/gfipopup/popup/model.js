@@ -10,8 +10,9 @@ define([
     "modules/gfipopup/gfiObjects/routable/view",
     "modules/gfipopup/themes/default/view",
     "modules/gfipopup/themes/mietenspiegel/view",
+    "modules/gfipopup/themes/mietenspiegel/view-formular",
     "modules/core/requestor"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTheme, MietenspiegelTheme, Requestor) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, Requestor) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
