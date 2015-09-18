@@ -36,7 +36,7 @@ define(function () {
         * @type {Array}
         * @desc lädt die Module
         */
-        customModules: ["../portale/mietenspiegel-formular/mietenspiegelform"],
+        customModules: ["../mietenspiegelform"],
         /**
         * @memberof config
         * @type {String}
