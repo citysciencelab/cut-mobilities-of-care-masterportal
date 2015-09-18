@@ -49,8 +49,10 @@ define([
             // Fenstermanagement
             EventBus.on("winParams", this.setStatus, this);
             this.set("layer", new ol.layer.Vector({
-                source: this.get("source")
+                source: this.get("source"),
+                name: "grenznachweisDraw"
             }));
+            EventBus.trigger("addLayer", this.get("layer"));
             // Cookie lesen
             if (cookie.model.hasItem() === true) {
                 this.readCookie();
@@ -238,6 +240,7 @@ define([
             else if (evt.target.id === "kundenemail") {
                 this.set("kundenemail", evt.target.value, {validate: "kundenemail"});
             }
+            this.trigger("render"); // rendert immer neu, damit behobene Fehlermeldungen verschwinden (wenn Fehler, dann rendert er 2x)
         },
         keyup: function (evt) {
             if (evt.target.id === "lagebeschreibung") {
@@ -280,15 +283,19 @@ define([
         click: function (evt) {
             if (evt.target.id === "zweckGebaeudeeinmessung") {
                 this.set("zweckGebaeudeeinmessung", evt.target.checked, {validate: "zweck"});
+                this.trigger("render");
             }
             else if (evt.target.id === "zweckGebaeudeabsteckung") {
                 this.set("zweckGebaeudeabsteckung", evt.target.checked, {validate: "zweck"});
+                this.trigger("render");
             }
             else if (evt.target.id === "zweckLageplan") {
                 this.set("zweckLageplan", evt.target.checked, {validate: "zweck"});
+                this.trigger("render");
             }
             else if (evt.target.id === "zweckSonstiges") {
                 this.set("zweckSonstiges", evt.target.checked, {validate: "zweck"});
+                this.trigger("render");
             }
             else if (evt.target.id === "weiter") {
                 this.changeZurueckButton(true, "zurück");
@@ -604,7 +611,6 @@ define([
         },
         toggleDrawInteraction: function () {
             if (this.get("activatedInteraction") === false) {
-                EventBus.trigger("addLayer", this.get("layer"));
                 this.set("draw", new ol.interaction.Draw({
                     source: this.get("source"),
                     type: "Polygon",
@@ -636,7 +642,6 @@ define([
         removeAllGeometries: function () {
             // lösche alle Geometrien
             this.get("source").clear();
-            EventBus.trigger("removeLayer", this.get("layer"));
             this.sourcechanged();
         },
         sourcechanged: function () {
