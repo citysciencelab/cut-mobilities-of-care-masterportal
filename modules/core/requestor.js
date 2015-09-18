@@ -1,9 +1,10 @@
 define([
     "backbone",
     "eventbus",
+    "openlayers",
     "modules/core/util",
     "config"
-], function (Backbone, EventBus, Util, Config) {
+], function (Backbone, EventBus, ol, Util, Config) {
 
     var Requestor = Backbone.Model.extend({
         /**
