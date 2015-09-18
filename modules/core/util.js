@@ -121,8 +121,11 @@ define([
                 newURL = url.replace("http://geodienste-hamburg.de", "/geodienste-hamburg");
             }
             else if (url.indexOf("http://geoportal.kreis-swm.de") !== -1) {
-                    newURL = url.replace("http://geoportal.kreis-swm.de", "/gpkswm");
-                }
+                newURL = url.replace("http://geoportal.kreis-swm.de", "/gpkswm");
+            }
+            else if (url.indexOf("http://geodaten.metropolregion.hamburg.de") !== -1) {
+                newURL = url.replace("http://geodaten.metropolregion.hamburg.de", "/mrh");
+            }
             else {
                 newURL = url;
             }
