@@ -517,7 +517,7 @@ define([
                         this.showErrorMessage();
                     }
                     else {
-                        EventBus.trigger("searchInput:deleteSearchString", this);
+                        EventBus.trigger("searchInput:deleteSearchString");
                         this.showSuccessMessage();
                         this.set("auftragsnummer", "");
                         this.set("lage", "");
