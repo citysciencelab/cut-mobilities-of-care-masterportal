@@ -222,7 +222,6 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
-            routing: true
             routing: true,
             addWMS: true
         },
