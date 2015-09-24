@@ -110,6 +110,7 @@ define([
                     element.isbaselayer = false;
                     return (element.datasets.length > 0 && element.url !== "nicht vorhanden") ;
                 });
+                response = this.deleteLayerByID(response);
                 response = this.deleteLayersByMetaID(response);
                 response = this.deleteLayersIncludeCache(response);
                 response = this.mergeLayersByIDs(response);
@@ -172,6 +173,13 @@ define([
                 });
                 return modelsArray;
             }
+        },
+
+        // Entfernt Layer über die ID. Wird über Config.tree.layerIDsForIgnore gesteuert.
+        deleteLayerByID: function (response) {
+            return _.reject(response, function (element) {
+                return _.contains(Config.tree.layerIDsForIgnore, element.id);
+            });
         },
 
         // Entfernt Layer über ihre MetadatenID. Wird über Config.tree.metaIDsForIgnore gesteuert.
