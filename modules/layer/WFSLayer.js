@@ -81,6 +81,8 @@ define([
                     }
                     catch (e) {
                         alert("Fehlermeldung beim Laden von Daten: \n" + e.message);
+                        console.log(e);
+                        console.log(data);
                     }
                 },
                 error: function (jqXHR, errorText, error) {

@@ -29,8 +29,8 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-            this.$el.find('.gfi-mobile-content').append(this.model.get('gfiContent')[this.model.get('gfiCounter') - 1].$el);
-            this.$el.find('.modal-title').text(this.model.get('gfiTitles')[this.model.get('gfiCounter') - 1]);
+            this.$el.find(".gfi-mobile-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el);
+            this.$el.find(".modal-title").text(this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1]);
             this.$el.modal({
                 show: true,
                 backdrop: "static"

@@ -7,12 +7,6 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=
-        */
-        metadatenURL: "",
-        /**
-        * @memberof config
-        * @type {String}
         * @desc Pfad zum img-Ordner für WFS-Styles
         */
         wfsImgPath: "../components/lgv-config/img/",
@@ -21,7 +15,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
-        allowParametricURL: true,
+        allowParametricURL: false,
         /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
@@ -34,21 +28,7 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769],
-            resolution: 2.2645838625010583,
-            resolutions: [
-                66.145965625264583,
-                26.458386250105834,
-                15.875031750063500,
-                10.583354500042333,
-                5.2916772500211667,
-                2.6458386250105834,
-                1.3229193125052917,
-                0.6614596562526458,
-                0.2645838625010583,
-                0.1322919312505292
-            ],
-            epsg: "EPSG:25832"
+            resolution: 2.6458386250105834 // 1:10000
         },
         /**
         * customModules
@@ -56,19 +36,19 @@ define(function () {
         * @type {Array}
         * @desc lädt die Module
         */
-        // customModules: ["customModule1", "customModule2"]
+        customModules: ["../mietenspiegelform"],
         /**
         * @memberof config
         * @type {String}
         * @desc zeigt einen Footer-Bereich an
         */
-        footer: true,
+        footer: false,
         /**
         * @memberof config
         * @type {String}
         * @desc aktiviert das QuickHelp-Modul
         */
-        quickHelp: true,
+        quickHelp: false,
 
         /**
         * @memberof config
@@ -128,53 +108,14 @@ define(function () {
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "1748", visible: false},
-            {id: "1562", visible: true},
-            {id: "1561", visible: true},
-            {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
-            {id:
-             [
-                 {
-                     id: "946",
-                     attribution:
-                     {
-                         eventname: "aktualisiereverkehrsnetz",
-                         timeout: (10 * 60000)
-                     }
-                 },
-                 {
-                     id: "947"
-                 }
-             ],
-             name: "aktuelle Meldungen der TBZ", visible: false
-            },
-            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
-             displayInTree: true,
-             filterOptions: [
-                 {
-                     fieldName: "teilnahme_geburtsklinik",
-                     filterType: "combo",
-                     filterName: "Geburtsklinik",
-                     filterString: ["*", "ja", "nein"]
-                 },
-                 {
-                     fieldName: "teilnahme_notversorgung",
-                     filterType: "combo",
-                     filterName: "Not- und Unfallversorgung",
-                     filterString: ["*", "ja", "eingeschränkt", "nein"]
-                 }
-             ],
-             routable: true
-            }
+            {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
         ],
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
         */
-        attributions: true,
+        attributions: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -186,13 +127,13 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/ScaleLineView.js geladen. Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
         */
-        scaleLine: true,
+        scaleLine: false,
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/MouseHoverPopupView.js geladen. Dieses Modul steuert die Darstellung des MouseHovers entsprechend layerIDs{mouseHoverField}
         */
-        mouseHover: true,
+        mouseHover: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -213,16 +154,16 @@ define(function () {
         * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
         */
         menu: {
-            viewerName: "GeoViewer",
+            viewerName: "Mietenspiegel HH",
             searchBar: true,
-            layerTree: true,
+            layerTree: false,
             helpButton: false,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
+            tools: false,
             treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: true,
-            routing: true
+            wfsFeatureFilter: false,
+            legend: false,
+            routing: false
         },
         /**
         * @memberof config
@@ -237,11 +178,10 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            bkgSuggestURL: "/bkg_suggest",
-            bkgSearchURL: "/bkg_geosearch",
-            useBKGSearch: true
+            placeholder: "Adresse eingeben",
+            gazetteerURL: function () {
+                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+            }
         },
 
         bPlan: {
@@ -257,9 +197,10 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            printID: "99999",
-            title: "Master",
-            gfi: false
+            printID: "99997",
+            title: "Freie und Hansestadt Hamburg - Mietenspiegel",
+            outputFilename: "Ausdruck Hamburger Mietenspiegel",
+            gfi: true
         },
         /**
         * @memberof config
@@ -272,11 +213,11 @@ define(function () {
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
+            gfi: false,
+            measure: false,
+            print: false,
+            coord: false,
+            draw: false,
             active: "gfi"
         },
         /**
@@ -284,13 +225,13 @@ define(function () {
         * @type {Boolean}
         * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
         */
-        orientation: true,
+        orientation: false,
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
         */
-        poi: true
+        poi: false
     };
 
     return config;

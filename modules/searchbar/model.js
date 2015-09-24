@@ -56,7 +56,6 @@ define([
                 houseNumbers: [],
                 // isOnlyOneStreet: false, // Wenn true --> Hausnummernsuche startet
                 onlyOneStreetName: "", // speichert den Namen der Straße, wenn die Straßensuche nur noch eine Treffer zurückgibt.
-                gazetteerURL: Config.searchBar.gazetteerURL(),
                 marker: new ol.Overlay({
                     positioning: "bottom-center",
                     element: $("#searchMarker"), // Element aus der index.html
@@ -77,6 +76,13 @@ define([
                 EventBus.on("sendNodeChild", this.getNodesForSearch, this);
 
                 this.set("isSearchReady", new SearchReady());
+                this.set("useBKGSearch", Config.searchBar.useBKGSearch);
+                if (_.isFunction(Config.searchBar.gazetteerURL)) {
+                    this.set("gazetteerURL", Config.searchBar.gazetteerURL());
+                }
+                else {
+                    this.set("gazetteerURL", Config.searchBar.gazetteerURL);
+                }
 
                 if (Config.searchBar.getFeatures !== undefined) {
                     this.getWFSFeatures();
@@ -148,13 +154,18 @@ define([
                     this.searchParcel();
                 }
                 else if (this.get("searchString").length >= 3) {
-                    this.searchStreets();
-                    this.searchDistricts();
-                    this.searchInFeatures();
-                    if (_.has(Config.searchBar, "getFeatures") === true) {
-                        this.searchInOlympiaFeatures();
-                        this.searchInBPlans();
+                    if (Config.searchBar.useBKGSearch) {
+                        this.suggestByBKG();
                     }
+                    else {
+                        this.searchStreets();
+                        this.searchDistricts();
+                    }
+                    if (_.has(Config.searchBar, "getFeatures") === true) {
+                            this.searchInOlympiaFeatures();
+                            this.searchInBPlans();
+                        }
+                    this.searchInFeatures();
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
                         this.searchInNodes();
@@ -170,16 +181,69 @@ define([
              * @param {function} successFunction - A function to be called if the request succeeds
              * @param {boolean} asyncBool - asynchroner oder synchroner Request
              */
-            getXML: function (url, data, successFunction, asyncBool) {
+            sendRequest: function (url, data, successFunction, asyncBool) {
                 $.ajax({
                     url: url,
                     data: data,
                     context: this,
                     async: asyncBool,
                     type: "GET",
-                    success: successFunction
+                    success: successFunction,
+                    timeout: 6000,
+                    error: function () {
+                        console.log(url + " unreachable");
+                    }
                 });
             },
+            /**
+            * @description Führt einen HTTP-GET-Request aus. Ermöglicht einen Parameter an die success function zu übergeben
+            * wird benötigt um vom view aus einen Request auszuführen und den View als Context übergeben zu können
+            *
+            *
+            **/
+            sendSearchRequestFromView: function (url, data, successFunction, asyncBool, context) {
+                $.ajax({
+                    url: url,
+                    data: data,
+                    context: this,
+                    async: asyncBool,
+                    type: "GET",
+                    success: function (result) {
+                        successFunction(result, context);
+                    },
+                    timeout: 6000,
+                    error: function () {
+                        console.log(url + " unreachable");
+                    }
+                });
+            },
+
+            suggestByBKG: function () {
+
+                if (Config.searchBar.useBKGSearch) {
+                    this.get("isSearchReady").set("suggestByBKG", false);
+                    var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
+                    Config.view.epsg + "&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:*)";
+
+                    this.sendRequest(Config.searchBar.bkgSuggestURL, request, this.pushSuggestions, true);
+                }
+            },
+
+            pushSuggestions: function (data) {
+                _.each(data, function (hit) {
+                        if (hit.score > 0.6) {
+                            this.pushHits("hitList", {
+                                name: hit.suggestion,
+                                type: "Ortssuche",
+                                bkg: true,
+                                glyphicon: "glyphicon-road",
+                                id: hit.suggestion
+                            });
+                        }
+                    }, this);
+                this.get("isSearchReady").set("suggestByBKG", true);
+            },
+
 
             /**
             *
@@ -187,8 +251,9 @@ define([
             searchStreets: function () {
                 if (this.get("isSearchReady").get("streetSearch") === true) {
                     this.get("isSearchReady").set("streetSearch", false);
-                    this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
+                        this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
                 }
+
             },
 
             /**
@@ -212,7 +277,6 @@ define([
                         id: hitName.replace(/ /g, "") + "Straße"
                     });
                 }, this);
-
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
                     this.searchInHouseNumbers();
@@ -268,8 +332,8 @@ define([
             *
             */
             searchHouseNumbers: function () {
-                this.get("isSearchReady").set("numberSearch", false);
-                this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
+                    this.get("isSearchReady").set("numberSearch", false);
+                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
             },
 
             searchInHouseNumbers: function () {
@@ -322,7 +386,7 @@ define([
             searchDistricts: function () {
                 if (this.get("isSearchReady").get("districtSearch") === true) {
                     this.get("isSearchReady").set("districtSearch", false);
-                    this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
+                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
                 }
             },
 
@@ -362,7 +426,7 @@ define([
                     flurstuecksnummer = this.get("searchString").slice(4);
                 }
                 gemarkung = this.get("searchString").slice(0, 4);
-                this.getXML(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                 this.get("isSearchReady").set("parcelSearch", true);
             },
 
@@ -496,13 +560,13 @@ define([
             getWFSFeatures: function () {
                 _.each(Config.searchBar.getFeatures, function (element) {
                     if (element.filter === "olympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
+                        this.sendRequest(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
                     }
                     else if (element.filter === "paralympia") {
-                        this.getXML(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
+                        this.sendRequest(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
                     }
                     else if (element.filter === "bplan") {
-                        this.getXML(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
+                        this.sendRequest(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
                     }
                 }, this);
             },
@@ -619,6 +683,27 @@ define([
             */
             createRecommendedList: function () {
                 this.set("isHitListReady", false);
+                if (Config.searchBar.useBKGSearch) {
+                    if (this.get("hitList").length > 5) {
+                        var suggestList = this.get("hitList"),
+                        //bkg Ergebnisse von anderen trennen
+                        split = _.partition(suggestList, function (obj) {
+                            return (obj.bkg === true);
+                        }),
+                        //Beide Listen kürzen und anschließend wieder vereinigen
+                        //Damit aus beiden Ergebnistypen gleichviele angezeigt werden
+                        shortHitlist = _.first(split[0], 5),
+                        shortHitlist2 = _.first(split[1], 5);
+
+                        this.set("recommendedList", _.union(shortHitlist2, shortHitlist));
+                    }
+                    else {
+                        this.set("recommendedList", this.get("hitList"));
+                    }
+                    this.set("isHitListReady", true);
+                    return;
+                }
+
                 if (this.get("hitList").length > 5) {
                     var numbers = [];
 

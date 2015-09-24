@@ -20,8 +20,9 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
-            //extent:[],
-            resolution: 66.145965625264583
+            extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
+            resolution: 152.87436231907702,
+            resolutions: [/*611.4974492763076, 305.7487246381551, */152.87436231907702, 76.43718115953851, 38.21859057976939, 19.109295289884642, 9.554647644942321, 4.7773238224711605, 2.3886619112355802, 1.1943309556178034, 0.5971654778089017]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
@@ -45,9 +46,10 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+            bkgSuggestURL: "/bkg_suggest",
+            bkgSearchURL: "/bkg_geosearch",
+            useBKGSearch: true
         },
         tools: {
             gfi: true,

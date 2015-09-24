@@ -105,10 +105,10 @@ define([
             if (_.has(Config, "tree") && Config.tree.custom === false) {
                 // nur vom Typ WMS
                 response = _.where(response, {typ: "WMS"});
-                // nur Layer die min. einen Datensatz zugeordnet sind
+                // nur Layer die min. einen Datensatz zugeordnet sind und solche mit korrekter URL
                 response = _.filter(response, function (element) {
                     element.isbaselayer = false;
-                    return element.datasets.length > 0 ;
+                    return (element.datasets.length > 0 && element.url !== "nicht vorhanden") ;
                 });
                 response = this.deleteLayersByMetaID(response);
                 response = this.deleteLayersIncludeCache(response);
