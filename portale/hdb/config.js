@@ -3,6 +3,7 @@ define(function () {
         geoAPI: true,
         allowParametricURL: true,
         view: {
+            extent: [454591, 5809000, 700000, 6075769],
             center: [565874, 5934140] // Rathausmarkt
         },
         // layerConf: "../components/lgv-config/services-internet.json",
@@ -54,10 +55,10 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                // return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+            bkgSuggestURL: "/bkg_suggest",
+            bkgSearchURL: "/bkg_geosearch",
+            useBKGSearch: true
         },
         tools: {
             gfi: true,
@@ -75,6 +76,7 @@ define(function () {
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
+
     return config;
 });
