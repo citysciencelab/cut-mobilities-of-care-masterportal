@@ -19,11 +19,7 @@ define([
             this.render();
         },
         startShowingRoute: function (evt) {
-            // lösche alte Route
-            this.model.showRoute(evt.currentTarget.value);
-//            this.model.clearRoute();
-//            var gesuchteRoute = evt.currentTarget.value;
-//            this.model.showRoute(gesuchteRoute);
+            this.model.showRoute(evt.currentTarget.id);
             EventBus.trigger("showGFIParams");
         },
         /**

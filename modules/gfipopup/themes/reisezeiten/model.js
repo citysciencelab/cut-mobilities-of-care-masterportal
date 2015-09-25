@@ -16,8 +16,7 @@ define([
             routeLayer: "", // Layer, in dem die Route dargestellt wird
             routenLayer: "", // WFS-Layer, der zum Abfragen der Routen verwendet wird
             verkehrslagelayer: "", // WFS-Layer, der zur Abfrage des LOS verwendet wird
-            ziele: [],
-            source: ""
+            ziele: []
         },
         /**
          *
@@ -34,8 +33,13 @@ define([
             this.set("standort", response.Standort);
             EventBus.on("mapView:replyProjection", this.setProjection, this);
             EventBus.trigger("mapView:requestProjection");
-            this.requestRouten();
-            this.sortRouten();
+            if (this.get("standort") !== "" && this.get("routenLayer") !== "" && this.get("verkehrslagelayer") !== "") {
+                this.requestRouten();
+                this.sortRouten();
+            }
+            else {
+                alert ("Fehler beim Initialisieren des Moduls(reisezeiten)");
+            }
         },
         /**
          * Sortiert das Array der übermittelten Routen in die Reihenfolge, wie sie im GFI angezeigt werden sollen.
@@ -63,8 +67,11 @@ define([
                 async: false,
                 method: "POST",
                 dataType: "xml",
-                complete: function () {
+                complete: function (jqXHR) {
                     Util.hideLoader();
+                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+                        alert("Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
+                    }
                 },
                 success: function (data) {
                     var hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
@@ -83,9 +90,6 @@ define([
                         });
                     });
                     this.set("ziele", ziele);
-                },
-                error: function () {
-                    // TODO
                 }
             });
         },
@@ -111,17 +115,20 @@ define([
         /**
          * Enfernt den "Route-Layer" von der Karte.
          */
-        clearRoute: function () {
-            this.get("routeLayer").getSource().clear();
-            EventBus.trigger("removeLayer", this.get("routeLayer"));
-            this.set("routeLayer", '');
+        removeRouteLayer: function () {
+            if (this.get("routeLayer")) {
+                this.get("routeLayer").getSource().clear();
+                EventBus.trigger("removeLayer", this.get("routeLayer"));
+                this.set("routeLayer", "");
+            }
         },
         /*
          * Fragt Layer mit LevelOfService Info ab, um Geometrien anzeigen zu können
          */
         requestVerkehrslagelayer: function (routenid) {
             var layer = this.get("routenLayer"),
-                request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_verkehrslage'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:route_id</PropertyName><Literal>" + routenid + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>";
+                request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_verkehrslage'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:route_id</PropertyName><Literal>" + routenid + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>",
+                source;
 
             Util.showLoader();
             $.ajax({
@@ -135,23 +142,26 @@ define([
                 async: false,
                 method: "POST",
                 dataType: "xml",
-                complete: function () {
+                complete: function (jqXHR) {
                     Util.hideLoader();
+                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+                        alert("Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
+                    }
                 },
                 success: function (data) {
                     var wfsReader = new ol.format.WFS({
                             featureNS: this.get("verkehrslagelayer").get("featureNS"),
                             featureType: this.get("verkehrslagelayer").get("featureType")
                         }),
-                        src = new ol.source.Vector();
+                        src = new ol.source.Vector({
+                            projection: this.get("projection")
+                        });
 
                     src.addFeatures(wfsReader.readFeatures(data));
-                    this.set("source", src);
-                },
-                error: function () {
-                    // TODO
+                    source = src;
                 }
             });
+            return source;
         },
         /**
          * Zeigt die ausgewählte Route.
@@ -160,39 +170,38 @@ define([
         showRoute: function (routeId) {
             var strokestyle,
                 features = [],
-                source;
+                source = this.requestVerkehrslagelayer(routeId);
 
-            this.requestVerkehrslagelayer(routeId);
-            source = this.get("source");
+            this.removeRouteLayer();
             this.createRouteLayer();
             _.each(source.getFeatures(), function (feature) {
                 switch (feature.get("farbe")) {
                     case "rot": {
                         strokestyle = new ol.style.Stroke({
-                            color: [255, 0, 0],
-                            width: 5
+                            color: "red",
+                            width: 8
                         });
                         break;
                     }
                     case "gelb": {
                         strokestyle = new ol.style.Stroke({
-                            color: [255, 255, 0],
-                            width: 5
+                            color: "yellow",
+                            width: 8
                         });
                         break;
                     }
                     case "schwarz": {
                         strokestyle = new ol.style.Stroke({
-                            color: [0, 0, 0],
-                            width: 5
+                            color: "black",
+                            width: 8
                         });
                         break;
                     }
                     // grün
                     default: {
                         strokestyle = new ol.style.Stroke({
-                            color: [0, 255, 0],
-                            width: 5
+                            color: "green",
+                            width: 8
                         });
                         break;
                     }
@@ -201,17 +210,16 @@ define([
                     stroke: strokestyle
                 }));
             });
-            console.log(source.getFeatures());
-            this.set("source", source);
             this.get("routeLayer").setSource(source);
+            this.get("routeLayer").setStyle(null);
             EventBus.trigger("addLayer", this.get("routeLayer"));
-//            EventBus.trigger("zoomToExtent", features.getGeometries().getExtent());
+            EventBus.trigger("zoomToExtent", source.getExtent());
         },
         /*
          * Zerstört das Modul vollständig.
          */
         destroy: function () {
-            this.clearRoute();
+            this.removeRouteLayer();
             this.unbind();
             this.clear({silent: true});
         }

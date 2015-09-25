@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <div class="panel panel-default no-margin">
-    <div class="bg-info panel-body no-margin container-fluid">
-        <h5 class="text-center">Ziele ab: <%= standort %></h5>
+    <div class="bg-primary no-margin container-fluid">
+        <h5 class="text-center"><strong>Ziele ab <em><%= standort %></em></strong></h5>
     </div>
-    <table id="reisezeitentable" class="table table-condensed table-hover" style="margin-bottom:0px;">
+    <table id="reisezeitentable" class="table table-condensed gfi-table-hover-link" style="margin-bottom:0px;">
         <tbody>
             <% _.each(ziele, function (ziel) { %>
-                <tr colspan="2">
+                <tr class="showroute" colspan="2" title="Detaillierte Route anzeigen." id="<%= ziel.routenid %>">
                     <td style="vertical-align:middle; width:100%;">
                         <strong><%= ziel.zielort %></strong>
                     </td>
-                    <td style="float:right; width: 130px;">
-                        <button id="<%= ziel.routenid %>" style="width: 100%;" title='Route zeigen' value='<%= ziel.routenid %>' type='button' class='btn btn-info btn-sm showroute'>
-                            <span style='float:left;' class='' aria-hidden='true'><%= ziel.anzeige %></span>
-                            <span style='float:right; padding-top:3px; padding-left:10px;' class='glyphicon glyphicon-road' aria-hidden='true'></span>
-                        </button>
+                    <td style="float:right; width: 90px;">
+                        <span title="<%= ziel.anzeige %>" class="label label-info"><%= ziel.anzeige %></span>
                     </td>
                 </tr>
             <% }); %>
