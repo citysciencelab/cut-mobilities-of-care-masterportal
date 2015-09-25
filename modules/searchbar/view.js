@@ -45,9 +45,11 @@ define([
                 "mouseover .list-group-item.hit": "showMarker",
                 "mouseleave .list-group-item.hit": "hideMarker",
                 "click .list-group-item.type": "collapseHits",
+                "click .btn-search-question": function () {
+                    EventBus.trigger("showWindowHelp", "search");
+                },
                 "mouseover ": "showHelp",
-                "mouseleave ": "hideHelp",
-                "click .glyphicon-question-sign": "showHelpWindow"
+                "mouseleave ": "hideHelp"
             },
             /**
             *
