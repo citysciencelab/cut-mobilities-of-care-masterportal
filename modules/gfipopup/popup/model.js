@@ -33,6 +33,7 @@ define([
          */
         initialize: function () {
             this.set("element", this.get("gfiOverlay").getElement());
+
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this); // trigger in map.js
@@ -56,6 +57,7 @@ define([
             this.set("isPopupVisible", true);
         },
         setGFIParams: function (params) {
+            EventBus.trigger("closeGFIParams", this);
             var response = Requestor.requestFeatures(params),
                 features = response[0],
                 coordinate = response[1],
@@ -92,15 +94,13 @@ define([
                 this.set("gfiCounter", pContent.length);
                 this.set("coordinate", coordinate);
             }
-            else {
-                EventBus.trigger("closeGFIParams", this);
-            }
         },
         sendGFIForPrint: function () {
             if (this.get("isPopupVisible") === true) {
                 var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
                     attr = printContent[0],
                     title = printContent[1];
+
                 EventBus.trigger("receiveGFIForPrint", [attr, title, this.get("coordinate")]);
             }
             else {
