@@ -15,7 +15,6 @@ define([
             "click .pager-right": "renderNext",
             "click .pager-left": "renderPrevious"
         },
-
         /**
          *
          */
@@ -28,6 +27,7 @@ define([
          */
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
             this.$el.find(".gfi-mobile-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el);
             this.$el.find(".modal-title").text(this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1]);
@@ -35,6 +35,7 @@ define([
                 show: true,
                 backdrop: "static"
             });
+            EventBus.trigger("GFIPopupVisibility", true);
         },
 
         /**
