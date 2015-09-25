@@ -5,9 +5,9 @@ define(function () {
             custom:false,
             orderBy: "opendata",
             filter: true,
-            layerIDsForMerge: [],
+            layerIDsToMerge: [],
 
-            metaIDsForMerge:[]
+            metaIDsToMerge:[]
         },
         baseLayer: [
             {id: "0", visible: true},       //WebAtlas
