@@ -12,7 +12,22 @@ define(function () {
           
             
         },
-        
+          baseLayerIDs: [
+            {id: "453", visible: true},
+            {id: "452", visible: false},
+              {id: "1933", visible: false},   //Haltestellen
+            {id:
+                [
+                {id: "1935",name: "Bus1"},
+                {id: "1935",name: "Bus2"}
+                ],
+                visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+            },
+
+            {id: "1935", visible: false, styles: ["geofox_Faehre", "geofox-bahn"], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
+
+            {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
+        ],
         view: {
             center: [565874, 5934140] // Rathausmarkt
         },
