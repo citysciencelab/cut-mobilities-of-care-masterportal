@@ -16,6 +16,7 @@ define([
         },
         initialize: function (response) {
             this.model = new Model(response);
+
             this.render();
         },
         startShowingRoute: function (evt) {
@@ -27,6 +28,7 @@ define([
          */
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
         },
         /**
