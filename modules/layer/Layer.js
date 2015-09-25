@@ -43,9 +43,9 @@ define([
             });
             this.set("settings", false);
             // Setze 'gfiTemplate' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder 'default'
-            this.set('gfiTheme', this.get('gfiTheme') || 'default');
+            this.set("gfiTheme", this.get("gfiTheme") || "default");
             // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
-            this.set('routable', this.get('routable') || false);
+            this.set("routable", this.get("routable") || false);
             // Tranparenz
             this.listenTo(this, "change:transparence", this.updateOpacity);
 
@@ -139,7 +139,7 @@ define([
             else {
                 this.set({selected: true});
             }
-            if (this.get("type") === "nodeChildLayer") {
+            if (this.get("type") === "nodeChildLayer" && this.get("parentView") !== undefined) {
                 this.get("parentView").checkSelectedOfAllChildren();
             }
             else {
@@ -229,9 +229,10 @@ define([
             window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL && Config.metadatenURL !== '') {
+            if (Config.metadatenURL && Config.metadatenURL !== "") {
                 this.set("metaURL", Config.metadatenURL + this.get("metaID"));
-            } else {
+            }
+            else {
                 if (this.get("url") !== undefined && this.has("link") === false) {
                     if (this.get("url").search("geodienste") !== -1) {
                         this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));

@@ -15,6 +15,9 @@ define([
             },
             initialize: function () {
                 this.$el.append(this.templateButton);
+                _.each(this.model.get("childViews"), function (layer) {
+                    layer.model.set("parentView", this);
+                }, this);
             },
             render: function () {
                 this.stopListening();
@@ -28,7 +31,6 @@ define([
             renderChildren: function () {
                 if (this.model.get("isExpanded") === true) {
                     _.each(this.model.get("childViews"), function (layer) {
-                        layer.model.set("parentView", this);
                         this.$el.after(layer.render().el);
                     }, this);
                 }

@@ -94,6 +94,11 @@ define([
                     if (_.has(Config, "tree") && Config.tree.custom === false) {
                         collection.resetModels();
                     }
+                    if (_.has(Config, "tree") && _.has(Config.tree, "layerIDsToSelect")) {
+                        _.each(Config.tree.layerIDsToSelect, function (id) {
+                            collection.get(id).set({visibility: true});
+                        });
+                    }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
                 }
@@ -175,17 +180,17 @@ define([
             }
         },
 
-        // Entfernt Layer über die ID. Wird über Config.tree.layerIDsForIgnore gesteuert.
+        // Entfernt Layer über die ID. Wird über Config.tree.layerIDsToIgnore gesteuert.
         deleteLayerByID: function (response) {
             return _.reject(response, function (element) {
-                return _.contains(Config.tree.layerIDsForIgnore, element.id);
+                return _.contains(Config.tree.layerIDsToIgnore, element.id);
             });
         },
 
-        // Entfernt Layer über ihre MetadatenID. Wird über Config.tree.metaIDsForIgnore gesteuert.
+        // Entfernt Layer über ihre MetadatenID. Wird über Config.tree.metaIDsToIgnore gesteuert.
         deleteLayersByMetaID: function (response) {
             return _.reject(response, function (element) {
-                return _.contains(Config.tree.metaIDsForIgnore, element.datasets[0].md_id);
+                return _.contains(Config.tree.metaIDsToIgnore, element.datasets[0].md_id);
             });
         },
 
@@ -224,12 +229,12 @@ define([
         },
 
         // Layer mit gleicher Metadaten-ID werden zu einem neuem Layer zusammengefasst.
-        // Layer die gruppiert werden sollen, werden über Config.tree.metaIDsForMerge gesteuert.
+        // Layer die gruppiert werden sollen, werden über Config.tree.metaIDsToMerge gesteuert.
         // Die zusammenfassenden alten Layer werden rausgefiltert.
         mergeLayersByMetaID: function (response) {
             var newLayer;
 
-            _.each(Config.tree.metaIDsForMerge, function (metaID) {
+            _.each(Config.tree.metaIDsToMerge, function (metaID) {
                 var layersByID = _.filter(response, function (layer) {
                     return layer.datasets[0].md_id === metaID;
                 });
@@ -250,10 +255,10 @@ define([
         },
 
         // Mehrere Layer werden zu einem neuem Layer über ihre ID zusammengefasst.
-        // Layer die gruppiert werden sollen, werden über Config.tree.layerIDsForMerge gesteuert.
+        // Layer die gruppiert werden sollen, werden über Config.tree.layerIDsToMerge gesteuert.
         // Die zusammenfassenden alten Layer werden entfernt.
         mergeLayersByIDs: function (response) {
-            _.each(Config.tree.layerIDsForMerge, function (layerIDs) {
+            _.each(Config.tree.layerIDsToMerge, function (layerIDs) {
                 var layersByID,
                     newLayer;
 
