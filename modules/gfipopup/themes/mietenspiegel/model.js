@@ -13,7 +13,7 @@ define([
          */
         defaults: {
             readyState: false,
-            msURL: "http://wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel", // URL unter der der Mietenspiegel-WFS antwortet
+            msURL: "/wscd0096/fachdaten_public/services/wfs_hh_mietenspiegel", // URL unter der der Mietenspiegel-WFS antwortet
             msDaten: [],// alle Mietenspiegel-Daten
             msErhebungsstand: "",// fixe Metadaten
             msHerausgeber: "",// fixe Metadaten
