@@ -56,8 +56,10 @@ define(function () {
             {id: "2128", visible: false, style: "2128", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
             {id: "47", visible: false, style: "47", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "id_kost"},
             {id: "2156", visible: true, style: "2156", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "name", routable: false},
-            {id: "2119", gfiTheme: "reisezeiten", visible: false, style: "2119", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
-            {id: "2132", visible: false, style: "2132", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""}
+            {id: "2714", gfiTheme: "reisezeiten", visible: false, style: "2119", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
+            {id: "2132", visible: false, style: "2132", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
+            {id: "2713", visible: false, displayInTree: false},
+            {id: "2715", visible: false, displayInTree: false}
         ],
         attributions: true,
         clickCounter: {

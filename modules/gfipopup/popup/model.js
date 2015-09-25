@@ -6,13 +6,13 @@ define([
     "bootstrap/popover",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view",
     "modules/gfipopup/themes/default/view",
     "modules/gfipopup/themes/mietenspiegel/view",
     "modules/gfipopup/themes/mietenspiegel/view-formular",
+    "modules/gfipopup/themes/reisezeiten/view",
     "modules/core/requestor"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, Requestor) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, Requestor) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -68,6 +68,10 @@ define([
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
+                            break;
+                        }
+                        case "reisezeiten": {
+                            templateView = new ReisezeitenTheme(content);
                             break;
                         }
                         default: {
