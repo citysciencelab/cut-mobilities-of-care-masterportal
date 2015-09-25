@@ -3,8 +3,8 @@ define([
     "modules/core/util",
     "eventbus",
     "config",
-    'modules/restReader/collection',
-    'modules/core/mapView'
+    "modules/restReader/collection",
+    "modules/core/mapView"
 ], function (Backbone, Util, EventBus, Config, RestReader, mapView) {
     "use strict";
     var model = Backbone.Model.extend({
@@ -17,7 +17,7 @@ define([
             printTitle: Config.print.title,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
-            currentMapScale: mapView.get('startScale'), // aktueller Maßstab wird in mapView gesetzt.
+            currentMapScale: mapView.get("startScale"), // aktueller Maßstab wird in mapView gesetzt.
             currentMapCenter: Config.view.center // aktuelle Zentrumkoordinate
         },
 
@@ -26,11 +26,12 @@ define([
          */
         url: function () {
             var resp;
+
             resp = RestReader.getServiceById(Config.print.printID);
-            if (resp[0] && resp[0].get('url')) {
-                this.set('printurl', resp[0].get('url'));
+            if (resp[0] && resp[0].get("url")) {
+                this.set("printurl", resp[0].get("url"));
             }
-            return Config.proxyURL + "?url=" + this.get('printurl') + "/master/info.json";
+            return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
         },
 
         /**
@@ -98,7 +99,8 @@ define([
             this.set("layerToPrint", []);
             if (_.has(Config, "tree") === true) {
                 EventBus.trigger("getSelectedVisibleWMSLayer");
-            } else {
+            }
+            else {
                 EventBus.trigger("layerlist:getVisibleWMSlayerList");
             }
             if (Config.tools.draw === true) {
@@ -200,44 +202,46 @@ define([
         /**
          * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
          */
-        setGFIPos: function() {
-            var position = this.get('printGFIPosition');
-            position[0] = position[0] + 0.25; //Verbesserung der Punktlage im Print
+        setGFIPos: function () {
+            var position = this.get("printGFIPosition");
+
             if (position !== null) {
+                position[0] = position[0] + 0.25; // Verbesserung der Punktlage im Print
                 this.push("layerToPrint", {
                     type: "Vector",
-                    styleProperty: 'styleId',
+                    styleProperty: "styleId",
                     styles: {
                         0: {
                             fill: false,
                             pointRadius: 8,
                             stroke: true,
-                            strokeColor: '#ff0000',
+                            strokeColor: "#ff0000",
                             strokeWidth: 3
                         },
                         1: {
                             fill: true,
                             pointRadius: 1,
-                            fillColor: '#000000',
+                            fillColor: "#000000",
                             stroke: false
                         }
                     },
                     geoJson: {
                         type: "FeatureCollection",
-                        features:[
+                        features: [
                             {
                                 type: "Feature",
                                 geometry: {
-                                    type: 'Point',
+                                    type: "Point",
                                     coordinates: position
                                 },
                                 properties: {
                                     styleId: 0
                                 }
-                            },{
+                            },
+                            {
                                 type: "Feature",
                                 geometry: {
-                                    type: 'Point',
+                                    type: "Point",
                                     coordinates: position
                                 },
                                 properties: {
@@ -253,8 +257,8 @@ define([
         /**
         * Abfrage an popupmodel starten.
         */
-        sendGFIForPrint: function() {
-            EventBus.trigger('sendGFIForPrint');
+        sendGFIForPrint: function () {
+            EventBus.trigger("sendGFIForPrint");
         },
         /**
         * [[Description]]
@@ -265,10 +269,11 @@ define([
             this.set("gfiTitle", values[1]);
             this.set("printGFIPosition", values[2]);
             // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-            if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get('gfiParams').length > 0) {
-                this.set("createURL", this.get('printurl') + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-            } else {
-                this.set("createURL", this.get('printurl') + "/master/create.json");
+            if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
+            }
+            else {
+                this.set("createURL", this.get("printurl") + "/master/create.json");
             }
             this.setGFIPos();
         },
