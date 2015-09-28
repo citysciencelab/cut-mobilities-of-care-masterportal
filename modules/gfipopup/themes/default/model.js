@@ -3,9 +3,8 @@ define([
     "config",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view"
-], function (Backbone, Config, ImgView, VideoView, RoutingView, RoutableView) {
+], function (Backbone, Config, ImgView, VideoView, RoutableView) {
     "use strict";
     var GFIContentDefaultModel = Backbone.Model.extend({
         /**
@@ -71,21 +70,6 @@ define([
                         key: videoView.model.get("id"),
                         val: videoView
                     });
-                }
-                else if (_.isObject(val) === false && val.indexOf("Min, ") !== -1 && val.indexOf("km") !== -1) {
-                    // Dienst liefert erst key=Flughafen Hamburg mit val=24 Min., 28km ohne Route
-                    lastroutenval = val;
-                    lastroutenkey = key;
-                    element[key] = "#";
-                }
-                else if (key.indexOf("Route") === 0) {
-                    // Nächstes element des Objects ist die Route
-                    var routingView = new RoutingView(lastroutenkey, lastroutenval, val);
-                    children.push({
-                        key: routingView.model.get("id"),
-                        val: routingView
-                    });
-                    element[key] = "#";
                 }
                 // lösche leere Dummy-Einträge wieder raus.
                 element = _.omit(element, function (value) {

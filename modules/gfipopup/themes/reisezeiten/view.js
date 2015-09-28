@@ -1,31 +1,26 @@
 define([
     "backbone",
-    "text!modules/gfipopup/gfiObjects/routing/template.html",
-    "modules/gfipopup/gfiObjects/routing/model",
+    "text!modules/gfipopup/themes/reisezeiten/template.html",
+    "modules/gfipopup/themes/reisezeiten/model",
     "eventbus"
-], function (Backbone, VideoTemplate, RoutingModel, EventBus) {
+], function (Backbone, Template, Model, EventBus) {
     "use strict";
     var RoutingView = Backbone.View.extend({
-        template: _.template(VideoTemplate),
+        template: _.template(Template),
         /**
          * Wird aufgerufen wenn die View erzeugt wird.
          */
         events: {
             "remove": "destroy",
-            "click": "startShowingRoute"
+            "click .showroute": "startShowingRoute"
         },
-        initialize: function (ueberschrift, buttontext, route) {
-            this.model = new RoutingModel();
-            this.model.set("ueberschrift", ueberschrift);
-            this.model.set("buttontext", buttontext);
-            this.model.set("route", route);
+        initialize: function (response) {
+            this.model = new Model(response);
+
             this.render();
         },
         startShowingRoute: function (evt) {
-            // lösche alte Route
-            this.model.clearRoute();
-            var gesuchteRoute = evt.currentTarget.value;
-            this.model.showRoute(gesuchteRoute);
+            this.model.showRoute(evt.currentTarget.id);
             EventBus.trigger("showGFIParams");
         },
         /**
@@ -33,6 +28,7 @@ define([
          */
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
         },
         /**

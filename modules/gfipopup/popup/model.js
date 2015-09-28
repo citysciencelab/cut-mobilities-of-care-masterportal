@@ -6,13 +6,13 @@ define([
     "bootstrap/popover",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routing/view",
     "modules/gfipopup/gfiObjects/routable/view",
     "modules/gfipopup/themes/default/view",
     "modules/gfipopup/themes/mietenspiegel/view",
     "modules/gfipopup/themes/mietenspiegel/view-formular",
+    "modules/gfipopup/themes/reisezeiten/view",
     "modules/core/requestor"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutingView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, Requestor) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, Requestor) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -33,6 +33,7 @@ define([
          */
         initialize: function () {
             this.set("element", this.get("gfiOverlay").getElement());
+
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this); // trigger in map.js
@@ -56,6 +57,7 @@ define([
             this.set("isPopupVisible", true);
         },
         setGFIParams: function (params) {
+            EventBus.trigger("closeGFIParams", this);
             var response = Requestor.requestFeatures(params),
                 features = response[0],
                 coordinate = response[1],
@@ -68,6 +70,10 @@ define([
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
+                            break;
+                        }
+                        case "reisezeiten": {
+                            templateView = new ReisezeitenTheme(content);
                             break;
                         }
                         default: {
@@ -88,15 +94,13 @@ define([
                 this.set("gfiCounter", pContent.length);
                 this.set("coordinate", coordinate);
             }
-            else {
-                EventBus.trigger("closeGFIParams", this);
-            }
         },
         sendGFIForPrint: function () {
             if (this.get("isPopupVisible") === true) {
                 var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
                     attr = printContent[0],
                     title = printContent[1];
+
                 EventBus.trigger("receiveGFIForPrint", [attr, title, this.get("coordinate")]);
             }
             else {

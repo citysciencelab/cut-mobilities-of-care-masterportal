@@ -15,26 +15,29 @@ define([
             "click .pager-right": "renderNext",
             "click .pager-left": "renderPrevious"
         },
-
         /**
          *
          */
         initialize: function () {
-            this.listenTo(this.model, "change:coordinate change:gfiCounter", this.render);
+            this.listenTo(this.model, "change:coordinate", this.render);
         },
 
         /**
          *
          */
         render: function () {
-            var attr = this.model.toJSON();
+            var attr = this.model.toJSON(),
+                content = this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el,
+                title = this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1];
+
             this.$el.html(this.template(attr));
-            this.$el.find(".gfi-mobile-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el);
-            this.$el.find(".modal-title").text(this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1]);
+            this.$el.find(".gfi-mobile-content").append(content);
+            this.$el.find(".modal-title").text(title);
             this.$el.modal({
                 show: true,
                 backdrop: "static"
             });
+            EventBus.trigger("GFIPopupVisibility", true);
         },
 
         /**
@@ -43,6 +46,7 @@ define([
         renderNext: function () {
             if ($(".pager-right").hasClass("disabled") === false) {
                 this.model.set("gfiCounter", this.model.get("gfiCounter") - 1);
+                this.render();
             }
         },
 
@@ -52,6 +56,7 @@ define([
         renderPrevious: function () {
             if ($(".pager-left").hasClass("disabled") === false) {
                 this.model.set("gfiCounter", this.model.get("gfiCounter") + 1);
+                this.render();
             }
         },
         /**
