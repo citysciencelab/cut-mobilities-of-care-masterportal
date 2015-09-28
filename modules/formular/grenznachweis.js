@@ -115,6 +115,9 @@ define([
                     if (this.validators.minLength(attributes.kundenname, 3) === false) {
                         errors.kundenname = "Name notwendig.";
                     }
+                    if (this.validators.pattern(attributes.kundenname, "[0-9\]") === true) {
+                        errors.kundenname = "Alphanumerischer Wert erwartet.";
+                    }
                     if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
                         errors.kundenadresse = "Adressangabe notwendig.";
                     }
@@ -130,6 +133,16 @@ define([
                     if (this.get("kundenanrede") === "Firma") {
                         if (this.validators.minLength(attributes.kundenfirma, 2) === false) {
                             errors.kundenfirma = "Firmenname erwartet.";
+                        }
+                    }
+                    if (identifier.validate === "kundenfestnetz" || identifier.validate === true) {
+                        if (this.validators.pattern(attributes.kundenfestnetz, "[^0-9\-/]") === true) {
+                            errors.kundenfestnetz = "Numerischer Wert erwartet.";
+                        }
+                    }
+                    if (identifier.validate === "kundenmobilfunk" || identifier.validate === true) {
+                        if (this.validators.pattern(attributes.kundenmobilfunk, "[^0-9\-/]") === true) {
+                            errors.kundenmobilfunk = "Numerischer Wert erwartet.";
                         }
                     }
                     // Bei Kundendaten werden auch Bestelldaten rudimentär geprüft, weil diese nach erfolgreicher Übermittlung gelöscht werden und so eine Doppelbestellung mit leeren Werten möglich wäre.
@@ -152,65 +165,6 @@ define([
                     }
                 }
             }
-            else {
-                if (identifier.validate === "lage") {
-                    if (this.validators.minLength(attributes.lage, 3) === false) {
-                        errors.lage = "Lagebeschreibung notwendig";
-                    }
-                }
-                if (identifier.validate === "zweck") {
-                    if (attributes.zweckGebaeudeeinmessung === false && attributes.zweckGebaeudeabsteckung === false && attributes.zweckLageplan === false && attributes.zweckSonstiges === false) {
-                        errors.zweck = "Min. ein Feld muss markiert sein.";
-                    }
-                }
-                if (identifier.validate === "kundennummer") {
-                    if (attributes.kundennummer !== "") {
-                        if (this.validators.pattern(attributes.kundennummer, "[^0-9\]") === true || attributes.kundennummer.length !== 6) {
-                            errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
-                        }
-                    }
-                }
-                if (identifier.validate === "kundenname1") {
-                    if (this.validators.pattern(attributes.kundenname, "[0-9\]") === true) {
-                        errors.kundenname = "Alphanumerischer Wert erwartet.";
-                    }
-                }
-                if (identifier.validate === "kundenname2" || identifier.validate === true) {
-                    if (this.validators.minLength(attributes.kundenname, 3) === false) {
-                        errors.kundenname = "Name notwendig.";
-                    }
-                }
-                if (identifier.validate === "kundenadresse" || identifier.validate === true) {
-                    if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
-                        errors.kundenadresse = "Adressangabe notwendig.";
-                    }
-                }
-                if (identifier.validate === "kundenplz" || identifier.validate === true) {
-                    if (this.validators.pattern(attributes.kundenplz, "[^0-9\]") === true || attributes.kundenplz.length !== 5) {
-                        errors.kundenplz = "Numerischer Wert der Länge 5 erwartet.";
-                    }
-                }
-                if (identifier.validate === "kundenort" || identifier.validate === true) {
-                    if (this.validators.pattern(attributes.kundenort, "[0-9\]") === true || this.validators.minLength(attributes.kundenort, 3) === false) {
-                        errors.kundenort = "Alphanumerischer Wert erwartet.";
-                    }
-                }
-                if (identifier.validate === "kundenemail" || identifier.validate === true) {
-                    if (attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
-                        errors.kundenemail = "Syntax inkorrekt.";
-                    }
-                }
-                if (identifier.validate === "kundenfestnetz" || identifier.validate === true) {
-                    if (this.validators.pattern(attributes.kundenfestnetz, "[^0-9\-/]") === true) {
-                        errors.kundenfestnetz = "Numerischer Wert erwartet.";
-                    }
-                }
-                if (identifier.validate === "kundenmobilfunk" || identifier.validate === true) {
-                    if (this.validators.pattern(attributes.kundenmobilfunk, "[^0-9\-/]") === true) {
-                        errors.kundenmobilfunk = "Numerischer Wert erwartet.";
-                    }
-                }
-            }
             // return die Errors
             this.set("errors", errors);
             if (_.isEmpty(errors) === false) {
@@ -220,34 +174,33 @@ define([
         // anonymisierte Events
         focusout: function (evt) {
             if (evt.target.id === "lagebeschreibung") {
-                this.set("lage", evt.target.value, {validate: "lage"});
+                this.set("lage", evt.target.value);
             }
             else if (evt.target.id === "kundennummer") {
-                this.set("kundennummer", evt.target.value, {validate: "kundennummer"});
+                this.set("kundennummer", evt.target.value);
             }
             else if (evt.target.id === "kundenname") {
-                this.set("kundenname", evt.target.value, {validate: "kundenname2"});
+                this.set("kundenname", evt.target.value);
             }
             else if (evt.target.id === "kundenadresse") {
-                this.set("kundenadresse", evt.target.value, {validate: "kundenadresse"});
+                this.set("kundenadresse", evt.target.value);
             }
             else if (evt.target.id === "kundenplz") {
-                this.set("kundenplz", evt.target.value, {validate: "kundenplz"});
+                this.set("kundenplz", evt.target.value);
             }
             else if (evt.target.id === "kundenort") {
-                this.set("kundenort", evt.target.value, {validate: "kundenort"});
+                this.set("kundenort", evt.target.value);
             }
             else if (evt.target.id === "kundenemail") {
-                this.set("kundenemail", evt.target.value, {validate: "kundenemail"});
+                this.set("kundenemail", evt.target.value);
             }
-            this.trigger("render"); // rendert immer neu, damit behobene Fehlermeldungen verschwinden (wenn Fehler, dann rendert er 2x)
         },
         keyup: function (evt) {
             if (evt.target.id === "lagebeschreibung") {
                 this.set("lage", evt.target.value);
             }
             else if (evt.target.id === "auftragsnummer") {
-                this.set("auftragsnummer", evt.target.value, {validate: "auftragsnummer"});
+                this.set("auftragsnummer", evt.target.value);
             }
             else if (evt.target.id === "kundennummer") {
                 this.set("kundennummer", evt.target.value);
@@ -256,7 +209,7 @@ define([
                 this.set("freitext", evt.target.value);
             }
             else if (evt.target.id === "kundenname") {
-                this.set("kundenname", evt.target.value, {validate: "kundenname1"});
+                this.set("kundenname", evt.target.value);
             }
             else if (evt.target.id === "kundenfirma") {
                 this.set("kundenfirma", evt.target.value);
@@ -274,27 +227,27 @@ define([
                 // nutze lieber focusout
             }
             else if (evt.target.id === "kundenfestnetz") {
-                this.set("kundenfestnetz", evt.target.value, {validate: "kundenfestnetz"});
+                this.set("kundenfestnetz", evt.target.value);
             }
             else if (evt.target.id === "kundenmobilfunk") {
-                this.set("kundenmobilfunk", evt.target.value, {validate: "kundenmobilfunk"});
+                this.set("kundenmobilfunk", evt.target.value);
             }
         },
         click: function (evt) {
             if (evt.target.id === "zweckGebaeudeeinmessung") {
-                this.set("zweckGebaeudeeinmessung", evt.target.checked, {validate: "zweck"});
+                this.set("zweckGebaeudeeinmessung", evt.target.checked);
                 this.trigger("render");
             }
             else if (evt.target.id === "zweckGebaeudeabsteckung") {
-                this.set("zweckGebaeudeabsteckung", evt.target.checked, {validate: "zweck"});
+                this.set("zweckGebaeudeabsteckung", evt.target.checked);
                 this.trigger("render");
             }
             else if (evt.target.id === "zweckLageplan") {
-                this.set("zweckLageplan", evt.target.checked, {validate: "zweck"});
+                this.set("zweckLageplan", evt.target.checked);
                 this.trigger("render");
             }
             else if (evt.target.id === "zweckSonstiges") {
-                this.set("zweckSonstiges", evt.target.checked, {validate: "zweck"});
+                this.set("zweckSonstiges", evt.target.checked);
                 this.trigger("render");
             }
             else if (evt.target.id === "weiter") {
