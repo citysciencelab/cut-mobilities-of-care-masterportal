@@ -39,12 +39,24 @@ define([
         setNodeChildLayer: function () {
             _.each(this.get("childnodes"), function (subfolder) {
                 _.each(subfolder.layerIDs, function (element) {
-                    this.push("layers", {
-                        id: element.id,
-                        visible: element.visible,
-                        subfolder: subfolder.node,
-                        kategorieCustom: this.get("node")
-                    });
+                    if (_.has(element, "name") === true) {
+                        this.push("layers", {
+                            id: element.id,
+                            name: element.name,
+                            metaName: element.metaName,
+                            visible: element.visible,
+                            subfolder: subfolder.node,
+                            kategorieCustom: this.get("node")
+                        });
+                    }
+                    else {
+                        this.push("layers", {
+                            id: element.id,
+                            visible: element.visible,
+                            subfolder: subfolder.node,
+                            kategorieCustom: this.get("node")
+                        });
+                    }
                 }, this);
             }, this);
         },

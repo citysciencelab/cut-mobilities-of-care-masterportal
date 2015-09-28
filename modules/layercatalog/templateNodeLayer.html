@@ -6,7 +6,7 @@
     <% } else { %>
         <span class="glyphicon glyphicon-unchecked pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer hinzufügen"></span>
     <% } %>
-    <% if (_.isNull(metaName)) { %>
+    <% if (_.isNull(metaName) || kategorieCustom !== undefined) { %>
         <div class="layer-name"><%= name %></div>
     <% }
     else { %>
