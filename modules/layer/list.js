@@ -373,7 +373,7 @@ define([
                     var cloneModel = element.clone();
                     // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt
                     cloneModel.set(categoryAttribute, category);
-                    cloneModel.set("id", element.id + category.replace(/ /g, ""));
+                    cloneModel.set("id", element.id + category.replace(/ /g, "").replace(/,/g, "_").toUpperCase());
                     // Model wird der Collection hinzugefügt
                     this.add(cloneModel, {merge: true});
                 }, this);
