@@ -106,7 +106,7 @@ define([
                 this.set("startResolution", Config.view.resolution);
             }
             if (_.has(Config.view, "zoomLevel")) {
-                this.set("startResolution", this.get("resolutions")[Config.view.zoomLevel - 1]);
+                this.set("startResolution", this.get("resolutions")[Config.view.zoomLevel]);
             }
         },
         /**
