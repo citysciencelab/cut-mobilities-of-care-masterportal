@@ -31,8 +31,8 @@ define(function () {
         view: {
             center: [565874, 5934140] // Rathausmarkt
         },
-        layerConf: "../components/lgv-config/services-fhhnet-architekten.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet-architekten.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
             printID: "99999",
@@ -60,7 +60,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
         tools: {
