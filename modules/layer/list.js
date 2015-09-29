@@ -94,11 +94,6 @@ define([
                     if (_.has(Config, "tree") && Config.tree.custom === false) {
                         collection.resetModels();
                     }
-                    if (_.has(Config, "tree") && _.has(Config.tree, "layerIDsToSelect")) {
-                        _.each(Config.tree.layerIDsToSelect, function (id) {
-                            collection.get(id).set({visibility: true});
-                        });
-                    }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
                 }
