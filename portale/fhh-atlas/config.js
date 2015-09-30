@@ -14,7 +14,7 @@ define(function () {
                 ["1043", "1044", "1045", "1046"]
             ],
             layerIDsToIgnore: [
-                "1912", "1913", "1914", "1915", "1916", "1917"
+                "1912", "1913", "1914", "1915", "1916", "1917" // UESG
             ],
             layerIDsToStyle: [
                 {
@@ -44,7 +44,8 @@ define(function () {
                 "88A22736-FE87-46F7-8A38-84F9E0E945F7", // TN für Olympia
                 "DDB01922-D7B5-4323-9DDF-B68A42C559E6", // Olympiastandorte
                 "AA06AD76-6110-4718-89E1-F1EDDA1DF4CF", // Regionales Raumordnungsprogramm Stade+Rotenburg
-                "1C8086F7-059F-4ACF-96C5-7AFEB8F8B751" // Fachdaten der Metropolregion
+                "1C8086F7-059F-4ACF-96C5-7AFEB8F8B751", // Fachdaten der Metropolregion
+                "A46086BA-4A4C-48A4-AC1D-9735DDB4FDDE" // Denkmalkartierung FIS
             ]
         },
         baseLayer: [
