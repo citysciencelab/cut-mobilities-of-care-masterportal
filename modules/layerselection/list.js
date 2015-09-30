@@ -1,17 +1,46 @@
 define([
     "backbone",
-    "eventbus"
-], function (Backbone, EventBus) {
+    "eventbus",
+    "config",
+    "bootstrap/popover"
+], function (Backbone, EventBus, Config) {
 
     var list = Backbone.Collection.extend({
         initialize: function () {
+
             // EventBus Listener
-            EventBus.on("addModelToSelectionList", this.addModelToList, this);
-            EventBus.on("removeModelFromSelectionList", this.remove, this);
-            EventBus.on("getSelectedVisibleWMSLayer", this.sendVisibleWMSLayer, this);
+            this.listenTo(EventBus, {
+                "layerlist:sendSelectedLayerList": this.addModelsToList,
+                "addModelToSelectionList": this.addModelToList,
+                "removeModelFromSelectionList": this.remove,
+                "getSelectedVisibleWMSLayer": this.sendVisibleWMSLayer,
+                "layerselectionlist:createParamsForURL": this.createParamsForURL
+            }, this);
+
             // Eigene Listener
-            this.listenTo(this, "add", this.addLayerToMap);
-            this.listenTo(this, "remove", this.removeLayerFromMap);
+            this.listenTo(this, {
+                "add": this.addLayerToMap,
+                "remove": this.removeLayerFromMap
+            }, this);
+
+            // Selektierte Layer werden in die Auswahl übernommen
+            this.loadSelection();
+        },
+
+        loadSelection: function () {
+            // Wird ausgewertet wenn das Portal parametrisiert aufgerufen wird
+            if (_.has(Config.tree, "layerIDsToSelect") === true) {
+                _.each(Config.tree.layerIDsToSelect, function (obj) {
+                    EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"selected": true});
+                    EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"visibility": obj.visibility});
+                }, this);
+            }
+            // Über die Konfiguration sichtbar geschaltete Hintergrundkarten
+            else if (_.has(Config, "baseLayer") === true) {
+                _.each(_.where(Config.baseLayer, {visibility: true}), function (obj) {
+                    EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"selected": true});
+                }, this);
+            }
         },
 
         // Fügt der Collection ein Model hinzu. Layer werden immer ans Ende hinzugefügt, der erste Baselayer an den Anfang.
@@ -92,6 +121,23 @@ define([
          */
         sendVisibleWMSLayer: function () {
             EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({typ: "WMS", selected: true, visibility: true}));
+        },
+
+        createParamsForURL: function () {
+            var layerIDs,
+                layerVisibility,
+                url;
+
+            layerIDs = this.pluck("id");
+            layerVisibility = this.pluck("visibility");
+            url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility;
+            $(".layer-selection-save").popover({
+                html: true,
+                title: "Speichern Sie sich diese URL als Lesezeichen ab!" + "<button type='button' class='close' onclick='$(&quot;.layer-selection-save&quot;).popover(&quot;hide&quot;);'>&times;</button>",
+                content: "<input type='text' class='form-control input-sm' value=" + url + ">",
+                trigger: "click"
+            });
+            $(".layer-selection-save").popover("show");
         }
     });
 
