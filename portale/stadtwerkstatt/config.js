@@ -24,35 +24,35 @@ define(function () {
             ],
             epsg: "EPSG:25832"
         },
-        
+
 
         footer: true,
 
         quickHelp: true,
 
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
 
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
 
         styleConf: "../components/lgv-config/style.json",
 
         categoryConf: "../components/lgv-config/category.json",
 
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         layerIDs: [
             {id: "452", visible: true},                         //Luftbild
             {id: "453", visible: false, legendUrl: "ignore"},   //Stadtplan
-            {id: "2486", visible: true, name:"ohne Thema"},
-            {id: "2482", visible: true, name:"Wirtschaft"},
-            {id: "2483", visible: true, name:"Umwelt"},
-            {id: "2477", visible: true, name:"Wohnen"},
-            {id: "2478", visible: true, name:"Gewerbe"},
-            {id: "2479", visible: true, name:"Natur"},
-            {id: "2480", visible: true, name:"Sport"},
-            {id: "2481", visible: true, name:"Bildung"},
-            {id: "2484", visible: true, name:"Verkehr"},
-            {id: "2485", visible: true, name:"Verfahren"}
+            {id: "2486", visible: true, name: "ohne Thema"},
+            {id: "2482", visible: true, name: "Wirtschaft"},
+            {id: "2483", visible: true, name: "Umwelt"},
+            {id: "2477", visible: true, name: "Wohnen"},
+            {id: "2478", visible: true, name: "Gewerbe"},
+            {id: "2479", visible: true, name: "Natur"},
+            {id: "2480", visible: true, name: "Sport"},
+            {id: "2481", visible: true, name: "Bildung"},
+            {id: "2484", visible: true, name: "Verkehr"},
+            {id: "2485", visible: true, name: "Verfahren"}
 
         ],
 
@@ -67,7 +67,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton:true,
+            contactButton: true,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
@@ -79,7 +79,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
             gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
 
