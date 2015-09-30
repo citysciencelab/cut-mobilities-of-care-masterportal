@@ -24,13 +24,7 @@ define(function () {
             ],
             epsg: "EPSG:25832"
         },
-        /**
-        * customModules
-        * @memberof config
-        * @type {Array}
-        * @desc lädt die Module
-        */
-        // customModules: ["customModule1", "customModule2"]
+        
 
         footer: true,
 
@@ -45,33 +39,7 @@ define(function () {
         categoryConf: "../components/lgv-config/category.json",
 
         proxyURL: "/cgi-bin/proxy.cgi",
-        /**
-        * @memberof config
-        * @type {Object[]}
-        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
-        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
-        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
-        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
-        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
-        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
-        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
-        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
-        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
-        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
-        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
-        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
-        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
-        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
-        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String}  minScale -
-        * @property {String}  maxScale -
-        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
-        * @desc Beschreibung.
-        */
+        
         layerIDs: [
             {id: "452", visible: true},                         //Luftbild
             {id: "453", visible: false, legendUrl: "ignore"},   //Stadtplan
@@ -99,7 +67,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
+            contactButton:true,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
@@ -108,7 +76,6 @@ define(function () {
         },
 
         startUpModul: "",
-
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
             gazetteerURL: function () {
