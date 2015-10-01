@@ -64,7 +64,7 @@ define(function () {
         },        
         print: {
             printID: "99999",
-            title: "Master",
+            title: "Wohnlagenverzeichnis Hamburg",
             gfi: false
         },     
         tools: {
