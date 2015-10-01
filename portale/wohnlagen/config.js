@@ -51,7 +51,7 @@ define(function () {
             contactButton:  true,
             tools: true,
             treeFilter: false,
-            wfsFeatureFilter: true,
+            wfsFeatureFilter: false,
             legend: true,
             routing: false
         },
