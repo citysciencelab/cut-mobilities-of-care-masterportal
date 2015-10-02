@@ -105,7 +105,7 @@ define([
 
                     if (geom instanceof ol.geom.Polygon) {
                         output = this.formatArea(geom);
-                        tooltipCoord = geom.getInteriorPoint().getCoordinates();
+                        tooltipCoord = geom.getLastCoordinate();
                     }
                     else if (geom instanceof ol.geom.LineString) {
                         output = this.formatLength(geom);
