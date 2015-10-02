@@ -12,7 +12,8 @@ define([
         defaults: {
             outputFilename: Config.print.outputFilename,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
-            gfiToPrint: [] // die sichtbaren GFIs
+            gfiToPrint: [], // die sichtbaren GFIs
+            center: Config.view.center
         },
 
         //
