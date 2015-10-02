@@ -49,13 +49,13 @@ define(function () {
             ]
         },
         baseLayer: [
-            {id: "453", visibility: false, minScale: "1000"},
-            {id: "8", visibility: false},
+            {id: "453", minScale: "1000"},
+            {id: "8"},
             {id: "717", visibility: true, minScale: "1000", name: "Geobasiskarten (farbig)"},
-            {id: "713", visibility: false, minScale: "1000", name: "Geobasiskarten (schwarz-weiß)"},
-            {id: "1043", visibility: false, minScale: "1000", name: "Geobasiskarten (grau-blau)"},
-            {id: "368", visibility: false, name: "ALKIS farbig", maxScale: "10000"},
-            {id: "149", visibility: false, name: "ALKIS grau-blau", maxScale: "10000"}
+            {id: "713", minScale: "1000", name: "Geobasiskarten (schwarz-weiß)"},
+            {id: "1043", minScale: "1000", name: "Geobasiskarten (grau-blau)"},
+            {id: "368", name: "ALKIS farbig", maxScale: "10000"},
+            {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
         ],
         attributions: true,
         footer: true,

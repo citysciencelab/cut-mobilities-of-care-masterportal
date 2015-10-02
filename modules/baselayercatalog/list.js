@@ -9,9 +9,6 @@ define([
             this.listenToOnce(EventBus, {
                 "layerlist:sendBaselayerList": this.addBaseLayer
             });
-            this.listenTo(EventBus, {
-                "layerlist:updateBaselayerSelection": this.updateBaseLayerSelection
-            });
             EventBus.trigger("layerlist:getBaselayerList");
         },
 
@@ -23,14 +20,6 @@ define([
             _.each(baselayer, function (layer) {
                 this.add(layer);
             }, this);
-        },
-
-        updateBaseLayerSelection: function () {
-            var layerlist = this.where({"selected": true});
-
-            _.each(layerlist, function (layer) {
-                EventBus.trigger("addModelToSelectionList", layer);
-            });
         }
     });
 

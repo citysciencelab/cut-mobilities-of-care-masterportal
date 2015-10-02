@@ -59,7 +59,17 @@ define([
                     Config.layerIDs = newLayerIDs;
                 }
                 else {
-                    Config.tree.layerIDsToSelect = values;
+                    var visibilityList = _.values(_.pick(result, "VISIBILITY"))[0].split(",");
+
+                    Config.tree.layerIDsToSelect = [];
+                    _.each(values, function (value, index) {
+                        if (visibilityList[index] === "TRUE") {
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: true});
+                        }
+                        else {
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: false});
+                        }
+                    });
                 }
             }
 

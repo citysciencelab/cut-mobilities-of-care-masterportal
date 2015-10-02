@@ -11,7 +11,11 @@
     min-width: 380px;
 }
 
-.layer-catalog-label, .layer-selection-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-right {
+.layer-catalog-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-right {
+    cursor: pointer;
+}
+
+.layer-selection-save, .layer-selection-label > .glyphicon-triangle-bottom, .layer-selection-label > .control-label, .layer-selection-label > .glyphicon-triangle-right {
     cursor: pointer;
 }
 
@@ -60,4 +64,28 @@
 .base-layer-selection > .glyphicon-question-sign:hover {
     opacity: 0.6;
     cursor: pointer;;
+}
+
+.layer-selection-save {
+    font-size: 11px;
+    padding: 6px;
+}
+
+.layer-selection-save + .popover {
+    min-width: 100%;
+}
+
+.layer-selection-save + .popover > .popover-title {
+    color: rgb(119, 119, 119);
+    font-weight: bold;
+}
+
+.layer-selection-save + .popover > .popover-content {
+    padding: 8px;
+}
+
+.layer-selection-save + .popover > .popover-title > button {
+    position: relative;
+    top: -3px;
+    right: -3px;
 }
