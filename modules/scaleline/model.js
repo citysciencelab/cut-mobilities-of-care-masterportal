@@ -11,17 +11,21 @@ define([
          *
          */
         initialize: function () {
-            EventBus.on("currentMapScale", this.setScaleValue, this);
+            this.listenTo(EventBus, {
+                "mapView:sendOptions": this.setScaleValue
+            });
+
             this.listenTo(this, "change:scaleValue", this.setScale);
             this.listenTo(this, "change:scale", this.setReflength);
-            this.setScaleValue(mapView.get('startScale'));
+            this.set("scaleValue", mapView.get("startScale"));
+            EventBus.trigger("mapView:getOptions");
         },
 
         /**
          *
          */
-        setScaleValue: function (value) {
-            this.set("scaleValue", value);
+        setScaleValue: function (obj) {
+            this.set("scaleValue", obj.scale);
         },
 
         /**
@@ -35,7 +39,8 @@ define([
 
             if (this.get("scaleValue") >= 1000) {
                 scale = "Maßstab = 1: " + scaleValue.substring(0, scaleValue.length - 3) + "." + scaleValue.substring(scaleValue.length - 3);
-            } else {
+            }
+            else {
                 scale = "Maßstab = 1: " + scaleValue;
             }
             this.set("scale", scale);
@@ -53,7 +58,8 @@ define([
 
             if (reflengthval >= 1000) {
                 reflength = (reflengthval / 1000).toString() + " km";
-            } else {
+            }
+            else {
                 reflength = reflengthval.toString() + " m";
             }
             this.set("reflength", reflength);

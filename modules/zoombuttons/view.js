@@ -13,17 +13,17 @@ define([
             },
             initialize: function () {
                 this.render();
-                EventBus.trigger('registerZoomButtonsInClickCounter', this.$el);
+                EventBus.trigger("registerZoomButtonsInClickCounter", this.$el);
             },
             render: function () {
                 this.template = "<span class='glyphicon glyphicon-plus'></span><br><span class='glyphicon glyphicon-minus'></span>";
                 $("#toggleRow").append(this.$el.html(this.template));
             },
             setZoomLevelUp: function () {
-                EventBus.trigger("setZoomLevelUp");
+                EventBus.trigger("mapView:setZoomLevelUp");
             },
             setZoomLevelDown: function () {
-                EventBus.trigger("setZoomLevelDown");
+                EventBus.trigger("mapView:setZoomLevelDown");
             }
         });
 

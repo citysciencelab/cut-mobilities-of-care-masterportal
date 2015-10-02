@@ -3,27 +3,19 @@ define([
     "modules/core/util",
     "eventbus",
     "config",
-    "modules/restReader/collection",
-    "modules/core/mapView"
-], function (Backbone, Util, EventBus, Config, RestReader, mapView) {
+    "modules/restReader/collection"
+], function (Backbone, Util, EventBus, Config, RestReader) {
     "use strict";
     var model = Backbone.Model.extend({
 
-        /**
-         *
-         */
+        //
         defaults: {
             outputFilename: Config.print.outputFilename,
-            printTitle: Config.print.title,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
-            gfiToPrint: [], // die sichtbaren GFIs
-            currentMapScale: mapView.get("startScale"), // aktueller Maßstab wird in mapView gesetzt.
-            currentMapCenter: Config.view.center // aktuelle Zentrumkoordinate
+            gfiToPrint: [] // die sichtbaren GFIs
         },
 
-        /**
-         *
-         */
+        //
         url: function () {
             var resp;
 
@@ -34,41 +26,76 @@ define([
             return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
         },
 
-        /**
-         *
-         */
+        //
         initialize: function () {
-            this.on("change:specification", this.getPDFURL, this);
+            this.listenTo(this, {
+                "change:layout change:scale change:isActive": this.updatePrintPage,
+                "change:specification": this.getPDFURL,
+                "change:isCurrentWin": this.setActive
+            });
+
+            this.listenTo(EventBus, {
+                "mapView:sendCenter": this.setCenter,
+                "mapView:sendOptions": this.setScaleByMapView,
+                "mapView:replyProjection": this.setProjection
+            });
 
             // get print config (info.json)
             this.fetch({
                 cache: false,
-                async: false
+                async: false,
+                success: function (model) {
+                    model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                }
             });
-
-            this.set("currentLayout", this.get("layouts")[0]);
-            this.set("currentScale", this.get("currentMapScale"));
-            this.on("change:isCurrentWin", this.setActive, this);
-            this.on("change:currentLayout change:currentScale change:isActive", this.updatePrintPage, this);
 
             EventBus.on("winParams", this.setStatus, this);
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
-            EventBus.on("currentMapCenter", this.setCurrentMapCenter, this);
-            EventBus.on("currentMapScale", this.setCurrentMapScale, this);
-            EventBus.on("mapView:replyProjection", this.setProjection, this);
+
             EventBus.trigger("mapView:requestProjection");
+            EventBus.trigger("mapView:getOptions");
         },
 
-        /**
-         *
-         */
+        // Setzt den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
+        setTitle: function () {
+            if (!$("#titleField").val()) {
+                this.set("title", Config.print.title);
+            }
+            else {
+                this.set("title", $("#titleField").val());
+            }
+        },
+
+        // Setzt das Format(DinA4/A3 Hoch-/Querformat) für den Ausdruck.
+        setLayout: function (index) {
+            this.set("layout", this.get("layouts")[index]);
+        },
+
+        // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
+        setScale: function (index) {
+            this.set("scale", this.get("scales")[index].value);
+            EventBus.trigger("mapView:setScale", this.get("scale"));
+        },
+
+        // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
+        setScaleByMapView: function (obj) {
+            this.set("scale", parseInt(obj.scale, 10));
+        },
+
+        // Setzt die Zentrumskoordinate.
+        setCenter: function (value) {
+            this.set("center", value);
+        },
+
+        //
         setStatus: function (args) {
             if (args[2] === "print") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-            } else {
+            }
+            else {
                 this.set("isCurrentWin", false);
             }
         },
@@ -76,20 +103,7 @@ define([
             this.set("isActive", this.get("isCurrentWin"));
         },
         updatePrintPage: function () {
-            EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("currentLayout").map, this.get("currentScale")]);
-        },
-        setCurrentMapCenter: function (value) {
-            this.set("currentMapCenter", value);
-        },
-        setCurrentMapScale: function (value) {
-            this.set("currentMapScale", value);
-            this.set("currentScale", this.get("currentMapScale"));
-        },
-        setCurrentLayout: function (index) {
-            this.set("currentLayout", this.get("layouts")[index]);
-        },
-        setCurrentScale: function (index) {
-            this.set("currentScale", this.get("scales")[index].value);
+            EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale")]);
         },
 
         /**
@@ -183,10 +197,10 @@ define([
                 layers: this.get("layerToPrint"),
                 pages: [
                     {
-                        center: this.get("currentMapCenter"),
-                        scale: this.get("currentScale"),
+                        center: this.get("center"),
+                        scale: this.get("scale"),
                         dpi: 96,
-                        mapTitle: this.get("printTitle")
+                        mapTitle: this.get("title")
                     }
                 ]
             };

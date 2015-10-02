@@ -12,6 +12,58 @@ define([
          */
         defaults: {
             startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+            options: [
+                {
+                    resolution: 66.145965625264583,
+                    scale: "250000",
+                    zoomLevel: 1
+                },
+                {
+                    resolution: 26.458386250105834,
+                    scale: "100000",
+                    zoomLevel: 2
+                },
+                {
+                    resolution: 15.875031750063500,
+                    scale: "60000",
+                    zoomLevel: 3
+                },
+                {
+                    resolution: 10.583354500042333,
+                    scale: "40000",
+                    zoomLevel: 4
+                },
+                {
+                    resolution: 5.2916772500211667,
+                    scale: "20000",
+                    zoomLevel: 5
+                },
+                {
+                    resolution: 2.6458386250105834,
+                    scale: "10000",
+                    zoomLevel: 6
+                },
+                {
+                    resolution: 1.3229159522920524,
+                    scale: "5000",
+                    zoomLevel: 7
+                },
+                {
+                    resolution: 0.6614596562526458,
+                    scale: "2500",
+                    zoomLevel: 8
+                },
+                {
+                    resolution: 0.2645838625010583,
+                    scale: "1000",
+                    zoomLevel: 9
+                },
+                {
+                    resolution: 0.13229159522920521,
+                    scale: "500",
+                    zoomLevel: 10
+                }
+            ],
             resolutions: [
                 66.145965625264583, // 1:250000
                 26.458386250105834, // 1:100000
@@ -25,7 +77,7 @@ define([
                 0.13229159522920521 // 1:500
             ],
             zoomLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // zoomLevel 1 = 1:250000
-            startResolution: 15.875031750063500,
+            resolution: 15.875031750063500,
             startCenter: [565874, 5934140],
             units: "m",
             DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
@@ -39,87 +91,75 @@ define([
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
                 },
-                "mapView:getResolution": function () {
-                    EventBus.trigger("mapView:sendViewResolution", this.get("resolution"));
-                },
-                "mapView:getViewStartResolution": function () {
-                    EventBus.trigger("mapView:sendViewStartResolution", this.get("startResolution"));
-                },
-                "mapView:getMapScale": function () {
-                    EventBus.trigger("mapView:sendMapScale", Math.round(this.getScale()));
-                },
                 "mapView:getMinResolution": function (scale) {
                     EventBus.trigger("mapView:sendMinResolution", this.getResolution(scale));
                 },
                 "mapView:getMaxResolution": function (scale) {
                     EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
-                }
+                },
+                "mapView:getOptions": function () {
+                    EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                },
+                "mapView:setScale": this.setScale,
+                "mapView:setZoomLevelUp": this.setZoomLevelUp,
+                "mapView:setZoomLevelDown": this.setZoomLevelDown,
+                "mapView:setCenter": this.setCenter,
+                "mapView:requestProjection": this.replyProjection
             });
 
             this.listenTo(this, {
                 "change:resolution": function () {
-                    EventBus.trigger("mapView:sendViewResolution", this.get("resolution"));
+                    EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                },
+                "change:center": function () {
+                    EventBus.trigger("mapView:sendCenter", this.get("center"));
+                },
+                "change:scale": function () {
+                    var params = _.findWhere(this.get("options"), {scale: this.get("scale")});
+
+                    this.set("resolution", params.resolution);
+                    this.get("view").setResolution(this.get("resolution"));
                 }
             });
 
-            this.setStartExtent();
-            this.setStartResolution();
-            this.setStartScale();
+            this.setExtent();
+            this.setResolution();
             this.setResolutions();
             this.setStartCenter();
             this.setProjection();
             this.setView();
 
-            // View listener
-            this.get("view").on("change:resolution", function (evt) {
-                EventBus.trigger("currentMapScale", Math.round(this.getScale()));
-                this.setResolution(evt);
+            // Listener für ol.View
+            this.get("view").on("change:resolution", function () {
+                this.set("resolution", this.get("view").getResolution());
             }, this);
             this.get("view").on("change:center", function () {
-                EventBus.trigger("currentMapCenter", this.get("view").getCenter());
+                this.set("center", this.get("view").getCenter());
             }, this);
-            EventBus.on("mapView:requestProjection", this.replyProjection, this);
-            EventBus.on("setCenter", this.setCenter, this);
-            EventBus.on("setZoomLevelUp", this.setZoomLevelUp, this);
-            EventBus.on("setZoomLevelDown", this.setZoomLevelDown, this);
-            EventBus.on("getCurrentMapScale", function () {
-                EventBus.trigger("sendCurrentMapScale", Math.round(this.getScale()));
-            }, this);
-        },
-
-        setResolution: function (evt) {
-            this.set("resolution", evt.target.get(evt.key));
         },
 
         /**
          *
          */
-        setStartExtent: function () {
+        setExtent: function () {
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
-                this.set("startExtent", Config.view.extent);
+                this.set("extent", Config.view.extent);
             }
         },
 
-        // Setzt die initiale Resolution.
-        setStartResolution: function () {
+        // Setzt die Resolution.
+        setResolution: function () {
             if (Config.view.resolution && _.isNumber(Config.view.resolution)) {
-                this.set("startResolution", Config.view.resolution);
+                this.set("resolution", Config.view.resolution);
             }
             if (_.has(Config.view, "zoomLevel")) {
-                this.set("startResolution", this.get("resolutions")[Config.view.zoomLevel - 1]);
+                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel - 1]);
             }
         },
-        /**
-         *
-         */
-        setStartScale: function () {
-            var resolution = this.get("startResolution"),
-                units = this.get("units"),
-                mpu = ol.proj.METERS_PER_UNIT[units],
-                dpi = this.get("DOTS_PER_INCH"),
-                scale = resolution * mpu * 39.37 * dpi;
 
-            this.set("startScale", Math.round(scale));
+        // Setzt den Maßstab.
+        setScale: function (scale) {
+            this.set("scale", scale);
         },
 
         /**
@@ -158,7 +198,7 @@ define([
             var proj = new ol.proj.Projection({
                 code: Config.view.epsg || "EPSG:25832",
                 units: this.get("units"),
-                extent: this.get("startExtent"),
+                extent: this.get("extent"),
                 axisOrientation: "enu",
                 global: false
             });
@@ -179,8 +219,8 @@ define([
             var view = new ol.View({
                 projection: this.get("projection"),
                 center: this.get("startCenter"),
-                extent: this.get("startExtent"),
-                resolution: this.get("startResolution"),
+                extent: this.get("extent"),
+                resolution: this.get("resolution"),
                 resolutions: this.get("resolutions")
             });
 
@@ -209,20 +249,6 @@ define([
          */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
-        },
-
-        /**
-         *
-         * @return {[type]} [description]
-         */
-        getScale: function () {
-            var resolution = this.get("view").getResolution(),
-                units = this.get("units"),
-                mpu = ol.proj.METERS_PER_UNIT[units],
-                dpi = this.get("DOTS_PER_INCH"),
-                scale = resolution * mpu * 39.37 * dpi;
-
-            return scale;
         },
 
         getResolution: function (scale) {

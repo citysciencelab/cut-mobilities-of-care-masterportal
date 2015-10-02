@@ -25,8 +25,8 @@ define([
         },
 
         // Setzt die aktuelle Resolution.
-        setViewResolution: function (resolution) {
-            this.set("viewResolution", resolution);
+        setViewResolution: function (obj) {
+            this.set("viewResolution", obj.resolution);
         },
 
         // Prüft ob der Layer in der aktuellen Resolution zu sehen ist und setzt den Parameter "isResolutionInRange".

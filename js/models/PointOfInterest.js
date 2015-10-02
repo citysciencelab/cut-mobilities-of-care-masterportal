@@ -20,7 +20,7 @@ define([
                 zoom=7;
             }
             EventBus.trigger("hidePOIModal");
-            EventBus.trigger("setCenter", [parseInt(this.get("xCoord"),10),parseInt(this.get("yCoord"),10)], zoom);
+            EventBus.trigger("mapView:setCenter", [parseInt(this.get("xCoord"),10),parseInt(this.get("yCoord"),10)], zoom);
         }
 
     });

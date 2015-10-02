@@ -19,13 +19,13 @@ define([
         initialize: function () {
             this.listenToOnce(EventBus, {
                 "mapView:sendResolutions": this.setResolutions,
-                "mapView:sendViewStartResolution": this.setViewResolution,
+                "mapView:sendOptions": this.setViewResolution,
                 "mapView:sendMinResolution": this.setMinResolution,
                 "mapView:sendMaxResolution": this.setMaxResolution
             });
 
             this.listenTo(EventBus, {
-                "mapView:sendViewResolution": this.setViewResolution
+                "mapView:sendOptions": this.setViewResolution
             });
 
             this.listenToOnce(this, {
@@ -58,7 +58,7 @@ define([
             else {
                 this.postInit();
             }
-            EventBus.trigger("mapView:getViewStartResolution");
+            // EventBus.trigger("mapView:getViewStartResolution");
         },
 
         postInit: function () {

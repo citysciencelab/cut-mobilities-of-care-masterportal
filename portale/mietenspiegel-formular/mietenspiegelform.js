@@ -24,7 +24,7 @@ define([
             projection: ""
         },
         initialize: function () {
-            EventBus.on("setCenter", this.newSearch, this); //Event der Searchbar bei erfolgreicher Suche
+            EventBus.on("mapView:setCenter", this.newSearch, this); //Event der Searchbar bei erfolgreicher Suche
             this.set("msLayer", LayerList.models[0].get("layer"));
             this.set("projection", MapView.get("view").getProjection());
             var msWin = new MSView(this.get("msLayer"), "");

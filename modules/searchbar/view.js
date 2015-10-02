@@ -101,7 +101,7 @@ define([
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
                             $(".dropdown-menu-search").hide();
-                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                            EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                         }
 
                         if (_.contains(types, "Parcel")) {
@@ -110,7 +110,7 @@ define([
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
                             $(".dropdown-menu-search").hide();
-                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                            EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                         }
                     }
                     else {
@@ -146,7 +146,7 @@ define([
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
                             $(".dropdown-menu-search").hide();
-                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                            EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                         }
                         else if (_.contains(types, "Parcel")) {
                             var hit = _.findWhere(this.model.get("hitList"), {type: "Parcel"});
@@ -154,7 +154,7 @@ define([
                             this.model.get("marker").setPosition(hit.coordinate);
                             $("#searchMarker").css("display", "block");
                             $(".dropdown-menu-search").hide();
-                            EventBus.trigger("setCenter", hit.coordinate, 7);
+                            EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                         }
                     }
                     else {
@@ -259,14 +259,14 @@ define([
                 }
                 else if (hit.type === "Krankenhaus") {
                     $(".dropdown-menu-search").hide();
-                    EventBus.trigger("setCenter", hit.coordinate, 5);
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 5);
                 }
                 else if (hit.type === "Adresse" || hit.type === "Stadtteil") {
                     zoomLevel = 7;
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                     $(".dropdown-menu-search").hide();
-                    EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
                 }
                 else if (hit.type === "Thema") {
                     $(".dropdown-menu-search").hide();
@@ -278,7 +278,7 @@ define([
                     this.model.get("marker").setPosition(hit.coordinate);
                     $("#searchMarker").css("display", "block");
                     $(".dropdown-menu-search").hide();
-                    EventBus.trigger("setCenter", hit.coordinate, zoomLevel);
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
                 }
                 else if (hit.type === "festgestellt" || hit.type === "im Verfahren") { // kann bestimmt noch besser gemacht werden. ins model?
                     var typeName = (hit.type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
@@ -359,7 +359,7 @@ define([
 
             zoomToBKGSearchResult: function (result, context) {
                 if (result.features[0].properties.typ === "Haus") {
-                     EventBus.trigger("setCenter", result.features[0].properties.bbox.coordinates, 5);
+                     EventBus.trigger("mapView:setCenter", result.features[0].properties.bbox.coordinates, 5);
                     context.model.get("marker").setPosition(result.features[0].properties.bbox.coordinates);
                     $("#searchMarker").css("display", "block");
                 }

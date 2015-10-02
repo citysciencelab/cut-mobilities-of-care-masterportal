@@ -9,20 +9,23 @@ define([
         className: "win-body",
         template: _.template(PrintWinTemplate),
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin change:currentScale", this.render, this);
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin change:scale": this.render
+            });
         },
         events: {
-            "change #layoutField": "setCurrentLayout",
-            "change #scaleField": "setCurrentScale",
-            "click button": "getLayersForPrint"
+            "change #layoutField": "setLayout",
+            "change #scaleField": "setScale",
+            "click button": "createPDF"
         },
-        setCurrentLayout: function (evt) {
-            this.model.setCurrentLayout(evt.target.selectedIndex);
+        setLayout: function (evt) {
+            this.model.setLayout(evt.target.selectedIndex);
         },
-        setCurrentScale: function (evt) {
-            this.model.setCurrentScale(evt.target.selectedIndex);
+        setScale: function (evt) {
+            this.model.setScale(evt.target.selectedIndex);
         },
-        getLayersForPrint: function () {
+        createPDF: function () {
+            this.model.setTitle();
             this.model.getLayersForPrint();
         },
         render: function () {
