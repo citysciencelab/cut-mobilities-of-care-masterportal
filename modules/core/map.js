@@ -212,7 +212,7 @@ define([
             layers = this.get("map").getLayers().getArray();
             resolution = this.get("view").getResolution();
             projection = this.get("view").getProjection();
-            scale = MapView.getScale();
+            // scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale;
             layersVisible = _.filter(layers, function (element) {
                 // NOTE GFI-Filter Nur Sichtbar
                 return element.getVisible() === true;
@@ -229,7 +229,7 @@ define([
 
                             gfiParams.push({
                                 typ: "WMS",
-                                scale: scale,
+                                // scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
                                 ol_layer: element
@@ -238,7 +238,7 @@ define([
                         else if (element.getProperties().typ === "WFS") {
                             gfiParams.push({
                                 typ: "WFS",
-                                scale: scale,
+                                // scale: scale,
                                 source: element.getSource(),
                                 style: element.getStyle(),
                                 name: element.get("name"),
@@ -275,7 +275,7 @@ define([
 
                                 gfiParams.push({
                                     typ: "WMS",
-                                    scale: scale,
+                                    // scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
                                     ol_layer: layer
@@ -284,7 +284,7 @@ define([
                             else if (layer.getProperties().typ === "WFS") {
                                 gfiParams.push({
                                     typ: "WFS",
-                                    scale: scale,
+                                    // scale: scale,
                                     source: layer.getSource(),
                                     style: layer.getStyle(),
                                     name: layer.get("name"),
