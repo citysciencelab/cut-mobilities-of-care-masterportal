@@ -103,8 +103,7 @@ define([
                 "mapView:setScale": this.setScale,
                 "mapView:setZoomLevelUp": this.setZoomLevelUp,
                 "mapView:setZoomLevelDown": this.setZoomLevelDown,
-                "mapView:setCenter": this.setCenter,
-                "mapView:requestProjection": this.replyProjection
+                "mapView:setCenter": this.setCenter
             });
 
             this.listenTo(this, {

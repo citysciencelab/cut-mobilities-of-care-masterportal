@@ -57,6 +57,10 @@ define(function () {
             {id: "368", name: "ALKIS farbig", maxScale: "10000"},
             {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
         ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         attributions: true,
         footer: true,
         quickHelp: true,
@@ -95,7 +99,6 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
-            orientation: false,
             active: "gfi"
         },
         print: {
