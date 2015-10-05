@@ -76,7 +76,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         }
 
         if (Config.menubar === true) {
-            require(["modules/menubar/view", "modules/togglebutton/view", "modules/zoombuttons/view", "modules/controls/view"], function (MenubarView, ToggleButtonView, ZoomButtonsView, ControlsView) {
+            require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
                 new MenubarView();
                 if ($('#map').is(":visible") === true) {
                     new ControlsView();
