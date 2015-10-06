@@ -15,19 +15,8 @@ define([
         setAttributes: function (value, key) {
             this.set(key, value);
         },
-        activateCoordinate: function () {
-            this.set("active", "coords");
-            EventBus.trigger("closeWindow", false);
-        },
-        activateMeasure: function () {
-            this.set("active", "measure");
-        },
-        activateDraw: function () {
-            this.set("active", "draw");
-        },
-        activateGFI: function () {
-            this.set("active", "gfi");
-            EventBus.trigger("closeWindow", false);
+        setActive: function (value) {
+            this.set("active", value);
         },
         activateTool: function () {
             EventBus.trigger("closeGFIParams", this);

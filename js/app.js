@@ -110,15 +110,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new DrawView();
                         });
                     }
+                    if (Config.tools.record === true) {
+                        require(["modules/recordData/view"], function (RecordView) {
+                            new RecordView();
+                        });
+                    }
                     if (Config.tools.print === true) {
-                        // require(["views/PrintView"], function (PrintView) {
-                        //     new PrintView();
-                        // });
                         require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
-                    require(["views/ToolsView"], function (ToolsView) {
+                    require(["modules/tools/view"], function (ToolsView) {
                         new ToolsView();
                     });
                 }
