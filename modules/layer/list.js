@@ -49,6 +49,10 @@ define([
                 "layerlist:setAttributionsByID": function (id, attrs) {
                     this.get(id).set(attrs);
                 },
+                "layerlist:addNewModel": function (model) {
+                    this.addExternalLayer(model);
+                },
+                "layerList:sendExternalFolders": this.sendExternalNodeNames,
                 "getNodeNames": this.sendNodeNames,
                 "layerlist:getLayerListForNode": this.sendLayerListForNode,
                 "layerlist:getInspireFolder": this.fetchLayer,
@@ -56,6 +60,7 @@ define([
                 "addFeatures": this.addFeatures,
                 "removeFeatures": this.removeFeatures
             });
+
             this.listenTo(this, {
                 "add": function (model) {
                     EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
@@ -406,6 +411,9 @@ define([
             else if (category === "inspire") {
                 EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
             }
+            else if (category === "externalLayers") {
+                EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({folder: nodeName}));
+            }
             else {
                 EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
             }
@@ -430,6 +438,39 @@ define([
                     features: features
                 });
             }
+        },
+
+         sendExternalNodeNames: function () {
+            var externalLayers = this.filter(function (model) {
+                return model.attributes.isExternal;
+            }),
+            folders = [];
+            _.each(externalLayers, function (model) {
+                folders.push(model.attributes.folder);
+            });
+            EventBus.trigger("catEx:sendExternalNodeNames", _.uniq(folders));
+        },
+
+        addExternalLayer: function (model) {
+            var externalLayers = this.filter(function (layer) {
+                        return layer.get("id").toString().indexOf("External") !== -1;
+                    }),
+            id = "",
+            addedModel = {};
+            if (!_.isEmpty(externalLayers)) {
+                var max = _.max(externalLayers, function (layer) {
+                    // parse int ignoriert das "E" automatisch
+                    return parseInt(layer.id, 10);
+                });
+
+                id = (parseInt(max.get("id"), 10) + 1).toString() + "External";
+            }
+            else {
+                id = "0External";
+            }
+            addedModel = this.add(_.extend(model, {"id" : id}));
+           //this.sendExternalNodeNames();
+
         },
 
         removeFeatures: function (name) {

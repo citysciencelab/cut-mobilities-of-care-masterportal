@@ -19,7 +19,8 @@ define([
                 },
                 "click .layer-catalog-label": "toggleCatalog",
                 "click .layer-selection-label": "toggleSelection",
-                "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer"
+                "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer",
+                "click .layer-extern-label": "toggleExternLayer"
             },
             initialize: function () {
                 this.$el.on({
@@ -54,6 +55,11 @@ define([
                 $(".base-layer-list").toggle("slow");
                 $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
                 $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-right");
+            },
+            toggleExternLayer: function () {
+                $(".layer-extern-container").toggle("slow");
+                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
+                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-right");
             },
             fixTree: function () {
                 $("body").on("click", "#map", this.helpForFixing);

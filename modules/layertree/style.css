@@ -61,3 +61,6 @@
     opacity: 0.6;
     cursor: pointer;;
 }
+.layer-catalog-extern {
+    display: none;
+}

@@ -27,7 +27,7 @@ define([
             "click .filterWfsFeature": "activateWfsFilter",
             "click .legend": "activateLegend",
             "click .routingModul": "activateRoutingModul",
-            "click .addWMS" : "activateAddWMSModul",
+            "click .addWMS": "activateAddWMSModul",
             "click .wfsFeatureFilter": "activateWfsFeatureFilter"
         },
         render: function () {
@@ -38,12 +38,13 @@ define([
                 $("#navbarRow").css("display", "none");
             }
             if (_.has(Config, "tree") === true) {
-                require(["modules/layerinformation/listView", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/layertree/view", "modules/baselayercatalog/listView"], function (LayerInformationListView, LayerSelectionListView, TreeListView, LayerTreeView, BaseLayerListView) {
+                require(["modules/layerinformation/listView", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/layertree/view", "modules/baselayercatalog/listView", "modules/catalogExtern/listView"], function (LayerInformationListView, LayerSelectionListView, TreeListView, LayerTreeView, BaseLayerListView, CataExView) {
                     new LayerInformationListView();
                     new LayerSelectionListView();
                     new LayerTreeView();
                     new TreeListView();
                     new BaseLayerListView();
+                    new CataExView();
                 });
             }
             else {
@@ -58,6 +59,7 @@ define([
         },
         appendItemToMenubar: function (obj) {
             var html = "<li>";
+
             html += "<a href='#' class='menuitem " + obj.classname + "'>";
             html += "<span class='' + obj.symbol + ''></span>&nbsp;" + obj.title;
             html += "</a>";

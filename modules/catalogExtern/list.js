@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "modules/layercatalog/node",
+    "modules/catalogExtern/node",
     "config",
     "eventbus",
     "modules/searchbar/model" // nicht schön --> Konzept von layercatalog überarbeiten SD 02.09
@@ -16,9 +16,11 @@ define([
         initialize: function () {
             // Listener auf den EventBus.
             this.listenTo(EventBus, {
-                "showLayerInTree": this.showLayerInTree,
-                "sendNodeNames sendCustomFolderNames": this.createNodes
+                //"showLayerInTree": this.showLayerInTree,
+                //"sendNodeNames sendCustomFolderNames": this.createNodes,
+               "catEx:sendExternalNodeNames": this.createNodes
                 // "catalogList:render": this.createNodes
+
             });
 
 
@@ -27,7 +29,7 @@ define([
                 EventBus.trigger("getCustomFolderNames");
             }
             else {
-                EventBus.trigger("getNodeNames");
+               //EventBus.trigger("layerList:sendExternalFolders");
             }
         },
 
@@ -37,11 +39,12 @@ define([
             var nodes = [];
 
             _.each(folderNames, function (folderName) {
-                nodes.push({name: folderName, category: Config.tree.orderBy});
+                nodes.push({name: folderName, category: "externalLayers"});
             }, this);
             // Alte Models werden entfernt, neue hinzugefügt.
             // http://backbonejs.org/#Collection-reset
             this.reset(nodes);
+            EventBus.trigger("catalogExtern/node:getLayers");
         },
 
         //

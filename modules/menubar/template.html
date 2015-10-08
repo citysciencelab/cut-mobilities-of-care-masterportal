@@ -43,7 +43,7 @@
                     </a>
                 </li>
             <% } %>
-            <% if (addWMS === true) { %>
+            <% if (typeof addWMS !== 'undefined' && addWMS === true) { %>
                 <li>
                     <a href="#" class="menuitem addWMS">
                         <span class="glyphicon glyphicon-road"></span>&nbsp;AddWMS

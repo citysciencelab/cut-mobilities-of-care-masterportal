@@ -9,7 +9,7 @@
     <% if (isbaselayer === true) { %>
         <div class="layer-name"><%= name %></div>
     <% }
-    else if (type === "nodeLayer") { %>
+    else if (typeof type !== "undefined" && type === "nodeLayer") { %>
         <div class="layer-name"><%= metaName %></div>
     <% }
     else  { %>

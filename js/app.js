@@ -158,8 +158,13 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                     });
                 }
                 if (Config.menu.addWMS === true) {
-                    require(["modules/addwms/view"], function (AddWMSView) {
+                    require(["modules/addwms/view",
+                             "modules/layerCatalogExternal/listView",
+                             "modules/layerCatalogExternal/treeview"
+                        ], function (AddWMSView, LayerListView, LayerTreeView) {
                         new AddWMSView();
+                        // new LayerListView();
+                        // new LayerTreeView();
                     });
                 }
                 if ($.isArray(Config.menu.formular)) {

@@ -2,9 +2,9 @@ define([
     "backbone",
     "config",
     "eventbus",
-    "modules/layercatalog/nodeChild",
-    "modules/layercatalog/viewNodeChild",
-    "modules/layercatalog/viewNodeLayer"
+    "modules/catalogExtern/nodeChild",
+    "modules/catalogExtern/viewNodeChild",
+    "modules/catalogExtern/viewNodeLayer"
 ], function (Backbone, Config, EventBus, NodeChild, NodeChildView, NodeLayerView) {
 
     var TreeNode = Backbone.Model.extend({
@@ -19,22 +19,31 @@ define([
         },
 
         initialize: function () {
-            this.listenToOnce(this, {
+           this.listenToOnce(this, {
                 "change:layerList": this.setChildren,
                 "change:children": this.setSortedLayerList,
                 "change:sortedLayerList": this.setNestedViews
             });
 
             this.listenToOnce(EventBus, {
-                "layerlist:sendLayerListForNode": this.setLayerList
+               "layerlist:sendLayerListForExternalNode": this.setLayerList
+            });
+            this.listenTo(EventBus, {
+                "catalogExtern/node:getLayers": function () {
+                    EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
+               }
             });
 
-            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören
         setLayerList: function (layerList) {
-            this.set("layerList", layerList);
+            var context = this;
+
+            this.set("layerList", layerList.filter(function (layer) {
+                return layer.attributes.folder === context.get("name");
+            }));
+            console.log(this.get("layerList"));
         },
 
         /**
