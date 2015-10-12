@@ -121,6 +121,7 @@ define([
                 }
             });
 
+            this.setOptions();
             this.setExtent();
             this.setResolution();
             this.setResolutions();
@@ -135,6 +136,14 @@ define([
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
             }, this);
+        },
+
+        setOptions: function () {
+            if (_.has(Config.view, "options")) {
+                _.each(Config.view.options, function (opt) {
+                    this.pushHits("options", opt);
+                }, this);
+            }
         },
 
         /**
@@ -165,7 +174,11 @@ define([
          *
          */
         setResolutions: function () {
-            if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
+            if (_.has(Config.view, "options")) {
+                console.log(_.pluck(Config.view.options, "resolution"));
+                this.set("resolutions", _.pluck(Config.view.options, "resolution"));
+            }
+            else if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
                 this.set("resolutions", Config.view.resolutions);
             }
         },
@@ -265,6 +278,13 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
+        },
+
+        pushHits: function (attribute, value) {
+            var tempArray = _.clone(this.get(attribute));
+
+            tempArray.push(value);
+            this.set(attribute, _.flatten(tempArray));
         }
     });
 

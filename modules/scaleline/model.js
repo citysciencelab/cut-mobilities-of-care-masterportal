@@ -1,9 +1,8 @@
 define([
     "backbone",
     "eventbus",
-    "config",
-    "modules/core/mapView"
-], function (Backbone, EventBus, Config, mapView) {
+    "config"
+], function (Backbone, EventBus, Config) {
     "use strict";
     var ScaleLine = Backbone.Model.extend({
 
@@ -17,7 +16,6 @@ define([
 
             this.listenTo(this, "change:scaleValue", this.setScale);
             this.listenTo(this, "change:scale", this.setReflength);
-            this.set("scaleValue", mapView.get("startScale"));
             EventBus.trigger("mapView:getOptions");
         },
 
