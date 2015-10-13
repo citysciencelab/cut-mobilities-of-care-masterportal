@@ -2,18 +2,18 @@ define(function () {
     var config = {
         title: "Geoportal der Metropolregion Hamurg",
         tree: {
-            custom:false,
+            custom: false,
             orderBy: "opendata",
             filter: true,
             layerIDsToMerge: [],
 
-            metaIDsToMerge:[]
+            metaIDsToMerge: []
         },
         baseLayer: [
-            {id: "0", visible: true},       //WebAtlas
-            {id: "1", visible: false},       //WebAtlas_grau
-            {id: "2", visible: false},      //Luftbilder
-            {id: "4", visible: false}       //1:5000
+            {id: "0", visibility: true}, // WebAtlas
+            {id: "1", visibility: false}, // WebAtlas_grau
+            {id: "2", visibility: false}, // Luftbilder
+            {id: "4", visibility: false} // 1:5000
         ],
         controls: {
             zoom: true,
