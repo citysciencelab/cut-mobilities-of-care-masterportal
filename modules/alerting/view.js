@@ -31,8 +31,8 @@ define([
             }
             else if (_.isObject(val)) {
                 var html = val.text,
-                    kategorie = val.kategorie,
-                    dismissable = val.dismissable;
+                    kategorie = (val.kategorie) ? val.kategorie : this.model.get("kategorie"),
+                    dismissable = (val.dismissable) ? val.dismissable : this.model.get("dismissable");
             }
             this.render(html, kategorie, dismissable);
         },
