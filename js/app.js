@@ -1,7 +1,7 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Util) {
+define("app", ["jquery", "config", "modules/core/util", "modules/restReader/collection"], function ($, Config, Util) {
     "use strict";
 
     Util.showLoader();
