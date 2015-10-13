@@ -44,7 +44,10 @@ define([
                             modelsArray.push(layerinfos);
                         }
                         else {
-                            alert ("Layerbeschreibung " + layers[0] + " nicht verfügbar.");
+                            EventBus.trigger("alert", {
+                                text: "Layerbeschreibung " + layers[0] + " nicht verfügbar.",
+                                kategorie: "alert-warning"
+                            });
                             return;
                         }
                         // default: Layer ist nicht routable, Punktabfrage kann nicht fürs Routing benutzt werden
@@ -133,7 +136,10 @@ define([
                                 modelChildren.push(layerinfos);
                             }
                             else {
-                                alert ('Layerbeschreibung ' + childlayer.id + ' nicht verfügbar.');
+                                EventBus.trigger("alert", {
+                                    text: "Layerbeschreibung ' + childlayer.id + ' nicht verfügbar.",
+                                    kategorie: "alert-warning"
+                                });
                                 return;
                             }
                         });
@@ -181,8 +187,10 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    console.log(this);
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
+                    EventBus.trigger("alert", {
+                        text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
+                        kategorie: "alert-warning"
+                    });
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)

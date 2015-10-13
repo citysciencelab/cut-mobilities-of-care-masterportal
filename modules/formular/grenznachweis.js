@@ -5,8 +5,7 @@ define([
     "openlayers",
     "modules/cookie/view",
     "modules/restReader/collection",
-    "modules/core/util",
-    "bootstrap/alert"
+    "modules/core/util"
 ], function (Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
