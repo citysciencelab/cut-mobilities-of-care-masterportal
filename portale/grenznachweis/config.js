@@ -21,7 +21,7 @@ define(function () {
         view: {
             center: [565874, 5934140],
             resolution: 2.2645838625010583,
-            resolutions : [
+            resolutions: [
                 66.145965625264583,
                 26.458386250105834,
                 15.875031750063500,
@@ -106,16 +106,16 @@ define(function () {
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: '453', visible: true},
-            {id: '368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396', visible: true, name: 'Alkis Liegenschaftskarte'},
-            {id: '2295,2296', visible: true, name: 'Alkis Grenznachweis'},
+            {id: "453", visible: true},
+            {id: "368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396", visible: true, name: "Alkis Liegenschaftskarte"},
+            {id: "2295,2296", visible: true, name: "Alkis Grenznachweis"}
         ],
         /**
         * @memberof config
         * @type {String}
         * @desc ID der WPS-Definition in restConf
         */
-        wpsID: '99998',
+        wpsID: "99998",
         /**
         * @memberof config
         * @type {Boolean}
@@ -172,9 +172,9 @@ define(function () {
             legend: false,
             routing: false,
             formular: [{
-                title: 'Bestellung Grenznachweis',
-                symbol: 'glyphicon glyphicon-shopping-cart',
-                modelname: 'grenznachweis'
+                title: "Bestellung Grenznachweis",
+                symbol: "glyphicon glyphicon-shopping-cart",
+                modelname: "grenznachweis"
             }]
         },
         /**
