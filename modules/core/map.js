@@ -109,7 +109,7 @@ define([
                 this.get("map").un("click", this.setGFIParams, this);
                 this.get("map").on("pointermove", this.pointerMoveOnMap);
             }
-            else if (tool === "draw") {
+            else if (tool === "draw" || tool === "record") {
                 this.get("map").un("click", this.setPositionCoordPopup);
                 this.get("map").un("click", this.setGFIParams, this);
                 this.get("map").un("pointermove", this.pointerMoveOnMap);
