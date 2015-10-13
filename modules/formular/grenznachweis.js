@@ -496,12 +496,13 @@ define([
             $("#loader").show();
         },
         showErrorMessage: function () {
-            var div = "<div class='alert alert-danger alert-dismissible' role='alert' style='position: absolute; left: 25%; bottom: 50%;width: 50%;'><button type='button' class='close' data-dismiss='alert'  aria-label='Close'><span aria-hidden='true'>&times;</span></button><strong>Ihr Auftrag wurde leider nicht übermittelt.</strong> Bitte versuchen Sie es später erneut.</div>";
-
-            $("body").append(div);
+            EventBus.trigger("alert", {
+                text: "<strong>Ihr Auftrag wurde leider nicht übermittelt.</strong> Bitte versuchen Sie es später erneut.",
+                kategorie: "alert-danger"
+            });
         },
         showSuccessMessage: function () {
-            var ergMsg, div;
+            var ergMsg;
 
             if (this.get("auftragsnummer") !== "") {
                 ergMsg = "mit der Auftragsnummer " + this.get("auftragsnummer") + " ";
@@ -509,8 +510,10 @@ define([
             else {
                 ergMsg = "";
             }
-            div = "<div class='alert alert-success alert-dismissible' role='alert' style='position: absolute; left: 25%; bottom: 50%;width: 50%;'><button type='button' class='close' data-dismiss='alert'  aria-label='Close'><span aria-hidden='true'>&times;</span></button><strong>Ihre Bestellung " + ergMsg + "wurde an unser Funktionspostfach übermittelt.</strong></br>Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826 - 5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag! Sie erhalten umgehend eine E-Mail mit den Bestelldetails.</div>";
-            $("body").append(div);
+            EventBus.trigger("alert", {
+                text: "Ihre Bestellung " + ergMsg + "wurde an unser Funktionspostfach übermittelt.</strong></br>Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826 - 5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag! Sie erhalten umgehend eine E-Mail mit den Bestelldetails.",
+                kategorie: "alert-success"
+            });
         },
         buildJSONGeom: function () {
             var featurearray = [];
