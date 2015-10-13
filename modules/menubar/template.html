@@ -67,7 +67,7 @@
             <% // two possible configs
               if (contactButton.on === true || contactButton === true) {
                 var email = contactButton.email || "LGVGeoPortal-Hilfe@gv.hamburg.de";
-               var mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t");
+               var mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t\n\n Systeminformationen: \n Platform: " + platform + "\n CookiesEnabled: " + cookieEnabled + "\n UserAgent: " + userAgent);
                %></%>
                 <li>
                     <a href=<%= mailto %>>
