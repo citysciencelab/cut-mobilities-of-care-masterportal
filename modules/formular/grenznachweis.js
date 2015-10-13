@@ -511,7 +511,7 @@ define([
                 ergMsg = "";
             }
             EventBus.trigger("alert", {
-                text: "Ihre Bestellung " + ergMsg + "wurde an unser Funktionspostfach übermittelt.</strong></br>Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826 - 5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag! Sie erhalten umgehend eine E-Mail mit den Bestelldetails.",
+                text: "<strong>Ihre Bestellung " + ergMsg + "wurde an unser Funktionspostfach übermittelt.</strong> Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826 - 5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag! Sie erhalten umgehend eine E-Mail mit den Bestelldetails.",
                 kategorie: "alert-success"
             });
         },
