@@ -174,6 +174,7 @@ define([
                         modelsArray.push(groupModel);
                     }
                 });
+                this.setBaseLayer(modelsArray);
                 return modelsArray;
             }
         },
