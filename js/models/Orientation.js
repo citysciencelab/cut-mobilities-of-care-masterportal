@@ -37,11 +37,14 @@ define([
                     this.getPOI(500);
                 }
                 EventBus.trigger('showGeolocationMarker', this);
-            },this);
-            geolocation.once('error', function(err) {
-                alert('Standpunktbestimmung momentan nicht verfügbar!');
+            }, this);
+            geolocation.once("error", function (err) {
+                EventBus.trigger("alert", {
+                    text: "<strong>Problem ermittelt.</strong> Standpunktbestimmung momentan nicht verfügbar!",
+                    kategorie: "alert-warning"
+                });
                 $(function () {
-                    $('#loader').hide();
+                    $("#loader").hide();
                 });
                 EventBus.trigger('clearGeolocationMarker', this);
             }, this);
