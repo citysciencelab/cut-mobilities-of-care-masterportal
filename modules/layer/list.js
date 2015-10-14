@@ -87,7 +87,10 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.layerConf));
+                    EventBus.trigger("alert", {
+                        text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
+                        kategorie: "alert-warning"
+                    });
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
