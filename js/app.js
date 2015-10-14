@@ -111,8 +111,8 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         });
                     }
                     if (Config.tools.record === true) {
-                        require(["modules/recordData/view"], function (RecordView) {
-                            new RecordView();
+                        require(["modules/wfs_t/view"], function (WFS_TView) {
+                            new WFS_TView();
                         });
                     }
                     if (Config.tools.print === true) {

@@ -24,3 +24,20 @@
     <br>
     <span class="record-label">Geometrie löschen</span>
 </p>
+<p id="record-button-select" class="record-button <% if (activeButton === 'select') { %> record-active <% } %>">
+    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    <br>
+    <span class="record-label">Attribute bearbeiten</span>
+</p>
+<% if (showAttrTable === true) { %>
+    <form class="form-horizontal record-form">
+        <% _.each(featureProperties, function (value, key) { %>
+            <div class="form-group form-group-sm">
+              <label for="<%= key %>" class="col-sm-2 control-label"><%= key %></label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control input-sm" id="<%= key %>" value="<%= value %>">
+              </div>
+            </div>
+        <% }); %>
+    </form>
+<% } %>
