@@ -131,6 +131,7 @@ define([
                         var layers = element.id.split(","),
                             layerinfos = _.findWhere(response, {id: layers[0]});
 
+                        element.isbaselayer = false;
                         // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                         if (layers.length === 1) {
                             modelsArray.push(_.extend(layerinfos, element));
@@ -157,6 +158,8 @@ define([
                             typ: "GROUP",
                             layerdefinitions: []
                         };
+
+                        element.isbaselayer = false;
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
