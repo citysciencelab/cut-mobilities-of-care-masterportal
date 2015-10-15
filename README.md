@@ -126,6 +126,7 @@ liest package.json.
 
 Wichtig für Öffentliche Nutzer: die Datei bower-public.json in bower.json umbenennen.
 
+´´´
 # bower install
 ```
 
