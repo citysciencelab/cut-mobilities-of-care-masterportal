@@ -24,10 +24,6 @@ define([
                 "mapView:sendMaxResolution": this.setMaxResolution
             });
 
-            this.listenTo(EventBus, {
-                "mapView:sendOptions": this.setViewResolution
-            });
-
             this.listenToOnce(this, {
                 "change:layer": function () {
                     EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
