@@ -3,7 +3,7 @@
 // }
 define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Util) {
     "use strict";
-
+    require(["modules/alerting/view"]);
     Util.showLoader();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {

@@ -18,7 +18,8 @@ define([
          *
          */
         updateData: function () {
-            $("#loader").show();
+            Util.showLoader();
+
             this.buildGetRequest();
             $.ajax({
                 url: this.get("url"),
@@ -27,7 +28,7 @@ define([
                 type: "GET",
                 context: this,
                 success: function (data) {
-                    $("#loader").hide();
+                    Util.hideLoader();
                     try {
                         var wfsReader = new ol.format.WFS({
                             featureNS: this.get("featureNS"),
@@ -49,7 +50,7 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get('gfiTheme'),
+                                gfiTheme: this.get("gfiTheme")
                             }));
                             this.reload();
                         }
@@ -73,21 +74,25 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get('gfiTheme')
+                                gfiTheme: this.get("gfiTheme")
                             }));
                             this.reload();
                         }
                         this.get("layer").id = this.get("id");
                     }
                     catch (e) {
-                        alert("Fehlermeldung beim Laden von Daten: \n" + e.message);
-                        console.log(e);
-                        console.log(data);
+                        EventBus.trigger("alert", {
+                            text: "<strong>Fehler bei Datenverarbeitung aufgetreten! </strong>" + e.message,
+                            kategorie: "alert-warning"
+                        });
                     }
                 },
                 error: function (jqXHR, errorText, error) {
-                    $("#loader").hide();
-                    alert("Fehler beim Laden von Daten: \n" + errorText + error);
+                    Util.hideLoader();
+                    EventBus.trigger("alert", {
+                        text: "<strong>Fehler bei Dienstabfrage aufgetreten </strong>" + errorText + error,
+                        kategorie: "alert-warning"
+                    });
                 }
             });
         },
