@@ -42,13 +42,13 @@
                             else {
                                 if (element.img[0].search(".pdf") !== -1) {
                                 %>
-                                    <a href=<%= element.img[0] %> target="_blank">weitere Informationen</a>
+                                    <a href=<%= element.img %> target="_blank">weitere Informationen</a>
                                 <%
                                 }
                                 else {
                                 %>
                                     <p>
-                                        <span><a href="<%= element.img %>" target="_blank">weitere Informationen</a></span>
+                                        <img src=<%= element.img[0] %>>
                                     </p>
                                 <%
                                 }
