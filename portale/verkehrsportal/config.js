@@ -46,6 +46,7 @@ define(function () {
              visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
             },
             {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
+            {id: "676", visible: false, name: "Positivnetz Lang-LKW"},
             {id: "46", visible: false, style: "46", clusterDistance: 60, searchField: "", mouseHoverField: "", filterOptions: [], routable: true},
             {id: "48", visible: false, style: "48", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
             {id: "50", visible: false, style: "50", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
