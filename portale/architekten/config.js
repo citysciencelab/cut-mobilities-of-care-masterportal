@@ -20,9 +20,12 @@ define(function () {
         view: {
             center: [565874, 5934140] // Rathausmarkt
         },
-        layerConf: "../components/lgv-config/services-internet.json",
+        footer: true,
+        quickHelp: true,
+        layerConf: "../components/lgv-config/services-internet-architekten.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
+
         print: {
             printID: "99999",
             title: "Architekten-Portal",
@@ -33,6 +36,7 @@ define(function () {
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
+
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,
@@ -45,13 +49,16 @@ define(function () {
             legend: true,
             routing: false
         },
+
         startUpModul: "",
+
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteerURL: function () {
                 return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
+
         tools: {
             gfi: true,
             measure: true,
