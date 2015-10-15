@@ -104,7 +104,7 @@ In der Admin-cmd global installieren
 
 ## Repository klonen
 
-Unser Repository irgendwohin klonen. Zurzeit noch das lokale auf G:.
+Unser Repository irgendwohin klonen.
 
 ```
 # git clone https://bitbucket.org/lgv-g12/lgv.git
@@ -124,11 +124,15 @@ liest package.json.
 
 ## App Abhängigkeiten ziehen via Bower
 
+Wichtig für Öffentliche Nutzer: die Datei bower-public.json in bower.json umbenennen.
+
 ```
 # bower install
 ```
 
 liest bower.json. Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config) nach /components, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
+
+
 
 ## Grunt Tasks ausführen
 

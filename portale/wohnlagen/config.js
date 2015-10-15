@@ -35,7 +35,7 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
             {id: "452", visible: false},
-            {id: "2515", visible: false}        //Wohnlagen
+            {id: "2515", visible: true}        //Wohnlagen
                     ],
         attributions: true,
         menubar: true,
