@@ -58,7 +58,7 @@ define([
                 success: function (data) {
                     var hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
                         fmNode = $(hits).find("gml\\:featureMember,featureMember"),
-                        receivedNode = $(fmNode).find("received")[0],
+                        receivedNode = $(fmNode).find("app\\:received,received")[0],
                         aktualitaet = receivedNode.textContent;
 
                     if (aktualitaet) {
