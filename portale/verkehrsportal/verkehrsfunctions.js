@@ -4,32 +4,40 @@ define([
     "config",
     "modules/layer/list",
     "openlayers",
-    "jquery",
-    "bootstrap/alert"
-], function (Backbone, EventBus, Config, LayerList, ol, $) {
+    "modules/core/util"
+], function (Backbone, EventBus, Config, LayerList, ol, Util) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
+        /*
+         * Lese Layer mit URL und starte refreshVerkehrsmeldungen, wobei layerid der gleichen URL entsprechen muss.
+         */
         initialize: function () {
             var url;
+
             EventBus.on("aktualisiereverkehrsnetz", this.refreshVerkehrssituation, this);
             _.each(LayerList.models, function (layerdef) {
-                if (layerdef.id === "45") {
-                    // layer 45 hat gleiche URL und wurde geladen.
-                    url = layerdef.get("url");
-                    url = url.replace("http://geofos.fhhnet.stadt.hamburg.de", "/geofos");
-                    url = url.replace("http://geofos", "/geofos");
-                    url = url.replace("http://geodienste-hamburg.de", "/geodienste-hamburg");
+                if (layerdef.id === "2404") {
+                    url = Util.getProxyURL(layerdef.get("url"));
                 }
             });
-            this.set("url", url);
-            this.refreshVerkehrsmeldung();
+            if (!url) {
+                EventBus.trigger("alert", "<strong>Verkehrsmeldungen </strong>der TBZ momentan nicht verfügbar.");
+            }
+            else {
+                this.set("url", url);
+                this.refreshVerkehrsmeldung();
+            }
         },
+        /*
+         *
+         */
         refreshVerkehrssituation: function (attributions, layer) {
             if (!layer) {
                 return;
             }
-            var newEventValue = "";
-            postmessage = "<wfs:GetFeature xmlns:wfs='http://www.opengis.net/wfs' service='WFS' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>";
+            var newEventValue = "",
+                postmessage = "<wfs:GetFeature xmlns:wfs='http://www.opengis.net/wfs' service='WFS' version='1.1.0' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>",
+                url = this.get("url");
 
             postmessage += "<wfs:Query typeName='feature:bab_vkl' srsName='epsg:25832'>";
             postmessage += "<ogc:Filter xmlns:ogc='http://www.opengis.net/ogc'>";
@@ -40,8 +48,6 @@ define([
             postmessage += "</ogc:Filter>";
             postmessage += "</wfs:Query>";
             postmessage += "</wfs:GetFeature>";
-            var url = this.get("url");
-            // diese Abfrage füllt die Attribution
             $.ajax({
                 url: url,
                 type: "POST",
@@ -50,22 +56,13 @@ define([
                     "Content-Type": "application/xml; charset=UTF-8"
                 },
                 success: function (data) {
-                    var nodeList, node;
+                    var hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
+                        fmNode = $(hits).find("gml\\:featureMember,featureMember"),
+                        receivedNode = $(fmNode).find("app\\:received,received")[0],
+                        aktualitaet = receivedNode.textContent;
 
-                    if (data.getElementsByTagName("gml:featureMember")[0]) {
-                        nodeList = data.getElementsByTagName("gml:featureMember")[0].childNodes[0].nextSibling.childNodes;
-                        node = _.filter(nodeList, function (element) {
-                            return element.localName === "received";
-                        });
-                    }
-                    if (data.getElementsByTagName("featureMember")[0]) {
-                        nodeList = data.getElementsByTagName("featureMember")[0].childNodes[0].nextSibling.childNodes;
-                        node = _.filter(nodeList, function (element) {
-                            return element.localName === "received";
-                        });
-                    }
-                    if (node && node[0]) {
-                        newEventValue = "<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: " + node[0].textContent.trim().replace("T", " ").substring(0, node[0].textContent.length - 3) + "</br>";
+                    if (aktualitaet) {
+                        newEventValue = "<strong>aktuelle Meldungen der TBZ:</strong></br>Aktualität: " + aktualitaet.trim().replace("T", " ").substring(0, aktualitaet.length - 3) + "</br>";
                         this.set("eventAttribution", newEventValue);
                     }
                 },
@@ -76,6 +73,9 @@ define([
             });
             this.refreshVerkehrsmeldung();
         },
+        /*
+         *
+         */
         refreshVerkehrsmeldung: function () {
             var url = this.get("url");
             // diese Abfrage zeigt im Bedarfsfall eine Meldung
@@ -96,13 +96,10 @@ define([
                         datum = feature.get("stand");
 
                         if (hinweis && datum) {
-                            var html = "<div class='alert alert-warning alert-dismissible' role='alert' style='position: absolute; left: 25%; bottom: 50px;width: 50%;'>";
-
-                            html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times";
-                            html += "</span></button>";
-                            html += "<strong>Tunnelbetrieb Hamburg: </strong>" + hinweis + " (" + datum + ")";
-                            html += "</div>";
-                            $("body").append(html);
+                            EventBus.trigger("alert", {
+                                text: "<strong>Tunnelbetrieb Hamburg: </strong>" + hinweis + " (" + datum + ")",
+                                kategorie: "alert-warning"
+                            });
                         }
 					}
 					catch (err) {
@@ -110,13 +107,7 @@ define([
 					}
                 },
                 error: function () {
-                    var html = "<div class='alert alert-info alert-dismissible' role='alert' style='position: absolute; left: 25%; bottom: 50px;width: 50%;'>";
-
-                    html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times";
-                    html += "</span></button>";
-                    html += "<strong>Verkehrsmeldungen </strong>der TBZ momentan nicht verfügbar.";
-                    html += "</div>";
-                    $("body").append(html);
+                    EventBus.trigger("alert", "<strong>Verkehrsmeldungen </strong>der TBZ momentan nicht verfügbar.");
                 }
             });
         }
