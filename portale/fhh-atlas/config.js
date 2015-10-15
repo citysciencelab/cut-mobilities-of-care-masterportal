@@ -29,7 +29,7 @@ define(function () {
             metaIDsToMerge: [
                 // "38575F13-7FA2-4F26-973F-EDED24D937E5", // Landesgrundbesitzverzeichnis
                 // "757A328B-415C-4E5A-A696-353ABDC80419", // ParkraumGIS
-                // "4AC1B569-65AA-4FAE-A5FC-E477DFE5D303", // Großraum- und Schwertransport-Routen in Hamburg
+                "4AC1B569-65AA-4FAE-A5FC-E477DFE5D303", // Großraum- und Schwertransport-Routen in Hamburg
                 "3EE8938B-FF9E-467B-AAA2-8534BB505580", // Bauschutzbereich § 12 LuftVG Hamburg
                 "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB", // Straßen HH-SIB
                 "F691CFB0-D38F-4308-B12F-1671166FF181", // Flurstücke gelb
