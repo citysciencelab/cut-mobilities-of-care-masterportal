@@ -1,0 +1,8 @@
+.alert {
+    max-width: 80%;
+    position: absolute;
+    right: 35px;
+    top: 70px;
+    z-index: 2001;
+    text-align: justify;
+}

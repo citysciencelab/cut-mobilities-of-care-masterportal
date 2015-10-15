@@ -3,8 +3,9 @@ define([
     "backbone",
     "models/WFSStyle",
     "config",
-    "modules/core/util"
-], function (_, Backbone, WFSStyle, Config, Util) {
+    "modules/core/util",
+    "eventbus"
+], function (_, Backbone, WFSStyle, Config, Util, EventBus) {
 
     var StyleList = Backbone.Collection.extend ({
         model: WFSStyle,
@@ -47,7 +48,10 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.styleConf));
+                    EventBus.trigger("alert", {
+                        text: "Fehler beim Laden von: " + Util.getPath(Config.styleConf),
+                        kategorie: "alert-warning"
+                    });
                 },
                 success: function () {
 //                    console.log(collection);

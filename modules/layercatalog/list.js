@@ -34,9 +34,13 @@ define([
         createNodes: function (folderNames) {
             var nodes = [];
 
-            _.each(folderNames, function (folderName) {
-                nodes.push({name: folderName, category: Config.tree.orderBy});
+            _.each(folderNames, function (folderName, index) {
+                nodes.push({name: folderName, category: Config.tree.orderBy, nodeIndex: index});
             }, this);
+            // Wenn es ein CustomTree ist, wird die Reihenfolge aus der Tree.json übernommen.
+            if (_.has(Config, "tree") && Config.tree.custom === true) {
+                this.comparator = "nodeIndex";
+            }
             // Alte Models werden entfernt, neue hinzugefügt.
             // http://backbonejs.org/#Collection-reset
             this.reset(nodes);
