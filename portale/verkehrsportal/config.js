@@ -61,6 +61,10 @@ define(function () {
             {id: "2713", visible: false, displayInTree: false},
             {id: "2715", visible: false, displayInTree: false}
         ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         attributions: true,
         clickCounter: {
             version: "",
