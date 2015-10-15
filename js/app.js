@@ -1,9 +1,9 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/core/util", "modules/alerting/view"], function ($, Config, Util) {
+define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Util) {
     "use strict";
-
+    require(["modules/alerting/view"]);
     Util.showLoader();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
