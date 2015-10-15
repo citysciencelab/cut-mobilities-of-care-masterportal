@@ -11,7 +11,8 @@ define(function () {
         },
           baseLayer: [
             {id: "453", visibility: true},
-            {id: "452", visibility: false}
+            {id: "452", visibility: false},
+            {id: "713", visibility: false}
         ],
         controls: {
             zoom: true,
@@ -67,7 +68,7 @@ define(function () {
             draw: false,
             active: "gfi"
         },
-        orientation: true,
+        orientation: false,
         poi: false
     };
 
