@@ -84,7 +84,7 @@ define([
                 }
                 // Wenn eine URL hinterlegt ist
                 else {
-                    legendURL = layer.get("legendURL");
+                    legendURL = [layer.get("legendURL")];
                 }
 
                 this.push("tempArray", {
