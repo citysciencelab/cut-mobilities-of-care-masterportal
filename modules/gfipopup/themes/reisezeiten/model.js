@@ -38,7 +38,7 @@ define([
                 this.sortRouten();
             }
             else {
-                alert ("Fehler beim Initialisieren des Moduls(reisezeiten)");
+                EventBus.trigger("alert", "Fehler beim Initialisieren des Moduls(reisezeiten)");
             }
         },
         /**
@@ -70,7 +70,7 @@ define([
                 complete: function (jqXHR) {
                     Util.hideLoader();
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        alert("Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
+                        EventBus.trigger("alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
                     }
                 },
                 success: function (data) {
