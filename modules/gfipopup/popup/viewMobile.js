@@ -21,6 +21,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, "change:coordinate", this.render);
 
+            EventBus.on("closeGFIParams", this.closeModal, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
         /**
@@ -90,6 +91,7 @@ define([
          *
          */
         closeModal: function () {
+            $("#popovermin").remove();
             this.removeTemplateModels();
             this.$el.modal("hide");
             this.model.set("isPopupVisible", false);
