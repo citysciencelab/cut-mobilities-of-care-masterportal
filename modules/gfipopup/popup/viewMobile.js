@@ -37,8 +37,7 @@ define([
             }
             else {
                 html = "<div id='popovermin' class='popover-min'>";
-                html += "<span class='glyphicon glyphicon-info-sign gfi-icon'></span>";
-                html += "<span class='gfi-title'>Informationen</span>";
+                html += "<span class='glyphicon glyphicon-info-sign gfi-icon-mobile'></span>";
                 html += "</div>";
                 $(".modal").hide();
                 $(".modal-backdrop").hide();
