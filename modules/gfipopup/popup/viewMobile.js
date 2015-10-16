@@ -20,8 +20,35 @@ define([
          */
         initialize: function () {
             this.listenTo(this.model, "change:coordinate", this.render);
+            EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
+        /**
+         * Toggle des Popovers in minimiert oder maximiert
+         */
+        minMaximizePop: function () {
+            var html;
 
+            if ($(".modal").is(":visible") === false) {
+                $("#popovermin").fadeOut(500, function () {
+                    $("#popovermin").remove();
+                    $(".modal").show(500);
+                    $(".modal-backdrop").show(500);
+                });
+            }
+            else {
+                html = "<div id='popovermin' class='popover-min'>";
+                html += "<span class='glyphicon glyphicon-info-sign gfi-icon'></span>";
+                html += "<span class='gfi-title'>Informationen</span>";
+                html += "</div>";
+                $(".modal").hide();
+                $(".modal-backdrop").hide();
+                $("#map").append(html);
+                $("#popovermin").fadeIn(500);
+                $("#popovermin").click(function () {
+                    EventBus.trigger("showGFIParams", this);
+                });
+            }
+        },
         /**
          *
          */
