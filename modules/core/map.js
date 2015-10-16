@@ -23,6 +23,7 @@ define([
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
             EventBus.on("removeLayer", this.removeLayer, this);
+            EventBus.on("removeLastLayer", this.removeLastLayer, this);
             EventBus.on("addOverlay", this.addOverlay, this);
             EventBus.on("removeOverlay", this.removeOverlay, this);
             EventBus.on("addControl", this.addControl, this);
@@ -172,6 +173,13 @@ define([
             else {
                 this.get("map").getLayers().push(layer);
             }
+        },
+        /**
+        */
+        removeLastLayer: function () {
+            var layer = this.get("map").getLayers().getArray()[this.get("map").getLayers().getArray().length - 1];
+
+            this.get("map").removeLayer(layer);
         },
         /**
         */
