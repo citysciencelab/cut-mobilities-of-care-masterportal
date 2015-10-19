@@ -28,7 +28,7 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            resolution: 2.6458386250105834 // 1:10000
+            resolution: 2.6458319045841048 // 1:10000
         },
         /**
         * @memberof config
@@ -103,7 +103,7 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
             {id: "452", visible: false},
-            {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
+            {id: "2515", visible: true, gfiTheme: 'mietenspiegel'}
         ],
         /**
         * @memberof config
