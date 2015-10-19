@@ -38,7 +38,7 @@ define([
                 this.sortRouten();
             }
             else {
-                EventBus.trigger("alert", "Fehler beim Initialisieren des Moduls(reisezeiten)");
+                EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (reisezeiten)", kategorie: "alert-danger"});
             }
         },
         /**

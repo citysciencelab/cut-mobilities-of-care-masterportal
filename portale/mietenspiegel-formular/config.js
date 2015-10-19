@@ -108,7 +108,9 @@ define(function () {
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: "2515", visible: true, gfiTheme: 'mietenspiegel'}
+            {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
+            {id: "2730", visible: false, displayInTree: false},
+            {id: "2731", visible: false, displayInTree: false}
         ],
         /**
         * @memberof config
