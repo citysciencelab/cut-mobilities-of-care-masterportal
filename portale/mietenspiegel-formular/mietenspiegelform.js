@@ -6,9 +6,8 @@ define([
     "modules/gfipopup/themes/mietenspiegel/view-formular",
     "modules/core/requestor",
     "modules/core/mapView",
-    "modules/core/util",
-    "bootstrap/alert"
-], function (Backbone, EventBus, Config, LayerList, MSView, Requestor, MapView, Util, Alert) {
+    "modules/core/util"
+], function (Backbone, EventBus, Config, LayerList, MSView, Requestor, MapView, Util) {
     /*
      * Im Mietenspiegel-Formular-Portal wird die <div id="map"> mit display = none; geladen. Stattdessen wird in der index.html ein <div id="mietenspiegel-formular> angelegt und in dieses wird
      * das Template des Mietenspiegerls leicht angepasst eingefügt. Die map ruft initial keine Dienste ab weil display=none, dennoch stehen alle ol-Funktionen, Config, etc.
@@ -24,11 +23,13 @@ define([
             projection: ""
         },
         initialize: function () {
-            EventBus.on("mapView:setCenter", this.newSearch, this); //Event der Searchbar bei erfolgreicher Suche
-            this.set("msLayer", LayerList.models[0].get("layer"));
+            EventBus.on("mapView:setCenter", this.newSearch, this); // Event der Searchbar bei erfolgreicher Suche
+            var msLayer = LayerList.models[0].get("layer"),
+                msWin = new MSView(msLayer, "");
+
+            this.set("msLayer", msLayer);
             this.set("projection", MapView.get("view").getProjection());
-            var msWin = new MSView(this.get("msLayer"), "");
-            $("#mietenspiegel-formular").append(msWin.$el); //leerer Dummy-Eintrag
+            $("#mietenspiegel-formular").append(msWin.$el); // leerer Dummy-Eintrag
         },
         /**
          * Abfrage des Wohnlagendienstes gemäß Config-Eintrag
@@ -40,6 +41,7 @@ define([
                 name: this.get("msLayer").get("name"),
                 ol_layer: this.get("msLayer")
             };
+
             return Requestor.requestFeatures([[params], coord]);
         },
         /**
@@ -47,27 +49,32 @@ define([
          */
         newSearch: function (marker) {
             Util.showLoader();
-            $("#noWohnlageMsg").remove();
+            $("#noWohnlageMsg").fadeOut(500);
             var response = this.requestMietenspiegel(marker),
-                layers = response[0],
-                layer = layers[0],
-                feature = layer.content[0],
+                hits = response[0],
+                hit = _.values(_.pick(hits, "0"))[0],
+                content = _.values(_.pick(hit, "content"))[0],
+                feature = _.values(_.pick(content, "0"))[0],
                 coord = response[1];
+
             if (feature) {
                 var msWin = new MSView(this.get("msLayer"), feature);
             }
             else {
-                var html = "<div id='noWohnlageMsg' class='alert alert-info alert-dismissible' role='alert'>";
-                html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times";
-                html += "</span></button>";
-                html += "An der gesuchten Adresse liegen <strong>keine Wohnlagendaten</strong> vor.";
-                html += "</div>";
                 var msWin = new MSView(this.get("msLayer"), "");
-                msWin.$el.prepend(html);
             }
             $("#mietenspiegel-formular").empty();
             $("#mietenspiegel-formular").append(msWin.$el);
-            msWin.focusNextMerkmal(0);
+            if (!feature) {
+                $("#noWohnlageMsg").fadeIn(500);
+                setInterval(function () {
+                    $("#noWohnlageMsg").fadeOut(500);
+                }, 5000);
+                msWin.focusNextMerkmal(-1);
+            }
+            else {
+                msWin.focusNextMerkmal(0);
+            }
             Util.hideLoader();
         }
     });

@@ -261,6 +261,12 @@ define([
                 this.set("msPLZ", response.Plz + " Hamburg");
                 this.set("msStadtteil", response.Stadtteil);
             }
+            else {
+                this.set("msWohnlage", "unbekannte Wohnlage");
+                this.set("msStrasse", "-");
+                this.set("msPLZ", "-");
+                this.set("msStadtteil", "-");
+            }
         }
     });
 
