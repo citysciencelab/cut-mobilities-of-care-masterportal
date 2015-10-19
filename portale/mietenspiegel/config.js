@@ -107,6 +107,10 @@ define(function () {
             {id: "2730", visible: false, displayInTree: false},
             {id: "2731", visible: false, displayInTree: false}
         ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         /**
         * @memberof config
         * @type {Boolean}
@@ -180,12 +184,6 @@ define(function () {
                     return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
-
-        bPlan: {
-            url: function () {
-                return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
-            }
-        },
                  /**
         * @memberof config
         * @desc Konfiguration für den Druckdienst.
@@ -194,7 +192,7 @@ define(function () {
         * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
         */
         print: {
-            printID: "99997",
+            printID: "99999",
             title: "Freie und Hansestadt Hamburg - Mietenspiegel",
             outputFilename: "Ausdruck Hamburger Mietenspiegel",
             gfi: true

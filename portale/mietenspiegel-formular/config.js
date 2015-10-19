@@ -111,6 +111,10 @@ define(function () {
             {id: "2730", visible: false, displayInTree: false},
             {id: "2731", visible: false, displayInTree: false}
         ],
+        controls: {
+            zoom: false,
+            toggleMenu: false
+        },
         /**
         * @memberof config
         * @type {Boolean}
