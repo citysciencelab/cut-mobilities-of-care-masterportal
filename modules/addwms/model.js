@@ -1,4 +1,5 @@
 define([
+    "jquery",
     "underscore",
     "backbone",
     "openlayers",
@@ -7,7 +8,7 @@ define([
     "modules/layer/WMSLayer",
     "modules/layer/list",
     "modules/core/util"
-], function (_, Backbone, ol, EventBus, config, WMSLayer, LayerList, Util) {
+], function (jquery, _, Backbone, ol, EventBus, config, WMSLayer, LayerList, Util) {
 
     var AddWMSModel = Backbone.Model.extend({
         layers: [],
@@ -24,49 +25,58 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
+        displayError: function (text) {
+                if(text === "" || typeof text === "undefined") {
+                    text = "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!";
+                }
+             jquery(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
+        },
+
         loadAndAddLayers: function () {
+            jquery(".addwms_error").remove();
             var parser = new ol.format.WMSCapabilities(),
             url = $("#wmsUrl").val(),
-            context = this,
-            urls = [
-               url, "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_LGV_Map/Rasterplan/MapServer/WmsServer"
-            ];
+            context = this;
 
+            if (url === "") {
+                context.displayError("Bitte die URL eines WMS in das Textfeld eingeben!");
+                return;
+            }
             Util.showLoader();
-            _.each(urls, function (url) {
-                $.ajax({
-                    url: Util.getProxyURL(url) + "?request=GetCapabilities&service=WMS",
-                    success: function (data) {
-                        Util.hideLoader();
-                       //  try {
-                                context.capability = parser.read(data);
-                               // var namedLayers = parser.postProcessLayers(context.capability);
-                                _.each(context.findLayersInCapabillities(context.capability.Capability), function (layer) {
-                                    var layerObj = context.newLayer(
-                                    layer.Title,
-                                    context.capability.Service.OnlineResource,
-                                    layer.Name,
-                                    context.capability.version,
-                                    context.capability.Service.Title);
+            $.ajax({
+                timeout: 4000,
+                url: Util.getProxyURL(url) + "?request=GetCapabilities&service=WMS",
+                success: function (data) {
+                    Util.hideLoader();
+                    try {
+                        context.capability = parser.read(data);
 
-                                    EventBus.trigger("layerlist:addNewModel", layerObj);
-                            });
-                            EventBus.trigger("layerList:sendExternalFolders");
-                        //}
-                        //catch (e) {
-                          //  console.log(e);
-                            // $("#layer_check_box_container").text("Leider konnten zu dieser URL keine Layer geladen werden.");
-                        //}
-                    },
-                    error: function () {
-                        Util.hideLoader();
+                        _.each(context.findLayersInCapabillities(context.capability.Capability.Layer.Layer, "noParent"), function (layer) {
+                            var layerObj = context.newLayer(
+                            layer.Title,
+                            context.capability.Service.OnlineResource,
+                            layer.Name,
+                            context.capability.version,
+                            context.capability.Service.Title,
+                            layer.parent);
+
+                            EventBus.trigger("layerlist:addNewModel", layerObj);
+                        });
+                        EventBus.trigger("layerList:sendExternalFolders");
                     }
-
-                });
+                    catch (e) {
+                       context.displayError();
+                    }
+                },
+                error: function () {
+                    Util.hideLoader();
+                    context.displayError();
+                }
             });
+
         },
         // crawled rekursiv durch die Capabillities und holt sich die Layer auf der untersten Ebene
-        findLayersInCapabillities: function (layerObject) {
+        findLayersInCapabillities: function (layerObject, parent) {
             /*
                 Wenn layer Object ein array ist rufe diese function für jedes Element auf
             */
@@ -77,31 +87,35 @@ define([
                 }
                 // wenn das Array nur einen Eintrag hat
                 if (layerObject.length === 1) {
-                        return this.findLayersInCapabillities(_.first(layerObject));
+                        return this.findLayersInCapabillities(_.first(layerObject), parent);
                 }
                 else {
                     // wenn das Array nur mehrere Einträge hat
-                    return this.findLayersInCapabillities(_.first(layerObject)).concat(
-                           this.findLayersInCapabillities(_.rest(layerObject, 1)));
+                    return this.findLayersInCapabillities(_.first(layerObject), parent).concat(
+                           this.findLayersInCapabillities(_.rest(layerObject, 1), parent));
                 }
             }
             else {
                 // layerObject ist kein Array hat aber ein Kind namens Layer
                 if (_.has(layerObject, "Layer")) {
-                    return this.findLayersInCapabillities(layerObject.Layer);
+                    if (parent === "noParent") {
+                        parent = layerObject.Title;
+                    }
+                    return this.findLayersInCapabillities(layerObject.Layer, parent);
                 }
                 // layerObject ist kein Array und hat kein Kind namens Layer
                 else {
-                        return [layerObject];
+                        return [_.extend(layerObject, {"parent": parent})];
                 }
             }
 
         },
-        newLayer: function (name, url, layers, version, wmsTitle) {
+        newLayer: function (name, url, layers, version, wmsTitle, parent) {
 
             return {
                 // die ID wird beim hinzufügen in der layer/list.js gesetzt
                 "isExternal": true,
+                "parent": parent,
                 "name": name,
                 "url": url,
                 "typ": "WMS",
@@ -122,8 +136,8 @@ define([
                 "folder": wmsTitle,
                 "datasets": [
                     {
-                        "md_id": name,
-                        "md_name": wmsTitle,
+                        "md_id": parent,
+                        "md_name": name,
                         "bbox": "nicht vorhanden",
                         "kategorie_opendata": [
                             "Externe"

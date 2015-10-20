@@ -28,11 +28,8 @@ define([
             this.listenToOnce(EventBus, {
                "layerlist:sendLayerListForExternalNode": this.setLayerList
             });
-            this.listenTo(EventBus, {
-                "catalogExtern/node:getLayers": function () {
-                    EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
-               }
-            });
+
+            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
 
         },
 
@@ -43,7 +40,6 @@ define([
             this.set("layerList", layerList.filter(function (layer) {
                 return layer.attributes.folder === context.get("name");
             }));
-            console.log(this.get("layerList"));
         },
 
         /**
@@ -118,7 +114,7 @@ define([
          * Alle Layer die mit Unterordner konfiguriert sind, werden nach diesem gruppiert.
          * Die Layer werden dem Attribut "nodeChildLayer" hinzugefügt.
          */
-        setNodeChildLayerForCustomTree: function () {
+        /*setNodeChildLayerForCustomTree: function () {
             var nodeChildLayerList,
                 countByFolder,
                 layerListByFolder;
@@ -143,7 +139,7 @@ define([
                     // Layer zum Attribut "nodeChildLayer" hinzugefügt
                     this.push("nodeChildLayer", {type: "nodeChild", name: layerListByFolder[0].get("subfolder"), children: layerListByFolder});
                 }, this);
-        },
+        },*/
 
         /**
          * Alle Layer werden nach ihrer MetaID gruppiert.
@@ -155,8 +151,7 @@ define([
                 layerListByID;
 
             // Gruppiert die Layer nach deren MetaID
-            countByMetaID = _.countBy(_.pluck(this.get("layerList"), "attributes"), "metaID");
-
+            countByMetaID = _.countBy(_.pluck(this.get("layerList"), "attributes"), "parent");
             // Iteriert über die Metadaten-ID's
             _.each(countByMetaID, function (value, key) {
                 // Alle Layer der Gruppe (sprich gleiche MetaID)
@@ -170,12 +165,19 @@ define([
                 }).reverse();
                 // Gibt es mehrere Layer in der Gruppe werden sie in einem Unterordner (Metadaten-Name) zusammengefasst
                 if (layerListByID.length > 1) {
-                    // Layer zum Attribut "nodeChildLayer" hinzugefügt
-                    this.push("nodeChildLayer", {type: "nodeChild", name: layerListByID[0].get("metaName"), children: layerListByID});
+                    if (layerListByID[0].get("parent") === "noParent") {
+                        _.each(layerListByID, function (layer) {
+                              this.push("nodeLayer", {type: "nodeLayer", name: layer.get("parent"), layer: layer});
+                        }, this);
+                    }
+                    else {
+                        // Layer zum Attribut "nodeChildLayer" hinzugefügt
+                        this.push("nodeChildLayer", {type: "nodeChild", name: layerListByID[0].get("parent"), children: layerListByID});
+                    }
                 }
                 else {
                     // Layer zum Attribut "nodeLayer" hinzugefügt
-                    this.push("nodeLayer", {type: "nodeLayer", name: layerListByID[0].get("metaName"), layer: layerListByID[0]});
+                    this.push("nodeLayer", {type: "nodeLayer", name: layerListByID[0].get("parent"), layer: layerListByID[0]});
                 }
             }, this);
         },
