@@ -10,6 +10,7 @@ define([
 
         //
         defaults: {
+            title: Config.print.title,
             outputFilename: Config.print.outputFilename,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
@@ -59,12 +60,9 @@ define([
             EventBus.trigger("mapView:getOptions");
         },
 
-        // Setzt den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
+        // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
         setTitle: function () {
-            if (!$("#titleField").val()) {
-                this.set("title", Config.print.title);
-            }
-            else {
+            if ($("#titleField").val()) {
                 this.set("title", $("#titleField").val());
             }
         },
