@@ -5,15 +5,19 @@ define(function () {
         allowParametricURL: true,
         tree: {
             custom: true,
-            filter: false,
+            filter: false,            
             orderBy: "architekten",
             customConfig: "../components/lgv-config/tree-config/architekten.json"
         },
           baseLayer: [
-            {id: "453", visibility: true},
-            {id: "452", visibility: false},
-            {id: "713", visibility: false}
-        ],
+            {id: "453", visibility: true},      //stadtplan
+            {id: "452", visibility: false}     //luftbilder
+            //{id: "713", visibility: false},     //geobasisikarte s-w
+            //{id: "717", visibility: false},     //geobasiskarte farbig
+            //{id: "1043", visibility: false},    //geobasiskarte g-b
+            //{id: "368", visibility: false},     //alkis farbig
+            //{id: "149", visibility: false}     //alkis g-b
+                     ],
         controls: {
             zoom: true,
             toggleMenu: true
@@ -21,9 +25,9 @@ define(function () {
         view: {
             center: [565874, 5934140] // Rathausmarkt
         },
-        footer: true,
+        footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet-architekten.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
 
@@ -37,7 +41,6 @@ define(function () {
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
-
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,
@@ -50,16 +53,13 @@ define(function () {
             legend: true,
             routing: false
         },
-
         startUpModul: "",
-
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteerURL: function () {
                 return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
-
         tools: {
             gfi: true,
             measure: true,
