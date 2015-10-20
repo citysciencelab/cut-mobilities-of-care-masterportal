@@ -50,7 +50,7 @@ define([
                     Util.hideLoader();
                     try {
                         context.capability = parser.read(data);
-
+                        // Für jede unterste Layer in den Capabillities erzeuge ein neues Layer objekt und schicke es an die Layermodelcollection
                         _.each(context.findLayersInCapabillities(context.capability.Capability.Layer.Layer, "noParent"), function (layer) {
                             var layerObj = context.newLayer(
                             layer.Title,
@@ -59,9 +59,10 @@ define([
                             context.capability.version,
                             context.capability.Service.Title,
                             layer.parent);
-
+                            //Schickt das neues Layerobjekt an die Layercollection
                             EventBus.trigger("layerlist:addNewModel", layerObj);
                         });
+                        // Wenn alle Layer hinzugefügt wurden das Erzeugen von Ordner in Catalogextern getriggert
                         EventBus.trigger("layerList:sendExternalFolders");
                     }
                     catch (e) {
@@ -76,6 +77,7 @@ define([
 
         },
         // crawled rekursiv durch die Capabillities und holt sich die Layer auf der untersten Ebene
+        // gibt den Layern den direkten Überordner als Attribut mit
         findLayersInCapabillities: function (layerObject, parent) {
             /*
                 Wenn layer Object ein array ist rufe diese function für jedes Element auf
@@ -115,6 +117,7 @@ define([
             return {
                 // die ID wird beim hinzufügen in der layer/list.js gesetzt
                 "isExternal": true,
+                // gibt den Direkten überordner an
                 "parent": parent,
                 "name": name,
                 "url": url,

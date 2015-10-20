@@ -16,7 +16,8 @@ define([
         initialize: function () {
             // Listener auf den EventBus.
             this.listenTo(EventBus, {
-               "catEx:sendExternalNodeNames": this.createNodes
+                // Empfängt die Ordner namen der ersten Ebene vom AddWMS Model
+               "catalogExtern:sendExternalNodeNames": this.createNodes
 
             });
 
