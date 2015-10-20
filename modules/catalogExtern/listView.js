@@ -1,9 +1,8 @@
 define([
     "backbone",
     "modules/catalogExtern/list",
-    "modules/catalogExtern/viewNode",
-    "eventbus"
-], function (Backbone, CatalogList, NodeView, EventBus) {
+    "modules/catalogExtern/viewNode"
+], function (Backbone, CatalogList, NodeView) {
 
     var listView = Backbone.View.extend({
         collection: CatalogList,
