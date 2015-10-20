@@ -159,7 +159,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 }
                 if (Config.menu.addWMS === true) {
                     require(["modules/addwms/view"
-                        ], function (AddWMSView, LayerListView, LayerTreeView) {
+                        ], function (AddWMSView) {
                         new AddWMSView();
                     });
                 }
