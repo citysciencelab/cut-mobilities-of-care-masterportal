@@ -15,16 +15,18 @@ define([
         },
         events: {
             "click #addWMSButton": "loadAndAddLayers",
-            "click #addLayersButton": "addLayers"
+            "click #addLayersButton": "addLayers",
+            "keydown": "keydown"
         },
         loadAndAddLayers: function () {
             this.model.loadAndAddLayers();
         },
-        loadLayers: function () {
-            this.model.loadLayers();
-        },
-        addLayers: function () {
-            this.model.addLayers();
+        keydown: function (e) {
+            var code = e.keyCode;
+
+            if (code === 13) {
+                this.loadAndAddLayers();
+            }
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
