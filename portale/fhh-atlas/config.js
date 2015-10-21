@@ -19,11 +19,13 @@ define(function () {
             layerIDsToStyle: [
                 {
                     "id": "1933",
-                    "styles": "geofox_stations"
+                    "styles": "geofox_stations",
+                    "name": "Haltestellen"
                 },
                 {
                     "id": "1935",
-                    "styles": ["geofox-bus", "geofox_BusName", "geofox-bahn"]
+                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"]
                 }
             ],
             metaIDsToMerge: [
