@@ -48,13 +48,7 @@ define([
          * Alle Layer aus der "layerList" werden in die richtige Reihenfolge gebracht und in das Attribut "children" geschrieben.
          */
         setChildren: function () {
-            if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
-                this.setNodeLayerForCustomTree();
-                this.setNodeChildLayerForCustomTree();
-            }
-            else {
-                this.setChildrenForTree();
-            }
+            this.setChildrenForTree();
             this.set("children", _.union(_.sortBy(this.get("nodeLayer"), "name").reverse(), _.sortBy(this.get("nodeChildLayer"), "name").reverse()));
 
         },
@@ -156,6 +150,7 @@ define([
             // Iteriert über "children"
             _.each(this.get("children"), function (child) {
                 if (child.type === "nodeLayer") {
+                    console.log("nodeLayer");
                     // nodeLayerView
                     child.layer.set("type", "nodeLayer");
                     nodeLayerView = new NodeLayerView({model: child.layer});

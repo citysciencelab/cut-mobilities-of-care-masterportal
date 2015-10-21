@@ -2,8 +2,7 @@ define([
     "backbone",
     "modules/catalogExtern/node",
     "config",
-    "eventbus",
-    "modules/searchbar/model" // nicht schön --> Konzept von layercatalog überarbeiten SD 02.09
+    "eventbus"
     ], function (Backbone, Node, Config, EventBus) {
 
     var TreeList = Backbone.Collection.extend({

@@ -1,3 +1,11 @@
+/**
+@Discription:
+    Dieses Model beinhaltet die Logik, um einen WMS Capabillity Request auszuführen und die Response zu parsen.
+    Aus dem geparseten Objekt werden die Layer ausgelesen und aus diesen Informationen Layerobjekte erzeugt und an die Collection,
+    die die Layer verwaltet geschickt
+@Autor: RL
+**/
+
 define([
     "jquery",
     "underscore",
@@ -5,10 +13,8 @@ define([
     "openlayers",
     "eventbus",
     "config",
-    "modules/layer/WMSLayer",
-    "modules/layer/list",
     "modules/core/util"
-], function (jquery, _, Backbone, ol, EventBus, config, WMSLayer, LayerList, Util) {
+], function (jquery, _, Backbone, ol, EventBus, config, Util) {
 
     var AddWMSModel = Backbone.Model.extend({
         layers: [],
@@ -25,13 +31,15 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
+        // Diese funktion wird benutzt, um Fehlermeldungen im WMSView darzustellen
         displayError: function (text) {
-                if(text === "" || typeof text === "undefined") {
+                if (text === "" || typeof text === "undefined") {
                     text = "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!";
                 }
              jquery(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
         },
 
+        // Lädt die Capabillities, parsed sie und extrahiert die Daten-Layer
         loadAndAddLayers: function () {
             jquery(".addwms_error").remove();
             var parser = new ol.format.WMSCapabilities(),
@@ -59,7 +67,7 @@ define([
                             context.capability.version,
                             context.capability.Service.Title,
                             layer.parent);
-                            //Schickt das neues Layerobjekt an die Layercollection
+                            // Schickt das neues Layerobjekt an die Layercollection
                             EventBus.trigger("layerlist:addNewModel", layerObj);
                         });
                         // Wenn alle Layer hinzugefügt wurden das Erzeugen von Ordner in Catalogextern getriggert
@@ -112,6 +120,8 @@ define([
             }
 
         },
+        // Erzeugt ein neues Layerobjekt, dabei werden
+        // die Meta Daten benutzt, um die Hierarchie der Layer abzubilden
         newLayer: function (name, url, layers, version, wmsTitle, parent) {
 
             return {
