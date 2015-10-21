@@ -28,6 +28,12 @@
     padding: 8px;
 }
 
+.gfi-icon-mobile {
+    float: left;
+    padding: 8px;
+    font-size: 30px!important;
+}
+
 .gfi-title {
     float: left;
     padding: 6px;

@@ -18,6 +18,7 @@ define([
         },
         reset: function () {
             this.model.defaultErgebnisse();
+
             this.render();
             EventBus.trigger ("gfipopup:rerender", this);
             this.focusNextMerkmal(0);
@@ -27,6 +28,7 @@ define([
          */
         changedMerkmal: function (evt) {
             var id;
+
             if (evt) {
                 $(".msmerkmal").each(function (index) {
                     if ($(this).attr("id") === evt.target.id) {
@@ -43,6 +45,7 @@ define([
          */
         returnMerkmaleListe: function () {
             var merkmale = _.object(["Wohnlage"], [$(".mswohnlage").text()]);
+
             $(".msmerkmal").each(function () {
                 if (this.value !== "-1") { // = bitte wählen
                     merkmale = _.extend(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
@@ -78,6 +81,7 @@ define([
         focusNextMerkmal: function (activateIndex) {
             var id,
                 merkmale;
+
             $(".msmerkmal").each (function (index) {
                 if (activateIndex === index) {
                     $(this).removeAttr("disabled");
@@ -146,6 +150,7 @@ define([
          */
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
         },
         /**

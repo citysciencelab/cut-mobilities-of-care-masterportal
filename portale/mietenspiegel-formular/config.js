@@ -27,8 +27,7 @@ define(function () {
         * @property {Array}  epsg - Der EPSG-Code. Default ist EPSG:25832
         */
         view: {
-            center: [565874, 5934140],
-            resolution: 2.6458386250105834 // 1:10000
+            center: [565874, 5934140]
         },
         /**
         * customModules
@@ -36,7 +35,7 @@ define(function () {
         * @type {Array}
         * @desc lädt die Module
         */
-        customModules: ["../mietenspiegelform"],
+        customModules: ["../mietenspiegelform", "../portale/mietenspiegel-formular/mietenspiegelform"],
         /**
         * @memberof config
         * @type {String}
@@ -108,8 +107,14 @@ define(function () {
         * @desc Beschreibung.
         */
         layerIDs: [
-            {id: '2515', visible: true, gfiTheme: 'mietenspiegel'}
+            {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
+            {id: "2730", visible: false, displayInTree: false},
+            {id: "2731", visible: false, displayInTree: false}
         ],
+        controls: {
+            zoom: false,
+            toggleMenu: false
+        },
         /**
         * @memberof config
         * @type {Boolean}
@@ -181,12 +186,6 @@ define(function () {
             placeholder: "Adresse eingeben",
             gazetteerURL: function () {
                     return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
-        },
-
-        bPlan: {
-            url: function () {
-                return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
             }
         },
                  /**
