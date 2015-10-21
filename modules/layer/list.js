@@ -118,6 +118,7 @@ define([
                 response = this.deleteLayersIncludeCache(response);
                 response = this.mergeLayersByIDs(response);
                 response = this.mergeLayersByMetaID(response);
+                this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
                 return response;
@@ -279,6 +280,21 @@ define([
                 response.push(newLayer);
             });
             return response;
+        },
+
+        // Hier wird den HVV-Layern ihr jeweiliger Style zugeordnet.
+        setLayerStyle: function (response) {
+            var styleLayerIDs = _.pluck(Config.tree.layerIDsToStyle, "id"),
+                layersByID;
+
+            layersByID = _.filter(response, function (layer) {
+                return _.contains(styleLayerIDs, layer.id);
+            });
+            _.each(layersByID, function (layer) {
+                var styleLayer = _.findWhere(Config.tree.layerIDsToStyle, {"id": layer.id});
+
+                layer = _.extend(layer, styleLayer);
+            });
         },
 
         // Hier werden die Geobasisdaten gesetzt. Wird über Config.baseLayer gesteuert.
