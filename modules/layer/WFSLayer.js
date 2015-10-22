@@ -42,7 +42,10 @@ define([
 
                             src.addFeatures(wfsReader.readFeatures(data));
                             this.set("source", src);
-                            this.styling();
+                            // für WFS-T wichtig --> benutzt den ol-default Style
+                            if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
+                                this.styling();
+                            }
                             this.set("layer", new ol.layer.Vector({
                                 source: this.get("source"),
                                 name: this.get("name"),
@@ -66,7 +69,9 @@ define([
                             });
 
                             this.set("source", cluster);
-                            this.styling();
+                            if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
+                                this.styling();
+                            }
                             this.set("layer", new ol.layer.Vector({
                                 source: this.get("source"),
                                 name: this.get("name"),

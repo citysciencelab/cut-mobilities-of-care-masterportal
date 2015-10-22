@@ -21,11 +21,11 @@ define([
             uncollapseWindow: function () {
                 this.setCollapse(false);
             },
-            setCollapse: function (value, val) {
+            setCollapse: function (value) {
                 this.set("isCollapsed", value);
             },
             setVisible: function (value) {
-                this.set("isVisible", value)
+                this.set("isVisible", value);
             },
             setParams: function (args) {
                 this.set("title", args[1]);
