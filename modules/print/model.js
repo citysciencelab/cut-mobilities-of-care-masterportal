@@ -38,8 +38,7 @@ define([
 
             this.listenTo(EventBus, {
                 "mapView:sendCenter": this.setCenter,
-                "mapView:sendOptions": this.setScaleByMapView,
-                "mapView:replyProjection": this.setProjection
+                "mapView:sendOptions": this.setScaleByMapView
             });
 
             // get print config (info.json)
@@ -56,7 +55,6 @@ define([
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
 
-            EventBus.trigger("mapView:requestProjection");
             EventBus.trigger("mapView:getOptions");
         },
 
@@ -330,10 +328,6 @@ define([
 
             tempArray.push(value);
             this.set(attribute, _.flatten(tempArray));
-        },
-
-        setProjection: function (proj) {
-            this.set("projection", proj);
         }
     });
 
