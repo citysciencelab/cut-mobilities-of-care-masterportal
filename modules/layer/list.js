@@ -136,25 +136,30 @@ define([
                         var layers = element.id.split(","),
                             layerinfos = _.findWhere(response, {id: layers[0]});
 
-                        element.isbaselayer = false;
-                        // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
-                        if (layers.length === 1) {
-                            modelsArray.push(_.extend(layerinfos, element));
+                        if (_.isUndefined(layerinfos)) {
+                            EventBus.trigger("alert", "Der Layer mit der ID '" + element.id + "' ist nicht vorhanden");
                         }
-                        // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
-                        else if (layers.length > 1) {
-                            var layerList = "";
-
-                            _.each(layers, function (layer) {
-                                var obj = _.findWhere(response, {id: layer});
-
-                                layerList += "," + obj.layers;
-                            });
-                            layerinfos.layers = layerList.slice(1, layerList.length);
-                            if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
-                                layerinfos.name = layerinfos.datasets[0].md_name;
+                        else {
+                            element.isbaselayer = false;
+                            // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
+                            if (layers.length === 1) {
+                                modelsArray.push(_.extend(layerinfos, element));
                             }
-                            modelsArray.push(_.extend(layerinfos, element));
+                            // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
+                            else if (layers.length > 1) {
+                                var layerList = "";
+
+                                _.each(layers, function (layer) {
+                                    var obj = _.findWhere(response, {id: layer});
+
+                                    layerList += "," + obj.layers;
+                                });
+                                layerinfos.layers = layerList.slice(1, layerList.length);
+                                if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
+                                    layerinfos.name = layerinfos.datasets[0].md_name;
+                                }
+                                modelsArray.push(_.extend(layerinfos, element));
+                            }
                         }
                     }
                     // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
@@ -171,15 +176,14 @@ define([
 
                             if (layerinfos) {
                                 groupModel.layerdefinitions.push(layerinfos);
+                                groupModel = _.extend(groupModel, element);
+                                groupModel.id = _.uniqueId("grouplayer_");
+                                modelsArray.push(groupModel);
                             }
                             else {
-                                alert ("Layerbeschreibung " + childlayer.id + " nicht verfügbar.");
-                                return;
+                                EventBus.trigger("alert", "Der Layer mit der ID '" + childlayer.id + "' ist nicht vorhanden");
                             }
                         });
-                        groupModel = _.extend(groupModel, element);
-                        groupModel.id = _.uniqueId("grouplayer_");
-                        modelsArray.push(groupModel);
                     }
                 });
                 this.setBaseLayer(modelsArray);
