@@ -52,7 +52,7 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get('gfiTheme'),
+                                gfiTheme: this.get('gfiTheme')
                             }));
                             this.reload();
                         }
