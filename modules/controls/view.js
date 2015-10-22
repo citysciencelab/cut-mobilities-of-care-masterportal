@@ -17,6 +17,17 @@ define([
                     new ZoomControlView();
                 });
             }
+//            if (_.has(Config.controls, "orientation") === true && Config.controls.orientation === true) {
+//                require(["modules/controls/orientation/view"], function (OrientationView) {
+//                    new OrientationView();
+//                });
+//            }
+//            if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
+//                require(["views/PointOfInterestView", "views/PointOfInterestListView"], function (PointOfInterestView, PointOfInterestListView) {
+//                    // new PointOfInterestView();
+//                    new PointOfInterestListView();
+//                });
+//            }
         },
         render: function () {
             $(".navbar").after(this.$el);

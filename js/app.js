@@ -137,17 +137,6 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new WFSFeatureFilterView();
                     });
                 }
-                if (Config.orientation === true) {
-                    require(["views/OrientationView"], function (OrientationView) {
-                        new OrientationView();
-                    });
-                }
-                if (Config.poi === true) {
-                    require(["views/PointOfInterestView", "views/PointOfInterestListView"], function (PointOfInterestView, PointOfInterestListView) {
-                        // new PointOfInterestView();
-                        new PointOfInterestListView();
-                    });
-                }
                 if (Config.menu.legend === true) {
                     require(["modules/legend/view"], function (LegendView) {
                         new LegendView();
