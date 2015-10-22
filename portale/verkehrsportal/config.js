@@ -64,7 +64,9 @@ define(function () {
         ],
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true,
+            poi: true
         },
         attributions: true,
         clickCounter: {
@@ -103,9 +105,7 @@ define(function () {
             coord: true,
             active: "gfi"
         },
-        gfiImgReloadTime: 20000,
-        orientation: true,
-        poi: true
+        gfiImgReloadTime: 20000
     }
 
     return config;
