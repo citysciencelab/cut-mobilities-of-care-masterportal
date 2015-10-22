@@ -127,6 +127,10 @@ define([
             else if (_.has(Config, "layerIDs")) {
                 var modelsArray = [];
 
+                if (_.has(Config.tree, "layerIDsToMerge") === true) {
+                    response = this.mergeLayersByIDs(response);
+                }
+
                 _.each(Config.layerIDs, function (element) {
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(","),
