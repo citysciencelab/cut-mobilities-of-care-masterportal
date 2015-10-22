@@ -7,7 +7,7 @@
         </div>
         <div id="legendbody" class="modal-body legendbody">
             <div class="panel-group" role="tablist" aria-multiselectable="true">
-            <%
+            <% console.log(legendParams);
             _.each(legendParams, function(element, index) {
             %>
                 <div class="panel panel-default">
@@ -47,10 +47,18 @@
                                 }
                                 else {
                                 %>
+                                <% if (element.img.length > 1) {
+                                    _.each(element.img, function (image) { %>
+                                        <p>
+                                            <img src=<%= image %>>
+                                        </p>
+                                <%    });
+                                }
+                                else { %>
                                     <p>
                                         <img src=<%= element.img[0] %>>
                                     </p>
-                                <%
+                                <% }
                                 }
                             }
                             %>
