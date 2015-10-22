@@ -4,17 +4,22 @@ define([
     "modules/controls/orientation/model",
     "config",
     "eventbus"
-], function (Backbone, OrientationTemplate, Orientation, Config, EventBus) {
+], function (Backbone, OrientationTemplate, OrientationModel, Config, EventBus) {
 
     var OrientationView = Backbone.View.extend({
-//        model: Orientation,
-        id: "toggleDiv",
+        className: "row",
         template: _.template(OrientationTemplate),
         events: {
-            "click .buttonStandpunkt": "getOrientation",
+            "click .orientationButtons > .glyphicon-map-marker": "getOrientation",
             "click .buttonPOI": "getPOI"
         },
         initialize: function () {
+            if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
+//                require(["views/PointOfInterestView", "views/PointOfInterestListView"], function (PointOfInterestView, PointOfInterestListView) {
+//                    // new PointOfInterestView();
+//                    new PointOfInterestListView();
+//                });
+            }
             if (!navigator.geolocation) {
                 return;
             }
@@ -32,7 +37,7 @@ define([
         finalize: function () {
             EventBus.on("showGeolocationMarker", this.showGeolocationMarker, this);
             EventBus.on("clearGeolocationMarker", this.clearGeolocationMarker, this);
-            this.model = Orientation;
+            this.model = OrientationModel;
             this.render();
         },
         showGeolocationMarker: function () {
@@ -42,12 +47,9 @@ define([
             $("#geolocation_marker").removeClass("geolocation_marker glyphicon glyphicon-map-marker");
         },
         render: function () {
-            // var attr = this.model.toJSON();
-            // this.getOrientation();
-            // $("#toggleRow").append(this.$el.html(this.template(attr)));
             var attr = Config;
 
-            $("#toggleRow").append(this.$el.html(this.template(attr)));
+            $(".controls-view").append(this.$el.html(this.template(attr)));
         },
         getOrientation: function () {
             this.model.setOrientation("stdPkt");

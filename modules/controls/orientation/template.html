@@ -1,13 +1,9 @@
-<div id="centerDiv">
-    <span id="geolocation_marker" class="" />
+<!DOCTYPE html>
+<span id="geolocation_marker" class="" />
+<div class="orientationButtons col-md-1">
+    <span id="geolocate" class="glyphicon glyphicon-map-marker" title="Standpunkt"></span>
+    <% if (controls.poi === true) { %>
+        <br>
+        <span id="geolocate" class="glyphicon glyphicon-record" title="In meiner Nähe"></span>
+    <% } %>
 </div>
-<% if(orientation===true){%>
-<div class="buttonStandpunkt" title="Standpunkt">
-    <span id="geolocate"class="glyphicon glyphicon-map-marker" title="Standpunkt"></span>
-</div>
-<%} %>
-<% if(poi===true){%>
-<div class="buttonPOI" title="POI">
-    <span id="geolocate"class="glyphicon glyphicon-record" title="In meiner Nähe"></span>
-</div>
-<%} %>
