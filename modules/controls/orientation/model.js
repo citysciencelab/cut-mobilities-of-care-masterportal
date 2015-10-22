@@ -15,9 +15,7 @@ define([
         initialize: function () {
             EventBus.on("setOrientation", this.setOrientation, this);
             EventBus.on("getPOI", this.getPOI, this);
-            EventBus.on("sendVisibleWFSLayerPOI", this.getPOIParams, this);
-            EventBus.on("mapView:replyProjection", this.setProjection, this);
-            EventBus.trigger("mapView:requestProjection");
+            EventBus.on("layerlist:sendVisibleWFSlayerList", this.getPOIParams, this);
         },
         setOrientation: function (btn) {
             var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
@@ -58,21 +56,21 @@ define([
                 circleCoord = circle.getCenter();
 
             this.set("circleExtent", circleExtent);
-            EventBus.trigger("getVisibleWFSLayerPOI", this);
+            EventBus.trigger("layerlist:getVisibleWFSlayerList", this);
         },
         getPOIParams: function (visibleWFSLayers) {
             var featureArray = [];
 
-            _.each(visibleWFSLayers, function (layer) {
-                layer.get("source").forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
-                    // featureArray.push(feature);
-                    EventBus.trigger("setModel", feature, StyleList, this.get("distance"), this.get("newCenter"), layer);
+            if (this.get("circleExtent") && visibleWFSLayers) {
+                _.each(visibleWFSLayers, function (layer) {
+                    if (layer) {
+                        layer.get("source").forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
+                            EventBus.trigger("setModel", feature, StyleList, this.get("distance"), this.get("newCenter"), layer);
+                        }, this);
+                    }
                 }, this);
-            }, this);
-            EventBus.trigger("showPOIModal");
-        },
-        setProjection: function (proj) {
-            this.set("projection", proj);
+                EventBus.trigger("showPOIModal");
+            }
         }
     });
 

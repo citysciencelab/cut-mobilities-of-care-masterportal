@@ -44,14 +44,14 @@ define([
                     });
                 }
                 if (distance <= maxDist) {
-                        this.add(new PointOfInterest({
-                            name: name,
-                            kategorie: kategorie,
-                            distance: distance,
-                            img: img.get("imagepath") + img.get("imagename"),
-                            xCoord: xCoord,
-                            yCoord: yCoord
-                        }));
+                    this.add(new PointOfInterest({
+                        name: name,
+                        kategorie: kategorie,
+                        distance: distance,
+                        img: img.get("imagepath") + img.get("imagename"),
+                        xCoord: xCoord,
+                        yCoord: yCoord
+                    }));
                     }
             }, this);
             }
@@ -86,8 +86,7 @@ define([
                         yCoord: yCoord
                     }));
                 }
-            }
-
+            };
         },
         removeAllModels: function () {
             this.reset();

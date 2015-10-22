@@ -11,7 +11,7 @@ define([
         template: _.template(OrientationTemplate),
         events: {
             "click .orientationButtons > .glyphicon-map-marker": "getOrientation",
-            "click .buttonPOI": "getPOI"
+            "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
             if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
