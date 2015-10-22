@@ -3,7 +3,7 @@ define(function () {
         allowParametricURL: false,
         view: {
             center: [565874, 5934140],
-            resolution: 5.2916772500211667
+            resolution: 5.2916638091682096
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
@@ -14,6 +14,10 @@ define(function () {
             {id: "182", visible: false, name: "Straßenbaumkataster", displayInTree: false},
             {id: "2297", visible: true, name: "Straßenbaumkataster", displayInTree: true}
         ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         styleConf: "../components/lgv-config/style.json",
         treeConf: "../components/lgv-config/tree.json",
         menubar: true,
@@ -45,7 +49,8 @@ define(function () {
             coord: true,
             draw: false,
             orientation: false,
-            active: "gfi"
+            active: "gfi",
+            record: false
         },
         print: {
             printID: "99999",
