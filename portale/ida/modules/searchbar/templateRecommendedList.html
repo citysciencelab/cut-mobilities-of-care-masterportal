@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<% _.each(recommendedList, function (hit, index) { %>
+    <% if (hit.model !== undefined && hit.model.get("type") === "nodeLayer") { %>
+        <% if (hit.glyphicon !== undefined) { %>
+            <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><span class="glyphicon <%= hit.glyphicon %>"></span><span><%= hit.metaName %></span><small><%= hit.type %></small></li>
+        <% } else { %>
+            <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= hit.metaName %></span><small><%= hit.type %></small></li>
+        <% }
+     }
+     else { %>
+        <% if (hit.glyphicon !== undefined) { %>
+            <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><span class="glyphicon <%= hit.glyphicon %>"></span><span><%= hit.name %></span><small><%= hit.type %></small></li>
+        <% } else { %>
+            <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= hit.name %></span><small><%= hit.type %></small></li>
+        <% } %>
+    <% } %>
+<% }); %>
+<% if (hitList.length >= 5) { %>
+    <li class="list-group-item results"><div><span>alle Ergebnisse anzeigen</span><span class="glyphicon glyphicon-play-circle"></span></div></li>
+<% } %>

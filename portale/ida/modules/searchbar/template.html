@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<div id="searchForm" class="form-group" role="search">
+    <div class="input-group">
+        <input id="searchInput" class="form-control" type="text" name="text" placeholder="<%= placeholder %>" value="<%= searchString %>">
+        <div class="input-group-btn">
+            <% if (searchString.length !== 0) { %>
+            <button type="button" class="btn btn-default btn-deleteSearch">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <% } %>
+            <button class="btn btn-default btn-search" type="button">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+            <ul class="dropdown-menu-search dropdown-menu-right">
+            </ul>
+        </div>
+    </div>
+</div>
+<% if (quickHelp === true) { %>
+<button class="btn btn-search-question hidden-xs" type="button">
+    <span class="glyphicon glyphicon-question-sign"></span>
+</button>
+<% } %>

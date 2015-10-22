@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<% _.each(typeList, function (type) {
+    var hitListOfType = _.where(hitList, {type: type}); %>
+    <li class="list-group-item type" style="min-width: 300px;"><span class="badge"><%= hitListOfType.length %></span><%= type %></li><div style="max-height: 220px; overflow-y: auto; overflow-x: hidden; display: none;">
+        <% _.each(hitListOfType, function (hit) { %>
+            <% if (hit.model !== undefined && hit.model.get("type") === "nodeLayer") { %>
+                <% if (hit.glyphicon !== undefined) { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><span class="glyphicon <%= hit.glyphicon %>"></span><span><%= hit.metaName %></span><small><%= hit.type %></small></li>
+                <% } else { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= hit.metaName %></span><small><%= hit.type %></small></li>
+                <% }
+             }
+             else { %>
+                <% if (hit.glyphicon !== undefined) { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><span class="glyphicon <%= hit.glyphicon %>"></span><span><%= hit.name %></span><small><%= hit.type %></small></li>
+                <% } else { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= hit.name %></span><small><%= hit.type %></small></li>
+                <% } %>
+            <% } %>
+        <% }); %></div>
+<% }); %>
