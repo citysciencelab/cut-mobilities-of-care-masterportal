@@ -3,9 +3,8 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "modules/layer/list",
     "modules/catalogExtern/viewNodeChildLayer"
-    ], function (_, Backbone, EventBus, Config, LayerList, NodeChildLayerView) {
+    ], function (_, Backbone, EventBus, Config, NodeChildLayerView) {
 
         var TreeNodeChild = Backbone.Model.extend({
 
@@ -18,6 +17,7 @@ define([
             },
 
             initialize: function () {
+                // schickt die Node an die Searchbar
                 EventBus.trigger("sendNodeChild", this);
                 this.setNestedViews();
             },
@@ -27,10 +27,11 @@ define([
              */
             setNestedViews: function () {
                 var nestedViews = [];
+
                 _.each(this.get("children"), function (child) {
                     child.set("type", "nodeChildLayer");
-                    // child.set("parentNode", this);
                     var nodeChildLayer = new NodeChildLayerView({model: child});
+
                     nestedViews.push(nodeChildLayer);
                 }, this);
                 this.set("childViews", nestedViews);
@@ -113,5 +114,6 @@ define([
                 this.get("parentNode").moveChildInList(this.get("name"), -1);
             }
         });
+
         return TreeNodeChild;
     });

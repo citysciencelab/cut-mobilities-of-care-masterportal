@@ -82,7 +82,7 @@ define([
             EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
         },
         activateAddWMSModul: function () {
-            EventBus.trigger("toggleWin", ["addwms", "AddWMS", "glyphicon-road"]);
+            EventBus.trigger("toggleWin", ["addwms", "WMS Hinzufügen", "glyphicon-plus"]);
         },
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);

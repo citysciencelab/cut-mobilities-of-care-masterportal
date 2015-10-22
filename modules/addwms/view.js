@@ -1,3 +1,8 @@
+/**
+@Discription Stellt das Tool-fenster da, in dem ein WMS per URL angefordert werden kann
+@Author: RL
+**/
+
 define([
     "jquery",
     "underscore",
@@ -15,17 +20,21 @@ define([
         },
         events: {
             "click #addWMSButton": "loadAndAddLayers",
-            "click #addLayersButton": "addLayers"
+            "keydown": "keydown"
         },
+        // Löst das laden und einfügen der Layer in den Baum aus
         loadAndAddLayers: function () {
             this.model.loadAndAddLayers();
         },
-        loadLayers: function () {
-            this.model.loadLayers();
+        // abschicken per Enter-Taste
+        keydown: function (e) {
+            var code = e.keyCode;
+
+            if (code === 13) {
+                this.loadAndAddLayers();
+            }
         },
-        addLayers: function () {
-            this.model.addLayers();
-        },
+        // Rendert das Tool-Fenster
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 var attr = this.model.toJSON();

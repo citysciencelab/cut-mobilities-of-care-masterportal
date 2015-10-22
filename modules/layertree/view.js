@@ -57,7 +57,7 @@ define([
                 $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-right");
             },
             toggleExternLayer: function () {
-                $(".layer-extern-container").toggle("slow");
+                $(".layer-extern-list").toggle("slow");
                 $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
                 $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-right");
             },
