@@ -15,10 +15,9 @@ define([
         },
         initialize: function () {
             if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
-//                require(["views/PointOfInterestView", "views/PointOfInterestListView"], function (PointOfInterestView, PointOfInterestListView) {
-//                    // new PointOfInterestView();
-//                    new PointOfInterestListView();
-//                });
+                require(["modules/controls/orientation/poi/view", "modules/controls/orientation/poi/feature/view"], function (PoiView, FeatureView) {
+                    new PoiView();
+                });
             }
             if (!navigator.geolocation) {
                 return;

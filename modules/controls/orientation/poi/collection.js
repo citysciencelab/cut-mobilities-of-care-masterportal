@@ -1,11 +1,10 @@
 define([
-    "underscore",
     "backbone",
-    "models/PointOfInterest",
+    "modules/controls/orientation/poi/feature/model",
     "eventbus",
     "config",
     "openlayers"
-], function (_, Backbone, PointOfInterest, EventBus, Config, ol) {
+], function (Backbone, PointOfInterest, EventBus, Config, ol) {
 
     var PointOfInterestList = Backbone.Collection.extend({
         initialize: function () {
@@ -16,22 +15,23 @@ define([
             // Cluster-WFS
             if (clusterFeature.getProperties().features) {
             _.each(clusterFeature.getProperties().features, function (feature) {
-                var name = feature.getProperties().name;
-                var kategorie = feature.get(layer.attributes.styleField);
-                var lineStringArray = [];
+                var name = feature.getProperties().name,
+                    kategorie = feature.get(layer.attributes.styleField),
+                    lineStringArray = [];
 
                 lineStringArray.push(newCenter);
                 var poiObject = feature.getGeometry().getCoordinates();
+
                 if (poiObject.length === 3) {
                     poiObject.pop();
                 }
-                var xCoord = poiObject[0];
-                var yCoord = poiObject[1];
+                var xCoord = poiObject[0],
+                    yCoord = poiObject[1];
 
                 lineStringArray.push(poiObject);
-                var lineString = new ol.geom.LineString(lineStringArray);
-                var distance = Math.round(lineString.getLength());
-                var img;
+                var lineString = new ol.geom.LineString(lineStringArray),
+                    distance = Math.round(lineString.getLength()),
+                    img;
 
                 if (kategorie !== undefined) {
                     img = _.find(styleList.models, function (num) {
@@ -57,9 +57,9 @@ define([
             }
             // WFS ohne Cluster
             else {
-                var feature = clusterFeature;
-                var name = feature.getProperties().name;
-                var lineStringArray = [];
+                var feature = clusterFeature,
+                    name = feature.getProperties().name,
+                    lineStringArray = [];
 
                 lineStringArray.push(newCenter);
                 var poiObject = feature.getGeometry().getCoordinates();
@@ -67,15 +67,15 @@ define([
                 if (poiObject.length === 3) {
                     poiObject.pop();
                 }
-                var xCoord = poiObject[0];
-                var yCoord = poiObject[1];
+                var xCoord = poiObject[0],
+                    yCoord = poiObject[1];
 
                 lineStringArray.push(poiObject);
-                var lineString = new ol.geom.LineString(lineStringArray);
-                var distance = Math.round(lineString.getLength());
-                var img = _.find(styleList.models, function (num) {
-                    return num.attributes.layerId == layer.attributes.id;
-                });
+                var lineString = new ol.geom.LineString(lineStringArray),
+                    distance = Math.round(lineString.getLength()),
+                    img = _.find(styleList.models, function (num) {
+                        return num.attributes.layerId == layer.attributes.id;
+                    });
 
                 if (distance <= maxDist) {
                     this.add(new PointOfInterest({

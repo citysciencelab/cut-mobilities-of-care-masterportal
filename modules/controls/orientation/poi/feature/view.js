@@ -1,10 +1,10 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'text!templates/PointOfInterest.html',
-    'models/PointOfInterest',
-    'eventbus'
+    "jquery",
+    "underscore",
+    "backbone",
+    "text!modules/controls/orientation/poi/feature/template.html",
+    "modules/controls/orientation/poi/feature/model",
+    "eventbus"
 ], function ($, _, Backbone, PointOfInterestTemplate, PointOfInterest, EventBus) {
 
     var PointOfInterestView = Backbone.View.extend({
@@ -14,13 +14,14 @@ define([
         template: _.template(PointOfInterestTemplate),
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
             return this;
         },
-        events : {
-            'click':'onPOIClick'
+        events: {
+            "click": "onPOIClick"
         },
-        onPOIClick: function(){
+        onPOIClick: function () {
             this.model.setCenter();
         }
 
