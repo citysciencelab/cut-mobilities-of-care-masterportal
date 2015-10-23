@@ -230,12 +230,12 @@ define([
         },
         setMetadataURL: function () {
 
-            if (Config.metadatenURL === "ignore") {
+            if (Config.metadataURL === "ignore") {
                 // hack
                 this.set("metaURL", null);
             }
-            else if (Config.metadatenURL && Config.metadatenURL !== "") {
-                this.set("metaURL", Config.metadatenURL + this.get("metaID"));
+            else if (Config.metadataURL && Config.metadataURL !== "") {
+                this.set("metaURL", Config.metadataURL + this.get("metaID"));
             }
             else {
                 if (this.get("url") !== undefined && this.has("link") === false) {
