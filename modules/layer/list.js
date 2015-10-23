@@ -43,6 +43,9 @@ define([
                 "layerlist:getVisibleWFSlayerList": function () {
                     EventBus.trigger("layerlist:sendVisibleWFSlayerList", this.where({visibility: true, typ: "WFS"}));
                 },
+                "layerlist:getVisiblePOIlayerList": function () {
+                    EventBus.trigger("layerlist:sendVisiblePOIlayerList", this.where({visibility: true, typ: "WFS"}));
+                },
                 "layerlist:getLayerByID": function (id) {
                     EventBus.trigger("layerlist:sendLayerByID", this.get(id));
                 },

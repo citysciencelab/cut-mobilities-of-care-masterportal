@@ -15,7 +15,7 @@ define([
         initialize: function () {
             EventBus.on("setOrientation", this.setOrientation, this);
             EventBus.on("getPOI", this.getPOI, this);
-            EventBus.on("layerlist:sendVisibleWFSlayerList", this.getPOIParams, this);
+            EventBus.on("layerlist:sendVisiblePOIlayerList", this.getPOIParams, this);
         },
         setOrientation: function (btn) {
             var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
@@ -56,14 +56,14 @@ define([
                 circleCoord = circle.getCenter();
 
             this.set("circleExtent", circleExtent);
-            EventBus.trigger("layerlist:getVisibleWFSlayerList", this);
+            EventBus.trigger("layerlist:getVisiblePOIlayerList", this);
         },
         getPOIParams: function (visibleWFSLayers) {
             var featureArray = [];
 
             if (this.get("circleExtent") && visibleWFSLayers) {
                 _.each(visibleWFSLayers, function (layer) {
-                    if (layer) {
+                    if (layer.has("source") === true) {
                         layer.get("source").forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
                             EventBus.trigger("setModel", feature, StyleList, this.get("distance"), this.get("newCenter"), layer);
                         }, this);

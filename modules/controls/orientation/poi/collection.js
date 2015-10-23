@@ -43,7 +43,7 @@ define([
                         return num.attributes.layerId === layer.attributes.id;
                     });
                 }
-                if (distance <= maxDist) {
+                if (distance <= maxDist && img) {
                     this.add(new PointOfInterest({
                         name: name,
                         kategorie: kategorie,
