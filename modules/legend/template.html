@@ -11,8 +11,8 @@
     _.each(legendParams, function(element, index) {
     %>
         <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="überschriftEins<%=index%>" data-toggle="collapse" href="#collapseEins<%=index%>" aria-expanded="true" aria-controls"collapseEins<%=index%>">
-                <h4 class="panel-title modal-legend-title">
+            <div class="panel-heading legend-heading" role="tab" id="überschriftEins<%=index%>" data-toggle="collapse" href="#collapseEins<%=index%>" aria-expanded="true" aria-controls"collapseEins<%=index%>">
+                <h4 class="panel-title legend-title">
                     <%= element.layername %>
                 </h4>
             </div>
@@ -68,4 +68,4 @@
     <%
     });
     %>
-    </div>
+</div>

@@ -1,3 +1,4 @@
+/***** Destop *****/
 .legend-win {
     position: absolute;
     top: 20px;
@@ -27,18 +28,22 @@
 
 .legend-win-content > .panel-group {
     padding: 12px;
+    margin-bottom: 0;
 }
 
 .legend-win-content > .panel-group .panel {
-    margin-top: 12px;
+    margin-top: 8px;
 }
 
+.legend-heading {
+    padding: 8px;
+}
 
+.legend-heading > .legend-title {
+    font-size: 12px;
+}
 
-
-
-
-
+/***** Mobil *****/
 .legendModal {
     background: #e7e7e7;
     background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
