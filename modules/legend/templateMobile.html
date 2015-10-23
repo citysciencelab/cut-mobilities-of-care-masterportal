@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header legendModal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button>
+            <h4 class="modal-title"><span class="glyphicon glyphicon-book"></span>Legende</h4>
+        </div>
+        <div id="legendbody" class="modal-body legendbody">
+            <div class="panel-group" role="tablist" aria-multiselectable="true">
+            <% console.log(legendParams);
+            _.each(legendParams, function(element, index) {
+            %>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="überschriftEins<%=index%>" data-toggle="collapse" href="#collapseEins<%=index%>" aria-expanded="true" aria-controls"collapseEins<%=index%>">
+                        <h4 class="panel-title modal-legend-title">
+                            <%= element.layername %>
+                        </h4>
+                    </div>
+                    <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
+                        <div class="panel-body panel-legend">
+                            <%
+                            if (element.typ === "WFS") {
+                            %>
+                                <table>
+                                <%
+                                _.each(element.img, function (image, index2) {
+                                %>
+                                    <tr>
+                                       <td class="tdLegend">
+                                           <img src="<%= image %>">
+                                       </td>
+                                       <td class="tdLegend">
+                                           <span><%= element.legendname[index2] %></span>
+                                       </td>
+                                   </tr>
+                                <%
+                                });
+                                %>
+                                </table>
+                            <%
+                            }
+                            else {
+                                if (element.img[0].search(".pdf") !== -1) {
+                                %>
+                                    <a href=<%= element.img %> target="_blank">weitere Informationen</a>
+                                <%
+                                }
+                                else {
+                                %>
+                                <% if (element.img.length > 1) {
+                                    _.each(element.img, function (image) { %>
+                                        <p>
+                                            <img src=<%= image %>>
+                                        </p>
+                                <%    });
+                                }
+                                else { %>
+                                    <p>
+                                        <img src=<%= element.img[0] %>>
+                                    </p>
+                                <% }
+                                }
+                            }
+                            %>
+                        </div>
+                    </div>
+                </div>
+            <%
+            });
+            %>
+            </div>
+        </div>
+    </div>
+</div>
