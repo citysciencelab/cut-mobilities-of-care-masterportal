@@ -1,7 +1,7 @@
 define(function () {
     var config = {
         title: "Geoportal der Metropolregion Hamurg",
-        metadataURL: "ignore",
+        metadatenURL: "ignore",
         tree: {
             custom:false,
             orderBy: "opendata",
