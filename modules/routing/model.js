@@ -21,8 +21,6 @@ define([
             bbox: ''
         },
         initialize: function () {
-            EventBus.on("mapView:replyProjection", this.setProjection, this);
-            EventBus.trigger("mapView:requestProjection");
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
                 this.set('bbox', '&bbox=' + Config.view.extent[0] + ',' + Config.view.extent[1] + ',' + Config.view.extent[2] + ',' + Config.view.extent[3] + '&srsName=' + Config.view.epsg);
             }
@@ -227,9 +225,6 @@ define([
             var position = olFeature.getGeometry().getLastCoordinate();
             this.get('mhpOverlay').setPosition([position[0] + 7, position[1] - 7]);
             EventBus.trigger('addOverlay', this.get('mhpOverlay'));
-        },
-        setProjection: function (proj) {
-            this.set("projection", proj);
         }
     });
 

@@ -32,7 +32,7 @@ define(function () {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],
             resolution: 2.6458319045841048 // 1:10 000
-            
+
         },
         footer: false,
         quickHelp: true,

@@ -21,11 +21,11 @@
 }
 
 .toggleButton > .glyphicon-up {
-    padding: 5px 4px 6px 6px;
+    padding: 5px 4px 6px 7px;
 }
 
 .toggleButton > .glyphicon-down {
-    padding: 7px 4px 4px 6px;
+    padding: 7px 4px 4px 7px;
 }
 
 /***** ZoomButtons *****/
@@ -39,11 +39,11 @@
 }
 
 .zoomButtons > .glyphicon-plus {
-    padding: 5px 5px 6px 6px;
+    padding: 5px 5px 6px 7px;
 }
 
 .zoomButtons > .glyphicon-minus {
-    padding: 4px 6px 6px 5px;
+    padding: 5px 7px 6px 5px;
 }
 
 @media (max-width: 768px) {
@@ -53,13 +53,28 @@
 }
 
 /***** OrientationControl *****/
-.orientationControl > .glyphicon {
-    font-size: 24px;
-    padding: 4px 5px 4px 3px;
-    margin-top: 15px;
+.orientationButtons {
+    margin-top: 30px;
 }
 
-.orientationMarker {
-    color: #d42132;
-    font-size: 40px;
+.orientationButtons > .glyphicon {
+    font-size: 22px;
+    margin-top: 4px;
 }
+
+.orientationButtons > .glyphicon-map-marker {
+    padding: 5px 7px 6px 6px;
+}
+
+.orientationButtons > .glyphicon-record {
+    padding: 5px 6px 6px 6px;
+}
+/***** OrientationControl -> geolocation_marker *****/
+.geolocation_marker {
+    color: #F3F3F3;
+    padding: 2px 3px 2px 2px;
+    background: none repeat scroll #D42132;
+    border-radius: 50px !important;
+    font-size: 20px;
+}
+
