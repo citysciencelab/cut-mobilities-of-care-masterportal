@@ -19,9 +19,12 @@ define([
         initialize: function () {
             this.listenToOnce(EventBus, {
                 "mapView:sendResolutions": this.setResolutions,
-                "mapView:sendOptions": this.setViewResolution,
                 "mapView:sendMinResolution": this.setMinResolution,
                 "mapView:sendMaxResolution": this.setMaxResolution
+            });
+
+            this.listenTo(EventBus, {
+                "mapView:sendOptions": this.setViewResolution
             });
 
             this.listenToOnce(this, {

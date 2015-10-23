@@ -30,7 +30,7 @@ define([
             this.$el.append(this.templateButton);
             this.listenTo(this.model, "change:visibility change:transparence change:settings", this.render);
             this.listenTo(this.model, "change:selected", this.remove);
-            this.listenTo(this.model, "change:isResolutionInRange", this.toggleStyle);
+            this.listenTo(this.model, "change:viewResolution", this.toggleStyle);
         },
         render: function () {
             var attr = this.model.toJSON();
