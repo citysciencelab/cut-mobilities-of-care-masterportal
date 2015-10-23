@@ -42,6 +42,13 @@ define([
             }
         },
 
+        // Wenn der Parameter "legendURL" leer ist, wird er auf GetLegendGraphic gesetzt.
+        setLegendURL: function () {
+            if (this.get("legendURL") === "") {
+                this.set("legendURL", this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
+            }
+        },
+
         /**
          *
          */
