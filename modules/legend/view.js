@@ -12,7 +12,7 @@ define([
         initialize: function () {
             $(window).resize(function() {
                 if ($(".legend-win-content").height() !== null) {
-                    $(".legend-win-content").height($(window).height() * 0.7);
+                    $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
                 }
             });
 
@@ -26,7 +26,7 @@ define([
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
-            $(".legend-win-content").height($(window).height() * 0.7);
+            $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
         }
     });
 
