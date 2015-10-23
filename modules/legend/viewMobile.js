@@ -11,8 +11,6 @@ define([
         className: "modal bs-example-modal-sm legend fade in",
         template: _.template(LegendTemplate),
         initialize: function () {
-            EventBus.trigger("layerlist:getVisiblelayerList");
-
             this.listenTo(this.model, {
                 "change:legendParams": this.render
             });
@@ -23,12 +21,13 @@ define([
 
             this.render();
         },
+
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            // this.show();
         },
+
         toggle: function () {
             this.$el.modal({
                 backdrop: true,
