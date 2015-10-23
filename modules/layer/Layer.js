@@ -29,8 +29,12 @@ define([
 
             this.listenToOnce(this, {
                 "change:layer": function () {
+                    this.setMetadataURL(); // setzen der MetadatenURL, vlt. besser in layerlist??
                     EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
                     EventBus.trigger("mapView:getMaxResolution", this.get("maxScale"));
+                    if (this.get("typ") === "WMS") {
+                        this.setLegendURL(); // -> WMSLayer.js
+                    }
                 }
             });
 
@@ -61,6 +65,10 @@ define([
         },
 
         postInit: function () {
+            // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
+            this.setAttributions();
+            this.unset("datasets");
+
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             if (this.get("transparence")) {
@@ -70,15 +78,9 @@ define([
                 this.set("transparence", 0);
             }
             // this.updateOpacity();
-            // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
-            this.setAttributions();
-            this.unset("datasets");
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
             this.get("layer").id = this.get("id");
-
-            // setzen der MetadatenURL, vlt. besser in layerlist??
-            this.setMetadataURL();
 
             if (this.get("visible") !== undefined) {
                 this.set("visibility", this.get("visible"));
@@ -226,7 +228,18 @@ define([
         },
 
         openMetadata: function () {
-            window.open(this.get("metaURL"), "_blank");
+            // console.log(this.get("legendURL"));
+            // console.log(this.get("metaURL"));
+            // console.log(this.get("metaID"));
+            // console.log(this.get("name"));
+            EventBus.trigger("layerinformation:add", {
+                "id": this.get("id"),
+                "legendURL": this.get("legendURL"),
+                "metaURL": this.get("metaURL"),
+                "metaID": this.get("metaID"),
+                "name": this.get("name")
+            });
+            // window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
             if (Config.metadatenURL && Config.metadatenURL !== "") {

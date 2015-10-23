@@ -1,21 +1,35 @@
-.layerinformations {
+/***** Destop *****/
+.layerinformation-win {
     position: absolute;
-    font-size: 11px;
-    right: 8px;
-    bottom: 22px;"
+    top: 20px;
+    right: 60px;
+    min-width: 40%;
+    max-width: 50%;
+    margin: 60px 10px 30px 10px;
 }
 
-.layerinformation {
+.layerinformation-win > .layerinformation-win-header {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    height: 34px;
+    cursor: move;
+    border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.layerinformation-win > .layerinformation-win-content {
+    background-color: white;
+    overflow-y: auto;
+}
+
+.layerinformation-heading {
     padding: 8px;
-    margin-bottom: 4px;
 }
 
-.layerinformation > span {
-    float: right;
-    margin-left: 10px;
-}
-
-.layerinformation > span:hover {
-    cursor: pointer;
-    opacity: 0.5;
+.layerinformation-heading > .layerinformation-title {
+    font-size: 12px;
 }
