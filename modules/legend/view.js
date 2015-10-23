@@ -9,6 +9,9 @@ define([
         model: Legend,
         className: "legend-win",
         template: _.template(LegendTemplate),
+        events: {
+            "click .legend-win-header > .win-close": "toggle"
+        },
         initialize: function () {
             $(window).resize(function() {
                 if ($(".legend-win-content").height() !== null) {
@@ -16,12 +19,17 @@ define([
                 }
             });
 
-            EventBus.trigger("layerlist:getVisiblelayerList");
-
             this.listenTo(this.model, {
                 "change:legendParams": this.render
             });
+
+            this.listenTo(EventBus, {
+                "toggleLegendWin": this.toggle
+            });
+
+            this.render();
         },
+
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
@@ -31,6 +39,10 @@ define([
                 containment: "#map",
                 handle: ".legend-win-header"
             });
+        },
+
+        toggle: function () {
+            this.$el.toggle();
         }
     });
 

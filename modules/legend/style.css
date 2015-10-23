@@ -1,9 +1,10 @@
 .legend-win {
     position: absolute;
-    top: 80px;
-    left: 30px;
+    top: 20px;
+    left: 20px;
     min-width: 40%;
     margin: 60px 10px 30px 10px;
+    display: none;
 }
 
 .legend-win > .legend-win-header {

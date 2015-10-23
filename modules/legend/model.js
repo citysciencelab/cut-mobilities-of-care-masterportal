@@ -15,8 +15,7 @@ define([
 
         initialize: function () {
             this.listenTo(EventBus, {
-                "layerlist:sendVisiblelayerList": this.setLayerList,
-                "toggleLegendWin": this.createLegend
+                "layerlist:sendVisiblelayerList": this.setLayerList
             });
 
             this.listenTo(this, {
@@ -57,6 +56,7 @@ define([
             if (_.has(groupedLayers, "GROUP")) {
                 this.set("groupLayerList", groupedLayers.GROUP);
             }
+            this.createLegend();
         },
 
         unsetLegendParams: function () {
