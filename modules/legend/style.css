@@ -1,3 +1,42 @@
+.legend-win {
+    position: absolute;
+    top: 80px;
+    left: 30px;
+    min-width: 40%;
+}
+
+.legend-win > .legend-win-header {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    height: 34px;
+    cursor: move;
+    border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.legend-win > .legend-win-content {
+    background-color: white;
+    overflow-y: auto;
+}
+
+.legend-win-content > .panel-group {
+    padding: 12px;
+}
+
+.legend-win-content > .panel-group .panel {
+    margin-top: 12px;
+}
+
+
+
+
+
+
+
 .legendModal {
     background: #e7e7e7;
     background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
