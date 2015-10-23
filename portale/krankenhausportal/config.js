@@ -6,51 +6,57 @@ define(function () {
         view: {
             center: [565874, 5934140] // Rathausmarkt
         },
-        layerConf: '../components/lgv-config/services-fhhnet.json',
+        layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: '../components/lgv-config/category.json',
-        styleConf: '../components/lgv-config/style.json',
-        proxyURL: '/cgi-bin/proxy.cgi',
+        categoryConf: "../components/lgv-config/category.json",
+        styleConf: "../components/lgv-config/style.json",
+        proxyURL: "/cgi-bin/proxy.cgi",
         layerIDs: [
-            {id: '453', visible: true},
-            {id: '452', visible: false},
-            {id: '1711', visible: true, style: '1711', clusterDistance: 0, searchField: 'name', mouseHoverField: 'name',
-             attribution: '<strong><a href="http://www.tagesschau.de/" target="_blank">Weitere Informationen</a></strong>',
+            {id: "453", visible: true},
+            {id: "452", visible: false},
+            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name",
+             attribution: "<strong><a href='http://www.tagesschau.de/' target='_blank'>Weitere Informationen</a></strong>",
              displayInTree: true,
              filterOptions: [
                  {
-                     'fieldName': 'teilnahme_geburtsklinik',
-                     'filterType': 'combo',
-                     'filterName': 'Geburtsklinik',
-                     'filterString': ['*','ja','nein']
+                     "fieldName": "teilnahme_geburtsklinik",
+                     "filterType": "combo",
+                     "filterName": "Geburtsklinik",
+                     "filterString": ["*", "ja", "nein"]
                  },
                  {
-                     'fieldName': 'teilnahme_notversorgung',
-                     'filterType': 'combo',
-                     'filterName': 'Not- und Unfallversorgung',
-                     'filterString': ['*','ja','eingeschränkt','nein']
+                     "fieldName": "teilnahme_notversorgung",
+                     "filterType": "combo",
+                     "filterName": "Not- und Unfallversorgung",
+                     "filterString": ["*", "ja", "eingeschränkt", "nein"]
                  }
              ]
             }
         ],
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: true,
+            poi: false
+        },
         attributions: false,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         menu: {
-            viewerName: 'GeoViewer',
+            viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: false,
             routing: false
         },
-        startUpModul: '',
+        startUpModul: "",
         searchBar: {
             placeholder: "Suche nach Straße oder Krankenhausname",
             gazetteerURL: function () {
@@ -59,19 +65,17 @@ define(function () {
         },
         print: {
             printID: "99999",
-            title: "Verkehrsportal",
+            title: "Krankenhäuser in Hamburg",
             gfi: false
         },
         tools: {
             gfi: true,
             measure: false,
             print: false,
-            draw: false,
             coord: false,
             draw: false,
             record: false,
-            orientation: false,
-            active: 'gfi'
+            active: "gfi"
         }
     }
     return config;

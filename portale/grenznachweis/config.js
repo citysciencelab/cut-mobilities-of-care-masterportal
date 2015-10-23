@@ -12,28 +12,18 @@ define(function () {
         allowParametricURL: false,
         /**
         * @memberof config
-        * @desc Die initiale Zentrums-Koordinate und die Resolution
-        * @property {Array}  center - Die initiale Zentrumskoordinate.
+        * @desc Optionale Konfigurations-Einstellungen für die Map View
+        * @property {Array}  center - Die initiale Zentrumskoordinate. Default ist [565874, 5934140]
         * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
         * @property {Number}  scale - Der initiale Maßstab.
-        * @property {Array}  extent - Der ol.view.extent der Karte
+        * @property {Array}  extent - Der ol.view.extent der Karte. Default ist [510000.0, 5850000.0, 625000.4, 6000000.0]
+        * @property {Array}  resolutions - Die Resolutions der Karte. Default 1:250000 - 1:1000
+        * @property {Array}  epsg - Der EPSG-Code. Default ist EPSG:25832
         */
         view: {
             center: [565874, 5934140],
-            resolution: 2.645838625010583,
-            resolutions: [
-                66.14596562526458,
-                26.45838625010583,
-                15.8750317500635,
-                10.58335450004233,
-                5.291677250021166,
-                2.645838625010583,
-                1.322919312505291,
-                0.661459656252645,
-                0.264583862501058,
-                0.132291931250529
-            ],
-            extent: [454591, 5809000, 700000, 6075769]
+            extent: [454591, 5809000, 700000, 6075769],
+            epsg: "EPSG:25832"
         },
         /**
         * @memberof config
@@ -110,6 +100,12 @@ define(function () {
             {id: "368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396", visible: true, name: "Alkis Liegenschaftskarte"},
             {id: "2295,2296", visible: true, name: "Alkis Grenznachweis"}
         ],
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: false,
+            poi: false
+        },
         /**
         * @memberof config
         * @type {String}
@@ -225,19 +221,7 @@ define(function () {
             draw: false,
             record: false,
             active: ""
-        },
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
-        */
-        orientation: false,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
-        */
-        poi: false
+        }
     };
 
     return config;

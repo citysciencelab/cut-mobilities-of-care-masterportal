@@ -37,9 +37,20 @@ define(function () {
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
         },
+        ,
+        /**
+        * @memberof config
+        * @desc Konfiguration der Controls auf der Map
+        * @property {Boolean}  zoom - Legt fest ob die Zoombuttons angezeigt werden sollen.
+        * @property {Boolean}  toggleMenu - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
+        * @property {Boolean}  orientation - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
+        * @property {Boolean}  poi - Legt fest ob die Points of Interest angezeigt werden sollen.
+        */
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true,
+            poi: true
         },
         /**
         * customModules
@@ -269,19 +280,7 @@ define(function () {
             coord: true,
             draw: true,
             active: "gfi"
-        },
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
-        */
-        orientation: true,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
-        */
-        poi: true
+        }
     };
 
     return config;
