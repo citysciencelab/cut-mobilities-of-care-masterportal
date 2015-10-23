@@ -32,12 +32,12 @@ define(function () {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],
             resolution: 2.6458319045841048 // 1:10 000
-            
+
         },
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
 
         print: {
