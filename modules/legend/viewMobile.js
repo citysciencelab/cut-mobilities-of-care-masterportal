@@ -1,11 +1,11 @@
 define([
     "backbone",
-    "text!modules/legend/template.html",
+    "text!modules/legend/templateMobile.html",
     "modules/legend/model",
     "eventbus"
 ], function (Backbone, LegendTemplate, Legend, EventBus) {
 
-    var LegendView = Backbone.View.extend({
+    var MobileLegendView = Backbone.View.extend({
         model: Legend,
         id: "base-modal-legend",
         className: "modal bs-example-modal-sm legend fade in",
@@ -16,14 +16,20 @@ define([
             this.listenTo(this.model, {
                 "change:legendParams": this.render
             });
+
+            this.listenTo(EventBus, {
+                "toggleLegendWin": this.toggle
+            });
+
+            this.render();
         },
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            this.show();
+            // this.show();
         },
-        show: function () {
+        toggle: function () {
             this.$el.modal({
                 backdrop: true,
                 show: true
@@ -31,5 +37,5 @@ define([
         }
     });
 
-    return LegendView;
+    return MobileLegendView;
 });

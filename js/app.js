@@ -151,8 +151,13 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                     });
                 }
                 if (Config.menu.legend === true) {
-                    require(["modules/legend/view"], function (LegendView) {
-                        new LegendView();
+                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                        if (Util.isAny()) {
+                            new MobileLegendView();
+                        }
+                        else {
+                            new LegendView();
+                        }
                     });
                 }
                 if (Config.menu.routing === true) {
