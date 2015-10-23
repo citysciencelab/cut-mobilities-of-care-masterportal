@@ -1,8 +1,9 @@
 .alert {
     max-width: 80%;
     position: absolute;
-    left: 15px;
-    top: 85px;
+    left: 50%;
+    top: 25%;
     z-index: 2001;
     text-align: justify;
+    transform: translate(-50%);
 }
