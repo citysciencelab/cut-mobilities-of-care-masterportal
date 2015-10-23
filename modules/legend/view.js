@@ -10,9 +10,12 @@ define([
         className: "legend-win",
         template: _.template(LegendTemplate),
         initialize: function () {
-//             $( window ).resize(function() {
-//   console.log(44);
-// });
+            $(window).resize(function() {
+                if ($(".legend-win-content").height() !== null) {
+                    $(".legend-win-content").height($(window).height() * 0.7);
+                }
+            });
+
             EventBus.trigger("layerlist:getVisiblelayerList");
 
             this.listenTo(this.model, {
@@ -21,11 +24,9 @@ define([
         },
         render: function () {
             var attr = this.model.toJSON();
-// console.log($(document));
-// console.log($(document).innerHeight());
-// console.log($(document).outerHeight());
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
+            $(".legend-win-content").height($(window).height() * 0.7);
         }
     });
 
