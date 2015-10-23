@@ -213,6 +213,7 @@ define(function () {
             print: true,
             coord: false,
             draw: false,
+            record: false,
             active: "gfi"
         },
         /**

@@ -103,6 +103,7 @@ define(function () {
             print: false,
             draw: false,
             coord: true,
+            record: false,
             active: "gfi"
         },
         gfiImgReloadTime: 20000

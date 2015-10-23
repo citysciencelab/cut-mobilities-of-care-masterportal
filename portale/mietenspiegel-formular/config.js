@@ -217,6 +217,7 @@ define(function () {
             print: false,
             coord: false,
             draw: false,
+            record: false,
             active: "gfi"
         },
         /**
