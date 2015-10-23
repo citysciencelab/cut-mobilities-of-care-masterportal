@@ -6,7 +6,7 @@ define([
     'modules/routing/model',
     'eventbus',
     'config',
-    'models/Orientation'
+    'modules/controls/orientation/model'
 ], function ($, _, Backbone, RoutingWin, RoutingModel, EventBus, Config) {
 
     var RoutingView = Backbone.View.extend({

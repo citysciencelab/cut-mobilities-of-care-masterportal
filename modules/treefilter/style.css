@@ -22,3 +22,7 @@
     overflow-y: auto;
     max-width: 300px;
 }
+
+.form-tree-filter {
+    max-width: 420px;
+}
