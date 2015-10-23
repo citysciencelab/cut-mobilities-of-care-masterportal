@@ -27,6 +27,10 @@ define([
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
             $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".legend-win-header"
+            });
         }
     });
 
