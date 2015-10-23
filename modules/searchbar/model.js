@@ -5,7 +5,6 @@ define([
     "eventbus",
     "config"
     ], function (Backbone, ol, LayerList, EventBus, Config) {
-
         /**
         * Dieses Model ist ein Attribut der Searchbar.
         * Es verwaltet die Zustände (Suche läuft = false, Suche fertig = true) der einzelnen Suchen (Adresse, Straßen...).
@@ -17,9 +16,7 @@ define([
             * Zusätzlich wird die Methode "checkAttributes" auf das Event "change" für alle Attribute registriert.
             */
             initialize: function () {
-                this.set("streetSearch", true);
                 this.set("districtSearch", true);
-                this.set("numberSearch", true);
                 this.on("change", this.checkAttributes);
             },
 
@@ -69,11 +66,12 @@ define([
             initialize: function () {
                 this.on("change:searchString", this.setSearchStringRegExp, this);
                 this.on("change:searchString", this.checkStringAndSearch, this);
-                this.on("change:onlyOneStreetName", this.searchHouseNumbers, this);
                 EventBus.on("layerlist:sendVisibleWFSlayerList", this.getFeaturesForSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
                 EventBus.on("layerlist:sendOverlayerList", this.getLayerForSearch, this);
                 EventBus.on("sendNodeChild", this.getNodesForSearch, this);
+
+                EventBus.on("searchbar:pushHits", this.pushHits, this);
 
                 this.set("isSearchReady", new SearchReady());
                 this.set("useBKGSearch", Config.searchBar.useBKGSearch);
@@ -130,7 +128,6 @@ define([
 
                  this.set("searchStringRegExp", searchStringRegExp);
              },
-
             /**
              * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
              * {String} attribute - Das Attribut das gesetzt werden soll
@@ -142,7 +139,6 @@ define([
                 tempArray.push(value);
                 this.set(attribute, _.flatten(tempArray));
             },
-
             /**
             *
             */
@@ -158,7 +154,8 @@ define([
                         this.suggestByBKG();
                     }
                     else {
-                        this.searchStreets();
+                        // Test mit neuem Modul
+                        EventBus.trigger("gazSearch:search", this.get("searchString"));
                         this.searchDistricts();
                     }
                     if (_.has(Config.searchBar, "getFeatures") === true) {
@@ -172,7 +169,6 @@ define([
                     }
                 }
             },
-
             /**
              * @description Führt einen HTTP-GET-Request aus.
              *
@@ -242,113 +238,6 @@ define([
                         }
                     }, this);
                 this.get("isSearchReady").set("suggestByBKG", true);
-            },
-
-
-            /**
-            *
-            */
-            searchStreets: function () {
-                if (this.get("isSearchReady").get("streetSearch") === true) {
-                    this.get("isSearchReady").set("streetSearch", false);
-                        this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(this.get("searchString")), this.getStreets, true);
-                }
-
-            },
-
-            /**
-             * [getStreets description]
-             * @param  {[type]} data [description]
-             */
-            getStreets: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    coordinates,
-                    hitName;
-
-                _.each(hits, function (hit) {
-                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
-                    hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
-                    // "Hitlist-Objekte"
-                    this.pushHits("hitList", {
-                        name: hitName,
-                        type: "Straße",
-                        coordinate: coordinates,
-                        glyphicon: "glyphicon-road",
-                        id: hitName.replace(/ /g, "") + "Straße"
-                    });
-                }, this);
-                if (hits.length === 1) {
-                    this.set("onlyOneStreetName", hitName);
-                    this.searchInHouseNumbers();
-                }
-                else if (hits.length === 0) {
-                    this.searchInHouseNumbers();
-                }
-                this.get("isSearchReady").set("streetSearch", true);
-            },
-
-            /**
-             * [getHouseNumbers description]
-             * @param  {[type]} data [description]
-             */
-            getHouseNumbers: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    number,
-                    affix,
-                    coordinate,
-                    position,
-                    name,
-                    addressJoin;
-
-                    _.each(hits, function (hit) {
-                        position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                        coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                        number = $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent;
-                        if ($(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] !== undefined) {
-                            affix = $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent;
-                            name = this.get("onlyOneStreetName") + " " + number + affix;
-                            addressJoin = this.get("onlyOneStreetName").replace(/ /g, "") + number + affix;
-                        }
-                        else {
-                            name = this.get("onlyOneStreetName") + " " + number ;
-                            addressJoin = this.get("onlyOneStreetName").replace(/ /g, "") + number;
-                        }
-
-                        // "Hitlist-Objekte"
-                        if (addressJoin.search(this.get("searchStringRegExp")) !== -1) {
-                            this.pushHits("houseNumbers", {
-                                name: name,
-                                type: "Adresse",
-                                coordinate: coordinate,
-                                glyphicon: "glyphicon-map-marker",
-                                id: addressJoin.replace(/ /g, "") + "Adresse"
-                            });
-                        }
-                    }, this);
-                this.get("isSearchReady").set("numberSearch", true);
-            },
-
-            /**
-            *
-            */
-            searchHouseNumbers: function () {
-                    this.get("isSearchReady").set("numberSearch", false);
-                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, true);
-            },
-
-            searchInHouseNumbers: function () {
-                var address;
-
-                this.get("isSearchReady").set("numberSearch", false);
-                _.each(this.get("houseNumbers"), function (houseNumber) {
-                    address = houseNumber.name.replace(/ /g, "");
-
-                    // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                    if (address.search(this.get("searchStringRegExp")) !== -1) {
-                        this.pushHits("hitList", houseNumber);
-                    }
-                }, this);
-                this.get("isSearchReady").set("numberSearch", true);
             },
 
             /**

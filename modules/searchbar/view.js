@@ -15,7 +15,13 @@ define([
             // tagName: "form",
             className: "navbar-form col-xs-9",
             template: _.template(SearchbarTemplate),
-            initialize: function () {
+            initialize: function (gazetteerConfig) {
+                // Lade ggf. Gazetteer-Modell
+                if (gazetteerConfig && gazetteerConfig.gazetteerURL && gazetteerConfig.gazetteerHouseNumbers) {
+                    require(["modules/searchbar/gaz/model"], function (GAZModel) {
+                        new GAZModel(gazetteerConfig.gazetteerURL, gazetteerConfig.gazetteerHouseNumbers);
+                    });
+                }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
 
                 EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
