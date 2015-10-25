@@ -19,7 +19,7 @@ define([
                 if (_.has(config, "gazetteer") === true) {
                     // Lade ggf. Gazetteer-Modell
                     require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                        new GAZModel(config.gazetteer.url, config.gazetteer.searchStreets, config.gazetteer.searchHouseNumbers, config.gazetteer.searchDistricts, config.gazetteer.searchParcels);
+                        new GAZModel(config.gazetteer.url, config.gazetteer.searchStreets, config.gazetteer.searchHouseNumbers, config.gazetteer.searchDistricts, config.gazetteer.searchParcels, config.gazetteer.minChars);
                     });
                 }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);

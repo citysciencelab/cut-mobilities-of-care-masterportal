@@ -137,7 +137,8 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                                 searchStreets: true,
                                 searchHouseNumbers: true,
                                 searchDistricts: true,
-                                searchParcels: true
+                                searchParcels: true,
+                                minChars: 3
                             }
                         });
                     });

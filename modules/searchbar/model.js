@@ -144,14 +144,11 @@ define([
             checkStringAndSearch: function () {
                 var firstFourChars = this.get("searchString").slice(0, 4);
 
+                EventBus.trigger("searchbar:search", this.get("searchString"));
                 this.set("hitList", []);
                 if (this.get("searchString").length >= 3) {
                     if (Config.searchBar.useBKGSearch) {
                         this.suggestByBKG();
-                    }
-                    else {
-                        // Test mit neuem Modul
-                        EventBus.trigger("searchbar:search", this.get("searchString"));
                     }
                     if (_.has(Config.searchBar, "getFeatures") === true) {
                             this.searchInOlympiaFeatures();

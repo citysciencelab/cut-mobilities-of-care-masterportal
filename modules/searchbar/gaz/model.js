@@ -9,6 +9,7 @@ define([
         */
         defaults: {
             inUse: 0,
+            minChars: 3,
             gazetteerURL: "",
             searchStreets: false,
             searchHouseNumbers: false,
@@ -21,22 +22,27 @@ define([
         /**
          * @description Initialisierung der Gazetteer Suche
          *
-         * @param {String} gazetteerURL - A string containing the URL to which the request is sent
-         * @param {boolean} searchHouseNumbers - sollen auch Hausnummern gesucht werden oder nur Straßen
+         * @param {String} gazetteerURL - A string containing the URL to which the request is sent.
+         * @param {boolean} searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+         * @param {boolean} searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+         * @param {boolean} searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
+         * @param {boolean} searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
+         * @param {integer} minCharacters - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
          */
-        initialize: function (gazetteerURL, searchStreets, searchHouseNumbers, searchDistricts, searchParcels) {
+        initialize: function (gazetteerURL, searchStreets, searchHouseNumbers, searchDistricts, searchParcels, minChars) {
             this.set("gazetteerURL", gazetteerURL);
             this.set("searchStreets", searchStreets);
             this.set("searchHouseNumbers", searchHouseNumbers);
             this.set("searchDistricts", searchDistricts);
             this.set("searchParcels", searchParcels);
+            this.set("minChars", minChars);
             EventBus.on("searchbar:search", this.search, this);
         },
         /**
         *
         */
         search: function (searchString) {
-            if (this.get("inUse") === 0) {
+            if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
