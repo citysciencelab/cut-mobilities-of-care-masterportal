@@ -132,8 +132,12 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 if (Config.menu.searchBar === true) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
                         new SearchbarView({
-                            gazetteerURL: Config.searchBar.gazetteerURL(),
-                            gazetteerHouseNumbers: true
+                            gazetteer: {
+                                url: Config.searchBar.gazetteerURL(),
+                                searchStreets: true,
+                                searchHouseNumbers: true,
+                                searchDistricts: true
+                            }
                         });
                     });
                 }

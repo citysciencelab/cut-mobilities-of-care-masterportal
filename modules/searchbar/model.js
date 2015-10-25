@@ -155,8 +155,7 @@ define([
                     }
                     else {
                         // Test mit neuem Modul
-                        EventBus.trigger("gazSearch:search", this.get("searchString"));
-                        this.searchDistricts();
+                        EventBus.trigger("searchbar:search", this.get("searchString"));
                     }
                     if (_.has(Config.searchBar, "getFeatures") === true) {
                             this.searchInOlympiaFeatures();
@@ -238,45 +237,6 @@ define([
                         }
                     }, this);
                 this.get("isSearchReady").set("suggestByBKG", true);
-            },
-
-            /**
-             * [getDistricts description]
-             * @param  {[type]} data [description]
-             * @return {[type]}      [description]
-             */
-            getDistricts: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    coordinate,
-                    position,
-                    hitName;
-
-                _.each(hits, function (hit) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    hitName = $(hit).find("dog\\:kreisname_normalisiert, kreisname_normalisiert")[0].textContent;
-                    // "Hitlist-Objekte"
-                    this.pushHits("hitList", {
-                        name: hitName,
-                        type: "Stadtteil",
-                        coordinate: coordinate,
-                        glyphicon: "glyphicon-map-marker",
-                        id: hitName.replace(/ /g, "") + "Stadtteil"
-                    });
-                }, this);
-
-                this.get("isSearchReady").set("districtSearch", true);
-            },
-
-            /**
-             * [searchDistricts description]
-             * @return {[type]} [description]
-             */
-            searchDistricts: function () {
-                if (this.get("isSearchReady").get("districtSearch") === true) {
-                    this.get("isSearchReady").set("districtSearch", false);
-                    this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=findeStadtteil&stadtteilname=" + this.get("searchString"), this.getDistricts, true);
-                }
             },
 
             /**

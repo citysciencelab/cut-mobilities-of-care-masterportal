@@ -15,11 +15,11 @@ define([
             // tagName: "form",
             className: "navbar-form col-xs-9",
             template: _.template(SearchbarTemplate),
-            initialize: function (gazetteerConfig) {
-                // Lade ggf. Gazetteer-Modell
-                if (gazetteerConfig && gazetteerConfig.gazetteerURL && gazetteerConfig.gazetteerHouseNumbers) {
+            initialize: function (config) {
+                if (_.has(config, "gazetteer") === true) {
+                    // Lade ggf. Gazetteer-Modell
                     require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                        new GAZModel(gazetteerConfig.gazetteerURL, gazetteerConfig.gazetteerHouseNumbers);
+                        new GAZModel(config.gazetteer.url, config.gazetteer.searchStreets, config.gazetteer.searchHouseNumbers, config.gazetteer.searchDistricts);
                     });
                 }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
