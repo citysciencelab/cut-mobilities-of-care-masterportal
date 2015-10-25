@@ -19,7 +19,7 @@ define([
                 if (_.has(config, "gazetteer") === true) {
                     // Lade ggf. Gazetteer-Modell
                     require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                        new GAZModel(config.gazetteer.url, config.gazetteer.searchStreets, config.gazetteer.searchHouseNumbers, config.gazetteer.searchDistricts);
+                        new GAZModel(config.gazetteer.url, config.gazetteer.searchStreets, config.gazetteer.searchHouseNumbers, config.gazetteer.searchDistricts, config.gazetteer.searchParcels);
                     });
                 }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
@@ -263,6 +263,17 @@ define([
                     $(".dropdown-menu-search").hide();
 
                 }
+                else if (hit.type === "Parcel") {
+                    var wkt = this.getWKTFromString("POINT", hit.coordinate),
+                        extent,
+                        format = new ol.format.WKT(),
+                        feature = format.readFeature(wkt);
+                    extent = feature.getGeometry().getExtent();
+                    EventBus.trigger("zoomToExtent", extent);
+                    $(".dropdown-menu-search").hide();
+                    this.model.get("marker").setPosition(hit.coordinate);
+                    $("#searchMarker").css("display", "block");
+                }
                 else if (hit.type === "Krankenhaus") {
                     $(".dropdown-menu-search").hide();
                     EventBus.trigger("mapView:setCenter", hit.coordinate, 5);
@@ -446,8 +457,14 @@ define([
                     else {
                         wkt += element + ", ";
                     }
-
                 });
+                }
+                else if (type === "POINT") {
+                    var wkt;
+
+                    wkt = type + "(";
+                    wkt += geom[0] + " " + geom[1];
+                    wkt += ")";
                 }
                 else if (type === "MULTIPOLYGON") {
                     wkt = type + "(((";

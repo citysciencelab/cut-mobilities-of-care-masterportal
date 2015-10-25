@@ -136,7 +136,8 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                                 url: Config.searchBar.gazetteerURL(),
                                 searchStreets: true,
                                 searchHouseNumbers: true,
-                                searchDistricts: true
+                                searchDistricts: true,
+                                searchParcels: true
                             }
                         });
                     });

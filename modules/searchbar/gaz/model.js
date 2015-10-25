@@ -8,11 +8,12 @@ define([
         *
         */
         defaults: {
-            inUse: false,
+            inUse: 0,
             gazetteerURL: "",
             searchStreets: false,
             searchHouseNumbers: false,
             searchDistricts: false,
+            searchParcels: false,
             onlyOneStreetName: "",
             searchStringRegExp: "",
             houseNumbers: []
@@ -23,30 +24,44 @@ define([
          * @param {String} gazetteerURL - A string containing the URL to which the request is sent
          * @param {boolean} searchHouseNumbers - sollen auch Hausnummern gesucht werden oder nur Straßen
          */
-        initialize: function (gazetteerURL, searchStreets, searchHouseNumbers, searchDistricts) {
+        initialize: function (gazetteerURL, searchStreets, searchHouseNumbers, searchDistricts, searchParcels) {
             this.set("gazetteerURL", gazetteerURL);
             this.set("searchStreets", searchStreets);
             this.set("searchHouseNumbers", searchHouseNumbers);
             this.set("searchDistricts", searchDistricts);
+            this.set("searchParcels", searchParcels);
             EventBus.on("searchbar:search", this.search, this);
         },
         /**
         *
         */
         search: function (searchString) {
-            if (this.get("inUse") === false) {
-                this.set("inUse", true);
-
+            if (this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
                 }
                 if (this.get("searchDistricts") === true) {
-                    this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true);
+                    if (!_.isNull(searchString.match(/^[a-z]+$/i))) {
+                        this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true);
+                    }
+                }
+                if (this.get("searchParcels") === true) {
+                    var gemarkung, flurstuecksnummer;
+
+                    if (!_.isNull(searchString.match(/^[0-9]{4}[\s|\/][0-9]*$/))) {
+                        gemarkung = searchString.split(/[\s|\/]/)[0];
+                        flurstuecksnummer = searchString.split(/[\s|\/]/)[1];
+                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                    }
+                    else if (!_.isNull(searchString.match(/^[0-9]{5,}$/))) {
+                        gemarkung = searchString.slice(0, 4);
+                        flurstuecksnummer = searchString.slice(4);
+                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                    }
                 }
             }
-
         },
         /**
          * [getStreets description]
@@ -79,7 +94,6 @@ define([
                     this.searchInHouseNumbers();
                 }
             }
-            this.set("inUse", false);
             EventBus.trigger("createRecommendedList");
         },
         /**
@@ -106,7 +120,6 @@ define([
                     id: hitName.replace(/ /g, "") + "Stadtteil"
                 });
             }, this);
-            this.set("inUse", false);
             EventBus.trigger("createRecommendedList");
         },
         searchInHouseNumbers: function () {
@@ -164,6 +177,35 @@ define([
             }, this);
         },
         /**
+         *
+         */
+        getParcel: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                coordinate,
+                position,
+                geom,
+                gemarkung,
+                flurstueck;
+
+            _.each(hits, function (hit) {
+                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                gemarkung = $(hit).find("dog\\:gemarkung,gemarkung")[0].textContent;
+                flurstueck = $(hit).find("dog\\:flurstuecksnummer,flurstuecksnummer")[0].textContent;
+                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                geom = $(hit).find("gml\\:posList, posList")[0].textContent;
+                // "Hitlist-Objekte"
+                EventBus.trigger("searchbar:pushHits", "hitList", {
+                    name: "Flurstück " + gemarkung + "/" + flurstueck,
+                    type: "Parcel",
+                    coordinate: coordinate,
+                    glyphicon: "glyphicon-map-marker",
+                    geom: "geom",
+                    id: "Parcel"
+                });
+            }, this);
+            EventBus.trigger("createRecommendedList");
+        },
+        /**
          * @description Führt einen HTTP-GET-Request aus.
          *
          * @param {String} url - A string containing the URL to which the request is sent
@@ -172,6 +214,7 @@ define([
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
          */
         sendRequest: function (data, successFunction, asyncBool) {
+            this.set("inUse", this.get("inUse") + 1);
             $.ajax({
                 url: this.get("gazetteerURL"),
                 data: data,
@@ -182,6 +225,9 @@ define([
                 timeout: 6000,
                 error: function () {
                     EventBus.trigger("alert", "Gazetteer-URL nicht erreichbar.");
+                },
+                complete: function () {
+                    this.set("inUse", this.get("inUse") - 1);
                 }
             });
         }

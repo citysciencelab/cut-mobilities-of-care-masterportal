@@ -16,7 +16,6 @@ define([
             * Zusätzlich wird die Methode "checkAttributes" auf das Event "change" für alle Attribute registriert.
             */
             initialize: function () {
-                this.set("districtSearch", true);
                 this.on("change", this.checkAttributes);
             },
 
@@ -146,10 +145,7 @@ define([
                 var firstFourChars = this.get("searchString").slice(0, 4);
 
                 this.set("hitList", []);
-                if (/^[0-9]{4}$/.test(firstFourChars) === true) {
-                    this.searchParcel();
-                }
-                else if (this.get("searchString").length >= 3) {
+                if (this.get("searchString").length >= 3) {
                     if (Config.searchBar.useBKGSearch) {
                         this.suggestByBKG();
                     }
@@ -160,7 +156,7 @@ define([
                     if (_.has(Config.searchBar, "getFeatures") === true) {
                             this.searchInOlympiaFeatures();
                             this.searchInBPlans();
-                        }
+                    }
                     this.searchInFeatures();
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
@@ -237,46 +233,6 @@ define([
                         }
                     }, this);
                 this.get("isSearchReady").set("suggestByBKG", true);
-            },
-
-            /**
-             *
-             */
-            getParcel: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    coordinate,
-                    position,
-                    geom;
-
-                _.each(hits, function (hit) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    geom = $(hit).find("gml\\:posList, posList")[0].textContent;
-                    // "Hitlist-Objekte"
-                    this.pushHits("hitList", {
-                        type: "Parcel",
-                        coordinate: coordinate,
-                        geom: "geom"
-                    });
-                }, this);
-            },
-
-            /**
-             *
-             */
-            searchParcel: function () {
-                var gemarkung, flurstuecksnummer;
-
-                this.get("isSearchReady").set("parcelSearch", false);
-                if (this.get("searchString").charAt(4) === " ") {
-                    flurstuecksnummer = this.get("searchString").slice(5);
-                }
-                else {
-                    flurstuecksnummer = this.get("searchString").slice(4);
-                }
-                gemarkung = this.get("searchString").slice(0, 4);
-                this.sendRequest(this.get("gazetteerURL"), "StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
-                this.get("isSearchReady").set("parcelSearch", true);
             },
 
             /**
