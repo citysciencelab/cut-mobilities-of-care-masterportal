@@ -15,12 +15,8 @@ define([
             minChars: 3
         },
         /**
-         * @description Initialisierung der wfsFeature Suche
+         * @description Initialisierung der visibleWFS Suche
          * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-         * @type {Objekt[]} Das Konfigurationsarray für die specialWFS-Suche
-         * @param {string} url - Die URL, des WFS
-         * @param {string} data - Query string des WFS-Request
-         * @param {string} name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
          */
         initialize: function (config) {
             if (config.minChars) {
