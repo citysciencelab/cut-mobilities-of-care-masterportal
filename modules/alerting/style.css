@@ -1,9 +1,12 @@
 .alert {
-    max-width: 80%;
+    top: 25%;
+    text-align: justify;
+}
+
+.messages {
     position: absolute;
-    left: 50%;
     top: 25%;
     z-index: 2001;
-    text-align: justify;
     transform: translate(-50%);
+    left: 50%;
 }
