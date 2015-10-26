@@ -129,18 +129,43 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new TreeFilterView();
                     });
                 }
-                if (Config.menu.searchBar === true) {
+                if (Config.menu.searchBar === true && Config.searchBar) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView({
-                            gazetteer: {
-                                url: Config.searchBar.gazetteerURL(),
-                                searchStreets: true,
-                                searchHouseNumbers: true,
-                                searchDistricts: true,
-                                searchParcels: true,
-                                minChars: 3
+                        var searchbar = {},
+                            gazetteer = {},
+                            specialWFS = [];
+
+                        if (Config.searchBar.gazetteer) {
+                            if (_.has(Config.searchBar.gazetteer, "url") === true) {
+                                _.extend(gazetteer, {url: Config.searchBar.gazetteer.url});
                             }
-                        });
+                            if (_.has(Config.searchBar.gazetteer, "searchStreets") === true) {
+                                _.extend(gazetteer, {searchStreets: Config.searchBar.gazetteer.searchStreets});
+                            }
+                            if (_.has(Config.searchBar.gazetteer, "searchHouseNumbers") === true) {
+                                _.extend(gazetteer, {searchHouseNumbers: Config.searchBar.gazetteer.searchHouseNumbers});
+                            }
+                            if (_.has(Config.searchBar.gazetteer, "searchDistricts") === true) {
+                                _.extend(gazetteer, {searchDistricts: Config.searchBar.gazetteer.searchDistricts});
+                            }
+                            if (_.has(Config.searchBar.gazetteer, "searchParcels") === true) {
+                                _.extend(gazetteer, {searchParcels: Config.searchBar.gazetteer.searchParcels});
+                            }
+                            if (_.has(Config.searchBar.gazetteer, "minChars") === true) {
+                                _.extend(gazetteer, {minChars: Config.searchBar.gazetteer.minChars});
+                            }
+                            _.extend(searchbar, {gazetteer: gazetteer});
+                        }
+                        if (Config.searchBar.specialWFS && Config.searchBar.specialWFS.definitions) {
+                            if (_.has(Config.searchBar.specialWFS, "definitions") === true) {
+                                _.extend(specialWFS, {definitions: Config.searchBar.specialWFS.definitions});
+                            }
+                            if (_.has(Config.searchBar.specialWFS, "minChars") === true) {
+                                _.extend(specialWFS, {minChars: Config.searchBar.specialWFS.minChars});
+                            }
+                            _.extend(searchbar, {specialWFS: specialWFS});
+                        }
+                        new SearchbarView(searchbar);
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {

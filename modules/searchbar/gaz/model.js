@@ -21,21 +21,31 @@ define([
         },
         /**
          * @description Initialisierung der Gazetteer Suche
-         *
-         * @param {String} gazetteerURL - A string containing the URL to which the request is sent.
+         * @type {Object} Das Konfigurationsobjekt für die Gazetteer-Suche
+         * @param {string} url - Die URL.
          * @param {boolean} searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
          * @param {boolean} searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
          * @param {boolean} searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
          * @param {boolean} searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
          * @param {integer} minCharacters - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
          */
-        initialize: function (gazetteerURL, searchStreets, searchHouseNumbers, searchDistricts, searchParcels, minChars) {
-            this.set("gazetteerURL", gazetteerURL);
-            this.set("searchStreets", searchStreets);
-            this.set("searchHouseNumbers", searchHouseNumbers);
-            this.set("searchDistricts", searchDistricts);
-            this.set("searchParcels", searchParcels);
-            this.set("minChars", minChars);
+        initialize: function (config) {
+            this.set("gazetteerURL", config.url);
+            if (config.searchStreets) {
+                this.set("searchStreets", config.searchStreets);
+            }
+            if (config.searchHouseNumbers) {
+                this.set("searchHouseNumbers", config.searchHouseNumbers);
+            }
+            if (config.searchDistricts) {
+               this.set("searchDistricts", config.searchDistricts);
+            }
+            if (config.searchParcels) {
+                this.set("searchParcels", config.searchParcels);
+            }
+            if (config.minChars) {
+                this.set("minChars", config.minChars);
+            }
             EventBus.on("searchbar:search", this.search, this);
         },
         /**

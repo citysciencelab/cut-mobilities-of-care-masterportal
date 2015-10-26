@@ -17,9 +17,13 @@ define([
             template: _.template(SearchbarTemplate),
             initialize: function (config) {
                 if (_.has(config, "gazetteer") === true) {
-                    // Lade ggf. Gazetteer-Modell
                     require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                        new GAZModel(config.gazetteer.url, config.gazetteer.searchStreets, config.gazetteer.searchHouseNumbers, config.gazetteer.searchDistricts, config.gazetteer.searchParcels, config.gazetteer.minChars);
+                        new GAZModel(config.gazetteer);
+                    });
+                }
+                if (_.has(config, "specialWFS") === true) {
+                    require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
+                        new SpecialWFSModel(config.specialWFS);
                     });
                 }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);

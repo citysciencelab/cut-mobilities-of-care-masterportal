@@ -126,23 +126,28 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Sportarten",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
             },
-            getFeatures: [
-                {
-                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
-                    typeName: "olympia_sportarten_paralympic",
-                    propertyName: "staette,art,piktogramm,geom",
-                    filter: "paralympia"
-                },
-                {
-                    url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
-                    typeName: "olympia_sportarten",
-                    propertyName: "staette,art,piktogramm,geom",
-                    filter: "olympia"
-                }
-            ]
+            specialWFS: {
+                minChar: 3,
+                definitions: [
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=olympia_sportarten_paralympic",
+                        name: "paralympia"
+                    },
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_olympiastandorte?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=olympia_sportarten",
+                        name: "olympia"
+                    }
+                ]
+            }
         },
         tools: {
             gfi: true,
@@ -151,6 +156,7 @@ define(function () {
             coord: true,
             draw: false,
             orientation: false,
+            record: false,
             active: "gfi"
         },
         print: {

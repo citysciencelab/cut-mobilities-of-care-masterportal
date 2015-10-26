@@ -81,10 +81,6 @@ define([
                     this.set("gazetteerURL", Config.searchBar.gazetteerURL);
                 }
 
-                if (Config.searchBar.getFeatures !== undefined) {
-                    this.getWFSFeatures();
-                }
-
                 // Initiale Suche query=...
                 if (Config.searchBar.initString !== undefined) {
                     if (Config.searchBar.initString.search(",") !== -1) {
@@ -142,17 +138,11 @@ define([
             *
             */
             checkStringAndSearch: function () {
-                var firstFourChars = this.get("searchString").slice(0, 4);
-
-                EventBus.trigger("searchbar:search", this.get("searchString"));
                 this.set("hitList", []);
+                EventBus.trigger("searchbar:search", this.get("searchString"));
                 if (this.get("searchString").length >= 3) {
                     if (Config.searchBar.useBKGSearch) {
                         this.suggestByBKG();
-                    }
-                    if (_.has(Config.searchBar, "getFeatures") === true) {
-                            this.searchInOlympiaFeatures();
-                            this.searchInBPlans();
                     }
                     this.searchInFeatures();
                     if (_.has(Config, "tree") === true) {
@@ -230,21 +220,6 @@ define([
                         }
                     }, this);
                 this.get("isSearchReady").set("suggestByBKG", true);
-            },
-
-            /**
-            /**
-            *
-            */
-            searchInBPlans: function () {
-                this.get("isSearchReady").set("bPlanSearch", false);
-                _.each(this.get("bPlans"), function (bPlan) {
-                    // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                    if (bPlan.name.search(this.get("searchStringRegExp")) !== -1) {
-                        this.pushHits("hitList", bPlan);
-                    }
-                }, this);
-                this.get("isSearchReady").set("bPlanSearch", true);
             },
 
             /**
@@ -355,131 +330,6 @@ define([
                 });
                 this.pushHits("features", featureArray);
             },
-
-            /**
-             * [getFeaturesFromWFS description]
-             */
-            getWFSFeatures: function () {
-                _.each(Config.searchBar.getFeatures, function (element) {
-                    if (element.filter === "olympia") {
-                        this.sendRequest(element.url, "typeNames=" + element.typeName, this.getFeaturesForOlympia, false);
-                    }
-                    else if (element.filter === "paralympia") {
-                        this.sendRequest(element.url, "typeNames=" + element.typeName, this.getFeaturesForParalympia, false);
-                    }
-                    else if (element.filter === "bplan") {
-                        this.sendRequest(element.url, "typeNames=" + element.typeName + "&propertyName=" + element.propertyName, this.getFeaturesForBPlan, false);
-                    }
-                }, this);
-            },
-
-            getFeaturesForBPlan: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    name,
-                    type;
-
-                _.each(hits, function (hit) {
-                    if ($(hit).find("app\\:planrecht, planrecht")[0] !== undefined) {
-                        name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
-                        type = "festgestellt";
-                    }
-                    else {
-                        name = $(hit).find("app\\:plan, plan")[0].textContent;
-                        type = "im Verfahren";
-                    }
-                    // "Hitlist-Objekte"
-                    this.pushHits("bPlans", {
-                        name: name.trim(),
-                        type: type,
-                        glyphicon: "glyphicon-picture",
-                        id: name.replace(/ /g, "") + "BPlan"
-                    });
-                }, this);
-            },
-
-            /**
-             * success-Funktion für die Olympiastandorte
-             * @param  {xml} data - getFeature-Request
-             */
-            getFeaturesForOlympia: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    coordinate,
-                    position,
-                    hitType,
-                    hitName;
-
-                _.each(hits, function (hit) {
-                   if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                        position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                        coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                        if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                            hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
-                            hitType = $(hit).find("app\\:staette, staette")[0].textContent;
-                            this.pushHits("olympia", {
-                                name: hitName,
-                                type: "Olympiastandort",
-                                coordinate: coordinate,
-                                glyphicon: "glyphicon-fire",
-                                id: hitName.replace(/ /g, "") + "Olympia"
-                            });
-                        }
-                   }
-                }, this);
-            },
-
-            /**
-             * success-Funktion für die Paralympiastandorte
-             * @param  {xml} data - getFeature-Request
-             */
-            getFeaturesForParalympia: function (data) {
-                var hits = $("wfs\\:member,member", data),
-                    coordinate,
-                    position,
-                    hitType,
-                    hitName;
-
-                _.each(hits, function (hit) {
-                   if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                        position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                        coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                        if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                            hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
-                            hitType = $(hit).find("app\\:staette, staette")[0].textContent;
-                            this.pushHits("olympia", {
-                                name: hitName,
-                                type: "Paralympiastandort",
-                                coordinate: coordinate,
-                                glyphicon: "glyphicon-fire",
-                                id: hitName.replace(/ /g, "") + "Paralympia"
-                            });
-                        }
-                   }
-                }, this);
-            },
-
-            /**
-            *
-            */
-            searchInOlympiaFeatures: function () {
-                this.get("isSearchReady").set("wfsFeatureSearch", false);
-                _.each(this.get("olympia"), function (feature) {
-                    _.each(feature.name.split(","), function (ele) {
-                        var eleName = ele.replace(/ /g, "");
-                        // Prüft ob der Suchstring ein Teilstring vom Feature ist
-                        if (eleName.search(this.get("searchStringRegExp")) !== -1) {
-                            this.pushHits("hitList", {
-                                name: ele,
-                                type: feature.type,
-                                coordinate: feature.coordinate,
-                                glyphicon: "glyphicon-fire",
-                                id: feature.id
-                            });
-                        }
-                    }, this);
-                }, this);
-                this.get("isSearchReady").set("wfsFeatureSearch", true);
-            },
-
             /**
             *
             */

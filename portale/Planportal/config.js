@@ -47,30 +47,30 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Bebauungsplan",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
             },
-            getFeatures: [
-                {
-                    url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                    typeName: "hh_hh_planung_festgestellt",
-                    propertyName: "planrecht",
-                    filter: "bplan"
-                },
-                {
-                    url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                    typeName: "imverfahren",
-                    propertyName: "plan",
-                    filter: "bplan"
-                }
-            ]
+            specialWFS: {
+                minChar: 3,
+                definitions: [
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        name: "bplan"
+                    },
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=imverfahren&propertyName=plan",
+                        name: "bplan"
+                    }
+                ]
+            },
+            placeholder: "Suche Adresse, Bebauungsplan",
         },
-        // bPlan: {
-        //     url: function () {
-        //             return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
-        //     }
-		// },
         tools: {
             gfi: true,
             measure: true,
@@ -88,6 +88,7 @@ define(function () {
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
+
     return config;
 });
