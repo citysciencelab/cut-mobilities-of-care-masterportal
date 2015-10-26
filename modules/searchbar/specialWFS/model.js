@@ -1,6 +1,7 @@
 define([
     "backbone",
-    "eventbus"
+    "eventbus",
+    "modules/searchbar/model"
     ], function (Backbone, EventBus) {
     "use strict";
     return Backbone.Model.extend({
@@ -9,21 +10,21 @@ define([
         */
         defaults: {
             inUse: false,
-            minChar: 3,
+            minChars: 3,
             bPlans: [],
             olympia: []
         },
         /**
          * @description Initialisierung der wfsFeature Suche
-         * @param {integer} minChar - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
          * @type {Objekt[]} Das Konfigurationsarray für die specialWFS-Suche
          * @param {string} url - Die URL, des WFS
          * @param {string} data - Query string des WFS-Request
          * @param {string} name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
          */
         initialize: function (config) {
-            if (config.minChar) {
-                this.set("minChar", config.minChar);
+            if (config.minChars) {
+                this.set("minChars", config.minChars);
             }
             _.each(config.definitions, function (element) {
                 if (element.name === "olympia") {
@@ -46,10 +47,10 @@ define([
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
-                if (this.get("olympia").length > 0 && searchString.length >= this.get("minChar")) {
+                if (this.get("olympia").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInOlympiaFeatures(searchStringRegExp);
                 }
-                if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChar")) {
+                if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInBPlans(searchStringRegExp);
                 }
                 EventBus.trigger("createRecommendedList");

@@ -65,7 +65,6 @@ define([
             initialize: function () {
                 this.on("change:searchString", this.setSearchStringRegExp, this);
                 this.on("change:searchString", this.checkStringAndSearch, this);
-                EventBus.on("layerlist:sendVisibleWFSlayerList", this.getFeaturesForSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
                 EventBus.on("layerlist:sendOverlayerList", this.getLayerForSearch, this);
                 EventBus.on("sendNodeChild", this.getNodesForSearch, this);
@@ -104,7 +103,6 @@ define([
                 }
                 EventBus.trigger("addOverlay", this.get("marker"));
                 EventBus.trigger("layerlist:getOverlayerList");
-                EventBus.trigger("layerlist:getVisibleWFSlayerList");
             },
 
             /**
@@ -144,7 +142,6 @@ define([
                     if (Config.searchBar.useBKGSearch) {
                         this.suggestByBKG();
                     }
-                    this.searchInFeatures();
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
                         this.searchInNodes();
@@ -223,21 +220,6 @@ define([
             },
 
             /**
-            *
-            */
-            searchInFeatures: function () {
-                this.get("isSearchReady").set("featureSearch", false);
-                _.each(this.get("features"), function (feature) {
-                    var featureName = feature.name.replace(/ /g, "");
-                    // Prüft ob der Suchstring ein Teilstring vom Feature ist
-                    if (featureName.search(this.get("searchStringRegExp")) !== -1) {
-                        this.pushHits("hitList", feature);
-                    }
-                }, this);
-                this.get("isSearchReady").set("featureSearch", true);
-            },
-
-            /**
              *
              */
             searchInNodes: function () {
@@ -304,31 +286,6 @@ define([
              */
             getNodesForSearch: function (node) {
                 this.pushHits("nodes", {name: node.get("name"), type: "Thema", glyphicon: "glyphicon-list", id: node.cid, model: node});
-            },
-
-            /**
-            *
-            */
-            getFeaturesForSearch: function (layermodels) {
-                this.set("features", []);
-                var featureArray = [],
-                    imageSrc;
-
-                _.each(layermodels, function (layer) {
-                    if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
-                        if (layer.get("layer").getStyle()[0]) {
-                            imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
-                            if (imageSrc) {
-                                var features = layer.get("layer").getSource().getFeatures();
-
-                                _.each(features, function (feature) {
-                                    featureArray.push({name: feature.get("name"), type: "Krankenhaus", coordinate: feature.getGeometry().getCoordinates(), imageSrc: imageSrc, id: feature.get("name").replace(/ /g, "") + layer.get("name")});
-                                });
-                            }
-                        }
-                    }
-                });
-                this.pushHits("features", featureArray);
             },
             /**
             *

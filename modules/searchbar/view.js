@@ -26,6 +26,11 @@ define([
                         new SpecialWFSModel(config.specialWFS);
                     });
                 }
+                if (_.has(config, "visibleWFS") === true) {
+                    require(["modules/searchbar/visibleWFS/model"], function (VisibleWFSModel) {
+                        new VisibleWFSModel(config.visibleWFS);
+                    });
+                }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
 
                 EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
