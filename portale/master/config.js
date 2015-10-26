@@ -235,8 +235,30 @@ define(function () {
         /**
         * @memberof config
         * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
-        * @property {Function}  gazetteerURL - Die Gazetteer-URL.
+        * @type {Object} gazetteer
+        * @param {string} url - Die URL.
+        * @param {boolean} searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @param {boolean} searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @param {boolean} searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @param {boolean} searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
+        * @param {integer} minCharacters - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @type {Object} bkg
+        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {string} bkgSuggestURL - URL für schnelles Suggest.
+        * @param {string} bkgSearchURL - URL für ausführliche Search.
+        * @param {[float]} extent - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @param {string} epsg - EPSG-Code des verwendeten Koordinatensystems.
+        * @param {string} filter - Filterstring
+        * @param {float} score - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @type {Object} specialWFS
+        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @type {Objekt[]} Das Konfigurationsarray für die specialWFS-Suche
+        * @param {string} url - Die URL, des WFS
+        * @param {string} data - Query string des WFS-Request
+        * @param {string} name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @type {Object} visibleWFS
+        * @desc Weitere Konfiguration am Layer. Siehe searchField.
+        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
         */
         searchBar: {
             gazetteer: {
