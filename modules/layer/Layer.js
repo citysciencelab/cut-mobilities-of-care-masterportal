@@ -237,7 +237,7 @@ define([
                 "legendURL": this.get("legendURL"),
                 "metaURL": this.get("metaURL"),
                 "metaID": this.get("metaID"),
-                "name": this.get("name")
+                "name": this.get("metaName")
             });
             // window.open(this.get("metaURL"), "_blank");
         },

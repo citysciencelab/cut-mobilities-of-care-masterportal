@@ -1,22 +1,23 @@
 define([
     "backbone",
+    "modules/layerinformation/model",
     "text!modules/layerinformation/template.html"
-], function (Backbone, LayerInformationTemplate) {
+], function (Backbone, Layerinformation, LayerInformationTemplate) {
 
     var LayerInformationView = Backbone.View.extend({
+        model: new Layerinformation(),
         className: "layerinformation-win",
         template: _.template(LayerInformationTemplate),
         events: {
-            "click .layerinformation-win-header > .glyphicon-remove": "removeView"
+            "click .layerinformation-win-header > .glyphicon-remove": "hide"
         },
+
         initialize: function () {
             this.listenTo(this.model, {
-                "change": function () {
-                    console.log(42);
-                }
-            })
-            this.render();
+                "sync": this.render
+            });
         },
+
         render: function () {
             var attr = this.model.toJSON();
 
@@ -25,11 +26,11 @@ define([
                 containment: "#map",
                 handle: ".layerinformation-win-header"
             });
+            this.$el.show();
         },
 
-        removeView: function () {
-            this.model.set("remove", true);
-            this.remove();
+        hide: function () {
+            this.$el.hide();
         }
     });
 

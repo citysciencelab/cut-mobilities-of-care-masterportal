@@ -37,8 +37,8 @@ define([
                 $("#navbarRow").css("display", "none");
             }
             if (_.has(Config, "tree") === true) {
-                require(["modules/layerinformation/list",  "modules/layertree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView"], function (LayerInformationList, TreeListView, LayerSelectionListView, LayerTreeView, BaseLayerListView) {
-                    new LayerInformationList();
+                require(["modules/layerinformation/view",  "modules/layertree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView"], function (LayerInformationView, TreeListView, LayerSelectionListView, LayerTreeView, BaseLayerListView) {
+                    new LayerInformationView();
                     new TreeListView();
                     new LayerSelectionListView();
                     new LayerTreeView();
