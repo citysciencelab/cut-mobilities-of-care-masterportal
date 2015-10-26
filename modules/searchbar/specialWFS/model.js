@@ -52,6 +52,7 @@ define([
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChar")) {
                     this.searchInBPlans(searchStringRegExp);
                 }
+                EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -65,7 +66,6 @@ define([
                     EventBus.trigger("searchbar:pushHits", "hitList", bPlan);
                 }
             }, this);
-            EventBus.trigger("createRecommendedList");
         },
         /**
         *
@@ -86,7 +86,6 @@ define([
                     }
                 }, this);
             }, this);
-            EventBus.trigger("createRecommendedList");
         },
         /**
          * success-Funktion für die Olympiastandorte. Schreibt Ergebnisse in "bplan".
