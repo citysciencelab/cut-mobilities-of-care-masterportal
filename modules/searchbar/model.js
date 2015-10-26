@@ -72,7 +72,6 @@ define([
                 EventBus.on("searchbar:pushHits", this.pushHits, this);
 
                 this.set("isSearchReady", new SearchReady());
-                this.set("useBKGSearch", Config.searchBar.useBKGSearch);
                 if (_.isFunction(Config.searchBar.gazetteerURL)) {
                     this.set("gazetteerURL", Config.searchBar.gazetteerURL());
                 }
@@ -139,9 +138,6 @@ define([
                 this.set("hitList", []);
                 EventBus.trigger("searchbar:search", this.get("searchString"));
                 if (this.get("searchString").length >= 3) {
-                    if (Config.searchBar.useBKGSearch) {
-                        this.suggestByBKG();
-                    }
                     if (_.has(Config, "tree") === true) {
                         this.searchInLayers();
                         this.searchInNodes();
@@ -169,54 +165,6 @@ define([
                         console.log(url + " unreachable");
                     }
                 });
-            },
-            /**
-            * @description Führt einen HTTP-GET-Request aus. Ermöglicht einen Parameter an die success function zu übergeben
-            * wird benötigt um vom view aus einen Request auszuführen und den View als Context übergeben zu können
-            *
-            *
-            **/
-            sendSearchRequestFromView: function (url, data, successFunction, asyncBool, context) {
-                $.ajax({
-                    url: url,
-                    data: data,
-                    context: this,
-                    async: asyncBool,
-                    type: "GET",
-                    success: function (result) {
-                        successFunction(result, context);
-                    },
-                    timeout: 6000,
-                    error: function () {
-                        console.log(url + " unreachable");
-                    }
-                });
-            },
-
-            suggestByBKG: function () {
-
-                if (Config.searchBar.useBKGSearch) {
-                    this.get("isSearchReady").set("suggestByBKG", false);
-                    var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
-                    Config.view.epsg + "&query=" + encodeURIComponent(this.get("searchString")) + "&filter=(typ:*)";
-
-                    this.sendRequest(Config.searchBar.bkgSuggestURL, request, this.pushSuggestions, true);
-                }
-            },
-
-            pushSuggestions: function (data) {
-                _.each(data, function (hit) {
-                        if (hit.score > 0.6) {
-                            this.pushHits("hitList", {
-                                name: hit.suggestion,
-                                type: "Ortssuche",
-                                bkg: true,
-                                glyphicon: "glyphicon-road",
-                                id: hit.suggestion
-                            });
-                        }
-                    }, this);
-                this.get("isSearchReady").set("suggestByBKG", true);
             },
 
             /**

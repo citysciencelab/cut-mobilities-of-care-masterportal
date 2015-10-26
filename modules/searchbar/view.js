@@ -31,9 +31,16 @@ define([
                         new VisibleWFSModel(config.visibleWFS);
                     });
                 }
+                if (_.has(config, "bkg") === true) {
+                    require(["modules/searchbar/bkg/model"], function (BKGModel) {
+                        new BKGModel(config.bkg);
+                    });
+                    EventBus.on("searchInput:showBKGSearchResult", this.zoomToBKGSearchResult, this);
+                }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
 
                 EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
+
                 this.listenTo(this.model, "change:searchString", this.render);
                 this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
                 this.listenTo(this.model, "change:initString", this.checkInitString);
@@ -253,13 +260,9 @@ define([
                 else {
                     $("#searchInput").val(hit.name);
                 }
-
-                 if (hit.bkg === true) {
-                        var request = "bbox=" + Config.view.extent + "&outputformat=json" + "&srsName=" +
-                        Config.view.epsg + "&count=15" + "&query=" + hit.name;
-
-                        this.model.sendSearchRequestFromView(Config.searchBar.bkgSearchURL, request, this.zoomToBKGSearchResult, true, this);
-                 }
+                if (hit.bkg === true) {
+                    EventBus.trigger("bkg:bkgSearch", hit.name);
+                }
 
                 if (hit.type === "Straße") {
 
@@ -383,21 +386,21 @@ define([
                 }
             },
 
-            zoomToBKGSearchResult: function (result, context) {
+            zoomToBKGSearchResult: function (result) {
                 if (result.features[0].properties.typ === "Haus") {
                      EventBus.trigger("mapView:setCenter", result.features[0].properties.bbox.coordinates, 5);
-                    context.model.get("marker").setPosition(result.features[0].properties.bbox.coordinates);
+                    this.model.get("marker").setPosition(result.features[0].properties.bbox.coordinates);
                     $("#searchMarker").css("display", "block");
                 }
                 else {
-                    context.hideMarker();
+                    this.hideMarker();
                     var coordinates = "";
 
                     _.each(result.features[0].properties.bbox.coordinates[0], function (point) {
                         coordinates += point[0] + " " + point[1] + " ";
                     });
                     coordinates = coordinates.trim();
-                    var wkt = context.getWKTFromString("POLYGON", coordinates),
+                    var wkt = this.getWKTFromString("POLYGON", coordinates),
                                 extent,
                                 format = new ol.format.WKT(),
                                 feature = format.readFeature(wkt);
@@ -408,17 +411,10 @@ define([
                 $(".dropdown-menu-search").hide();
             },
 
-
             /**
             *
             */
             showMarker: function (evt) {
-
-                // when der BKG search verwendet wird, dann werden mit den Vorschlägen keine Koordinaten gesendet,
-                // deswegen ist dann eine Markeranzeige nicht möglich.
-                if (this.model.get("useBKGSearch")) {
-                    return;
-                }
                 var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
@@ -439,11 +435,7 @@ define([
             hideMarker: function () {
                 if ($(".dropdown-menu-search").css("display") === "block") {
                     $("#searchMarker").css("display", "none");
-                    // this.zoomTo(evt);
                 }
-                // else {
-                    // this.zoomTo(evt);
-                // }
             },
 
             /**
@@ -504,11 +496,6 @@ define([
                 }
                 return wkt;
             },
-            //
-            // escapeRegExp: function (string) {
-            //     console.log(string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"));
-            //     return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-            // },
 
             /**
             * Platziert den Cursor am Ende vom String

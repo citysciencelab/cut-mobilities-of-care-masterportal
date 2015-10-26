@@ -93,8 +93,9 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Adresssuche",
-            gazetteerURL: function () {
-                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+            bkg: {
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch",
             }
         },
         tools: {

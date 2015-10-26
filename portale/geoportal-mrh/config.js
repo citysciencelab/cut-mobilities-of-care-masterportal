@@ -96,10 +96,17 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            bkgSuggestURL: "/bkg_suggest",
-            bkgSearchURL: "/bkg_geosearch",
-            useBKGSearch: true
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: false,
+                searchHouseNumbers: false,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            bkg: {
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch",
+            }
         },
         tools: {
             gfi: true,
@@ -108,6 +115,7 @@ define(function () {
             coord: true,
             draw: true,
             orientation: false,
+            record: false,
             active: "gfi"
         },
         print: {

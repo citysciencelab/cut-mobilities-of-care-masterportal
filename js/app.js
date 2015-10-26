@@ -131,44 +131,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 }
                 if (Config.menu.searchBar === true && Config.searchBar) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
-                        var searchbar = {},
-                            gazetteer = {},
-                            specialWFS = {},
-                            visibleWFS = {};
-
-                        if (Config.searchBar.gazetteer) {
-                            _.extend(gazetteer, {url: Config.searchBar.gazetteer.url});
-                            if (_.has(Config.searchBar.gazetteer, "searchStreets") === true) {
-                                _.extend(gazetteer, {searchStreets: Config.searchBar.gazetteer.searchStreets});
-                            }
-                            if (_.has(Config.searchBar.gazetteer, "searchHouseNumbers") === true) {
-                                _.extend(gazetteer, {searchHouseNumbers: Config.searchBar.gazetteer.searchHouseNumbers});
-                            }
-                            if (_.has(Config.searchBar.gazetteer, "searchDistricts") === true) {
-                                _.extend(gazetteer, {searchDistricts: Config.searchBar.gazetteer.searchDistricts});
-                            }
-                            if (_.has(Config.searchBar.gazetteer, "searchParcels") === true) {
-                                _.extend(gazetteer, {searchParcels: Config.searchBar.gazetteer.searchParcels});
-                            }
-                            if (_.has(Config.searchBar.gazetteer, "minChars") === true) {
-                                _.extend(gazetteer, {minChars: Config.searchBar.gazetteer.minChars});
-                            }
-                            _.extend(searchbar, {gazetteer: gazetteer});
-                        }
-                        if (Config.searchBar.specialWFS && Config.searchBar.specialWFS.definitions) {
-                            _.extend(specialWFS, {definitions: Config.searchBar.specialWFS.definitions});
-                            if (_.has(Config.searchBar.specialWFS, "minChars") === true) {
-                                _.extend(specialWFS, {minChars: Config.searchBar.specialWFS.minChars});
-                            }
-                            _.extend(searchbar, {specialWFS: specialWFS});
-                        }
-                        if (Config.searchBar.visibleWFS) {
-                            if (_.has(Config.searchBar.visibleWFS, "minChars") === true) {
-                                _.extend(visibleWFS, {minChars: Config.searchBar.visibleWFS.minChars});
-                            }
-                            _.extend(searchbar, {visibleWFS: visibleWFS});
-                        }
-                        new SearchbarView(searchbar);
+                        new SearchbarView(Config.searchBar);
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {

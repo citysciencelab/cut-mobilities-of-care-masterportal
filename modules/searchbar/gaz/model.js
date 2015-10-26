@@ -225,7 +225,6 @@ define([
         /**
          * @description Führt einen HTTP-GET-Request aus.
          *
-         * @param {String} url - A string containing the URL to which the request is sent
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
