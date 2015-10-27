@@ -229,7 +229,11 @@ define([
             window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL && Config.metadatenURL !== "") {
+            if (Config.metadatenURL === "ignore") {
+                // hack
+                this.set("metaURL", null);
+            }
+            else if (Config.metadatenURL && Config.metadatenURL !== "") {
                 this.set("metaURL", Config.metadatenURL + this.get("metaID"));
             }
             else {

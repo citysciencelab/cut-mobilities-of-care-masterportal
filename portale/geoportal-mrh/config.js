@@ -1,6 +1,7 @@
 define(function () {
     var config = {
         title: "Geoportal der Metropolregion Hamburg",
+        metadatenURL: "ignore",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
@@ -107,7 +108,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: true,
             orientation: false,
