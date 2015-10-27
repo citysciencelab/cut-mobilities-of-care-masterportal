@@ -68,24 +68,7 @@ define([
 
         setLegendParamsFromWMS: function () {
             _.each(this.get("wmsLayerList"), function (layer) {
-                var legendURL = [];
-                // GetLegendGraphic wenn keine URL hinterlegt ist
-                if (layer.get("legendURL") === "" || layer.get("legendURL") === undefined) {
-                    var layerNames = layer.get("layers").split(",");
-
-                    if (layerNames.length === 1) {
-                        legendURL.push(layer.get("url") + this.get("getLegendURLParams") + layer.get("layers"));
-                    }
-                    else if (layerNames.length > 1) {
-                        _.each(layerNames, function (layerName) {
-                            legendURL.push(layer.get("url") + this.get("getLegendURLParams") + layerName);
-                        }, this);
-                    }
-                }
-                // Wenn eine URL hinterlegt ist
-                else {
-                    legendURL = [layer.get("legendURL")];
-                }
+                var legendURL = layer.get("legendURL");
 
                 this.push("tempArray", {
                     layername: layer.get("name"),
