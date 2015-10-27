@@ -5,10 +5,10 @@ define([
 
     var Util = Backbone.Model.extend({
         isAndroid: function () {
-            return navigator.userAgent.match(/Android/i);
+            return navigator.userAgent.match(/Android.*Mobile/i);
         },
         isApple: function () {
-            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+            return navigator.userAgent.match(/iPhone|iPod/i);
         },
         isOpera: function () {
             return navigator.userAgent.match(/Opera Mini/i);
