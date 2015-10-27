@@ -9,13 +9,13 @@
     <h4><%= name %></h4>
     <p class="abstract"><%= abstractText %></p>
     <br>
-    <p class="metaLink"><a href="<%= metaURL %>">weitere Informationen</a></p>
+    <p class="metaLink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
     <p>Stand der Daten: <%= date %></p>
     <% if (legendURL !== "ignore") { %>
         <hr>
         <h4>Legende</h4>
         <p>
-            <% if (legendURL.search(".pdf") !== -1) { console.log(legendURL) %>
+            <% if (legendURL.search(".pdf") !== -1) { %>
                 <a href=<%= legendURL %> target="_blank">weitere Informationen</a>
             <% }
             else { %>

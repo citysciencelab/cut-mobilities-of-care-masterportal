@@ -45,6 +45,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
     ], function (Map, Config, $) {
         new Map();
 
+        if (Util.isAny()) {
+            require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
+                new MobileLayerInformationView();
+            });
+        }
+        else {
+            require(["modules/layerinformation/view"], function (LayerInformationView) {
+                new LayerInformationView();
+            });
+        }
+
         if (Config.footer && Config.footer === true) {
             require(["modules/footer/view"], function (FooterView) {
                 new FooterView();
