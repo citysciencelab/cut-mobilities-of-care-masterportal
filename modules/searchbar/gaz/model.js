@@ -188,7 +188,6 @@ define([
                         id: addressJoin.replace(/ /g, "") + "Adresse"
                     };
 
-                    EventBus.trigger("searchbar:pushHits", "houseNumbers", obj);
                     this.get("houseNumbers").push(obj);
                 }
             }, this);

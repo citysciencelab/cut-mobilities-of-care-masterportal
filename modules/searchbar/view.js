@@ -37,6 +37,11 @@ define([
                     });
                     EventBus.on("searchInput:showBKGSearchResult", this.zoomToBKGSearchResult, this);
                 }
+                if (_.has(config, "tree") === true) {
+                    require(["modules/searchbar/tree/model"], function (TreeModel) {
+                        new TreeModel(config.tree);
+                    });
+                }
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
 
                 EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);

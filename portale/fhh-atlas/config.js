@@ -100,6 +100,9 @@ define(function () {
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
+            },
+            tree: {
+                minChars: 3
             }
         },
         tools: {
