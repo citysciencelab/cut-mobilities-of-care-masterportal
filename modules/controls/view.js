@@ -17,6 +17,11 @@ define([
                     new ZoomControlView();
                 });
             }
+            if (_.has(Config.controls, "orientation") === true && Config.controls.orientation === true) {
+                require(["modules/controls/orientation/view"], function (OrientationView) {
+                    new OrientationView();
+                });
+            }
         },
         render: function () {
             $(".navbar").after(this.$el);

@@ -109,7 +109,9 @@ define(function () {
         ],
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true,
+            poi: false
         },
         /**
         * @memberof config
@@ -213,20 +215,9 @@ define(function () {
             print: true,
             coord: false,
             draw: false,
+            record: false,
             active: "gfi"
-        },
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
-        */
-        orientation: true,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
-        */
-        poi: false
+        }
     };
 
     return config;

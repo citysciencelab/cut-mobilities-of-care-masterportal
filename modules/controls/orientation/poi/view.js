@@ -1,14 +1,12 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
-    "text!templates/PointOfInterestList.html",
-    "collections/PointOfInterestList",
-    "views/PointOfInterestView",
+    "text!modules/controls/orientation/poi/template.html",
+    "modules/controls/orientation/poi/collection",
+    "modules/controls/orientation/poi/feature/view",
     "eventbus",
     "bootstrap/tab",
     "bootstrap/modal"
-], function ($, _, Backbone, PointOfInterestListTemplate, PointOfInterestList, PointOfInterestView, EventBus) {
+], function (Backbone, PointOfInterestListTemplate, PointOfInterestList, PointOfInterestView, EventBus) {
 
     var PointOfInterestListView = Backbone.View.extend({
         collection: PointOfInterestList,

@@ -24,8 +24,8 @@
 .win-body {
     background-color: #fff;
     padding: 15px;
-    max-width: 420px;
-    overflow-y: auto;
+    /*max-width: 420px;*/
+    /*overflow-y: auto;*/
 }
 
 /* Das Glyphicon für das Minimieren */
@@ -51,7 +51,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     min-width: 300px;
 	z-index: 999;
-    max-width: 420px;
+    /*max-width: 420px;*/
 }
 @media (max-width: 768px) {
     .win-max {

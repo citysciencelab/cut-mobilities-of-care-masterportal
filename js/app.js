@@ -110,15 +110,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new DrawView();
                         });
                     }
+                    if (Config.tools.record === true) {
+                        require(["modules/wfs_t/view"], function (WFS_TView) {
+                            new WFS_TView();
+                        });
+                    }
                     if (Config.tools.print === true) {
-                        // require(["views/PrintView"], function (PrintView) {
-                        //     new PrintView();
-                        // });
                         require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
-                    require(["views/ToolsView"], function (ToolsView) {
+                    require(["modules/tools/view"], function (ToolsView) {
                         new ToolsView();
                     });
                 }
@@ -135,17 +137,6 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 if (Config.menu.wfsFeatureFilter === true) {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
-                    });
-                }
-                if (Config.orientation === true) {
-                    require(["views/OrientationView"], function (OrientationView) {
-                        new OrientationView();
-                    });
-                }
-                if (Config.poi === true) {
-                    require(["views/PointOfInterestView", "views/PointOfInterestListView"], function (PointOfInterestView, PointOfInterestListView) {
-                        // new PointOfInterestView();
-                        new PointOfInterestListView();
                     });
                 }
                 if (Config.menu.legend === true) {

@@ -101,6 +101,7 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
+            record: false,
             active: "gfi"
         },
         print: {
