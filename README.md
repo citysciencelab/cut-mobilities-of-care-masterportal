@@ -137,12 +137,18 @@ liest bower.json. Installiert unter anderem Ordner das Repository [build-config]
 ## Grunt Tasks ausführen
 
 
+### grunt server
+Einen lokalen Entwicklungsserver starten.
+
 ```
 # grunt server
 ```
 
 yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 
+
+### grunt build
+Ein Portal für die Veröffentlichung fertig machen.
 
 ```
 // grunt build --path=<pfad-zum-portal> --name=<Portalname>
@@ -151,8 +157,11 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 
 - baut das Portal und alles, was es braucht in den Ordner dist/<pkg.version>
 - Pfade in index.html werden automatisch ersetzt
-- components/lgv-config, also Konfigs, die zwischen den Portalen geteilt werden, werden in den Ordner /lgv-config kopiert, da wird die auch auf den 'echten' Servern erwartet
  - Pfade zu *Conf in config.js werden automatisch ersetzt
+- components/lgv-config, also Konfigs, die zwischen den Portalen geteilt werden, werden in den Ordner /lgv-config kopiert, da wird die auch auf den 'echten' Servern erwartet
+
+### grunt doc
+Die Dokumentation erzeugen. Zurzeit nur für portale/master/config.js.
 
 
 ```
@@ -161,7 +170,6 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 ```
 
 - schreibt die Dokumentation nach doc
-- zurzeit nur für die Datei portale/master/config.js
 
 #### Alle grunt-Tasks
 
