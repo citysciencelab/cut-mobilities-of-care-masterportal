@@ -12,18 +12,37 @@ define([
         var SearchbarView = Backbone.View.extend({
             model: Searchbar,
             id: "searchbar",
-            // tagName: "form",
             className: "navbar-form col-xs-9",
             template: _.template(SearchbarTemplate),
             initialize: function (config) {
+                EventBus.on("searchInput:setFocus", this.setFocus, this);
+
+                EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
+
+                this.listenTo(this.model, "change:searchString", this.render);
+                this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
+                this.listenTo(this.model, "change:initString", this.checkInitString);
+                this.render();
+                $(window).on("orientationchange", function () {
+                    this.render();
+                }, this);
+                if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
+                    $("#searchInput").val(this.model.get("placeholder"));
+                }
+                $("#searchInput").blur();
+                // bedarfsweises Laden der Suchalgorythmen
                 if (_.has(config, "gazetteer") === true) {
                     require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                        new GAZModel(config.gazetteer);
+                        var gazModel = new GAZModel(config.gazetteer);
+
+                        gazModel.directSearch(Config.searchBar.initString);
                     });
                 }
                 if (_.has(config, "specialWFS") === true) {
                     require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
-                        new SpecialWFSModel(config.specialWFS);
+                        var specialWFSModel = new SpecialWFSModel(config.specialWFS);
+
+                        specialWFSModel.search(Config.searchBar.initString);
                     });
                 }
                 if (_.has(config, "visibleWFS") === true) {
@@ -42,24 +61,6 @@ define([
                         new TreeModel(config.tree);
                     });
                 }
-                EventBus.on("searchInput:setFocus", this.setFocus, this);
-
-                EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
-
-                this.listenTo(this.model, "change:searchString", this.render);
-                this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
-                this.listenTo(this.model, "change:initString", this.checkInitString);
-                this.render();
-                // if (Config.bPlan !== undefined) {
-                //     $("#searchInput").prop("disabled", "");
-                // }
-                $(window).on("orientationchange", function () {
-                    this.render();
-                }, this);
-                if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    $("#searchInput").val(this.model.get("placeholder"));
-                }
-                $("#searchInput").blur();
             },
             events: {
                 "keyup input": "setSearchString",
@@ -152,7 +153,7 @@ define([
                 }
             },
             /*
-             * Methose, um den Focus über den EventBus in SearchInput zu legen
+             * Methode, um den Focus über den EventBus in SearchInput zu legen
              */
             setFocus: function () {
                 $("#searchInput").focus();
@@ -248,7 +249,7 @@ define([
 
                 if (_.has(evt, "cid")) { // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
                     if (Config.searchBar.initString.search(",") !== -1) {
-                        hit = this.model.get("hitList")[1]; // initial Suche Adresse mit Hausnummer
+                        hit = _.values(_.pick(this.model.get("hitList"), "0"))[0]; // initial Suche Adresse mit Hausnummer
                     }
                     else {
                         hit = this.model.get("hitList")[0]; // alles andere, Straßen, BPläne, Flurstücke...
@@ -275,6 +276,7 @@ define([
                         extent,
                         format = new ol.format.WKT(),
                         feature = format.readFeature(wkt);
+
                     extent = feature.getGeometry().getExtent();
                     EventBus.trigger("zoomToExtent", extent);
                     $(".dropdown-menu-search").hide();
@@ -285,6 +287,7 @@ define([
                         extent,
                         format = new ol.format.WKT(),
                         feature = format.readFeature(wkt);
+
                     extent = feature.getGeometry().getExtent();
                     EventBus.trigger("zoomToExtent", extent);
                     $(".dropdown-menu-search").hide();
@@ -380,6 +383,7 @@ define([
                             var format = new ol.format.WKT(),
                             extent,
                             feature = format.readFeature(wkt);
+
                             extent = feature.getGeometry().getExtent();
                             EventBus.trigger("zoomToExtent", extent);
                             $(".dropdown-menu-search").hide();

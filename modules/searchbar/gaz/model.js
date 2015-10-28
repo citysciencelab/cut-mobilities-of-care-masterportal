@@ -81,6 +81,25 @@ define([
             }
         },
         /**
+        * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.searchbar.initString
+        */
+        directSearch: function (searchString) {
+            if (searchString.search(",") !== -1) {
+                var splitInitString = searchString.split(",");
+
+                this.set("onlyOneStreetName", splitInitString[0]);
+                this.set("searchStringRegExp", new RegExp(searchString.replace(/\,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
+                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false);
+                this.searchInHouseNumbers();
+            }
+            else {
+                this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
+                this.set("onlyOneStreetName", "");
+                this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
+            }
+            EventBus.trigger("createRecommendedList");
+        },
+        /**
          * [getStreets description]
          * @param  {[type]} data [description]
          */
@@ -104,7 +123,7 @@ define([
             if (this.get("searchHouseNumbers") === true) {
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
-                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, true);
+                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false);
                     this.searchInHouseNumbers();
                 }
                 else if (hits.length === 0) {
@@ -144,7 +163,6 @@ define([
 
             _.each(this.get("houseNumbers"), function (houseNumber) {
                 address = houseNumber.name.replace(/ /g, "");
-
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
                 if (address.search(this.get("searchStringRegExp")) !== -1) {
                     EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);

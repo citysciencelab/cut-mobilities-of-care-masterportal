@@ -9,7 +9,6 @@ define([
         *
         */
         Searchbar = Backbone.Model.extend({
-
             /**
             *
             */
@@ -17,14 +16,12 @@ define([
                 placeholder: Config.searchBar.placeholder,
                 searchString: "", // der aktuelle String in der Suchmaske
                 hitList: [],
-                onlyOneStreetName: "", // speichert den Namen der Straße, wenn die Straßensuche nur noch eine Treffer zurückgibt.
                 marker: new ol.Overlay({
                     positioning: "bottom-center",
                     element: $("#searchMarker"), // Element aus der index.html
                     stopEvent: false
                 })
             },
-
             /**
             *
             */
@@ -32,20 +29,6 @@ define([
                 this.on("change:searchString", this.checkStringAndSearch, this);
                 EventBus.on("createRecommendedList", this.createRecommendedList, this);
                 EventBus.on("searchbar:pushHits", this.pushHits, this);
-
-                // Initiale Suche query=...
-                if (Config.searchBar.initString !== undefined) {
-                    if (Config.searchBar.initString.search(",") !== -1) {
-                        var splitInitString = Config.searchBar.initString.split(",");
-
-                        this.set("onlyOneStreetName", splitInitString[0]);
-                        // this.set("isOnlyOneStreet", true);
-                        this.set("searchString", splitInitString[0] + " " + splitInitString[1]);
-                    }
-                    else {
-                        this.set("searchString", Config.searchBar.initString);
-                    }
-                }
 
                 // Quick-Help
                 if (Config.quickHelp && Config.quickHelp === true) {
@@ -70,7 +53,7 @@ define([
              */
             pushHits: function (attribute, value) {
                 var tempArray = _.clone(this.get(attribute));
-console.log(attribute);
+
                 tempArray.push(value);
                 this.set(attribute, _.flatten(tempArray));
             },

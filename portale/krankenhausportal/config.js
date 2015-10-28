@@ -40,6 +40,7 @@ define(function () {
             poi: false
         },
         attributions: false,
+        allowParametricURL: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
