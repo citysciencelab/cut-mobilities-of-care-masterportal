@@ -131,7 +131,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 }
                 if (Config.menu.searchBar === true && Config.searchBar) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView(Config.searchBar);
+                        new SearchbarView(Config.searchBar, Config.searchBar.initString);
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {

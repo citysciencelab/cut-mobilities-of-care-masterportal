@@ -14,7 +14,17 @@ define([
             id: "searchbar",
             className: "navbar-form col-xs-9",
             template: _.template(SearchbarTemplate),
-            initialize: function (config) {
+            /**
+            * @description View der Searchbar
+            * @param {Object} config - Das Konfigurationsobjekt der Searchbar
+            * @param {Object} [config.gazetteer] - Das Konfigurationsobjekt der Gazetteersuche.
+            * @param {Object} [config.specialWFS] - Das Konfigurationsobjekt der speziellen WFS.
+            * @param {Object} [config.visibleWFS] - Das Konfigurationsobjekt sichtbaren WFS Suche.
+            * @param {Object} [config.bkg] - Das Konfigurationsobjekt der BKG Suggest Suche.
+            * @param {Object} [config.tree] - Das Konfigurationsobjekt der Suche im Tree.
+            * @param {string} [initialQuery] - Initiale Suche.
+            */
+            initialize: function (config, querySearchString) {
                 EventBus.on("searchInput:setFocus", this.setFocus, this);
 
                 EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
@@ -33,9 +43,7 @@ define([
                 // bedarfsweises Laden der Suchalgorythmen
                 if (_.has(config, "gazetteer") === true) {
                     require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                        var gazModel = new GAZModel(config.gazetteer);
-
-                        gazModel.directSearch(Config.searchBar.initString);
+                        new GAZModel(config.gazetteer, querySearchString);
                     });
                 }
                 if (_.has(config, "specialWFS") === true) {

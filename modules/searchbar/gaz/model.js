@@ -22,15 +22,16 @@ define([
         },
         /**
          * @description Initialisierung der Gazetteer Suche
-         * @type {Object} Das Konfigurationsobjekt für die Gazetteer-Suche
-         * @param {string} url - Die URL.
-         * @param {boolean} searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-         * @param {boolean} searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-         * @param {boolean} searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
-         * @param {boolean} searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
-         * @param {integer} minCharacters - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+         * @param {Object} config - Das Konfigurationsobjekt für die Gazetteer-Suche.
+         * @param {string} config.url - Die URL.
+         * @param {boolean} [config.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+         * @param {boolean} [config.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+         * @param {boolean} [config.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
+         * @param {boolean} [config.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
+         * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+         * @param {string} [initialQuery] - Initialer Suchstring.
          */
-        initialize: function (config) {
+        initialize: function (config, initialQuery) {
             this.set("gazetteerURL", config.url);
             if (config.searchStreets) {
                 this.set("searchStreets", config.searchStreets);
@@ -48,6 +49,9 @@ define([
                 this.set("minChars", config.minChars);
             }
             EventBus.on("searchbar:search", this.search, this);
+            if (initialQuery && _.isString(initialQuery) === true) {
+                this.directSearch(initialQuery);
+            }
         },
         /**
         *
