@@ -17,7 +17,8 @@ define([
         },
         /**
          * @description Initialisierung der wfsFeature Suche
-         * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @param {Object} config - Das Konfigurationsobjekt der Tree-Suche.
+         * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
          */
         initialize: function (config) {
             if (config.minChars) {

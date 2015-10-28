@@ -20,13 +20,14 @@ define([
         },
         /**
          * @description Initialisierung der BKG Suggest Suche
-         * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-         * @param {string} bkgSuggestURL - URL für schnelles Suggest.
-         * @param {string} bkgSearchURL - URL für ausführliche Search.
-         * @param {[float]} extent - Koordinatenbasierte Ausdehnung in der gesucht wird.
-         * @param {string} epsg - EPSG-Code des verwendeten Koordinatensystems.
-         * @param {string} filter - Filterstring
-         * @param {float} score - Score-Wert, der die Qualität der Ergebnisse auswertet.
+         * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
+         * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @param {string} config.bkgSuggestURL - URL für schnelles Suggest.
+         * @param {string} [config.bkgSearchURL] - URL für ausführliche Search.
+         * @param {[float]} [config.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+         * @param {string} [config.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
+         * @param {string} [config.filter=filter=(typ:*)] - Filterstring
+         * @param {float} [config.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
          */
         initialize: function (config) {
             this.set("bkgSuggestURL", config.bkgSuggestURL);

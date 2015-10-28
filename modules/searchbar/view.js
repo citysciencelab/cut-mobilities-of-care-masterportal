@@ -48,9 +48,7 @@ define([
                 }
                 if (_.has(config, "specialWFS") === true) {
                     require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
-                        var specialWFSModel = new SpecialWFSModel(config.specialWFS);
-
-                        specialWFSModel.search(Config.searchBar.initString);
+                        new SpecialWFSModel(config.specialWFS, querySearchString);
                     });
                 }
                 if (_.has(config, "visibleWFS") === true) {
@@ -255,13 +253,8 @@ define([
             zoomTo: function (evt) {
                 var zoomLevel, hitID, hit;
 
-                if (_.has(evt, "cid")) { // in diesem Fall ist evt = model, für die initiale Suche von B-Plänen --> workaround
-                    if (Config.searchBar.initString.search(",") !== -1) {
-                        hit = _.values(_.pick(this.model.get("hitList"), "0"))[0]; // initial Suche Adresse mit Hausnummer
-                    }
-                    else {
-                        hit = this.model.get("hitList")[0]; // alles andere, Straßen, BPläne, Flurstücke...
-                    }
+                if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
+                    hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
                 }
                 else {
                     hitID = evt.currentTarget.id;
@@ -330,7 +323,7 @@ define([
                         propertyName = (hit.type === "festgestellt") ? "planrecht" : "plan";
 
                     $.ajax({
-                        url: Config.searchBar.getFeatures[0].url,
+                        url: Config.searchBar.specialWFS.definitions[0].url,
                         data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + hit.name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>",
                         type: "POST",
                         context: this, // model
