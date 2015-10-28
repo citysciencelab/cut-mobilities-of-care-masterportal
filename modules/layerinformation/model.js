@@ -1,7 +1,8 @@
 define([
     "backbone",
-    "eventbus"
-], function (Backbone, EventBus) {
+    "eventbus",
+    "moment"
+], function (Backbone, EventBus, moment) {
 
     var LayerInformation = Backbone.Model.extend({
         url: "/hmdk/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=summary",
@@ -42,7 +43,11 @@ define([
                         return abstractText;
                     }
                 }(),
-                "date": $("gmd\\:dateStamp,dateStamp", xmlDoc)[0].textContent
+                "date": function () {
+                    var date = $("gmd\\:dateStamp,dateStamp", xmlDoc)[0].textContent;
+
+                    return moment(date).format("DD.MM.YYYY");
+                }()
             }
         }
     });
