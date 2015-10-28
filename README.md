@@ -154,6 +154,15 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 - components/lgv-config, also Konfigs, die zwischen den Portalen geteilt werden, werden in den Ordner /lgv-config kopiert, da wird die auch auf den 'echten' Servern erwartet
  - Pfade zu *Conf in config.js werden automatisch ersetzt
 
+
+```
+// läuft nur in der Admin-cmd
+# grunt doc
+```
+
+- schreibt die Dokumentation nach doc
+- zurzeit nur für die Datei portale/master/config.js
+
 #### Alle grunt-Tasks
 
 ```
