@@ -186,6 +186,7 @@ define([
                 name,
                 addressJoin;
 
+            this.set("houseNumbers", []);
             _.each(hits, function (hit) {
                 position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                 coordinate = [parseFloat(position[0]), parseFloat(position[1])];
