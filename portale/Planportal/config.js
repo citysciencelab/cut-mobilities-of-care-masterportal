@@ -70,6 +70,7 @@ define(function () {
                 ]
             },
             placeholder: "Suche Adresse, Bebauungsplan",
+            geoLocateHit: true
         },
         tools: {
             gfi: true,

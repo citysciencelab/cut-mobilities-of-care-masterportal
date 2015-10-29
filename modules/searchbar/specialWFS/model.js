@@ -12,15 +12,18 @@ define([
             inUse: false,
             minChars: 3,
             bPlans: [],
-            olympia: []
+            olympia: [],
+            bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
         },
         /**
          * @description Initialisierung der wfsFeature Suche.
          * @param {Objekt} config - Das Konfigurationsarray für die specialWFS-Suche
-         * @param {string} config.url - Die URL, des WFS
-         * @param {string} config.data - Query string des WFS-Request
-         * @param {string} config.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
          * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @param {Object[]} config.definitions - Definitionen der SpecialWFS.
+         * @param {Object} config.definitions[].definition - Definition eines SpecialWFS.
+         * @param {string} config.definitions[].definition.url - Die URL, des WFS
+         * @param {string} config.definitions[].definition.data - Query string des WFS-Request
+         * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
          * @param {string} [initialQuery] - Initialer Suchstring.
          */
         initialize: function (config, initialQuery) {
@@ -35,16 +38,19 @@ define([
                     this.sendRequest(element.url, element.data, this.getFeaturesForParalympia, false);
                 }
                 else if (element.name === "bplan") {
+                    this.set("bplanURL", element.url);
                     this.sendRequest(element.url, element.data, this.getFeaturesForBPlan, false);
                 }
             }, this);
             EventBus.on("searchbar:search", this.search, this);
+            EventBus.on("specialWFS:requestbplan", this.requestbplan, this);
             if (initialQuery && _.isString(initialQuery) === true) {
                 this.search(initialQuery);
             }
         },
         /**
-        *
+         * @description Suchfunktion, wird von Searchbar getriggert
+         * @param {string} searchString - Der Suchstring.
         */
         search: function (searchString) {
             if (this.get("inUse") === false) {
@@ -60,6 +66,24 @@ define([
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
             }
+        },
+        /**
+         * @description Methode, um Koordinaten eines B-Plan abzufragen. Wird vom mapHandler getriggert.
+         * @param {string} type - Der ausgewählte BPlan-Typ, der abgefragt werden soll.
+        */
+        requestbplan: function (type, name) {
+            var typeName = (type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
+                propertyName = (type === "festgestellt") ? "planrecht" : "plan",
+                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature SERVICE='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
+
+            this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true, true);
+        },
+        /**
+        * @description Methode zum Zurückschicken des gefundenen Plans an mapHandler.
+        * @param {string} data - Die Data-XML.
+        */
+        getExtentFromBPlan: function (data) {
+            EventBus.trigger("mapHandler:zoomToBPlan", data);
         },
         /**
         *
@@ -186,16 +210,20 @@ define([
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
+         * @param {boolean} [usePOST] - POST anstelle von GET?
          */
-        sendRequest: function (url, data, successFunction, asyncBool) {
+        sendRequest: function (url, data, successFunction, asyncBool, usePOST) {
+            var type = (usePOST && usePOST === true) ? "POST" : "GET";
+
             $.ajax({
                 url: url,
                 data: data,
                 context: this,
                 async: asyncBool,
-                type: "GET",
+                type: type,
                 success: successFunction,
                 timeout: 6000,
+                contentType: "text/xml",
                 error: function () {
                     EventBus.trigger("alert", url + " nicht erreichbar.");
                 }

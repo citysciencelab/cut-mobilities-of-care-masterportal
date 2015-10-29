@@ -296,7 +296,8 @@ define(function () {
             visibleWFS: {
                 minChars: 3
             },
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan"
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
+            geoLocateHit: true
         },
 
         bPlan: {

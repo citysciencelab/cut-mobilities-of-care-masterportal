@@ -67,7 +67,8 @@ define(function () {
             },
             visibleWFS: {
                 minChars: 3
-            }
+            },
+            geoLocateHit: true
         },
         print: {
             printID: "99999",

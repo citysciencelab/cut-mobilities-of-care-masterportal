@@ -57,10 +57,15 @@ define(function () {
         },
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            //bkgSuggestURL: "/bkg_suggest",
-            //bkgSearchURL: "/bkg_geosearch",
-           // useBKGSearch: true
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            geoLocateHit: true
         },
         print: {
             printID: "99999",

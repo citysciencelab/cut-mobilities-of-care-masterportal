@@ -106,7 +106,8 @@ define(function () {
             bkg: {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
-            }
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,

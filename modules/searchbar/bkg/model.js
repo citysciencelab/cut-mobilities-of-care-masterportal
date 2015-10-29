@@ -69,7 +69,7 @@ define([
         suggestByBKG: function (searchString) {
             var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter");
 
-            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true);
+            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, false);
         },
         /**
          * [pushSuggestions description]
@@ -83,7 +83,7 @@ define([
                         type: "Ortssuche",
                         bkg: true,
                         glyphicon: "glyphicon-road",
-                        id: hit.suggestion
+                        id: _.uniqueId("bkgSuggest")
                     });
                 }
             }, this);
@@ -93,12 +93,16 @@ define([
          * @param  {string} name - Gesuchter String
          */
         bkgSearch: function (name) {
-            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=15" + "&query=" + name;
+            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + name;
 
             this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this);
         },
-        handleBKGSearchResult: function (result) {
-            EventBus.trigger("searchInput:showBKGSearchResult", result);
+        /**
+         * @description Triggert das Zoomen auf den Eintrag
+         * @param  {string} data - Data-XML des request
+         */
+        handleBKGSearchResult: function (data) {
+            EventBus.trigger("mapHandler:zoomToBKGSearchResult", data);
         },
         /**
          * @description Führt einen HTTP-GET-Request aus.

@@ -188,7 +188,8 @@ define(function () {
                 searchHouseNumbers: true,
                 searchDistricts: false,
                 searchParcels: true
-            }
+            },
+            geoLocateHit: true
         },
                  /**
         * @memberof config

@@ -147,7 +147,8 @@ define(function () {
                         name: "olympia"
                     }
                 ]
-            }
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,
