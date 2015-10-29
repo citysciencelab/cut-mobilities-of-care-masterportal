@@ -33,7 +33,7 @@ define([
                 this.model.toggleSelected();
             },
             getMetadata: function () {
-                window.open(this.model.get("metaURL"));
+                this.model.openMetadata();
             },
             toggleStyle: function () {
                 if (this.model.get("selected") === true) {

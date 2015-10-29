@@ -1,13 +1,13 @@
 define([
     "backbone",
     "modules/layerinformation/model",
-    "text!modules/layerinformation/template.html"
-], function (Backbone, Layerinformation, LayerInformationTemplate) {
+    "text!modules/layerinformation/templateMobile.html"
+], function (Backbone, Layerinformation, LayerInformationMobileTemplate) {
 
     var LayerInformationView = Backbone.View.extend({
         model: new Layerinformation(),
-        className: "layerinformation-win",
-        template: _.template(LayerInformationTemplate),
+        className: "modal fade layerinformation-mobile-win",
+        template: _.template(LayerInformationMobileTemplate),
         events: {
             "click .layerinformation-win-header > .glyphicon-remove": "hide"
         },
@@ -21,16 +21,14 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.html(this.template(attr)));
-            this.$el.draggable({
-                containment: "#map",
-                handle: ".layerinformation-win-header"
+            this.$el.html(this.template(attr));
+            this.$el.modal({
+                show: true
             });
-            this.$el.show();
         },
 
         hide: function () {
-            this.$el.hide();
+            this.$el.modal("hide");
         }
     });
 
