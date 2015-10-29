@@ -36,12 +36,7 @@ define([
                 this.model.toggleSelected();
             },
             getMetadata: function () {
-                if (this.model.get("url").search("geodienste") !== -1) {
-                    window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
-                }
-                else {
-                    window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
-                }
+                this.model.openMetadata();
             },
             toggleStyle: function () {
                 if (this.model.get("selected") === true) {

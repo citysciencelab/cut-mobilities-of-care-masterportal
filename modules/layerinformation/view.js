@@ -1,33 +1,38 @@
 define([
     "backbone",
+    "modules/layerinformation/model",
     "text!modules/layerinformation/template.html"
-], function (Backbone, LayerInformationTemplate) {
+], function (Backbone, Layerinformation, LayerInformationTemplate) {
 
-        var view = Backbone.View.extend({
-            template: _.template(LayerInformationTemplate),
-            className: "alert alert-danger alert-dismissible layerinformation",
-            events: {
-                "click .glyphicon": "remove"
-            },
-            initialize: function () {
-                this.$el.on({
-                    click: function (e) {
-                        e.stopPropagation();
-                    }
-                });
-                this.listenTo(this.model, {
-                    "remove": function () {
-                        this.remove();
-                    }
-                });
-            },
-            render: function () {
-                var attr = this.model.toJSON();
+    var LayerInformationView = Backbone.View.extend({
+        model: new Layerinformation(),
+        className: "layerinformation-win",
+        template: _.template(LayerInformationTemplate),
+        events: {
+            "click .layerinformation-win-header > .glyphicon-remove": "hide"
+        },
 
-                this.$el.html(this.template(attr));
-                return this;
-            }
-        });
+        initialize: function () {
+            this.listenTo(this.model, {
+                "sync": this.render
+            });
+        },
 
-        return view;
+        render: function () {
+            var attr = this.model.toJSON();
+
+            $("body").append(this.$el.html(this.template(attr)));
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".layerinformation-win-header"
+            });
+            this.$el.show();
+        },
+
+        hide: function () {
+            this.$el.hide();
+        }
+    });
+
+    return LayerInformationView;
 });

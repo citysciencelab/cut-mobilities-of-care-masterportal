@@ -33,3 +33,5 @@
 @import "../modules/layerinformation/style.css";
 @import "../modules/alerting/style.css";
 @import "../modules/mapMarker/style.css";
+@import "../modules/catalogExtern/style.css";
+@import "../modules/addwms/style.css";

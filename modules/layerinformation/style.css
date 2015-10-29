@@ -1,21 +1,45 @@
-.layerinformations {
+/***** Destop *****/
+.layerinformation-win {
     position: absolute;
-    font-size: 11px;
-    right: 8px;
-    bottom: 22px;"
+    top: 20px;
+    right: 60px;
+    width: 500px;
+    margin: 60px 10px 30px 10px;
+    display: none;
 }
 
-.layerinformation {
-    padding: 8px;
-    margin-bottom: 4px;
+.layerinformation-win-header {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #777;
+    cursor: move;
+    border-bottom: 1px solid rgb(215, 215, 215);
 }
 
-.layerinformation > span {
-    float: right;
-    margin-left: 10px;
+.layerinformation-win > .layerinformation-win-header {
+    height: 34px;
 }
 
-.layerinformation > span:hover {
-    cursor: pointer;
-    opacity: 0.5;
+.layerinformation-win > .layerinformation-win-content {
+    max-height: 450px;
+    background-color: white;
+    overflow-y: auto;
+    padding: 10px;
+    box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
+}
+
+.layerinformation-win-content > .abstract {
+    font-size: 12px;
+}
+
+.layerinformation-win-content > .metaLink {
+    float:right;
+}
+
+.layerinformation-win-content > hr {
+    border-color: rgb(215,215,215);
 }

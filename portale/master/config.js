@@ -37,7 +37,6 @@ define(function () {
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
         },
-        ,
         /**
         * @memberof config
         * @desc Konfiguration der Controls auf der Map
@@ -224,7 +223,8 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
-            routing: true
+            routing: true,
+            addWMS: true
         },
         /**
         * @memberof config

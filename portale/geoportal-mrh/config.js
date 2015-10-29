@@ -1,6 +1,10 @@
 define(function () {
     var config = {
-        title: "Geoportal der Metropolregion Hamurg",
+        title: "Geoportal der Metropolregion Hamburg",
+        metadatenURL: "ignore",
+        logo: "../img/Logo_MRH_93x36.png",
+        logoLink: "http://metropolregion.hamburg.de/",
+        logoTooltip: "Metropolregion Hamburg",
         tree: {
             custom: false,
             orderBy: "opendata",
@@ -75,7 +79,7 @@ define(function () {
             ]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
@@ -91,7 +95,8 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: false
+            routing: false,
+            addWMS: true,
         },
         startUpModul: "",
         searchBar: {
@@ -112,15 +117,16 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: true,
+            record: false,
             orientation: false,
             record: false,
             active: "gfi"
         },
         print: {
-            printID: "99997",
+            printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
             outputFilename: "Ausdruck Geoportal GDI-MRH",
             gfi: false

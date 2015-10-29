@@ -45,6 +45,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
     ], function (Map, Config, $) {
         new Map();
 
+        if (Util.isAny()) {
+            require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
+                new MobileLayerInformationView();
+            });
+        }
+        else {
+            require(["modules/layerinformation/view"], function (LayerInformationView) {
+                new LayerInformationView();
+            });
+        }
+
         if (Config.footer && Config.footer === true) {
             require(["modules/footer/view"], function (FooterView) {
                 new FooterView();
@@ -148,13 +159,24 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                     });
                 }
                 if (Config.menu.legend === true) {
-                    require(["modules/legend/view"], function (LegendView) {
-                        new LegendView();
+                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                        if (Util.isAny()) {
+                            new MobileLegendView();
+                        }
+                        else {
+                            new LegendView();
+                        }
                     });
                 }
                 if (Config.menu.routing === true) {
                     require(["modules/routing/view"], function (RoutingView) {
                         new RoutingView();
+                    });
+                }
+                if (Config.menu.addWMS === true) {
+                    require(["modules/addwms/view"
+                        ], function (AddWMSView) {
+                        new AddWMSView();
                     });
                 }
                 if ($.isArray(Config.menu.formular)) {

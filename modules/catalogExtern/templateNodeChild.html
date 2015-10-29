@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<div class="node-child-content">
+    <% if (isExpanded === false) { %>
+        <span class="glyphicon glyphicon-plus-sign pull-left"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-minus-sign pull-left"></span>
+    <% } %>
+    <% if (isSelected === true) { %>
+        <span class="glyphicon glyphicon-check pull-left"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left"></span>
+    <% } %>
+    <div class="node-child-name"><%= name %></div>
+</div>

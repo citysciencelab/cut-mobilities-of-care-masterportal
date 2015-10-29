@@ -27,6 +27,7 @@ define([
             "click .filterWfsFeature": "activateWfsFilter",
             "click .legend": "activateLegend",
             "click .routingModul": "activateRoutingModul",
+            "click .addWMS": "activateAddWMSModul",
             "click .wfsFeatureFilter": "activateWfsFeatureFilter"
         },
         render: function () {
@@ -37,12 +38,12 @@ define([
                 $("#navbarRow").css("display", "none");
             }
             if (_.has(Config, "tree") === true) {
-                require(["modules/layerinformation/listView",  "modules/layertree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView"], function (LayerInformationListView, TreeListView, LayerSelectionListView, LayerTreeView, BaseLayerListView) {
-                    new LayerInformationListView();
+                require(["modules/layertree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView", "modules/catalogExtern/listView"], function (TreeListView, LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
                     new TreeListView();
                     new LayerSelectionListView();
                     new LayerTreeView();
                     new BaseLayerListView();
+                    new CataExView();
                 });
             }
             else {
@@ -57,6 +58,7 @@ define([
         },
         appendItemToMenubar: function (obj) {
             var html = "<li>";
+
             html += "<a href='#' class='menuitem " + obj.classname + "'>";
             html += "<span class='' + obj.symbol + ''></span>&nbsp;" + obj.title;
             html += "</a>";
@@ -77,6 +79,9 @@ define([
         },
         activateRoutingModul: function () {
             EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
+        },
+        activateAddWMSModul: function () {
+            EventBus.trigger("toggleWin", ["addwms", "WMS Hinzufügen", "glyphicon-plus"]);
         },
         activateWfsFeatureFilter: function () {
             EventBus.trigger("toggleWin", ["wfsfeaturefilter", "Filter", "glyphicon-filter"]);
