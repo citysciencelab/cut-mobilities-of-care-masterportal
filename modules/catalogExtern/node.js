@@ -2,9 +2,9 @@ define([
     "backbone",
     "config",
     "eventbus",
-    "modules/layercatalog/nodeChild",
-    "modules/layercatalog/viewNodeChild",
-    "modules/layercatalog/viewNodeLayer"
+    "modules/catalogExtern/nodeChild",
+    "modules/catalogExtern/viewNodeChild",
+    "modules/catalogExtern/viewNodeLayer"
 ], function (Backbone, Config, EventBus, NodeChild, NodeChildView, NodeLayerView) {
 
     var TreeNode = Backbone.Model.extend({
@@ -19,121 +19,38 @@ define([
         },
 
         initialize: function () {
-            this.listenToOnce(this, {
+           this.listenToOnce(this, {
                 "change:layerList": this.setChildren,
                 "change:children": this.setSortedLayerList,
                 "change:sortedLayerList": this.setNestedViews
             });
 
             this.listenToOnce(EventBus, {
-                "layerlist:sendLayerListForNode": this.setLayerList
+                // empfängt die zu deisem Ordner gehörenden externen Layer
+               "layerlist:sendLayerListForExternalNode": this.setLayerList
             });
-
+            // Wird durch das "reset" beim erzeugen der Knoten in CatalogExtern/List getriggert
+            // Fordert die Layer die zu diesem Knoten gehören an. (Category ist bei Externen Layern auf "external" gesetzt)
             EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
+
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören
         setLayerList: function (layerList) {
-            this.set("layerList", layerList);
+            var context = this;
+
+            this.set("layerList", layerList.filter(function (layer) {
+                return layer.attributes.folder === context.get("name");
+            }));
         },
 
         /**
          * Alle Layer aus der "layerList" werden in die richtige Reihenfolge gebracht und in das Attribut "children" geschrieben.
          */
         setChildren: function () {
-            if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
-                this.setNodeLayerForCustomTree();
-                this.setNodeChildLayerForCustomTree();
-            }
-            else {
-                this.setChildrenForTree();
-            }
+            this.setChildrenForTree();
             this.set("children", _.union(_.sortBy(this.get("nodeLayer"), "name").reverse(), _.sortBy(this.get("nodeChildLayer"), "name").reverse()));
 
-        },
-
-        /**
-         * Alle Layer die ohne Unterordner konfiguriert sind, werden nach ihrer MetaID gruppiert.
-         * Dabei handelt es sich nicht immer zwingend um einen "NodeLayer".
-         * Gibt es pro MetaID einen Layer, wird er zum Attribut "nodeLayer" hinzugefügt.
-         * Gibt es pro MetaID mehrere Layer, werden die Layer zum Attribut "nodeChildLayer" hinzugefügt.
-         */
-        setNodeLayerForCustomTree: function () {
-            var nodeLayerList,
-                countByMetaID,
-                layerListByMetaID;
-
-                // Alle Layer die nicht zu einem Unterordner gehören
-                nodeLayerList = _.filter(this.get("layerList"), function (layer) {
-                    return layer.attributes.subfolder === undefined;
-                });
-
-                // Gruppiert die Layer nach deren MetaID
-                countByMetaID = _.countBy(_.pluck(nodeLayerList, "attributes"), "metaID");
-
-                // Iteriert über die gruppierten Layer
-                _.each(countByMetaID, function (value, key) {
-                    if (key !== "undefined") {
-                        // Alle Layer der Gruppe (sprich gleiche MetaID)
-                        layerListByMetaID = _.filter(nodeLayerList, function (layer) {
-                            return layer.attributes.metaID === key;
-                        });
-                        // Layer nach Namen sortiert
-                        layerListByMetaID = _.sortBy(layerListByMetaID, function (layer) {
-                            return layer.get("name");
-                        }).reverse();
-                        // Gibt es mehrere Layer in der Gruppe werden sie in einem Unterordner (Metadaten-Name) zusammengefasst
-                        if (layerListByMetaID.length > 1) {
-                            // Layer zum Attribut "nodeChildLayer" hinzugefügt
-                            this.push("nodeChildLayer", {type: "nodeChild", name: layerListByMetaID[0].get("metaName"), children: layerListByMetaID});
-                        }
-                        else {
-                            // Layer zum Attribut "nodeLayer" hinzugefügt
-                            this.push("nodeLayer", {type: "nodeLayer", name: layerListByMetaID[0].get("name"), layer: layerListByMetaID[0]});
-                        }
-                    }
-                }, this);
-
-                //********************************************** --> nur vorübergehend fürs Olympia-Portal...hoffentlich
-                // Alle Layer die keine MetaID und keinen Subfolder haben
-                nodeLayerList = _.filter(this.get("layerList"), function (layer) {
-                    return layer.attributes.metaID === undefined && layer.attributes.subfolder === undefined;
-                });
-                _.each(nodeLayerList, function (layer) {
-                    this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
-                }, this);
-                //**********************************************
-        },
-
-        /**
-         * Alle Layer die mit Unterordner konfiguriert sind, werden nach diesem gruppiert.
-         * Die Layer werden dem Attribut "nodeChildLayer" hinzugefügt.
-         */
-        setNodeChildLayerForCustomTree: function () {
-            var nodeChildLayerList,
-                countByFolder,
-                layerListByFolder;
-
-                // Alle Layer die zu einem Unterordner gehören
-                nodeChildLayerList = _.filter(this.get("layerList"), function (layer) {
-                    return layer.attributes.subfolder !== undefined;
-                });
-                // Gruppiert die Layer nach deren Unterordnern
-                 countByFolder = _.countBy(_.pluck(nodeChildLayerList, "attributes"), "subfolder");
-
-                 // Iteriert über die gruppierten Layer
-                _.each(countByFolder, function (value, key) {
-                    // Alle Layer der Gruppe (sprich gleiche Unterordner)
-                    layerListByFolder = _.filter(this.get("layerList"), function (layer) {
-                        return layer.attributes.subfolder === key;
-                    });
-                    // Layer nach Namen sortiert
-                    layerListByFolder = _.sortBy(layerListByFolder, function (layer) {
-                        return layer.get("name");
-                    }).reverse();
-                    // Layer zum Attribut "nodeChildLayer" hinzugefügt
-                    this.push("nodeChildLayer", {type: "nodeChild", name: layerListByFolder[0].get("subfolder"), children: layerListByFolder});
-                }, this);
         },
 
         /**
@@ -146,8 +63,7 @@ define([
                 layerListByID;
 
             // Gruppiert die Layer nach deren MetaID
-            countByMetaID = _.countBy(_.pluck(this.get("layerList"), "attributes"), "metaID");
-
+            countByMetaID = _.countBy(_.pluck(this.get("layerList"), "attributes"), "parent");
             // Iteriert über die Metadaten-ID's
             _.each(countByMetaID, function (value, key) {
                 // Alle Layer der Gruppe (sprich gleiche MetaID)
@@ -161,12 +77,21 @@ define([
                 }).reverse();
                 // Gibt es mehrere Layer in der Gruppe werden sie in einem Unterordner (Metadaten-Name) zusammengefasst
                 if (layerListByID.length > 1) {
-                    // Layer zum Attribut "nodeChildLayer" hinzugefügt
-                    this.push("nodeChildLayer", {type: "nodeChild", name: layerListByID[0].get("metaName"), children: layerListByID});
+                    // Wenn die Layer keinen Überordner haben bekommen sie beim Parsen der Capabillities das Attribut "noParent"
+                    // diese Layer werden einzeln hinzugefügt
+                    if (layerListByID[0].get("parent") === "noParent") {
+                        _.each(layerListByID, function (layer) {
+                              this.push("nodeLayer", {type: "nodeLayer", name: layer.get("parent"), layer: layer});
+                        }, this);
+                    }
+                    else {
+                        // Layer mit dem Selben Parent werden in "nodeChildLayer" zusammen hinzugefügt
+                        this.push("nodeChildLayer", {type: "nodeChild", name: layerListByID[0].get("parent"), children: layerListByID});
+                    }
                 }
                 else {
                     // Layer zum Attribut "nodeLayer" hinzugefügt
-                    this.push("nodeLayer", {type: "nodeLayer", name: layerListByID[0].get("metaName"), layer: layerListByID[0]});
+                    this.push("nodeLayer", {type: "nodeLayer", name: layerListByID[0].get("parent"), layer: layerListByID[0]});
                 }
             }, this);
         },
@@ -225,6 +150,7 @@ define([
             // Iteriert über "children"
             _.each(this.get("children"), function (child) {
                 if (child.type === "nodeLayer") {
+                    console.log("nodeLayer");
                     // nodeLayerView
                     child.layer.set("type", "nodeLayer");
                     nodeLayerView = new NodeLayerView({model: child.layer});

@@ -95,7 +95,8 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: false
+            routing: false,
+            addWMS: true,
         },
         startUpModul: "",
         searchBar: {
@@ -111,6 +112,7 @@ define(function () {
             print: false,
             coord: true,
             draw: true,
+            record: false,
             orientation: false,
             active: "gfi"
         },

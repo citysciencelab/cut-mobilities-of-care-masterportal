@@ -55,6 +55,10 @@ define([
                 "layerlist:setAttributionsByID": function (id, attrs) {
                     this.get(id).set(attrs);
                 },
+                "layerlist:addNewModel": function (model) {
+                    this.addExternalLayer(model);
+                },
+                "layerList:sendExternalFolders": this.sendExternalNodeNames,
                 "getNodeNames": this.sendNodeNames,
                 "layerlist:getLayerListForNode": this.sendLayerListForNode,
                 "layerlist:getInspireFolder": this.fetchLayer,
@@ -62,6 +66,7 @@ define([
                 "addFeatures": this.addFeatures,
                 "removeFeatures": this.removeFeatures
             });
+
             this.listenTo(this, {
                 "add": function (model) {
                     EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
@@ -451,6 +456,10 @@ define([
             else if (category === "inspire") {
                 EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
             }
+            else if (category === "externalLayers") {
+                // Schickt die externen Layer aus dem Ordner "nodeName"
+                EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({folder: nodeName, isExternal: true}));
+            }
             else {
                 EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
             }
@@ -475,6 +484,61 @@ define([
                     features: features
                 });
             }
+        },
+
+         sendExternalNodeNames: function () {
+            var externalLayers = this.filter(function (model) {
+                return model.attributes.isExternal;
+            }),
+            folders = [];
+
+            _.each(externalLayers, function (model) {
+                folders.push(model.attributes.folder);
+            });
+            // Sendet die Ordner namen der ersten Ebene
+            EventBus.trigger("catalogExtern:sendExternalNodeNames", _.uniq(folders));
+        },
+
+        addExternalLayer: function (model) {
+            var externalLayers = this.filter(function (layer) {
+                        return layer.get("id").toString().indexOf("External") !== -1;
+                    }),
+            id = "",
+            addedModel = {};
+
+            if (!_.isEmpty(externalLayers)) {
+
+                //  Testet, ob die Layer schon in der Liste ist
+                var layerInList = externalLayers.find(function (layer) {
+                    var attr = layer.attributes,
+                    result = false;
+
+                    if (attr.folder === model. folder &&
+                        attr.name === model.name &&
+                        attr.parent === model.parent &&
+                        attr.layers === model.layers) {
+                        result = true;
+                    }
+                    return result;
+                });
+
+                // wenn diese Layer schon in derListe ist diese Layer überspringen
+                if (layerInList) {
+                    return;
+                }
+                // sucht die Layer mit dem höchsten index
+                var max = _.max(externalLayers, function (layer) {
+                    // parse int ignoriert das "E" automatisch
+                    return parseInt(layer.id, 10);
+                });
+                // erhöht den höchsten Index um eins und gibt der neuen Layer den erhöhten Index
+                id = (parseInt(max.get("id"), 10) + 1).toString() + "External";
+            }
+            else {
+                // Wenn noch keine Externe Layer besteht bekommt die neue diesen Index
+                id = "0External";
+            }
+            addedModel = this.add(_.extend(model, {"id": id}));
         },
 
         removeFeatures: function (name) {

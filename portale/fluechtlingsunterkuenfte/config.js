@@ -7,12 +7,6 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=
-        */
-        metadatenURL: "",
-        /**
-        * @memberof config
-        * @type {String}
         * @desc Pfad zum img-Ordner für WFS-Styles
         */
         wfsImgPath: "../components/lgv-config/img/",
@@ -21,7 +15,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
-        allowParametricURL: true,
+        allowParametricURL: false,
         /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
@@ -34,49 +28,27 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769],
-            epsg: "EPSG:25832"
+            resolution: 26.458386250105834
         },
-        /**
-        * @memberof config
-        * @desc Konfiguration der Controls auf der Map
-        * @property {Boolean}  zoom - Legt fest ob die Zoombuttons angezeigt werden sollen.
-        * @property {Boolean}  toggleMenu - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
-        * @property {Boolean}  orientation - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
-        * @property {Boolean}  poi - Legt fest ob die Points of Interest angezeigt werden sollen.
-        */
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: true,
-            poi: true
-        },
-        /**
-        * customModules
-        * @memberof config
-        * @type {Array}
-        * @desc lädt die Module
-        */
-        // customModules: ["customModule1", "customModule2"]
         /**
         * @memberof config
         * @type {String}
         * @desc zeigt einen Footer-Bereich an
         */
-        footer: true,
+        footer: false,
         /**
         * @memberof config
         * @type {String}
         * @desc aktiviert das QuickHelp-Modul
         */
-        quickHelp: true,
+        quickHelp: false,
 
         /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-fluechtlinge.json",
         /**
         * @memberof config
         * @type {String}
@@ -130,52 +102,22 @@ define(function () {
         */
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "1748", visible: false},
-            {id: "1562", visible: true},
-            {id: "1561", visible: true},
-            {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
-            {id:
-             [
-                 {
-                     id: "946",
-                     attribution:
-                     {
-                         eventname: "aktualisiereverkehrsnetz",
-                         timeout: (10 * 60000)
-                     }
-                 },
-                 {
-                     id: "947"
-                 }
-             ],
-             name: "aktuelle Meldungen der TBZ", visible: false
-            },
-            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
-             displayInTree: true,
-             filterOptions: [
-                 {
-                     fieldName: "teilnahme_geburtsklinik",
-                     filterType: "combo",
-                     filterName: "Geburtsklinik",
-                     filterString: ["*", "ja", "nein"]
-                 },
-                 {
-                     fieldName: "teilnahme_notversorgung",
-                     filterType: "combo",
-                     filterName: "Not- und Unfallversorgung",
-                     filterString: ["*", "ja", "eingeschränkt", "nein"]
-                 }
-             ],
-             routable: true
-            }
+            {id: "8", visible: false},
+            {id: "1112,1113,1114,1115,1116,1117", name: "RISE-Fördergebiete", visible: false},
+            {id: "2097", visible: false},
+            {id: "1585", visible: false},
+            {id: "1", visible: true},
+            {id: "2", visible: true},
+            {id: "3", visible: true},
+            {id: "4", visible: true},
+            {id: "5", visible: true}
         ],
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
         */
-        attributions: true,
+        attributions: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -193,7 +135,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/MouseHoverPopupView.js geladen. Dieses Modul steuert die Darstellung des MouseHovers entsprechend layerIDs{mouseHoverField}
         */
-        mouseHover: true,
+        mouseHover: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -214,17 +156,16 @@ define(function () {
         * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
         */
         menu: {
-            viewerName: "GeoViewer",
+            viewerName: "Fluechtlingunterkuenfte HH",
             searchBar: true,
             layerTree: true,
             helpButton: false,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
-            wfsFeatureFilter: true,
+            wfsFeatureFilter: false,
             legend: true,
-            routing: true,
-            addWMS: true
+            routing: false
         },
         /**
         * @memberof config
@@ -239,11 +180,10 @@ define(function () {
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
         searchBar: {
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            bkgSuggestURL: "/bkg_suggest",
-            bkgSearchURL: "/bkg_geosearch",
-            useBKGSearch: true
+            placeholder: "Suche nach Adresse",
+            gazetteerURL: function () {
+                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            }
         },
 
         bPlan: {
@@ -260,7 +200,7 @@ define(function () {
         */
         print: {
             printID: "99999",
-            title: "Master",
+            title: "",
             gfi: false
         },
         /**
@@ -275,12 +215,24 @@ define(function () {
         */
         tools: {
             gfi: true,
-            measure: true,
+            measure: false,
             print: true,
-            coord: true,
-            draw: true,
+            coord: false,
+            draw: false,
             active: "gfi"
-        }
+        },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
+        */
+        orientation: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
+        */
+        poi: false
     };
 
     return config;

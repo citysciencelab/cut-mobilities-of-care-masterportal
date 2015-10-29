@@ -18,7 +18,9 @@ define([
             this.listenTo(EventBus, {
                 "showLayerInTree": this.showLayerInTree,
                 "sendNodeNames sendCustomFolderNames": this.createNodes
+                // "catalogList:render": this.createNodes
             });
+
 
             // Initial werden die Namen für die 1.Ordnerebene geholt.
             if (_.has(Config, "tree") && Config.tree.custom === true) {
@@ -91,7 +93,7 @@ define([
                         model.set("selected", true);
                     }
                     else {
-                        element.set("isExpanded", false);
+                            element.set("isExpanded", false);
                     }
                 }
 

@@ -175,7 +175,6 @@ define([
          */
         setResolutions: function () {
             if (_.has(Config.view, "options")) {
-                console.log(_.pluck(Config.view.options, "resolution"));
                 this.set("resolutions", _.pluck(Config.view.options, "resolution"));
             }
             else if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
