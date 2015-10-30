@@ -41,8 +41,6 @@ define([
 
             EventBus.on("searchInput:setFocus", this.setFocus, this);
             EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
-            EventBus.on("searchInput:setSearchbarString", this.setSearchbarString, this);
-            EventBus.on("searchInput:hideMenu", this.hideMenu, this);
 
             this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
@@ -173,10 +171,10 @@ define([
             $("#searchInput").focus();
         },
         /**
-        * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde. Führt dann zwei Funktionen aus:
-        * 1. zoomen auf Punkt und 2. Trigger den Eintrag im Eventbus.
+        * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
+            // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 var hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
             }
@@ -187,7 +185,19 @@ define([
             else {
                 var hit = this.model.get("hitList")[0];
             }
+            // 1. Schreibe Text in Searchbar
+            if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
+                this.setSearchbarString(hit.metaName);
+            }
+            else {
+                this.setSearchbarString(hit.name);
+            }
+            // 2. Verberge Suchmenü
+            this.hideMenu();
+            // 3. Zoome ggf. auf Ergebnis
             EventBus.trigger("mapHandler:zoomTo", hit);
+            // 4. Triggere Treffer über Eventbus
+            EventBus.trigger("searchbar:hit", hit);
         },
         /**
         *
