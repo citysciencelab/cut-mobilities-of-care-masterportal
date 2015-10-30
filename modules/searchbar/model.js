@@ -1,9 +1,8 @@
 define([
     "backbone",
-    "openlayers",
     "eventbus",
     "config"
-    ], function (Backbone, ol, EventBus, Config) {
+    ], function (Backbone, EventBus, Config) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
