@@ -22,6 +22,8 @@ define([
         * @param {Object} [config.tree] - Das Konfigurationsobjekt der Suche im Tree.
         * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
         * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
+        * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
+        * @param {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
         * @param {string} [initialQuery] - Initiale Suche.
         */
         initialize: function (config, querySearchString) {
@@ -30,6 +32,9 @@ define([
             }
             if (config.recommandedListLength) {
                 this.model.set("recommandedListLength", config.recommandedListLength);
+            }
+            if (config.placeholder) {
+                this.model.set("placeholder", config.placeholder);
             }
             this.className = "navbar-form col-xs-9";
             this.model.set("querySearchString", querySearchString);

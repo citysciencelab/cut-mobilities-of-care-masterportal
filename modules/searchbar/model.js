@@ -1,13 +1,13 @@
 define([
     "backbone",
-    "eventbus",
-    "config"
-    ], function (Backbone, EventBus, Config) {
+    "eventbus"
+    ], function (Backbone, EventBus) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
-            placeholder: Config.searchBar.placeholder,
+            placeholder: "Suche",
             recommandedListLength: 5,
+            quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
             hitList: []
         },
@@ -19,14 +19,6 @@ define([
 
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
             EventBus.on("searchbar:pushHits", this.pushHits, this);
-
-            // Quick-Help
-            if (Config.quickHelp && Config.quickHelp === true) {
-                this.set("quickHelp", true);
-            }
-            else {
-                this.set("quickHelp", false);
-            }
         },
 
         /**
