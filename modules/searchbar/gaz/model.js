@@ -49,6 +49,7 @@ define([
                 this.set("minChars", config.minChars);
             }
             EventBus.on("searchbar:search", this.search, this);
+            EventBus.on("gaz:adressSearch", this.adressSearch, this);
             if (initialQuery && _.isString(initialQuery) === true) {
                 this.directSearch(initialQuery);
             }
@@ -85,7 +86,23 @@ define([
             }
         },
         /**
-        * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.searchbar.initString
+        * @description Adresssuche mit Straße und Hausnummer und Zusatz. Wird nicht über die Searchbar getriggert.
+        * @param {Object} adress - Adressobjekt zur Suche
+        * @param {string} adress.streetname - Straßenname
+        * @param {integer} adress.housenumber - Hausnummer
+        * @param {string} [adress.affix] - Zusatz zur Hausnummer
+        */
+        adressSearch: function (adress) {
+            if (adress.affix && adress.affix !== "") {
+                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + adress.streetname + "&hausnummer=" + adress.housenumber + "&zusatz=" + adress.affix, this.getAdress, false);
+            }
+            else {
+                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + adress.streetname + "&hausnummer=" + adress.housenumber, this.getAdress, false);
+            }
+        },
+        /**
+        * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery
+        * @param {string} searchString - Suchstring
         */
         directSearch: function (searchString) {
             if (searchString.search(",") !== -1) {
@@ -102,6 +119,13 @@ define([
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
             }
             EventBus.trigger("createRecommendedList");
+        },
+        /**
+        * @description Methode zur Weiterleitung der adressSearch
+        * @param {xml} data - Response
+        */
+        getAdress: function (data) {
+            EventBus.trigger("gaz:getAdress", data);
         },
         /**
          * [getStreets description]
@@ -184,7 +208,7 @@ define([
                 coordinate,
                 position,
                 name,
-                addressJoin;
+                adress = {};
 
             this.set("houseNumbers", []);
             _.each(hits, function (hit) {
@@ -194,25 +218,31 @@ define([
                 if ($(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] !== undefined) {
                     affix = $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent;
                     name = this.get("onlyOneStreetName") + " " + number + affix;
-                    addressJoin = this.get("onlyOneStreetName").replace(/ /g, "") + number + affix;
+                    adress = {
+                        streetname: this.get("onlyOneStreetName"),
+                        housenumber: number,
+                        affix: affix
+                    };
                 }
                 else {
                     name = this.get("onlyOneStreetName") + " " + number ;
-                    addressJoin = this.get("onlyOneStreetName").replace(/ /g, "") + number;
-                }
-
-                // "Hitlist-Objekte"
-                if (addressJoin.search(this.get("searchStringRegExp")) !== -1) {
-                    var obj = {
-                        name: name,
-                        type: "Adresse",
-                        coordinate: coordinate,
-                        glyphicon: "glyphicon-map-marker",
-                        id: addressJoin.replace(/ /g, "") + "Adresse"
+                    adress = {
+                        streetname: this.get("onlyOneStreetName"),
+                        housenumber: number,
+                        affix: ""
                     };
-
-                    this.get("houseNumbers").push(obj);
                 }
+                // "Hitlist-Objekte"
+                var obj = {
+                    name: name,
+                    type: "Adresse",
+                    coordinate: coordinate,
+                    glyphicon: "glyphicon-map-marker",
+                    adress: adress,
+                    id: _.uniqueId("Adresse")
+                };
+
+                this.get("houseNumbers").push(obj);
             }, this);
         },
         /**
