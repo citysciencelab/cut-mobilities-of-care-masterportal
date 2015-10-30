@@ -244,11 +244,26 @@ insert_final_newline = true
 }
 ```
 # Git
-### Commit
+## Commit
 * Committe früh und oft
 * Ein Commit repräsentiert eine Idee oder eine Änderung
 * Nutze Verben für die Commits (add/remove/update/refactor/fix)
 * Es dürfen keine console.log Statements in den Commits vorhanden sein
+
+## Branches
+* Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
+
+## Pushen
+* Die Commits werden mit thematisch umschließenden Pushes ins Repository geschrieben, wobei es nicht Ziel ist, ganze Features in einem Push zu umschließen, sondern Tätigkeiten. Mit der lokalen Entwicklungsumgebung ist eine tägliche Sicherung ins Repository empfehlenswert um Datenverlust zu verhindern.
+
+## Pullrequests
+* Die in Branches abgelegten Commits werden vorm mergen in Pullrequests dem restlichen (verfügbaren) Team zum reviewen angeboten. Diese werden gebeten, möglichst zeitnah einen Blick auf den Code zu werfen, um evtl. Schwachstellen aufzudecken. Es ist nicht notwendig, den Code hinsichtlich seiner Funktionsfähigkeit zu untersuchen. Fehler können dann im Code oder im Pullrequest kommentiert werden. Es reicht bereits ein accept aus, um den Pullrequest in dev zu mergen. 
+
+### Accept
+* Werden keine produktionsverhindernden Gründe gefunden, soll der Pullrequest baldmöglichst accepted werden.
+
+### Decline
+* Im Falle von produktionsverhindernden Gründen wird der Pullrequest declined. Damit kann er in Bitbucket nicht mehr accepted werden und ein neuer Pullrequest muss nach Behebung der Fehler gestellt werden. Der requestor wird über die Gründe informiert.
 
 # Architektur
     |-- modules

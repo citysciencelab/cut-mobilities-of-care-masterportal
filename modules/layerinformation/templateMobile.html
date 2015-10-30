@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header layerinformation-win-header">
+            <span class="glyphicon glyphicon-remove win-close"></span>
+            <h4 class="modal-title">Datensatz Informationen</h4>
+        </div>
+        <div class="modal-body layerinformation-win-content">
+            <h4><%= name %></h4>
+            <p class="abstract"><%= abstractText %></p>
+            <br>
+            <p class="metaLink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
+            <p>Stand der Daten: <%= date %></p>
+            <% if (legendURL !== "ignore") { %>
+                <hr>
+                <h4>Legende</h4>
+                <p>
+                    <% if (legendURL.search(".pdf") !== -1) { %>
+                        <a href=<%= legendURL %> target="_blank">weitere Informationen</a>
+                    <% }
+                    else { %>
+                        <img src="<%= legendURL %>">
+                    <% } %>
+                </p>
+            <% } %>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

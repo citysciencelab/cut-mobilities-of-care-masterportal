@@ -37,9 +37,19 @@ define(function () {
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
         },
+        /**
+        * @memberof config
+        * @desc Konfiguration der Controls auf der Map
+        * @property {Boolean}  zoom - Legt fest ob die Zoombuttons angezeigt werden sollen.
+        * @property {Boolean}  toggleMenu - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
+        * @property {Boolean}  orientation - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
+        * @property {Boolean}  poi - Legt fest ob die Points of Interest angezeigt werden sollen.
+        */
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true,
+            poi: true
         },
         /**
         * customModules
@@ -213,7 +223,8 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
-            routing: true
+            routing: true,
+            addWMS: true
         },
         /**
         * @memberof config
@@ -224,15 +235,69 @@ define(function () {
         /**
         * @memberof config
         * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
-        * @property {Function}  gazetteerURL - Die Gazetteer-URL.
+        * @type {Object} gazetteer
+        * @param {string} url - Die URL.
+        * @param {boolean} searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @param {boolean} searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @param {boolean} searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @param {boolean} searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
+        * @param {integer} minCharacters - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @type {Object} bkg
+        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {string} bkgSuggestURL - URL für schnelles Suggest.
+        * @param {string} bkgSearchURL - URL für ausführliche Search.
+        * @param {[float]} extent - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @param {string} epsg - EPSG-Code des verwendeten Koordinatensystems.
+        * @param {string} filter - Filterstring
+        * @param {float} score - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @type {Object} specialWFS
+        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @type {Objekt[]} Das Konfigurationsarray für die specialWFS-Suche
+        * @param {string} url - Die URL, des WFS
+        * @param {string} data - Query string des WFS-Request
+        * @param {string} name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @type {Object} visibleWFS
+        * @desc Weitere Konfiguration am Layer. Siehe searchField.
+        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
         */
         searchBar: {
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            bkg: {
+                minChars: 3,
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch",
+                extent: [454591, 5809000, 700000, 6075769],
+                epsg: "EPSG:25832",
+                filter: "filter=(typ:*)",
+                score: 0.6
+            },
+            specialWFS: {
+                minChar: 3,
+                definitions: [
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        name: "bplan"
+                    },
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=imverfahren&propertyName=plan",
+                        name: "bplan"
+                    }
+                ]
+            },
+            visibleWFS: {
+                minChars: 3
+            },
             placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            bkgSuggestURL: "/bkg_suggest",
-            bkgSearchURL: "/bkg_geosearch",
-            useBKGSearch: true
+            geoLocateHit: true
         },
 
         bPlan: {
@@ -269,19 +334,7 @@ define(function () {
             coord: true,
             draw: true,
             active: "gfi"
-        },
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
-        */
-        orientation: true,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
-        */
-        poi: true
+        }
     };
 
     return config;

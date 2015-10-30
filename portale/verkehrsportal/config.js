@@ -64,7 +64,9 @@ define(function () {
         ],
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true,
+            poi: true
         },
         attributions: true,
         clickCounter: {
@@ -91,9 +93,18 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Adresssuche",
-            gazetteerURL: function () {
-                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            bkg: {
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch"
+            },
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: false,
+                searchParcels: false
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,
@@ -101,11 +112,10 @@ define(function () {
             print: false,
             draw: false,
             coord: true,
+            record: false,
             active: "gfi"
         },
-        gfiImgReloadTime: 20000,
-        orientation: true,
-        poi: true
+        gfiImgReloadTime: 20000
     }
 
     return config;

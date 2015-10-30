@@ -19,11 +19,13 @@ define(function () {
             layerIDsToStyle: [
                 {
                     "id": "1933",
-                    "styles": "geofox_stations"
+                    "styles": "geofox_stations",
+                    "name": "Haltestellen"
                 },
                 {
                     "id": "1935",
-                    "styles": ["geofox-bus", "geofox_BusName", "geofox-bahn"]
+                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"]
                 }
             ],
             metaIDsToMerge: [
@@ -91,7 +93,18 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0"
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            tree: {
+                minChars: 3
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,
@@ -99,6 +112,7 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
+            record: false,
             active: "gfi"
         },
         print: {

@@ -43,12 +43,22 @@ define([
                 "layerlist:getVisibleWFSlayerList": function () {
                     EventBus.trigger("layerlist:sendVisibleWFSlayerList", this.where({visibility: true, typ: "WFS"}));
                 },
+                "layerlist:getVisiblePOIlayerList": function () {
+                    EventBus.trigger("layerlist:sendVisiblePOIlayerList", this.where({visibility: true, typ: "WFS"}));
+                },
+                "layerlist:getEditableLayerList": function () {
+                    EventBus.trigger("layerlist:sendEditablelayerList", this.where({editable: true}));
+                },
                 "layerlist:getLayerByID": function (id) {
                     EventBus.trigger("layerlist:sendLayerByID", this.get(id));
                 },
                 "layerlist:setAttributionsByID": function (id, attrs) {
                     this.get(id).set(attrs);
                 },
+                "layerlist:addNewModel": function (model) {
+                    this.addExternalLayer(model);
+                },
+                "layerList:sendExternalFolders": this.sendExternalNodeNames,
                 "getNodeNames": this.sendNodeNames,
                 "layerlist:getLayerListForNode": this.sendLayerListForNode,
                 "layerlist:getInspireFolder": this.fetchLayer,
@@ -56,6 +66,7 @@ define([
                 "addFeatures": this.addFeatures,
                 "removeFeatures": this.removeFeatures
             });
+
             this.listenTo(this, {
                 "add": function (model) {
                     EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
@@ -118,6 +129,7 @@ define([
                 response = this.deleteLayersIncludeCache(response);
                 response = this.mergeLayersByIDs(response);
                 response = this.mergeLayersByMetaID(response);
+                this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
                 return response;
@@ -126,30 +138,39 @@ define([
             else if (_.has(Config, "layerIDs")) {
                 var modelsArray = [];
 
+                if (_.has(Config.tree, "layerIDsToMerge") === true) {
+                    response = this.mergeLayersByIDs(response);
+                }
+
                 _.each(Config.layerIDs, function (element) {
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(","),
                             layerinfos = _.findWhere(response, {id: layers[0]});
 
-                        element.isbaselayer = false;
-                        // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
-                        if (layers.length === 1) {
-                            modelsArray.push(_.extend(layerinfos, element));
+                        if (_.isUndefined(layerinfos)) {
+                            EventBus.trigger("alert", "Der Layer mit der ID '" + element.id + "' ist nicht vorhanden");
                         }
-                        // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
-                        else if (layers.length > 1) {
-                            var layerList = "";
-
-                            _.each(layers, function (layer) {
-                                var obj = _.findWhere(response, {id: layer});
-
-                                layerList += "," + obj.layers;
-                            });
-                            layerinfos.layers = layerList.slice(1, layerList.length);
-                            if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
-                                layerinfos.name = layerinfos.datasets[0].md_name;
+                        else {
+                            element.isbaselayer = false;
+                            // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
+                            if (layers.length === 1) {
+                                modelsArray.push(_.extend(layerinfos, element));
                             }
-                            modelsArray.push(_.extend(layerinfos, element));
+                            // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
+                            else if (layers.length > 1) {
+                                var layerList = "";
+
+                                _.each(layers, function (layer) {
+                                    var obj = _.findWhere(response, {id: layer});
+
+                                    layerList += "," + obj.layers;
+                                });
+                                layerinfos.layers = layerList.slice(1, layerList.length);
+                                if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
+                                    layerinfos.name = layerinfos.datasets[0].md_name;
+                                }
+                                modelsArray.push(_.extend(layerinfos, element));
+                            }
                         }
                     }
                     // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
@@ -166,15 +187,14 @@ define([
 
                             if (layerinfos) {
                                 groupModel.layerdefinitions.push(layerinfos);
+                                groupModel = _.extend(groupModel, element);
+                                groupModel.id = _.uniqueId("grouplayer_");
+                                modelsArray.push(groupModel);
                             }
                             else {
-                                alert ("Layerbeschreibung " + childlayer.id + " nicht verfügbar.");
-                                return;
+                                EventBus.trigger("alert", "Der Layer mit der ID '" + childlayer.id + "' ist nicht vorhanden");
                             }
                         });
-                        groupModel = _.extend(groupModel, element);
-                        groupModel.id = _.uniqueId("grouplayer_");
-                        modelsArray.push(groupModel);
                     }
                 });
                 this.setBaseLayer(modelsArray);
@@ -279,6 +299,21 @@ define([
                 response.push(newLayer);
             });
             return response;
+        },
+
+        // Hier wird den HVV-Layern ihr jeweiliger Style zugeordnet.
+        setLayerStyle: function (response) {
+            var styleLayerIDs = _.pluck(Config.tree.layerIDsToStyle, "id"),
+                layersByID;
+
+            layersByID = _.filter(response, function (layer) {
+                return _.contains(styleLayerIDs, layer.id);
+            });
+            _.each(layersByID, function (layer) {
+                var styleLayer = _.findWhere(Config.tree.layerIDsToStyle, {"id": layer.id});
+
+                layer = _.extend(layer, styleLayer);
+            });
         },
 
         // Hier werden die Geobasisdaten gesetzt. Wird über Config.baseLayer gesteuert.
@@ -421,6 +456,10 @@ define([
             else if (category === "inspire") {
                 EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
             }
+            else if (category === "externalLayers") {
+                // Schickt die externen Layer aus dem Ordner "nodeName"
+                EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({folder: nodeName, isExternal: true}));
+            }
             else {
                 EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
             }
@@ -445,6 +484,61 @@ define([
                     features: features
                 });
             }
+        },
+
+         sendExternalNodeNames: function () {
+            var externalLayers = this.filter(function (model) {
+                return model.attributes.isExternal;
+            }),
+            folders = [];
+
+            _.each(externalLayers, function (model) {
+                folders.push(model.attributes.folder);
+            });
+            // Sendet die Ordner namen der ersten Ebene
+            EventBus.trigger("catalogExtern:sendExternalNodeNames", _.uniq(folders));
+        },
+
+        addExternalLayer: function (model) {
+            var externalLayers = this.filter(function (layer) {
+                        return layer.get("id").toString().indexOf("External") !== -1;
+                    }),
+            id = "",
+            addedModel = {};
+
+            if (!_.isEmpty(externalLayers)) {
+
+                //  Testet, ob die Layer schon in der Liste ist
+                var layerInList = externalLayers.find(function (layer) {
+                    var attr = layer.attributes,
+                    result = false;
+
+                    if (attr.folder === model. folder &&
+                        attr.name === model.name &&
+                        attr.parent === model.parent &&
+                        attr.layers === model.layers) {
+                        result = true;
+                    }
+                    return result;
+                });
+
+                // wenn diese Layer schon in derListe ist diese Layer überspringen
+                if (layerInList) {
+                    return;
+                }
+                // sucht die Layer mit dem höchsten index
+                var max = _.max(externalLayers, function (layer) {
+                    // parse int ignoriert das "E" automatisch
+                    return parseInt(layer.id, 10);
+                });
+                // erhöht den höchsten Index um eins und gibt der neuen Layer den erhöhten Index
+                id = (parseInt(max.get("id"), 10) + 1).toString() + "External";
+            }
+            else {
+                // Wenn noch keine Externe Layer besteht bekommt die neue diesen Index
+                id = "0External";
+            }
+            addedModel = this.add(_.extend(model, {"id": id}));
         },
 
         removeFeatures: function (name) {

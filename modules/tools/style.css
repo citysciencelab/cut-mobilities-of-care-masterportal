@@ -1,0 +1,7 @@
+#tools > li > a {
+    padding: 4px 16px;
+}
+
+#tools > li > a > span {
+    padding-right: 8px;
+}

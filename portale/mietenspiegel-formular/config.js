@@ -113,7 +113,9 @@ define(function () {
         ],
         controls: {
             zoom: false,
-            toggleMenu: false
+            toggleMenu: false,
+            orientation: false,
+            poi: false
         },
         /**
         * @memberof config
@@ -184,9 +186,14 @@ define(function () {
         */
         searchBar: {
             placeholder: "Adresse eingeben",
-            gazetteerURL: function () {
-                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: false,
+                searchParcels: true
+            },
+            geoLocateHit: true
         },
                  /**
         * @memberof config
@@ -217,20 +224,9 @@ define(function () {
             print: false,
             coord: false,
             draw: false,
+            record: false,
             active: "gfi"
-        },
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Ermöglicht über einen Button auf der Karter den aktuellen Standpunkt bestimmen zu lassen.
-        */
-        orientation: false,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Vorraussetzung für POI(Points of interest) ist, dass orientation auf true gesetzt ist. POI zeigt alle in der Nähe befindlichen Objekte von eingeschalteten WFS Diensten an in den Abständen 500, 1000 und 2000 Metern.
-        */
-        poi: false
+        }
     };
 
     return config;

@@ -31,8 +31,6 @@ define([
                 return layer.id === "2715";
             }));
             this.set("standort", response.Standort);
-            EventBus.on("mapView:replyProjection", this.setProjection, this);
-            EventBus.trigger("mapView:requestProjection");
             if (this.get("standort") !== "" && this.get("routenLayer") !== "" && this.get("verkehrslagelayer") !== "") {
                 this.requestRouten();
                 this.sortRouten();
@@ -92,9 +90,6 @@ define([
                     this.set("ziele", ziele);
                 }
             });
-        },
-        setProjection: function (proj) {
-            this.set("projection", proj);
         },
         /**
          * Erzeugt einen leeren VactorLayer mit default-style

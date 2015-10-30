@@ -5,10 +5,10 @@ define([
 
     var Util = Backbone.Model.extend({
         isAndroid: function () {
-            return navigator.userAgent.match(/Android/i);
+            return navigator.userAgent.match(/Android.*Mobile/i);
         },
         isApple: function () {
-            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+            return navigator.userAgent.match(/iPhone|iPod/i);
         },
         isOpera: function () {
             return navigator.userAgent.match(/Opera Mini/i);
@@ -58,7 +58,6 @@ define([
         /** Umwandeln der services*.json-URLs in lokale Proxy-URL*/
         getProxyURL: function (url) {
             var newURL;
-
             if (url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
                 // remove ports here, are handled in proxy conf

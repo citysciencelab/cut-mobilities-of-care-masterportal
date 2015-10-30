@@ -45,6 +45,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
     ], function (Map, Config, $) {
         new Map();
 
+        if (Util.isAny()) {
+            require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
+                new MobileLayerInformationView();
+            });
+        }
+        else {
+            require(["modules/layerinformation/view"], function (LayerInformationView) {
+                new LayerInformationView();
+            });
+        }
+
         if (Config.footer && Config.footer === true) {
             require(["modules/footer/view"], function (FooterView) {
                 new FooterView();
@@ -110,15 +121,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new DrawView();
                         });
                     }
+                    if (Config.tools.record === true) {
+                        require(["modules/wfs_t/view"], function (WFS_TView) {
+                            new WFS_TView();
+                        });
+                    }
                     if (Config.tools.print === true) {
-                        // require(["views/PrintView"], function (PrintView) {
-                        //     new PrintView();
-                        // });
                         require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
-                    require(["views/ToolsView"], function (ToolsView) {
+                    require(["modules/tools/view"], function (ToolsView) {
                         new ToolsView();
                     });
                 }
@@ -127,9 +140,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new TreeFilterView();
                     });
                 }
-                if (Config.menu.searchBar === true) {
+                if (Config.menu.searchBar === true && Config.searchBar) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView();
+                        if (_.has(Config.searchBar, "geoLocateHit") === true && Config.searchBar.geoLocateHit === true) {
+                            require(["modules/mapMarker/view"], function (MapHandler) {
+                                new MapHandler();
+                                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                            });
+                        }
+                        else {
+                            new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                        }
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {
@@ -137,25 +158,25 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new WFSFeatureFilterView();
                     });
                 }
-                if (Config.orientation === true) {
-                    require(["views/OrientationView"], function (OrientationView) {
-                        new OrientationView();
-                    });
-                }
-                if (Config.poi === true) {
-                    require(["views/PointOfInterestView", "views/PointOfInterestListView"], function (PointOfInterestView, PointOfInterestListView) {
-                        // new PointOfInterestView();
-                        new PointOfInterestListView();
-                    });
-                }
                 if (Config.menu.legend === true) {
-                    require(["modules/legend/view"], function (LegendView) {
-                        new LegendView();
+                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                        if (Util.isAny()) {
+                            new MobileLegendView();
+                        }
+                        else {
+                            new LegendView();
+                        }
                     });
                 }
                 if (Config.menu.routing === true) {
                     require(["modules/routing/view"], function (RoutingView) {
                         new RoutingView();
+                    });
+                }
+                if (Config.menu.addWMS === true) {
+                    require(["modules/addwms/view"
+                        ], function (AddWMSView) {
+                        new AddWMSView();
                     });
                 }
                 if ($.isArray(Config.menu.formular)) {
