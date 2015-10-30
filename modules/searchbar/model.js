@@ -7,6 +7,7 @@ define([
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
             placeholder: Config.searchBar.placeholder,
+            recommandedListLength: 5,
             searchString: "", // der aktuelle String in der Suchmaske
             hitList: []
         },
@@ -15,6 +16,7 @@ define([
         */
         initialize: function () {
             this.on("change:searchString", this.checkStringAndSearch, this);
+
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
             EventBus.on("searchbar:pushHits", this.pushHits, this);
 
@@ -55,48 +57,34 @@ define([
         *
         */
         createRecommendedList: function () {
-            this.set("isHitListReady", false);
-            if (Config.searchBar.useBKGSearch) {
-                if (this.get("hitList").length > 5) {
-                    var suggestList = this.get("hitList"),
-                    // bkg Ergebnisse von anderen trennen
-                    split = _.partition(suggestList, function (obj) {
-                        return (obj.bkg === true);
-                    }),
-                    // Beide Listen kürzen und anschließend wieder vereinigen
-                    // Damit aus beiden Ergebnistypen gleichviele angezeigt werden
-                    shortHitlist = _.first(split[0], 5),
-                    shortHitlist2 = _.first(split[1], 5);
+            var max = this.get("recommandedListLength");
 
-                    this.set("recommendedList", _.union(shortHitlist2, shortHitlist));
+            if (this.get("hitList").length > 0) {
+                this.set("isHitListReady", false);
+                if (this.get("hitList").length > max) {
+                    var hitList = this.get("hitList"),
+                        foundTypes = [],
+                        singleTypes = _.reject(hitList, function (hit) {
+                            if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
+                                return true;
+                            }
+                            else {
+                                foundTypes.push(hit.type);
+                            }
+                        });
+                    while (singleTypes.length < max) {
+                        var randomNumber = _.random(0, hitList.length - 1);
+
+                        singleTypes.push(hitList[randomNumber]);
+                        hitList.splice(randomNumber, 1);
+                    }
+                    this.set("recommendedList", singleTypes);
                 }
                 else {
                     this.set("recommendedList", this.get("hitList"));
                 }
                 this.set("isHitListReady", true);
-                return;
             }
-
-            if (this.get("hitList").length > 5) {
-                var numbers = [];
-
-                while (numbers.length < 5) {
-                    var randomNumber = _.random(0, this.get("hitList").length - 1);
-
-                    if (_.contains(numbers, randomNumber) === false) {
-                        numbers.push(randomNumber);
-                    }
-                }
-                var mapHitList = _.map(numbers, function (number) {
-                    return this.get("hitList")[number];
-                }, this);
-
-                this.set("recommendedList", mapHitList);
-            }
-            else {
-                this.set("recommendedList", this.get("hitList"));
-            }
-            this.set("isHitListReady", true);
         }
     });
 
