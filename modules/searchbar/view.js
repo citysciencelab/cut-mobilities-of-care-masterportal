@@ -21,11 +21,15 @@ define([
         * @param {Object} [config.bkg] - Das Konfigurationsobjekt der BKG Suggest Suche.
         * @param {Object} [config.tree] - Das Konfigurationsobjekt der Suche im Tree.
         * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
+        * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
         * @param {string} [initialQuery] - Initiale Suche.
         */
         initialize: function (config, querySearchString) {
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
+            }
+            if (config.recommandedListLength) {
+                this.model.set("recommandedListLength", config.recommandedListLength);
             }
             this.className = "navbar-form col-xs-9";
             this.model.set("querySearchString", querySearchString);
