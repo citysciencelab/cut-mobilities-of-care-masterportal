@@ -63,12 +63,16 @@ define([
                             else {
                                 foundTypes.push(hit.type);
                             }
-                        });
-                    while (singleTypes.length < max) {
-                        var randomNumber = _.random(0, hitList.length - 1);
+                        }),
+                        usedNumbers = [],
+                        randomNumber;
 
-                        singleTypes.push(hitList[randomNumber]);
-                        hitList.splice(randomNumber, 1);
+                    while (singleTypes.length < max) {
+                        randomNumber = _.random(0, hitList.length - 1);
+                        if (_.contains(usedNumbers, randomNumber) === false) {
+                            singleTypes.push(hitList[randomNumber]);
+                            usedNumbers.push(randomNumber);
+                        }
                     }
                     this.set("recommendedList", singleTypes);
                 }
