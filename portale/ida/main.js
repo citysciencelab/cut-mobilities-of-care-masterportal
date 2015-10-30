@@ -8,7 +8,9 @@ require.config({
         text: "../../components/requirejs-text/text",
         bootstrap: "../../components/bootstrap/js",
         eventbus: "../../js/EventBus",
-        app: "app"
+        app: "app",
+        modules: "../../modules",
+        test: "test"
     },
     shim: {
         bootstrap: {

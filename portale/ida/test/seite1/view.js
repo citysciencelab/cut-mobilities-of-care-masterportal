@@ -2,8 +2,8 @@ define([
     "jquery",
     "backbone",
     "eventbus",
-    "modules/seite1/model",
-    "modules/seite1_lage/view",
+    "test/seite1/model",
+    "test/seite1_lage/view",
     "modules/searchbar/view"
 ], function ($, Backbone, EventBus, Model, Seite1_Lage, Searchbar) {
     /*

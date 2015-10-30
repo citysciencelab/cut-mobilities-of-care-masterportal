@@ -2,7 +2,7 @@ define([
     "jquery",
     "backbone",
     "eventbus",
-    "modules/seite1/model"
+    "test/seite1/model"
 ], function ($, Backbone, EventBus, Model) {
     /*
      *
