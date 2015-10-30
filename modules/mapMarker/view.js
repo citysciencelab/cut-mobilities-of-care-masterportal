@@ -24,14 +24,6 @@ define([
         zoomTo: function (hit) {
             var zoomLevel;
 
-            // 1. Schreibe Text in Searchbar
-            if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
-                EventBus.trigger("searchInput:setSearchbarString", hit.metaName);
-            }
-            else {
-                EventBus.trigger("searchInput:setSearchbarString", hit.name);
-            }
-            // 2. Navigiere
             switch (hit.type) {
                 case "Ortssuche": {
                     EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
@@ -87,8 +79,6 @@ define([
                     break;
                 }
             }
-            // 3. Verberge Suchmenü
-            EventBus.trigger("searchInput:hideMenu", this);
         },
         /*
         * @description Getriggert vom specialWFS empfängt diese Methode die XML des zu suchenden BPlans.
