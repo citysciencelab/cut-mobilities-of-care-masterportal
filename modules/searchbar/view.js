@@ -9,8 +9,8 @@ define([
     "use strict";
     return Backbone.View.extend({
         model: Searchbar,
-        id: "searchbar",
-        className: "navbar-form col-xs-9",
+        id: "searchbar", // wird ignoriert, bei renderToDOM
+        className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         template: _.template(SearchbarTemplate),
         /**
         * @description View der Searchbar
@@ -20,9 +20,14 @@ define([
         * @param {Object} [config.visibleWFS] - Das Konfigurationsobjekt sichtbaren WFS Suche.
         * @param {Object} [config.bkg] - Das Konfigurationsobjekt der BKG Suggest Suche.
         * @param {Object} [config.tree] - Das Konfigurationsobjekt der Suche im Tree.
+        * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
         * @param {string} [initialQuery] - Initiale Suche.
         */
         initialize: function (config, querySearchString) {
+            if (config.renderToDOM) {
+                this.setElement(config.renderToDOM);
+            }
+            this.className = "navbar-form col-xs-9";
             this.model.set("querySearchString", querySearchString);
 
             EventBus.on("searchInput:setFocus", this.setFocus, this);
