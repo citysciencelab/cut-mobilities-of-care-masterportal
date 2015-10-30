@@ -17,6 +17,16 @@ define([
 //            "keyup": "keyup"
         },
         initialize: function () {
+            new Searchbar({
+                gazetteer: {
+                    minChars: 3,
+                    url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                    searchStreets: true,
+                    searchHouseNumbers: true
+                },
+                placeholder: "Suche nach Adresse",
+                renderToDOM: "#adresse2"
+            });
         },
         keyup: function (evt) {
             console.log(evt.target.id);
