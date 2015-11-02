@@ -100,6 +100,9 @@ define([
                 "mapView:getOptions": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
+                "mapView:getCenterAndZoom": function () {
+                    EventBus.trigger("mapView:sendCenterAndZoom", this.getCenter(), this.getZoom());
+                },
                 "mapView:setScale": this.setScale,
                 "mapView:setZoomLevelUp": this.setZoomLevelUp,
                 "mapView:setZoomLevelDown": this.setZoomLevelDown,
@@ -260,6 +263,10 @@ define([
          */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
+        },
+
+        getCenter: function () {
+            return this.get("view").getCenter();
         },
 
         getResolution: function (scale) {

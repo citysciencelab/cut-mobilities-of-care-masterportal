@@ -21,7 +21,7 @@ define([
                 "click .layer-selection-label > .glyphicon-triangle-bottom, .layer-selection-label > .glyphicon-triangle-right, .layer-selection-label > .control-label": "toggleSelection",
                 "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer",
                 "click .layer-selection-save": function () {
-                    EventBus.trigger("layerselectionlist:createParamsForURL");
+                    EventBus.trigger("mapView:getCenterAndZoom");
                 },
                 "click .layer-extern-label": "toggleExternLayer"
             },
