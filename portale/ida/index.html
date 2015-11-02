@@ -1,125 +1,227 @@
 <!DOCTYPE html>
-<html lang="de">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Immobilienwert Daten Auskunft (IDA)</title>
-        <link rel="stylesheet" href="style.css">
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+
+		<title>Immobilienwert Daten Auskunft (IDA)</title>
+
+		<style type="text/css">
+			/* styles for this example page */
+			.wrapper{width: 100%; margin: 0px auto;}
+		</style>
+
+	 	<!--link rel="stylesheet" href="css/formanizr.css"-->
+        <link rel="stylesheet" href="http://www.hamburg.de/resources/9944/0/-1623059459/de.css">
         <link rel="stylesheet" href="../../css/style.css">
         <script type="text/javascript" data-main="main" src="../../components/requirejs/require.js"></script>
-    </head>
-    <body>
-        <!--<div id='loader'><img src='../../img/ajax-loader.gif'></div>-->
-        <section class="wrapper">
-        <!--  -->
-        <form class="formanizr fzr_legend-inside fzr_label-top" action="">
-            <fieldset id="page1">
-                <legend>IDA.HH – die Immobilienwertdatenauskunft von Hamburg</legend>
-                <p class="intro">Lorem ipsum dolor sit amet, sit velit harum cu, his ea rebum viderer, id constituto ullamcorper vix. Ne ancillae delectus complectitur sit. Sed augue mandamus no, platonem gloriatur democritum his te, ad cum admodum vivendum. No mei legere meliore, possim epicuri neglegentur at vim, mel ne autem decore. Usu facilisi qualisque theophrastus et. </p></br>
-                <hr/>
-                <h2>Lage</h2>
-                <div id="lage" class="fzr_row">
-                    <div class="fzr_col fzr_12">
-                        <label>Wie möchten Sie die Lage Ihrer Immobilie mitteilen?</label>
-                        <div class="fzr_inline">
-                            <input type="radio" name="lage_radio" checked="checked" value="radio1"/>
-                            <label>Straße / Hausnummer</label>
-                        </div><!-- /.fzr_inline -->
-                        <div class="fzr_inline">
-                            <input type="radio" name="lage_radio" value="radio2"/>
-                            <label>Gemarkung / Flurstück / Straße</label>
-                        </div><!-- /.fzr_inline -->
-                    </div><!-- fzr_col -->
-                </div><!-- .fzr_row -->
+
+	</head>
+	<body>
+
+	<section class="wrapper">
+
+	<!--  -->
+	<form class="formanizr fzr_legend-inside fzr_label-top" action="">
+		<fieldset>
+			<legend>IDA.HH – die Immobilienwertdatenauskunft von Hamburg</legend>
+			<p class="intro">Lorem ipsum dolor sit amet, sit velit harum cu, his ea rebum viderer, id constituto ullamcorper vix. Ne ancillae delectus complectitur sit. Sed augue mandamus no, platonem gloriatur democritum his te, ad cum admodum vivendum. No mei legere meliore, possim epicuri neglegentur at vim, mel ne autem decore. Usu facilisi qualisque theophrastus et. </p></br>
+			<hr/>
+
+	<div id="seite_eins">
+   		<h2>Lage</h2>
+
+            <div id="lage" class="fzr_row">
+				<div class="fzr_col fzr_12">
+					<label>Wie möchten Sie die Lage Ihrer Immobilie mitteilen?</label>
+					<div class="fzr_inline">
+						<input type="radio" name="lage_radio" checked="checked" value="radio1"/>
+						<label>Straße / Hausnummer</label>
+					</div><!-- /.fzr_inline -->
+					<div class="fzr_inline">
+						<input type="radio" name="lage_radio" value="radio2"/>
+						<label>Gemarkung / Flurstück / Straße</label>
+					</div><!-- /.fzr_inline -->
+				</div><!-- fzr_col -->
 
                 <div style="display:block;" id="adresse" class="fzr_row">
-                    <div id="adresse2" class="fzr_col fzr_11">
-                        <!--<input id="lage_strasse" type="text" placeholder="Straße" name="strasse"/>-->
-                    </div><!-- fzr_col -->
-
-                    <div class="fzr_col fzr_1">
-                        <!--<input id="lage_hausnummer" type="text" placeholder="Nr." name="hausnummer" />-->
-                    </div><!-- fzr_col -->
+                    <div id="adressfeld" class="fzr_col fzr_11"></div><!-- fzr_col -->
 
                 </div><!-- .fzr_row -->
 
                 <div style="display:none;" id="gemarkung" class="fzr_row">
 
                     <div class="fzr_col fzr_3">
-                        <input id="lage_gemarkung" type="text" placeholder="Gemarkung" name="gemarkung" />
+                        <input id="gemarkungsnummer" type="text" placeholder="Gemarkung" name="gemarkung" />
                     </div><!-- fzr_col -->
 
                     <div class="fzr_col fzr_3">
-                        <input id="lage_flurstueck" type="text" placeholder="Flurstück" name="flurstuck" />
+                        <input id="flurstuecksnummer" type="text" placeholder="Flurstück" name="flurstuck" />
                     </div><!-- fzr_col -->
 
-                    <div class="fzr_col fzr_6">
-                        <input id="lage_strasse_gemarkung" type="text" placeholder="Straße" name="strasse_gemarkung" />
+                    <div id="strassenfeld" class="fzr_col fzr_6">
+                            <input id="flurstuecksstrasse" type="text" placeholder="Straße" name="strasse_gemarkung" />
                     </div><!-- fzr_col -->
 
                 </div><!-- .fzr_row -->
+            </div><!-- .fzr_row -->
 
-                <br></br>
+            <br></br>
 
-                <div class="fzr_row">
-                    <div class="fzr_col fzr_6">
-                        <h2>Jahr</h2>
-                        <label>Für welches Jahr wünschen Sie eine Auskunft? <span style="display:inline" class="fzr_add-on">(2013 - 1973)</span><br>
-                              Die aktuellsten Daten beziehen sich auf das Jahr 2013
-                        </label>
-                        <input type="text" placeholder="Jahr" name="jahr" />
-                    </div><!-- fzr_col -->
+			<div class="fzr_row">
 
-                    <div class="fzr_col fzr_6">
-                        <h2>Nutzung</h2>
-                        <label>
-                            <br>
-                            Wählen Sie die Nutzung Ihrer Immobilie aus.
-                        </label>
-                        <select name="nutzung">
-                            <option value="-">Bitte auswählen</option>
-                            <option value="ETW">Eigentumswohnung</option>
-                            <option value="TG">Tiefgaragenstellplatz</option>
-                            <option value="GAR">Einzelgarage</option>
-                            <option value="STP">Stellplatz</option>
-                            <option value="EFH">Ein-/Zweifamilienhaus</option>
-                            <option value="MFH">Mehrfamilienhaus</option>
-                            <option value="GH">Geschäftshaus</option>
-                            <option value="LAD">eingeschossiger Laden</option>
-                            <option value="BH">Bürohaus</option>
-                            <option value="PL">Produktions-/Logistik-Grundstück</option>
-                            <option value="BGH">Büro- und Geschäftshaus</option>
-                            <option value="WGH">Wohn- und Geschäftshaus</option>
-                            <option value="WGB">Wohn-, Büro- und Geschäftshaus</option>
-                            <option value="A">Acker</option>
-                            <option value="GR">Grünland</option>
-                            <option value="EGA">Erwerbsgartenbaufläche</option>
-                            <option value="GEM">Feingemüseland</option>
-                            <option value="F">Waldfläche</option>
-                            <option value="LW">Begünstigtes Agrarland</option>
-                        </select>
-                    </div><!-- fzr_col -->
-                </div><!-- .fzr_row --><br></br>
-                <hr/>
-                <h2 class="fzr_headline">Produktauswahl</h2>
-                <div class="fzr_row">
-                    <div class="fzr_col fzr_12">
-                        <label>
-                            Bitte wählen Sie ein Produkt aus.
-                            <span class="fzr_add-on">Falls keine Produkte angezeigt werden, ändern Sie Ihre vorherigen Angaben.</span>
-                        </label>
-                        <select name="produkte" disabled>
-                            <option value="-">Lorem</option>
-                            <option value="1">Ipsum</option>
-                        </select>
-                    </div><!-- fzr_col -->
-                    <div class="fzr_col fzr_12 fzr_right"><br></br><br></br>
-                        <input type="submit" value="Weiter" class="fzr_highlight" disabled="disabled" />
-                    </div><!-- /.fzr_col -->
-                </div><!-- .fzr_row -->
-            </fieldset>
-        </form>
-        </section>
-    </body>
+			<div class="fzr_col fzr_6"><h2>Jahr</h2>
+					<label>Für welches Jahr wünschen Sie eine Auskunft? <span style="display:inline" class="fzr_add-on">(2013 - 1973)</span><br>
+					  Die aktuellsten Daten beziehen sich auf das Jahr 2013
+					</label>
+					<input type="text" placeholder="Jahr" name="jahr" />
+			</div><!-- fzr_col -->
+
+
+			<div class="fzr_col fzr_6">
+			  <h2>Nutzung</h2>
+					<label>
+						<br>
+				    Wählen Sie die Nutzung Ihrer Immobilie aus. </label>
+					<select name="nutzung">
+						<option value="-">Bitte auswählen</option>
+						<option value="ETW">Eigentumswohnung</option>
+                        <option value="TG">Tiefgaragenstellplatz</option>
+                        <option value="GAR">Einzelgarage</option>
+                        <option value="STP">Stellplatz</option>
+                        <option value="EFH">Ein-/Zweifamilienhaus</option>
+                        <option value="MFH">Mehrfamilienhaus</option>
+                        <option value="GH">Geschäftshaus</option>
+                        <option value="LAD">eingeschossiger Laden</option>
+                        <option value="BH">Bürohaus</option>
+                        <option value="PL">Produktions-/Logistik-Grundstück</option>
+                        <option value="BGH">Büro- und Geschäftshaus</option>
+                        <option value="WGH">Wohn- und Geschäftshaus</option>
+                        <option value="WGB">Wohn-, Büro- und Geschäftshaus</option>
+                        <option value="A">Acker</option>
+                        <option value="GR">Grünland</option>
+                        <option value="EGA">Erwerbsgartenbaufläche</option>
+                        <option value="GEM">Feingemüseland</option>
+                        <option value="F">Waldfläche</option>
+                        <option value="LW">Begünstigtes Agrarland</option>
+					</select>
+			</div><!-- fzr_col -->
+
+			</div><!-- .fzr_row --><br></br>
+
+			<hr/>
+
+			<h2 class="fzr_headline">Produktauswahl</h2>
+			<div class="fzr_row">
+
+				<div class="fzr_col fzr_12">
+					<label>
+						Bitte wählen Sie ein Produkt aus.
+						<span class="fzr_add-on">Falls keine Produkte angezeigt werden, ändern Sie Ihre vorherigen Angaben.</span>
+					</label>
+					<select name="produkte" disabled>
+						<option value="-">Lorem</option>
+						<option value="1">Ipsum</option>
+					</select>
+				</div><!-- fzr_col -->
+                <div class="fzr_col fzr_12 fzr_right"><br></br><br></br>
+					<input type="submit" value="Weiter" class="fzr_highlight" disabled="disabled" />
+				</div><!-- /.fzr_col -->
+
+			</div><!-- .fzr_row -->
+
+</div>
+
+ <div id="ladebalken" align="center" style="display:block">
+  <h2> Ihre Daten werden überprüft! <br></br>Bitte warten. </h2>
+  <div id="balken"> </div>
+  </div>
+
+ <div id="seite_einsb" style="display:block">
+  <div id="fehler" align="center" style="display:block">
+  <h2 style="color:red"> </h2>
+  </div>
+
+  <div id="link_boris" align="center" style="display:block">
+  <h2> Bitte ergänzen Sie Ihre Daten!<p>Nutzen Sie hierfür unsere Anwendung <a href="http://www.geoportal-hamburg.de/boris/">BORIS.HH</a>.</p> </h2>
+  <div id="balken"> </div>
+  </div>
+
+
+			<hr/><h2 class="fzr_headline">Ergänzungen zu Bodenrichtwerte</h2>
+			<div class="fzr_row" id="br_tab">
+
+				<div class="fzr_col fzr_3" id="br_sp1">
+					<label>
+						Spalte 1 ?????
+					</label>
+					<input type="text" />
+				</div><!-- fzr_col -->
+
+				<div class="fzr_col fzr_3" id="br_sp2">
+					<label>
+						Spalte 2 ????
+						</label>
+					<input type="text" />
+				</div><!-- fzr_col -->
+
+				<div class="fzr_col fzr_6" id="br_sp3">
+					<label>
+						Bodenrichtwert in €/m²
+					</label>
+					<input type="text" />
+
+				</div><!-- fzr_col -->
+
+			</div><!-- .fzr_row -->
+</div><!-- .seite_einsb -->
+
+<div id="seite_zwei" style="display:block">
+
+  			<h2 class="fzr_headline">Weitere Parameter</h2>
+			<div class="fzr_row" id="p_tab">
+
+				<div class="fzr_col fzr_6" id="p_sp1">
+					<label>
+						Parameter 1 ?????
+					</label>
+					<input type="text" />
+				</div><!-- fzr_col -->
+
+				<div class="fzr_col fzr_6" id="p_sp2">
+					<label>
+						Parameter 2 ????
+						</label>
+					<input type="text" />
+				</div><!-- fzr_col -->
+
+			</div><!-- .fzr_row -->
+</div><!-- .seite_zwei -->
+
+ <div id="seite_zweib" style="display:block">
+  <div id="fehler_p" align="center" style="display:block">
+  <h2 style="color:red"> </h2>
+  </div>
+
+  <div id="ok_p" align="center" style="display:block">
+  <h2 style="color:green">Ihre Daten sind in Ordnung!</h2>
+  </div>
+  <div align="center"><input type="submit" value="PDF Ausgabe" class="fzr_highlight" id="pdf" />
+  </div>
+</div><!-- .seite_zweib -->
+
+<div id="seite_ende" style="display:block">
+  <div id="ende" align="center" style="display:block">
+  <h2>Vielen Dank!</h2>
+  </div>
+</div><!-- .seite_ende -->
+
+	  </fieldset>
+	</form>
+
+	</section>
+
+</body>
 </html>
