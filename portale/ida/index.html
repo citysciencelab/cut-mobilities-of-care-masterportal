@@ -72,20 +72,20 @@
 
 			<div class="fzr_row">
 
-			<div class="fzr_col fzr_6"><h2>Jahr</h2>
-					<label>Für welches Jahr wünschen Sie eine Auskunft? <span style="display:inline" class="fzr_add-on">(2013 - 1973)</span><br>
+			<div id="jahr" class="fzr_col fzr_6"><h2>Jahr</h2>
+					<label>Für welches Jahr wünschen Sie eine Auskunft? <span id="validjahre" style="display:inline" class="fzr_add-on">(2013 - 1973)</span><br>
 					  Die aktuellsten Daten beziehen sich auf das Jahr 2013
 					</label>
-					<input type="text" placeholder="Jahr" name="jahr" />
+					<input id="jahresfeld" type="text" placeholder="Jahr" name="jahr" />
 			</div><!-- fzr_col -->
 
 
-			<div class="fzr_col fzr_6">
+			<div id="nutzung" class="fzr_col fzr_6">
 			  <h2>Nutzung</h2>
 					<label>
 						<br>
 				    Wählen Sie die Nutzung Ihrer Immobilie aus. </label>
-					<select name="nutzung">
+					<select id="nutzungdropdown" name="nutzung">
 						<option value="-">Bitte auswählen</option>
 						<option value="ETW">Eigentumswohnung</option>
                         <option value="TG">Tiefgaragenstellplatz</option>
