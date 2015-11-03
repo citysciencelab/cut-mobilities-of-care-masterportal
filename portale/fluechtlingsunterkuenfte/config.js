@@ -28,7 +28,7 @@ define(function () {
         */
         view: {
             center: [565874, 5934140],
-            resolution: 26.458386250105834
+            resolution: 15.874991427504629
         },
         /**
         * @memberof config
@@ -106,11 +106,11 @@ define(function () {
             {id: "1112,1113,1114,1115,1116,1117", name: "RISE-Fördergebiete", visible: false},
             {id: "2097", visible: false},
             {id: "1585", visible: false},
-            {id: "1", visible: true},
-            {id: "2", visible: true},
-            {id: "3", visible: true},
-            {id: "4", visible: true},
-            {id: "5", visible: true}
+            {id: "7", visible: false, editable: true},
+            // {id: "2", visible: true},
+             {id: "3", visible: true},
+             {id: "4", visible: true},
+             {id: "5", visible: true}
         ],
         /**
         * @memberof config
@@ -219,7 +219,8 @@ define(function () {
             print: true,
             coord: false,
             draw: false,
-            active: "gfi"
+            active: "gfi",
+            record: true
         },
         /**
         * @memberof config
