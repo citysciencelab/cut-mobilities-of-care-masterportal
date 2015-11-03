@@ -41,6 +41,10 @@ define([
                 this.set("jahr", jahr);
                 EventBus.trigger("seite1_jahr:newJahr", jahr);
             }
+            else {
+                this.set("jahr", "");
+                EventBus.trigger("seite1_jahr:newJahr", "");
+            }
         }
     });
 

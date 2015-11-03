@@ -36,7 +36,12 @@ define([
             this.checkParameter();
         },
         checkParameter: function () {
-            console.log('checkParameter');
+            if (this.get("jahr") !== "" && this.get("nutzung") !== "" && this.get("produkt") !== "" && this.get("lage") !== "") {
+                $("#seite1_weiter").prop("disabled", false);
+            }
+            else {
+                $("#seite1_weiter").prop("disabled", true);
+            }
         }
     });
 

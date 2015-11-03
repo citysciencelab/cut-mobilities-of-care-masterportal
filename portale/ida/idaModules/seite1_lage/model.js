@@ -16,11 +16,15 @@ define([
         },
         initialize: function () {
             EventBus.on("searchbar:hit", this.searchbarhit, this);
+
             EventBus.on("gaz:getAdress", this.adressHit, this);
         },
         searchbarhit: function (hit) {
             if (hit.type === "Adresse") {
                 EventBus.trigger("gaz:adressSearch", hit.adress);
+            }
+            else {
+                EventBus.trigger("seite1_lage:newLage", "");
             }
         },
         adressHit: function (data) {

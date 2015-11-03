@@ -13,8 +13,12 @@ define([
         el: "#seite_eins",
         model: Model,
         events: {
+            "click #seite1_weiter": "weiter"
         },
         initialize: function () {
+        },
+        weiter: function () {
+            console.log('Seite 1 fertig');
         }
     });
 

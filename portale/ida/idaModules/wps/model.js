@@ -23,7 +23,7 @@ define([
             var request_str = "<wps:Execute xmlns:wps='http://www.opengis.net/wps/1.0.0' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ows='http://www.opengis.net/ows/1.1' service='WPS' version='1.0.0' xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'><ows:Identifier>" + request.workbenchname + ".fmw</ows:Identifier>" + request.dataInputs + "</wps:Execute>";
 
             this.set("request", request);
-            Util.showLoader();
+            $("#ladebalken").show();
             $.ajax({
                 url: this.get("url") + "?Request=Execute&Service=WPS&Version=1.0.0",
                 data: request_str,
@@ -33,14 +33,13 @@ define([
                 context: this,
                 method: "POST",
                 complete: function (jqXHR) {
-                    Util.hideLoader();
+                    $("#ladebalken").hide();
                     if (jqXHR.status !== 200 ||
                         jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         alert ("Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
                     }
                 },
                 success: function (response) {
-                    Util.hideLoader();
                     var exeResp = $("wps\\:ExecuteResponse,ExecuteResponse", response),
                         data = $(exeResp).find("wps\\:ComplexData,ComplexData")[0];
 
