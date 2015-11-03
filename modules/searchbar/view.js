@@ -198,6 +198,8 @@ define([
             EventBus.trigger("mapHandler:zoomTo", hit);
             // 4. Triggere Treffer über Eventbus
             EventBus.trigger("searchbar:hit", hit);
+            // 5. Beende Event
+            evt.stopPropagation();
         },
         /**
         *
