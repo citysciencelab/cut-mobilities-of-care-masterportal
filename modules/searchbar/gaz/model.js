@@ -58,6 +58,7 @@ define([
         *
         */
         search: function (searchString) {
+            this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
@@ -134,11 +135,13 @@ define([
         getStreets: function (data) {
             var hits = $("wfs\\:member,member", data),
                 coordinates,
+                hitNames = [],
                 hitName;
 
             _.each(hits, function (hit) {
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                hitNames.push(hitName);
                 // "Hitlist-Objekte"
                 EventBus.trigger("searchbar:pushHits", "hitList", {
                     name: hitName,
@@ -156,6 +159,15 @@ define([
                 }
                 else if (hits.length === 0) {
                     this.searchInHouseNumbers();
+                }
+                else {
+                    _.each(hitNames, function (hitName) {
+                        if (hitName.toLowerCase() === this.get("searchString").toLowerCase()) {
+                            this.set("onlyOneStreetName", hitName);
+                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false);
+                            this.searchInHouseNumbers();
+                        }
+                    }, this);
                 }
             }
             EventBus.trigger("createRecommendedList");
