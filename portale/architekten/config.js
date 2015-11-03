@@ -65,9 +65,14 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
-            gazetteerURL: function () {
-                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: false
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,

@@ -44,10 +44,43 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Stadtteil, Thema",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            bkg: {
+                minChars: 3,
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch",
+                extent: [454591, 5809000, 700000, 6075769],
+                epsg: "EPSG:25832",
+                filter: "filter=(typ:*)",
+                score: 0.6
+            },
+            specialWFS: {
+                minChar: 3,
+                definitions: [
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        name: "bplan"
+                    },
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=imverfahren&propertyName=plan",
+                        name: "bplan"
+                    }
+                ]
+            },
+            visibleWFS: {
+                minChars: 3
+            },
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
+            geoLocateHit: true
         },
         tools: {
             gfi: true,
