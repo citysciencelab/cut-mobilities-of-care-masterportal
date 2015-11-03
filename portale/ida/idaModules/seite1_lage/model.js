@@ -41,6 +41,13 @@ define([
             else {
                 this.set("strHsNrZusatz", "");
             }
+            EventBus.trigger("seite1_lage:newLage", {
+                type: "Adresse",
+                strschl: this.get("strschl"),
+                strName: this.get("strName"),
+                strHsNr: this.get("strHsNr"),
+                strHsNrZusatz: this.get("strHsNrZusatz")
+            });
         }
     });
 

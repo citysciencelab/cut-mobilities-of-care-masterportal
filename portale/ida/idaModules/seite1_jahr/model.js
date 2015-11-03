@@ -1,7 +1,8 @@
 define([
     "underscore",
-    "backbone"
-], function (_, Backbone) {
+    "backbone",
+    "eventbus"
+], function (_, Backbone, EventBus) {
     "use strict";
     var Seite1JahrModel = Backbone.Model.extend({
         defaults: {
@@ -38,6 +39,7 @@ define([
             if (_.isNaN(jahr) === false && jahr >= this.get("minJahr") && jahr <= this.get("maxJahr")) {
                 this.unset("jahr", {silent: true});
                 this.set("jahr", jahr);
+                EventBus.trigger("seite1_jahr:newJahr", jahr);
             }
         }
     });

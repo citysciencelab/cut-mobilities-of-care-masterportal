@@ -10,7 +10,7 @@ define([
     var WPSModel = Backbone.Model.extend({
         defaults: {
             url: "",
-            data: ""
+            request: ""
         },
         initialize: function () {
             var resp = RestReader.getServiceById(Config.wpsID),
@@ -19,13 +19,14 @@ define([
             this.set("url", newURL);
             EventBus.on("wps:request", this.request, this);
         },
-        request: function (data) {
-            console.log(data);
-            this.set("data", data);
+        request: function (request) {
+            var request_str = "<wps:Execute xmlns:wps='http://www.opengis.net/wps/1.0.0' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ows='http://www.opengis.net/ows/1.1' service='WPS' version='1.0.0' xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'><ows:Identifier>" + request.workbenchname + ".fmw</ows:Identifier>" + request.dataInputs + "</wps:Execute>";
+
+            this.set("request", request);
             Util.showLoader();
             $.ajax({
                 url: this.get("url") + "?Request=Execute&Service=WPS&Version=1.0.0",
-                data: this.get("data"),
+                data: request_str,
                 headers: {
                     "Content-Type": "text/xml; charset=UTF-8"
                 },
@@ -33,20 +34,27 @@ define([
                 method: "POST",
                 complete: function (jqXHR) {
                     Util.hideLoader();
-                    console.log(jqXHR);
-//                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-//                        EventBus.trigger("alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
-//                    }
-//                    if (data.getElementsByTagName("jobStatus") !== undefined && data.getElementsByTagName("jobStatus")[0].textContent === "FME_FAILURE") {
-//                        this.showErrorMessage();
-//                    }
+                    if (jqXHR.status !== 200 ||
+                        jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+                        alert ("Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
+                    }
                 },
                 success: function (response) {
                     Util.hideLoader();
-                    EventBus.trigger("wps:response", this.get("data"), response);
+                    var exeResp = $("wps\\:ExecuteResponse,ExecuteResponse", response),
+                        data = $(exeResp).find("wps\\:ComplexData,ComplexData")[0];
+
+                    if (!data) {
+                        alert ("Fehler beim Abfragen eines Dienstes");
+                    }
+                    else {
+                        EventBus.trigger("wps:response", {
+                            request: this.get("request"),
+                            data: data
+                        });
+                    }
                 }
             });
-            $("#loader").show();
         }
     });
 
