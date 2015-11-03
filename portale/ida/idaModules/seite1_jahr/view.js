@@ -3,9 +3,7 @@ define([
     "backbone",
     "idaModules/seite1_jahr/model"
 ], function ($, Backbone, Model) {
-    /*
-     *
-     */
+    "use strict";
     var Seite1JahrView = Backbone.View.extend({
         el: "#jahr",
         model: Model,

@@ -2,7 +2,7 @@ define([
     "underscore",
     "backbone"
 ], function (_, Backbone) {
-
+    "use strict";
     var Seite1JahrModel = Backbone.Model.extend({
         defaults: {
             maxJahr: "",

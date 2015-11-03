@@ -4,9 +4,7 @@ define([
     "idaModules/seite1_lage/model",
     "modules/searchbar/view"
 ], function ($, Backbone, Model, Searchbar) {
-    /*
-     *
-     */
+    "use strict";
     var Seite1LageView = Backbone.View.extend({
         el: "#lage",
         model: Model,

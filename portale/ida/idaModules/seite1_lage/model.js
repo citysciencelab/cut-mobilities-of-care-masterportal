@@ -2,7 +2,7 @@ define([
     "backbone",
     "eventbus"
 ], function (Backbone, EventBus) {
-
+    "use strict";
     var Seite1LageModel = Backbone.Model.extend({
         defaults: {
             strschl: "",
