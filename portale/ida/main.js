@@ -10,7 +10,8 @@ require.config({
         eventbus: "../../js/EventBus",
         app: "app",
         modules: "../../modules",
-        idaModules: "idaModules"
+        idaModules: "idaModules",
+        config: "config"
     },
     shim: {
         bootstrap: {
