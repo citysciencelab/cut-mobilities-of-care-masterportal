@@ -19,7 +19,8 @@ define([
             this.render();
             EventBus.on("showWindowHelp", this.showWindow, this);
             this.$el.draggable({
-                containment: "#map"
+                containment: "#map",
+                handle: ".header"
             });
         },
         render: function () {
