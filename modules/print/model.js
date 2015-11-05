@@ -303,7 +303,10 @@ define([
                 },
                 success: this.openPDF,
                 error: function (error) {
-                    alert ("Druck fehlgeschlagen: " + error.statusText);
+                    EventBus.trigger("alert", {
+                        text: "Druck fehlgeschlagen: " + error.statusText,
+                        kategorie: "alert-warning"
+                    });
                 },
                 complete: Util.hideLoader,
                 beforeSend: Util.showLoader

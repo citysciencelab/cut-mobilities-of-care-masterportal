@@ -115,7 +115,10 @@ define([
                     }
                 },
                 error: function (error) {
-                    alert ('Adressabfrage fehlgeschlagen: ' + error.statusText);
+                    EventBus.trigger("alert", {
+                        text: "Adressabfrage fehlgeschlagen: " + error.statusText,
+                        kategorie: "alert-warning"
+                    });
                 },
                 timeout: 3000
             });
@@ -156,7 +159,10 @@ define([
                     }
                 },
                 error: function (error) {
-                    alert ('Adressabfrage fehlgeschlagen: ' + error.statusText);
+                    EventBus.trigger("alert", {
+                        text: "Adressabfrage fehlgeschlagen: " + error.statusText,
+                        kategorie: "alert-warning"
+                    });
                 },
                 timeout: 3000
             });
@@ -206,7 +212,10 @@ define([
                     $('#loader').hide();
                     this.set('description', '');
                     this.set('endDescription', '');
-                    alert('Fehlermeldung beim Laden der Route: \n' + data.responseText);
+                    EventBus.trigger("alert", {
+                        text: "Fehlermeldung beim Laden der Route: \n" + data.responseText,
+                        kategorie: "alert-warning"
+                    });
                 }
             });
         },
