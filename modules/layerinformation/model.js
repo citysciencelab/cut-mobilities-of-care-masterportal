@@ -15,6 +15,7 @@ define([
 
         setAttributes: function (attrs) {
             this.set(attrs);
+            console.log(attrs);
             this.fetchData({id: this.get("metaID")});
         },
 
