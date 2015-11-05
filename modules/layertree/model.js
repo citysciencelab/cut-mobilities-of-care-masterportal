@@ -11,6 +11,11 @@ define([
                 filter: Config.tree.filter
             },
             initialize: function () {
+                this.listenTo(EventBus, {
+                    "mapView:sendCenterAndZoom": function (center, zoom) {
+                        EventBus.trigger("layerselectionlist:createParamsForURL", center, zoom);
+                    }
+                });
                 this.listenTo(this, "change:currentSelection", this.sendSelection);
             },
             setSelection: function (value) {

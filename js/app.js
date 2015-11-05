@@ -140,9 +140,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new TreeFilterView();
                     });
                 }
-                if (Config.menu.searchBar === true) {
+                if (Config.menu.searchBar === true && Config.searchBar) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView();
+                        if (_.has(Config.searchBar, "geoLocateHit") === true && Config.searchBar.geoLocateHit === true) {
+                            require(["modules/mapMarker/view"], function (MapHandler) {
+                                new MapHandler();
+                                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                            });
+                        }
+                        else {
+                            new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                        }
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {

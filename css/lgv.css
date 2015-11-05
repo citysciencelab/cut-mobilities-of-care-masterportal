@@ -32,12 +32,12 @@ html, body {
     }
 }
 
-#toggleDiv {
+/*#toggleDiv {
     position: relative;
     top:50px;
     right: 17px;
     z-index: 999;
-}
+}*/
 
 .color {
     color: #cdcdcd;
@@ -130,15 +130,19 @@ html, body {
     overflow:auto;
     overflow-x: hidden;
 }
+.dropdown-menu {
+    margin-left: -2px;
+}
+
 #poibody{
     overflow:auto;
 }
-.legendbody{
+/*.legendbody{
     overflow:auto;
 }
 #legend{
     overflow:hidden;
-}
+}*/
 
 
 #tree small {
@@ -146,9 +150,9 @@ html, body {
 }
 
 
-.layername{
+/*.layername{
     margin-left: 5px;
-}
+}*/
 
 .menuitem{
     margin-left: 5px;
@@ -156,15 +160,15 @@ html, body {
     text-transform: uppercase;
 }
 
-.legend{
+/*.legend{
     overflow:hidden;
 }
 .legenddiv{
     overflow-y: auto;
-}
-#tree small {
+}*/
+/*#tree small {
     cursor: pointer;
-}
+}*/
 
 /*bootstrap überschreiben*/
 .tree-panel {
@@ -200,10 +204,10 @@ html, body {
     margin-bottom: 0px;
 }
 
-#measurePopup {
+/*#measurePopup {
     position: absolute;
     top: 70px;
-}
+}*/
 
 /******* Ajax Loader *******/
 #loader
@@ -224,9 +228,9 @@ html, body {
     margin-top: -50px;
 }
 
-#coordPopup {
+/*#coordPopup {
     padding: 10px;
-}
+}*/
 #poiPanel{
     visibility: hidden;
 }
