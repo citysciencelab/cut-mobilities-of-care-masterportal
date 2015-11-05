@@ -99,15 +99,16 @@ define([
                 success: function (data) {
                     try {
                         var treffer = [];
+
                         if (target === "start") {
-                            _.each(data, function (strasse, index, list) {
-                                treffer.push('id="' + strasse.suggestion + '" class="list-group-item startAdresseSelected"><span>' +  strasse.highlighted + '</span>');
+                            _.each(data, function (strasse) {
+                                treffer.push("id='" + strasse.suggestion + "' class='list-group-item startAdresseSelected'><span>" + strasse.highlighted + "</span>");
                             });
                             this.set("fromList", treffer);
                         }
                         else {
-                            _.each(data, function (strasse, index, list) {
-                                treffer.push('id="' + strasse.suggestion + '" class="list-group-item zielAdresseSelected"><span>' +  strasse.highlighted + '</span>');
+                            _.each(data, function (strasse) {
+                                treffer.push("id='" + strasse.suggestion + "' class='list-group-item zielAdresseSelected'><span>" + strasse.highlighted + "</span>");
                             });
                             this.set("toList", treffer);
                         }
@@ -177,7 +178,7 @@ define([
             */
             if (this.get("routingtime") !== "" && this.get("routingdate") !== "") {
                 var splitter = this.get("routingtime").split(":"),
-                    utcHour = (parseFloat(splitter[0]) + new Date().getTimezoneOffset()/60).toString(),
+                    utcHour = (parseFloat(splitter[0]) + new Date().getTimezoneOffset() / 60).toString(),
                     utcMinute = parseFloat(splitter[1]);
 
                 request = request + "&STARTTIME=" + this.get("routingdate") + "T" + utcHour + ":" + utcMinute + ":00.000Z";
@@ -189,6 +190,7 @@ define([
                 async: true,
                 context: this,
                 success: function (data) {
+                    $("#loader").hide();
                     var geoJsonFormat = new ol.format.GeoJSON(),
                         olFeature = geoJsonFormat.readFeature(data),
                         vectorlayer = new ol.layer.Vector({
@@ -203,7 +205,6 @@ define([
                             })
                         });
 
-                    $("#loader").hide();
                     vectorlayer.id = "routenplanerroute";
                     this.get("map").addLayer(vectorlayer);
                     this.set("endDescription", olFeature.get("EndDescription"));
@@ -211,7 +212,7 @@ define([
                     EventBus.trigger("zoomToExtent", olFeature.getGeometry().getExtent());
                     this.addOverlay(olFeature);
                 },
-                error: function (data, textStatus, jqXHR) {
+                error: function (data) {
                     $("#loader").hide();
                     this.set("description", "");
                     this.set("endDescription", "");
@@ -228,13 +229,14 @@ define([
             }
         },
         addOverlay: function (olFeature) {
-            var html = '<div id="routingoverlay" class="">';
-            html += '<span class="glyphicon glyphicon-flag"></span>'
-            html += '<span>' + olFeature.get('EndDescription').substr(olFeature.get('EndDescription').indexOf('. ') + 1) + '</span>';
+            var html = "<div id='routingoverlay' class=''>",
+                position = olFeature.getGeometry().getLastCoordinate();
+
+            html += "<span class='glyphicon glyphicon-flag'></span>";
+            html += "<span>" + olFeature.get("EndDescription").substr(olFeature.get("EndDescription").indexOf(". ") + 1) + "</span>";
             html += "</div>";
             $("#map").append(html);
             this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")}));
-            var position = olFeature.getGeometry().getLastCoordinate();
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             EventBus.trigger("addOverlay", this.get("mhpOverlay"));
         }
