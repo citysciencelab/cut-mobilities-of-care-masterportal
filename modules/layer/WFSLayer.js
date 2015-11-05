@@ -181,8 +181,6 @@ define([
                     }
                 }
             }
-            // wird in layerinformation benötigt. --> macht vlt. für Legende Sinn?!
-            this.set("legendURL", [this.get("style")[0].getImage().getSrc()]);
         },
         setSimpleCustomLabeledStyle: function () {
             var styleId = this.get("styleId"),
@@ -265,6 +263,14 @@ define([
         },
         setProjection: function (proj) {
             this.set("projection", proj);
+        },
+        // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
+        setLegendURL: function () {
+            if (!_.isUndefined(this.get("styleId"))) {
+                var style = StyleList.returnModelById(this.get("styleId"));
+
+                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+            }
         }
     });
 

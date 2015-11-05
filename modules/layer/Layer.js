@@ -32,9 +32,7 @@ define([
                     this.setMetadataURL(); // setzen der MetadatenURL, vlt. besser in layerlist??
                     EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
                     EventBus.trigger("mapView:getMaxResolution", this.get("maxScale"));
-                    if (this.get("typ") === "WMS") {
-                        this.setLegendURL(); // -> WMSLayer.js
-                    }
+                    this.setLegendURL();
                 }
             });
 
@@ -228,10 +226,6 @@ define([
         },
 
         openMetadata: function () {
-            // console.log(this.get("legendURL"));
-            // console.log(this.get("metaURL"));
-            // console.log(this.get("metaID"));
-            // console.log(this.get("name"));
             EventBus.trigger("layerinformation:add", {
                 "id": this.get("id"),
                 "legendURL": this.get("legendURL"),
@@ -261,9 +255,11 @@ define([
                 else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
                     if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                         this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                     }
                     else {
                         this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                     }
                 }
                 else {
