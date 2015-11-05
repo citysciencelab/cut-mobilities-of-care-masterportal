@@ -1,9 +1,9 @@
 @charset "utf-8";
 
-@import "fonts.css";
 @import "../components/bootstrap/dist/css/bootstrap.css";
 @import "../components/video.js/dist/video-js/video-js.css";
 @import "../_libs/openlayers/v3.5.0/ol.css";
+@import "fonts.css";
 @import "lgv.css";
 @import "../modules/gfipopup/popup/style.css";
 @import "panel.css";
@@ -32,5 +32,6 @@
 @import "../modules/wfs_t/style.css";
 @import "../modules/layerinformation/style.css";
 @import "../modules/alerting/style.css";
+@import "../modules/mapMarker/style.css";
 @import "../modules/catalogExtern/style.css";
 @import "../modules/addwms/style.css";
