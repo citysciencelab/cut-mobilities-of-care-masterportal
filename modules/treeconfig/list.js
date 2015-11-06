@@ -29,7 +29,10 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Laden von:" + Config.tree.orderBy + ".json");
+                    EventBus.trigger("alert", {
+                        text: "Fehler beim Laden von: " + Config.tree.orderBy + ".json",
+                        kategorie: "alert-warning"
+                    });
                 },
                 success: function (collection) {
                     Config.layerIDs = _.flatten(collection.pluck("layers"));

@@ -49,6 +49,7 @@ define([
                 this.setChildrenForTree();
             }
             this.set("children", _.union(_.sortBy(this.get("nodeLayer"), "name").reverse(), _.sortBy(this.get("nodeChildLayer"), "name").reverse()));
+
         },
 
         /**
@@ -66,6 +67,7 @@ define([
                 nodeLayerList = _.filter(this.get("layerList"), function (layer) {
                     return layer.attributes.subfolder === undefined;
                 });
+
                 // Gruppiert die Layer nach deren MetaID
                 countByMetaID = _.countBy(_.pluck(nodeLayerList, "attributes"), "metaID");
 
@@ -152,6 +154,7 @@ define([
                 layerListByID = _.filter(this.get("layerList"), function (layer) {
                     return layer.attributes.metaID === key;
                 });
+
                 // Absteigende alphabetische Sortierung der Layer --> Das ABSTEIGENDE ist für das rendern erforderlich
                 layerListByID = _.sortBy(layerListByID, function (layer) {
                     return layer.get("name");

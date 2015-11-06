@@ -123,14 +123,14 @@ define([
             EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({typ: "WMS", selected: true, visibility: true}));
         },
 
-        createParamsForURL: function () {
+        createParamsForURL: function (center, zoom) {
             var layerIDs,
                 layerVisibility,
                 url;
 
             layerIDs = this.pluck("id");
             layerVisibility = this.pluck("visibility");
-            url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility;
+            url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility + "&center=" + center + "&zoomlevel=" + zoom;
             $(".layer-selection-save").popover({
                 html: true,
                 title: "Speichern Sie sich diese URL als Lesezeichen ab!" + "<button type='button' class='close' onclick='$(&quot;.layer-selection-save&quot;).popover(&quot;hide&quot;);'>&times;</button>",

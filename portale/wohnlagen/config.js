@@ -61,10 +61,22 @@ define(function () {
         },
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
+<<<<<<< HEAD
             gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0"
             // bkgSuggestURL: "/bkg_suggest",
             // bkgSearchURL: "/bkg_geosearch",
            // useBKGSearch: true
+=======
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            geoLocateHit: true
+>>>>>>> 0f3e0c56918372e57ab622760b99851b53a2f6bf
         },
         print: {
             printID: "99999",

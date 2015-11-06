@@ -40,6 +40,7 @@ define(function () {
             poi: false
         },
         attributions: false,
+        allowParametricURL: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
@@ -59,14 +60,20 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche nach Straße oder Krankenhausname",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true
+            },
+            visibleWFS: {
+                minChars: 3
+            },
+            geoLocateHit: true
         },
         print: {
             printID: "99999",
             title: "Krankenhäuser in Hamburg",
-            gfi: false
+            gfi: true
         },
         tools: {
             gfi: true,

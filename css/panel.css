@@ -1,4 +1,4 @@
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
     .panel-master {
         margin-top: 20px;
     }
@@ -19,7 +19,7 @@
     display: none;
     max-width: 400px;
 /*    min-width: 370px;*/
-}
+/*}
 
 .panel-master > .panel-heading {
     background: -moz-linear-gradient(center top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -60,4 +60,4 @@
 
 .panel-heading > .glyphicon-chevron-up:hover, .panel-heading > .glyphicon-chevron-down:hover {
     opacity: 0.5;
-}
+}*/

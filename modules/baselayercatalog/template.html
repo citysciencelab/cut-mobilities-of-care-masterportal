@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <div class="base-layer-content">
+    <% if (!_.isNull(metaURL)) { %>
     <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
+    <% } %>
     <% if(selected === true) { %>
         <span class="glyphicon glyphicon-check pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer entfernen"></span>
     <% } else { %>

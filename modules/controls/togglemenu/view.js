@@ -17,6 +17,7 @@ define([
             }
             else {
                 this.template = "<div class='toggleButton col-md-1'><span class='glyphicon glyphicon-chevron-down glyphicon-down'></span></div>";
+                $(".controls-view").css("top", "0px");
             }
             $(".controls-view").append(this.$el.html(this.template));
         },

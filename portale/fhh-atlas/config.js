@@ -93,7 +93,18 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0"
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            tree: {
+                minChars: 3
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,

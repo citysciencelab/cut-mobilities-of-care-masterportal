@@ -29,8 +29,10 @@ define([
 
             this.listenToOnce(this, {
                 "change:layer": function () {
+                    this.setMetadataURL(); // setzen der MetadatenURL, vlt. besser in layerlist??
                     EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
                     EventBus.trigger("mapView:getMaxResolution", this.get("maxScale"));
+                    this.setLegendURL();
                 }
             });
 
@@ -61,6 +63,10 @@ define([
         },
 
         postInit: function () {
+            // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
+            this.setAttributions();
+            this.unset("datasets");
+
             this.setAttributionLayerSource();
             this.setAttributionLayer();
             if (this.get("transparence")) {
@@ -70,15 +76,9 @@ define([
                 this.set("transparence", 0);
             }
             // this.updateOpacity();
-            // NOTE hier werden die datasets[0] Attribute aus der json in das Model geschrieben
-            this.setAttributions();
-            this.unset("datasets");
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
             this.get("layer").id = this.get("id");
-
-            // setzen der MetadatenURL, vlt. besser in layerlist??
-            this.setMetadataURL();
 
             if (this.get("visible") !== undefined) {
                 this.set("visibility", this.get("visible"));
@@ -226,10 +226,21 @@ define([
         },
 
         openMetadata: function () {
-            window.open(this.get("metaURL"), "_blank");
+            EventBus.trigger("layerinformation:add", {
+                "id": this.get("id"),
+                "legendURL": this.get("legendURL"),
+                "metaURL": this.get("metaURL"),
+                "metaID": this.get("metaID"),
+                "name": this.get("metaName")
+            });
+            // window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL && Config.metadatenURL !== "") {
+            if (Config.metadatenURL === "ignore") {
+                // hack
+                this.set("metaURL", null);
+            }
+            else if (Config.metadatenURL && Config.metadatenURL !== "") {
                 this.set("metaURL", Config.metadatenURL + this.get("metaID"));
             }
             else {
@@ -244,9 +255,11 @@ define([
                 else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
                     if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                         this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                     }
                     else {
                         this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                     }
                 }
                 else {

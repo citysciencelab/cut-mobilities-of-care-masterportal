@@ -100,6 +100,9 @@ define([
                 "mapView:getOptions": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
+                "mapView:getCenterAndZoom": function () {
+                    EventBus.trigger("mapView:sendCenterAndZoom", this.getCenter(), this.getZoom());
+                },
                 "mapView:setScale": this.setScale,
                 "mapView:setZoomLevelUp": this.setZoomLevelUp,
                 "mapView:setZoomLevelDown": this.setZoomLevelDown,
@@ -175,7 +178,6 @@ define([
          */
         setResolutions: function () {
             if (_.has(Config.view, "options")) {
-                console.log(_.pluck(Config.view.options, "resolution"));
                 this.set("resolutions", _.pluck(Config.view.options, "resolution"));
             }
             else if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
@@ -261,6 +263,10 @@ define([
          */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
+        },
+
+        getCenter: function () {
+            return this.get("view").getCenter();
         },
 
         getResolution: function (scale) {

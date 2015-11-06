@@ -13,7 +13,13 @@ define([
             this.render();
         },
         render: function () {
-            this.$el.html(this.template({title: Config.title, util: Util}));
+            this.$el.html(this.template( {
+                title: Config.title,
+                util: Util,
+                logo: Config.logo || "../img/hh-logo.png",
+                logoLink: Config.logoLink || "http://geoinfo.hamburg.de",
+                logoTooltip: Config.logoTooltip || "Landesbetrieb Geoinformation und Vermessung"
+            } ));
             $(".nav").append(this.$el);
         }
     });

@@ -1,8 +1,9 @@
 define([
     "backbone",
     "modules/layercatalog/list",
-    "modules/layercatalog/viewNode"
-], function (Backbone, CatalogList, NodeView) {
+    "modules/layercatalog/viewNode",
+    "eventbus"
+], function (Backbone, CatalogList, NodeView, EventBus) {
 
     var listView = Backbone.View.extend({
         collection: CatalogList,
@@ -12,8 +13,7 @@ define([
             this.listenTo(this.collection, {
                 "reset": this.render
             });
-
-            this.render();
+             this.render();
         },
         render: function () {
             $(".layer-catalog").after(this.$el.html(""));
@@ -21,8 +21,10 @@ define([
         },
         addTreeNode: function (node) {
             var nodeView = new NodeView({model: node});
+
             this.$el.append(nodeView.render().el);
         }
     });
+
     return listView;
 });

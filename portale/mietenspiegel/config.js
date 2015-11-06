@@ -182,9 +182,14 @@ define(function () {
         */
         searchBar: {
             placeholder: "Suche nach Adresse",
-            gazetteerURL: function () {
-                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: false,
+                searchParcels: true
+            },
+            geoLocateHit: true
         },
                  /**
         * @memberof config

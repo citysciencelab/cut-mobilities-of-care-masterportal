@@ -65,6 +65,15 @@ define([
             this.get("layer").getLayers().forEach(function () {
                 reloadLayer(this);
             });
+        },
+
+        setLegendURL: function () {
+            var legendURL = [];
+
+            _.each(this.get("backbonelayers"), function (layer) {
+                legendURL.push(layer.get("legendURL")[0]);
+            });
+            this.set("legendURL", legendURL);
         }
     });
 

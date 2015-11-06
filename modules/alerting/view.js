@@ -38,19 +38,26 @@ define([
         },
         render: function (message, kategorie, dismissable) {
             var dismissablestring = (dismissable === true) ? " alert-dismissable" : "",
-                html = "<div id='alertmessage' class='alert " + kategorie + dismissablestring + "' role='alert'>";
+                html = "<div id='alertmessage' class='alert " + kategorie + dismissablestring + "' role='alert'>",
+                messagediv = "<div id='messages' class='messages'></div>";
 
             if (dismissable === true) {
                 html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times</span></button>";
             }
             html += message;
             html += "</div>";
-            $("body").prepend(html);
+
+            if (!$("#messages").length) {
+                $("body").prepend(messagediv);
+            }
+
+            $("#messages").prepend(html);
+
         },
         remove: function () {
             $("#alertmessage").remove();
         }
     });
 
-    return new AlertingView;
+    return new AlertingView();
 });
