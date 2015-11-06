@@ -84,6 +84,9 @@ define(function () {
                 searchDistricts: true,
                 searchParcels: false
             },
+            tree: {
+                minChars: 3
+            },
             geoLocateHit: true
         },
         tools: {
