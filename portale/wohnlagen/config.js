@@ -35,8 +35,12 @@ define(function () {
         layerIDs: [
             {id: "453", visible: true, legendUrl: "ignore"},
             {id: "452", visible: false},
-            {id: "2515", visible: true}        //Wohnlagen
-                    ],
+            {id: "2515", visible: true} // Wohnlagen
+        ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -48,7 +52,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton:  true,
+            contactButton: true,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
@@ -57,9 +61,9 @@ define(function () {
         },
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            //bkgSuggestURL: "/bkg_suggest",
-            //bkgSearchURL: "/bkg_geosearch",
+            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0"
+            // bkgSuggestURL: "/bkg_suggest",
+            // bkgSearchURL: "/bkg_geosearch",
            // useBKGSearch: true
         },
         print: {
@@ -75,7 +79,7 @@ define(function () {
             draw: true,
             active: "gfi"
         },
-        orientation: true,
+        orientation: false,
         poi: true
     };
 
