@@ -198,6 +198,7 @@ define([
                     }
                 });
                 this.setBaseLayer(modelsArray);
+                this.setLayerStyle(modelsArray);
                 return modelsArray;
             }
         },
@@ -303,6 +304,7 @@ define([
 
         // Hier wird den HVV-Layern ihr jeweiliger Style zugeordnet.
         setLayerStyle: function (response) {
+
             var styleLayerIDs = _.pluck(Config.tree.layerIDsToStyle, "id"),
                 layersByID;
 

@@ -14,6 +14,18 @@ define(function () {
                 ["713", "714", "715", "716"],
                 ["1043", "1044", "1045", "1046"]
             ],
+            layerIDsToStyle: [
+                {
+                    "id": "1933",
+                    "styles": "geofox_stations",
+                    "name": "Haltestellen"
+                },
+                {
+                    "id": "1935",
+                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"]
+                }
+            ],
             customConfig: "../components/lgv-config/tree-config/architekten.json"
         },
         baseLayer: [
@@ -77,10 +89,11 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: false,
-            active: "gfi"
+            active: "gfi",
+            record: false
         },
         orientation: false,
         poi: false
