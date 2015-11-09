@@ -1,0 +1,46 @@
+.tree-light-list {
+    padding: 10px 12px;
+    color: #777;
+}
+
+@media (max-width: 768px) {
+    .tree-light-list > .content > .pull-right > .refresh > .glyphicon-cog {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 768px) {
+    .tree-light-list > .content {
+        width: 20em;
+    }
+    .tree-light-list > .content > .pull-right > .btn-glyphicon > .glyphicon {
+        font-size: 16px;
+    }
+}
+
+.tree-light-list > .content > .layer-name {
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 2em;
+    margin-right: 6em
+}
+
+.tree-light-list > .content > .layer-name:hover {
+    opacity: 0.6;
+}
+
+.tree-light-list > .content > .folder-icons > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.tree-light-list > .content > .pull-right > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.tree-light-list > .content > .btn-glyphicon > .glyphicon {
+    font-size: 16px;
+}
+
+.layer-content > .btn-glyphicon > .glyphicon:hover {
+    opacity: 0.6;
+}
