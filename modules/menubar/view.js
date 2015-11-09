@@ -1,7 +1,8 @@
 define([
     "backbone",
     "text!modules/menubar/template.html",
-    "views/LayerListView",
+    // "views/LayerListView",
+    "modules/treeLight/listView",
     "modules/menubar/model",
     "config",
     "eventbus"
@@ -16,7 +17,7 @@ define([
         initialize: function () {
             EventBus.on("appendItemToMenubar", this.appendItemToMenubar, this);
             this.render();
-            $("#tree").on({
+            $(".dropdown-tree").on({
                 click: function (e) {
                     e.stopPropagation();
                 }
