@@ -198,7 +198,9 @@ define([
                     }
                 });
                 this.setBaseLayer(modelsArray);
-                this.setLayerStyle(modelsArray);
+                if (_.has(Config, "tree")) {
+                    this.setLayerStyle(modelsArray);
+                }
                 return modelsArray;
             }
         },

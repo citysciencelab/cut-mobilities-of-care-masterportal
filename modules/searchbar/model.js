@@ -9,15 +9,15 @@ define([
             recommandedListLength: 5,
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
-            hitList: []
+            hitList: [],
+            isHitListReady: true
         },
         /**
         *
         */
         initialize: function () {
-            this.on("change:searchString", this.checkStringAndSearch, this);
-
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
+
             EventBus.on("searchbar:pushHits", this.pushHits, this);
         },
 
@@ -26,6 +26,8 @@ define([
         */
         setSearchString: function (value) {
             this.set("searchString", value);
+            this.set("hitList", []);
+            EventBus.trigger("searchbar:search", this.get("searchString"));
         },
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
@@ -41,17 +43,10 @@ define([
         /**
         *
         */
-        checkStringAndSearch: function () {
-            this.set("hitList", []);
-            EventBus.trigger("searchbar:search", this.get("searchString"));
-        },
-        /**
-        *
-        */
         createRecommendedList: function () {
             var max = this.get("recommandedListLength");
 
-            if (this.get("hitList").length > 0) {
+            if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
                 this.set("isHitListReady", false);
                 if (this.get("hitList").length > max) {
                     var hitList = this.get("hitList"),
