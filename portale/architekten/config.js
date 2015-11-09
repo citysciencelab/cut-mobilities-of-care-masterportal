@@ -70,7 +70,7 @@ define(function () {
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
-                searchParcels: false
+                searchParcels: true
             },
             geoLocateHit: true
         },
@@ -80,6 +80,7 @@ define(function () {
             print: true,
             coord: true,
             draw: false,
+            record: false,
             active: "gfi"
         },
         orientation: false,
