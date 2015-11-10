@@ -1,8 +1,9 @@
 define([
     "underscore",
     "backbone",
-    "eventbus"
-], function (_, Backbone, EventBus) {
+    "eventbus",
+    "config"
+], function (_, Backbone, EventBus, Config) {
     "use strict";
     var Seite1JahrModel = Backbone.Model.extend({
         defaults: {
@@ -11,24 +12,11 @@ define([
             jahr: ""
         },
         initialize: function () {
+            this.set("minJahr", Config.minJahr);
+            this.set("maxJahr", Config.maxJahr);
             if ($("#validjahre")[0] && $("#validjahre")[0].textContent) {
-                var splitted = $("#validjahre")[0].textContent.split(/\D/g),
-                    filtered = _.filter(splitted, function (val) {
-                        var num = parseInt(val);
-
-                        if (_.isNaN(num) === false) {
-                            return true;
-                        }
-                    });
-
-                if (filtered[0] > filtered[1]) {
-                    this.set("maxJahr", filtered[0]);
-                    this.set("minJahr", filtered[1]);
-                }
-                else {
-                    this.set("maxJahr", filtered[1]);
-                    this.set("minJahr", filtered[0]);
-                }
+                $("#validjahre").html("(" + Config.minJahr + " - " + Config.maxJahr + ")");
+                $("#maxjahr").html(Config.maxJahr);
             }
             else {
                 alert("Fehlendes Element in HTML: validjahre");
