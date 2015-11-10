@@ -3,8 +3,9 @@ define([
     "openlayers",
     "eventbus",
     "modules/layer/list",
-    "modules/core/util"
-], function (Backbone, ol, EventBus, LayerList, Util) {
+    "modules/core/util",
+    "config"
+], function (Backbone, ol, EventBus, LayerList, Util, Config) {
     "use strict";
     var RoutingModel = Backbone.Model.extend({
         /**
@@ -12,7 +13,7 @@ define([
          */
         defaults: {
             standort: "",
-            projection: "",
+            projection: Config.view.proj,
             routeLayer: "", // Layer, in dem die Route dargestellt wird
             routenLayer: "", // WFS-Layer, der zum Abfragen der Routen verwendet wird
             verkehrslagelayer: "", // WFS-Layer, der zur Abfrage des LOS verwendet wird
