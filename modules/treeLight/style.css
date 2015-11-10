@@ -1,19 +1,36 @@
 .tree-light-list {
     padding: 10px 12px;
     color: #777;
+    font-size: 12px;
 }
 
+/***** Mobil *****/
 @media (max-width: 768px) {
     .tree-light-list > .content > .pull-right > .refresh > .glyphicon-cog {
         font-size: 18px;
     }
+    .tree-light-list > .settings > .layer-name > span {
+        vertical-align: sub;
+    }
+
+    .tree-light-list > .content > .layer-name > span {
+        vertical-align: sub;
+    }
+
+    .settings > .transparence {
+        margin-right: 10px;
+    }
 }
 
+/***** Desktop *****/
 @media (min-width: 768px) {
-    .tree-light-list > .content {
-        width: 20em;
+    .tree-light-list > .content, .settings {
+        width: 24em;
     }
-    .tree-light-list > .content > .pull-right > .btn-glyphicon > .glyphicon {
+    .tree-light-list > .content > .cog > button {
+        font-size: 16px;
+    }
+    .tree-light-list > .settings > .cog > button {
         font-size: 16px;
     }
 }
@@ -41,6 +58,23 @@
     font-size: 16px;
 }
 
-.layer-content > .btn-glyphicon > .glyphicon:hover {
+.content > .btn-glyphicon > .glyphicon:hover {
     opacity: 0.6;
+}
+
+.settings > .layer-name {
+    font-size: 12px;
+    color: rgb(82, 82, 82);
+    width: 5em;
+}
+.settings > .transparence > .minus, .plus {
+    vertical-align: sub;
+}
+
+.settings > .transparence > .text {
+    padding-right: 4px;
+}
+
+.settings > .transparence {
+    width: 170px;
 }

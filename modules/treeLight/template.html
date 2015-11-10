@@ -3,12 +3,12 @@
         <% if(visibility === true) { %>
             <button type="button" class="btn-glyphicon check" data-toggle="tooltip" data-placement="bottom" title="Layer ausschalten"><span class="glyphicon glyphicon-check"></span></button>
         <% } else { %>
-            <button type="button" class="btn-glyphicon unchecked" data-toggle="tooltip" data-placement="bottom" title="Layer einschalten"><span class="glyphicon glyphicon-unchecked"></span></button>
+            <button type="button" class="btn-glyphicon unchecked"><span class="glyphicon glyphicon-unchecked" data-toggle="tooltip" data-placement="bottom" title="Layer einschalten"></span></button>
         <% } %>
         </div>
-        <div class="pull-right">
+        <div class="cog pull-right">
             <button type="button" class="btn-glyphicon info" data-toggle="tooltip" data-placement="bottom" title="Metadaten"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
             <button type="button" class="btn-glyphicon refresh" data-toggle="tooltip" data-placement="bottom" title="Einstellungen"><span class="glyphicon glyphicon-cog"></span></button>
         </div>
-        <div class="layer-name"><%= name %></div>
+        <div class="layer-name"><span><%= name %></span></div>
 </div>
