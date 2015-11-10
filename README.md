@@ -151,8 +151,8 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 Ein Portal für die Veröffentlichung fertig machen.
 
 ```
-// grunt build --path=<pfad-zum-portal> --name=<Portalname>
-# grunt build --path=portale/local --name=FHH-Atlas
+// grunt build --path=<pfad-zum-portal> --name=<Portalname> [--env=internet| default:fhhnet]
+# grunt build --path=portale/local --name=FHH-Atlas 
 ```
 
 - baut das Portal und alles, was es braucht in den Ordner dist/<pkg.version>
@@ -170,6 +170,23 @@ Die Dokumentation erzeugen. Zurzeit nur für portale/master/config.js.
 ```
 
 - schreibt die Dokumentation nach doc
+
+## grunt buildExamples
+```
+# grunt buildExamples --env=internet
+```
+- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
+- erzeugt zusätzlich examples.zip
+
+## grunt copyExamples
+```
+# grunt buildExamples --env=internet
+```
+- leert den Ordner examples
+- kopiert den aktuellen dist-Ordner nach examples
+- kopiert notwednige Dateien aus lgv-config und die beiden Portale und nimmt Ersetzungen vor
+- wird aus grunt buildExamples aufgerufen
+
 
 ## Alle grunt-Tasks
 
