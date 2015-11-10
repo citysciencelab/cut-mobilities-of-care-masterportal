@@ -68,7 +68,7 @@ define([
          * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.
          */
         initialize: function () {
-            var ms = _.find(Config.layerIDs, function (layer) {
+            var ms = _.find(Config.tree.layer, function (layer) {
                 return _.values(_.pick(layer, "gfiTheme"))[0] === "mietenspiegel";
             });
             if (ms) {

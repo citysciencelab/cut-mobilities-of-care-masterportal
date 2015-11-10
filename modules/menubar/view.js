@@ -38,7 +38,7 @@ define([
             if (Config.isMenubarVisible === false) {
                 $("#navbarRow").css("display", "none");
             }
-            if (_.has(Config, "tree") === true) {
+            if (_.has(Config, "tree") && Config.tree.type !== "light") {
                 require(["modules/layertree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView", "modules/catalogExtern/listView"], function (TreeListView, LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
                     new TreeListView();
                     new LayerSelectionListView();

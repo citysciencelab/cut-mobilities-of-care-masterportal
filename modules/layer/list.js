@@ -116,7 +116,7 @@ define([
 
         parse: function (response) {
             // Layerbaum mit Ordnerstruktur
-            if (_.has(Config, "tree") && Config.tree.custom === false) {
+            if (_.has(Config.tree, "type") && Config.tree.type === "default") {
                 // nur vom Typ WMS
                 response = _.where(response, {typ: "WMS"});
                 // nur Layer die min. einen Datensatz zugeordnet sind und solche mit korrekter URL
@@ -135,14 +135,14 @@ define([
                 return response;
             }
             // Ansonsten Layer über ID
-            else if (_.has(Config, "layerIDs")) {
+            else if (_.has(Config.tree, "type") && Config.tree.type === "light" || Config.tree.type === "custom") {
                 var modelsArray = [];
 
                 if (_.has(Config.tree, "layerIDsToMerge") === true) {
                     response = this.mergeLayersByIDs(response);
                 }
 
-                _.each(Config.layerIDs, function (element) {
+                _.each(Config.tree.layer, function (element) {
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(","),
                             layerinfos = _.findWhere(response, {id: layers[0]});
@@ -202,6 +202,14 @@ define([
                     this.setLayerStyle(modelsArray);
                 }
                 return modelsArray;
+            }
+            else {
+                if (!_.has(Config.tree, "type")) {
+                    EventBus.trigger("alert", "Config.tree.type nicht vorhanden");
+                }
+                else {
+                    EventBus.trigger("alert", "Config.tree nicht vorhanden");
+                }
             }
         },
 

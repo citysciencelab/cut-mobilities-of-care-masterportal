@@ -22,7 +22,7 @@ define([
 
         /**
          * Holt sich die gewünschte Tree-Konfiguration (Config.tree.orderBy).
-         * Überschreibt die Config.layerIDs mit den Layern der Tree-Konfiguration.
+         * Überschreibt die Config.tree.layer mit den Layern der Tree-Konfiguration.
          */
         fetchTreeConfig: function () {
             this.fetch({
@@ -35,7 +35,7 @@ define([
                     });
                 },
                 success: function (collection) {
-                    Config.layerIDs = _.flatten(collection.pluck("layers"));
+                    Config.tree.layer = _.flatten(collection.pluck("layers"));
                 }
             });
         },
