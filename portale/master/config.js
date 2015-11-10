@@ -1,13 +1,13 @@
 define(function () {
     /**
     * @namespace config
-    * @desc Beschreibung
+    * @desc Konfigurationsdatei für das LGV Master-Portal
     */
     var config = {
         /**
         * @memberof config
         * @type {String}
-        * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=
+        * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=. Ist "ignore" gesetzt, werden keine i-Buttons im Layerbaum erzeugt.
         */
         metadatenURL: "",
         /**
@@ -74,7 +74,7 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Pfad zur DienstAPI.
+        * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes
         */
         layerConf: "../components/lgv-config/services-fhhnet.json",
         /**
@@ -235,30 +235,28 @@ define(function () {
         /**
         * @memberof config
         * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @type {Object} gazetteer
-        * @param {string} url - Die URL.
-        * @param {boolean} searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @param {boolean} searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @param {boolean} searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @param {boolean} searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
-        * @param {integer} minCharacters - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @type {Object} bkg
-        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {string} bkgSuggestURL - URL für schnelles Suggest.
-        * @param {string} bkgSearchURL - URL für ausführliche Search.
-        * @param {[float]} extent - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @param {string} epsg - EPSG-Code des verwendeten Koordinatensystems.
-        * @param {string} filter - Filterstring
-        * @param {float} score - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @type {Object} specialWFS
-        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @type {Objekt[]} Das Konfigurationsarray für die specialWFS-Suche
-        * @param {string} url - Die URL, des WFS
-        * @param {string} data - Query string des WFS-Request
-        * @param {string} name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @type {Object} visibleWFS
-        * @desc Weitere Konfiguration am Layer. Siehe searchField.
-        * @param {integer} minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object} gazetteer Konfigurationsobjekt für die Gazeteer-Suche
+        * @property {string} gazetteer.url - Die URL.
+        * @property {boolean} gazetteer.searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @property {boolean} gazetteer.searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @property {boolean} gazetteer.searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @property {boolean} gazetteer.searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
+        * @property {integer} gazetteer.minChars - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @property {Object} bkg Konfigurationsobjekt für die Suche auf dem BKG Geokodierungsdienst
+        * @property {integer} bkg.minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
+        * @property {string} bkg.bkgSearchURL - URL für ausführliche Search.
+        * @property {float} bkg.extent - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @property {string} bkg.epsg - EPSG-Code des verwendeten Koordinatensystems.
+        * @property {string} bkg.filter - Filterstring
+        * @property {float} bkg.score - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @property {Object} specialWFS Konfigurationsobjekt für die server-seitige Suche auf WFS.
+        * @property {integer} specialWFS.minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {string} specialWFS.url - Die URL des WFS
+        * @property {string} specialWFS.data - Query string des WFS-Request
+        * @property {string} specialWFS.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @property {Object} visibleWFS Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
+        * @property {integer} visibleWFS.minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
         */
         searchBar: {
             gazetteer: {
