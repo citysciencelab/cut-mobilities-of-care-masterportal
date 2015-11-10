@@ -8,7 +8,8 @@ define([
         defaults: {
             produkt: "",
             nutzung: "",
-            jahr: ""
+            jahr: "",
+            wpsWorkbenchname: "IDAWertarten"
         },
         initialize: function () {
             EventBus.on("seite1_nutzung:newNutzung", this.setNutzung, this);
@@ -18,17 +19,19 @@ define([
             EventBus.on("wps:response", this.setProdukte, this);
         },
         setProdukte: function (obj) {
-            $("#produktdropdown").empty();
-            var werte = $(obj.data).find("wps\\:wert,wert");
+            if (obj.request.workbenchname === this.get("wpsWorkbenchname")) {
+                $("#produktdropdown").empty();
+                var werte = $(obj.data).find("wps\\:wert,wert");
 
-            _.each(werte, function (wert) {
-                var id = wert.getAttribute("id"),
-                    text = wert.getAttribute("text"),
-                    option = new Option(text, id);
+                _.each(werte, function (wert) {
+                    var id = wert.getAttribute("id"),
+                        text = wert.getAttribute("text"),
+                        option = new Option(text, id);
 
-                $("#produktdropdown").append($(option));
-            });
-            this.setProdukt();
+                    $("#produktdropdown").append($(option));
+                });
+                this.setProdukt();
+            }
         },
         setProdukt: function (val) {
             this.set("produkt", $("#produktdropdown")[0].value);
@@ -63,7 +66,7 @@ define([
                 dataInputs += "</wps:Input>";
                 dataInputs += "</wps:DataInputs>";
                 EventBus.trigger("wps:request", {
-                    workbenchname: "IDAWertarten",
+                    workbenchname: this.get("wpsWorkbenchname"),
                     dataInputs: dataInputs
                 });
             }

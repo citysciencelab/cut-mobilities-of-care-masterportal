@@ -18,7 +18,7 @@ define([
         initialize: function () {
         },
         weiter: function () {
-            console.log('Seite 1 fertig');
+            this.model.requestBRWs();
         }
     });
 

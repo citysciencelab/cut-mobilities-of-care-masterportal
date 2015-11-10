@@ -7,6 +7,7 @@ define(function () {
         wpsID: "99998",
         minJahr: 1973,
         maxJahr: 2013
-    }
+    };
+
     return config;
 });
