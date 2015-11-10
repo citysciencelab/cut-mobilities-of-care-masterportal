@@ -67,6 +67,11 @@ define([
                     dataInputs: dataInputs
                 });
             }
+            else {
+                $("#produktdropdown").empty();
+                this.set("produkt", "");
+                EventBus.trigger("seite1_produkt:newProdukt", "");
+            }
         }
     });
 
