@@ -6,6 +6,78 @@ define(function () {
     var config = {
         /**
         * @memberof config
+        * @type {Object[]}
+        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
+        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
+        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
+        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
+        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
+        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
+        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
+        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
+        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
+        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
+        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
+        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
+        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
+        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
+        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
+        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
+        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
+        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
+        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
+        * @property {String}  minScale -
+        * @property {String}  maxScale -
+        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
+        * @desc Beschreibung.
+        */
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true, legendUrl: "ignore"},
+                {id: "452", visible: false},
+                {id: "1748", visible: false},
+                {id: "1562", visible: true},
+                {id: "1561", visible: true},
+                {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
+                {id:
+                 [
+                     {
+                         id: "946",
+                         attribution:
+                         {
+                             eventname: "aktualisiereverkehrsnetz",
+                             timeout: (10 * 60000)
+                         }
+                     },
+                     {
+                         id: "947"
+                     }
+                 ],
+                 name: "aktuelle Meldungen der TBZ", visible: false
+                },
+                {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                 displayInTree: true,
+                 filterOptions: [
+                     {
+                         fieldName: "teilnahme_geburtsklinik",
+                         filterType: "combo",
+                         filterName: "Geburtsklinik",
+                         filterString: ["*", "ja", "nein"]
+                     },
+                     {
+                         fieldName: "teilnahme_notversorgung",
+                         filterType: "combo",
+                         filterName: "Not- und Unfallversorgung",
+                         filterString: ["*", "ja", "eingeschränkt", "nein"]
+                     }
+                 ],
+                 routable: true
+                }
+            ]
+        },
+        /**
+        * @memberof config
         * @type {String}
         * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=
         */
@@ -101,75 +173,6 @@ define(function () {
         * @desc Pfad zur Proxy-CGI
         */
         proxyURL: "/cgi-bin/proxy.cgi",
-        /**
-        * @memberof config
-        * @type {Object[]}
-        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
-        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
-        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
-        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
-        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
-        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
-        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
-        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
-        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
-        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
-        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
-        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
-        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
-        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
-        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String}  minScale -
-        * @property {String}  maxScale -
-        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
-        * @desc Beschreibung.
-        */
-        layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "1748", visible: false},
-            {id: "1562", visible: true},
-            {id: "1561", visible: true},
-            {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
-            {id:
-             [
-                 {
-                     id: "946",
-                     attribution:
-                     {
-                         eventname: "aktualisiereverkehrsnetz",
-                         timeout: (10 * 60000)
-                     }
-                 },
-                 {
-                     id: "947"
-                 }
-             ],
-             name: "aktuelle Meldungen der TBZ", visible: false
-            },
-            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
-             displayInTree: true,
-             filterOptions: [
-                 {
-                     fieldName: "teilnahme_geburtsklinik",
-                     filterType: "combo",
-                     filterName: "Geburtsklinik",
-                     filterString: ["*", "ja", "nein"]
-                 },
-                 {
-                     fieldName: "teilnahme_notversorgung",
-                     filterType: "combo",
-                     filterName: "Not- und Unfallversorgung",
-                     filterString: ["*", "ja", "eingeschränkt", "nein"]
-                 }
-             ],
-             routable: true
-            }
-        ],
         /**
         * @memberof config
         * @type {Boolean}

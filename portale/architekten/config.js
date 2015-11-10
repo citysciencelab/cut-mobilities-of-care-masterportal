@@ -4,6 +4,7 @@ define(function () {
         wfsImgPath: "..components/lgv-config/img",
         allowParametricURL: true,
         tree: {
+            type: "custom",
             custom: true,
             filter: false,
             orderBy: "architekten",
