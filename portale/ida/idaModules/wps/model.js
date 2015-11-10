@@ -41,10 +41,14 @@ define([
                 },
                 success: function (response) {
                     var exeResp = $("wps\\:ExecuteResponse,ExecuteResponse", response),
-                        data = $(exeResp).find("wps\\:ComplexData,ComplexData")[0];
+                        data = $(exeResp).find("wps\\:ComplexData,ComplexData")[0],
+                        statusInfo = $(data).find("statusInfo")[0],
+                        status = $(statusInfo).find("status")[0],
+                        message = $(statusInfo).find("message")[0];
 
-                    if (!data) {
+                    if (status && status.textContent === "failure") {
                         alert ("Fehler beim Abfragen eines Dienstes");
+                        console.log(message.textContent);
                     }
                     else {
                         EventBus.trigger("wps:response", {
