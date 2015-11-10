@@ -12,7 +12,9 @@ dist
 temp
 lgv-config
 doc
+examples
 
 /nbproject/private/
 /img/*.db
 jshintrc
+examples.zip
