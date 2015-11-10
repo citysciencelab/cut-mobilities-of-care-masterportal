@@ -193,7 +193,7 @@ define([
                     // parse result, try built-in ol-format first
                     gfiFormat = new ol.format.WMSGetFeatureInfo();
                     gfiFeatures = gfiFormat.readFeatures(data, {
-                        dataProjection: Config.view.projection
+                        dataProjection: Config.view.proj
                     });
 
                     // ESRI is not parsed by the ol-format

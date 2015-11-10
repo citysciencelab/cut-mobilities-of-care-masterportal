@@ -97,13 +97,6 @@ define(function () {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch"
             },
-            gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: false,
-                searchParcels: false
-            },
             geoLocateHit: true
         },
         tools: {
