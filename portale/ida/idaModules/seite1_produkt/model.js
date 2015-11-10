@@ -58,7 +58,7 @@ define([
                 dataInputs += "<wps:Input>";
                 dataInputs += "<ows:Identifier>nutzung</ows:Identifier>";
                 dataInputs += "<wps:Data>";
-                dataInputs += "<wps:LiteralData dataType='strung'>" + nutzung + "</wps:LiteralData>";
+                dataInputs += "<wps:LiteralData dataType='string'>" + nutzung + "</wps:LiteralData>";
                 dataInputs += "</wps:Data>";
                 dataInputs += "</wps:Input>";
                 dataInputs += "</wps:DataInputs>";
