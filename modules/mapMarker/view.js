@@ -5,6 +5,23 @@ define([
     "eventbus"
     ], function (Backbone, ol, MapHandlerModel, EventBus) {
     "use strict";
+
+    var searchVector = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: "#08775f",
+                lineDash: [8],
+                width: 4
+            }),
+            fill: new ol.style.Fill({
+                color: "rgba(8, 119, 95, 0.3)"
+            })
+        })
+    });
+
+    EventBus.trigger("addLayer", searchVector);
+
     return Backbone.View.extend({
         model: MapHandlerModel,
         /**
@@ -24,17 +41,20 @@ define([
         zoomTo: function (hit) {
             var zoomLevel;
 
+            searchVector.getSource().clear();
             switch (hit.type) {
                 case "Ortssuche": {
                     EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
                     break;
                 }
                 case "Straße": {
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString("POLYGON", hit.coordinate));
+                    this.model.getWKTFromString("POLYGON", hit.coordinate);
+                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
                     break;
                 }
                 case "Parcel": {
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString("POINT", hit.coordinate));
+                    this.model.getWKTFromString("POINT", hit.coordinate);
+                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
                     this.showMarker(hit.coordinate);
                     break;
                 }
@@ -86,14 +106,15 @@ define([
         */
         zoomToBPlan: function (data) {
             var wkt,
+                format,
+                feature,
                 hits = $("gml\\:Polygon,Polygon", data),
                 wktArray = [],
-                geom,
-                extent;
+                geom;
 
             if (hits.length > 1) {
                 _.each(hits, function (hit) {
-                    var geoms = $(hits).find("gml\\:posList,posList");
+                    var geoms = $(hit).find("gml\\:posList,posList");
 
                     if (geoms.length === 1) {
                         geom = geoms[0].textContent;
@@ -103,13 +124,18 @@ define([
                     }
                     wktArray.push(geom);
                 });
-                extent = this.model.getExtentFromString("MULTIPOLYGON", wktArray);
+                wkt = this.getWKTFromString("MULTIPOLYGON", wktArray);
             }
             else if (hits.length === 1) {
                 geom = $(hits).find("gml\\:posList,posList")[0].textContent;
-                extent = this.model.getExtentFromString("POLYGON", geom);
+                wkt = this.model.getWKTFromString("POLYGON", geom);
             }
-            EventBus.trigger("zoomToExtent", extent);
+
+            format = new ol.format.WKT(),
+            feature = format.readFeature(wkt);
+            searchVector.getSource().addFeature(feature);
+            searchVector.setVisible(true);
+            EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
         },
         /*
         * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
@@ -126,7 +152,7 @@ define([
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                var extent = this.model.getExtentFromString("POLYGON", coordinates.trim());
+                var extent = this.model.getWKTFromString("POLYGON", coordinates.trim());
 
                 EventBus.trigger("zoomToExtent", extent);
             }
