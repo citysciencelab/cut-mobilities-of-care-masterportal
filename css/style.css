@@ -11,7 +11,7 @@
 @import "copyright.css";
 @import "../modules/attribution/style.css";
 @import "routingwin.css";
-@import "window.css";
+@import "../modules/window/style.css";
 @import "../modules/scaleline/style.css";
 @import "../modules/menubar/style.css";
 @import "../modules/layerselection/style.css";
