@@ -1,8 +1,7 @@
 define([
-    "underscore",
     "backbone",
     "eventbus"
-    ], function (_, Backbone, EventBus) {
+    ], function (Backbone, EventBus) {
 
         var Window = Backbone.Model.extend({
             defaults: {

@@ -92,7 +92,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 if ($('#map').is(":visible") === true) {
                     new ControlsView();
                 }
-                require(["views/WindowView"], function (WindowView) {
+                require(["modules/window/view"], function (WindowView) {
                     new WindowView();
                 });
                 if (Config.menu.tools === true) {
