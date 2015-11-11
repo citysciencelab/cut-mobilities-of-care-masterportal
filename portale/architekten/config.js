@@ -29,7 +29,8 @@ define(function () {
             customConfig: "../components/lgv-config/tree-config/architekten.json"
         },
         baseLayer: [
-            {id: "452", visibility: false}, // luftbilder
+            {id: "94", visibility: false}, // luftbilder unbelaubt
+            {id: "756", visibility: false}, // luftbilder belaubt
             {id: "713", visibility: false}, // stadtplan s-w
             {id: "717", visibility: false}, // stadtplan farbig
             {id: "1043", visibility: true}, // stadtplan g-b
@@ -92,7 +93,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             draw: false,
             record: false,
