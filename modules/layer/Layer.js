@@ -100,7 +100,9 @@ define([
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
                     this.set("metaID", dataset.md_id);
-                    this.set("metaName", dataset.md_name);
+                    if (_.isNull(this.get("metaName"))) {
+                        this.set("metaName", dataset.md_name);
+                    }
                     if (dataset.kategorie_opendata.length > 1) {
                         this.set("kategorieOpendata", dataset.kategorie_opendata);
                     }
