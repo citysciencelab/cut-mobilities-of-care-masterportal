@@ -23,6 +23,8 @@ define([
                 "change:wfsLayerList": this.setLegendParamsFromWFS,
                 "change:groupLayerList": this.setLegendParamsFromGROUP
             });
+
+            EventBus.trigger("layerlist:getVisiblelayerList");
         },
 
         createLegend: function () {

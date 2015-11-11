@@ -8,7 +8,9 @@
         <% } %>
         </div>
         <div class="pull-right">
+            <% if (!_.isNull(metaURL)) { %>
             <button type="button" class="btn-glyphicon info" data-toggle="tooltip" data-placement="bottom" title="Metadaten"><span class="glyphicon glyphicon-info-sign" style="margin-right: 10px;"></span></button>
+            <% } %>
             <button type="button" class="btn-glyphicon refresh" data-toggle="tooltip" data-placement="bottom" title="Einstellungen"><span class="glyphicon glyphicon-cog"></span></button>
         </div>
         <div class="layer-name"><%= name %></div>
