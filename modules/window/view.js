@@ -3,15 +3,17 @@ define([
     "config",
     "modules/window/model",
     "text!modules/window/templateMax.html",
+    "text!modules/window/templateMin.html",
     "eventbus",
     "jqueryui/draggable"
-], function (Backbone, Config, Window, WindowTemplate, EventBus) {
+], function (Backbone, Config, Window, templateMax, templateMin, EventBus) {
 
     var WindowView = Backbone.View.extend({
         id: "window",
         className: "win-max ui-widget-content",
         model: Window,
-        template: _.template(WindowTemplate),
+        templateMax: _.template(templateMax),
+        templateMin: _.template(templateMin),
         initialize: function () {
             this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             this.$el.draggable({
@@ -36,16 +38,17 @@ define([
             var attr = this.model.toJSON();
 
             if (this.model.get("isVisible") === true) {
-                $("#toggleRow").append(this.$el.html(this.template(attr)));
-                this.model.sendParamsToWinCotent();
                 if (this.model.get("isCollapsed") === true) {
+                    $("#navbarRow").append(this.$el.html(this.templateMin(attr)));
                     this.$el.addClass("win-min");
                     this.$el.removeClass("win-max");
                 }
                 else {
+                    $("#navbarRow").append(this.$el.html(this.templateMax(attr)));
                     this.$el.addClass("win-max");
                     this.$el.removeClass("win-min");
                 }
+                this.model.sendParamsToWinCotent();
                 this.$el.show("slow");
             }
             else {
