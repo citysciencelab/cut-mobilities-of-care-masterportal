@@ -64,10 +64,17 @@
                     </a>
                 </li>
             <% } %>
+            <% if (legend === true) { %>
+                <li>
+                    <a href="#" class="legend">
+                        <span class="glyphicon glyphicon-book"></span><small class="menuitem">Legende</small>
+                    </a>
+                </li>
+            <% } %>
             <% if (helpButton === true) { %>
                 <li>
                     <a href="#">
-                        <span class="glyphicon glyphicon-question-sign"></span>&nbsp;Hilfe
+                        <span class="glyphicon glyphicon-question-sign"></span><small class="menuitem">Hilfe</small>
                     </a>
                 </li>
             <% } %>
@@ -82,14 +89,6 @@
                     </a>
                 </li>
             <% } %>
-            <% if (legend === true) { %>
-                <li>
-                    <a href="#" class="legend">
-                        <span class="glyphicon glyphicon-book"></span><small class="menuitem">Legende</small>
-                    </a>
-                </li>
-            <% } %>
-
             </ul>
         </div>
     </div>
