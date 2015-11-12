@@ -78,6 +78,8 @@
 .layer-selection-save + .popover > .popover-title {
     color: rgb(119, 119, 119);
     font-weight: bold;
+    line-height: normal;
+    font-family: sans-serif;
 }
 
 .layer-selection-save + .popover > .popover-content {

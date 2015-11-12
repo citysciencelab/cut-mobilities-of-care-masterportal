@@ -70,6 +70,7 @@ define([
          */
          addLayerToMap: function (model) {
             EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+            $(".layer-selection-save").popover("destroy");
         },
         /**
          * Triggert das Event "removeLayer". Übergibt das "layer"-Attribut vom Model (ol.layer).
@@ -77,6 +78,7 @@ define([
          */
         removeLayerFromMap: function (model) {
            EventBus.trigger("removeLayer", model.get("layer"));
+           $(".layer-selection-save").popover("destroy");
        },
         /**
          * Schiebt das Model in der Collection eine Position nach oben.
@@ -128,6 +130,7 @@ define([
                 layerVisibility,
                 url;
 
+            $(".layer-selection-save").popover("destroy");
             layerIDs = this.pluck("id");
             layerVisibility = this.pluck("visibility");
             url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility + "&center=" + center + "&zoomlevel=" + zoom;
