@@ -283,7 +283,6 @@ define([
          * @return {[type]} [description]
          */
         getZoom: function () {
-            console.log(this.get("view").getZoom());
             return this.get("view").getZoom();
         },
 
