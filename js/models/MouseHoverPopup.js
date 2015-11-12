@@ -31,7 +31,7 @@ define([
         },
         checkLayersAndRegisterEvent: function (map) {
             // Lese Config-Optionen ein
-            var layerIDs = Config.layerIDs,
+            var layerIDs = Config.tree.layer,
                 wfsList = [];
 
             _.each(layerIDs, function (element) {

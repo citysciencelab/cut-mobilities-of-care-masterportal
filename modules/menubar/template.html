@@ -16,15 +16,8 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-list"></span><small class="menuitem">Themen</small>
                     </a>
-                    <% if (hasTree) { %>
                         <div class="dropdown-menu dropdown-tree">
                         </div>
-                    <% } else { %>
-                        <div class="dropdown-menu">
-                            <ul id="tree" class="list-group">
-                            </ul>
-                        </div>
-                    <% } %>
                 </li>
             <% } %>
             <% if (tools === true && oneTool === false) { %>

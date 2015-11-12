@@ -1,18 +1,18 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
-    "text!modules/layer/Layer.html"
-], function ($, _, Backbone, LayerTemplate) {
+    "text!modules/treeLight/template.html",
+    "text!modules/treeLight/templateSettings.html"
+], function (Backbone, LayerTemplate, SettingsTemplate) {
 
     var LayerView = Backbone.View.extend({
-        className: "list-group-item",
+        className: "list-group-item tree-light-list",
         tagName: "li",
         template: _.template(LayerTemplate),
+        templateSettings: _.template(SettingsTemplate),
         initialize: function () {
-            this.listenTo(this.model, "change:visibility", this.render);
-            this.listenTo(this.model, "change:transparence", this.render);
-            this.listenTo(this.model, "change:settings", this.render);
+            this.listenTo(this.model, {
+                "change:visibility change:transparence change:settings": this.render
+            });
             this.listenTo(this.model, "change:isInScaleRange", this.toggleStyle);
         },
         events: {
@@ -24,6 +24,25 @@ define([
             "click .down": "moveModelDown",
             "click .refresh": "toggleSettings"
         },
+
+        render: function () {
+            var attr = this.model.toJSON();
+
+            if (this.model.get("settings") === true) {
+                this.$el.html(this.templateSettings(attr));
+            }
+            else {
+                this.$el.html(this.template(attr));
+            }
+            if (this.model.get("displayInTree") !== false) {
+                this.$el.css("display", "block");
+            }
+            else {
+                this.$el.css("display", "none");
+            }
+            return this;
+        },
+
         moveModelUp: function () {
             this.model.moveUp();
         },
@@ -52,18 +71,6 @@ define([
             else {
                 this.$el.css("color", "rgba(150, 150, 150, 0.6)");
             }
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html(this.template(attr));
-            if (this.model.get("displayInTree") !== false) {
-                this.$el.css("display", "block");
-            }
-            else {
-                this.$el.css("display", "none");
-            }
-            return this;
         }
     });
 
