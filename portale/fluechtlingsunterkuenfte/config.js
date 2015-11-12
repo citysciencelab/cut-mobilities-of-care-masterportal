@@ -16,6 +16,15 @@ define(function () {
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
         allowParametricURL: false,
+        tree: {
+            custom: true,
+            filter: false,
+            customConfig: "../components/lgv-config/tree-config/fluechtlinge.json"
+        },
+        baseLayer: [
+            {id: "8", visibility: false},
+            {id: "453", visibility: true}
+        ],
         /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
@@ -73,54 +82,7 @@ define(function () {
         * @desc Pfad zur Proxy-CGI
         */
         proxyURL: "/cgi-bin/proxy.cgi",
-        /**
-        * @memberof config
-        * @type {Object[]}
-        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
-        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
-        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
-        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
-        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
-        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
-        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
-        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
-        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
-        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
-        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
-        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
-        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
-        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
-        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String}  minScale -
-        * @property {String}  maxScale -
-        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
-        * @desc Beschreibung.
-        */
-        layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "8", visible: false},
-            {id: "1112,1113,1114,1115,1116,1117", name: "RISE-Fördergebiete", visible: false},
-            {id: "2097", visible: false},
-            {id: "1585", visible: false},
-            // {id: "7", visible: false, editable: true},
-            {id: "010", visible: true},
-            {id: "012", visible: true},
-            {id: "013", visible: true},
-            {id: "014", visible: true},
-            {id: "015", visible: true},
-            {id: "016", visible: true},
-            {id: "011", visible: true},
-            {id: "01", visible: true},
-            {id: "1", visible: true},
-            {id: "2", visible: true},
-            {id: "3", visible: true},
-            {id: "5", visible: true},
-            {id: "4", visible: true}
-        ],
+
         /**
         * @memberof config
         * @type {Boolean}
