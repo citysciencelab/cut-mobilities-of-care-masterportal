@@ -23,7 +23,7 @@ define([
 
 
             // Initial werden die Namen für die 1.Ordnerebene geholt.
-            if (_.has(Config, "tree") && Config.tree.custom === true) {
+            if (Config.tree.type === "custom") {
                 EventBus.trigger("getCustomFolderNames");
             }
             else {
@@ -40,7 +40,7 @@ define([
                 nodes.push({name: folderName, category: Config.tree.orderBy, nodeIndex: index});
             }, this);
             // Wenn es ein CustomTree ist, wird die Reihenfolge aus der Tree.json übernommen.
-            if (_.has(Config, "tree") && Config.tree.custom === true) {
+            if (Config.tree.type === "custom") {
                 this.comparator = "nodeIndex";
             }
             // Alte Models werden entfernt, neue hinzugefügt.

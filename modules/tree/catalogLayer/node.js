@@ -41,7 +41,7 @@ define([
          * Alle Layer aus der "layerList" werden in die richtige Reihenfolge gebracht und in das Attribut "children" geschrieben.
          */
         setChildren: function () {
-            if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+            if (Config.tree.type === "custom") {
                 this.setNodeLayerForCustomTree();
                 this.setNodeChildLayerForCustomTree();
             }

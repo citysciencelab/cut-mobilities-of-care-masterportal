@@ -80,7 +80,7 @@ define([
                 },
                 "sync": function () {
                     EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
-                    if (_.has(Config, "tree") && Config.tree.custom === false) {
+                    if (Config.tree.type === "default") {
                         this.sendNodeNames();
                     }
                     EventBus.trigger("layerlist:updateOverlayerSelection");
@@ -105,7 +105,7 @@ define([
                 },
                 success: function (collection) {
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (_.has(Config, "tree") && Config.tree.custom === false) {
+                    if (Config.tree.type === "default") {
                         collection.resetModels();
                     }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert

@@ -12,7 +12,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         });
     }
 
-    if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+    if (Config.tree.type === "custom") {
         require(["modules/treeconfig/list"], function (TreeConfig) {
             new TreeConfig();
         });
