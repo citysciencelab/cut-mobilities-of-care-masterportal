@@ -1,12 +1,20 @@
 define([
     "backbone",
     "eventbus",
-    "moment"
-], function (Backbone, EventBus, moment) {
+    "config",
+    "modules/restReader/collection",
+    "moment",
+    "modules/core/util"
+], function (Backbone, EventBus, Config, RestReader, moment, Util) {
 
     var LayerInformation = Backbone.Model.extend({
-        url: "/hmdk/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=summary",
+        url: function () {
+            var resp = RestReader.getServiceById(Config.csw.id);
 
+            if (resp[0] && resp[0].get("url")) {
+                return Util.getProxyURL(resp[0].get("url"));
+            }
+        },
         initialize: function () {
             this.listenTo(EventBus, {
                 "layerinformation:add": this.setAttributes

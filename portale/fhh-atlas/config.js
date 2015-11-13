@@ -64,6 +64,9 @@ define(function () {
             zoom: true,
             toggleMenu: true
         },
+        csw: {
+            id: "1"
+        },
         attributions: true,
         footer: true,
         quickHelp: true,
