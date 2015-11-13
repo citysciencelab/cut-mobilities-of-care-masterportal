@@ -38,7 +38,7 @@ define([
                 $("#navbarRow").css("display", "none");
             }
             if (_.has(Config, "tree") && Config.tree.type !== "light") {
-                require(["modules/tree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView", "modules/catalogExtern/listView"], function (TreeView, LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
+                require(["modules/tree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/tree/catalogBaseLayer/listView", "modules/catalogExtern/listView"], function (TreeView, LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
                     new TreeView();
                     new LayerSelectionListView();
                     new LayerTreeView();
