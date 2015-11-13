@@ -1,10 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "modules/tree/model",
     "text!modules/tree/template.html",
     "eventbus"
-], function (_, Backbone, LayerTree, LayerTreeTemplate, EventBus) {
+], function (Backbone, LayerTree, LayerTreeTemplate, EventBus) {
 
         var TreeView = Backbone.View.extend({
             model: new LayerTree(),
@@ -26,6 +25,12 @@ define([
                 "click .layer-extern-label": "toggleExternLayer"
             },
             initialize: function () {
+                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
+                    new LayerSelectionListView();
+                    new LayerTreeView();
+                    new BaseLayerListView();
+                    new CataExView();
+                });
                 this.$el.on({
                     click: function (e) {
                         e.stopPropagation();

@@ -38,12 +38,8 @@ define([
                 $("#navbarRow").css("display", "none");
             }
             if (_.has(Config, "tree") && Config.tree.type !== "light") {
-                require(["modules/tree/view", "modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (TreeView, LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
+                require(["modules/tree/view"], function (TreeView) {
                     new TreeView();
-                    new LayerSelectionListView();
-                    new LayerTreeView();
-                    new BaseLayerListView();
-                    new CataExView();
                 });
             }
             else {
