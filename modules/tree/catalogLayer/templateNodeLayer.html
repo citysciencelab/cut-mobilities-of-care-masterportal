@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div class="node-layer-content">
+    <% if (!_.isNull(metaURL)) { %>
+    <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
+    <% } %>
+    <% if(selected === true) { %>
+        <span class="glyphicon glyphicon-check pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer entfernen"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left" data-toggle="tooltip" data-placement="bottom" title="Layer hinzufügen"></span>
+    <% } %>
+    <% if (_.isNull(metaName) || kategorieCustom !== undefined) { %>
+        <div class="layer-name"><%= name %></div>
+    <% }
+    else { %>
+        <div class="layer-name"><%= metaName %></div>
+    <% } %>
+</div>

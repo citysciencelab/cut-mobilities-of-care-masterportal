@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<div class="node-child-layer-content">
+    <% if (!_.isNull(metaURL)) { %>
+    <span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Metadaten"></span>
+    <% } %>
+    <% if(selected === true) { %>
+        <span class="glyphicon glyphicon-check pull-left"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left"></span>
+    <% } %>
+    <div class="layer-name"><%= name %></div>
+</div>
