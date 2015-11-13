@@ -2,6 +2,7 @@
 
 @import "catalogBaseLayer/style.css";
 @import "catalogLayer/style.css";
+@import "catalogExtern/style.css";
 @import "selection/style.css";
 
 .dropdown-tree {
