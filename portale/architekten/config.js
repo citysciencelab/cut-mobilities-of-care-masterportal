@@ -5,7 +5,6 @@ define(function () {
         allowParametricURL: true,
         tree: {
             type: "custom",
-            custom: true,
             filter: false,
             orderBy: "architekten",
             layerIDsToMerge: [
