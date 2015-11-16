@@ -40,7 +40,7 @@ define([
             var context = this;
 
             this.set("layerList", layerList.filter(function (layer) {
-                return layer.attributes.folder === context.get("name");
+                return layer.attributes.node === context.get("name");
             }));
         },
 

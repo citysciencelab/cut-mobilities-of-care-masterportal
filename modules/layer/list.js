@@ -83,6 +83,11 @@ define([
                     if (Config.tree.type === "default") {
                         this.sendNodeNames();
                     }
+                    if (Config.tree.type === "light") {
+                        this.forEach(function (model) {
+                            EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                        }, this);
+                    }
                     EventBus.trigger("layerlist:updateOverlayerSelection");
                 }
             });
@@ -97,6 +102,7 @@ define([
             this.fetch({
                 cache: false,
                 async: false,
+                reset: true,
                 error: function () {
                     EventBus.trigger("alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
@@ -393,26 +399,13 @@ define([
         resetModels: function () {
             var modelsByCategory, categoryAttribute;
 
-            switch (Config.tree.orderBy) {
-                case "opendata": {
-                    // Name für das Model-Attribut für die entsprechende Kategorie
-                    categoryAttribute = "kategorieOpendata";
-                    // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
-                    modelsByCategory = this.filter(function (element) {
-                        return (typeof element.get(categoryAttribute) === "object" && element.get("isbaselayer") !== true);
-                    });
-                    break;
-                }
-                case "inspire": {
-                    // Name für das Model-Attribut für die entsprechende Kategorie
-                    categoryAttribute = "kategorieInspire";
-                    // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
-                    modelsByCategory = this.filter(function (element) {
-                        return (typeof element.get(categoryAttribute) === "object" && element.get("isbaselayer") !== true);
-                    });
-                    break;
-                }
-            }
+            // Name für das Model-Attribut für die entsprechende Kategorie
+            categoryAttribute = "node";
+            // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
+            modelsByCategory = this.filter(function (element) {
+                return (typeof element.get(categoryAttribute) === "object" && element.get("isbaselayer") !== true);
+            });
+
             // Iteriert über die Models
             _.each(modelsByCategory, function (element) {
                 var categories = element.get(categoryAttribute);
@@ -454,33 +447,19 @@ define([
         },
 
         sendNodeNames: function () {
-            if (Config.tree.orderBy === "opendata") {
-                EventBus.trigger("sendNodeNames", this.getOpendataFolder());
-            }
-            else if (Config.tree.orderBy === "inspire") {
-                EventBus.trigger("sendNodeNames", this.getInspireFolder());
-            }
+            EventBus.trigger("sendNodeNames", this.getNodes());
         },
         sendLayerListForNode: function (category, nodeName) {
-            if (category === "opendata") {
-                EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieOpendata: nodeName, isbaselayer: false}));
-            }
-            else if (category === "inspire") {
-                EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieInspire: nodeName, isbaselayer: false}));
-            }
-            else if (category === "externalLayers") {
+            if (category === "externalLayers") {
                 // Schickt die externen Layer aus dem Ordner "nodeName"
-                EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({folder: nodeName, isExternal: true}));
+                EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({node: nodeName, isExternal: true}));
             }
             else {
-                EventBus.trigger("layerlist:sendLayerListForNode", this.where({kategorieCustom: nodeName, isbaselayer: false}));
+                EventBus.trigger("layerlist:sendLayerListForNode", this.where({node: nodeName, isbaselayer: false}));
             }
         },
-        getInspireFolder: function () {
-            return _.uniq(_.flatten(this.pluck("kategorieInspire")));
-        },
-        getOpendataFolder: function () {
-            return _.uniq(_.flatten(this.pluck("kategorieOpendata")));
+        getNodes: function () {
+            return _.uniq(_.flatten(this.pluck("node")));
         },
 
         addFeatures: function (name, features) {
@@ -502,13 +481,13 @@ define([
             var externalLayers = this.filter(function (model) {
                 return model.attributes.isExternal;
             }),
-            folders = [];
+            nodes = [];
 
             _.each(externalLayers, function (model) {
-                folders.push(model.attributes.folder);
+                nodes.push(model.attributes.node);
             });
             // Sendet die Ordner namen der ersten Ebene
-            EventBus.trigger("catalogExtern:sendExternalNodeNames", _.uniq(folders));
+            EventBus.trigger("catalogExtern:sendExternalNodeNames", _.uniq(nodes));
         },
 
         addExternalLayer: function (model) {
