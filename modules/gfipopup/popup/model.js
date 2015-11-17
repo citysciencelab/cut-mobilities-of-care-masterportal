@@ -36,7 +36,7 @@ define([
 
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
-            EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this); // trigger in map.js
+            EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
         },
         /**
          * Vernichtet das Popup.
@@ -95,6 +95,9 @@ define([
                 this.set("coordinate", coordinate);
             }
         },
+        /*
+        * @description Liefert die GFI-Infos ans Print-Modul.
+        */
         sendGFIForPrint: function () {
             if (this.get("isPopupVisible") === true) {
                 var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
