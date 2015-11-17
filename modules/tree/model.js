@@ -8,7 +8,7 @@ define([
             defaults: {
                 topicList: ["Opendata", "Inspire"], // --> Config
                 currentSelection: Config.tree.orderBy,
-                filter: Config.tree.filter
+                type: Config.tree.type
             },
             initialize: function () {
                 this.listenTo(EventBus, {

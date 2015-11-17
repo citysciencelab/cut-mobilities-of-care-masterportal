@@ -35,7 +35,6 @@ define([
                     });
                 },
                 success: function (collection) {
-                    console.log("treeconfig");
                     Config.tree.layer = _.flatten(collection.pluck("layers"));
                 }
             });
