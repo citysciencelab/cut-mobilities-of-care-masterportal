@@ -60,9 +60,13 @@ define([
                 },
                 "layerList:sendExternalFolders": this.sendExternalNodeNames,
                 "getNodeNames": this.sendNodeNames,
-                "layerlist:getLayerListForNode": this.sendLayerListForNode,
-                "layerlist:getInspireFolder": this.fetchLayer,
-                "layerlist:getOpendataFolder": this.fetchLayer,
+                "layerlist:getLayerListForNode": function (nodeName) {
+                    EventBus.trigger("layerlist:sendLayerListForNode", this.where({node: nodeName, isbaselayer: false}));
+                },
+                "layerlist:getLayerListForExternalNode": function (nodeName) {
+                    EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({node: nodeName, isExternal: true}));
+                },
+                "layerlist:fetchLayer": this.fetchLayer,
                 "addFeatures": this.addFeatures,
                 "removeFeatures": this.removeFeatures
             });
@@ -449,15 +453,7 @@ define([
         sendNodeNames: function () {
             EventBus.trigger("sendNodeNames", this.getNodes());
         },
-        sendLayerListForNode: function (category, nodeName) {
-            if (category === "externalLayers") {
-                // Schickt die externen Layer aus dem Ordner "nodeName"
-                EventBus.trigger("layerlist:sendLayerListForExternalNode", this.where({node: nodeName, isExternal: true}));
-            }
-            else {
-                EventBus.trigger("layerlist:sendLayerListForNode", this.where({node: nodeName, isbaselayer: false}));
-            }
-        },
+
         getNodes: function () {
             return _.uniq(_.flatten(this.pluck("node")));
         },

@@ -30,9 +30,8 @@ define([
                "layerlist:sendLayerListForExternalNode": this.setLayerList
             });
             // Wird durch das "reset" beim erzeugen der Knoten in CatalogExtern/List getriggert
-            // Fordert die Layer die zu diesem Knoten gehören an. (Category ist bei Externen Layern auf "external" gesetzt)
-            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
-
+            // Fordert die Layer die zu diesem Knoten gehören an.
+            EventBus.trigger("layerlist:getLayerListForExternalNode", this.get("name"));
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören

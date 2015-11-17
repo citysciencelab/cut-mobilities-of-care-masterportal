@@ -29,7 +29,7 @@ define([
                 "layerlist:sendLayerListForNode": this.setLayerList
             });
 
-            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
+            EventBus.trigger("layerlist:getLayerListForNode", this.get("name"));
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören

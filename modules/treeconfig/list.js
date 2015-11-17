@@ -21,7 +21,7 @@ define([
         },
 
         /**
-         * Holt sich die gewünschte Tree-Konfiguration (Config.tree.orderBy).
+         * Holt sich die gewünschte Tree-Konfiguration (Config.tree.customConfig).
          * Überschreibt die Config.tree.layer mit den Layern der Tree-Konfiguration.
          */
         fetchTreeConfig: function () {
@@ -30,11 +30,12 @@ define([
                 async: false,
                 error: function () {
                     EventBus.trigger("alert", {
-                        text: "Fehler beim Laden von: " + Config.tree.orderBy + ".json",
+                        text: "Fehler beim Laden von: " + Config.tree.customConfig,
                         kategorie: "alert-warning"
                     });
                 },
                 success: function (collection) {
+                    console.log("treeconfig");
                     Config.tree.layer = _.flatten(collection.pluck("layers"));
                 }
             });
