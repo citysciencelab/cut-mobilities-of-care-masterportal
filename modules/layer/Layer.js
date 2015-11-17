@@ -13,7 +13,6 @@ define([
             selected: false,
             settings: false,
             visibility: false,
-            kategorieCustom: undefined,
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
