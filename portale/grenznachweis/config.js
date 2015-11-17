@@ -196,7 +196,7 @@ define(function () {
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
-            gfi: false,
+            gfi: true,
             measure: true,
             print: true,
             coord: false,
