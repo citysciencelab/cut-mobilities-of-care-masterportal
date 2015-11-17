@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<%  _.each(brwList, function(brw) { %>
+    <div class="fzr_row" id="br_tab">
+        <div class="fzr_col fzr_3" id="br_sp1">
+            <label>Nutzung: <%= brw.bezeichnung %>, Jahrgang: <%= brw.jahr1%></label>
+            <input id="<%= brw.bezeichnung %>_<%= brw.jahr1 %>" type="text" placeholder="BRW-Nummer" title="Bitte Bodenrichtwertnummer eingeben." value="<%= brw.wnum1 %>"/>
+        </div>
+    </div>
+    <div class="fzr_row" id="br_tab">
+        <div class="fzr_col fzr_3" id="br_sp1">
+            <label>Nutzung: <%= brw.bezeichnung %>, Jahrgang: <%= brw.jahr2%></label>
+            <input id="<%= brw.bezeichnung %>_<%= brw.jahr2 %>" type="text" placeholder="BRW-Nummer" title="Bitte Bodenrichtwertnummer eingeben." value="<%= brw.wnum2 %>"/>
+        </div>
+    </div>
+<% }) %>

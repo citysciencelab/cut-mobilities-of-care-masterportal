@@ -33,7 +33,8 @@ define([
                  strName,
                  strHsNr,
                  strHsNrZusatz,
-                 zusatzTest;
+                 zusatzTest,
+                 coordinates = [];
 
             this.set("strschl", $(hit).find("dog\\:strasse,strasse")[0].textContent);
             this.set("strName", $(hit).find("dog\\:strassenname, strassenname")[0].textContent);
@@ -45,12 +46,15 @@ define([
             else {
                 this.set("strHsNrZusatz", "");
             }
+            coordinates = $(hit).find("gml\\:pos, pos")[0].textContent.split(" ");
             EventBus.trigger("seite1_lage:newLage", {
                 type: "Adresse",
-                strschl: this.get("strschl"),
-                strName: this.get("strName"),
-                strHsNr: this.get("strHsNr"),
-                strHsNrZusatz: this.get("strHsNrZusatz")
+                strassenschluessel: this.get("strschl"),
+                strassenname: this.get("strName"),
+                hausnummer: this.get("strHsNr"),
+                hausnummerZusatz: this.get("strHsNrZusatz"),
+                rechtswert: coordinates[0],
+                hochwert: coordinates[1]
             });
         }
     });
