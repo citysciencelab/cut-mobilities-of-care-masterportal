@@ -10,20 +10,22 @@ define([
     var WPSModel = Backbone.Model.extend({
         defaults: {
             url: "",
-            request: ""
+            request: "",
+            processesRunning: 0
         },
         initialize: function () {
             var resp = RestReader.getServiceById(Config.wpsID),
                 newURL = Util.getProxyURL(resp[0].get("url"));
 
             this.set("url", newURL);
+            this.listenTo(this, "change:processesRunning", this.checkProcesses);
             EventBus.on("wps:request", this.request, this);
         },
         request: function (request) {
             var request_str = "<wps:Execute xmlns:wps='http://www.opengis.net/wps/1.0.0' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ows='http://www.opengis.net/ows/1.1' service='WPS' version='1.0.0' xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'><ows:Identifier>" + request.workbenchname + ".fmw</ows:Identifier>" + request.dataInputs + "</wps:Execute>";
 
             this.set("request", request);
-            $("#ladebalken").show();
+            this.set("processesRunning", this.get("processesRunning") + 1);
             $.ajax({
                 url: this.get("url") + "?Request=Execute&Service=WPS&Version=1.0.0",
                 data: request_str,
@@ -33,7 +35,7 @@ define([
                 context: this,
                 method: "POST",
                 complete: function (jqXHR) {
-                    $("#ladebalken").hide();
+                    this.set("processesRunning", this.get("processesRunning") - 1);
                     if (jqXHR.status !== 200 ||
                         jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         alert ("Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
@@ -58,6 +60,16 @@ define([
                     }
                 }
             });
+        },
+        checkProcesses: function () {
+            var rp = this.get("processesRunning");
+
+            if (rp > 0) {
+                $("#ladebalken").show();
+            }
+            else {
+                $("#ladebalken").hide();
+            }
         }
     });
 
