@@ -10,18 +10,41 @@ define([
             produkt: "",
             lage: "",
             brwList: [],
+            complete: false,
             wpsWorkbenchnameListe: "IDAListeBodenrichtwerte",
             wpsWorkbenchnameDetails: "IDABRWZoneByAdresse"
         },
         initialize: function () {
-            this.listenTo(this, "change:brwList", this.triggerBRWList);
+            this.listenTo(this, "change:brwList", this.checkBRWList);
 
             EventBus.on("wps:response", this.saveBRWList, this); // Result von wpsWorkbenchnameListe
             EventBus.on("wps:response", this.saveBRWDetails, this); // Result von wpsWorkbenchnameDetails
             EventBus.on("seite2:setBRWList", this.setBrwList, this);
         },
-        triggerBRWList: function () {
-            EventBus.trigger("seite2:newBRWList", this.get("brwList"));
+        checkBRWList: function () {
+            var brwList = this.get("brwList"),
+                complete = false;
+
+            _.each(brwList, function (brw) {
+                if (brw.brw1 && brw.brw1 !== "" &&
+                    brw.brw2 && brw.brw2 !== "" &&
+                    brw.jahr1 && brw.jahr1 !== "" &&
+                    brw.jahr2 && brw.jahr2 !== "" &&
+                    brw.anteil1 && brw.anteil1 !== "" &&
+                    brw.anteil2 && brw.anteil2 !== "" &&
+                    brw.wnum1 && brw.wnum1 !== "" &&
+                    brw.wnum2 && brw.wnum2 !== "" &&
+                    brw.ortsteil1 && brw.ortsteil1 !== "" &&
+                    brw.ortsteil2 && brw.ortsteil2 !== "") {
+                    complete = true;
+                }
+            });
+            if (complete === true) {
+                this.set("complete", true);
+            }
+            else {
+                EventBus.trigger("seite2:newBRWList", brwList);
+            }
         },
         requestBRWs: function () {
             var jahr = this.get("jahr"),
