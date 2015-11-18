@@ -4,9 +4,16 @@ define(function () {
         wfsImgPath: "..components/lgv-config/img",
         allowParametricURL: true,
         tree: {
-            custom: true,
-            filter: false,
-            orderBy: "architekten",
+            type: "custom",
+            baseLayer: [
+                {id: "94", visibility: false}, // luftbilder unbelaubt
+                {id: "756", visibility: false}, // luftbilder belaubt
+                {id: "713", visibility: false}, // stadtplan s-w
+                {id: "717", visibility: false}, // stadtplan farbig
+                {id: "1043", visibility: true}, // stadtplan g-b
+                {id: "368", visibility: false}, // alkis farbig
+                {id: "149", visibility: false} // alkis g-b
+            ],
             layerIDsToMerge: [
                 ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
                 ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
@@ -28,15 +35,6 @@ define(function () {
             ],
             customConfig: "../components/lgv-config/tree-config/architekten.json"
         },
-        baseLayer: [
-            {id: "94", visibility: false}, // luftbilder unbelaubt
-            {id: "756", visibility: false}, // luftbilder belaubt
-            {id: "713", visibility: false}, // stadtplan s-w
-            {id: "717", visibility: false}, // stadtplan farbig
-            {id: "1043", visibility: true}, // stadtplan g-b
-            {id: "368", visibility: false}, // alkis farbig
-            {id: "149", visibility: false} // alkis g-b
-        ],
         controls: {
             zoom: true,
             toggleMenu: true
