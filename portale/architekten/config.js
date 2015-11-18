@@ -39,6 +39,9 @@ define(function () {
             zoom: true,
             toggleMenu: true
         },
+        csw: {
+            id: "1"
+        },
         view: {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],
