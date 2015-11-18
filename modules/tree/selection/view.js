@@ -1,18 +1,13 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
-    "text!modules/layerselection/template.html",
-    "text!modules/layerselection/templateSettings.html",
-    "text!modules/layerselection/templateAttribution.html",
-    "eventbus"
-], function ($, _, Backbone, Template, SettingTemplate, AttributionTempate, EventBus) {
+    "text!modules/tree/selection/template.html",
+    "text!modules/tree/selection/templateSettings.html"
+], function (Backbone, Template, SettingTemplate) {
 
     var view = Backbone.View.extend({
         tagName: "li",
         className: "list-group-item",
         template: _.template(Template),
-        templateAttribution: _.template(AttributionTempate),
         templateSetting: _.template(SettingTemplate),
         templateButton: _.template("<div class='layer-toggle-button pull-right' data-toggle='tooltip' data-placement='bottom' title='Einstellungen'><span class='glyphicon glyphicon-cog rotate'></span></div>"),
         events: {

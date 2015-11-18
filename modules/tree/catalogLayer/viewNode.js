@@ -1,9 +1,7 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
-    "text!modules/catalogExtern/templateNode.html"
-    ], function ($, _, Backbone, NodeTemplate) {
+    "text!modules/tree/catalogLayer/templateNode.html"
+    ], function (Backbone, NodeTemplate) {
 
         var NodeView = Backbone.View.extend({
             className: "list-group-item node",

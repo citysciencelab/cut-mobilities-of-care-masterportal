@@ -1,9 +1,7 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
-    "text!modules/layercatalog/templateNodeChildLayer.html"
-    ], function ($, _, Backbone, NodeChildLayerTemplate) {
+    "text!modules/tree/catalogExtern/templateNodeChildLayer.html"
+    ], function (Backbone, NodeChildLayerTemplate) {
 
         var NodeChildLayerView = Backbone.View.extend({
             className: "list-group-item node-child-layer",
@@ -15,6 +13,10 @@ define([
             },
             initialize: function () {
                 this.$el.append(this.templateButton);
+
+                if (this.model.get("visibility") === true) {
+                    this.toggleSelected();
+                }
             },
             render: function () {
                 this.stopListening();
@@ -36,7 +38,12 @@ define([
                 this.model.toggleSelected();
             },
             getMetadata: function () {
-                this.model.openMetadata();
+                if (this.model.get("url").search("geodienste") !== -1) {
+                    window.open("http://metaver.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+                }
+                else {
+                    window.open("http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.model.get("metaID"), "_blank");
+                }
             },
             toggleStyle: function () {
                 if (this.model.get("selected") === true) {

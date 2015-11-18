@@ -1,3 +1,10 @@
+@charset "utf-8";
+
+@import "catalogBaseLayer/style.css";
+@import "catalogLayer/style.css";
+@import "catalogExtern/style.css";
+@import "selection/style.css";
+
 .dropdown-tree {
     font-size: 16px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;

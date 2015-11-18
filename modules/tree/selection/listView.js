@@ -1,10 +1,9 @@
 define([
-    "underscore",
     "backbone",
-    "modules/layerselection/list",
-    "modules/layerselection/view",
+    "modules/tree/selection/list",
+    "modules/tree/selection/view",
     "jqueryui/sortable"
-], function (_, Backbone, List, View) {
+], function (Backbone, List, View) {
 
         var listView = Backbone.View.extend({
             collection: new List(),

@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "modules/baselayercatalog/list",
-    "modules/baselayercatalog/view"
+    "modules/tree/catalogBaseLayer/list",
+    "modules/tree/catalogBaseLayer/view"
 ], function (Backbone, BaseLayerList, BaseLayerView) {
 
     var listView = Backbone.View.extend({

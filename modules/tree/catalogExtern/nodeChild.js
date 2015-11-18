@@ -1,10 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "eventbus",
     "config",
-    "modules/catalogExtern/viewNodeChildLayer"
-    ], function (_, Backbone, EventBus, Config, NodeChildLayerView) {
+    "modules/tree/catalogExtern/viewNodeChildLayer"
+    ], function (Backbone, EventBus, Config, NodeChildLayerView) {
 
         var TreeNodeChild = Backbone.Model.extend({
 

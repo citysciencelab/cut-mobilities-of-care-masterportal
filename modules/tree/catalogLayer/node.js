@@ -2,9 +2,9 @@ define([
     "backbone",
     "config",
     "eventbus",
-    "modules/layercatalog/nodeChild",
-    "modules/layercatalog/viewNodeChild",
-    "modules/layercatalog/viewNodeLayer"
+    "modules/tree/catalogLayer/nodeChild",
+    "modules/tree/catalogLayer/viewNodeChild",
+    "modules/tree/catalogLayer/viewNodeLayer"
 ], function (Backbone, Config, EventBus, NodeChild, NodeChildView, NodeLayerView) {
 
     var TreeNode = Backbone.Model.extend({
@@ -29,7 +29,7 @@ define([
                 "layerlist:sendLayerListForNode": this.setLayerList
             });
 
-            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
+            EventBus.trigger("layerlist:getLayerListForNode", this.get("name"));
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören
@@ -41,7 +41,7 @@ define([
          * Alle Layer aus der "layerList" werden in die richtige Reihenfolge gebracht und in das Attribut "children" geschrieben.
          */
         setChildren: function () {
-            if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+            if (Config.tree.type === "custom") {
                 this.setNodeLayerForCustomTree();
                 this.setNodeChildLayerForCustomTree();
             }

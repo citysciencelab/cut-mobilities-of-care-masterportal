@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "modules/catalogExtern/node",
+    "modules/tree/catalogExtern/node",
     "config",
     "eventbus"
     ], function (Backbone, Node, Config, EventBus) {

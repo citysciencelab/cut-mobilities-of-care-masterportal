@@ -2,9 +2,9 @@ define([
     "backbone",
     "config",
     "eventbus",
-    "modules/catalogExtern/nodeChild",
-    "modules/catalogExtern/viewNodeChild",
-    "modules/catalogExtern/viewNodeLayer"
+    "modules/tree/catalogExtern/nodeChild",
+    "modules/tree/catalogExtern/viewNodeChild",
+    "modules/tree/catalogExtern/viewNodeLayer"
 ], function (Backbone, Config, EventBus, NodeChild, NodeChildView, NodeLayerView) {
 
     var TreeNode = Backbone.Model.extend({
@@ -30,9 +30,8 @@ define([
                "layerlist:sendLayerListForExternalNode": this.setLayerList
             });
             // Wird durch das "reset" beim erzeugen der Knoten in CatalogExtern/List getriggert
-            // Fordert die Layer die zu diesem Knoten gehören an. (Category ist bei Externen Layern auf "external" gesetzt)
-            EventBus.trigger("layerlist:getLayerListForNode", this.get("category"), this.get("name"));
-
+            // Fordert die Layer die zu diesem Knoten gehören an.
+            EventBus.trigger("layerlist:getLayerListForExternalNode", this.get("name"));
         },
 
         // Alle Layer bzw. Layer-Models die zu dieser Node gehören
@@ -40,7 +39,7 @@ define([
             var context = this;
 
             this.set("layerList", layerList.filter(function (layer) {
-                return layer.attributes.folder === context.get("name");
+                return layer.attributes.node === context.get("name");
             }));
         },
 

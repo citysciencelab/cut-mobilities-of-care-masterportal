@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "modules/layercatalog/node",
+    "modules/tree/catalogLayer/node",
     "config",
     "eventbus",
     "modules/searchbar/model" // nicht schön --> Konzept von layercatalog überarbeiten SD 02.09
@@ -21,9 +21,8 @@ define([
                 // "catalogList:render": this.createNodes
             });
 
-
             // Initial werden die Namen für die 1.Ordnerebene geholt.
-            if (_.has(Config, "tree") && Config.tree.custom === true) {
+            if (Config.tree.type === "custom") {
                 EventBus.trigger("getCustomFolderNames");
             }
             else {
@@ -37,10 +36,10 @@ define([
             var nodes = [];
 
             _.each(folderNames, function (folderName, index) {
-                nodes.push({name: folderName, category: Config.tree.orderBy, nodeIndex: index});
+                nodes.push({name: folderName, nodeIndex: index});
             }, this);
             // Wenn es ein CustomTree ist, wird die Reihenfolge aus der Tree.json übernommen.
-            if (_.has(Config, "tree") && Config.tree.custom === true) {
+            if (Config.tree.type === "custom") {
                 this.comparator = "nodeIndex";
             }
             // Alte Models werden entfernt, neue hinzugefügt.
@@ -58,7 +57,7 @@ define([
             $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-triangle-right");
             this.forEach(function (element) {
                 if (model.get("type") !== undefined && model.get("type") === "nodeChild") {
-                    if (model.get("children")[0].get("kategorieOpendata") === element.get("name") || model.get("children")[0].get("kategorieInspire") === element.get("name") || model.get("children")[0].get("kategorieCustom") === element.get("name")) {
+                    if (model.get("children")[0].get("node") === element.get("name")) {
                         element.set("isExpanded", true);
                         model.set("isExpanded", true);
                         _.each(model.get("children"), function (child) {
@@ -69,7 +68,7 @@ define([
                     }
                 }
                 else {
-                    if (model.get("kategorieOpendata") === element.get("name") || model.get("kategorieInspire") === element.get("name") || model.get("kategorieCustom") === element.get("name")) {
+                    if (model.get("node") === element.get("name")) {
                         element.set("isExpanded", true);
                         _.each(element.get("childViews"), function (view) {
                             if (view.model.get("name") === model.get("metaName") || view.model.get("name") === model.get("subfolder")) {
