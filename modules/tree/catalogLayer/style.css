@@ -1,0 +1,117 @@
+.layer-catalog-list {
+    max-height: 300px;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 14px;
+    color: rgb(150, 150, 150);
+}
+
+/***** Catalog - Node *****/
+.node {
+    padding: 8px 15px;
+}
+
+.node-content {
+    width: 24em;
+}
+
+.node-name {
+    margin-left: 2em;
+    font-size: 12px;
+}
+
+.node-content > span:hover, .node-name:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+/***** Catalag - Node-Layer ******/
+.node-layer {
+    color: rgb(150, 150, 150);
+    /*font-size: 14px;*/
+}
+
+.node-layer-content > .layer-name {
+    margin-left: 4em;
+    margin-right: 2em;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.node-layer-content > .layer-name:hover {
+    opacity: 0.6;
+}
+
+.node-layer-content > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.node-layer-content > .glyphicon-check {
+    margin-left: 14px;
+}
+
+.node-layer-content > .glyphicon-unchecked {
+    margin-left: 14px;
+}
+
+.node-layer-content > .glyphicon-info-sign {
+    font-size: 16px;
+}
+
+/***** Catalog - Node-Child *****/
+.node-child {
+    color: rgb(150, 150, 150);
+    /*font-size: 14px;*/
+}
+
+.node-child-content {
+    width: 25em;
+}
+
+.node-child-content > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.node-child-content > .glyphicon-plus-sign, .node-child-content > .glyphicon-minus-sign {
+    margin-left: 14px;
+}
+
+.node-child-content > .glyphicon-check, .node-child-content > .glyphicon-unchecked {
+    padding-left: 12px;
+}
+
+.node-child-name {
+    margin-left: 6em;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.node-child-name:hover {
+    opacity: 0.6;
+}
+
+/***** Catalog - Node-Child-Layer *****/
+.node-child-layer {
+    color: rgb(150, 150, 150);
+    /*font-size: 14px;*/
+}
+
+.node-child-layer-content > .layer-name {
+    margin-left: 6em;
+    margin-right: 2em;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.node-child-layer-content > .layer-name:hover, .node-child-layer-content > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.node-child-layer-content > .glyphicon-check, .node-child-layer-content > .glyphicon-unchecked {
+    margin-left: 40px;
+}
+
+.node-child-layer-content > .glyphicon-info-sign {
+    font-size: 16px;
+}

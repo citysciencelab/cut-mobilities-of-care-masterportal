@@ -1,12 +1,11 @@
 define([
     "backbone",
     "text!modules/menubar/template.html",
-    // "views/LayerListView",
     "modules/treeLight/listView",
     "modules/menubar/model",
     "config",
     "eventbus"
-], function (Backbone, MenubarTemplate, LayerListView, Menubar, Config, EventBus) {
+], function (Backbone, MenubarTemplate, TreeLightView, Menubar, Config, EventBus) {
 
     var MenubarView = Backbone.View.extend({
         model: Menubar,
@@ -39,16 +38,12 @@ define([
                 $("#navbarRow").css("display", "none");
             }
             if (_.has(Config, "tree") && Config.tree.type !== "light") {
-                require(["modules/layertree/view", "modules/layerselection/listView", "modules/layercatalog/listView", "modules/baselayercatalog/listView", "modules/catalogExtern/listView"], function (TreeListView, LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
-                    new TreeListView();
-                    new LayerSelectionListView();
-                    new LayerTreeView();
-                    new BaseLayerListView();
-                    new CataExView();
+                require(["modules/tree/view"], function (TreeView) {
+                    new TreeView();
                 });
             }
             else {
-                new LayerListView();
+                new TreeLightView();
             }
             if (_.has(Config, "title") === true) {
                 require(["modules/title/view"], function (TitleView) {

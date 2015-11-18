@@ -28,7 +28,7 @@ define([
          */
         setNodeLayer: function () {
             _.each(this.get("layerIDs"), function (element) {
-                element.kategorieCustom = this.get("node");
+                element.node = this.get("node");
                 this.push("layers", element);
             }, this);
         },
@@ -46,7 +46,7 @@ define([
                             metaName: element.metaName,
                             visible: element.visible,
                             subfolder: subfolder.node,
-                            kategorieCustom: this.get("node")
+                            node: this.get("node")
                         });
                     }
                     else {
@@ -54,7 +54,7 @@ define([
                             id: element.id,
                             visible: element.visible,
                             subfolder: subfolder.node,
-                            kategorieCustom: this.get("node")
+                            node: this.get("node")
                         });
                     }
                 }, this);
