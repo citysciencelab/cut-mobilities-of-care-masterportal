@@ -16,52 +16,52 @@ define([
                 {
                     resolution: 66.14579761460263,
                     scale: "250000",
-                    zoomLevel: 1
+                    zoomLevel: 0
                 },
                 {
                     resolution: 26.458319045841044,
                     scale: "100000",
-                    zoomLevel: 2
+                    zoomLevel: 1
                 },
                 {
                     resolution: 15.874991427504629,
                     scale: "60000",
-                    zoomLevel: 3
+                    zoomLevel: 2
                 },
                 {
                     resolution: 10.583327618336419,
                     scale: "40000",
-                    zoomLevel: 4
+                    zoomLevel: 3
                 },
                 {
                     resolution: 5.2916638091682096,
                     scale: "20000",
-                    zoomLevel: 5
+                    zoomLevel: 4
                 },
                 {
                     resolution: 2.6458319045841048,
                     scale: "10000",
-                    zoomLevel: 6
+                    zoomLevel: 5
                 },
                 {
                     resolution: 1.3229159522920524,
                     scale: "5000",
-                    zoomLevel: 7
+                    zoomLevel: 6
                 },
                 {
                     resolution: 0.6614579761460262,
                     scale: "2500",
-                    zoomLevel: 8
+                    zoomLevel: 7
                 },
                 {
                     resolution: 0.2645831904584105,
                     scale: "1000",
-                    zoomLevel: 9
+                    zoomLevel: 8
                 },
                 {
                     resolution: 0.13229159522920521,
                     scale: "500",
-                    zoomLevel: 10
+                    zoomLevel: 9
                 }
             ],
             resolutions: [
@@ -76,7 +76,7 @@ define([
                 0.2645831904584105, // 1:1000
                 0.13229159522920521 // 1:500
             ],
-            zoomLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // zoomLevel 1 = 1:250000
+            zoomLevels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // zoomLevel 0 = 1:250000
             resolution: 15.874991427504629,
             startCenter: [565874, 5934140],
             units: "m",
@@ -164,7 +164,7 @@ define([
                 this.set("resolution", Config.view.resolution);
             }
             if (_.has(Config.view, "zoomLevel")) {
-                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel - 1]);
+                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel]);
             }
         },
 

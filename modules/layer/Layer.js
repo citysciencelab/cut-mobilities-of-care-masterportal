@@ -13,7 +13,6 @@ define([
             selected: false,
             settings: false,
             visibility: false,
-            kategorieCustom: undefined,
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
@@ -100,19 +99,25 @@ define([
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
                     this.set("metaID", dataset.md_id);
-                    this.set("metaName", dataset.md_name);
-                    if (dataset.kategorie_opendata.length > 1) {
-                        this.set("kategorieOpendata", dataset.kategorie_opendata);
+                    if (_.isNull(this.get("metaName"))) {
+                        this.set("metaName", dataset.md_name);
                     }
-                    else {
-                        this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
+
+                    if (Config.tree.orderBy === "opendata") {
+                        if (dataset.kategorie_opendata.length > 1) {
+                            this.set("node", dataset.kategorie_opendata);
+                        }
+                        else {
+                            this.set("node", dataset.kategorie_opendata[0]);
+                        }
                     }
-                    // besser auf type kontrollieren (Array oder String)
-                    if (dataset.kategorie_inspire.length > 1) {
-                        this.set("kategorieInspire", dataset.kategorie_inspire);
-                    }
-                    else {
-                        this.set("kategorieInspire", dataset.kategorie_inspire[0]);
+                    else if (Config.tree.orderBy === "inspire") {
+                        if (dataset.kategorie_inspire.length > 1) {
+                            this.set("node", dataset.kategorie_inspire);
+                        }
+                        else {
+                            this.set("node", dataset.kategorie_inspire[0]);
+                        }
                     }
                 }
             }

@@ -7,14 +7,12 @@
 **/
 
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "openlayers",
     "eventbus",
     "config",
     "modules/core/util"
-], function (jquery, _, Backbone, ol, EventBus, config, Util) {
+], function (Backbone, ol, EventBus, config, Util) {
 
     var AddWMSModel = Backbone.Model.extend({
         layers: [],
@@ -36,12 +34,12 @@ define([
                 if (text === "" || typeof text === "undefined") {
                     text = "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!";
                 }
-             jquery(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
+             $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
         },
 
         // Lädt die Capabillities, parsed sie und extrahiert die Daten-Layer
         loadAndAddLayers: function () {
-            jquery(".addwms_error").remove();
+            $(".addwms_error").remove();
             var parser = new ol.format.WMSCapabilities(),
             url = $("#wmsUrl").val(),
             context = this;
@@ -146,7 +144,7 @@ define([
                 "legendURL": "",
                 "isbaselayer": false,
                 "cache": false,
-                "folder": wmsTitle,
+                "node": wmsTitle,
                 "datasets": [
                     {
                         "md_id": parent,

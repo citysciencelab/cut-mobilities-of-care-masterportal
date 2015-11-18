@@ -16,15 +16,8 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-list"></span><small class="menuitem">Themen</small>
                     </a>
-                    <% if (hasTree) { %>
                         <div class="dropdown-menu dropdown-tree">
                         </div>
-                    <% } else { %>
-                        <div class="dropdown-menu">
-                            <ul id="tree" class="list-group">
-                            </ul>
-                        </div>
-                    <% } %>
                 </li>
             <% } %>
             <% if (tools === true && oneTool === false) { %>
@@ -64,10 +57,17 @@
                     </a>
                 </li>
             <% } %>
+            <% if (legend === true) { %>
+                <li>
+                    <a href="#" class="legend">
+                        <span class="glyphicon glyphicon-book"></span><small class="menuitem">Legende</small>
+                    </a>
+                </li>
+            <% } %>
             <% if (helpButton === true) { %>
                 <li>
                     <a href="#">
-                        <span class="glyphicon glyphicon-question-sign"></span>&nbsp;Hilfe
+                        <span class="glyphicon glyphicon-question-sign"></span><small class="menuitem">Hilfe</small>
                     </a>
                 </li>
             <% } %>
@@ -82,14 +82,6 @@
                     </a>
                 </li>
             <% } %>
-            <% if (legend === true) { %>
-                <li>
-                    <a href="#" class="legend">
-                        <span class="glyphicon glyphicon-book"></span><small class="menuitem">Legende</small>
-                    </a>
-                </li>
-            <% } %>
-
             </ul>
         </div>
     </div>

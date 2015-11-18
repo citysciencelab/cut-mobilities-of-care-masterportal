@@ -17,7 +17,7 @@
     <% if (legendURL !== "ignore" && legendURL !== "") { %>
         <h4>Legende</h4>
         <p>
-            <% if (legendURL[0].search(".pdf") !== -1) { %>
+            <% if (typeof legendURL === "string") { %>
                 <a href=<%= legendURL[0] %> target="_blank">weitere Informationen</a>
             <% }
             else { %>

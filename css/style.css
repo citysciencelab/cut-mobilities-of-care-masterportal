@@ -11,17 +11,14 @@
 @import "copyright.css";
 @import "../modules/attribution/style.css";
 @import "routingwin.css";
-@import "window.css";
+@import "../modules/window/style.css";
 @import "../modules/scaleline/style.css";
 @import "../modules/menubar/style.css";
-@import "../modules/layerselection/style.css";
 @import "../modules/footer/style.css";
 @import "../modules/quickhelp/style.css";
 @import "../modules/title/style.css";
-@import "../modules/layertree/style.css";
-@import "../modules/layercatalog/style.css";
-@import "../modules/layer/style.css";
-@import "../modules/baselayercatalog/style.css";
+@import "../modules/tree/style.css";
+@import "../modules/treeLight/style.css";
 @import "../modules/treefilter/style.css";
 @import "../modules/coordpopup/style.css";
 @import "../modules/legend/style.css";
@@ -33,5 +30,4 @@
 @import "../modules/layerinformation/style.css";
 @import "../modules/alerting/style.css";
 @import "../modules/mapMarker/style.css";
-@import "../modules/catalogExtern/style.css";
 @import "../modules/addwms/style.css";

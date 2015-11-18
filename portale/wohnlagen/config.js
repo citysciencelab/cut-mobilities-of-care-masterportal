@@ -23,7 +23,7 @@ define(function () {
             ],
             epsg: "EPSG:25832"
         },
-        footer: true,
+        footer: false,
         quickHelp: true,
 
         layerConf: "../components/lgv-config/services-fhhnet.json",
@@ -59,24 +59,20 @@ define(function () {
             legend: true,
             routing: false
         },
+        startUpModul: "",
         searchBar: {
-            placeholder: "Suche nach Adresse, Stadtteil",
-<<<<<<< HEAD
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0"
-            // bkgSuggestURL: "/bkg_suggest",
-            // bkgSearchURL: "/bkg_geosearch",
-           // useBKGSearch: true
-=======
+            placeholder: "Suche Adresse, Stadtteil",
             gazetteer: {
-                minChars: 3,
                 url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
             },
+            tree: {
+                minChars: 3
+            },
             geoLocateHit: true
->>>>>>> 0f3e0c56918372e57ab622760b99851b53a2f6bf
         },
         print: {
             printID: "99999",
@@ -89,6 +85,7 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
+            record: false,
             active: "gfi"
         },
         orientation: false,

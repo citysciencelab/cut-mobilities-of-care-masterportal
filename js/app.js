@@ -12,7 +12,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         });
     }
 
-    if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+    if (Config.tree.type === "custom") {
         require(["modules/treeconfig/list"], function (TreeConfig) {
             new TreeConfig();
         });
@@ -92,7 +92,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 if ($('#map').is(":visible") === true) {
                     new ControlsView();
                 }
-                require(["views/WindowView"], function (WindowView) {
+                require(["modules/window/view"], function (WindowView) {
                     new WindowView();
                 });
                 if (Config.menu.tools === true) {

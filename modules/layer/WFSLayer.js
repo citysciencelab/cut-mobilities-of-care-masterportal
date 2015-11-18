@@ -105,7 +105,7 @@ define([
             // Nur einmalig und nicht beim reload.
             if (this.get("layer") === undefined) {
                 var id = this.get("id"),
-                    layerIDs = _.find(Config.layerIDs, function (num) {
+                    layerIDs = _.find(Config.tree.layer, function (num) {
                         return num.id === id;
                     });
 

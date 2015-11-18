@@ -33,7 +33,7 @@ define([
              */
             if (_.has(result, 'LAYERIDS')) {
                 var values = _.values(_.pick(result, 'LAYERIDS'))[0].split(','),
-                    newLayerIDs = Config.layerIDs;
+                    newLayerIDs = Config.tree.layer;
                 if (_.has(Config, "layerIDs")) {
                     var layeridList = values,
                         visibilityList,
@@ -79,10 +79,10 @@ define([
                         })
                         //wenn Layerid-Wert aus URL nicht in Config, dann zur Config zufügen
                         if (!checked){
-                           Config.layerIDs.push({id:param.id,visible:param.visible});
+                           Config.tree.layer.push({id:param.id,visible:param.visible});
                         }
                     })
-                    Config.layerIDs = newLayerIDs;
+                    Config.tree.layer = newLayerIDs;
                 }
                 else {
                     var visibilityList = _.values(_.pick(result, "VISIBILITY"))[0].split(",");

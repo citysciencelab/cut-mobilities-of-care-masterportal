@@ -266,7 +266,7 @@ define([
             this.setSpecification();
         },
         /**
-        * Abfrage an popupmodel starten.
+        * Abfrage an popupmodel starten. Bedingt Config.tools.gfi: true.
         */
         sendGFIForPrint: function () {
             EventBus.trigger("sendGFIForPrint");
