@@ -8,8 +8,19 @@ define([
 ], function (Backbone, EventBus, Config, RestReader, moment, Util) {
 
     var LayerInformation = Backbone.Model.extend({
+        defaults: {
+            cswID: "1"
+        },
+
         url: function () {
-            var resp = RestReader.getServiceById(Config.csw.id);
+            var resp;
+
+            if (_.has(Config, "csw")) {
+                resp = RestReader.getServiceById(Config.csw.id);
+            }
+            else {
+                resp = RestReader.getServiceById(this.get("cswID"));
+            }
 
             if (resp[0] && resp[0].get("url")) {
                 return Util.getProxyURL(resp[0].get("url"));
