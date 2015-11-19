@@ -1,36 +1,51 @@
 define(function () {
     /**
     * @namespace config
-    * @desc Konfigurationsdatei für das LGV Master-Portal
+    * @desc Konfigurationsdatei für das LGV Master-Portal.
     */
     var config = {
         /**
         * @memberof config
-        * @type {Object[]}
-        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
-        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
-        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
-        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
-        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
-        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
-        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
-        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
-        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
-        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
-        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
-        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
-        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
-        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
-        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String}  minScale -
-        * @property {String}  maxScale -
-        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
-        * @desc Beschreibung.
+        * @type {Object}
+        * @property {Object} tree - Das tree-Konfigurationsobject
+        * @property {('light'|'custom'|'default')} tree.type - Art des trees. 'light' = einfache Auflistung, 'default' = FHH-Atlas, 'custom' = benutzerdefinierte Layerliste anhand json.
+        * @property {Object[]} [tree.layer] - Bei type: light. Array, bestehend aus Layer-Konfigurationsobjekten.
+        * @property {String} tree.layer.id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
+        * @property {Boolean} tree.layer.visible - Initiale Sichtbarkeit des Layers.
+        * @property {String} [tree.layer.style] - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
+        * @property {String} [tree.layer.styles] - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
+        * @property {Number} [tree.layer.clusterDistance] - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
+        * @property {String} [tree.layer.searchField] - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
+        * @property {String} [tree.layer.styleField] - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
+        * @property {String} [tree.layer.styleLabelField] - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
+        * @property {String} [tree.layer.mouseHoverField] - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
+        * @property {Object[]} [tree.layer.filterOptions] - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
+        * @property {String} tree.layer.filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
+        * @property {('combo')} tree.layer.filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
+        * @property {String} tree.layer.filterOptions.filterName - Name des Filters in der Oberfläche.
+        * @property {Array} tree.layer.filterOptions.filterString - Array filterbarer Einträge.
+        * @property {string} tree.layer.filterOptions.filterString.string - Eintrag, nach dem gefiltert werden kann.
+        * @property {String|Object} [tree.layer.attribution] - Falls ein String gesetzt wird, wird dieser als Attribution gesetzt. Alternativ kann ein Konfigurationsobjekt einer Atribution übergeben werden.
+        * @property {String} tree.layer.attribution.eventname - Name des Events, das abgefeuert wird.
+        * @property {integer} tree.layer.attribution.timeout - Dauer in Millisekunden für setInterval.
+        * @property {String} [tree.layer.opacity] - Wert für die voreingestellte Transparenz für den Layer.
+        * @property {String} [tree.layer.minScale] - Mindestmaßstab zum Anzeigen dieses Layers.
+        * @property {String} [tree.layer.maxScale] - Maximalmaßstab zum Anzeigen dieses Layers.
+        * @property {Boolean} [tree.layer.routable] - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
+        * @property {Array} [tree.layerIDsToMerge] - Bei type: custom|default. Arrays der Definitionen, die im Baum zusammengefasst werden.
+        * @property {string[]} tree.layerIDsToMerge. - Array der LayerIDs.
+        * @property {Object[]} [tree.layerIDsToStyle] - Bei type: custom|default. Array der Konfigurationsobjekte zur Styledefinition.
+        * @property {string} tree.layerIDsToStyle.id - ID des Layers.
+        * @property {string|string[]} tree.layerIDsToStyle.styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
+        * @property {string|string[]} tree.layerIDsToStyle.name - Bezeichnungen dieser Layer im Tree.
+        * @property {string} [tree.customConfig] - Bei type: custom. URL der JSON mit der benutzerdefinierten Konfiguration.
+        * @property {'opendata'|'inspire'} [tree.orderBy] - Bei type: default. Defaultkategorie der Layersortierung.
+        * @property {string[]} [tree.layerIDsToIgnore] - Bei type: default. IDs der Layer, die im Tree ignoriert werden sollen.
+        * @property {string[]} [tree.metaIDsToMerge] - Bei type: default. IDs der Metadaten, nach denen nicht zusammengefasst wird.
+        * @property {string[]} [tree.metaIDsToIgnore] - Bei type: default. IDs der Metadaten, die nicht dargestellt werden sollen.
+        * @desc Diese Konfiguration steuert die inhaltliche und graphische Ausgestaltung des Layertrees in der Menubar.
         */
+
         tree: {
             type: "light",
             layer: [
@@ -79,35 +94,36 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Optional: URL zu den Metadteneinträgen, die um identifier ergänzt wird. Wenn nicht gesetzt, wird MetaVer verwendet. Beispiel: http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=. Ist "ignore" gesetzt, werden keine i-Buttons im Layerbaum erzeugt.
-        */
-        metadatenURL: "",
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Pfad zum img-Ordner für WFS-Styles
+        * @desc Pfad Ordner mit IMGs, die für WFS-Stylesbenutzt werden.
         */
         wfsImgPath: "../components/lgv-config/img/",
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
+        * @property {string} [CENTER] - Zentrumskoordinate. Rechtswert, Hochwert. EPSG:25832.
+        * @property {string} [LAYERIDS] - Kommagetrennte Aulistung der initial sichtbaren LayerIDs.
+        * @property {Boolean} [ISMENUBARVISIBLE] - Legt fest, ob die Menüleiste initial aufgeklappt oder minimiert ist.
+        * @property {'ROUTING'} [STARTUPMODUL] - Legt fest, welches Modul initial geladen werden soll. Derzeit nur für Routing verwendet.
+        * @property {string} [QUERY] - Führt initial eine Suche nach diesem Suchstring aus.
+        * @property {'DESKTOP'|'MOBILE'} [CLICKCOUNTER] - Legt fest, welcher, in der Config definierter, Klickzähler genutzt werden soll.
+        * @desc Wenn TRUE, wird das Modul zur Auswertung parametrisierter Aufrufe geladen. Dieses Modul wertet folgende Parameter aus und übernimmt dessen spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js.
         */
         allowParametricURL: true,
         /**
         * @memberof config
+        * @type {Object}
         * @desc Optionale Konfigurations-Einstellungen für die Map View
-        * @property {Array}  center - Die initiale Zentrumskoordinate. Default ist [565874, 5934140]
-        * @property {Number}  resolution - Die initale Resolution der Karte. Default ist 15.874991427504629, das entsprich einen Maßstab von 1:60000.
-        * @property {Number}  scale - Der initiale Maßstab.
-        * @property {Array}  extent - Der ol.view.extent der Karte. Default ist [510000.0, 5850000.0, 625000.4, 6000000.0]
-        * @property {Array}  resolutions - Die Resolutions der Karte. Default 1:250000 - 1:1000
-        * @property {Array}  epsg - Der EPSG-Code. Default ist EPSG:25832
+        * @property {Object} [view] - Das Konfigurationsobjekt zur View-Definition.
+        * @property {Array} [view.center=[565874, 5934140]] - Die initiale Zentrumskoordinate.
+        * @property {Number} [view.resolution=15.874991427504629] - Die initale Resolution der Karte.
+        * @property {Array} [view.extent=[510000.0, 5850000.0, 625000.4, 6000000.0]] - Die Ausdehnung der Karte.
+        * @property {Array} [view.resolutions=[66.14579761460263,26.458319045841044,15.874991427504629,10.583327618336419,5.2916638091682096,2.6458319045841048,1.3229159522920524,0.6614579761460262,0.2645831904584105,0.13229159522920521]] - Die Resolutions der Karte.
+        * @property {Array} [view.epsg=EPSG:25832] - Der EPSG-Code.
         */
         view: {
-            center: [565874, 5934140],
+           /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
-            epsg: "EPSG:25832"
+            epsg: "EPSG:25832"*/
         },
         /**
         * @memberof config
