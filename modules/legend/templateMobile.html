@@ -40,7 +40,7 @@
                             <%
                             }
                             else {
-                                if (element.img[0].search(".pdf") !== -1) {
+                                if (typeof element.img === "string") {
                                 %>
                                     <a href=<%= element.img %> target="_blank">weitere Informationen</a>
                                 <%
