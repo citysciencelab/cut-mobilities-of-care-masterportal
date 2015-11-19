@@ -55,8 +55,28 @@ define([
         hideLoader: function () {
             $("#loader").hide();
         },
+       getProxyURL: function (url) {
+            var parser = document.createElement("a"),
+            protocol = "",
+            result = "",
+            hostname = "";
+
+            parser.href = url;
+            protocol = parser.protocol;
+
+            if (protocol.indexOf("//") === -1) {
+                protocol += "//";
+            }
+
+            result = url.replace(protocol, "");
+            // www und www2 usw. raus
+            // hostname = result.replace(/www\d?\./, "");
+            hostname = parser.hostname.split(".").join("_");
+            result = result.replace(parser.hostname, "/" + hostname);
+            return result;
+        }
         /** Umwandeln der services*.json-URLs in lokale Proxy-URL*/
-        getProxyURL: function (url) {
+       /* getProxyURL: function (url) {
             var newURL;
             if (url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
@@ -133,7 +153,7 @@ define([
             }
 
             return newURL;
-        }
+        }*/
     });
 
     return new Util();
