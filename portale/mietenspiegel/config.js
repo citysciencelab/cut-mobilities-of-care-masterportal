@@ -100,13 +100,16 @@ define(function () {
         * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
         * @desc Beschreibung.
         */
-        layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
-            {id: "2730", visible: false, displayInTree: false},
-            {id: "2731", visible: false, displayInTree: false}
-        ],
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true, legendUrl: "ignore"},
+                {id: "452", visible: false},
+                {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
+                {id: "2730", visible: false, displayInTree: false},
+                {id: "2731", visible: false, displayInTree: false}
+            ]
+        },
         controls: {
             zoom: true,
             toggleMenu: true,

@@ -8,6 +8,7 @@ define([
     var GFIPopupView = Backbone.View.extend({
         model: GFIPopup,
         template: _.template(GFIPopupTemplate),
+        backupGFI: {},
         events: {
             "click .gfi-close": "destroy",
             "click .gfi-toggle": "minMaximizePop",
@@ -74,7 +75,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-            this.$el.find(".gfi-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el.clone());
+            this.$el.find(".gfi-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el.clone(true));
             this.$el.find(".gfi-title").text(this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1]);
             $(this.model.get("element")).popover({
                 placement: function () {

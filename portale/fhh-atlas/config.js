@@ -4,15 +4,6 @@ define(function () {
         logo: "../img/hh-logo.png",
         tree: {
             type: "default",
-            baseLayer: [
-                {id: "453", minScale: "500"},
-                {id: "8"},
-                {id: "717", visibility: true, minScale: "500", name: "Geobasiskarten (farbig)"},
-                {id: "713", minScale: "500", name: "Geobasiskarten (schwarz-weiß)"},
-                {id: "1043", minScale: "500", name: "Geobasiskarten (grau-blau)"},
-                {id: "368", name: "ALKIS farbig", maxScale: "10000"},
-                {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
-            ],
             orderBy: "opendata",
             layerIDsToMerge: [
                 ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
@@ -58,9 +49,21 @@ define(function () {
                 "A46086BA-4A4C-48A4-AC1D-9735DDB4FDDE" // Denkmalkartierung FIS
             ]
         },
+        baseLayer: [
+            {id: "453", minScale: "500"},
+            {id: "8"},
+            {id: "717", visibility: true, minScale: "500", name: "Geobasiskarten (farbig)"},
+            {id: "713", minScale: "500", name: "Geobasiskarten (schwarz-weiß)"},
+            {id: "1043", minScale: "500", name: "Geobasiskarten (grau-blau)"},
+            {id: "368", name: "ALKIS farbig", maxScale: "10000"},
+            {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
+        ],
         controls: {
             zoom: true,
             toggleMenu: true
+        },
+        csw: {
+            id: "1"
         },
         attributions: true,
         footer: true,
