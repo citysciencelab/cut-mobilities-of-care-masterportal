@@ -34,27 +34,37 @@
 
 .dropdown-menu {
     padding:  0;
+    margin-left: -2px;
 }
-
 
 .dropdown-menu > li > a {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-@media (min-width: 768px) {
-    .navbar {
-        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
-    }
+.menuitem {
+    margin-left: 5px;
+    font-size: 12px;
+    text-transform: uppercase;
 }
 
 @media (min-width: 768px) {
     a.dropdown-toggle > span.glyphicon {
         font-size: 12px;
     }
+    .navbar {
+        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
+    }
 }
 
 @media (max-width: 768px) {
     a.dropdown-toggle > span.glyphicon {
         font-size: 16px;
+    }
+    .menuitem {
+        font-size: 16px !important;
+        margin-left: 15px !important;
+    }
+    .dropdown-menu {
+        font-size: 18px;
     }
 }
