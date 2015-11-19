@@ -13,7 +13,8 @@ define([
             this.listenTo(this.collection, {
                 "reset": this.render
             });
-             this.render();
+            this.setMaxHeight();
+            this.render();
         },
         render: function () {
             $(".layer-catalog").after(this.$el.html(""));
@@ -23,6 +24,9 @@ define([
             var nodeView = new NodeView({model: node});
 
             this.$el.append(nodeView.render().el);
+        },
+        setMaxHeight: function () {
+            this.$el.css("max-height", $(window).height() / 4);
         }
     });
 

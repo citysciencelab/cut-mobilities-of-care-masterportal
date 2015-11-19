@@ -13,6 +13,8 @@ define([
             this.listenTo(this.collection, {
                 "add": this.render
             });
+
+            this.setMaxHeight();
             this.render();
         },
         render: function () {
@@ -25,6 +27,10 @@ define([
             var layerView = new LayerView({model: node});
 
             this.$el.prepend(layerView.render().el);
+        },
+        setMaxHeight: function () {
+            this.$el.css("max-height", $(window).height() - 100);
+            this.$el.css("overflow-y", "auto");
         }
     });
 
