@@ -36,8 +36,13 @@ define([
                 }, this);
             }
             // Über die Konfiguration sichtbar geschaltete Hintergrundkarten
-            else if (_.has(Config.tree, "baseLayer") === true) {
+            if (_.has(Config.tree, "baseLayer") === true) {
                 _.each(_.where(Config.tree.baseLayer, {visibility: true}), function (obj) {
+                    EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"selected": true});
+                }, this);
+            }
+            if (_.has(Config.tree, "layer") === true) {
+                _.each(_.where(Config.tree.layer, {visibility: true}), function (obj) {
                     EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"selected": true});
                 }, this);
             }

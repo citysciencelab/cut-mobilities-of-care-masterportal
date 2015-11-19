@@ -44,7 +44,7 @@ define([
                             id: element.id,
                             name: element.name,
                             metaName: element.metaName,
-                            visible: element.visible,
+                            visibility: element.visible,
                             subfolder: subfolder.node,
                             node: this.get("node")
                         });
@@ -52,7 +52,7 @@ define([
                     else {
                         this.push("layers", {
                             id: element.id,
-                            visible: element.visible,
+                            visibility: element.visible,
                             subfolder: subfolder.node,
                             node: this.get("node")
                         });
