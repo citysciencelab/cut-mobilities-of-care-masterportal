@@ -17,14 +17,13 @@ define(function () {
         */
         allowParametricURL: false,
         tree: {
-            custom: true,
-            filter: false,
+            type: "custom",
+            baseLayer: [
+                {id: "8", visibility: false},
+                {id: "453", visibility: true}
+            ],
             customConfig: "../components/lgv-config/tree-config/fluechtlinge.json"
         },
-        baseLayer: [
-            {id: "8", visibility: false},
-            {id: "453", visibility: true}
-        ],
         /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
@@ -150,11 +149,20 @@ define(function () {
         * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
-        searchBar: {
-            placeholder: "Suche nach Adresse",
-            gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+         searchBar: {
+            placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            tree: {
+                minChars: 3
+            },
+            geoLocateHit: true
         },
 
         bPlan: {
