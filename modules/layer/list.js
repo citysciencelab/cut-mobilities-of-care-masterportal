@@ -340,14 +340,14 @@ define([
 
         // Hier werden die Geobasisdaten gesetzt. Wird über Config.baseLayer gesteuert.
         setBaseLayer: function (response) {
-            var baseLayerIDs = _.pluck(Config.baseLayer, "id"),
+            var baseLayerIDs = _.pluck(Config.tree.baseLayer, "id"),
                 layersByID;
 
             layersByID = _.filter(response, function (layer) {
                 return _.contains(baseLayerIDs, layer.id);
             });
             _.each(layersByID, function (layer) {
-                var baseLayer = _.findWhere(Config.baseLayer, {"id": layer.id});
+                var baseLayer = _.findWhere(Config.tree.baseLayer, {"id": layer.id});
 
                 layer = _.extend(layer, baseLayer);
                 layer.isbaselayer = true;
