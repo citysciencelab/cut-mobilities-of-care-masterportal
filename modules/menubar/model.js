@@ -22,12 +22,6 @@ define([
             else {
                 this.set("oneTool", false);
             }
-            if (_.has(Config, "tree")) {
-                this.set("hasTree", true);
-            }
-            else {
-                this.set("hasTree", false);
-            }
         },
         setAttributes: function (value, key) {
             this.set(key, value);
