@@ -39,12 +39,12 @@ define([
 
             if (this.model.get("isVisible") === true) {
                 if (this.model.get("isCollapsed") === true) {
-                    $("#navbarRow").append(this.$el.html(this.templateMin(attr)));
+                    $("body").append(this.$el.html(this.templateMin(attr)));
                     this.$el.addClass("win-min");
                     this.$el.removeClass("win-max");
                 }
                 else {
-                    $("#navbarRow").append(this.$el.html(this.templateMax(attr)));
+                    $("body").append(this.$el.html(this.templateMax(attr)));
                     this.$el.addClass("win-max");
                     this.$el.removeClass("win-min");
                 }
