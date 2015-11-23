@@ -28,11 +28,18 @@ define([
         * @description View des Map Handlers
         */
         initialize: function () {
+            EventBus.on("mapHandler:clearMarker", this.clearMarker, this);
             EventBus.on("mapHandler:zoomTo", this.zoomTo, this);
             EventBus.on("mapHandler:hideMarker", this.hideMarker, this);
             EventBus.on("mapHandler:showMarker", this.showMarker, this);
             EventBus.on("mapHandler:zoomToBPlan", this.zoomToBPlan, this);
             EventBus.on("mapHandler:zoomToBKGSearchResult", this.zoomToBKGSearchResult, this);
+        },
+        /**
+        * @description Entfernt den searchVector
+        */
+        clearMarker: function () {
+            searchVector.getSource().clear();
         },
         /**
         * @description Zoom auf Treffer
@@ -41,7 +48,7 @@ define([
         zoomTo: function (hit) {
             var zoomLevel;
 
-            searchVector.getSource().clear();
+            this.clearMarker();
             switch (hit.type) {
                 case "Ortssuche": {
                     EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
@@ -130,7 +137,7 @@ define([
                 geom = $(hits).find("gml\\:posList,posList")[0].textContent;
                 wkt = this.model.getWKTFromString("POLYGON", geom);
             }
-
+            this.clearMarker();
             format = new ol.format.WKT(),
             feature = format.readFeature(wkt);
             searchVector.getSource().addFeature(feature);
@@ -142,19 +149,23 @@ define([
         * @param {string} data - Die Data-Object des request.
         */
         zoomToBKGSearchResult: function (data) {
-            if (data.features[0].properties.typ === "Haus") {
+            if (data.features[0].properties.bbox.type === "Point") {
                 EventBus.trigger("mapView:setCenter", data.features[0].properties.bbox.coordinates, 5);
                 this.showMarker(data.features[0].properties.bbox.coordinates);
             }
-            else {
+            else if (data.features[0].properties.bbox.type === "Polygon") {
                 var coordinates = "";
 
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                var extent = this.model.getWKTFromString("POLYGON", coordinates.trim());
-
-                EventBus.trigger("zoomToExtent", extent);
+                var wkt = this.model.getWKTFromString("POLYGON", coordinates.trim()),
+                    format = new ol.format.WKT(),
+                    feature = format.readFeature(wkt);
+                this.clearMarker();
+                searchVector.getSource().addFeature(feature);
+                searchVector.setVisible(true);
+                EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
             }
         },
         /**
