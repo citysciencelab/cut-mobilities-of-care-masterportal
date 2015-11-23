@@ -31,7 +31,7 @@ Test in cmd:
 
 ## [Node.js](http://nodejs.org)
 
-Via Windows-Installer von der Seite. Letzte als funktionierend bekannte Version: iojs-3.3.0-x86 mit NPM 2.13.3
+Via Windows-Installer von der Seite. Letzte als funktionierend bekannte Version: node-v4.2.2-x64 mit NPM 2.14.7
 
 Test in cmd:
 
