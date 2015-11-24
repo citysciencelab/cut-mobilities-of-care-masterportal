@@ -10,14 +10,14 @@ define([
             source: new ol.source.Vector(),
             types: ["Point", "LineString", "Polygon"],
             colors: [
-                { name: "Grau", value: "#999999" },
-                { name: "Orange", value: "#fc8d62" },
-                { name: "Rot", value: "#e31a1c" },
-                { name: "Blau", value: "#1f78b4" },
-                { name: "Grün", value: "#33a02c" },
-                { name: "Gelb", value: "#ffff33" },
-                { name: "Schwarz", value: "#000000" },
-                { name: "Weiß", value: "#ffffff" }
+                { name: "Orange", value: "rgb(255, 127, 0)" },
+                { name: "Grau", value: "rgb(153, 153, 153)" },
+                { name: "Rot", value: "rgb(228, 26, 28)" },
+                { name: "Blau", value: "rgb(55, 126, 184)" },
+                { name: "Grün", value: "rgb(77, 175, 74)" },
+                { name: "Gelb", value: "rgb(255, 255, 51)" },
+                { name: "Schwarz", value: "rgb(0, 0, 0)" },
+                { name: "Weiß", value: "rgb(255, 255, 255)" }
             ],
             pointRadiuses: [
                 { name: "6 px", value: 6 },
@@ -36,7 +36,7 @@ define([
                 { name: "6 px", value: 6 }
             ],
             selectedType: "Point",
-            color: "#fc8d62",
+            color: "rgb(255, 127, 0)",
             radius: 6,
             selectedStrokeWidth: 1
         },
@@ -134,6 +134,7 @@ define([
                      })
                 })
             });
+
             this.set("style", style);
         },
 
