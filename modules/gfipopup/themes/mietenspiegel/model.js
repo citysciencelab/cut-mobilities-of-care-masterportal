@@ -74,10 +74,10 @@ define([
             if (ms) {
                 // lade Layerinformationen aus Config
                 this.set("msLayerDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2730";
+                    return layer.id === "2730" || layer.id === "2830";
                 }));
                 this.set("msLayerMetaDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2731";
+                    return layer.id === "2731" || layer.id === "2831";
                 }));
                 if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
                     this.ladeDaten();
