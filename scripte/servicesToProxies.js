@@ -8,7 +8,7 @@
 var fs = require("fs"),
 _ = require("underscore"),
 url = require("url"),
-// http = require("http"),
+// arguments kommt von Note.js und enthält die in der Konsole übergebenen Argumente
 arguments = process.argv,
 targetFile = "",
 targetFileLocal = "";
@@ -19,7 +19,9 @@ function getProxyName (domain) {
     // alle Punkte durch Unterstriche ersetzen
     return domain.split(".").join("_");
 }
-
+// erstellt einen localen Proxyeintrag
+// Bei Internet Url wird auf den 96er weitergeleitet
+// Bei Fhh urls wird ein rewrite eingefügt
 function appendToLocalProxies (proxyName, domain, isLast, proxyForFHHNet) {
     if (!proxyForFHHNet) {
         domain = "wscd0096";
@@ -30,15 +32,20 @@ function appendToLocalProxies (proxyName, domain, isLast, proxyForFHHNet) {
                 "   port: 80,\n" +
                 "   https: false,\n" +
                 "   changeOrigin: false,\n" +
-                "   xforward: false,\n" +
-                "   rewrite: {\n" +
+                "   xforward: false";
+
+    if (proxyForFHHNet) {
+        entry += ",\n   rewrite: {\n" +
                 "       \"^/" + proxyName + "\": \"\"\n" +
-                "   } \n" +
-                "}";
-                console.log(entry);
-    if (!isLast) {
-        entry += ",\n";
+                "   }";
     }
+
+    entry += "\n}";
+
+    if (!isLast) {
+        entry += ",";
+    }
+    console.log(entry);
     fs.appendFile(targetFileLocal,
                entry,
         function (err) {
@@ -47,7 +54,33 @@ function appendToLocalProxies (proxyName, domain, isLast, proxyForFHHNet) {
         }
    });
 }
+// Erstellt den Apacheproxy für Proxies, die aus dem FHHnet auf das Internet
+// @param: proxyForFHHNet ProxyRemote erstellen für Proxies, die aus dem FHHnet auf das Internet zugreifen
+function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNet) {
+    if (protocol) {
+            domain = protocol + "//" + domain;
+    }
 
+    var proxy = "/" + proxyName + " " + domain;
+
+    if (port) {
+        proxy += ":" + port;
+    }
+    var outputString = "ProxyPass " + proxy + "\nProxyPassReverse " + proxy + "\n\n";
+
+    // für Proxies, die aus dem FHHnet auf das Internet zugreifen sollen muss ein ProxyRemote erstellt werden
+    if (proxyForFHHNet) {
+        outputString = "ProxyRemote " + domain + " http://wall.lit.hamburg.de:80\n" + outputString;
+    }
+     console.log(outputString);
+    fs.appendFile(targetFile, outputString, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+}
+
+// Erstellt die Proxies.
 function writeEntry (entry, isLast, proxyForFHHNet) {
     var protocol = entry[0],
     domain = entry[1],
@@ -63,29 +96,11 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
             console.log("domain: " + domain + " ausgelassen, da bereits proxy");
             return;
         }
-
+        // lokalen proxy erstellen
         appendToLocalProxies(proxyName, domain, isLast, proxyForFHHNet);
 
-        if (protocol) {
-            domain = protocol + "//" + domain;
-        }
-
-        var proxy = "/" + proxyName + " " + domain;
-
-        if (port) {
-            proxy += ":" + port;
-        }
-        var outputString = "ProxyPass " + proxy + "\nProxyPassReverse " + proxy + "\n\n";
-
-        if (proxyForFHHNet) {
-            outputString = "ProxyRemote " + domain + " http://wall.lit.hamburg.de:80\n" + outputString;
-        }
-
-        fs.appendFile(targetFile, outputString, function (err) {
-            if (err) {
-                return console.log(err);
-            }
-        });
+        // apache proxy erstellen
+        appendToApacheProxies(protocol, domain, port, proxyName, proxyForFHHNet);
     }
 }
 
@@ -95,10 +110,12 @@ function printHelpText () {
     console.log("### Example: servicesToProxies \"../components/lgv-config/services.json\" \"true\" \n\n");
 }
 
-// json laden
 printHelpText();
+
+// json laden
 if (typeof arguments[2] !== "undefined") {
     if (targetFile === "") {
+        // Apache Zieldatei
         targetFile = "proxies_" + arguments[2].substring(arguments[2].lastIndexOf("/") + 1, arguments[2].lastIndexOf(".")) + ".txt";
     }
     var proxyForFHHNet = false;
@@ -107,10 +124,13 @@ if (typeof arguments[2] !== "undefined") {
         proxyForFHHNet = true;
         console.log("RemoteProxies are being created.\n");
     }
+    // Lokale Zieldatei
     targetFileLocal = "local_" + targetFile;
+
     // datei löschen
     fs.writeFile(targetFile, "");
     fs.writeFile(targetFileLocal, "");
+    // In obj wird das geparste json Objekt gespeichert
     var obj = {};
 
     fs.readFile(arguments[2], "utf8", function (err, data) {
@@ -120,6 +140,8 @@ if (typeof arguments[2] !== "undefined") {
         // Datei kann nicht gelesen werden
         return console.log(err);
       }
+
+      // In entrz arraz werden alle aus der Json extrahierten url eintraege gespeichert
       var entryArray = [];
 
       _.each(obj, function (layer) {
@@ -144,6 +166,7 @@ if (typeof arguments[2] !== "undefined") {
             if ((entryArray.length - 1) === index) {
                 isLast = true;
             }
+            // proxies erstellen
             writeEntry(entry, isLast, proxyForFHHNet);
       });
 
