@@ -68,9 +68,21 @@ define([
                     }
                 }(),
                 "date": function () {
-                    var date = $("gmd\\:dateStamp,dateStamp", xmlDoc)[0].textContent;
+                    var dates = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", xmlDoc),
+                        dateTime;
 
-                    return moment(date).format("DD.MM.YYYY");
+                    if (dates.length === 1) {
+                        dateTime = $("gco\\:DateTime,DateTime", xmlDoc)[0].textContent;
+                    }
+                    else {
+                        dates.each(function (index, element) {
+                            if ($(element).attr("codeListValue") === "revision") {
+                                dateTime = $("gco\\:DateTime,DateTime", xmlDoc)[index].textContent;
+                            }
+                        });
+                    }
+
+                    return moment(dateTime).format("DD.MM.YYYY");
                 }()
             };
         }
