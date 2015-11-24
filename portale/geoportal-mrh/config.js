@@ -6,19 +6,15 @@ define(function () {
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
         tree: {
-            custom: false,
+            type: "default",
             orderBy: "opendata",
-            filter: true,
-            layerIDsToMerge: [],
-
-            metaIDsToMerge: []
+            baseLayer: [
+                {id: "0", visibility: true}, // WebAtlas
+                {id: "1", visibility: false}, // WebAtlas_grau
+                {id: "2", visibility: false}, // Luftbilder
+                {id: "4", visibility: false} // 1:5000
+            ]
         },
-        baseLayer: [
-            {id: "0", visibility: true}, // WebAtlas
-            {id: "1", visibility: false}, // WebAtlas_grau
-            {id: "2", visibility: false}, // Luftbilder
-            {id: "4", visibility: false} // 1:5000
-        ],
         controls: {
             zoom: true,
             toggleMenu: true
@@ -96,7 +92,7 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: false,
-            addWMS: true,
+            addWMS: true
         },
         startUpModul: "",
         searchBar: {
@@ -110,7 +106,7 @@ define(function () {
             },
             bkg: {
                 bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
+                bkgSearchURL: "/bkg_geosearch"
             },
             geoLocateHit: true
         },
@@ -122,7 +118,6 @@ define(function () {
             draw: true,
             record: false,
             orientation: false,
-            record: false,
             active: "gfi"
         },
         print: {
