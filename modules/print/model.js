@@ -336,16 +336,10 @@ define([
             this.set(attribute, _.flatten(tempArray));
         },
 
-        rgbToHex: function (r, g, b) {
-            return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
-        },
-
-        componentToHex: function (c) {
-            var hex = c.toString(16);
-
-            return hex.length === 1 ? "0" + hex : hex;
-        },
-
+        // Prüft ob es sich um einen rgb(a) oder hexadezimal String handelt.
+        // Ist es ein rgb(a) String, wird er in ein hexadezimal String umgewandelt.
+        // Wenn vorhanden, wird die Opacity(default = 1) überschrieben.
+        // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
                 opacity = 1;
@@ -370,7 +364,18 @@ define([
                     "opacity": opacity
                 };
             }
+        },
 
+        // Setzt den hexadezimal String zusammen und gibt ihn zurück.
+        rgbToHex: function (red, green, blue) {
+            return "#" + this.componentToHex(red) + this.componentToHex(green) + this.componentToHex(blue);
+        },
+
+        // Ein Integer (color) wird in ein hexadezimal String umgewandelt und zurückgegeben.
+        componentToHex: function (color) {
+            var hex = color.toString(16);
+
+            return hex.length === 1 ? "0" + hex : hex;
         }
     });
 
