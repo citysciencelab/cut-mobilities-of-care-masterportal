@@ -10,14 +10,14 @@ define([
             source: new ol.source.Vector(),
             types: ["Point", "LineString", "Polygon"],
             colors: [
-                { name: "Orange", value: "rgb(255, 127, 0)" },
-                { name: "Grau", value: "rgb(153, 153, 153)" },
-                { name: "Rot", value: "rgb(228, 26, 28)" },
-                { name: "Blau", value: "rgb(55, 126, 184)" },
-                { name: "Grün", value: "rgb(77, 175, 74)" },
-                { name: "Gelb", value: "rgb(255, 255, 51)" },
-                { name: "Schwarz", value: "rgb(0, 0, 0)" },
-                { name: "Weiß", value: "rgb(255, 255, 255)" }
+                { name: "Orange", value: "rgba(255, 127, 0, 0.5)" },
+                { name: "Grau", value: "rgba(153, 153, 153, 0.5)" },
+                { name: "Rot", value: "rgba(228, 26, 28, 0.5)" },
+                { name: "Blau", value: "rgba(55, 126, 184, 0.5)" },
+                { name: "Grün", value: "rgba(77, 175, 74, 0.5)" },
+                { name: "Gelb", value: "rgba(255, 255, 51, 0.5)" },
+                { name: "Schwarz", value: "rgba(0, 0, 0, 0.5)" },
+                { name: "Weiß", value: "rgba(255, 255, 255, 0.5)" }
             ],
             pointRadiuses: [
                 { name: "6 px", value: 6 },
@@ -35,8 +35,21 @@ define([
                 { name: "5 px", value: 5 },
                 { name: "6 px", value: 6 }
             ],
+            opacity: [
+                {name: "0 %", value: "1.0"},
+                {name: "10 %", value: "0.9"},
+                {name: "20 %", value: "0.8"},
+                {name: "30 %", value: "0.7"},
+                {name: "40 %", value: "0.6"},
+                {name: "50 %", value: "0.5"},
+                {name: "60 %", value: "0.4"},
+                {name: "70 %", value: "0.3"},
+                {name: "80 %", value: "0.2"},
+                {name: "90 %", value: "0.1"}
+            ],
             selectedType: "Point",
-            color: "rgb(255, 127, 0)",
+            selectedOpacity: "0.5",
+            color: "rgba(255, 127, 0, 0.5)",
             radius: 6,
             selectedStrokeWidth: 1
         },
@@ -107,7 +120,9 @@ define([
         },
 
         setColor: function (value) {
-            this.set("color", value);
+            var color = value.substr(0, value.length - 4) + this.get("selectedOpacity");
+
+            this.set("color", color + ")");
         },
 
         setPointRadius: function (value) {
@@ -116,6 +131,14 @@ define([
 
         setStrokeWidth: function (value) {
             this.set("selectedStrokeWidth", parseInt(value, 10));
+        },
+
+        setOpacity: function (value) {
+            var color;
+
+            this.set("selectedOpacity", parseFloat(value, 10).toFixed(1));
+            color = this.get("color").substr(0, this.get("color").length - 4) + this.get("selectedOpacity");
+            this.set("color", color + ")");
         },
 
         setStyle: function () {
