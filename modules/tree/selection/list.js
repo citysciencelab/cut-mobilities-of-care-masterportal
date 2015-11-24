@@ -131,18 +131,31 @@ define([
         },
 
         createParamsForURL: function (center, zoom) {
-            var layerIDs,
-                layerVisibility,
-                url;
+            var layerIDs = [],
+                layerVisibility = [],
+                url,
+                layerListNoExternals;
 
+                if (typeof zoom === "undefined") {
+                    zoom = 0;
+                }
             $(".layer-selection-save").popover("destroy");
-            layerIDs = this.pluck("id");
-            layerVisibility = this.pluck("visibility");
+
+            layerListNoExternals = this.filter(function (layer) {
+                return !layer.attributes.isExternal;
+            });
+            _.each(layerListNoExternals, function (layer) {
+                layerIDs.push(layer.attributes.id);
+            });
+            _.each(layerListNoExternals, function (layer) {
+                layerVisibility.push(layer.attributes.visibility);
+            });
+
             url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility + "&center=" + center + "&zoomlevel=" + zoom;
             $(".layer-selection-save").popover({
                 html: true,
                 title: "Speichern Sie sich diese URL als Lesezeichen ab!" + "<button type='button' class='close' onclick='$(&quot;.layer-selection-save&quot;).popover(&quot;hide&quot;);'>&times;</button>",
-                content: "<input type='text' class='form-control input-sm' value=" + url + ">",
+                content: "<input type='text' class='form-control input-sm' value=" + url + ">" + "<div class=\"save-popup-sub\"> Layer von selbst hinzugefügten WMS können nicht gespeichert werden. </div>",
                 trigger: "click"
             });
             $(".layer-selection-save").popover("show");
