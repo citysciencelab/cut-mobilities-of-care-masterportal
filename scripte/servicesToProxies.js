@@ -20,16 +20,22 @@ function getProxyName (domain) {
     return domain.split(".").join("_");
 }
 
-function appendToLocalProxies (proxyName, isLast) {
+function appendToLocalProxies (proxyName, domain, isLast, proxyForFHHNet) {
+    if (!proxyForFHHNet) {
+        domain = "wscd0096";
+    }
     var entry = "{\n" +
-                "  context: \"/" + proxyName + "\",\n" +
-                "  host: \"wscd0096\",\n" +
-                "  port: 80,\n" +
-                "  https: false,\n" +
-                "  changeOrigin: false,\n" +
-                "  xforward: false\n" +
+                "   context: \"/" + proxyName + "\",\n" +
+                "   host: \"" + domain + "\",\n" +
+                "   port: 80,\n" +
+                "   https: false,\n" +
+                "   changeOrigin: false,\n" +
+                "   xforward: false,\n" +
+                "   rewrite: {\n" +
+                "       \"^/" + proxyName + "\": \"\"\n" +
+                "   } \n" +
                 "}";
-
+                console.log(entry);
     if (!isLast) {
         entry += ",\n";
     }
@@ -57,6 +63,9 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
             console.log("domain: " + domain + " ausgelassen, da bereits proxy");
             return;
         }
+
+        appendToLocalProxies(proxyName, domain, isLast, proxyForFHHNet);
+
         if (protocol) {
             domain = protocol + "//" + domain;
         }
@@ -77,11 +86,10 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
                 return console.log(err);
             }
         });
-        appendToLocalProxies(proxyName, isLast);
     }
 }
 
-function printHelpText() {
+function printHelpText () {
     console.log("### @Params: Path to Json File");
     console.log("### @Params: (optional) (Values: \"true/false\"): Should a remoteProxy be created");
     console.log("### Example: servicesToProxies \"../components/lgv-config/services.json\" \"true\" \n\n");
