@@ -12,6 +12,7 @@ define([
             this.listenTo(this.collection, "add", this.render);
             this.collection.on("add", this.render, this);
             this.collection.on("sync", this.render, this);
+            this.setMaxHeight();
             this.render();
         },
         render: function () {
@@ -23,6 +24,9 @@ define([
 
             nodeView = new BaseLayerView({model: baselayer});
             this.$el.append(nodeView.render().el);
+        },
+        setMaxHeight: function () {
+            this.$el.css("max-height", $(window).height() / 6);
         }
     });
 

@@ -34,8 +34,9 @@ define([
             var attr = this.model.toJSON();
 
             $("body").append(this.$el.append(this.template(attr)));
+
             if (Config.isMenubarVisible === false) {
-                $("#navbarRow").css("display", "none");
+                $("#navbarRow").toggle();
             }
             if (_.has(Config, "tree") && Config.tree.type !== "light") {
                 require(["modules/tree/view"], function (TreeView) {

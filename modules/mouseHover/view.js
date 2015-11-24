@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "models/MouseHoverPopup",
+    "modules/mouseHover/model",
     "eventbus"
 ], function (Backbone, MouseHoverPopup, EventBus) {
 

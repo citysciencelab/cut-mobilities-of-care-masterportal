@@ -69,7 +69,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         }
 
         if (Config.mouseHover && Config.mouseHover === true) {
-            require(["views/MouseHoverPopupView"], function (MouseHoverPopupView) {
+            require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
         }
