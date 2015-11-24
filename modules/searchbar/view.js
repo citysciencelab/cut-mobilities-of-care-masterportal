@@ -255,6 +255,7 @@ define([
             this.model.setSearchString("");
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
+            EventBus.trigger("mapHandler:clearMarker", this);
         },
         /**
         *
