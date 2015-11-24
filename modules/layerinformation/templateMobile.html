@@ -15,12 +15,23 @@
                 <hr>
                 <h4>Legende</h4>
                 <p>
-                    <% if (legendURL.search(".pdf") !== -1) { %>
-                        <a href=<%= legendURL %> target="_blank">weitere Informationen</a>
+                    <% if (typeof legendURL === "string") { %>
+                        <a href=<%= legendURL[0] %> target="_blank">weitere Informationen</a>
                     <% }
                     else { %>
-                        <img src="<%= legendURL %>">
-                    <% } %>
+                        <% if (legendURL.length > 1) {
+                            _.each(legendURL, function (legend) { %>
+                                <p>
+                                    <img src=<%= legend %>>
+                                </p>
+                        <%    });
+                        }
+                        else { %>
+                            <p>
+                                <img src=<%= legendURL[0] %>>
+                            </p>
+                        <% }
+                    } %>
                 </p>
             <% } %>
         </div>

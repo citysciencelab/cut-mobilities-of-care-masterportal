@@ -16,6 +16,11 @@ define([
             this.listenTo(this.model, {
                 "sync": this.render
             });
+            this.$el.on({
+                click: function (e) {
+                    e.stopPropagation();
+                }
+            });
         },
 
         render: function () {
