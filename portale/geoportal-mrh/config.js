@@ -96,13 +96,16 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suchen nach Adresse, Thema",
+            placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
             gazetteer: {
                 url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: false,
                 searchHouseNumbers: false,
                 searchDistricts: true,
                 searchParcels: true
+            },
+            tree: {
+                minChars: 3
             },
             bkg: {
                 bkgSuggestURL: "/bkg_suggest",
