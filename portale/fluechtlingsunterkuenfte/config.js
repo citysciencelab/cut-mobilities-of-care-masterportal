@@ -24,6 +24,10 @@ define(function () {
             ],
             customConfig: "../components/lgv-config/tree-config/fluechtlinge.json"
         },
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
