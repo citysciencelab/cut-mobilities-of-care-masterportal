@@ -155,7 +155,7 @@ define([
             $(".layer-selection-save").popover({
                 html: true,
                 title: "Speichern Sie sich diese URL als Lesezeichen ab!" + "<button type='button' class='close' onclick='$(&quot;.layer-selection-save&quot;).popover(&quot;hide&quot;);'>&times;</button>",
-                content: "<input type='text' class='form-control input-sm' value=" + url + ">" + "<div class=\"save-popup-sub\"> Layer von selbst hinzugefügten WMS können nicht gespeichert werden. </div>",
+                content: "<input type='text' class='form-control input-sm' value=" + url + ">",
                 trigger: "click"
             });
             $(".layer-selection-save").popover("show");
