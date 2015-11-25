@@ -147,14 +147,14 @@ define([
                     color: this.get("color")
                 }),
                 stroke: new ol.style.Stroke({
-                    color: this.get("color"),
+                    color: this.get("color").substr(0, this.get("color").length - 6) + ", 1)",
                     width: this.get("selectedStrokeWidth")
                 }),
                 image: new ol.style.Circle({
                     radius: this.get("radius"),
                     fill: new ol.style.Fill({
                         color: this.get("color")
-                     })
+                    })
                 })
             });
 
