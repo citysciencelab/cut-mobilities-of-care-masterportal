@@ -50,7 +50,7 @@ define([
 
             this.clearMarker();
             switch (hit.type) {
-                case "Ortssuche": {
+                case "Ort": {
                     EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
                     break;
                 }
