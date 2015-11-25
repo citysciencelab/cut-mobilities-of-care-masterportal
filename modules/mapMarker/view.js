@@ -159,12 +159,7 @@ define([
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                var wkt = this.model.getWKTFromString("POLYGON", coordinates.trim()),
-                    format = new ol.format.WKT(),
-                    feature = format.readFeature(wkt);
-                this.clearMarker();
-                searchVector.getSource().addFeature(feature);
-                searchVector.setVisible(true);
+                var wkt = this.model.getWKTFromString("POLYGON", coordinates.trim());
                 EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
             }
         },
