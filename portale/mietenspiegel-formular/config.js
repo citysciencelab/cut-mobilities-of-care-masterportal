@@ -35,7 +35,7 @@ define(function () {
         * @type {Array}
         * @desc lädt die Module
         */
-        customModules: ["../mietenspiegelform", "../portale/mietenspiegel-formular/mietenspiegelform"],
+        customModules: ["../portale/mietenspiegel-formular/mietenspiegelform"],
         /**
         * @memberof config
         * @type {String}
@@ -106,11 +106,14 @@ define(function () {
         * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
         * @desc Beschreibung.
         */
-        layerIDs: [
-            {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
-            {id: "2730", visible: false, displayInTree: false},
-            {id: "2731", visible: false, displayInTree: false}
-        ],
+        tree: {
+            type: "light",
+            layer: [
+                {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
+                {id: "2730", visible: false, displayInTree: false},
+                {id: "2731", visible: false, displayInTree: false}
+            ]
+        },
         controls: {
             zoom: false,
             toggleMenu: false,
@@ -186,9 +189,14 @@ define(function () {
         */
         searchBar: {
             placeholder: "Adresse eingeben",
-            gazetteerURL: function () {
-                    return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: false,
+                searchParcels: true
+            },
+            geoLocateHit: true
         },
                  /**
         * @memberof config

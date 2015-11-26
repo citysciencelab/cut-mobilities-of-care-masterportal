@@ -1,11 +1,10 @@
 define([
-    "underscore",
     "backbone",
     "openlayers",
     "eventbus",
     "config",
     "modules/core/util"
-], function (_, Backbone, ol, EventBus, Config, Util) {
+], function (Backbone, ol, EventBus, Config, Util) {
 
     var WFSStyle = Backbone.Model.extend({
         defaults: {
@@ -58,12 +57,12 @@ define([
         * Fügt dem normalen Symbol ein Symbol für das Cluster hinzu und gibt evtl. den Cache zurück
         */
         getClusterStyle: function (feature) {
-            var mycoll = new ol.Collection(feature.get("features"));
-            var size = mycoll.getLength();
-            var style = this.get("styleCache")[size];
+            var mycoll = new ol.Collection(feature.get("features")),
+                size = mycoll.getLength(),
+                style = this.get("styleCache")[size];
 
             if (!style) {
-                if (size != "1") {
+                if (size !== "1") {
                     style = this.getClusterSymbol(size);
                 }
                 else {
@@ -74,31 +73,31 @@ define([
             return style;
         },
         getClusterSymbol: function (anzahl) {
-            if (!anzahl == "") {
-                var font = this.get("clusterfont").toString();
-                var color = this.returnColor(this.get("clustercolor"));
-                var scale = parseInt(this.get("clusterscale"));
-                var offsetX = parseInt(this.get("clusteroffsetx"));
-                var offsetY = parseInt(this.get("clusteroffsety"));
-                var fillcolor = this.returnColor(this.get("clusterfillcolor"));
-                var strokecolor = this.returnColor(this.get("clusterstrokecolor"));
-                var strokewidth = parseInt(this.get("clusterstrokewidth"));
-                var clusterText = new ol.style.Text({
-                    text: anzahl.toString(),
-                    offsetX: offsetX,
-                    offsetY: offsetY,
-                    font: font,
-                    color: color,
-                    scale: scale,
-                    fill: new ol.style.Fill({
-                        color: fillcolor
+            if (anzahl !== "") {
+                var font = this.get("clusterfont").toString(),
+                    color = this.returnColor(this.get("clustercolor")),
+                    scale = parseInt(this.get("clusterscale"), 10),
+                    offsetX = parseInt(this.get("clusteroffsetx"), 10),
+                    offsetY = parseInt(this.get("clusteroffsety"), 10),
+                    fillcolor = this.returnColor(this.get("clusterfillcolor")),
+                    strokecolor = this.returnColor(this.get("clusterstrokecolor")),
+                    strokewidth = parseInt(this.get("clusterstrokewidth"), 10),
+                    clusterText = new ol.style.Text({
+                        text: anzahl.toString(),
+                        offsetX: offsetX,
+                        offsetY: offsetY,
+                        font: font,
+                        color: color,
+                        scale: scale,
+                        fill: new ol.style.Fill({
+                            color: fillcolor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: strokecolor,
+                            width: strokewidth
+                        })
                     }),
-                    stroke: new ol.style.Stroke({
-                        color: strokecolor,
-                        width: strokewidth
-                    })
-                });
-                var style = this.getSimpleStyle();
+                    style = this.getSimpleStyle();
 
                 style.push(
                 new ol.style.Style({
@@ -115,80 +114,86 @@ define([
             return style;
         },
         getSimpleStyle: function () {
-            if (this.get("subclass") == "Icon") {
-                var src = this.get("imagepath") + this.get("imagename");
-                var width = this.get("imagewidth");
-                var height = this.get("imageheight");
-                var scale = parseFloat(this.get("imagescale"));
-                var offset = [parseFloat(this.get("imageoffsetx")), parseFloat(this.get("imageoffsety"))];
-                var imagestyle = new ol.style.Icon({
-                    src: src,
-                    width: width,
-                    height: height,
-                    scale: scale,
-                    anchor: offset,
-//                    anchorXUnits: "pixels",
-//                    anchorYUnits: "pixels"
-                });
+            var imagestyle, symbolText, strokestyle;
+
+            if (this.get("subclass") === "Icon") {
+                var src = this.get("imagepath") + this.get("imagename"),
+                    width = this.get("imagewidth"),
+                    height = this.get("imageheight"),
+                    scale = parseFloat(this.get("imagescale")),
+                    offset = [parseFloat(this.get("imageoffsetx")), parseFloat(this.get("imageoffsety"))];
+
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale,
+                        anchor: offset
+    //                    anchorXUnits: "pixels",
+    //                    anchorYUnits: "pixels"
+                    });
             }
-            else if (this.get("subclass") == "IconWithText") {
-                var src = this.get("imagepath") + this.get("imagename");
-                var width = this.get("imagewidth");
-                var height = this.get("imageheight");
-                var scale = parseFloat(this.get("imagescale"));
-                var imagestyle = new ol.style.Icon({
-                    src: src,
-                    width: width,
-                    height: height,
-                    scale: scale
-                });
-                var font = this.get("textfont").toString();
-                var text = this.get("textlabel");
-                var color = this.returnColor(this.get("textcolor"));
-                var scale = parseInt(this.get("textscale"));
-                var offsetX = parseInt(this.get("textoffsetx"));
-                var offsetY = parseInt(this.get("textoffsety"));
-                var fillcolor = this.returnColor(this.get("textfillcolor"));
-                var strokecolor = this.returnColor(this.get("textstrokecolor"));
-                var strokewidth = parseInt(this.get("textstrokewidth"));
-                var symbolText = new ol.style.Text({
-                    text: text,
-                    offsetX: offsetX,
-                    offsetY: offsetY,
-                    font: font,
-                    color: color,
-                    scale: scale,
-                    fill: new ol.style.Fill({
-                        color: fillcolor
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: strokecolor,
-                        width: strokewidth
-                    })
-                });
+            else if (this.get("subclass") === "IconWithText") {
+                var src = this.get("imagepath") + this.get("imagename"),
+                    width = this.get("imagewidth"),
+                    height = this.get("imageheight"),
+                    scale = parseFloat(this.get("imagescale")),
+                    font = this.get("textfont").toString(),
+                    text = this.get("textlabel"),
+                    color = this.returnColor(this.get("textcolor")),
+                    scale = parseInt(this.get("textscale"), 10),
+                    offsetX = parseInt(this.get("textoffsetx"), 10),
+                    offsetY = parseInt(this.get("textoffsety"), 10),
+                    fillcolor = this.returnColor(this.get("textfillcolor")),
+                    strokecolor = this.returnColor(this.get("textstrokecolor")),
+                    strokewidth = parseInt(this.get("textstrokewidth"), 10);
+
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale
+                    });
+                    symbolText = new ol.style.Text({
+                        text: text,
+                        offsetX: offsetX,
+                        offsetY: offsetY,
+                        font: font,
+                        color: color,
+                        scale: scale,
+                        fill: new ol.style.Fill({
+                            color: fillcolor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: strokecolor,
+                            width: strokewidth
+                        })
+                    });
 
             }
-            else if (this.get("subclass") == "Circle") {
-                var radius = parseInt(this.get("circleradius"));
-                var fillcolor = this.returnColor(this.get("circlefillcolor"));
-                var strokecolor = this.returnColor(this.get("circlestrokecolor"));
-                var imagestyle = new ol.style.Circle({
-                    radius: radius,
-                    fill: new ol.style.Fill({
-                        color: fillcolor
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: strokecolor
-                    })
-                });
+            else if (this.get("subclass") === "Circle") {
+                var radius = parseInt(this.get("circleradius"), 10),
+                    fillcolor = this.returnColor(this.get("circlefillcolor")),
+                    strokecolor = this.returnColor(this.get("circlestrokecolor"));
+
+                    imagestyle = new ol.style.Circle({
+                        radius: radius,
+                        fill: new ol.style.Fill({
+                            color: fillcolor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: strokecolor
+                        })
+                    });
             }
-            else if (this.get("subclass") == "Stroke") {
-                var strokecolor = this.returnColor(this.get("strokecolor"));
-                var strokewidth = parseInt(this.get("strokewidth"));
-                var strokestyle = new ol.style.Stroke({
-                    color: strokecolor,
-                    width: strokewidth
-                });
+            else if (this.get("subclass") === "Stroke") {
+                var strokecolor = this.returnColor(this.get("strokecolor")),
+                    strokewidth = parseInt(this.get("strokewidth"), 10);
+
+                    strokestyle = new ol.style.Stroke({
+                        color: strokecolor,
+                        width: strokewidth
+                    });
             }
             else {
                 // console.log("Subclass " + this.get("subclass") + " unbekannt.");
@@ -206,11 +211,10 @@ define([
             return style;
         },
         initialize: function () {
-            var style = this.getSimpleStyle();
+            var style = this.getSimpleStyle(),
+                styleCache = [];
 
             this.set("style", style);
-            var styleCache = new Array();
-
             this.set("styleCache", styleCache);
         }
     });

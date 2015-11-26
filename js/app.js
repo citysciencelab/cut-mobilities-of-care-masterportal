@@ -12,7 +12,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         });
     }
 
-    if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+    if (Config.tree.type === "custom") {
         require(["modules/treeconfig/list"], function (TreeConfig) {
             new TreeConfig();
         });
@@ -69,7 +69,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         }
 
         if (Config.mouseHover && Config.mouseHover === true) {
-            require(["views/MouseHoverPopupView"], function (MouseHoverPopupView) {
+            require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
         }
@@ -92,7 +92,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                 if ($('#map').is(":visible") === true) {
                     new ControlsView();
                 }
-                require(["views/WindowView"], function (WindowView) {
+                require(["modules/window/view"], function (WindowView) {
                     new WindowView();
                 });
                 if (Config.menu.tools === true) {
@@ -140,9 +140,17 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         new TreeFilterView();
                     });
                 }
-                if (Config.menu.searchBar === true) {
+                if (Config.menu.searchBar === true && Config.searchBar) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView();
+                        if (_.has(Config.searchBar, "geoLocateHit") === true && Config.searchBar.geoLocateHit === true) {
+                            require(["modules/mapMarker/view"], function (MapHandler) {
+                                new MapHandler();
+                                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                            });
+                        }
+                        else {
+                            new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                        }
                     });
                 }
                 if (Config.menu.wfsFeatureFilter === true) {

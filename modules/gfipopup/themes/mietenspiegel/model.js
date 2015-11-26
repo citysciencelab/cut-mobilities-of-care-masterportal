@@ -68,16 +68,16 @@ define([
          * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.
          */
         initialize: function () {
-            var ms = _.find(Config.layerIDs, function (layer) {
+            var ms = _.find(Config.tree.layer, function (layer) {
                 return _.values(_.pick(layer, "gfiTheme"))[0] === "mietenspiegel";
             });
             if (ms) {
                 // lade Layerinformationen aus Config
                 this.set("msLayerDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2730";
+                    return layer.id === "2730" || layer.id === "2830";
                 }));
                 this.set("msLayerMetaDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2731";
+                    return layer.id === "2731" || layer.id === "2831";
                 }));
                 if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
                     this.ladeDaten();
@@ -95,7 +95,9 @@ define([
             var daten = this.get("msDaten"),
                 merkmale,
                 merkmaleReduced,
-                possibleValues;
+                possibleValues,
+                uniqueValues,
+                sortedValues;
 
             merkmale = _.map(daten, function (value, key) {
                 return value.merkmale;
@@ -106,7 +108,21 @@ define([
             possibleValues = _.map(merkmaleReduced, function (merkmal) {
                 return _.values(_.pick(merkmal, merkmalId))[0];
             });
-            return _.unique(possibleValues);
+            uniqueValues = _.unique(possibleValues);
+
+            if (merkmalId === "Baualtersklasse/Bezugsfertigkeit") {
+                // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
+                sortedValues = _.sortBy(uniqueValues, function (val) {
+                    return val.substring(val.length - 4);
+                });
+            }
+            else {
+                // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
+                sortedValues = _.sortBy(uniqueValues, function (val) {
+                    return val.substring(0, 1);
+                });
+            }
+            return sortedValues;
         },
         /*
          * Lese Mietenspiegel-Daten aus msLayerMetaDaten und msLayerDaten. REQUESTOR kann nicht verwendet werden, weil es geometrielose Dienste sind.

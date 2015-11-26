@@ -17,7 +17,7 @@ define([
             */
             var idArray = [];
 
-            _.each(Config.layerIDs, function (wfsconfelement) {
+            _.each(Config.tree.layer, function (wfsconfelement) {
                 if (_.isArray(wfsconfelement.id)) { // Gruppenlayer
                     _.each(wfsconfelement.id, function (childlayer) {
                         if (_.has(childlayer, "style")) {

@@ -13,6 +13,7 @@ define([
             "change .drawColor": "setColor",
             "change .drawPointRadius": "setPointRadius",
             "change .drawStrokeWidth": "setStrokeWidth",
+            "change .drawOpacity": "setOpacity",
             "click button": "deleteFeatures"
         },
         initialize: function () {
@@ -47,6 +48,10 @@ define([
 
         setStrokeWidth: function (evt) {
             this.model.setStrokeWidth(evt.target.value);
+        },
+
+        setOpacity: function (evt) {
+            this.model.setOpacity(evt.target.value);
         },
 
         deleteFeatures: function () {

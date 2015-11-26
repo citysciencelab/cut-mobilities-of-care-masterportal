@@ -109,6 +109,9 @@ define([
             else if (url.indexOf("http://wscd0096") !== -1) {
                 newURL = url.replace("http://wscd0096", "/wscd0096");
             }
+            else if (url.indexOf("http://hmdk.fhhnet.stadt.hamburg.de") !== -1) {
+                newURL = url.replace("http://hmdk.fhhnet.stadt.hamburg.de", "/hmdk");
+            }
             // ab hier Internet
             else if (url.indexOf("http://extmap.hbt.de") !== -1) {
                 newURL = url.replace("http://extmap.hbt.de", "/extmap");

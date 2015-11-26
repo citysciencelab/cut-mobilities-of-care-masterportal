@@ -14,7 +14,10 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Laden von: " + Util.getPath(Config.restConf));
+                    EventBus.trigger("alert", {
+                        text: "Fehler beim Laden von: " + Util.getPath(Config.restConf),
+                        kategorie: "alert-warning"
+                    });
                 },
                 success: function (collection) {
                 }

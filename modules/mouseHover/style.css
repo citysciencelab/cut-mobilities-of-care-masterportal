@@ -1,0 +1,11 @@
+.mouseHover {
+    font-size: 12px;
+    max-width: inherit;
+    padding: 6px;
+    background-color: rgb(255, 255, 255);
+    color: #777;
+    font-weight: bold;
+    /*display: block;*/
+    white-space: pre;
+    border: 1px solid #777;
+}

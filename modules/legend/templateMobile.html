@@ -5,7 +5,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button>
             <h4 class="modal-title"><span class="glyphicon glyphicon-book"></span>Legende</h4>
         </div>
-        <div id="legendbody" class="modal-body legendbody">
+        <div id="legendbody" class="modal-body">
             <div class="panel-group" role="tablist" aria-multiselectable="true">
             <%
             _.each(legendParams, function(element, index) {
@@ -40,7 +40,7 @@
                             <%
                             }
                             else {
-                                if (element.img[0].search(".pdf") !== -1) {
+                                if (typeof element.img === "string") {
                                 %>
                                     <a href=<%= element.img %> target="_blank">weitere Informationen</a>
                                 <%

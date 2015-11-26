@@ -54,11 +54,23 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: false
+            },
             placeholder: "Suche Adresse, Stadtteil",
-            gazetteerURL: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-            bkgSuggestURL: "/bkg_suggest",
-            bkgSearchURL: "/bkg_geosearch",
-            useBKGSearch: true
+            bkg: {
+                minChars: 3,
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch",
+                extent: [454591, 5809000, 700000, 6075769],
+                epsg: "EPSG:25832",
+                filter: "filter=(typ:*)",
+                score: 0.6
+            }
         },
         tools: {
             gfi: true,
@@ -66,6 +78,7 @@ define(function () {
             print: false,
             coord: true,
             draw: true,
+            record: false,
             active: "gfi"
         },
         orientation: true,

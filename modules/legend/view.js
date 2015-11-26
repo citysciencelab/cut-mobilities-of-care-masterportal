@@ -2,7 +2,8 @@ define([
     "backbone",
     "text!modules/legend/template.html",
     "modules/legend/model",
-    "eventbus"
+    "eventbus",
+    "jqueryui/draggable"
 ], function (Backbone, LegendTemplate, Legend, EventBus) {
 
     var LegendView = Backbone.View.extend({
