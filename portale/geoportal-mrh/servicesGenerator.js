@@ -6,7 +6,6 @@ var servicesGenerator = {
 layers: [],
 mrhTreeConfig: {},
 lgvTreeConfig: [],
-lgvTreeConfigRecord: {},
 
 run: function () {
 
@@ -15,41 +14,49 @@ run: function () {
 		var treeConfigRecord = treeConfig[i],
 			layerStore = treeConfigRecord.layerStore,
 			isBaseLayerStore = (treeConfigRecord.nodeType === "gx_baselayercontainer"),
-			parentFolder = treeConfigRecord.text;
+			parentFolder = treeConfigRecord.text,
+			firstLevel = {};
 
-		this.lgvTreeConfigRecord = {node: parentFolder, childnodes: []};
+		// console.log(parentFolder);
+		firstLevel = {node: parentFolder, childnodes: [], layerIDs: []};
 
+		// no childFolders
         if (layerStore)	{
-			// console.log("  no children");
-			this.addLayers(layerStore, isBaseLayerStore, parentFolder);
+			firstLevel = this.addLayers(layerStore, isBaseLayerStore, firstLevel);
 		}
+		// has childFolders
 		else {
 			for (var k = 0; k < treeConfigRecord.children.length; k++) {
 
 				var childLayerStore = treeConfigRecord.children[k].layerStore,
 					layer = treeConfigRecord.children[k].layer,
-					childFolder = {};
-
-				childFolder.name = treeConfigRecord.children[k].text;
-				childFolder.id = childFolder.name + k;
+					childFolder = treeConfigRecord.children[k].text,
+					secondLevel = {};
 
 				if (childLayerStore) {
-					// console.log("  " + md.name);
-					this.addLayers(childLayerStore, isBaseLayerStore, parentFolder, childFolder);
-
+					secondLevel = {node: childFolder, layerIDs: []};
+					// console.log("    " + childFolder);
+					secondLevel = this.addLayers(childLayerStore, isBaseLayerStore, secondLevel);
 				}
+				// Freizeit & Tourismus (?), maybe coz of folders after layers?
 				else if (layer) {
-					this.addLayer(layer, parentFolder, childFolder);
+					this.layers.push(layer);
+					firstLevel.layerIDs.push(layer.name);
+				}
+
+				// check for empty secondLevel object - happens with Freizeit & Tourismus
+				if (Object.keys(secondLevel).length !== 0) {
+					firstLevel.childnodes.push(secondLevel);
 				}
 			}
 		}
 
-        this.lgvTreeConfig.push(this.lgvTreeConfigRecord);
+        this.lgvTreeConfig.push(firstLevel);
 
 	}
 
-    console.log(this.lgvTreeConfig);
-
+    this.writeLgvTreeConfig();
+    console.log("###");
 	this.writeServicesJson();
 	return "copy json from console.";
 },
@@ -75,63 +82,44 @@ translateGfiProps: function (layer) {
 	}
 },
 
-// adds a single layer to this.layers
-addLayer: function (layer, parentFolder, childFolder) {
+getId: function (str) {
+	var index = str.lastIndexOf("_") + 1;
 
-    this.layers.push({
-		layer: layer,
-		parentFolder: parentFolder,
-		childFolder: childFolder
-	});
+	return str.substring(index);
 },
 
-// read layers from layer store and call addLayer
-addLayers: function (layerStore, isBaseLayerStore, parentFolder, childFolder) {
+// read layers from layer store and adds to this.layers
+addLayers: function (layerStore, isBaseLayerStore, level) {
+    var id;
 
-    // build second Level folders
-    if (childFolder){
-        this.lgvTreeConfigRecord.childnodes.push({node: childFolder.name, layerIDs: []});
-    }
-
-    // console.log(parentFolder)
-    if (childFolder) {
-        console.log("   " + childFolder.name);
-    }
-
-	layerStore.each(function (rec, index) {
-       // console.log(index);
-        	if (isBaseLayerStore) {
-				if (rec.data.layer.isBaseLayer) {
-					this.addLayer(rec.data.layer, parentFolder, childFolder);
-				}
+    layerStore.each(function (rec) {
+		id = rec.data.layer.id = this.getId(rec.data.layer.id);
+		if (isBaseLayerStore) {
+			if (rec.data.layer.isBaseLayer) {
+				this.layers.push(rec.data.layer);
+				level.layerIDs.push(id);
 			}
-			else {
-				this.addLayer(rec.data.layer, parentFolder, childFolder);
-                if (parentFolder !== "Hintergrundkarten"){
-                    if (childFolder){
-         //               console.log(this.lgvTreeConfigRecord);
-                        //this.lgvTreeConfigRecord.childnodes[index].layerIDs.push(rec.data.layer.id);
-                    }
-            }
-			}
+		}
+		else {
+			this.layers.push(rec.data.layer);
+            // console.log("        " + rec.data.layer.name);
+            level.layerIDs.push(id);
+		}
 	}, this);
 
-	return true;
+	return level;
 },
 
-// write servicesJson array from previously built this.layers
+// write servicesJson array from this.layers
 writeServicesJson: function () {
 	var servicesJson = [];
-    //console.log(this.layers);
+    // console.log(this.layers);
 	for (var i = 0; i < this.layers.length; i++) {
 
-		var layer = this.layers[i].layer,
-			parentFolder = this.layers[i].parentFolder,
-			childFolder = this.layers[i].childFolder,
-            secondLevel = childFolder ? childFolder.name : "layer" ;
+		var layer = this.layers[i];
 
         servicesJson.push({
-            "id": i.toString(),
+            "id": layer.id,
             "name": layer.name,
             "url": layer.url,
             "typ": "WMS",
@@ -148,19 +136,15 @@ writeServicesJson: function () {
             "gfiAttributes": this.translateGfiProps(layer),
             "layerAttribution": layer.attribution || "nicht vorhanden",
             "cache": false,
-            "datasets": [
-               /*{
-                    "md_id": childFolder ? childFolder.id : i.toString(),
-                    "md_name": childFolder ? childFolder.name : layer.name,
-                    "bbox": "nicht vorhanden",
-                    "kategorie_opendata": [parentFolder],
-                    "kategorie_inspire": "Kein INSPIRE-Thema"
-                }*/
-            ]
+            "datasets": []
 		});
 
 	}
-	// console.log(JSON.stringify(servicesJson));
+	console.log(JSON.stringify(servicesJson));
+},
+
+writeLgvTreeConfig: function () {
+	console.log(JSON.stringify(this.lgvTreeConfig));
 }
 
 };
