@@ -47,6 +47,7 @@ define([
             },
             activatePrint: function () {
                 EventBus.trigger("toggleWin", ["print", "Druckeinstellungen", "glyphicon-print"]);
+                this.model.setActive("print");
             },
             activateRecord: function () {
                 this.model.setActive("record");
