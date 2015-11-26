@@ -29,4 +29,9 @@ if (typeof print !== "undefined" && print === true) { %>
 <li id="printMenu" <% if (active === "print") { %> class="active hidden-xs" <% } else { %> class="hidden-xs" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-print"></span>Karte drucken</a>
 </li>
+<% }
+if (typeof parcelSearch !== "undefined" && parcelSearch === true) { %>
+<li id="parcelSearchMenu" <% if (active === "parcelSearch") { %> class="active hidden-xs" <% } else { %> class="hidden-xs" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-search"></span>Flurstückssuche</a>
+</li>
 <% } %>
