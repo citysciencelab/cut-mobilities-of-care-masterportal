@@ -7,59 +7,69 @@ define(function () {
             center: [565874, 5934140], // Rathausmarkt
             resolution: 26.458386250105834 // // 1:100.000
         },
-        //layerConf: locations.baseUrl + (locations.fhhnet ? '../diensteapiFHHNET.json' : '../diensteapiINTERNET.json'),
-        layerConf: locations.baseUrl + '../diensteapiINTERNET.json',
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        styleConf: locations.baseUrl + '../style.json',
-        proxyURL: '/cgi-bin/proxy.cgi',
-        // gazetteerURL: locations.host + '/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0',
-        layerIDs: [
-            {id: '453', visible: true},
-            {id: '94', visible: false},
-            {id: '2013', visible: true, transparence: 50}
-        ],
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: true,
+            poi: false
+        },
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
+        styleConf: "../components/lgv-config/style.json",
+        categoryConf: "../components/lgv-config/category.json",
+        proxyURL: "/cgi-bin/proxy.cgi",
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true},
+                {id: "94", visible: false},
+                {id: "2013", visible: true, transparence: "50"}
+            ]
+        },
         menubar: true,
         scaleLine: false,
         isMenubarVisible: true,
         menu: {
-            viewerName: 'GeoViewer',
+            viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "LGVGeoPrtal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+            legend: false,
+            routing: false,
+            addWMS: false
         },
-        startUpModul: '',
+        startUpModul: "",
         searchBar: {
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
             placeholder: "Adresssuche",
-            gazetteerURL: function () {
-                if (locations.fhhnet) {
-                    return locations.host + "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-                }
-                else {
-                    return locations.host + "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
-                }
-            }
+            geoLocateHit: true
         },
         print: {
             printID: "99999",
-            title: 'Gründachstrategie',
+            title: "Gründachstrategie",
             gfi: false
         },
         tools: {
             gfi: false,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
-            active: 'gfi'
-        },
-        orientation: true,
-        poi: false
-    }
+            draw: false,
+            record: false,
+            active: "gfi"
+        }
+    };
 
     return config;
 });
