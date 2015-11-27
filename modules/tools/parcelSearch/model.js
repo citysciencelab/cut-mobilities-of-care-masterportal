@@ -47,6 +47,7 @@ define([
             if (this.isValid()) {
                 $("#parcelField + .text-danger").html("");
                 $("#parcelField").parent().removeClass("has-error");
+                EventBus.trigger("alert:remove");
                 this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + this.get("districtNumber") + "&flurstuecksnummer=" + this.get("parcelNumber"), this.getParcel);
             }
             else {
