@@ -59,6 +59,7 @@ define(function () {
                 {id: "1748", visible: false},
                 {id: "1562", visible: true},
                 {id: "1561", visible: true},
+                {id: "2003", visible: true, style: "2003"},
                 {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
