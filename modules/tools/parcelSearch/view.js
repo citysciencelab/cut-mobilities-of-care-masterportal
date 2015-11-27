@@ -35,6 +35,9 @@ define([
             this.model.setDistrictNumber($("#districtField").val());
         },
         setParcelNumber: function (evt) {
+            if (evt.keyCode === 13) {
+                this.model.validateParcelNumber();
+            }
             this.model.setParcelNumber(evt.target.value);
         },
         setFocusToParcelInput: function () {
