@@ -8,7 +8,8 @@ define([
     var ParcelSearch = Backbone.Model.extend({
         defaults: {
             "districtNumber": "0601",
-            "parcelNumber": ""
+            "parcelNumber": "",
+            "gazetteerURL": Config.searchBar.gazetteer.url
         },
         url: Util.getPath(Config.parcelSearch),
         initialize: function () {
@@ -46,13 +47,45 @@ define([
             if (this.isValid()) {
                 $("#parcelField + .text-danger").html("");
                 $("#parcelField").parent().removeClass("has-error");
-                console.log(this.get("parcelNumber"));
-                console.log(this.get("districtNumber"));
+                this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + this.get("districtNumber") + "&flurstuecksnummer=" + this.get("parcelNumber"), this.getParcel);
             }
             else {
                 $("#parcelField + .text-danger").html("");
                 $("#parcelField").after("<span class='text-danger'><small>" + this.validationError + "</small></span>");
                 $("#parcelField").parent().addClass("has-error");
+            }
+        },
+        /**
+         * @description Führt einen HTTP-GET-Request aus.
+         *
+         * @param {String} data - Data to be sent to the server
+         * @param {function} successFunction - A function to be called if the request succeeds
+         * @param {boolean} asyncBool - asynchroner oder synchroner Request
+         */
+        sendRequest: function (data, successFunction) {
+            $.ajax({
+                url: this.get("gazetteerURL"),
+                data: data,
+                context: this,
+                success: successFunction,
+                timeout: 6000,
+                error: function () {
+                    EventBus.trigger("alert", "Dienst ist zurzeit nicht erreichbar. Bitte versuchen Sie es später nochmal.");
+                }
+            });
+        },
+        getParcel: function (data) {
+            var hit = $("wfs\\:member,member", data),
+                coordinate,
+                position;
+
+            if (hit.length === 0) {
+                EventBus.trigger("alert", "Es wurde kein Flurstück mit der Nummer " + this.get("parcelNumber") + " gefunden.");
+            }
+            else {
+                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                EventBus.trigger("mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
             }
         }
     });
