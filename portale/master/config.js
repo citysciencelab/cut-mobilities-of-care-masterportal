@@ -342,6 +342,7 @@ define(function () {
         * @property {Boolean}  draw - Zeichnen.
         * @property {Boolean}  print - Drucken.
         * @property {Boolean}  coord - Koordinaten-Abfrage.
+        * @property {Boolean}  parcelSearch - Die Flurstückssuche.
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
@@ -350,8 +351,15 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
+            parcelSearch: true,
             active: "gfi"
-        }
+        },
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Pfad zur gemarkung.json für die Flurstückssuche.
+        */
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;
