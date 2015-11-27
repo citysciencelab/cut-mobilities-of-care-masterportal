@@ -1,26 +1,38 @@
 define(function () {
     var config = {
         title: "Geoportal der Metropolregion Hamburg",
-        metadatenURL: "ignore",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
         tree: {
-            type: "default",
-            orderBy: "opendata",
+            type: "custom",
+            customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
             baseLayer: [
-                {id: "0", visibility: true}, // WebAtlas
-                {id: "1", visibility: false}, // WebAtlas_grau
-                {id: "2", visibility: false}, // Luftbilder
-                {id: "4", visibility: false} // 1:5000
+                {id: "51", visibility: true}, // WebAtlas
+                {id: "53", visibility: false}, // WebAtlas_grau
+                {id: "55", visibility: false}, // Luftbilder
+                {id: "57", visibility: false} // 1:5000
+            ],
+            layerIDsToStyle: [
+                {
+                    "id": "223",
+                    "styles": "geofox_stations",
+                    "name": "HVV-Haltestellen"
+                },
+                {
+                    "id": "221",
+                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"]
+                }
             ]
         },
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true
         },
-        footer: true,
-        quickHelp: true,
+        footer: false,
+        quickHelp: false,
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
@@ -97,16 +109,12 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
-            gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: false,
-                searchHouseNumbers: false,
-                searchDistricts: true,
-                searchParcels: true
-            },
             bkg: {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch"
+            },
+            tree: {
+                minChars: 3
             },
             geoLocateHit: true
         },
