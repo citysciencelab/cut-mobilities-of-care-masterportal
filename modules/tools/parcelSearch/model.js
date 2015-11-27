@@ -11,7 +11,7 @@ define([
             "parcelNumber": "",
             "gazetteerURL": Config.searchBar.gazetteer.url
         },
-        url: Util.getPath(Config.parcelSearch),
+        url: Util.getPath(Config.gemarkungen),
         initialize: function () {
             this.listenTo(EventBus, {
                 "winParams": this.setStatus
@@ -56,13 +56,6 @@ define([
                 $("#parcelField").parent().addClass("has-error");
             }
         },
-        /**
-         * @description Führt einen HTTP-GET-Request aus.
-         *
-         * @param {String} data - Data to be sent to the server
-         * @param {function} successFunction - A function to be called if the request succeeds
-         * @param {boolean} asyncBool - asynchroner oder synchroner Request
-         */
         sendRequest: function (data, successFunction) {
             $.ajax({
                 url: this.get("gazetteerURL"),
