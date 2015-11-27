@@ -37,7 +37,7 @@ define([
         },
         readConfig: function () {
             // Lese Config-Optionen ein und speichere Ergebnisse
-            var layerIDs = Config.layerIDs;
+            var layerIDs = Config.tree.layer;
             var wfsList = new Array();
             _.each(layerIDs, function(element, key, list) {
                 if (_.has(element, 'filterOptions')) {

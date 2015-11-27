@@ -11,8 +11,6 @@ define(function () {
 
         footer: true,
         quickHelp: true,
-
-
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
@@ -20,12 +18,10 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
 
         layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},    //Karte
-            {id: "452", visible: false},                      //Luftbild
-            {id: "1727", visible: true, name:"Kooperationsprojekte mit Hamburger Nachbargemeinden u. -kreisen"}
-
+            {id: "453", visible: true, legendUrl: "ignore"}, // Karte
+            {id: "452", visible: false}, // Luftbild
+            {id: "1727", visible: true, name: "Kooperationsprojekte mit Hamburger Nachbargemeinden u. -kreisen"}
         ],
-
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -50,7 +46,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche nach Adresse, Stadtteil",
             gazetteerURL: function () {
-                    return   "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
 
@@ -63,7 +59,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: true,
+            print: false,
             coord: true,
             draw: false,
             active: "gfi"

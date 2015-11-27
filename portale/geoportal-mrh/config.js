@@ -6,19 +6,15 @@ define(function () {
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
         tree: {
-            custom: false,
+            type: "default",
             orderBy: "opendata",
-            filter: true,
-            layerIDsToMerge: [],
-
-            metaIDsToMerge: []
+            baseLayer: [
+                {id: "0", visibility: true}, // WebAtlas
+                {id: "1", visibility: false}, // WebAtlas_grau
+                {id: "2", visibility: false}, // Luftbilder
+                {id: "4", visibility: false} // 1:5000
+            ]
         },
-        baseLayer: [
-            {id: "0", visibility: true}, // WebAtlas
-            {id: "1", visibility: false}, // WebAtlas_grau
-            {id: "2", visibility: false}, // Luftbilder
-            {id: "4", visibility: false} // 1:5000
-        ],
         controls: {
             zoom: true,
             toggleMenu: true
@@ -96,15 +92,23 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: false,
-            addWMS: true,
+            addWMS: true
         },
         startUpModul: "",
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
-            gazetteerURL: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-            bkgSuggestURL: "/bkg_suggest",
-            bkgSearchURL: "/bkg_geosearch",
-            useBKGSearch: true
+            gazetteer: {
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: false,
+                searchHouseNumbers: false,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            bkg: {
+                bkgSuggestURL: "/bkg_suggest",
+                bkgSearchURL: "/bkg_geosearch"
+            },
+            geoLocateHit: true
         },
         tools: {
             gfi: true,

@@ -220,7 +220,7 @@ define([
             layers = this.get("map").getLayers().getArray();
             resolution = this.get("view").getResolution();
             projection = this.get("view").getProjection();
-            // scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale;
+            scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale;
             layersVisible = _.filter(layers, function (element) {
                 // NOTE GFI-Filter Nur Sichtbar
                 return element.getVisible() === true;
@@ -237,7 +237,7 @@ define([
 
                             gfiParams.push({
                                 typ: "WMS",
-                                // scale: scale,
+                                scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
                                 ol_layer: element
@@ -246,7 +246,7 @@ define([
                         else if (element.getProperties().typ === "WFS") {
                             gfiParams.push({
                                 typ: "WFS",
-                                // scale: scale,
+                                scale: scale,
                                 source: element.getSource(),
                                 style: element.getStyle(),
                                 name: element.get("name"),
@@ -306,7 +306,7 @@ define([
             EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
         },
         zoomToExtent: function (extent) {
-            this.get("view").fitExtent(extent, this.get("map").getSize());
+            this.get("view").fit(extent, this.get("map").getSize());
         },
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);

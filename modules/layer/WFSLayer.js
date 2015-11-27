@@ -105,7 +105,7 @@ define([
             // Nur einmalig und nicht beim reload.
             if (this.get("layer") === undefined) {
                 var id = this.get("id"),
-                    layerIDs = _.find(Config.layerIDs, function (num) {
+                    layerIDs = _.find(Config.tree.layer, function (num) {
                         return num.id === id;
                     });
 
@@ -263,6 +263,14 @@ define([
         },
         setProjection: function (proj) {
             this.set("projection", proj);
+        },
+        // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
+        setLegendURL: function () {
+            if (!_.isUndefined(this.get("styleId"))) {
+                var style = StyleList.returnModelById(this.get("styleId"));
+
+                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+            }
         }
     });
 

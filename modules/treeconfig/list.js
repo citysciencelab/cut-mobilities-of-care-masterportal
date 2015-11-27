@@ -21,18 +21,21 @@ define([
         },
 
         /**
-         * Holt sich die gewünschte Tree-Konfiguration (Config.tree.orderBy).
-         * Überschreibt die Config.layerIDs mit den Layern der Tree-Konfiguration.
+         * Holt sich die gewünschte Tree-Konfiguration (Config.tree.customConfig).
+         * Überschreibt die Config.tree.layer mit den Layern der Tree-Konfiguration.
          */
         fetchTreeConfig: function () {
             this.fetch({
                 cache: false,
                 async: false,
                 error: function () {
-                    alert("Fehler beim Laden von:" + Config.tree.orderBy + ".json");
+                    EventBus.trigger("alert", {
+                        text: "Fehler beim Laden von: " + Config.tree.customConfig,
+                        kategorie: "alert-warning"
+                    });
                 },
                 success: function (collection) {
-                    Config.layerIDs = _.flatten(collection.pluck("layers"));
+                    Config.tree.layer = _.flatten(collection.pluck("layers"));
                 }
             });
         },
