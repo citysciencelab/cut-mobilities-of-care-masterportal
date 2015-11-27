@@ -32,61 +32,77 @@ define([
              * Ist der Parameter 'layerIDs' vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
              */
             if (_.has(result, 'LAYERIDS')) {
-                var values = _.values(_.pick(result, 'LAYERIDS'))[0].split(','),
+                var valuesString = _.values(_.pick(result, 'LAYERIDS'))[0],
+                    visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
+                    values = [],
+                    visibilityList = [],
                     newLayerIDs = Config.tree.layer;
-                if (_.has(Config, "layerIDs")) {
-                    var layeridList = values,
-                        visibilityList,
-                        params = [],
+
+                if (valuesString.indexOf(",") !== -1) {
+                    values = valuesString.split(",");
+                }
+                else {
+                    values.push(valuesString);
+                }
+                if (_.has(result, 'VISIBILITY')) {
+                    if (visibilityListString && visibilityListString.indexOf(",") !== -1) {
+                        visibilityList = visibilityListString.split(",");
+                    }
+                    else {
+                        visibilityList.push(visibilityListString);
+                    }
+                }
+                if (Config.tree.type === "light" || Config.tree.type === "custom") {
+                    var params = [],
                         visibilitycheck = false;
-                    if (_.has(result, 'VISIBILITY')) {
-                        visibilityList = _.values(_.pick(result, "VISIBILITY"))[0].split(",");
+                    if (visibilityListString) {
                          //für alle Layerid-parameter visible-parameter enthalten?
-                        visibilitycheck = (visibilityList.length === layeridList.length);
+                        visibilitycheck = (visibilityList.length === values.length);
                     }
                     //Layer-ID-Objekt aus Url-Params erstellen
-                    _.each(layeridList, function (k,i){
+                    _.each(values, function (k,i){
                         //wenn für alle Layerid-parameter visible-parameter enthalten sind.
                         if (visibilitycheck === true) {
-                            //cast to boolean
                             var visibleParam = (visibilityList[i] == 'TRUE');
                             params.push({
-                                id: layeridList[i],
+                                id: values[i],
                                 visible: visibleParam
                             });
                         }
                         //wenn nicht, alle defaultmäßig 'true'setzen
                         else {
                             params.push({
-                                id: layeridList[i],
+                                id: values[i],
                                 visible: true
                                 });
                             }
                     });
-                    //layerid-Wert in config enthalten?
-                    _.each(params,function(param){
-                        var checked = false,
-                        actualparam = param;
-                        _.some(newLayerIDs,function(newLayerID){
-                            if (newLayerID.id === actualparam.id) {
-                                //nur wenn in URL vorhanden, config-layer-visibles überschreiben
-                                if (visibilitycheck === true){
-                                    newLayerID.visible =actualparam.visible;
-                                }
-                                checked = true;
-                            }
-                            return;
-                        })
-                        //wenn Layerid-Wert aus URL nicht in Config, dann zur Config zufügen
-                        if (!checked){
-                           Config.tree.layer.push({id:param.id,visible:param.visible});
+                    // Wenn Layer nicht im tree.layer enthalten ist, diesen hinzufügen
+                    _.each(params,function (param) {
+                        var layer = _.find(Config.tree.layer, function (layer) {
+                            return layer.id === param.id;
+                        });
+                        if (!layer) {
+                            Config.tree.layer.push({
+                                id: param.id,
+                                visible: false
+                            });
                         }
-                    })
-                    Config.tree.layer = newLayerIDs;
+                    });
+                    // Layersichtbarkeit schalten
+                    _.each(Config.tree.layer, function (layer) {
+                        var param = _.find(params, function (par) {
+                            return par.id === layer.id;
+                        });
+                        if (param && param.visible === true) {
+                            layer.visible = true;
+                        }
+                        else {
+                            layer.visible = false;
+                        }
+                    });
                 }
-                else {
-                    var visibilityList = _.values(_.pick(result, "VISIBILITY"))[0].split(",");
-
+                else if (Config.tree.type === "default" && visibilityListString) {
                     Config.tree.layerIDsToSelect = [];
                     _.each(values, function (value, index) {
                         if (visibilityList[index] === "TRUE") {
