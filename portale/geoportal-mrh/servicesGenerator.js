@@ -18,7 +18,13 @@ run: function () {
 			firstLevel = {};
 
 		// console.log(parentFolder);
-		firstLevel = {node: parentFolder, childnodes: [], layerIDs: []};
+        if (!isBaseLayerStore) {
+            firstLevel = {node: parentFolder, childnodes: [], layerIDs: []};
+        }
+        else {
+            firstLevel = {layerIDs: []};
+        }
+
 
 		// no childFolders
         if (layerStore)	{
@@ -40,8 +46,9 @@ run: function () {
 				}
 				// Freizeit & Tourismus (?), maybe coz of folders after layers?
 				else if (layer) {
-					this.layers.push(layer);
-					firstLevel.layerIDs.push(layer.name);
+					layer.id = this.getId(layer.id);
+                    this.layers.push(layer);
+                    firstLevel.layerIDs.push(layer.id);
 				}
 
 				// check for empty secondLevel object - happens with Freizeit & Tourismus
@@ -97,13 +104,13 @@ addLayers: function (layerStore, isBaseLayerStore, level) {
 		if (isBaseLayerStore) {
 			if (rec.data.layer.isBaseLayer) {
 				this.layers.push(rec.data.layer);
-				level.layerIDs.push(id);
+				level.layerIDs.push({id: id, visible: false});
 			}
 		}
 		else {
 			this.layers.push(rec.data.layer);
             // console.log("        " + rec.data.layer.name);
-            level.layerIDs.push(id);
+            level.layerIDs.push({id: id, visible: false});
 		}
 	}, this);
 
@@ -132,7 +139,6 @@ writeServicesJson: function () {
             "gutter": layer.options.gutter || 0,
             "minScale": 0,
             "maxScale": 1000000,
-            "isbaselayer": layer.isBaseLayer,
             "gfiAttributes": this.translateGfiProps(layer),
             "layerAttribution": layer.attribution || "nicht vorhanden",
             "cache": false,
