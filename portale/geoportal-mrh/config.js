@@ -121,11 +121,10 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             draw: true,
             record: false,
-            orientation: false,
             active: "gfi"
         },
         print: {
