@@ -120,6 +120,7 @@ define([
                     }
                     // Special-Ding für HVV --> Layer werden über Styles gesteuert
                     collection.cloneByStyle();
+                    EventBus.trigger("mapView:getOptions");
                 }
             });
         },
