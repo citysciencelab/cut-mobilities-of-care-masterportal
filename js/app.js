@@ -131,6 +131,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new PrintView();
                         });
                     }
+                    if (_.has(Config.tools, "parcelSearch") && Config.tools.parcelSearch === true) {
+                        require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
+                            new ParcelSearchView();
+                        });
+                    }
                     require(["modules/tools/view"], function (ToolsView) {
                         new ToolsView();
                     });

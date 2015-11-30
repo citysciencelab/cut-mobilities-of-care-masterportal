@@ -20,7 +20,8 @@ define([
                 "click #measureMenu": "activateMeasure",
                 "click #printMenu": "activatePrint",
                 "click #drawMenu": "activateDraw",
-                "click #recordMenu": "activateRecord"
+                "click #recordMenu": "activateRecord",
+                "click #parcelSearchMenu": "activateParcelSearch"
             },
             render: function () {
                 var attr = this.model.toJSON();
@@ -52,6 +53,10 @@ define([
             activateRecord: function () {
                 this.model.setActive("record");
                 EventBus.trigger("toggleWin", ["record", "Datenerfassung", "glyphicon-edit"]);
+            },
+            activateParcelSearch: function () {
+                this.model.setActive("parcelSearch");
+                EventBus.trigger("toggleWin", ["parcelSearch", "Flurstückssuche", "glyphicon-search"]);
             }
         });
 
