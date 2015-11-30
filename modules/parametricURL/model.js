@@ -71,14 +71,14 @@ define([
 
                             params.push({
                                 id: values[i],
-                                visible: visibleParam
+                                visibility: visibleParam
                             });
                         }
                         // wenn nicht, alle defaultmäßig 'true'setzen
                         else {
                             params.push({
                                 id: values[i],
-                                visible: true
+                                visibility: true
                                 });
                             }
                     });
@@ -100,9 +100,10 @@ define([
                             return layerid === param.id;
                         });
                         if (!layer) {
+                            Config.tree.layer = [];
                             Config.tree.layer.push({
                                 id: param.id,
-                                visible: false
+                                visibility: false
                             });
                         }
                     });
@@ -125,11 +126,11 @@ define([
                             return par.id === layerid;
                         });
 
-                        if (param && param.visible === true) {
-                            layer.visible = true;
+                        if (param && param.visibility === true) {
+                            layer.visibility = true;
                         }
                         else {
-                            layer.visible = false;
+                            layer.visibility = false;
                         }
                     });
                 }
