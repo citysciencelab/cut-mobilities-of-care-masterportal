@@ -106,6 +106,7 @@ define([
         * @param {string} searchString - Suchstring
         */
         directSearch: function (searchString) {
+            this.set("searchString", searchString);
             if (searchString.search(",") !== -1) {
                 var splitInitString = searchString.split(",");
 
