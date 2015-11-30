@@ -53,6 +53,7 @@ define([
          * @param {string} searchString - Der Suchstring.
         */
         search: function (searchString) {
+            this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
