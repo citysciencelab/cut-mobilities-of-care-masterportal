@@ -174,16 +174,19 @@ define([
         * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
+            var hit;
+
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
-                var hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
+                hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
-                var hitID = evt.currentTarget.id,
-                    hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+                var hitID = evt.currentTarget.id;
+
+                hit = _.findWhere(this.model.get("hitList"), {id: hitID});
             }
             else {
-                var hit = this.model.get("hitList")[0];
+                hit = this.model.get("hitList")[0];
             }
             // 1. Schreibe Text in Searchbar
             if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
@@ -205,7 +208,6 @@ define([
         *
         */
         setSearchString: function (evt) {
-            this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
             if (evt.key === "Enter" || evt.keyCode === 13) {
                 if (this.model.get("hitList").length === 1) {
                     this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -213,6 +215,9 @@ define([
                 else {
                     this.renderHitList();
                 }
+            }
+            else {
+                this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
             }
         },
         /**
