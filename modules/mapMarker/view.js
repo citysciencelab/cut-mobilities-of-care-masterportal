@@ -60,8 +60,7 @@ define([
                     break;
                 }
                 case "Parcel": {
-                    this.model.getWKTFromString("POINT", hit.coordinate);
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                     this.showMarker(hit.coordinate);
                     break;
                 }
