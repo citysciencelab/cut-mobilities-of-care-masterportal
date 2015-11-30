@@ -143,6 +143,7 @@ define([
 
         setOptions: function () {
             if (_.has(Config.view, "options")) {
+                this.set("options", []);
                 _.each(Config.view.options, function (opt) {
                     this.pushHits("options", opt);
                 }, this);
