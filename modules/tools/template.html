@@ -24,9 +24,14 @@ if (typeof gfi !== "undefined" && gfi === true) { %>
     <a href="#"><span class="glyphicon glyphicon-info-sign"></span>Informationen abfragen</a>
 </li>
 <% }
+if (typeof parcelSearch !== "undefined" && parcelSearch === true) { %>
+<li id="parcelSearchMenu" <% if (active === "parcelSearch") { %> class="active <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-search"></span>Flurstückssuche</a>
+</li>
+<% }
 if (typeof print !== "undefined" && print === true) { %>
 <li class="divider hidden-xs"></li>
-<li id="printMenu" class="hidden-xs">
+<li id="printMenu" <% if (active === "print") { %> class="active hidden-xs" <% } else { %> class="hidden-xs" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-print"></span>Karte drucken</a>
 </li>
 <% } %>

@@ -9,14 +9,24 @@ define([
         defaults: {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
-                    fill: new ol.style.Fill({
-                        color: "rgba(255, 255, 255, 0.2)"
-                    }),
+                fill: new ol.style.Fill({
+                    color: "rgba(255, 127, 0, 0.3)"
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "rgba(255, 127, 0, 1.0)",
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 6,
                     stroke: new ol.style.Stroke({
-                        color: "#ffcc33",
-                        width: 2
+                        color: "rgba(255, 127, 0, 1.0)",
+                        width: 3
+                    }),
+                    fill: new ol.style.Fill({
+                        color: "rgba(255, 127, 0, 0.4)"
                     })
-                   }),
+                })
+            }),
             type: "LineString",
             measureTooltips: []
         },
@@ -55,7 +65,8 @@ define([
             EventBus.trigger("removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
-                type: this.get("type")
+                type: this.get("type"),
+                style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
                 this.set("sketch", evt.feature);

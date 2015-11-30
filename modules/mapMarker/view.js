@@ -50,7 +50,7 @@ define([
 
             this.clearMarker();
             switch (hit.type) {
-                case "Ortssuche": {
+                case "Ort": {
                     EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
                     break;
                 }
@@ -60,8 +60,7 @@ define([
                     break;
                 }
                 case "Parcel": {
-                    this.model.getWKTFromString("POINT", hit.coordinate);
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                     this.showMarker(hit.coordinate);
                     break;
                 }
@@ -159,12 +158,7 @@ define([
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                var wkt = this.model.getWKTFromString("POLYGON", coordinates.trim()),
-                    format = new ol.format.WKT(),
-                    feature = format.readFeature(wkt);
-                this.clearMarker();
-                searchVector.getSource().addFeature(feature);
-                searchVector.setVisible(true);
+                var wkt = this.model.getWKTFromString("POLYGON", coordinates.trim());
                 EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
             }
         },

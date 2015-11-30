@@ -80,7 +80,7 @@ define([
                 if (hit.score > this.get("score")) {
                     EventBus.trigger("searchbar:pushHits", "hitList", {
                         name: hit.suggestion,
-                        type: "Ortssuche",
+                        type: "Ort",
                         bkg: true,
                         glyphicon: "glyphicon-road",
                         id: _.uniqueId("bkgSuggest")

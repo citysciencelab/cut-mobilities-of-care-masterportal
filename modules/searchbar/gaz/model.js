@@ -186,7 +186,7 @@ define([
             _.each(hits, function (hit) {
                 position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                 coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                hitName = $(hit).find("dog\\:kreisname_normalisiert, kreisname_normalisiert")[0].textContent;
+                hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
                 // "Hitlist-Objekte"
                 EventBus.trigger("searchbar:pushHits", "hitList", {
                     name: hitName,
