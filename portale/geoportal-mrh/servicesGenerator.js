@@ -48,7 +48,7 @@ run: function () {
 				else if (layer) {
 					layer.id = this.getId(layer.id);
                     this.layers.push(layer);
-                    firstLevel.layerIDs.push(layer.id);
+                    firstLevel.layerIDs.push({id: layer.id, visible:false});
 				}
 
 				// check for empty secondLevel object - happens with Freizeit & Tourismus
@@ -99,12 +99,13 @@ getId: function (str) {
 addLayers: function (layerStore, isBaseLayerStore, level) {
     var id;
 
-    layerStore.each(function (rec) {
-		id = rec.data.layer.id = this.getId(rec.data.layer.id);
+    layerStore.each(function (rec, index) {
+        id = rec.data.layer.id = this.getId(rec.data.layer.id);
 		if (isBaseLayerStore) {
-			if (rec.data.layer.isBaseLayer) {
-				this.layers.push(rec.data.layer);
-				level.layerIDs.push({id: id, visible: false});
+            if (rec.data.layer.isBaseLayer) {
+                console.log(rec.data.layer);
+                this.layers.push(rec.data.layer);
+				level.layerIDs.push({id: id, visible: (rec.data.layer.name === "WebatlasDE")});
 			}
 		}
 		else {
