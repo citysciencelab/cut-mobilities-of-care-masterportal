@@ -287,7 +287,13 @@ define([
                 this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             }
             else {
-                this.set("createURL", this.get("printurl") + "/master/create.json");
+                if (_.has(Config.print, "configYAML") === true) {
+                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
+                }
+                else {
+                    this.set("createURL", this.get("printurl") + "/master/create.json");
+                }
+
             }
             this.setGFIPos();
         },
