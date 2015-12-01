@@ -115,8 +115,10 @@ define(function () {
             coord: true,
             draw: true,
             record: false,
+            parcelSearch: true,
             active: "gfi"
         },
+        gemarkungen: "../components/lgv-config/gemarkung.json",
         print: {
             printID: "99999",
             title: "Freie und Hansestadt Hamburg - Atlas",

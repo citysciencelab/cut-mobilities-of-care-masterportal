@@ -20,11 +20,11 @@ define([
         setOrientation: function (btn) {
             var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
 
-            geolocation.on ("change", function (evt) {
+            geolocation.on ("change", function () {
                 var position = geolocation.getPosition();
 
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position));
-                EventBus.trigger("setCenter", this.get("newCenter"), 6);
+                EventBus.trigger("mapView:setCenter", this.get("newCenter"), 6);
                 EventBus.trigger("setGeolocation", [this.get("newCenter"), position]);
                 var marker = this.get("marker");
 
@@ -33,12 +33,12 @@ define([
                 this.set("marker", marker);
                 EventBus.trigger("addOverlay", marker);
                 geolocation.setTracking(false);
-                if (btn == "poi") {
+                if (btn === "poi") {
                     this.getPOI(500);
                 }
                 EventBus.trigger("showGeolocationMarker", this);
             }, this);
-            geolocation.once("error", function (err) {
+            geolocation.once("error", function () {
                 EventBus.trigger("alert", {
                     text: "<strong>Problem ermittelt.</strong> Standpunktbestimmung momentan nicht verfügbar!",
                     kategorie: "alert-warning"
@@ -52,14 +52,12 @@ define([
         getPOI: function (distance) {
             this.set("distance", distance);
             var circle = new ol.geom.Circle(this.get("newCenter"), this.get("distance")),
-                circleExtent = circle.getExtent(),
-                circleCoord = circle.getCenter();
+                circleExtent = circle.getExtent();
 
             this.set("circleExtent", circleExtent);
             EventBus.trigger("layerlist:getVisiblePOIlayerList", this);
         },
         getPOIParams: function (visibleWFSLayers) {
-            var featureArray = [];
 
             if (this.get("circleExtent") && visibleWFSLayers) {
                 _.each(visibleWFSLayers, function (layer) {

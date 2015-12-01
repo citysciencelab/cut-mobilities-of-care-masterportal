@@ -47,7 +47,8 @@ define([
         *
         */
         createRecommendedList: function () {
-            var max = this.get("recommandedListLength");
+            var max = this.get("recommandedListLength"),
+                recommendedList = [];
 
             if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
                 this.set("isHitListReady", false);
@@ -72,11 +73,12 @@ define([
                             usedNumbers.push(randomNumber);
                         }
                     }
-                    this.set("recommendedList", singleTypes);
+                    recommendedList = singleTypes;
                 }
                 else {
-                    this.set("recommendedList", this.get("hitList"));
+                    recommendedList = this.get("hitList");
                 }
+                this.set("recommendedList", _.sortBy(recommendedList, "name"));
                 this.set("isHitListReady", true);
             }
         }

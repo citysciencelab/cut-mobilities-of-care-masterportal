@@ -1,26 +1,38 @@
 define(function () {
     var config = {
         title: "Geoportal der Metropolregion Hamburg",
-        metadatenURL: "ignore",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
         tree: {
-            type: "default",
-            orderBy: "opendata",
+            type: "custom",
+            customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
             baseLayer: [
-                {id: "0", visibility: true}, // WebAtlas
-                {id: "1", visibility: false}, // WebAtlas_grau
-                {id: "2", visibility: false}, // Luftbilder
-                {id: "4", visibility: false} // 1:5000
+                {id: "51", visibility: true}, // WebAtlas
+                {id: "53", visibility: false}, // WebAtlas_grau
+                {id: "55", visibility: false}, // Luftbilder
+                {id: "57", visibility: false} // 1:5000
+            ],
+            layerIDsToStyle: [
+                {
+                    "id": "223",
+                    "styles": "geofox_stations",
+                    "name": "HVV-Haltestellen"
+                },
+                {
+                    "id": "221",
+                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"]
+                }
             ]
         },
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: true
         },
-        footer: true,
-        quickHelp: true,
+        footer: false,
+        quickHelp: false,
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
@@ -30,47 +42,47 @@ define(function () {
                 {
                     resolution: 152.87436231907702,
                     scale: "250000",
-                    zoomLevel: 1
+                    zoomLevel: 0
                 },
                 {
                     resolution: 76.43718115953851,
                     scale: "100000",
-                    zoomLevel: 2
+                    zoomLevel: 1
                 },
                 {
                     resolution: 38.21859057976939,
                     scale: "60000",
-                    zoomLevel: 3
+                    zoomLevel: 2
                 },
                 {
                     resolution: 19.109295289884642,
                     scale: "40000",
-                    zoomLevel: 4
+                    zoomLevel: 3
                 },
                 {
                     resolution: 9.554647644942321,
                     scale: "20000",
-                    zoomLevel: 5
+                    zoomLevel: 4
                 },
                 {
                     resolution: 4.7773238224711605,
                     scale: "10000",
-                    zoomLevel: 6
+                    zoomLevel: 5
                 },
                 {
                     resolution: 2.3886619112355802,
                     scale: "5000",
-                    zoomLevel: 7
+                    zoomLevel: 6
                 },
                 {
                     resolution: 1.1943309556178034,
                     scale: "2500",
-                    zoomLevel: 8
+                    zoomLevel: 7
                 },
                 {
                     resolution: 0.5971654778089017,
                     scale: "1000",
-                    zoomLevel: 9
+                    zoomLevel: 8
                 }
             ]
         },
@@ -96,31 +108,23 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
-            gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: false,
-                searchHouseNumbers: false,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            tree: {
-                minChars: 3
-            },
+            placeholder: "Suchen nach Adresse, Thema",
             bkg: {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch"
+            },
+            tree: {
+                minChars: 3
             },
             geoLocateHit: true
         },
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             draw: true,
             record: false,
-            orientation: false,
             active: "gfi"
         },
         print: {

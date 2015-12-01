@@ -40,7 +40,9 @@ define([
             clusteroffsety: 0,
             clusterfillcolor: [255, 255, 255, 1],
             clusterstrokecolor: [0, 0, 0, 1],
-            clusterstrokewidth: 3
+            clusterstrokewidth: 3,
+            // Für Polygon
+            fillcolor: [255, 255, 255, 1]
         },
         returnColor: function (textstring) {
             if (typeof textstring === "string") {
@@ -114,7 +116,7 @@ define([
             return style;
         },
         getSimpleStyle: function () {
-            var imagestyle, symbolText, strokestyle;
+            var imagestyle, symbolText, strokestyle, fill;
 
             if (this.get("subclass") === "Icon") {
                 var src = this.get("imagepath") + this.get("imagename"),
@@ -195,6 +197,16 @@ define([
                         width: strokewidth
                     });
             }
+            else if (this.get("subclass") === "Polygon") {
+                var strokestyle = new ol.style.Stroke({
+                    color: this.returnColor(this.get("color")),
+                    width: this.returnColor(this.get("strokewidth"))
+                });
+
+                fill = new ol.style.Fill({
+                    color: this.returnColor(this.get("fillcolor"))
+                });
+            }
             else {
                 // console.log("Subclass " + this.get("subclass") + " unbekannt.");
                 return;
@@ -204,7 +216,8 @@ define([
                     image: imagestyle,
                     text: symbolText,
                     zIndex: "Infinity",
-                    stroke: strokestyle
+                    stroke: strokestyle,
+                    fill: fill
                 })
             ];
 

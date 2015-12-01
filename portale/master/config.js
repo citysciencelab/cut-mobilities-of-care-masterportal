@@ -1,7 +1,13 @@
 define(function () {
     /**
     * @namespace config
-    * @desc Konfigurationsdatei für das LGV Master-Portal.
+    * @type {Object}
+    * @desc Konfigurationsdatei für das LGV Master-Portal. Liegt neben index.html im gleichen Verzeichnis.
+    * @example JS-Aufbau:
+    define(function () {
+        return config = {
+        }
+    });
     */
     var config = {
         /**
@@ -45,7 +51,6 @@ define(function () {
         * @property {string[]} [tree.metaIDsToIgnore] - Bei type: default. IDs der Metadaten, die nicht dargestellt werden sollen.
         * @desc Diese Konfiguration steuert die inhaltliche und graphische Ausgestaltung des Layertrees in der Menubar.
         */
-
         tree: {
             type: "light",
             layer: [
@@ -54,6 +59,7 @@ define(function () {
                 {id: "1748", visible: false},
                 {id: "1562", visible: true},
                 {id: "1561", visible: true},
+                {id: "2003", visible: true, style: "2003"},
                 {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
@@ -94,19 +100,23 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Pfad Ordner mit IMGs, die für WFS-Stylesbenutzt werden.
+        * @desc Pfad zum Ordner mit IMGs, die für WFS-Styles benutzt werden ausgehend von main.js.
+        * @example wfsImgPath: "../components/lgv-config/img/"
         */
         wfsImgPath: "../components/lgv-config/img/",
         /**
         * @memberof config
         * @type {Boolean}
-        * @property {string} [CENTER] - Zentrumskoordinate. Rechtswert, Hochwert. EPSG:25832.
-        * @property {string} [LAYERIDS] - Kommagetrennte Aulistung der initial sichtbaren LayerIDs.
-        * @property {Boolean} [ISMENUBARVISIBLE] - Legt fest, ob die Menüleiste initial aufgeklappt oder minimiert ist.
-        * @property {'ROUTING'} [STARTUPMODUL] - Legt fest, welches Modul initial geladen werden soll. Derzeit nur für Routing verwendet.
-        * @property {string} [QUERY] - Führt initial eine Suche nach diesem Suchstring aus.
-        * @property {'DESKTOP'|'MOBILE'} [CLICKCOUNTER] - Legt fest, welcher, in der Config definierter, Klickzähler genutzt werden soll.
+        * @property {string} [CENTER] - Zentrumskoordinate. Rechtswert, Hochwert. EPSG:25832. Siehe {@link config.view}.
+        * @property {string} [LAYERIDS] - Kommagetrennte Aulistung der initial sichtbaren LayerIDs. Siehe {@link config.tree}.
+        * @property {string} [VISIBILITY] - Kommagetrennte Aulistung der Sichtbarkeit, der unter LAYERIDS genannten Layer. Nur bei tree.type: custom interessant.
+        * @property {Boolean} [ISMENUBARVISIBLE] - Legt fest, ob die Menüleiste initial aufgeklappt oder minimiert ist. Siehe {@link config.isMenubarVisible}.
+        * @property {'ROUTING'} [STARTUPMODUL] - Legt fest, welches Modul initial geladen werden soll. Derzeit nur für Routing verwendet. Siehe {@link config.menu}.
+        * @property {string} [QUERY] - Führt initial eine Suche nach diesem Suchstring aus. Siehe {@link config.searchBar}.
+        * @property {'DESKTOP'|'MOBILE'} [CLICKCOUNTER] - Legt fest, welcher, in der Config definierter, Klickzähler genutzt werden soll. Siehe {@link config.clickCounter}.
         * @desc Wenn TRUE, wird das Modul zur Auswertung parametrisierter Aufrufe geladen. Dieses Modul wertet folgende Parameter aus und übernimmt dessen spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js.
+        * @example http://geoportal-hamburg.de/verkehrsportal/?layerids=453,1935&center=560759,5932000&zoomlevel=5&clickcounter=desktop&ismenubarvisible=false
+        * @default [false]
         */
         allowParametricURL: true,
         /**
@@ -123,15 +133,17 @@ define(function () {
         view: {
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
-            epsg: "EPSG:25832"*/
+            epsg: "EPSG:25832"
+            */
         },
         /**
         * @memberof config
+        * @type {Object}
         * @desc Konfiguration der Controls auf der Map
-        * @property {Boolean}  zoom - Legt fest ob die Zoombuttons angezeigt werden sollen.
-        * @property {Boolean}  toggleMenu - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
-        * @property {Boolean}  orientation - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
-        * @property {Boolean}  poi - Legt fest ob die Points of Interest angezeigt werden sollen.
+        * @property {Boolean}  [zoom=false] - Legt fest ob die Zoombuttons angezeigt werden sollen.
+        * @property {Boolean}  [toggleMenu=false] - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
+        * @property {Boolean}  [orientation=false] - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
+        * @property {Boolean}  [poi=false] - Legt fest ob die Points of Interest angezeigt werden sollen. Nur möglich, bei orientation: true.
         */
         controls: {
             zoom: true,
@@ -140,142 +152,166 @@ define(function () {
             poi: true
         },
         /**
-        * customModules
         * @memberof config
+        * @desc Lädt zusätzliche Module außerhalb der main.js
         * @type {Array}
-        * @desc lädt die Module
+        * @property {string[]} url - Relativer Pfad ab main.js.
+        * @example customModules: ["../url", "../url"]
+        * @default []
         */
-        // customModules: ["customModule1", "customModule2"]
+        customModules: [],
         /**
         * @memberof config
-        * @type {String}
-        * @desc zeigt einen Footer-Bereich an
+        * @type {Boolean}
+        * @default [false]
+        * @desc Zeigt einen Footer-Bereich an.
         */
         footer: true,
         /**
         * @memberof config
-        * @type {String}
-        * @desc aktiviert das QuickHelp-Modul
+        * @default [false]
+        * @type {Boolean}
+        * @desc Aktiviert das QuickHelp-Modul.
         */
         quickHelp: true,
-
         /**
         * @memberof config
         * @type {String}
-        * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes
+        * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes.
+        * @example layerConf: "../components/lgv-config/services-fhhnet.json"
         */
         layerConf: "../components/lgv-config/services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}
-        * @desc Pfad zur json mit Druck- und WPS-Dienst
+        * @desc Pfad zur json mit Druck- und WPS-Dienst.
+        * @example restConf: "../components/lgv-config/rest-services-fhhnet.json"
         */
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
+        * @example styleConf: "../components/lgv-config/style.json"
         */
         styleConf: "../components/lgv-config/style.json",
         /**
         * @memberof config
         * @type {String}
-        * @desc Pfad zur Konfig-Datei für den automatisiert generiereten Layerbaum
-        */
-        categoryConf: "../components/lgv-config/category.json",
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Pfad zur Proxy-CGI
+        * @desc Pfad zur Proxy-CGI.
+        * @example proxyURL: "/cgi-bin/proxy.cgi"
         */
         proxyURL: "/cgi-bin/proxy.cgi",
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
+        * @desc Regelt die Darstellung der Layerattributierung aus layerConf oder {@link config.tree}.
+        * @default [false]
         */
         attributions: true,
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
+        * @default [false]
         */
         menubar: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Wenn TRUE, wird in main.js views/ScaleLineView.js geladen. Zeigt eine ScaleLine in der Map unten links an oder nicht. Benutze <div id="scaleLine" und <div id="scaleLineInner"></div>
+        * @desc Zeigt eine ScaleLine in der Map unten links an oder nicht.
+        * @default [false]
         */
         scaleLine: true,
         /**
         * @memberof config
         * @type {Boolean}
-        * @desc Wenn TRUE, wird in main.js views/MouseHoverPopupView.js geladen. Dieses Modul steuert die Darstellung des MouseHovers entsprechend layerIDs{mouseHoverField}
+        * @desc Steuert die Darstellung des MouseHovers. Siehe {@link config.tree}
+        * @default [false]
         */
         mouseHover: true,
         /**
         * @memberof config
         * @type {Boolean}
         * @desc Steuert, ob die Menubar initial ausgeklappt ist oder nicht.
+        * @default [true]
         */
         isMenubarVisible: true,
         /**
         * @memberof config
-        * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste aktivieren/deaktivieren.
-        * @property {Boolean}  searchBar - Die Suchfunktion.
-        * @property {Boolean}  layerTree - Der Themenbaum
-        * @property {Boolean}  helpButton - Der Hilfe-Button.
-        * @property {Object}  contactButton - Der Kontakt-Button. {on: true|false, email: string}. Default für email ist LGVGeoPortal-Hilfe@gv.hamburg.de
-        * @property {Boolean}  tools - Die Werkzeuge
-        * @property {Boolean}  treeFilter - Der Filter für die Straßenbäume.
-        * @property {Boolean}  wfsFeatureFilter - Der WFS-Filter. Filterung entsprechend Eintrag in layerIDs{filterOptions}.
-        * @property {Boolean}  legend - Die Legende
-        * @property {Boolean}  routing - Wenn TRUE, wird in main.js views/RoutingView.js geladen. Möglichkeit der Routenberechnung.
+        * @type {Object}
+        * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste konfigurieren.
+        * @property {Object} menu - Das menu-Konfigurationsobject
+        * @property {boolean} helpButton - auf false setzen
+        * @property {Boolean} [menu.searchBar=false] - Legt fest, ob die Suchfunktion geladen werden soll.
+        * @property {Boolean}  menu.layerTree - Legt fest, ob der Themenbaum geladen werden soll.
+        * @property {Object}  menu.contactButton - Konfigurationsobjekt des Kontakt-Buttons.
+        * @property {boolean} [menu.contactButton.on=false] Kontakt-Button anzeigen.
+        * @property {string} menu.contactButton.email Emailadresse Empfänger.
+        * @property {Boolean}  menu.tools - Legt fest, ob der Werkzeuge-Button angezeigt werden soll.
+        * @property {Boolean}  menu.treeFilter - Legt fest, ob der Filter für die Straßenbäume angezeigt werden soll.
+        * @property {Boolean}  menu.wfsFeatureFilter - Legt fest, ob der WFS-Filter geladen werden soll. Siehe {@link config.tree}.
+        * @property {Boolean}  menu.legend - Legt fest, ob das Legendenmodul geladen werden soll.
+        * @property {Boolean}  menu.routing - Legt fest, ob das RoutingModul geladen werden soll.
+        * @property {Object[]}  [menu.formular] - Konfigurationsobjekt eines Formulars
+        * @property {string}  menu.formular.title - Bezeichnung des Formulars
+        * @property {string}  menu.formular.symbol - Symbolname
+        * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
+        * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
+        * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
+        * @todo helpButton
         */
         menu: {
-            viewerName: "GeoViewer",
+            helpButton: false,
             searchBar: true,
             layerTree: true,
-            helpButton: false,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
             routing: true,
-            addWMS: true
+            addWMS: true,
+            formular: {}
         },
         /**
         * @memberof config
-        * @desc Konfiguration des beim Starten zu ladenden Moduls. Funktioniert derzeit mit wfsFeatureFilter und Routing. Wird auch im parametrisierten Aufruf erkannt.
-        * @property {String}  Name des Moduls.
+        * @type {String}
+        * @desc Legt das Modul fest, das beim Starten geööfnet wird. Funktioniert derzeit nur mit Routing. Wird auch im parametrisierten Aufruf {@link config.allowParametricURL}erkannt.
+        * @default ""
         */
         startUpModul: "",
         /**
         * @memberof config
+        * @type {Object}
         * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @property {Object} gazetteer Konfigurationsobjekt für die Gazeteer-Suche
-        * @property {string} gazetteer.url - Die URL.
-        * @property {boolean} gazetteer.searchStreets - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @property {boolean} gazetteer.searchHouseNumbers - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @property {boolean} gazetteer.searchDistricts - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @property {boolean} gazetteer.searchParcels - Soll nach Flurstücken gesucht werden? Default: false.
-        * @property {integer} gazetteer.minChars - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @property {Object} bkg Konfigurationsobjekt für die Suche auf dem BKG Geokodierungsdienst
-        * @property {integer} bkg.minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object} [visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
+        * @property {integer} [visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object} [tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
+        * @property {integer} [tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Objekt} [specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
+        * @property {integer} [specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object[]} specialWFS.definitions - Definitionen der SpecialWFS.
+        * @property {Object} specialWFS.definitions[].definition - Definition eines SpecialWFS.
+        * @property {string} specialWFS.definitions[].definition.url - Die URL, des WFS
+        * @property {string} specialWFS.definitions[].definition.data - Query string des WFS-Request
+        * @property {string} specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @property {Object} bkg - Das Konfigurationsobjet der BKG Suche.
+        * @property {integer} [bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
         * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
-        * @property {string} bkg.bkgSearchURL - URL für ausführliche Search.
-        * @property {float} bkg.extent - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @property {string} bkg.epsg - EPSG-Code des verwendeten Koordinatensystems.
-        * @property {string} bkg.filter - Filterstring
-        * @property {float} bkg.score - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @property {Object} specialWFS Konfigurationsobjekt für die server-seitige Suche auf WFS.
-        * @property {integer} specialWFS.minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {string} specialWFS.url - Die URL des WFS
-        * @property {string} specialWFS.data - Query string des WFS-Request
-        * @property {string} specialWFS.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @property {Object} visibleWFS Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
-        * @property {integer} visibleWFS.minChars - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
+        * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
+        * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
+        * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @property {Object} [gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
+        * @property {string} gazetteer.url - Die URL.
+        * @property {boolean} [gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @property {boolean} [gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @property {boolean} [gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @property {boolean} [gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
+        * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @property {string} [initialQuery] - Initialer Suchstring.
         */
         searchBar: {
             gazetteer: {
@@ -316,18 +352,13 @@ define(function () {
             placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
             geoLocateHit: true
         },
-
-        bPlan: {
-            url: function () {
-                return "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene";
-            }
-        },
-                 /**
+        /**
         * @memberof config
+        * @type {Object}
         * @desc Konfiguration für den Druckdienst.
-        * @property {String}  url - Die Druckdienst-URL
+        * @property {String}  printID - ID des Druckdienstes in der restServices.json. Siehe {@link config.restConf}.
         * @property {String}  title - Der Titel erscheint auf dem Ausdruck der Karte.
-        * @property {Boolean}  gfi - Bisher nur teilweise umgesetzt. Nur möglich wenn die Anzahl der GFI-Attribute genau sechs ist(Straßenbaumkataster).
+        * @property {Boolean}  gfi - Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.
         */
         print: {
             printID: "99999",
@@ -336,13 +367,15 @@ define(function () {
         },
         /**
         * @memberof config
+        * @type {Object}
         * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
-        * @property {Boolean}  gfi - GetFeatureInfo-Abfrage.
-        * @property {Boolean}  measure - Messen.
-        * @property {Boolean}  draw - Zeichnen.
-        * @property {Boolean}  print - Drucken.
-        * @property {Boolean}  coord - Koordinaten-Abfrage.
-        * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
+        * @property {Boolean}  [gfi=false] - GetFeatureInfo-Abfrage.
+        * @property {Boolean}  [measure=false] - Messen.
+        * @property {Boolean}  [draw=false] - Zeichnen.
+        * @property {Boolean}  [print=false] - Drucken.
+        * @property {Boolean}  [coord=false] - Koordinaten-Abfrage.
+        * @property {String}  [active=false] - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
+        * @property {Boolean}  [record=false] - Legt fest, ob das WFS-T Modul geladen werden soll.
         */
         tools: {
             gfi: true,
@@ -350,8 +383,34 @@ define(function () {
             print: true,
             coord: true,
             draw: true,
-            active: "gfi"
-        }
+            parcelSearch: true,
+            active: "gfi",
+            record: false
+        },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Legt fest, ob die geoAPI Schnittstelle geladen werden soll.
+        * @default [false]
+        */
+        geoAPI: false,
+        /**
+        * @memberof config
+        * @type {Object}
+        * @desc Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.
+        * @property {Object} [clickCounter] - Konfigurationsobjekt
+        * @property {'desktop'|'mobil'} [clickCounter.version] - Legt fest, an welche URL gemeldet werden soll. Siehe auch {@link config.allowParametricURL}
+        * @property {string} clickCounter.desktop - URL des iFrame bei Desktopausspielung.
+        * @property {string} clickCounter.mobil - URL des iFrame bei mobiler Ausspielung.
+        * @example clickCounter: {version: "", desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html", mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"}
+        */
+        clickCounter: {},
+        /**
+        * @memberof config
+        * @type {String}
+        * @desc Pfad zur gemarkung.json für die Flurstückssuche.
+        */
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;

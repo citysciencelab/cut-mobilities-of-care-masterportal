@@ -164,13 +164,16 @@ define([
                         type: feature.getGeometry().getType()
                     }
                 });
+
                 featureStyles[index] = {
-                    fillColor: feature.getStyle().getFill().getColor(),
+                    fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
+                    fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
                     pointRadius: feature.getStyle().getImage().getRadius(),
-                    strokeColor: feature.getStyle().getStroke().getColor(),
-                    strokeWidth: feature.getStyle().getStroke().getWidth()
+                    strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
+                    strokeWidth: feature.getStyle().getStroke().getWidth(),
+                    strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
                 };
-            });
+            }, this);
             this.push("layerToPrint", {
                 type: "Vector",
                 styles: featureStyles,
@@ -331,6 +334,48 @@ define([
 
             tempArray.push(value);
             this.set(attribute, _.flatten(tempArray));
+        },
+
+        // Prüft ob es sich um einen rgb(a) oder hexadezimal String handelt.
+        // Ist es ein rgb(a) String, wird er in ein hexadezimal String umgewandelt.
+        // Wenn vorhanden, wird die Opacity(default = 1) überschrieben.
+        // Gibt den hexadezimal String und die Opacity zurück.
+        getColor: function (value) {
+            var color = value,
+                opacity = 1;
+
+            if (color.search("#") === -1) {
+                var begin = color.indexOf("(") + 1;
+
+                color = color.substring(begin, color.length - 1);
+                color = color.split(",");
+                if (color.length === 4) {
+                    opacity = parseFloat(color[3], 10);
+                }
+                color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
+                return {
+                    "color": color,
+                    "opacity": opacity
+                };
+            }
+            else {
+                return {
+                    "color": color,
+                    "opacity": opacity
+                };
+            }
+        },
+
+        // Setzt den hexadezimal String zusammen und gibt ihn zurück.
+        rgbToHex: function (red, green, blue) {
+            return "#" + this.componentToHex(red) + this.componentToHex(green) + this.componentToHex(blue);
+        },
+
+        // Ein Integer (color) wird in ein hexadezimal String umgewandelt und zurückgegeben.
+        componentToHex: function (color) {
+            var hex = color.toString(16);
+
+            return hex.length === 1 ? "0" + hex : hex;
         }
     });
 

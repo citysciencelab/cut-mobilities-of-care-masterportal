@@ -33,7 +33,6 @@ define([
                 newlayer.get("layer").setVisible(true);
                 newlayer.visibility = true;
                 newlayer.get("layer").setOpacity(1);
-                newlayer.get("layer").setSaturation(1);
                 layers.push(newlayer.get("layer"));
                 backbonelayers.push(newlayer);
             });
