@@ -121,7 +121,7 @@ define(function () {
         tools: {
             gfi: true,
             measure: true,
-            print: false,
+            print: true,
             coord: true,
             draw: true,
             record: false,
@@ -132,7 +132,8 @@ define(function () {
             printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
             outputFilename: "Ausdruck Geoportal GDI-MRH",
-            gfi: false
+            gfi: false,
+            configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };
