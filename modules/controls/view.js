@@ -22,6 +22,11 @@ define([
                     new OrientationView();
                 });
             }
+            this.$el.on({
+                click: function (e) {
+                    e.stopPropagation();
+                }
+            });
         },
         render: function () {
             $(".navbar").after(this.$el);
