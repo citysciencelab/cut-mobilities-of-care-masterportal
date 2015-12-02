@@ -35,7 +35,20 @@ define([
                     });
                 },
                 success: function (collection) {
-                    Config.tree.layer = _.flatten(collection.pluck("layers"));
+                    var layerList = _.flatten(collection.pluck("layers"));
+
+                    // Wenn ein Portal mit einem "custom-tree" parametrisiert aufgerufen wird,
+                    // ist Config.tree.layer bereits definiert.
+                    // Beispiel: http://localhost:9001/portale/architekten/?layerIDs=1043,1757&visibility=true,true&center=567323.9473630342,5935541.810008875&zoomlevel=2
+                    // Dann wird hier die tree-config.json mit Config.tree.layer zusammengeführt.
+                    if (_.has(Config.tree, "layer") === true) {
+                        layerList.map(function (la) {
+                            var layer = _.findWhere(Config.tree.layer, {id: la.id});
+
+                            return _.extend(la, layer);
+                        });
+                    }
+                    Config.tree.layer = layerList;
                 }
             });
         },

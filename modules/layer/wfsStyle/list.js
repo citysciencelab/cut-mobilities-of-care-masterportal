@@ -1,11 +1,10 @@
 define([
-    "underscore",
     "backbone",
-    "models/WFSStyle",
+    "modules/layer/wfsStyle/model",
     "config",
     "modules/core/util",
     "eventbus"
-], function (_, Backbone, WFSStyle, Config, Util, EventBus) {
+], function (Backbone, WFSStyle, Config, Util, EventBus) {
 
     var StyleList = Backbone.Collection.extend ({
         model: WFSStyle,

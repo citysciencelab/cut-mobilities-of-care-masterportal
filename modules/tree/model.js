@@ -8,7 +8,8 @@ define([
             defaults: {
                 topicList: ["Opendata", "Inspire"], // --> Config
                 currentSelection: Config.tree.orderBy,
-                type: Config.tree.type
+                type: Config.tree.type,
+                quickHelp: false
             },
             initialize: function () {
                 this.listenTo(EventBus, {
@@ -17,6 +18,10 @@ define([
                     }
                 });
                 this.listenTo(this, "change:currentSelection", this.sendSelection);
+
+                if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
+                    this.set("quickHelp", true);
+                }
             },
             setSelection: function (value) {
                 this.set("currentSelection", value.toLowerCase());

@@ -92,9 +92,7 @@ define([
             "click .list-group-item.type": "collapseHits",
             "click .btn-search-question": function () {
                 EventBus.trigger("showWindowHelp", "search");
-            },
-            "mouseover ": "showHelp",
-            "mouseleave ": "hideHelp"
+            }
         },
         /**
         *
@@ -291,12 +289,6 @@ define([
 
             element.focus();
             element[0].setSelectionRange(strLength, strLength);
-        },
-        showHelp: function () {
-            $(".btn-search-question").css("opacity", "1");
-        },
-        hideHelp: function () {
-            $(".btn-search-question").css("opacity", "0");
         },
         showHelpWindow: function () {
             EventBus.trigger("showWindowHelp", "search");
