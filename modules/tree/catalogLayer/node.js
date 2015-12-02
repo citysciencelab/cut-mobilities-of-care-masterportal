@@ -19,6 +19,7 @@ define([
         },
 
         initialize: function () {
+            console.log("init");
             this.listenToOnce(this, {
                 "change:layerList": this.setChildren,
                 "change:children": this.setSortedLayerList,
@@ -45,6 +46,7 @@ define([
                 this.setNodeLayerForCustomTree();
                 this.setNodeChildLayerForCustomTree();
                 this.set("children", _.union(this.get("nodeLayer"), this.get("nodeChildLayer")));
+                console.log(this.get("children").length);
             }
             else {
                 this.setChildrenForTree();
@@ -70,6 +72,7 @@ define([
 
                 // Gruppiert die Layer nach der jeweiligen Node
                 countByNode = _.countBy(_.pluck(nodeLayerList, "attributes"), "node");
+                console.log(countByNode);
                 // Iteriert über die gruppierten Layer
                 _.each(countByNode, function (value, key) {
                     if (key !== "undefined") {
@@ -83,14 +86,14 @@ define([
                     }
                 }, this);
 
-                //********************************************** --> nur vorübergehend fürs Olympia-Portal...hoffentlich
+                //********************************************** --> nur vorübergehend fürs Olympia-Portal...hoffentlich --> hier fehlt ein if-Statement
                 // Alle Layer die keine MetaID und keinen Subfolder haben
-                nodeLayerList = _.filter(this.get("layerList"), function (layer) {
-                    return layer.attributes.metaID === undefined && layer.attributes.subfolder === undefined;
-                });
-                _.each(nodeLayerList, function (layer) {
-                    this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
-                }, this);
+                // nodeLayerList = _.filter(this.get("layerList"), function (layer) {
+                //     return layer.attributes.metaID === undefined && layer.attributes.subfolder === undefined;
+                // });
+                // _.each(nodeLayerList, function (layer) {
+                //     this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
+                // }, this);
                 //**********************************************
         },
 
