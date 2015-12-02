@@ -31,6 +31,7 @@ define(function () {
             toggleMenu: true,
             orientation: true
         },
+        attributions: true,
         footer: false,
         quickHelp: false,
         allowParametricURL: true,
