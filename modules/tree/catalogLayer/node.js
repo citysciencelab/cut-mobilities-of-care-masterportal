@@ -44,12 +44,12 @@ define([
             if (Config.tree.type === "custom") {
                 this.setNodeLayerForCustomTree();
                 this.setNodeChildLayerForCustomTree();
+                this.set("children", _.union(this.get("nodeLayer"), this.get("nodeChildLayer")));
             }
             else {
                 this.setChildrenForTree();
+                this.set("children", _.union(_.sortBy(this.get("nodeLayer"), "name").reverse(), _.sortBy(this.get("nodeChildLayer"), "name").reverse()));
             }
-            this.set("children", _.union(_.sortBy(this.get("nodeLayer"), "name").reverse(), _.sortBy(this.get("nodeChildLayer"), "name").reverse()));
-
         },
 
         /**
@@ -60,37 +60,26 @@ define([
          */
         setNodeLayerForCustomTree: function () {
             var nodeLayerList,
-                countByMetaID,
-                layerListByMetaID;
+                countByNode,
+                layerListByNode;
 
                 // Alle Layer die nicht zu einem Unterordner gehören
                 nodeLayerList = _.filter(this.get("layerList"), function (layer) {
                     return layer.attributes.subfolder === undefined;
                 });
 
-                // Gruppiert die Layer nach deren MetaID
-                countByMetaID = _.countBy(_.pluck(nodeLayerList, "attributes"), "metaID");
-
+                // Gruppiert die Layer nach der jeweiligen Node
+                countByNode = _.countBy(_.pluck(nodeLayerList, "attributes"), "node");
                 // Iteriert über die gruppierten Layer
-                _.each(countByMetaID, function (value, key) {
+                _.each(countByNode, function (value, key) {
                     if (key !== "undefined") {
-                        // Alle Layer der Gruppe (sprich gleiche MetaID)
-                        layerListByMetaID = _.filter(nodeLayerList, function (layer) {
-                            return layer.attributes.metaID === key;
-                        });
-                        // Layer nach Namen sortiert
-                        layerListByMetaID = _.sortBy(layerListByMetaID, function (layer) {
-                            return layer.get("name");
+                        // Alle Layer der Gruppe (sprich gleiche Node)
+                        layerListByNode = _.filter(nodeLayerList, function (layer) {
+                            return layer.attributes.node === key;
                         }).reverse();
-                        // Gibt es mehrere Layer in der Gruppe werden sie in einem Unterordner (Metadaten-Name) zusammengefasst
-                        if (layerListByMetaID.length > 1) {
-                            // Layer zum Attribut "nodeChildLayer" hinzugefügt
-                            this.push("nodeChildLayer", {type: "nodeChild", name: layerListByMetaID[0].get("metaName"), children: layerListByMetaID});
-                        }
-                        else {
-                            // Layer zum Attribut "nodeLayer" hinzugefügt
-                            this.push("nodeLayer", {type: "nodeLayer", name: layerListByMetaID[0].get("name"), layer: layerListByMetaID[0]});
-                        }
+                        _.each(layerListByNode, function (layer) {
+                            this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
+                        }, this);
                     }
                 }, this);
 
@@ -119,17 +108,13 @@ define([
                     return layer.attributes.subfolder !== undefined;
                 });
                 // Gruppiert die Layer nach deren Unterordnern
-                 countByFolder = _.countBy(_.pluck(nodeChildLayerList, "attributes"), "subfolder");
+                 countByFolder = _.countBy(_.pluck(nodeChildLayerList, "attributes").reverse(), "subfolder");
 
                  // Iteriert über die gruppierten Layer
                 _.each(countByFolder, function (value, key) {
                     // Alle Layer der Gruppe (sprich gleiche Unterordner)
                     layerListByFolder = _.filter(this.get("layerList"), function (layer) {
                         return layer.attributes.subfolder === key;
-                    });
-                    // Layer nach Namen sortiert
-                    layerListByFolder = _.sortBy(layerListByFolder, function (layer) {
-                        return layer.get("name");
                     }).reverse();
                     // Layer zum Attribut "nodeChildLayer" hinzugefügt
                     this.push("nodeChildLayer", {type: "nodeChild", name: layerListByFolder[0].get("subfolder"), children: layerListByFolder});

@@ -13,6 +13,7 @@ define([
             selected: false,
             settings: false,
             visibility: false,
+            treeType: Config.tree.type,
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
