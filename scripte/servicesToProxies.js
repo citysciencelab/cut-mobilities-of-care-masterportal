@@ -9,7 +9,6 @@ var fs = require("fs"),
 _ = require("underscore"),
 url = require("url"),
 // arguments kommt von Note.js und enthält die in der Konsole übergebenen Argumente
-arguments = process.argv,
 targetFile = "",
 targetFileLocal = "";
 
@@ -22,19 +21,19 @@ function getProxyName (domain) {
 // erstellt einen localen Proxyeintrag
 // Bei Internet Url wird auf den 96er weitergeleitet
 // Bei Fhh urls wird ein rewrite eingefügt
-function appendToLocalProxies (proxyName, domain, isLast, proxyForFHHNet) {
-    if (!proxyForFHHNet) {
+function appendToLocalProxies (proxyName, domain, port, isLast, proxyForFHHNet) {
+    if (proxyForFHHNet) {
         domain = "wscd0096";
     }
     var entry = "{\n" +
                 "   context: \"/" + proxyName + "\",\n" +
                 "   host: \"" + domain + "\",\n" +
-                "   port: 80,\n" +
+                "   port: " + port + ",\n" +
                 "   https: false,\n" +
                 "   changeOrigin: false,\n" +
                 "   xforward: false";
 
-    if (proxyForFHHNet) {
+    if (!proxyForFHHNet) {
         entry += ",\n   rewrite: {\n" +
                 "       \"^/" + proxyName + "\": \"\"\n" +
                 "   }";
@@ -43,7 +42,7 @@ function appendToLocalProxies (proxyName, domain, isLast, proxyForFHHNet) {
     entry += "\n}";
 
     if (!isLast) {
-        entry += ",";
+        entry += ",\n";
     }
     console.log(entry);
     fs.appendFile(targetFileLocal,
@@ -86,6 +85,9 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
     domain = entry[1],
     port = entry[2];
 
+    if (!port) {
+        port = "80";
+    }
     if (domain) {
 
         var proxyName = getProxyName(domain);
@@ -93,88 +95,97 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
         // die domain ist ein Proxy
         // (z.B. /geofos)
         if (proxyName === domain) {
-            console.log("domain: " + domain + " ausgelassen, da bereits proxy");
-            return;
+            console.log("===============> domain: " + domain + " Achtung: eventuell Teil einer anderen Domain");
+           // return;
         }
         // lokalen proxy erstellen
-        appendToLocalProxies(proxyName, domain, isLast, proxyForFHHNet);
+        appendToLocalProxies(proxyName, domain, port, isLast, proxyForFHHNet);
 
         // apache proxy erstellen
         appendToApacheProxies(protocol, domain, port, proxyName, proxyForFHHNet);
     }
 }
 
-function printHelpText () {
-    console.log("### @Params: Path to Json File");
-    console.log("### @Params: (optional) (Values: \"true/false\"): Should a remoteProxy be created");
-    console.log("### Example: servicesToProxies \"../components/lgv-config/services.json\" \"true\" \n\n");
+function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
+
+          // In entry array werden alle aus der Json extrahierten url eintraege gespeichert
+          var entryArray = [];
+
+          _.each(allDomains, function (layer) {
+                var hostname = url.parse(layer.url).hostname;
+
+                if (hostname) {
+
+                    // duplikate vermeiden, die sich nur durch ein "www" in der Domain unterscheiden
+                    // hostname = hostname.replace(/www\d?\./, "");
+                    // Tripel aus protocol, domain und port in array sammeln
+                    entryArray.push([url.parse(layer.url).protocol, hostname, url.parse(layer.url).port]);
+                }
+            });
+          // doppelte domain rauswerfen
+          entryArray = _.unique(entryArray, function (item) {
+            return item[1].replace(/www\d?\./, "");
+            });
+          // für jeden eintrag im array einen Proxy schreiben
+          _.each(entryArray, function (entry, index) {
+                var isLast = false;
+
+                if ((entryArray.length - 1) === index) {
+                    isLast = true;
+                }
+                // proxies erstellen
+                writeEntry(entry, isLast, proxyForFHHNet);
+          });
 }
 
-printHelpText();
+function printHelpText () {
+    console.log("### @Params: name of targetfile");
+    console.log("### @Params: (Values: \"true/false\"): Should a remoteProxy be created");
+    console.log("### @Params: 4-x Paths to Json Files");
+    console.log("### Example: servicesToProxies \"proxiesFuer96er\" \"true\" \"../components/lgv-config/services.json\"  \n\n");
+}
 
-// json laden
-if (typeof arguments[2] !== "undefined") {
-    if (targetFile === "") {
-        // Apache Zieldatei
-        targetFile = "proxies_" + arguments[2].substring(arguments[2].lastIndexOf("/") + 1, arguments[2].lastIndexOf(".")) + ".txt";
-    }
-    var proxyForFHHNet = false;
 
-    if (typeof arguments[3] !== "undefined" && arguments[3] === "true") {
-        proxyForFHHNet = true;
-        console.log("RemoteProxies are being created.\n");
-    }
-    // Lokale Zieldatei
-    targetFileLocal = "local_" + targetFile;
+function main () {
+    printHelpText();
+    var arguments = process.argv;
 
-    // datei löschen
-    fs.writeFile(targetFile, "");
-    fs.writeFile(targetFileLocal, "");
-    // In obj wird das geparste json Objekt gespeichert
-    var obj = {};
+    // json laden
+    if (typeof arguments[4] !== "undefined") {
+        if (targetFile === "") {
+            // Apache Zieldatei
+            targetFile = arguments[2] + ".conf";
+        }
+        var proxyForFHHNet = false;
 
-    fs.readFile(arguments[2], "utf8", function (err, data) {
-        // UTF8 BOM entfernen
-        obj = JSON.parse(data.toString("utf8").replace(/^\uFEFF/, ""));
-      if (err) {
-        // Datei kann nicht gelesen werden
-        return console.log(err);
-      }
+        if (typeof arguments[3] !== "undefined" && arguments[3] === "true") {
+            proxyForFHHNet = true;
+            console.log("RemoteProxies are being created.\n");
+        }
+        // Lokale Zieldatei
+        targetFileLocal = "local_" + targetFile;
 
-      // In entrz arraz werden alle aus der Json extrahierten url eintraege gespeichert
-      var entryArray = [];
+        // datei löschen
+        fs.writeFile(targetFile, "");
+        fs.writeFile(targetFileLocal, "");
 
-      _.each(obj, function (layer) {
-            var hostname = url.parse(layer.url).hostname;
+        var allDomains = [];
 
-            if (hostname) {
+        for (var i = 4; i < arguments.length; i++) {
+            var data = fs.readFileSync(arguments[i], "utf8"),
+            obj = JSON.parse(data.toString("utf8").replace(/^\uFEFF/, ""));
 
-                // duplikate vermeiden, die sich nur durch ein "www" in der Domain unterscheiden
-                // hostname = hostname.replace(/www\d?\./, "");
-                // Tripel aus protocol, domain und port in array sammeln
-                entryArray.push([url.parse(layer.url).protocol, hostname, url.parse(layer.url).port]);
-            }
-        });
-      // doppelte domain rauswerfen
-      entryArray = _.unique(entryArray, function (item) {
-        return item[1].replace(/www\d?\./, "");
-        });
-      // für jeden eintrag im array einen Proxy schreiben
-      _.each(entryArray, function (entry, index) {
-            var isLast = false;
-
-            if ((entryArray.length - 1) === index) {
-                isLast = true;
-            }
-            // proxies erstellen
-            writeEntry(entry, isLast, proxyForFHHNet);
-      });
-
+            allDomains.concat(obj);
+        }
+        allDomains.length;
+        console.log(allDomains);
+        readfileAndGenerateProxies(allDomains, proxyForFHHNet);
         console.log("\nWritten: apache proxies to " + targetFile);
         console.log("Written: local proxies to " + targetFileLocal);
-    });
+    }
+    else {
+        console.log("Bitte den Pfad zur Json als argument übergeben");
+    }
+}
 
-}
-else {
-    console.log("Bitte den Pfad zur Json als argument übergeben");
-}
+main();
