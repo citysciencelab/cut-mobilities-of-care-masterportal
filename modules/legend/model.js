@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "collections/stylelist",
+    "modules/layer/wfsStyle/list",
     "eventbus",
     "bootstrap/modal"
 ], function (Backbone, StyleList, EventBus) {

@@ -5,7 +5,7 @@ define([
     "eventbus",
     "config",
     "modules/layer/Layer",
-    "collections/StyleList",
+    "modules/layer/wfsStyle/list",
     "modules/core/util",
     "modules/core/mapView"
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
