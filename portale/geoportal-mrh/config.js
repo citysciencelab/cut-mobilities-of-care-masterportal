@@ -31,6 +31,7 @@ define(function () {
             toggleMenu: true,
             orientation: true
         },
+        attributions: true,
         footer: false,
         quickHelp: false,
         allowParametricURL: true,
@@ -125,7 +126,6 @@ define(function () {
             coord: true,
             draw: true,
             record: false,
-            orientation: false,
             active: "gfi"
         },
         print: {

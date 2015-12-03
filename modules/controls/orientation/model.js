@@ -3,7 +3,7 @@ define([
     "eventbus",
     "openlayers",
     "proj4",
-    "collections/StyleList",
+    "modules/layer/wfsStyle/list",
     "config"
 ], function (Backbone, EventBus, ol, proj4, StyleList, Config) {
 
