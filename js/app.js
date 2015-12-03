@@ -56,7 +56,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
             });
         }
 
-        if (Config.footer && Config.footer === true) {
+        if (Config.footer && (Config.footer === true || Config.footer.ulrs)) {
             require(["modules/footer/view"], function (FooterView) {
                 new FooterView();
             });
