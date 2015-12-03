@@ -105,7 +105,7 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
+                {id: "2834", visible: true, gfiTheme: "mietenspiegel"},
                 {id: "2730", visible: false, displayInTree: false},
                 {id: "2731", visible: false, displayInTree: false}
             ]

@@ -148,7 +148,7 @@ define([
             if (this.get("styleField") && this.get("styleField") !== "") {
                 if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
                     if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        // TODO
+                        this.setSimpleStyleForStyleFieldAndLabel();
                     }
                     else {
                         this.setSimpleStyleForStyleField();
@@ -202,6 +202,19 @@ define([
                     stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
 
                 return stylelistmodel.getSimpleStyle();
+            });
+        },
+        setSimpleStyleForStyleFieldAndLabel: function () {
+            var styleId = this.get("styleId"),
+                styleLabelField = this.get("styleLabelField"),
+                styleField = this.get("styleField");
+
+            this.set("style", function (feature) {
+                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
+                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
+                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
+
+                return stylelistmodel.getCustomLabeledStyle(label);
             });
         },
         setClusterStyleForStyleField: function () {

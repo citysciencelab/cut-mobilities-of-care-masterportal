@@ -24,9 +24,7 @@ define(function () {
                     "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"]
                 }
             ],
-            customConfig: "../components/lgv-config/tree-config/architekten.json"
-        },
-        baseLayer: [
+            baseLayer: [
             {id: "94", visibility: false}, // luftbilder unbelaubt
             {id: "756", visibility: false}, // luftbilder belaubt
             {id: "713", visibility: false}, // stadtplan s-w
@@ -35,6 +33,8 @@ define(function () {
             {id: "368", visibility: false}, // alkis farbig
             {id: "149", visibility: false} // alkis g-b
         ],
+            customConfig: "../components/lgv-config/tree-config/architekten.json"
+        },
         controls: {
             zoom: true,
             toggleMenu: true
@@ -47,8 +47,8 @@ define(function () {
         },
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
 
         print: {
@@ -70,7 +70,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: false
         },
         startUpModul: "",
