@@ -145,7 +145,6 @@ function printHelpText () {
     console.log("### Example: servicesToProxies \"proxiesFuer96er\" \"true\" \"../components/lgv-config/services.json\"  \n\n");
 }
 
-
 function main () {
     printHelpText();
     var arguments = process.argv;
@@ -175,10 +174,9 @@ function main () {
             var data = fs.readFileSync(arguments[i], "utf8"),
             obj = JSON.parse(data.toString("utf8").replace(/^\uFEFF/, ""));
 
-            allDomains.concat(obj);
+            allDomains = allDomains.concat(obj);
         }
-        allDomains.length;
-        console.log(allDomains);
+        console.log(allDomains.length);
         readfileAndGenerateProxies(allDomains, proxyForFHHNet);
         console.log("\nWritten: apache proxies to " + targetFile);
         console.log("Written: local proxies to " + targetFileLocal);
