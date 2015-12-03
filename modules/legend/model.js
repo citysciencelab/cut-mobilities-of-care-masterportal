@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "collections/stylelist",
+    "modules/layer/wfsStyle/list",
     "eventbus",
     "bootstrap/modal"
 ], function (Backbone, StyleList, EventBus) {
@@ -90,7 +90,12 @@ define([
                 if (styleList.length > 1) {
                     _.each(styleList, function (style) {
                         image.push(style.getSimpleStyle()[0].getImage().getSrc());
-                        name.push(style.get("styleFieldValue"));
+                        if (style.has("legendValue")) {
+                            name.push(style.get("legendValue"));
+                        }
+                        else {
+                            name.push(style.get("styleFieldValue"));
+                        }
                     });
                 }
                 else {

@@ -31,6 +31,7 @@ define(function () {
             toggleMenu: true,
             orientation: true
         },
+        attributions: true,
         footer: false,
         quickHelp: false,
         allowParametricURL: true,
@@ -131,7 +132,8 @@ define(function () {
             printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
             outputFilename: "Ausdruck Geoportal GDI-MRH",
-            gfi: false
+            gfi: false,
+            configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };

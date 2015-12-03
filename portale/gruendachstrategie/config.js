@@ -5,7 +5,7 @@ define(function () {
         allowParametricURL: false,
         view: {
             center: [565874, 5934140], // Rathausmarkt
-            resolution: 26.458386250105834 // // 1:100.000
+            resolution: 26.458319045841044 // // 1:100.000
         },
         controls: {
             zoom: true,
