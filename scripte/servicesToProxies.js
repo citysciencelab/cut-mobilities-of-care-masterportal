@@ -140,9 +140,9 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
 
 function printHelpText () {
     console.log("### @Params: name of targetfile");
-    console.log("### @Params: (Values: \"true/false\"): Should a remoteProxy be created");
-    console.log("### @Params: 4-x Paths to Json Files");
-    console.log("### Example: servicesToProxies \"proxiesFuer96er\" \"true\" \"../components/lgv-config/services.json\"  \n\n");
+    console.log("### @Params: (Values: \"true/false\"): Should a remoteProxy be created (needed when target Server is within fhhnet and Proxiy targets are in the Internet");
+    console.log("### @Params 4-x:  Paths to Json Files");
+    console.log("### Example: servicesToProxies \"proxiesFuer96er\" \"true\" \"../components/lgv-config/rest-services-fhhnet.json\" \"../components/lgv-config/services-fhhnet.json\"  \n\n");
 }
 
 function main () {
