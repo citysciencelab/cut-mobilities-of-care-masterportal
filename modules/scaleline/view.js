@@ -18,7 +18,7 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (Config.footer && Config.footer === true) {
+            if (Config.footer) {
                 $(".footer").append(this.$el);
                 $(".scale-line").css("right", 0);
             }
