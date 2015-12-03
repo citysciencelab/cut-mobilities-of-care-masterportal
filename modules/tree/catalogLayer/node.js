@@ -19,7 +19,6 @@ define([
         },
 
         initialize: function () {
-            console.log("init");
             this.listenToOnce(this, {
                 "change:layerList": this.setChildren,
                 "change:children": this.setSortedLayerList,
@@ -46,7 +45,6 @@ define([
                 this.setNodeLayerForCustomTree();
                 this.setNodeChildLayerForCustomTree();
                 this.set("children", _.union(this.get("nodeLayer"), this.get("nodeChildLayer")));
-                console.log(this.get("children").length);
             }
             else {
                 this.setChildrenForTree();
@@ -72,7 +70,6 @@ define([
 
                 // Gruppiert die Layer nach der jeweiligen Node
                 countByNode = _.countBy(_.pluck(nodeLayerList, "attributes"), "node");
-                console.log(countByNode);
                 // Iteriert über die gruppierten Layer
                 _.each(countByNode, function (value, key) {
                     if (key !== "undefined") {

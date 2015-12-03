@@ -37,21 +37,34 @@ run: function () {
 				var childLayerStore = treeConfigRecord.children[k].layerStore,
 					layer = treeConfigRecord.children[k].layer,
 					childFolder = treeConfigRecord.children[k].text,
-					secondLevel = {};
+                    secondLevel = {};
 
 				if (childLayerStore) {
 					secondLevel = {node: childFolder, layerIDs: []};
-					// console.log("    " + childFolder);
 					secondLevel = this.addLayers(childLayerStore, isBaseLayerStore, secondLevel);
 				}
-				// Freizeit & Tourismus (?), maybe coz of folders after layers?
+				// Freizeit & Tourismus
 				else if (layer) {
 					layer.id = this.getId(layer.id);
                     this.layers.push(layer);
                     firstLevel.layerIDs.push({id: layer.id, visible:false});
 				}
+                // Freizeit Cuxhaven
+                else {
+                    var cuxhavenConfig = treeConfigRecord.children[k];
 
-				// check for empty secondLevel object - happens with Freizeit & Tourismus
+                    for (var j = 0; j < cuxhavenConfig.children.length; j++) {
+                        var childFolder = cuxhavenConfig.children[j].text,
+                            childLayerStore = cuxhavenConfig.children[j].layerStore;
+
+                        secondLevel = {node: "Cuxhaven: " + childFolder, layerIDs: []};
+                        secondLevel = this.addLayers(childLayerStore, false, secondLevel);
+
+                        firstLevel.childnodes.push(secondLevel);
+                    }
+                }
+
+                // check for empty secondLevel object - happens with Freizeit & Tourismus
 				if (Object.keys(secondLevel).length !== 0) {
 					firstLevel.childnodes.push(secondLevel);
 				}
@@ -64,7 +77,8 @@ run: function () {
 
     this.writeLgvTreeConfig();
     console.log("###");
-	this.writeServicesJson();
+    this.writeServicesJson();
+
 	return "copy json from console.";
 },
 
@@ -103,14 +117,12 @@ addLayers: function (layerStore, isBaseLayerStore, level) {
         id = rec.data.layer.id = this.getId(rec.data.layer.id);
 		if (isBaseLayerStore) {
             if (rec.data.layer.isBaseLayer) {
-                console.log(rec.data.layer);
                 this.layers.push(rec.data.layer);
 				level.layerIDs.push({id: id, visible: (rec.data.layer.name === "WebatlasDE")});
 			}
 		}
 		else {
 			this.layers.push(rec.data.layer);
-            // console.log("        " + rec.data.layer.name);
             level.layerIDs.push({id: id, visible: false});
 		}
 	}, this);
@@ -142,6 +154,7 @@ writeServicesJson: function () {
             "maxScale": 1000000,
             "gfiAttributes": this.translateGfiProps(layer),
             "layerAttribution": layer.attribution || "nicht vorhanden",
+            "legendURL": layer.legendURL || "",
             "cache": false,
             "datasets": []
 		});
