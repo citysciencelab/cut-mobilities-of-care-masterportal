@@ -171,7 +171,6 @@ define([
                             width: strokewidth
                         })
                     });
-
             }
             else if (this.get("subclass") === "Circle") {
                 var radius = parseInt(this.get("circleradius"), 10),
