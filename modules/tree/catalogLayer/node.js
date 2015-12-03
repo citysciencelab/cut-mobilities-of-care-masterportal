@@ -83,14 +83,14 @@ define([
                     }
                 }, this);
 
-                //********************************************** --> nur vorübergehend fürs Olympia-Portal...hoffentlich
+                //********************************************** --> nur vorübergehend fürs Olympia-Portal...hoffentlich --> hier fehlt ein if-Statement
                 // Alle Layer die keine MetaID und keinen Subfolder haben
-                nodeLayerList = _.filter(this.get("layerList"), function (layer) {
-                    return layer.attributes.metaID === undefined && layer.attributes.subfolder === undefined;
-                });
-                _.each(nodeLayerList, function (layer) {
-                    this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
-                }, this);
+                // nodeLayerList = _.filter(this.get("layerList"), function (layer) {
+                //     return layer.attributes.metaID === undefined && layer.attributes.subfolder === undefined;
+                // });
+                // _.each(nodeLayerList, function (layer) {
+                //     this.push("nodeLayer", {type: "nodeLayer", name: layer.get("name"), layer: layer});
+                // }, this);
                 //**********************************************
         },
 
