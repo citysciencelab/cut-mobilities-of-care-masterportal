@@ -109,7 +109,7 @@ define(function () {
         tree: {
             type: "light",
             layer: [
-                {id: "2515", visible: true, gfiTheme: "mietenspiegel"},
+                {id: "2834", visible: true, gfiTheme: "mietenspiegel"},
                 {id: "2730", visible: false, displayInTree: false},
                 {id: "2731", visible: false, displayInTree: false}
             ]
