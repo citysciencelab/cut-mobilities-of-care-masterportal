@@ -173,6 +173,19 @@ define([
             else {
                 data = "";
             }
+            if (Config.feature_count) {
+                var index = -1;
+                debugger;
+                _.each(Config.feature_count, function (layer, idx) {
+                    if (layer.id + "" === params.id) {
+                        index = idx;
+                        return;
+                    }
+                });
+                if (index !== -1) {
+                    data += "FEATURE_COUNT=" + Config.feature_count[index].count;
+                }
+            }
 
             $.ajax({
                 url: url,

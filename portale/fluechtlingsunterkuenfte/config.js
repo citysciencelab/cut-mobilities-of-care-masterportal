@@ -29,6 +29,18 @@ define(function () {
             toggleMenu: true
         },
         /**
+        * @desc Erlaubt für einzelne Layer mehr Objekte pro GFI-request zuzulassen.
+        * @memberof config
+        * @property {number} id - Die Id der Layer
+        * @property {number} count -Anzahl der Objekte pro GFI
+        */
+        feature_count: [
+            {
+                id: 4,
+                count: 5
+            }
+        ],
+        /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
         * @property {Array}  center - Die initiale Zentrumskoordinate. Default ist [565874, 5934140]
