@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <% _.each(typeList, function (type) {
-    var hitListOfType = _.where(hitList, {type: type}); %>
+    var hitListOfType = _.sortBy(_.where(hitList, {type: type}), "name"); %>
     <li class="list-group-item type" style="min-width: 300px;"><span class="badge"><%= hitListOfType.length %></span><%= type %></li><div style="max-height: 220px; overflow-y: auto; overflow-x: hidden; display: none;">
         <% _.each(hitListOfType, function (hit) { %>
             <% if (hit.model !== undefined && hit.model.get("type") === "nodeLayer" && hit.metaName !== null) { %>

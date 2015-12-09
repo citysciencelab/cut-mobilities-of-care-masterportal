@@ -149,7 +149,6 @@ define([
             // Iteriert über "children"
             _.each(this.get("children"), function (child) {
                 if (child.type === "nodeLayer") {
-                    console.log("nodeLayer");
                     // nodeLayerView
                     child.layer.set("type", "nodeLayer");
                     nodeLayerView = new NodeLayerView({model: child.layer});

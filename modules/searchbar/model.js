@@ -10,8 +10,8 @@ define([
             recommandedListLength: 5,
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
-            hitList: [],
-            isHitListReady: true
+            hitList: []
+            // isHitListReady: true
         },
         /**
         *
@@ -28,9 +28,15 @@ define([
         * aus View gaufgerufen
         */
         setSearchString: function (value) {
-            this.set("searchString", value);
-            this.set("hitList", []);
-            EventBus.trigger("searchbar:search", this.get("searchString"));
+            if (value.length >= 3) {
+                this.set("searchString", value);
+                this.set("hitList", []);
+                EventBus.trigger("searchbar:search", this.get("searchString"));
+                $(".dropdown-menu-search").show();
+            }
+            else {
+                $(".dropdown-menu-search").hide();
+            }
         },
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
@@ -50,8 +56,8 @@ define([
             var max = this.get("recommandedListLength"),
                 recommendedList = [];
 
-            if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
-                this.set("isHitListReady", false);
+            // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
+            //     this.set("isHitListReady", false);
                 if (this.get("hitList").length > max) {
                     var hitList = this.get("hitList"),
                         foundTypes = [],
@@ -79,8 +85,8 @@ define([
                     recommendedList = this.get("hitList");
                 }
                 this.set("recommendedList", _.sortBy(recommendedList, "name"));
-                this.set("isHitListReady", true);
-            }
+                // this.set("isHitListReady", true);
+            // }
         }
     });
 

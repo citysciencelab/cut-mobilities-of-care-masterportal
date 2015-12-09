@@ -53,7 +53,7 @@
 	z-index: 999;
     /*max-width: 420px;*/
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .win-max {
         left: 5px;
         margin-top: 5px;
