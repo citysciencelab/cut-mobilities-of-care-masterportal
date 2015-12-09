@@ -256,26 +256,18 @@ define([
             this.set("coordinate", coordinate);
             this.defaultErgebnisse();
             if (response) {
-                if (response["Wohnlage typ"] === "normal") {
-                    this.set("msWohnlage", "Normale Wohnlage");
+                this.set("msWohnlage", response.bezeichnung);
+                if (response.hausnummer_zusatz) {
+                    this.set("msStrasse", response.strasse + " " + response.hausnummer + response.hausnummer_zusatz);
                 }
-                else if (response["Wohnlage typ"] === "gut") {
-                    this.set("msWohnlage", "Gute Wohnlage");
-                }
-                else {
-                    this.set("msWohnlage", "unbekannte Wohnlage");
-                }
-                if (response["Hausnummer zusatz"]) {
-                    this.set("msStrasse", response.Strasse + " " + response.Hausnummer + response["Hausnummer zusatz"]);
-                }
-                else if (response.Hausnummer) {
-                    this.set("msStrasse", response.Strasse + " " + response.Hausnummer);
+                else if (response.hausnummer) {
+                    this.set("msStrasse", response.strasse + " " + response.hausnummer);
                 }
                 else {
-                    this.set("msStrasse", response.Strasse);
+                    this.set("msStrasse", response.strasse);
                 }
-                this.set("msPLZ", response.Plz + " Hamburg");
-                this.set("msStadtteil", response.Stadtteil);
+                this.set("msPLZ", response.plz + " " + response.ort);
+                this.set("msStadtteil", response.stadtteil);
             }
             else {
                 this.set("msWohnlage", "unbekannte Wohnlage");

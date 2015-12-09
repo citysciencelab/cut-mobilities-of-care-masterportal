@@ -51,7 +51,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     a.dropdown-toggle > span.glyphicon {
         font-size: 16px;
     }

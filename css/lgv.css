@@ -16,7 +16,7 @@ html, body {
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-envelope, .glyphicon-book {
         font-size: 18px !important;
     }

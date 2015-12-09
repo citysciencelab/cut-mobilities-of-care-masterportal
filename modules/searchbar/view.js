@@ -42,8 +42,8 @@ define([
             EventBus.on("searchInput:setFocus", this.setFocus, this);
             EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
 
-            this.listenTo(this.model, "change:searchString", this.render);
-            this.listenTo(this.model, "change:isHitListReady", this.renderRecommendedList);
+            // this.listenTo(this.model, "change:searchString", this.render);
+            this.listenTo(this.model, "change:recommendedList", this.renderRecommendedList);
             this.render();
             $(window).on("orientationchange", function () {
                 this.render();
@@ -129,14 +129,14 @@ define([
         *
         */
         renderRecommendedList: function () {
-            if (this.model.get("isHitListReady") === true) {
+            // if (this.model.get("isHitListReady") === true) {
                 var attr = this.model.toJSON(),
                     // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
                     template = _.template(SearchbarRecommendedListTemplate);
 
                 $("ul.dropdown-menu-search").html(template(attr));
-            }
+            // }
             // Wird gerufen
             if (this.model.get("querySearchString") !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
                 this.hitSelected();
@@ -147,7 +147,7 @@ define([
         *
         */
         renderHitList: function () {
-            if (this.model.get("isHitListReady") === true) {
+            // if (this.model.get("isHitListReady") === true) {
                 if (this.model.get("hitList").length === 1) {
                     this.hitSelected(); // erster und einziger Eintrag in Liste
                 }
@@ -160,7 +160,7 @@ define([
 
                     $("ul.dropdown-menu-search").html(template(attr));
                 }
-            }
+            // }
         },
         /*
          * Methode, um den Focus über den EventBus in SearchInput zu legen
@@ -206,16 +206,18 @@ define([
         *
         */
         setSearchString: function (evt) {
-            if (evt.key === "Enter" || evt.keyCode === 13) {
-                if (this.model.get("hitList").length === 1) {
-                    this.hitSelected(); // erster und einziger Eintrag in Liste
+            if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40) {
+                if (evt.key === "Enter" || evt.keyCode === 13) {
+                    if (this.model.get("hitList").length === 1) {
+                        this.hitSelected(); // erster und einziger Eintrag in Liste
+                    }
+                    else {
+                        this.renderHitList();
+                    }
                 }
                 else {
-                    this.renderHitList();
+                    this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 }
-            }
-            else {
-                this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
             }
         },
         /**

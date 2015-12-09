@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     #searchbar {
         margin-top: 8px;
         margin-bottom: 8px;
@@ -23,6 +23,8 @@
 @media (min-width: 768px) {
     #searchbar {
         float: right;
+        padding-left: 10px;
+        padding-right: 10px;
         /*min-width: 400px;*/
         /*margin-right: 20px;*/
         /*width: 100%;*/
