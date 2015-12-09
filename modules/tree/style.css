@@ -8,10 +8,11 @@
 .dropdown-tree {
     font-size: 16px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    border: 1px solid #ccc;
 }
 
 .dropdown-tree > div, .dropdown-tree > form {
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(153, 153, 153);
     color: #fff;
     border-bottom: 1px solid #fff;
     padding: 4px 6px;

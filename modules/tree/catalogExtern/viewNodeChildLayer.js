@@ -50,10 +50,11 @@ define([
                     this.$el.css("color", "#fc8d62");
                 }
                 else {
-                    this.$el.css("color", "rgb(150, 150, 150)");
+                    this.$el.css("color", "rgb(153, 153, 153)");
                 }
                 this.model.get("parentView").toggleStyle();
             }
         });
+
         return NodeChildLayerView;
     });
