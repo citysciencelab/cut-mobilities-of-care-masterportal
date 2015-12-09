@@ -20,11 +20,11 @@ define([
             this.model.set("nutzung", nutzung);
             this.model.set("produkt", produkt);
             this.model.set("lage", lage);
-            this.model.requestBRWs();
+            this.model.requestNecessaryData();
             this.show();
         },
         weiter: function () {
-            new Seite3(this.model.get("lage"));
+            new Seite3(this.model.get("lage"), this.model.get("params"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("brwList"), this.model.get("jahr"));
         },
         show: function () {
             $("#seite_zwei").show();

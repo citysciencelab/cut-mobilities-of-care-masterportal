@@ -20,13 +20,18 @@ define([
 
             this.$el.html(this.template(attr));
         },
+        /*
+        * Wird zweimal gerufen, wenn mit Strg + V eingefügt wird. Einmal pro Taste.
+        */
         checkBRWNummer: function (evt) {
-            if (evt.keyCode === 13 || evt.currentTarget.value.length === 8) { // return
-                var wnum = evt.currentTarget.value,
-                    nutzung = evt.currentTarget.id.split("_")[0],
-                    jahr = evt.currentTarget.id.split("_")[1];
+            if (evt.ctrlKey === false && evt.shiftKey === false && evt.altKey === false) { // verhindert doppeltes ausführen
+                if (evt.keyCode === 13 || evt.currentTarget.value.length === 8) { // return
+                    var wnum = evt.currentTarget.value,
+                        nutzung = evt.currentTarget.id.split("_")[0],
+                        jahr = evt.currentTarget.id.split("_")[1];
 
-                this.model.requestBRWDetails(wnum, jahr);
+                    this.model.requestBRWDetails(wnum, jahr);
+                }
             }
         }
     });

@@ -14,6 +14,7 @@ define([
             EventBus.on("wps:response", this.saveBRW, this); // Result von wpsWorkbenchnameWNUM
         },
         setBRWList: function (val) {
+            this.unset("brwList", {silent: true});
             this.set("brwList", val);
         },
         requestBRWDetails: function (wnum, jahrgang) {
@@ -52,26 +53,30 @@ define([
                         nutzung = $(ergebnis).find("wps\\:nutzung,nutzung")[0].textContent,
                         ortsteil = $(ergebnis).find("wps\\:ortsteil,ortsteil")[0].textContent,
                         stichtag = $(ergebnis).find("wps\\:stichtag,stichtag")[0].textContent,
+                        entw = ergebnis.find("wps\\:entw,entw")[0].textContent,
+                        beit = ergebnis.find("wps\\:beit,beit")[0].textContent,
+                        nuta = ergebnis.find("wps\\:nuta,nuta")[0].textContent,
+                        ergnuta = ergebnis.find("wps\\:ergnuta,ergnuta")[0].textContent,
+                        wgfz = ergebnis.find("wps\\:wgfz,wgfz")[0].textContent,
+                        bauw = ergebnis.find("wps\\:bauw,bauw")[0].textContent,
+                        flae = ergebnis.find("wps\\:flae,flae")[0].textContent,
                         brwList = this.get("brwList");
 
                     _.each(brwList, function (obj) {
-                        if (obj.bezeichnung === nutzung) {
-                            if (obj.jahr1 === jahrgang) {
-                                obj = _.extend(obj, {
-                                    brw1: brw,
-                                    wnum1: wnum,
-                                    ortsteil1: ortsteil,
-                                    stichtag1: stichtag
-                                });
-                            }
-                            else if (obj.jahr2 === jahrgang) {
-                                obj = _.extend(obj, {
-                                    brw2: brw,
-                                    wnum2: wnum,
-                                    ortsteil2: ortsteil,
-                                    stichtag2: stichtag
-                                });
-                            }
+                        if (obj.bezeichnung === nutzung && obj.jahr === jahrgang) {
+                            obj = _.extend(obj, {
+                                brw: brw,
+                                wnum: wnum,
+                                ortsteil: ortsteil,
+                                stichtag: stichtag,
+                                entw: entw,
+                                beit: beit,
+                                nuta: nuta,
+                                ergnuta: ergnuta,
+                                wgfz: wgfz,
+                                bauw: bauw,
+                                flae: flae
+                            });
                         }
                     });
                     EventBus.trigger("seite2:setBRWList", brwList);

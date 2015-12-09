@@ -10,7 +10,7 @@ define([
         model: Model,
         events: {
             "change input[type=radio]": "switchLage", // 'click .toggleRoutingOptions': 'toggleRoutingOptions',
-            "keyup #gemarkungsnummer": "setGemarkungsnummer",
+            "change #gemarkungsnummer": "setGemarkungsnummer",
             "keyup #flurstuecksnummer": "setFlurstuecksnummer",
             "keyup #flurstuecksstrasse": "setFlurstuecksstrasse"
         },

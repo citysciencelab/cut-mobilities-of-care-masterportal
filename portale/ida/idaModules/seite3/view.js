@@ -1,28 +1,56 @@
 define([
-    "jquery",
     "backbone",
     "eventbus",
-    "idaModules/seite3/model"
-], function ($, Backbone, EventBus, Model) {
+    "idaModules/seite3/model",
+    "text!idaModules/seite3/template.html",
+    "idaModules/seite4/view"
+], function (Backbone, EventBus, Model, Template, Seite4) {
     "use strict";
-    var Seite2View = Backbone.View.extend({
+    var Seite3View = Backbone.View.extend({
         el: "#seite_drei",
         model: Model,
+        template: _.template(Template),
         events: {
+            "click #seite3_weiter": "weiter",
+            "change #requestedParamsListe": "paramChanged"
         },
-        initialize: function (brwList) {
+        initialize: function (lage, params, nutzung, produkt, brwList, jahr) {
+            this.model.set("lage", lage),
+            this.model.set("requestedParams", params),
+            this.model.set("nutzung", nutzung),
+            this.model.set("produkt", produkt),
+            this.model.set("jahr", jahr),
             this.model.set("brwList", brwList);
-            this.show();
+
+            if (_.contains(params, true) === true) {
+                this.show();
+            }
+            else {
+                this.weiter();
+            }
+        },
+        paramChanged: function (evt) {
+            this.model.paramChanged(evt.target);
         },
         weiter: function () {
-            // dddd
+            new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"));
         },
         show: function () {
+            this.render();
             $("#seite_drei").show();
             $("#seite_zwei").hide();
             $("#seite_vier").hide();
+            this.model.setInitialParams($("#requestedParamsListe"));
+        },
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+            if (this.model.get("brwList") .length > 0) {
+                $("#StadtteilName").val(this.model.get("brwList")[0].ortsteil);
+            }
         }
     });
 
-    return Seite2View;
+    return Seite3View;
 });

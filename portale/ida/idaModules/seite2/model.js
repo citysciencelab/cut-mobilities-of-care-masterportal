@@ -10,34 +10,52 @@ define([
             produkt: "",
             lage: "",
             brwList: [],
+            params: {
+                DATU: false,
+                StadtteilName: false,
+                NormBRW: false,
+                AktBRW: false,
+                WGFZ: false,
+                FLAE: false,
+                BAUW: false,
+                STRL: false,
+                GESL: false,
+                BAUJ: false,
+                MODG: false,
+                WOFL: false,
+                ZAWO: false,
+                GARI: false,
+                GARA: false,
+                STEA: false,
+                EGFL: false,
+                OGFL: false,
+                WONKM: false,
+                SONKM: false,
+                RLZ: false,
+                JEZ: false,
+                Par24: false,
+                ENER: false,
+                Par26: false,
+                EBK: false
+            },
             complete: false,
             wpsWorkbenchnameListe: "IDAListeBodenrichtwerte",
-            wpsWorkbenchnameDetails: "IDABRWZoneByAdresse"
+            wpsWorkbenchnameDetailsAdresse: "IDABRWZoneByAdresse",
+            wpsWorkbenchnameDetailsFlurstueck: "IDABRWZoneByFlurstueck"
         },
         initialize: function () {
             this.listenTo(this, "change:brwList", this.checkBRWList);
 
-            EventBus.on("wps:response", this.saveBRWList, this); // Result von wpsWorkbenchnameListe
+            EventBus.on("wps:response", this.handleNecessaryData, this); // Result von wpsWorkbenchnameListe
             EventBus.on("wps:response", this.saveBRWDetails, this); // Result von wpsWorkbenchnameDetails
             EventBus.on("seite2:setBRWList", this.setBrwList, this);
         },
         checkBRWList: function () {
             var brwList = this.get("brwList"),
-                complete = false;
+                complete = true;
 
-            _.each(brwList, function (brw) {
-                if (brw.brw1 && brw.brw1 !== "" &&
-                    brw.brw2 && brw.brw2 !== "" &&
-                    brw.jahr1 && brw.jahr1 !== "" &&
-                    brw.jahr2 && brw.jahr2 !== "" &&
-                    brw.anteil1 && brw.anteil1 !== "" &&
-                    brw.anteil2 && brw.anteil2 !== "" &&
-                    brw.wnum1 && brw.wnum1 !== "" &&
-                    brw.wnum2 && brw.wnum2 !== "" &&
-                    brw.ortsteil1 && brw.ortsteil1 !== "" &&
-                    brw.ortsteil2 && brw.ortsteil2 !== "") {
-                    complete = true;
-                }
+            complete = _.every(brwList, function (brw) {
+                return (brw.art && brw.brw && brw.jahr && brw.anteil && brw.wnum && brw.bezeichnung && brw.stichtag && brw.ortsteil);
             });
             if (complete === true) {
                 this.set("complete", true);
@@ -46,7 +64,7 @@ define([
                 EventBus.trigger("seite2:newBRWList", brwList);
             }
         },
-        requestBRWs: function () {
+        requestNecessaryData: function () {
             var jahr = this.get("jahr"),
                 nutzung = this.get("nutzung"),
                 produkt = this.get("produkt"),
@@ -77,24 +95,37 @@ define([
                 dataInputs: dataInputs
             });
         },
-        saveBRWList: function (obj) {
+        handleNecessaryData: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameListe")) {
                 var brws = $(obj.data).find("wps\\:BRW,BRW"),
+                    params = $(obj.data).find("wps\\:Params,Params")[0],
                     brwList = [];
 
+                // speichere benötigte Parameter ab
+                _.each(params.attributes, function (att) {
+                    var attrObj = this.get("params"),
+                        newObj = _.extend(attrObj, _.object([att.name], [Boolean(att.value === "True")]));
+
+                    this.set("params", newObj);
+                }, this);
+                // speichere benötigte BRW ab
                 _.each(brws, function (brw) {
                     if (brw.getAttribute("bezeichnung")) {
                         brwList.push({
+                            art: brw.getAttribute("art"),
                             bezeichnung: brw.getAttribute("bezeichnung"),
-                            jahr1: brw.getAttribute("jahr1"),
-                            anteil1: brw.getAttribute("anteil1"),
-                            jahr2: brw.getAttribute("jahr2"),
-                            anteil2: brw.getAttribute("anteil2")
+                            anteil: brw.getAttribute("anteil"),
+                            jahr: brw.getAttribute("jahr")
                         });
                     }
                 });
                 this.set("brwList", brwList);
-                this.getBRWDetails();
+                if (brwList.length > 0) {
+                    this.getBRWDetails();
+                }
+                else {
+                    this.set("complete", true);
+                }
             }
         },
         getBRWDetails: function () {
@@ -107,11 +138,47 @@ define([
         requestBRWDetails: function (brw) {
             if (brw.bezeichnung !== "") {
                 var lage = this.get("lage"),
-                    dataInputs,
-                    jahre = [brw.jahr1, brw.jahr2],
-                    i;
+                    dataInputs;
 
-                for (i = 0; i < jahre.length; i++) {
+                if (lage.type === "Flurstück") {
+                    dataInputs = "<wps:DataInputs>";
+                    dataInputs += "<wps:Input>";
+                    dataInputs += "<ows:Identifier>gemarkung</ows:Identifier>";
+                    dataInputs += "<wps:Data>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + lage.gemarkung + "</wps:LiteralData>";
+                    dataInputs += "</wps:Data>";
+                    dataInputs += "</wps:Input>";
+                    dataInputs += "<wps:Input>";
+                    dataInputs += "<ows:Identifier>flurstueck</ows:Identifier>";
+                    dataInputs += "<wps:Data>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + lage.flurstueck + "</wps:LiteralData>";
+                    dataInputs += "</wps:Data>";
+                    dataInputs += "</wps:Input>";
+                    dataInputs += "<wps:Input>";
+                    dataInputs += "<ows:Identifier>strassendefinition</ows:Identifier>";
+                    dataInputs += "<wps:Data>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + lage.strassendefinition + "</wps:LiteralData>";
+                    dataInputs += "</wps:Data>";
+                    dataInputs += "</wps:Input>";
+                    dataInputs += "<wps:Input>";
+                    dataInputs += "<ows:Identifier>nutzung</ows:Identifier>";
+                    dataInputs += "<wps:Data>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.bezeichnung + "</wps:LiteralData>";
+                    dataInputs += "</wps:Data>";
+                    dataInputs += "</wps:Input>";
+                    dataInputs += "<wps:Input>";
+                    dataInputs += "<ows:Identifier>jahrgang</ows:Identifier>";
+                    dataInputs += "<wps:Data>";
+                    dataInputs += "<wps:LiteralData dataType='integer'>" + brw.jahr + "</wps:LiteralData>";
+                    dataInputs += "</wps:Data>";
+                    dataInputs += "</wps:Input>";
+                    dataInputs += "</wps:DataInputs>";
+                    EventBus.trigger("wps:request", {
+                        workbenchname: this.get("wpsWorkbenchnameDetailsFlurstueck"),
+                        dataInputs: dataInputs
+                    });
+                }
+                else if (lage.type === "Adresse") {
                     dataInputs = "<wps:DataInputs>";
                     dataInputs += "<wps:Input>";
                     dataInputs += "<ows:Identifier>strassenschluessel</ows:Identifier>";
@@ -152,19 +219,19 @@ define([
                     dataInputs += "<wps:Input>";
                     dataInputs += "<ows:Identifier>jahrgang</ows:Identifier>";
                     dataInputs += "<wps:Data>";
-                    dataInputs += "<wps:LiteralData dataType='integer'>" + jahre[i] + "</wps:LiteralData>";
+                    dataInputs += "<wps:LiteralData dataType='integer'>" + brw.jahr + "</wps:LiteralData>";
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "</wps:DataInputs>";
                     EventBus.trigger("wps:request", {
-                        workbenchname: this.get("wpsWorkbenchnameDetails"),
+                        workbenchname: this.get("wpsWorkbenchnameDetailsAdresse"),
                         dataInputs: dataInputs
                     });
                 }
             }
         },
         saveBRWDetails: function (obj) {
-            if (obj.request.workbenchname === this.get("wpsWorkbenchnameDetails")) {
+            if (obj.request.workbenchname === this.get("wpsWorkbenchnameDetailsAdresse") || obj.request.workbenchname === this.get("wpsWorkbenchnameDetailsFlurstueck")) {
                 var ergebnis = $(obj.data).find("wps\\:Ergebnis,Ergebnis"),
                     parameter = $(obj.data).find("wps\\:Parameter,Parameter"),
                     nutzung = parameter[0].getAttribute("nutzung"),
@@ -175,35 +242,39 @@ define([
                     var ortsteil = ergebnis.find("wps\\:ortsteil,ortsteil")[0].textContent,
                     wnum = ergebnis.find("wps\\:wnum,wnum")[0].textContent,
                     brw = ergebnis.find("wps\\:brw,brw")[0].textContent,
+                    entw = ergebnis.find("wps\\:entw,entw")[0].textContent,
+                    beit = ergebnis.find("wps\\:beit,beit")[0].textContent,
+                    nuta = ergebnis.find("wps\\:nuta,nuta")[0].textContent,
+                    ergnuta = ergebnis.find("wps\\:ergnuta,ergnuta")[0].textContent,
+                    wgfz = ergebnis.find("wps\\:wgfz,wgfz")[0].textContent,
+                    bauw = ergebnis.find("wps\\:bauw,bauw")[0].textContent,
+                    flae = ergebnis.find("wps\\:flae,flae")[0].textContent,
                     stichtag = ergebnis.find("wps\\:stichtag,stichtag")[0].textContent;
 
                     _.each(brwList, function (obj) {
-                        if (obj.bezeichnung === nutzung) {
-                            if (obj.jahr1 === jahrgang) {
-                                obj = _.extend(obj, {
-                                    brw1: brw,
-                                    wnum1: wnum,
-                                    ortsteil1: ortsteil,
-                                    stichtag1: stichtag
-                                });
-                            }
-                            else if (obj.jahr2 === jahrgang) {
-                                obj = _.extend(obj, {
-                                    brw2: brw,
-                                    wnum2: wnum,
-                                    ortsteil2: ortsteil,
-                                    stichtag2: stichtag
-                                });
-                            }
+                        if (obj.bezeichnung === nutzung && obj.jahr === jahrgang) {
+                            obj = _.extend(obj, {
+                                brw: brw,
+                                wnum: wnum,
+                                ortsteil: ortsteil,
+                                stichtag: stichtag,
+                                entw: entw,
+                                beit: beit,
+                                nuta: nuta,
+                                ergnuta: ergnuta,
+                                wgfz: wgfz,
+                                bauw: bauw,
+                                flae: flae
+                            });
                         }
                     });
-                    this.set("brwList", []);
+                    this.unset("brwList", {silent: true});
                     this.set("brwList", brwList);
                 }
             }
         },
         setBrwList: function (brwList) {
-            this.set("brwList", []);
+            this.unset("brwList", {silent: true});
             this.set("brwList", brwList);
         }
     });

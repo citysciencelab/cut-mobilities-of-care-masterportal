@@ -16,8 +16,23 @@ define([
         },
         initialize: function () {
             EventBus.on("searchbar:hit", this.searchbarhit, this);
-
             EventBus.on("gaz:getAdress", this.adressHit, this);
+            this.listenTo(this, "change:flurGemarkung", this.flurstueckInput);
+            this.listenTo(this, "change:flurFlurstueck", this.flurstueckInput);
+            this.listenTo(this, "change:flurStrasse", this.flurstueckInput);
+        },
+        flurstueckInput: function () {
+            if (this.get("flurFlurstueck") !== "" && this.get("flurGemarkung") !== "" && this.get("flurStrasse") !== "" ) {
+                EventBus.trigger("seite1_lage:newLage", {
+                    type: "Flurstück",
+                    gemarkung: this.get("flurGemarkung"),
+                    flurstueck: this.get("flurFlurstueck"),
+                    strassendefinition: this.get("flurStrasse")
+                });
+            }
+            else {
+                EventBus.trigger("seite1_lage:newLage", "");
+            }
         },
         searchbarhit: function (hit) {
             if (hit.type === "Adresse") {
