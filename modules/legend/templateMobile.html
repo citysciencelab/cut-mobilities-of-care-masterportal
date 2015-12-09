@@ -41,9 +41,14 @@
                             }
                             else {
                                 if (typeof element.img === "string") {
-                                %>
-                                    <a href=<%= element.img %> target="_blank">weitere Informationen</a>
-                                <%
+                                    if (element.img.search(".pdf") !== -1) { %>
+                                        <a href=<%= element.img %> target="_blank">weitere Informationen</a>
+                                    <% }
+                                    else { %>
+                                        <p>
+                                            <img src=<%= element.img %>>
+                                        </p>
+                                    <% }
                                 }
                                 else {
                                 %>

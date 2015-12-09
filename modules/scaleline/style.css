@@ -20,7 +20,7 @@
     padding: 0 16px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .scale-line {
         display: none;
     }
