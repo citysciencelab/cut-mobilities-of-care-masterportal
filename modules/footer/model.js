@@ -13,21 +13,6 @@ define([
                     "url": "http://www.geoinfo.hamburg.de/",
                     "alias": "Landesbetrieb Geoniformation und Vermessung",
                     "alias_mobil": "LGV Hamburg"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/fhh-atlas_alt/",
-                    "alias": "Zum alten FHH-Atlas"
                 }
             ]
         },

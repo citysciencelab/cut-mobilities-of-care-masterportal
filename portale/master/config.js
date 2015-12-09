@@ -162,11 +162,33 @@ define(function () {
         customModules: [],
         /**
         * @memberof config
-        * @type {Boolean}
+        * @type {Object}
         * @default [false]
         * @desc Zeigt einen Footer-Bereich an.
+        * @property {Boolean} [footer.visibility] Schaltet den Footer sichtbar.
+        * @property {Object[]} [footer.urls] Das Array besteht aus Objekten mit den Attributen bezeichnung, url, alias und alias_mobil.
         */
-        footer: true,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV Hamburg"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         /**
         * @memberof config
         * @default [false]
