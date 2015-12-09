@@ -228,6 +228,7 @@ define([
             _.each(layersVisible, function (element) {
                 if (element.get("typ") !== "GROUP") {
                     var gfiAttributes = element.get("gfiAttributes");
+
                     if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                         if (element.getProperties().typ === "WMS") {
                             var gfiURL = element.getSource().getGetFeatureInfoUrl(
@@ -240,7 +241,8 @@ define([
                                 scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
-                                ol_layer: element
+                                ol_layer: element,
+                                id: element.id
                             });
                         }
                         else if (element.getProperties().typ === "WFS") {
@@ -250,7 +252,8 @@ define([
                                 source: element.getSource(),
                                 style: element.getStyle(),
                                 name: element.get("name"),
-                                ol_layer: element
+                                ol_layer: element,
+                                id: element.id
                             });
                         }
                     }
@@ -264,7 +267,8 @@ define([
                                     typ: "GeoJSON",
                                     feature: feature,
                                     name: element.get("name"),
-                                    ol_layer: element
+                                    ol_layer: element,
+                                    id: element.id
                                 });
                             });
                         }
@@ -286,7 +290,8 @@ define([
                                     // scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
-                                    ol_layer: layer
+                                    ol_layer: layer,
+                                    id: layer.id
                                 });
                             }
                             else if (layer.getProperties().typ === "WFS") {
@@ -296,7 +301,8 @@ define([
                                     source: layer.getSource(),
                                     style: layer.getStyle(),
                                     name: layer.get("name"),
-                                    ol_layer: layer
+                                    ol_layer: layer,
+                                    id: layer.id
                                 });
                             }
                         }
