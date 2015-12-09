@@ -64,19 +64,6 @@ define([
                     zoomLevel: 9
                 }
             ],
-            resolutions: [
-                66.14579761460263, // 1:250000
-                26.458319045841044, // 1:100000
-                15.874991427504629, // 1:60000
-                10.583327618336419, // 1:40000
-                5.2916638091682096, // 1:20000
-                2.6458319045841048, // 1:10000
-                1.3229159522920524, // 1:5000
-                0.6614579761460262, // 1:2500
-                0.2645831904584105, // 1:1000
-                0.13229159522920521 // 1:500
-            ],
-            zoomLevels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // zoomLevel 0 = 1:250000
             resolution: 15.874991427504629,
             startCenter: [565874, 5934140],
             units: "m",
@@ -91,9 +78,7 @@ define([
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
                 },
-                "mapView:getMinResolution": function (scale) {
-                    EventBus.trigger("mapView:sendMinResolution", this.getResolution(scale));
-                },
+                "mapView:getMinResolution": this.sendMinResolution,
                 "mapView:getMaxResolution": function (scale) {
                     EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
                 },
@@ -125,9 +110,12 @@ define([
             });
 
             this.setOptions();
+            this.setScales();
+            this.setResolutions();
+            this.setZoomLevels();
+
             this.setExtent();
             this.setResolution();
-            this.setResolutions();
             this.setStartCenter();
             this.setProjection();
             this.setView();
@@ -148,6 +136,18 @@ define([
                     this.pushHits("options", opt);
                 }, this);
             }
+        },
+
+        setScales: function () {
+            this.set("scales", _.pluck(this.get("options"), "scale"));
+        },
+
+        setResolutions: function () {
+            this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+        },
+
+        setZoomLevels: function () {
+            this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
         },
 
         /**
@@ -172,18 +172,6 @@ define([
         // Setzt den Maßstab.
         setScale: function (scale) {
             this.set("scale", scale);
-        },
-
-        /**
-         *
-         */
-        setResolutions: function () {
-            if (_.has(Config.view, "options")) {
-                this.set("resolutions", _.pluck(Config.view.options, "resolution"));
-            }
-            else if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
-                this.set("resolutions", Config.view.resolutions);
-            }
         },
 
         /**
@@ -285,6 +273,23 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
+        },
+
+        sendMinResolution: function (minScale) {
+            if (_.contains(this.get("scales"), minScale)) {
+                EventBus.trigger("mapView:sendMinResolution", _.findWhere(this.get("options"), {scale: minScale}).resolution);
+            }
+            else if (minScale !== "0") {
+                var scales = _.union([minScale], this.get("scales"));
+
+                scales = _.sortBy(scales, function (scale) {
+                    return parseInt(scale, 10);
+                }).reverse();
+                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[_.indexOf(scales, minScale) - 1]);
+            }
+            else {
+                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[this.get("resolutions").length - 1]);
+            }
         },
 
         pushHits: function (attribute, value) {
