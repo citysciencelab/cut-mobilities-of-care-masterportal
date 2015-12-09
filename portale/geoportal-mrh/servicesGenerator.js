@@ -59,13 +59,16 @@ run: function () {
 
                         secondLevel = {node: "Cuxhaven: " + childFolder, layerIDs: []};
                         secondLevel = this.addLayers(childLayerStore, false, secondLevel);
+                        secondLevel.layerIDs = secondLevel.layerIDs.reverse();
 
                         firstLevel.childnodes.push(secondLevel);
                     }
                 }
 
+
                 // check for empty secondLevel object - happens with Freizeit & Tourismus
 				if (Object.keys(secondLevel).length !== 0) {
+                    secondLevel.layerIDs = secondLevel.layerIDs.reverse();
 					firstLevel.childnodes.push(secondLevel);
 				}
 			}
@@ -136,7 +139,8 @@ writeServicesJson: function () {
     // console.log(this.layers);
 	for (var i = 0; i < this.layers.length; i++) {
 
-		var layer = this.layers[i];
+		var layer = this.layers[i],
+            gutter = layer.tileSize.h || 0;
 
         servicesJson.push({
             "id": layer.id,
@@ -148,10 +152,10 @@ writeServicesJson: function () {
             "version": layer.params.VERSION,
             "singleTile": layer.singleTile || false,
             "transparent": layer.params.TRANSPARENT || false,
-            "tilesize": layer.tileSize.h,
-            "gutter": layer.options.gutter || 0,
-            "minScale": 0,
-            "maxScale": 1000000,
+            "tilesize": layer.tileSize.h.toString(),
+            "gutter": gutter.toString(),
+            "minScale": "0",
+            "maxScale": "1000000",
             "gfiAttributes": this.translateGfiProps(layer),
             "layerAttribution": layer.attribution || "nicht vorhanden",
             "legendURL": layer.legendURL || "",
