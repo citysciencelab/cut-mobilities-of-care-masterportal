@@ -32,7 +32,29 @@ define(function () {
             orientation: true
         },
         attributions: true,
-        footer: false,
+        footer: {
+            visibility: true,
+            urls: [
+                    {
+                        "bezeichnung": "",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/kontakte.htm",
+                        "alias": "Kontakte",
+                        "alias_mobil": "Kontakte"
+                    },
+                    {
+                        "bezeichnung": "",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/copyright.htm",
+                        "alias": "Copyright",
+                        "alias_mobil": "Copyright"
+                    },
+                    {
+                        "bezeichnung": "",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/links.htm",
+                        "alias": "Linkliste",
+                        "alias_mobil": "Linkliste"
+                    }
+            ]
+        },
         quickHelp: false,
         allowParametricURL: true,
         view: {

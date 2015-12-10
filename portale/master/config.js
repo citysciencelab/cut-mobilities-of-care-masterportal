@@ -59,7 +59,7 @@ define(function () {
                 {id: "1748", visible: false},
                 {id: "1562", visible: true},
                 {id: "1561", visible: true},
-                {id: "2003", visible: true, style: "2003"},
+                {id: "2003", visible: false, style: "2003"},
                 {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
@@ -162,11 +162,38 @@ define(function () {
         customModules: [],
         /**
         * @memberof config
-        * @type {Boolean}
-        * @default [false]
+        * @type {Object}
         * @desc Zeigt einen Footer-Bereich an.
+        * @property {Object} [footer] - Konfigurationsobjekt für den Footer.
+        * @property {Boolean} footer.visibility - Schaltet den Footer sichtbar.
+        * @property {Object[]} [footer.urls] - Das Array besteht aus Objekten mit den Attributen bezeichnung, url, alias und alias_mobil. Wenn nicht gesetzt, kommen default-werte.
+        * @property {string} footer.urls.bezeichnung - Bezeichnung vor dem Link.
+        * @property {string} footer.urls.url - Aufzurufende URL.
+        * @property {string} footer.urls.alias - Bezeichnung bei Desktop-Ausspielung des Links.
+        * @property {string} [footer.urls.alias_mobil] - Bezeichnung bei mobiler Ausspielung. Wird ignoriert, wenn nicht gesetzt.
         */
-        footer: true,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "ttt"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         /**
         * @memberof config
         * @default [false]
