@@ -78,7 +78,7 @@ run: function () {
 
 	}
 
-    this.writeLgvTreeConfig();
+    //this.writeLgvTreeConfig();
     console.log("###");
     this.writeServicesJson();
 
@@ -160,7 +160,8 @@ writeServicesJson: function () {
             "layerAttribution": layer.attribution || "nicht vorhanden",
             "legendURL": layer.legendURL || "",
             "cache": false,
-            "datasets": []
+            "datasets": [],
+            "infoFormat": "application/vnd.ogc.gml"
 		});
 
 	}
