@@ -1,9 +1,10 @@
 define([
     "jquery",
     "backbone",
+    "config",
     "idaModules/seite1_lage/model",
     "modules/searchbar/view"
-], function ($, Backbone, Model, Searchbar) {
+], function ($, Backbone, Config, Model, Searchbar) {
     "use strict";
     var Seite1LageView = Backbone.View.extend({
         el: "#lage",
@@ -15,16 +16,7 @@ define([
             "keyup #flurstuecksstrasse": "setFlurstuecksstrasse"
         },
         initialize: function () {
-            new Searchbar({
-                gazetteer: {
-                    minChars: 3,
-                    url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                    searchStreets: true,
-                    searchHouseNumbers: true
-                },
-                placeholder: "Suche nach Adresse (Straße/Hausnummer)",
-                renderToDOM: "#adressfeld"
-            });
+            new Searchbar(Config.searchbar);
         },
         switchLage: function (evt) {
             if (evt.target.value === "radio1") {

@@ -6,7 +6,17 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
         wpsID: "99998",
         minJahr: 1973,
-        maxJahr: 2013
+        maxJahr: 2013,
+        searchbar: {
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true
+            },
+            placeholder: "Suche nach Adresse (Straße/Hausnummer)",
+            renderToDOM: "#adressfeld"
+        }
     };
 
     return config;

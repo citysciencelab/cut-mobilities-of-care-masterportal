@@ -58,26 +58,26 @@ define([
                     new GAZModel(config.gazetteer, querySearchString);
                 });
             }
-            if (_.has(config, "specialWFS") === true) {
-                require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
-                    new SpecialWFSModel(config.specialWFS, querySearchString);
-                });
-            }
-            if (_.has(config, "visibleWFS") === true) {
-                require(["modules/searchbar/visibleWFS/model"], function (VisibleWFSModel) {
-                    new VisibleWFSModel(config.visibleWFS);
-                });
-            }
-            if (_.has(config, "bkg") === true) {
-                require(["modules/searchbar/bkg/model"], function (BKGModel) {
-                    new BKGModel(config.bkg);
-                });
-            }
-            if (_.has(config, "tree") === true) {
-                require(["modules/searchbar/tree/model"], function (TreeModel) {
-                    new TreeModel(config.tree);
-                });
-            }
+//            if (_.has(config, "specialWFS") === true) {
+//                require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
+//                    new SpecialWFSModel(config.specialWFS, querySearchString);
+//                });
+//            }
+//            if (_.has(config, "visibleWFS") === true) {
+//                require(["modules/searchbar/visibleWFS/model"], function (VisibleWFSModel) {
+//                    new VisibleWFSModel(config.visibleWFS);
+//                });
+//            }
+//            if (_.has(config, "bkg") === true) {
+//                require(["modules/searchbar/bkg/model"], function (BKGModel) {
+//                    new BKGModel(config.bkg);
+//                });
+//            }
+//            if (_.has(config, "tree") === true) {
+//                require(["modules/searchbar/tree/model"], function (TreeModel) {
+//                    new TreeModel(config.tree);
+//                });
+//            }
         },
         events: {
             "keyup input": "setSearchString",

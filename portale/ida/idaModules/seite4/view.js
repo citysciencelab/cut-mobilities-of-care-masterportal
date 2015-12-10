@@ -13,7 +13,9 @@ define([
             "change #requestedParamsListe": "paramChanged"
         },
         initialize: function (params, brwList, nutzung, produkt, jahr) {
-            this.listenTo(this.model, "change:page", this.refreshPage);
+            this.listenTo(this.model, "change:result", this.refreshResult),
+            this.listenTo(this.model, "change:error", this.refreshError),
+            this.listenTo(this.model, "change:parameter", this.refreshParameter);
 
             this.model.set("params", params),
             this.model.set("nutzung", nutzung),
@@ -32,8 +34,18 @@ define([
             $("#seite_fuenf").hide();
             $("#seite_vier").show();
         },
-        refreshPage: function () {
-            var page = this.model.get("page");
+        refreshResult: function () {
+            var page = this.model.get("result");
+
+            $("#ok_p").append(page);
+        },
+        refreshError: function () {
+            var page = this.model.get("error");
+
+            $("#fehler_p").append(page);
+        },
+        refreshParameter: function () {
+            var page = this.model.get("parameter");
 
             $("#ok_p").append(page);
         }

@@ -11,7 +11,7 @@ require.config({
         app: "app",
         modules: "../../modules",
         idaModules: "idaModules",
-        config: "config"
+        config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config"
     },
     shim: {
         bootstrap: {

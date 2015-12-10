@@ -367,10 +367,13 @@ define([
         */
         handleIDAResponse: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameIDAUmrechnung")) {
-                var idaErgebnis = $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent,
+                var result = $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent,
+                    error = $(obj.data).find("wps\\:error,error")[0].textContent,
                     params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0],
-                    html = "WERT= " + idaErgebnis + " ";
+                    html = "";
 
+                this.set("result", result);
+                this.set("error", error.replace(/\n/g, "<br>"));
                 if (params.hasAttribute("NUTZUNG")) {
                     html += "</br>NUTZUNG " + params.getAttribute("NUTZUNG");
                 }
@@ -464,7 +467,7 @@ define([
                 if (params.hasAttribute("EBK")) {
                     html += "</br>EBK " + params.getAttribute("EBK");
                 }
-                this.set("page", html);
+                this.set("parameter", html);
             }
         }
     });
