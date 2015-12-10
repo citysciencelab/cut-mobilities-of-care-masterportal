@@ -5,7 +5,7 @@
 }
 
 /***** Mobil *****/
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .tree-light-list > .content > .pull-right > .refresh > .glyphicon-cog {
         font-size: 18px;
     }

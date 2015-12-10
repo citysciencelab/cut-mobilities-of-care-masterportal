@@ -59,7 +59,8 @@ define([
             var parser = document.createElement("a"),
             protocol = "",
             result = "",
-            hostname = "";
+            hostname = "",
+            port = "";
 
             parser.href = url;
             protocol = parser.protocol;
@@ -68,7 +69,9 @@ define([
                 protocol += "//";
             }
 
-            result = url.replace(protocol, "");
+            port = parser.port;
+
+            result = url.replace(protocol, "").replace(":" + port, "");
             // www und www2 usw. raus
             // hostname = result.replace(/www\d?\./, "");
             hostname = parser.hostname.split(".").join("_");
