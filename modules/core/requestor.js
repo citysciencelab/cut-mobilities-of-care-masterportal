@@ -175,7 +175,7 @@ define([
             }
             if (Config.feature_count) {
                 var index = -1;
-                debugger;
+
                 _.each(Config.feature_count, function (layer, idx) {
                     if (layer.id + "" === params.id) {
                         index = idx;
