@@ -65,7 +65,6 @@ run: function () {
                     }
                 }
 
-
                 // check for empty secondLevel object - happens with Freizeit & Tourismus
 				if (Object.keys(secondLevel).length !== 0) {
                     secondLevel.layerIDs = secondLevel.layerIDs.reverse();
