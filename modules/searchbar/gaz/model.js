@@ -66,7 +66,7 @@ define([
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
                 }
                 if (this.get("searchDistricts") === true) {
-                    if (!_.isNull(searchString.match(/^[a-z]+$/i))) {
+                    if (!_.isNull(searchString.match(/^[a-z\-]+$/i))) {
                         this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true);
                     }
                 }

@@ -66,10 +66,10 @@ define([
         },
         toggleStyle: function () {
             if (this.model.get("isInScaleRange") === true) {
-                this.$el.css("color", "rgb(150, 150, 150)");
+                this.$el.css("color", "rgb(153, 153, 153)");
             }
             else {
-                this.$el.css("color", "rgba(150, 150, 150, 0.6)");
+                this.$el.css("color", "rgba(153, 153, 153, 0.6)");
             }
         }
     });

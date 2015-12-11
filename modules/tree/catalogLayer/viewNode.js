@@ -17,6 +17,7 @@ define([
             },
             render: function () {
                 var attr = this.model.toJSON();
+
                 this.$el.html(this.template(attr));
                 if (this.model.get("isExpanded") === true) {
                     _.each(this.model.get("childViews"), function (view) {
@@ -51,13 +52,15 @@ define([
                 var someTrue = _.some(this.model.get("layerList"), function (model) {
                     return model.get("selected") === true;
                 });
+
                 if (someTrue === true) {
                     this.$el.css("color", "#fc8d62");
                 }
                 else {
-                    this.$el.css("color", "rgb(150, 150, 150)");
+                    this.$el.css("color", "rgb(153, 153, 153)");
                 }
             }
         });
+
         return NodeView;
     });

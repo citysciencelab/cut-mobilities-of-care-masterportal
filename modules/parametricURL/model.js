@@ -138,10 +138,10 @@ define([
                     Config.tree.layerIDsToSelect = [];
                     _.each(values, function (value, index) {
                         if (visibilityList[index] === "TRUE") {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: true});
+                            Config.tree.layerIDsToSelect.push({id: value.toLowerCase(), visibility: true});
                         }
                         else {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: false});
+                            Config.tree.layerIDsToSelect.push({id: value.toLowerCase(), visibility: false});
                         }
                     });
                 }
