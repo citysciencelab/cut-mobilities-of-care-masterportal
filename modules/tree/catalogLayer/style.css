@@ -3,7 +3,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     font-size: 14px;
-    color: rgb(150, 150, 150);
+    color: rgb(153, 153, 153);
 }
 
 /***** Catalog - Node *****/
@@ -27,7 +27,7 @@
 
 /***** Catalag - Node-Layer ******/
 .node-layer {
-    color: rgb(150, 150, 150);
+    color: rgb(153, 153, 153);
     /*font-size: 14px;*/
 }
 
@@ -60,7 +60,7 @@
 
 /***** Catalog - Node-Child *****/
 .node-child {
-    color: rgb(150, 150, 150);
+    color: rgb(153, 153, 153);
     /*font-size: 14px;*/
 }
 
@@ -92,7 +92,7 @@
 
 /***** Catalog - Node-Child-Layer *****/
 .node-child-layer {
-    color: rgb(150, 150, 150);
+    color: rgb(153, 153, 153);
     /*font-size: 14px;*/
 }
 

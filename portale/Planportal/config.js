@@ -29,13 +29,16 @@ define(function () {
                 {id: "1561", visibility: true}
             ]
         },
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
         isMenubarVisible: true,
         menu: {
-            viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
             helpButton: false,
@@ -59,13 +62,13 @@ define(function () {
                 minChar: 3,
                 definitions: [
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
                         name: "bplan"
                     },
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=imverfahren&propertyName=plan",
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=imverfahren&propertyName=plan",
                         name: "bplan"
                     }
                 ]
@@ -82,8 +85,6 @@ define(function () {
             active: "gfi",
             record: false
         },
-        orientation: true,
-        poi: false,
         print: {
             printID: "99999",
             title: "Planportal",
