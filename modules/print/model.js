@@ -25,7 +25,13 @@ define([
             if (resp[0] && resp[0].get("url")) {
                 this.set("printurl", resp[0].get("url"));
             }
-            return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
+
+            if (_.has(Config.print, "configYAML") === true) {
+                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json"
+            }
+            else {
+                return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
+            }
         },
 
         //
