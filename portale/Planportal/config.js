@@ -29,13 +29,16 @@ define(function () {
                 {id: "1561", visibility: true}
             ]
         },
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
         isMenubarVisible: true,
         menu: {
-            viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
             helpButton: false,
@@ -82,8 +85,6 @@ define(function () {
             active: "gfi",
             record: false
         },
-        orientation: true,
-        poi: false,
         print: {
             printID: "99999",
             title: "Planportal",
