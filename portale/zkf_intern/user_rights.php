@@ -25,7 +25,7 @@
 
 	evaluateuser();
 
-	if (ismemberofgroup('CN=U-LGV-LGV_G12,OU=Gruppen,OU=GV,DC=fhhnet,DC=stadt,DC=hamburg,DC=de') == TRUE){
+	if (ismemberofgroup('CN=U-LGV-Fluechtlingsportal,OU=Gruppen,OU=GV,DC=fhhnet,DC=stadt,DC=hamburg,DC=de') == TRUE){
 	//if (ismemberofgroup('CN=Fluechtlinge,OU=Gruppen,OU=GV,DC=fhhnet,DC=stadt,DC=hamburg,DC=de') == TRUE){
 
 	}
