@@ -62,13 +62,13 @@ define(function () {
                 minChar: 3,
                 definitions: [
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
                         name: "bplan"
                     },
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=imverfahren&propertyName=plan",
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=imverfahren&propertyName=plan",
                         name: "bplan"
                     }
                 ]
