@@ -9,7 +9,30 @@ define(function () {
                 {id: "22", visible: false},
                 {id: "23", visible: false},
                 {id: "24", visible: false},
-                {id: "25", visible: false}
+                {id: "25", visible: false},
+                {id: "1556", visible: false},
+                {id: "1557", visible: false},
+                {id: "1558", visible: false},
+                {id: "1559", visible: false},
+                {id: "1949", visible: false},
+                {id: "1950", visible: false},
+                {id: "1951", visible: false},
+                {id: "1952", visible: false},
+                {id: "979", visible: false},
+                {id: "1007", visible: false},
+                {id: "1020", visible: false},
+                {id: "1933", visible: false},   //Haltestellen
+            {id:
+                [
+                {id: "1935",name: "Bus1"},
+                {id: "1935",name: "Bus2"}
+                ],
+                visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+            },
+
+            {id: "1935", visible: false, styles: ["geofox_Faehre", "geofox-bahn"], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
+
+            {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"}
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
@@ -30,7 +53,7 @@ define(function () {
         footer: false,
         quickHelp: true,
         layerConf: "../components/lgv-config/services-verkehrsmodell.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
@@ -55,7 +78,7 @@ define(function () {
         searchBar: {
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
