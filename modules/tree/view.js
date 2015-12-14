@@ -17,8 +17,8 @@ define([
                     EventBus.trigger("showWindowHelp", "tree");
                 },
                 "click .layer-catalog-label": "toggleCatalog",
-                "click .layer-selection-label > .glyphicon-triangle-bottom, .layer-selection-label > .glyphicon-triangle-right, .layer-selection-label > .control-label": "toggleSelection",
-                "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer",
+                "click .layer-selection-label > .glyphicon-minus-sign, .layer-selection-label > .glyphicon-plus-sign, .layer-selection-label > .control-label": "toggleSelection",
+                "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-minus-sign, .base-layer-selection > .glyphicon-plus-sign": "toggleBaseLayer",
                 "click .layer-selection-save": function () {
                     EventBus.trigger("mapView:getCenterAndZoom");
                 },
@@ -46,28 +46,28 @@ define([
             setSelection: function (evt) {
                 this.model.setSelection(evt.target.value);
                 $(".layer-catalog-list").show("slow");
-                $(".layer-catalog-label > .glyphicon").addClass("glyphicon-triangle-bottom");
-                $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-triangle-right");
+                $(".layer-catalog-label > .glyphicon").addClass("glyphicon-minus-sign");
+                $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-plus-sign");
             },
             toggleCatalog: function () {
                 $(".layer-catalog-list").toggle("slow");
-                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-right");
+                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-plus-sign");
             },
             toggleSelection: function () {
                 $(".layer-selected-list").toggle("slow");
-                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-right");
+                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-minus-sign");
+                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-plus-sign");
             },
             toggleBaseLayer: function () {
                 $(".base-layer-list").toggle("slow");
-                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
-                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-right");
+                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-minus-sign");
+                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-plus-sign");
             },
             toggleExternLayer: function () {
                 $(".layer-extern-list").toggle("slow");
-                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-right");
+                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-minus-sign");
+                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-plus-sign");
             },
             fixTree: function () {
                 $("body").on("click", "#map", this.helpForFixing);
