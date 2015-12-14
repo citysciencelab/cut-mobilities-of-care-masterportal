@@ -1,0 +1,772 @@
+[
+    {
+       "id" : "010",
+       "name" : "Grundschulen mit eingerichteten Basisklassen (BK) (01.12.2015)",
+       "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+       "typ" : "WMS",
+       "layers" : "bk_grundschulen",
+       "format" : "image/png",
+       "version" : "1.3.0",
+       "singleTile" : false,
+       "transparent" : true,
+       "tilesize" : "512",
+       "gutter" : "10",
+       "minScale" : "2400",
+       "maxScale" : "350000",
+       "gfiAttributes" : "showAll",
+       "layerAttribution" : "nicht vorhanden",
+       "legendURL" : "",
+       "cache" : false,
+       "datasets" : []
+      },
+      {
+        "id" : "011",
+        "name" : "Grundschulen mit eingerichteten internationalen Vorbereitungsklassen (IVK) (01.12.2015)",
+        "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+        "typ" : "WMS",
+        "layers" : "ivk_grundschulen",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : false,
+        "transparent" : true,
+        "tilesize" : "512",
+        "gutter" : "10",
+        "minScale" : "2400",
+        "maxScale" : "350000",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "legendURL" : "",
+        "cache" : false,
+        "datasets" : []
+        },
+        {
+          "id" : "012",
+          "name" : "Grundschulen ohne Vorbereitungsklassen für Zuwanderer und Flüchtlinge (01.12.2015)",
+          "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+          "typ" : "WMS",
+          "layers" : "ohne_vk_grundschulen",
+          "format" : "image/png",
+          "version" : "1.3.0",
+          "singleTile" : false,
+          "transparent" : true,
+          "tilesize" : "512",
+          "gutter" : "10",
+          "minScale" : "2400",
+          "maxScale" : "350000",
+          "gfiAttributes" : "showAll",
+          "layerAttribution" : "nicht vorhanden",
+          "legendURL" : "",
+          "cache" : false,
+          "datasets" : []
+        },
+        {
+         "id" : "013",
+         "name" : "Stadtteilschulen mit eingerichteten Basisklassen (BK) (01.12.2015)",
+         "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+         "typ" : "WMS",
+         "layers" : "bk_stadtteilschulen",
+         "format" : "image/png",
+         "version" : "1.3.0",
+         "singleTile" : false,
+         "transparent" : true,
+         "tilesize" : "512",
+         "gutter" : "10",
+         "minScale" : "2400",
+         "maxScale" : "350000",
+         "gfiAttributes" : "showAll",
+         "layerAttribution" : "nicht vorhanden",
+         "legendURL" : "",
+         "cache" : false,
+         "datasets" : []
+       },
+        {
+          "id" : "014",
+          "name" : "Stadtteilschulen mit eingerichteten internationalen Vorbereitungsklassen (IVK) (01.12.2015)",
+          "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+          "typ" : "WMS",
+          "layers" : "ivk_stadtteilschulen",
+          "format" : "image/png",
+          "version" : "1.3.0",
+          "singleTile" : false,
+          "transparent" : true,
+          "tilesize" : "512",
+          "gutter" : "10",
+          "minScale" : "2400",
+          "maxScale" : "350000",
+          "gfiAttributes" : "showAll",
+          "layerAttribution" : "nicht vorhanden",
+          "legendURL" : "",
+          "cache" : false,
+          "datasets" : []
+        },
+      {
+        "id" : "015",
+        "name" : "Stadtteilschulen ohne Vorbereitungsklassen für Zuwanderer und Flüchtlinge (01.12.2015)",
+        "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+        "typ" : "WMS",
+        "layers" : "ohne_vk_stadtteilschulen",
+        "format" : "image/png",
+        "version" : "1.3.0",
+        "singleTile" : false,
+        "transparent" : true,
+        "tilesize" : "512",
+        "gutter" : "10",
+        "minScale" : "2400",
+        "maxScale" : "350000",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "legendURL" : "",
+        "cache" : false,
+        "datasets" : []
+      },
+      {
+      "id" : "016",
+      "name" : "Gymnasien mit eingerichteten Basisklassen (BK) (01.12.2015)",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "bk_gymnasien",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+    },
+     {
+      "id" : "017",
+      "name" : "Gymnasien mit eingerichteten internationalen Vorbereitungsklassen (IVK) (01.12.2015)",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "ivk_gymnasien",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+    },
+    {
+      "id" : "018",
+      "name" : "Gymnasien ohne Vorbereitungsklassen für Zuwanderer und Flüchtlinge (01.12.2015)",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "ohne_vk_gymnasien",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+    },
+    {
+      "id" : "019",
+      "name" : "Berufsbildende Schulen mit Vorbereitungsmaßnahmen für neu zugewanderte Schüler",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "hibb_angebote",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+    },
+	{
+      "id" : "020",
+      "name" : "Dauerhafte Wohnquartiere",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "dauerhafte_wohnquartiere",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+    },
+    {
+      "id" : "01",
+      "name" : "Geplante unbegleitete minderjährige Flüchtlinge",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "geplante_umf",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "1",
+      "name" : "Bestehende unbegleitete minderjährige Flüchtlinge",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "bestehende_umf",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "2",
+      "name" : "Geplante zentrale Erstaufnahmeeinrichtungen",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "geplante_zea",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "name" : "Name",
+         "bezirk" : "Bezirk",
+         "platzzahl" : "Platzzahl"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "3",
+      "name" : "Bestehende zentrale Erstaufnahmeeinrichtungen (ZEA)",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "bestehende_zea",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "name" : "Name",
+         "bezirk" : "Bezirk",
+         "platzzahl" : "Platzzahl"
+        },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "4",
+      "name" : "Bestehende Flüchtlingsunterkünfte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "bestehende_unterkuenfte",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "strasse": "Strasse",
+         "bezirk" : "Bezirk",
+         "platzzahl" : "Platzzahl",
+         "stand": "Stand"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "5",
+      "name" : "Geplante Flüchtlingsunterkünfte",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_intranet",
+      "typ" : "WMS",
+      "layers" : "geplante_unterkuenfte",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "2400",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "strasse": "Strasse",
+         "bezirk" : "Bezirk",
+         "platzzahl" : "Platzzahl",
+         "stand": "Stand"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "6",
+      "name" : "Geplante Flüchtlingsunterkünfte (geschützt)",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_fluechtlinge_geschuetzt",
+      "typ" : "WMS",
+      "layers" : "oeru_vorplanung",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "10",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : []
+   },
+   {
+      "id" : "7",
+      "name" : "Demo Datenerfassung",
+      "url" : "http://wscd0096/fachdaten_public/services/wfst_dudentest",
+      "typ" : "WFS",
+      "featureType" : "dudentest",
+      "format" : "image/png",
+      "version" : "1.1.0",
+      "featureNS" : "http://www.deegree.org/app",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "datasets" : []
+   },
+   {
+      "id" : "8",
+      "name" : "Luftbilder DOP 10",
+      "url" : "http://lgvfds02.fhhnet.stadt.hamburg.de/arcgis/services/GBD_Image/DOP10/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "image/jpeg",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "ignore",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "ignore",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
+            "rs_id" : "HMDK#25DB0242-D6A3-48E2-BAE4-359FB28491BA",
+            "md_name" : "Digitale Orthophotos 10cm Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "453",
+      "name" : "Stadtplan",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/wms_hamburgde",
+      "typ" : "WMS",
+      "layers" : "geobasisdaten",
+      "format" : "image/jpeg",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "256",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "ignore",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "ignore",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
+            "rs_id" : "HMDK#932c8a6b-31f7-40e0-aade-c29c5c631c4f",
+            "md_name" : "Internetstadtplan Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
+   },
+   {
+      "id" : "1112",
+      "name" : "Hamburgische Landesförderung",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_RISE_FG/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : true,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "BEZIRK" : "Bezirk",
+         "GEBIETSNAM" : "Gebietsname",
+         "STRASSENNA" : "Straßenname",
+         "STADTTEIL" : "Stadtteil"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "rs_id" : "HMDK#0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "md_name" : "Integrierte Stadtteilentwicklung - RISE - Fördergebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "kategorie_inspire" : "Bodennutzung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1113",
+      "name" : "Aktive Stadt und Ortsteilzentren",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_RISE_FG/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "2",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : true,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "BEZIRK" : "Bezirk",
+         "GEBIETSNAM" : "Gebietsname",
+         "STRASSENNA" : "Straßenname",
+         "STADTTEIL" : "Stadtteil"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "rs_id" : "HMDK#0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "md_name" : "Integrierte Stadtteilentwicklung - RISE - Fördergebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "kategorie_inspire" : "Bodennutzung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1114",
+      "name" : "Städtebaulicher Denkmalschutz",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_RISE_FG/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "3",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : true,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "BEZIRK" : "Bezirk",
+         "GEBIETSNAM" : "Gebietsname",
+         "STRASSENNA" : "Straßenname",
+         "STADTTEIL" : "Stadtteil"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "rs_id" : "HMDK#0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "md_name" : "Integrierte Stadtteilentwicklung - RISE - Fördergebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "kategorie_inspire" : "Bodennutzung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1115",
+      "name" : "Soziale Stadt",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_RISE_FG/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "4",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : true,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "BEZIRK" : "Bezirk",
+         "GEBIETSNAM" : "Gebietsname",
+         "STRASSENNA" : "Straßenname",
+         "STADTTEIL" : "Stadtteil"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "rs_id" : "HMDK#0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "md_name" : "Integrierte Stadtteilentwicklung - RISE - Fördergebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "kategorie_inspire" : "Bodennutzung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1116",
+      "name" : "Stadtumbau West",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_RISE_FG/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "5",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : true,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "BEZIRK" : "Bezirk",
+         "GEBIETSNAM" : "Gebietsname",
+         "STRASSENNA" : "Straßenname",
+         "STADTTEIL" : "Stadtteil"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "rs_id" : "HMDK#0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "md_name" : "Integrierte Stadtteilentwicklung - RISE - Fördergebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "kategorie_inspire" : "Bodennutzung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1117",
+      "name" : "Städtebauliche Sanierung",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_RISE_FG/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "6",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : true,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : {
+         "BEZIRK" : "Bezirk",
+         "GEBIETSNAM" : "Gebietsname",
+         "STRASSENNA" : "Straßenname",
+         "STADTTEIL" : "Stadtteil"
+      },
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "rs_id" : "HMDK#0B04AC26-6602-49A2-93D0-75531B1A2FC5",
+            "md_name" : "Integrierte Stadtteilentwicklung - RISE - Fördergebiete in Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Infrastruktur, Bauen und Wohnen"
+            ],
+            "kategorie_inspire" : "Bodennutzung",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "1585",
+      "name" : "Öffentliche Schulen Hamburgs",
+      "url" : "http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wms_hh_schulen",
+      "typ" : "WMS",
+      "layers" : "hh_schulen_dwh",
+      "format" : "image/png",
+      "version" : "1.1.1",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
+            "rs_id" : "HMDK#7988c147-7523-45bb-8f18-7f39d0d20541",
+            "md_name" : "Schulstammdaten und Schülerzahlen der Hamburger Schulen",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Öffentliche Verwaltung, Haushalt und Steuern"
+            ],
+            "kategorie_inspire" : "Versorgungswirtschaft und staatliche Dienste",
+            "filter" : [
+               "hmbtg",
+               "#opendata_hh#",
+               "inspireidentifiziert"
+            ]
+         }
+      ]
+   },
+   {
+      "id" : "2097",
+      "name" : "Sozialmonitoring 2014 (nur bewohnte Bereiche)",
+      "url" : "http://lgvfds01.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/BSU_WSB2_Sozialmonitor2014/MapServer/WmsServer",
+      "typ" : "WMS",
+      "layers" : "1",
+      "format" : "nicht vorhanden",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "tilesize" : "512",
+      "gutter" : "0",
+      "minScale" : "0",
+      "maxScale" : "350000",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "datasets" : [
+         {
+            "md_id" : "9499E840-3B3C-415A-8F35-856AEE649BCA",
+            "rs_id" : "HMDK#d85638f1-8570-4f2b-ae3d-326a641d4eee",
+            "md_name" : "Sozialmonitoring Integrierte Stadtteilentwicklung - Karte Gesamtindex (FHHNET)",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : "Kein INSPIRE-Thema",
+            "filter" : []
+         }
+      ]
+   }
+]

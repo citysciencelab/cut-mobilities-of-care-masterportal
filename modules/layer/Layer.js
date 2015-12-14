@@ -99,11 +99,16 @@ define([
             if (datasets && datasets.length > 0) {
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
-                    this.set("metaID", dataset.md_id);
-                    if (_.isNull(this.get("metaName"))) {
-                        this.set("metaName", dataset.md_name);
+                    if (this.id === "1561") { // Ausnahme für festgestellte Bebauungspläne
+                        this.set("metaID", "EBA4BF12-3ED2-4305-9B67-8E689FE8C445");
+                        this.set("metaName", "Bebauungspläne Hamburg");
                     }
-
+                    else {
+                        this.set("metaID", dataset.md_id);
+                        if (_.isNull(this.get("metaName"))) {
+                            this.set("metaName", dataset.md_name);
+                        }
+                    }
                     if (Config.tree.orderBy === "opendata") {
                         if (dataset.kategorie_opendata.length > 1) {
                             this.set("node", dataset.kategorie_opendata);
