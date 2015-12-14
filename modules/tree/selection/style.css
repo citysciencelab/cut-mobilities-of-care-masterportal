@@ -1,6 +1,6 @@
 /* Liste der ausgewählten Layer -- listView.js */
 .layer-selected-list {
-    color: rgb(153, 153, 153);
+    color: rgb(119, 119, 119);
     overflow-y: auto;
 }
 
