@@ -14,7 +14,7 @@
         }
         function maximizeWindow () {
             $(".changelog-content, .changelog-min, .changelog-max").toggle();
-            $(".changelog-window").css("width", "500px");
+            $(".changelog-window").css("width", "400px");
             $(".changelog-title").text("Die wichtigsten Neuerungen auf einen Blick");
         }
         function minimizeWindow () {
@@ -26,12 +26,12 @@
     <style>
         .changelog-window {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-            width: 260px;
+            width: 400px;
             position: absolute;
             top: 0;
             right: 0;
             margin: 60px 10px 30px 10px;
-            margin-right: 250px;
+            margin-right: 200px;
             z-index: 1000;
         }
         .changelog-header {
@@ -54,11 +54,10 @@
         }
 
         .changelog-content {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 10px;
-            display: none;
             font-size: 12px;
             background-color: #fff;
             color: rgb(34, 34, 34);
@@ -89,6 +88,16 @@
             <span class="glyphicon glyphicon-minus pull-right changelog-min" onclick="minimizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Minimieren"></span>
         </div>
         <div class="changelog-content">
+            <p>
+                <h4>Update 14.12.2015</h4>
+                <dl>
+                    <dt>Flurstückssuche</dt>
+                    <dd>Unter Werkzeuge gibt es eine zusätzliche Flurstückssuche. Hier kann die Gemarkung aus einer Liste ausgewählt werden. Die "Schnellsuche" über das Suchfeld ist weiterhin möglich.</dd>
+                    <dt>Zeichenfunktion</dt>
+                    <dd>Zeichnungen können transparent geschaltet werden.</dd>
+                </dl>
+            </p>
+            <hr>
             <p>
                 <h4>Update 13.11.2015</h4>
                 <dl>
