@@ -21,6 +21,10 @@
     font-size: 12px;
 }
 
+.dropdown-menu > li > a > span {
+    padding-right: 8px;
+}
+
 #tools > .divider {
     margin: 6px 0;
 }

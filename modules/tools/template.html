@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <% if (typeof coord !== "undefined" && coord === true) { %>
 <li id="coordinateMenu" <% if (active === "coords") { %> class="active" <% } %>>
-    <a href="#">Koordinate abfragen</a>
+    <a href="#"><span class="glyphicon glyphicon-screenshot"></span>Koordinate abfragen</a>
 </li>
 <% }
 if (typeof measure !== "undefined" && measure === true) { %>
 <li class="divider"></li>
 <li id="measureMenu" <% if (active === "measure") { %> class="active" <% } %>>
-    <a href="#">Strecke / Fl&auml;che messen</a>
+    <a href="#"><span class="glyphicon glyphicon-resize-full"></span>Strecke / Fl&auml;che messen</a>
 </li>
 <% }
 if (typeof draw !== "undefined" && draw === true) { %>
 <li class="divider"></li>
 <li id="drawMenu" <% if (active === "draw") { %> class="active" <% } %>>
-    <a href="#">Zeichnen</a>
+    <a href="#"><span class="glyphicon glyphicon-pencil"></span>Zeichnen</a>
 </li>
 <% }
 if (typeof record !== "undefined" && record === true) { %>
 <li class="divider"></li>
 <li id="recordMenu" <% if (active === "record") { %> class="active" <% } %>>
-    <a href="#">Daten erfassen</a>
+    <a href="#"><span class="glyphicon glyphicon-edit"></span>Daten erfassen</a>
 </li>
 <% }
 if (typeof gfi !== "undefined" && gfi === true) { %>
 <li class="divider"></li>
 <li id="gfiMenu" <% if (active === "gfi") { %> class="active" <% } %>>
-    <a href="#">Informationen abfragen</a>
+    <a href="#"><span class="glyphicon glyphicon-info-sign"></span>Informationen abfragen</a>
 </li>
 <% }
 if (typeof parcelSearch !== "undefined" && parcelSearch === true) { %>
 <li class="divider"></li>
 <li id="parcelSearchMenu" <% if (active === "parcelSearch") { %> class="active" <% } %>>
-    <a href="#">Flurstückssuche</a>
+    <a href="#"><span class="glyphicon glyphicon-search"></span>Flurstückssuche</a>
 </li>
 <% }
 if (typeof print !== "undefined" && print === true) { %>
 <li class="divider hidden-xs"></li>
 <li id="printMenu" <% if (active === "print") { %> class="active hidden-xs" <% } else { %> class="hidden-xs" <% } %>>
-    <a href="#">Karte drucken</a>
+    <a href="#"><span class="glyphicon glyphicon-print"></span>Karte drucken</a>
 </li>
 <% } %>

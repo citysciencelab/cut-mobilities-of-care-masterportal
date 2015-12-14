@@ -14,6 +14,7 @@
             <% if (layerTree === true) { %>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-list"></span>
                         <span class="menuitem">Themen</span>
                     </a>
                         <div class="dropdown-menu dropdown-tree">
@@ -23,6 +24,7 @@
             <% if (tools === true && oneTool === false) { %>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-wrench"></span>
                         <span class="menuitem">Werkzeuge</span>
                     </a>
                     <ul id="tools" class="dropdown-menu">
@@ -32,6 +34,7 @@
             <% if (routing === true) { %>
                 <li>
                     <a href="#" class="menuitem routingModul">
+                        <span class="glyphicon glyphicon-road"></span>
                         <span class="menuitem">Routenplaner</span>
                     </a>
                 </li>
@@ -39,6 +42,7 @@
             <% if (typeof addWMS !== "undefined" && addWMS === true) { %>
                 <li>
                     <a href="#" title="WMS Hinzufügen" class="menuitem addWMS">
+                        <span class="glyphicon glyphicon-plus"></span>
                         <span class="menuitem">WMS</span>
                     </a>
                 </li>
@@ -53,6 +57,7 @@
             <% if (treeFilter === true) { %>
                 <li>
                     <a href="#" class="filterTree">
+                        <span class="glyphicon glyphicon-leaf"></span>
                         <span class="menuitem">Filter</span>
                     </a>
                 </li>
@@ -60,6 +65,7 @@
             <% if (legend === true) { %>
                 <li>
                     <a href="#" class="legend">
+                        <span class="glyphicon glyphicon-book"></span>
                         <span class="menuitem">Legende</span>
                     </a>
                 </li>
@@ -67,6 +73,7 @@
             <% if (helpButton === true) { %>
                 <li>
                     <a href="#">
+                        <span class="glyphicon glyphicon-question-sign">
                         <span class="menuitem">Hilfe</span>
                     </a>
                 </li>
@@ -78,6 +85,7 @@
                %></%>
                 <li>
                     <a href=<%= mailto %>>
+                        <span class="glyphicon glyphicon-envelope"></span>
                         <span class="menuitem">Kontakt</span>
                     </a>
                 </li>
