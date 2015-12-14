@@ -37,8 +37,9 @@ define([
 
                 params = _.extend(params, _.object([id], [val]));
             });
-            liste.find(":selected").each(function (num, selected) {
-                var id = selected.closest("select").id,
+            liste.find(":selected").each(function (num, selected, bla) {
+                var parent = $(selected).parent()[0],
+                    id = parent.id,
                     val = selected.value;
 
                 params = _.extend(params, _.object([id], [val]));
