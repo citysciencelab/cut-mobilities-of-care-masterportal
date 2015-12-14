@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Geoportal der Metropolregion Hamburg",
+        title: "Geoportal",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
@@ -37,19 +37,19 @@ define(function () {
             urls: [
                     {
                         "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/kontakte.htm",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/kontakte.htm",
                         "alias": "Kontakte",
                         "alias_mobil": "Kontakte"
                     },
                     {
                         "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/copyright.htm",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/copyright.htm",
                         "alias": "Copyright",
                         "alias_mobil": "Copyright"
                     },
                     {
                         "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/links.htm",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/links.htm",
                         "alias": "Linkliste",
                         "alias_mobil": "Linkliste"
                     },
@@ -127,7 +127,6 @@ define(function () {
         },
         layerConf: "../components/lgv-config/services-mrh.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
