@@ -8,7 +8,7 @@ define([
             jahr: "",
             nutzung: "",
             produkt: "",
-            lage: {}
+            lage: ""
         },
         initialize: function () {
             EventBus.on("seite1_lage:newLage", this.setLage, this);
@@ -30,6 +30,12 @@ define([
         },
         setLage: function (val) {
             this.set("lage", val);
+        },
+        reset: function () {
+            this.set("jahr", ""),
+            this.set("nutzung", ""),
+            this.set("produkt", ""),
+            this.set("lage", "");
         }
     });
 

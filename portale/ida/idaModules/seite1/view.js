@@ -17,13 +17,12 @@ define([
             "click #seite1_weiter": "weiter"
         },
         initialize: function () {
-            this.listenTo(this.model, "change:jahr", this.checkParameter);
-
-            this.listenTo(this.model, "change:nutzung", this.checkParameter);
-
-            this.listenTo(this.model, "change:produkt", this.checkParameter);
-
+            this.listenTo(this.model, "change:jahr", this.checkParameter),
+            this.listenTo(this.model, "change:nutzung", this.checkParameter),
+            this.listenTo(this.model, "change:produkt", this.checkParameter)
             this.listenTo(this.model, "change:lage", this.checkParameter);
+
+            this.model.reset();
         },
         weiter: function () {
             new Seite2(this.model.get("jahr"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("lage"));
