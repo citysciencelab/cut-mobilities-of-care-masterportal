@@ -148,7 +148,7 @@ define(function () {
             printID: "99999",
             title: "Freie und Hansestadt Hamburg - Atlas",
             outputFilename: "Ausdruck FHH - Atlas",
-            gfi: false
+            gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };
