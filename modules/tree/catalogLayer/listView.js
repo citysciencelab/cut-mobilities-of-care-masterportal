@@ -17,7 +17,7 @@ define([
             this.render();
         },
         render: function () {
-            $(".layer-catalog").after(this.$el.html(""));
+            $(".layer-catalog > .content").append(this.$el.html(""));
             this.collection.forEach(this.addTreeNode, this);
         },
         addTreeNode: function (node) {

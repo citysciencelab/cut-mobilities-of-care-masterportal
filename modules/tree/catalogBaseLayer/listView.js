@@ -16,7 +16,7 @@ define([
             this.render();
         },
         render: function () {
-            $(".base-layer-selection").after(this.$el.html(""));
+            $(".base-layer-catalog > .content").append(this.$el.html(""));
             this.collection.forEach(this.addBaseLayer, this);
         },
         addBaseLayer: function (baselayer) {
