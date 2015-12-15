@@ -14,7 +14,7 @@
         }
         function maximizeWindow () {
             $(".changelog-content, .changelog-min, .changelog-max").toggle();
-            $(".changelog-window").css("width", "500px");
+            $(".changelog-window").css("width", "400px");
             $(".changelog-title").text("Die wichtigsten Neuerungen auf einen Blick");
         }
         function minimizeWindow () {
@@ -26,42 +26,40 @@
     <style>
         .changelog-window {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-            width: 260px;
+            width: 400px;
             position: absolute;
             top: 0;
             right: 0;
             margin: 60px 10px 30px 10px;
-            margin-right: 250px;
+            margin-right: 200px;
             z-index: 1000;
         }
         .changelog-header {
-            cursor: help;
-            background-color: #d42132;
+            background-color: rgb(212, 33, 50);
             color: #fff;
             padding: 8px;
             font-size: 14px;
         }
 
-        .changelog-max, .changelog-remove {
+        .changelog-min, .changelog-remove {
             cursor: pointer;
             margin-left: 5px;
         }
 
-        .changelog-min {
+        .changelog-max {
             cursor: pointer;
             margin-left: 5px;
             display: none;
         }
 
         .changelog-content {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 10px;
-            display: none;
             font-size: 12px;
             background-color: #fff;
-            color: rgb(34, 34, 34);
+            color: rgb(119, 119, 119);
         }
 
         dt {
@@ -83,12 +81,22 @@
     <div id="searchMarker" class="glyphicon glyphicon-map-marker"></div>
     <div class="changelog-window">
         <div class="changelog-header">
-            <span class="changelog-title" data-toggle="tooltip" data-placement="bottom" title="Die wichtigsten Neuerungen auf einen Blick">Die wichtigsten Neuerungen...</span>
+            <span class="changelog-title" data-toggle="tooltip" data-placement="bottom" title="Die wichtigsten Neuerungen auf einen Blick">Die wichtigsten Neuerungen auf einen Blick</span>
             <span class="glyphicon glyphicon-remove pull-right changelog-remove" onclick="hideWindow();" data-toggle="tooltip" data-placement="bottom" title="Schließen"></span>
             <span class="glyphicon glyphicon-unchecked pull-right changelog-max" onclick="maximizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Maximieren"></span>
             <span class="glyphicon glyphicon-minus pull-right changelog-min" onclick="minimizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Minimieren"></span>
         </div>
         <div class="changelog-content">
+            <p>
+                <h4>Update 15.12.2015</h4>
+                <dl>
+                    <dt>Flurstückssuche</dt>
+                    <dd>Unter Werkzeuge gibt es eine zusätzliche Flurstückssuche. Hier kann die Gemarkung aus einer Liste ausgewählt werden. Die "Schnellsuche" über das Suchfeld ist weiterhin möglich.</dd>
+                    <dt>Zeichenfunktion</dt>
+                    <dd>Zeichnungen können transparent geschaltet werden.</dd>
+                </dl>
+            </p>
+            <hr>
             <p>
                 <h4>Update 13.11.2015</h4>
                 <dl>

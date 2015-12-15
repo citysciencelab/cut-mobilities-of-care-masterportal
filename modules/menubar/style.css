@@ -1,3 +1,7 @@
+.navbar-fixed-top {
+    border-bottom-width: 0;
+}
+
 .navbar {
     min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
     background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -6,7 +10,7 @@
     background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 12px;
+    /*font-size: 12px;*/
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.176);
 }
 
@@ -37,9 +41,8 @@
 }
 
 .menuitem {
-    margin-left: 5px;
-    font-size: 12px;
-    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.6px;
 }
 
 @media (min-width: 768px) {

@@ -13,16 +13,16 @@ define([
                 "change select": "setSelection",
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
-                "click .base-layer-selection > .glyphicon-question-sign": function () {
+                "click .base-layer-catalog > .header > .glyphicon-question-sign": function () {
                     EventBus.trigger("showWindowHelp", "tree");
                 },
-                "click .layer-catalog-label": "toggleCatalog",
-                "click .layer-selection-label > .glyphicon-triangle-bottom, .layer-selection-label > .glyphicon-triangle-right, .layer-selection-label > .control-label": "toggleSelection",
-                "click .base-layer-selection > .control-label, .base-layer-selection > .glyphicon-triangle-bottom, .base-layer-selection > .glyphicon-triangle-right": "toggleBaseLayer",
+                "click .layer-catalog > .header > .glyphicon-minus-sign, .layer-catalog > .header > .glyphicon-plus-sign, .layer-catalog > .header > .control-label": "toggleCatalog",
+                "click .layer-selection > .header > .glyphicon-minus-sign, .layer-selection > .header > .glyphicon-plus-sign, .layer-selection > .header > .control-label": "toggleSelection",
+                "click .base-layer-catalog > .header > .control-label, .base-layer-catalog > .header > .glyphicon-minus-sign, .base-layer-catalog > .header > .glyphicon-plus-sign": "toggleBaseLayer",
                 "click .layer-selection-save": function () {
                     EventBus.trigger("mapView:getCenterAndZoom");
                 },
-                "click .layer-extern-label": "toggleExternLayer"
+                "click .layer-catalog-extern > .header > span": "toggleExternLayer"
             },
             initialize: function () {
                 require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
@@ -46,28 +46,28 @@ define([
             setSelection: function (evt) {
                 this.model.setSelection(evt.target.value);
                 $(".layer-catalog-list").show("slow");
-                $(".layer-catalog-label > .glyphicon").addClass("glyphicon-triangle-bottom");
-                $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-triangle-right");
+                $(".layer-catalog-label > .glyphicon").addClass("glyphicon-minus-sign");
+                $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-plus-sign");
             },
             toggleCatalog: function () {
                 $(".layer-catalog-list").toggle("slow");
-                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-catalog-label > .glyphicon").toggleClass("glyphicon-triangle-right");
+                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
             },
             toggleSelection: function () {
                 $(".layer-selected-list").toggle("slow");
-                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-selection-label > .glyphicon").toggleClass("glyphicon-triangle-right");
+                $(".layer-selection > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
+                $(".layer-selection > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
             },
             toggleBaseLayer: function () {
                 $(".base-layer-list").toggle("slow");
-                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
-                $(".base-layer-selection > .glyphicon:first").toggleClass("glyphicon-triangle-right");
+                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
+                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
             },
             toggleExternLayer: function () {
                 $(".layer-extern-list").toggle("slow");
-                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-bottom");
-                $(".layer-extern-label > .glyphicon:first").toggleClass("glyphicon-triangle-right");
+                $(".layer-catalog-extern > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog-extern > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
             },
             fixTree: function () {
                 $("body").on("click", "#map", this.helpForFixing);

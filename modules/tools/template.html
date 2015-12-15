@@ -5,26 +5,31 @@
 </li>
 <% }
 if (typeof measure !== "undefined" && measure === true) { %>
+<li class="divider"></li>
 <li id="measureMenu" <% if (active === "measure") { %> class="active" <% } %>>
-    <a href="#"><span class="glyphicon glyphicon-resize-full"></span>Messen</a>
+    <a href="#"><span class="glyphicon glyphicon-resize-full"></span>Strecke / Fl&auml;che messen</a>
 </li>
 <% }
 if (typeof draw !== "undefined" && draw === true) { %>
+<li class="divider"></li>
 <li id="drawMenu" <% if (active === "draw") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-pencil"></span>Zeichnen</a>
 </li>
 <% }
 if (typeof record !== "undefined" && record === true) { %>
+<li class="divider"></li>
 <li id="recordMenu" <% if (active === "record") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-edit"></span>Daten erfassen</a>
 </li>
 <% }
 if (typeof gfi !== "undefined" && gfi === true) { %>
+<li class="divider"></li>
 <li id="gfiMenu" <% if (active === "gfi") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-info-sign"></span>Informationen abfragen</a>
 </li>
 <% }
 if (typeof parcelSearch !== "undefined" && parcelSearch === true) { %>
+<li class="divider"></li>
 <li id="parcelSearchMenu" <% if (active === "parcelSearch") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-search"></span>Flurstückssuche</a>
 </li>

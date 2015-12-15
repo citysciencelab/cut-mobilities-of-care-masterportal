@@ -39,7 +39,7 @@ define([
                 }
                 else if (element.name === "bplan") {
                     this.set("bplanURL", element.url);
-                    this.sendRequest(element.url, element.data, this.getFeaturesForBPlan, false);
+                    this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
                 }
             }, this);
             EventBus.on("searchbar:search", this.search, this);
@@ -75,7 +75,7 @@ define([
         requestbplan: function (type, name) {
             var typeName = (type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
                 propertyName = (type === "festgestellt") ? "planrecht" : "plan",
-                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature SERVICE='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
+                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
             this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true, true);
         },
@@ -225,6 +225,21 @@ define([
                 success: successFunction,
                 timeout: 6000,
                 contentType: "text/xml",
+                error: function () {
+                    EventBus.trigger("alert", url + " nicht erreichbar.");
+                }
+            });
+        },
+
+        sendGetRequest: function (url, data, successFunction, asyncBool) {
+            $.ajax({
+                url: url,
+                data: data,
+                context: this,
+                async: asyncBool,
+                type: "GET",
+                success: successFunction,
+                timeout: 6000,
                 error: function () {
                     EventBus.trigger("alert", url + " nicht erreichbar.");
                 }

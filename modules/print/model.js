@@ -108,7 +108,7 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            if (_.has(Config, "tree") === true) {
+            if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
                 EventBus.trigger("getSelectedVisibleWMSLayer");
             }
             else {

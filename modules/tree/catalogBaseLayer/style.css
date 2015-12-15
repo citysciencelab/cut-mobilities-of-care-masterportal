@@ -2,11 +2,11 @@
     overflow-y: auto;
 }
 
-.base-layer {
-    color: rgb(150, 150, 150);
+/*.base-layer {
+    color: rgb(119, 119, 119);
     font-size: 14px;
     padding: 8px 15px;
-}
+}*/
 
 .base-layer-content > .layer-name {
     margin-left: 2em;

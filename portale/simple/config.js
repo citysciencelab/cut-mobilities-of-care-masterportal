@@ -9,13 +9,15 @@ define(function () {
         },
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        layerIDs:
-        [
-            {id: "39", visible: true},
-            {id: "2625", visible: false},
-            {id: "1711", visible: false, style: "1711", name: "Krankenhäuser WFS", searchField: "name"},
-            {id: "1561", visible: true}
-        ],
+        tree: {
+            type: "light",
+            layer: [
+                {id: "39", visible: true},
+                {id: "2625", visible: false},
+                {id: "1711", visible: false, style: "1711", name: "Krankenhäuser WFS", searchField: "name"},
+                {id: "1561", visible: true}
+            ]
+        },
         menu: {
             searchBar: true,
             layerTree: true,
@@ -64,54 +66,48 @@ define(function () {
         },
         view: {
             center: [565874, 5934140],
-            epsg: "EPSG:25832",
-            // extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
-            resolution: 152.87436231907702,
+            extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
+            resolution: 76.43718115953851,
             options: [
                 {
-                    resolution: 152.87436231907702,
-                    scale: "250000",
-                    zoomLevel: 1
-                },
-                {
                     resolution: 76.43718115953851,
-                    scale: "100000",
-                    zoomLevel: 2
+                    scale: "288896",
+                    zoomLevel: 0
                 },
                 {
                     resolution: 38.21859057976939,
-                    scale: "60000",
-                    zoomLevel: 3
+                    scale: "144448",
+                    zoomLevel: 1
                 },
                 {
                     resolution: 19.109295289884642,
-                    scale: "40000",
-                    zoomLevel: 4
+                    scale: "72223",
+                    zoomLevel: 2
                 },
                 {
                     resolution: 9.554647644942321,
-                    scale: "20000",
-                    zoomLevel: 5
+                    scale: "36112",
+                    zoomLevel: 3
                 },
                 {
                     resolution: 4.7773238224711605,
-                    scale: "10000",
-                    zoomLevel: 6
+                    scale: "18056",
+                    zoomLevel: 4
                 },
                 {
                     resolution: 2.3886619112355802,
-                    scale: "5000",
-                    zoomLevel: 7
+                    scale: "9028",
+                    zoomLevel: 5
                 },
                 {
                     resolution: 1.1943309556178034,
-                    scale: "2500",
-                    zoomLevel: 8
+                    scale: "4514",
+                    zoomLevel: 6
                 },
                 {
                     resolution: 0.5971654778089017,
-                    scale: "1000",
-                    zoomLevel: 9
+                    scale: "2257",
+                    zoomLevel: 7
                 }
             ]
         },

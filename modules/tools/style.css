@@ -1,7 +1,37 @@
-#tools > li > a {
-    padding: 4px 16px;
+#tools {
+    border: 1px solid #ccc;
 }
 
-#tools > li > a > span {
+#tools > li > a:hover {
+    background-color: rgb(153, 153, 153);
+    color: rgb(255, 255, 255);
+    /*padding-right: 8px;*/
+}
+
+#tools > .active > a {
+    background-color: rgb(153, 153, 153);
+    color: rgb(255, 255, 255);
+}
+
+#tools {
+    padding: 6px 0;
+}
+.dropdown-menu > li > a {
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    font-size: 12px;
+}
+
+.dropdown-menu > li > a > span {
     padding-right: 8px;
+}
+
+#tools > .divider {
+    margin: 6px 0;
+}
+
+@media (max-width: 767px) {
+    #tools {
+        border-right: 0;
+        border-left: 0;
+    }
 }

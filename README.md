@@ -175,12 +175,12 @@ Die Dokumentation erzeugen. Zurzeit nur für portale/master/config.js.
 ```
 # grunt buildExamples --env=internet
 ```
-- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
+- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen (zurzeit simple und simpleTree) enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
 - erzeugt zusätzlich examples.zip
 
 ## grunt copyExamples
 ```
-# grunt buildExamples --env=internet
+# grunt copyExamples --env=internet
 ```
 - leert den Ordner examples
 - kopiert den aktuellen dist-Ordner nach examples

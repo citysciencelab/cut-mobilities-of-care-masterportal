@@ -29,7 +29,7 @@ define([
             this.render();
         },
         render: function () {
-            $(".layer-selection").after(this.$el.html(""));
+            $(".layer-selection > .content").append(this.$el.html(""));
             this.collection.forEach(this.renderModelView, this);
         },
         renderModelView: function (model) {

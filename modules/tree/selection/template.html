@@ -14,6 +14,9 @@
     else if (typeof isExternal !== "undefined" && isExternal === true) { %>
          <div class="layer-name"><%= name %></div>
     <% }
+    else if (_.isNull(metaName) || treeType === "custom") { %>
+        <div class="layer-name"><%= name %></div>
+    <% }
     else if (typeof type !== "undefined" && type === "nodeLayer" && metaName !== null) { %>
         <div class="layer-name"><%= metaName %></div>
     <% }

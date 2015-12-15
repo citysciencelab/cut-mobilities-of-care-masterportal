@@ -8,9 +8,9 @@ define(function () {
             baseLayer: [
                 {id: "453", minScale: "500"},
                 {id: "8"},
-                {id: "717", visibility: true, minScale: "500", name: "Geobasiskarten (farbig)"},
-                {id: "713", minScale: "500", name: "Geobasiskarten (schwarz-weiß)"},
-                {id: "1043", minScale: "500", name: "Geobasiskarten (grau-blau)"},
+                {id: "717", visibility: true, minScale: "1000", name: "Geobasiskarten (farbig)"},
+                {id: "713", minScale: "1000", name: "Geobasiskarten (schwarz-weiß)"},
+                {id: "1043", minScale: "1000", name: "Geobasiskarten (grau-blau)"},
                 {id: "368", name: "ALKIS farbig", maxScale: "10000"},
                 {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
             ],
@@ -66,7 +66,32 @@ define(function () {
             id: "1"
         },
         attributions: true,
-        footer: true,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV Hamburg"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/fhh-atlas_alt/",
+                    "alias": "Zum alten FHH-Atlas"
+                }
+            ]
+        },
         quickHelp: true,
         allowParametricURL: true,
         view: {
@@ -123,7 +148,7 @@ define(function () {
             printID: "99999",
             title: "Freie und Hansestadt Hamburg - Atlas",
             outputFilename: "Ausdruck FHH - Atlas",
-            gfi: false
+            gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };
