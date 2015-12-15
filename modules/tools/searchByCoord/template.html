@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<form class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm pull-left" id="coordSystemField">
+                <% console.log(this.model.get("coordSystem"));
+                _.each(this.model.get("coordSystems"), function(value, key) {
+                    if (value === this.model.get("coordSystem")) {%>
+                        <option value=<%= value %> SELECTED><%= value%></option>
+                    <%} else { %>
+                        <option value=<%= value %>><%= value%></option>
+                <% }}, this); %>
+            </select>
+        </div>
+    </div>
+    <%if (this.model.get("coordSystem") === "ETRS89") { %>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Rechtswert</label>
+            <div class="col-md-7 col-sm-7">
+                <input type="text" class="form-control" id="coordinatesEastingField">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Hochwert</label>
+            <div class="col-md-7 col-sm-7">
+                <input type="text" class="form-control" id="coordinatesNorthingField">
+            </div>
+        </div>
+    <% }
+    else if (this.model.get("coordSystem") === "WGS84") {%>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Ostwert</label>
+            <div class="col-md-7">
+            <div class="col-md-2 col-sm-1">
+                <input type="text" class="form-control" id="coordinatesEastingDegreeField" placeholder="°">
+            </div>
+            <div class="col-md-2 col-sm-1">
+                <input type="text" class="form-control" id="coordinatesEastingMinuteField" placeholder="'">
+            </div>
+            <div class="col-md-2 col-sm-1">
+                <input type="text" class="form-control" id="coordinatesEastingSecondField" placeholder="''">
+            </div>
+        </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Nordwert</label>
+                <div class="col-md-1 col-sm-1">
+                    <input type="text" class="form-control" id="coordinatesNorthingDegreeField" placeholder="°">
+                </div>
+                <div class="col-md-1 col-sm-1">
+                    <input type="text" class="form-control" id="coordinatesNorthingMinuteField" placeholder="'">
+                </div>
+                <div class="col-md-1 col-sm-1">
+                    <input type="text" class="form-control" id="coordinatesNorthingSecondField" placeholder="''">
+                </div>
+        </div>
+    <% } %>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-panel-submit col-md-12 col-sm-12">Suchen</button>
+        </div>
+    </div>
+</form>

@@ -21,7 +21,8 @@ define([
                 "click #printMenu": "activatePrint",
                 "click #drawMenu": "activateDraw",
                 "click #recordMenu": "activateRecord",
-                "click #parcelSearchMenu": "activateParcelSearch"
+                "click #parcelSearchMenu": "activateParcelSearch",
+                "click #searchByCoordSearchMenu": "activateSearchByCoord"
             },
             render: function () {
                 var attr = this.model.toJSON();
@@ -57,6 +58,10 @@ define([
             activateParcelSearch: function () {
                 this.model.setActive("parcelSearch");
                 EventBus.trigger("toggleWin", ["parcelSearch", "Flurstückssuche", "glyphicon-search"]);
+            },
+            activateSearchByCoord: function () {
+                this.model.setActive("searchByCoord");
+                EventBus.trigger("toggleWin", ["searchByCoord", "Suche per Koordinate", "glyphicon-search"]);
             }
         });
 
