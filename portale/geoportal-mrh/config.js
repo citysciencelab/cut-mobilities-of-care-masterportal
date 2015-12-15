@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Geoportal",
+        title: "Geoportal der MRH",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
