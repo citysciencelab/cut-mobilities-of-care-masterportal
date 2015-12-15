@@ -35,19 +35,18 @@
             z-index: 1000;
         }
         .changelog-header {
-            cursor: help;
             background-color: rgb(212, 33, 50);
             color: #fff;
             padding: 8px;
             font-size: 14px;
         }
 
-        .changelog-max, .changelog-remove {
+        .changelog-min, .changelog-remove {
             cursor: pointer;
             margin-left: 5px;
         }
 
-        .changelog-min {
+        .changelog-max {
             cursor: pointer;
             margin-left: 5px;
             display: none;
@@ -82,7 +81,7 @@
     <div id="searchMarker" class="glyphicon glyphicon-map-marker"></div>
     <div class="changelog-window">
         <div class="changelog-header">
-            <span class="changelog-title" data-toggle="tooltip" data-placement="bottom" title="Die wichtigsten Neuerungen auf einen Blick">Die wichtigsten Neuerungen...</span>
+            <span class="changelog-title" data-toggle="tooltip" data-placement="bottom" title="Die wichtigsten Neuerungen auf einen Blick">Die wichtigsten Neuerungen auf einen Blick</span>
             <span class="glyphicon glyphicon-remove pull-right changelog-remove" onclick="hideWindow();" data-toggle="tooltip" data-placement="bottom" title="Schließen"></span>
             <span class="glyphicon glyphicon-unchecked pull-right changelog-max" onclick="maximizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Maximieren"></span>
             <span class="glyphicon glyphicon-minus pull-right changelog-min" onclick="minimizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Minimieren"></span>
