@@ -89,19 +89,22 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         if (Config.menubar === true) {
             require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
                 new MenubarView();
-                if ($('#map').is(":visible") === true) {
+                if ($("#map").is(":visible") === true) {
                     new ControlsView();
                 }
                 require(["modules/window/view"], function (WindowView) {
                     new WindowView();
                 });
-                if (Config.menu.tools === true) {
-                    if (Config.tools.coord === true) {
+                if (_.has(Config, "tools") === true) {
+                    require(["modules/tools/listView"], function (ToolsListView) {
+                        new ToolsListView();
+                    });
+                    if (_.has(Config.tools, "coord") === true) {
                         require(["modules/coordpopup/view"], function (CoordPopupView) {
                             new CoordPopupView();
                         });
                     }
-                    if (Config.tools.gfi === true) {
+                    if (_.has(Config.tools, "gfi") === true) {
                         require(["modules/gfipopup/popup/view", "modules/gfipopup/popup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
                             if (Util.isAny()) {
                                 new MobileGFIPopupView();
@@ -111,12 +114,12 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             }
                         });
                     }
-                    if (Config.tools.measure === true) {
+                    if (_.has(Config.tools, "measure") === true) {
                         require(["modules/measure/view"], function (MeasureView) {
                             new MeasureView();
                         });
                     }
-                    if (Config.tools.draw === true) {
+                    if (_.has(Config.tools, "draw") === true) {
                         require(["modules/draw/view"], function (DrawView) {
                             new DrawView();
                         });
@@ -126,19 +129,16 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new WFS_TView();
                         });
                     }
-                    if (Config.tools.print === true) {
+                    if (_.has(Config.tools, "print") === true) {
                         require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
-                    if (_.has(Config.tools, "parcelSearch") && Config.tools.parcelSearch === true) {
+                    if (_.has(Config.tools, "parcelSearch") === true) {
                         require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
                             new ParcelSearchView();
                         });
                     }
-                    require(["modules/tools/view"], function (ToolsView) {
-                        new ToolsView();
-                    });
                 }
                 if (Config.menu.treeFilter === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
