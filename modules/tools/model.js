@@ -1,31 +1,36 @@
 define([
     "backbone",
-    "eventbus",
-    "config"
-], function (Backbone, EventBus, Config) {
+    "eventbus"
+], function (Backbone, EventBus) {
 
     var Tools = Backbone.Model.extend({
+        defaults: {
+            isActive: false,
+            title: "",
+            glyphicon: ""
+        },
         initialize: function () {
-            _.each(Config.tools, this.setAttributes, this);
-            this.listenTo(this, "change:active", this.activateTool);
-            EventBus.trigger("activateClick", "gfi");
-            EventBus.on("activateGFI", this.activateGFI, this);
-            EventBus.on("onlyActivateGFI", this.onlyActivateGFI, this);
+            this.listenTo(this, {
+                 "change:isActive": this.activateTool
+            });
         },
-        setAttributes: function (value, key) {
-            this.set(key, value);
-        },
-        setActive: function (value) {
-            this.set("active", value);
+        setActiveToTrue: function () {
+            this.set("isActive", true);
+            this.collection.setActiveToFalse(this);
         },
         activateTool: function () {
-            EventBus.trigger("closeGFIParams", this);
-            EventBus.trigger("activateClick", this.get("active"));
-        },
-        onlyActivateGFI: function () {
-            this.set("active", "gfi");
+            if (this.get("isActive") === true) {
+                EventBus.trigger("activateClick", this.get("name"));
+                if (this.get("name") !== "gfi" && this.get("name") !== "coord") {
+                    EventBus.trigger("toggleWin", [this.get("name"), this.get("title"), this.get("glyphicon")]);
+                }
+                else {
+                    EventBus.trigger("winParams", [false, false, ""]);
+                    EventBus.trigger("closeWindow", false);
+                }
+            }
         }
     });
 
-    return new Tools();
+    return Tools;
 });

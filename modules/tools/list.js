@@ -8,22 +8,27 @@ define([
     var ToolList = Backbone.Collection.extend({
         model: Tool,
         initialize: function () {
-            EventBus.on("onlyActivateGFI", this.activateGFI, this);
+            this.listenTo(EventBus, {
+                "onlyActivateGFI": this.activateGFI
+            });
             _.each(Config.tools, this.addModel, this);
         },
         addModel: function (obj, key) {
             obj.name = key;
             this.add(obj);
         },
-        changeActive: function (mod) {
-            var model = this.without(mod);
+        setActiveToFalse: function (model) {
+            var models = this.without(model);
 
-            _.each(model, function (mod) {
+            _.each(models, function (mod) {
                 mod.set("isActive", false);
             });
         },
         activateGFI: function () {
-            this.changeActive(this.findWhere({name: "gfi"}).cid);
+            var model = this.findWhere({name: "gfi"});
+
+            model.set("isActive", true);
+            this.setActiveToFalse(model);
         }
     });
 
