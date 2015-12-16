@@ -395,24 +395,58 @@ define(function () {
         /**
         * @memberof config
         * @type {Object}
-        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
-        * @property {Boolean}  [gfi=false] - GetFeatureInfo-Abfrage.
-        * @property {Boolean}  [measure=false] - Messen.
-        * @property {Boolean}  [draw=false] - Zeichnen.
-        * @property {Boolean}  [print=false] - Drucken.
-        * @property {Boolean}  [coord=false] - Koordinaten-Abfrage.
-        * @property {String}  [active=false] - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
-        * @property {Boolean}  [record=false] - Legt fest, ob das WFS-T Modul geladen werden soll.
+        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
+        * @property {Object} [parcelSearch] - Flurstückssuche.
+        * @property {string} [parcelSearch.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [parcelSearch.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [parcelSearch.isActive] - Tool initial aktiviert.
+        * @property {Object} [gfi] - GFI-Abfrage.
+        * @property {string} [gfi.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [gfi.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [gfi.isActive] - Tool initial aktiviert.
+        * @property {Object} [print] - Drucken.
+        * @property {string} [print.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [print.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [print.isActive] - Tool initial aktiviert.
+        * @property {Object} [coord] - Koordinateabfrage.
+        * @property {string} [coord.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [coord.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [coord.isActive] - Tool initial aktiviert.
+        * @property {Object} [measure] - Messen.
+        * @property {string} [measure.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [measure.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [measure.isActive] - Tool initial aktiviert.
+        * @property {Object} [draw] - Zeichnen.
+        * @property {string} [draw.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [draw.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [draw.isActive] - Tool initial aktiviert.
         */
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            parcelSearch: true,
-            active: "gfi",
-            record: false
+            parcelSearch: {
+                title: "Flurstückssuche",
+                glyphicon: "glyphicon-search"
+            },
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            }
         },
         /**
         * @memberof config
