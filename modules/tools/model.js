@@ -14,10 +14,13 @@ define([
                  "change:isActive": this.activateTool
             });
         },
+        // Setzt das Tool auf aktiviert
         setActiveToTrue: function () {
             this.set("isActive", true);
             this.collection.setActiveToFalse(this);
         },
+        // Aktviert das Tool und triggert es an map.js
+        // Ggf. wird es noch an window.js getriggert.
         activateTool: function () {
             if (this.get("isActive") === true) {
                 EventBus.trigger("activateClick", this.get("name"));

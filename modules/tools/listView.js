@@ -12,15 +12,14 @@ define([
         },
         render: function () {
             this.collection.forEach(this.addTool, this);
+            // löscht den letzten divider in der Toolliste
             $("#tools li:last-child").remove();
         },
         addTool: function (tool) {
             var toolView = new ToolView({model: tool});
 
             this.$el.append(toolView.render().el);
-            if (this.collection.length > 1) {
-                this.$el.append("<li class='divider'></li>");
-            }
+            this.$el.append("<li class='divider'></li>");
         }
     });
 
