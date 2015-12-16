@@ -2,7 +2,8 @@
 Hier tauchen alle Funktionen auf, die sich unter dem Menüpunkt "Werkzeuge" befinden.
 Die Einträge werden in einer Liste verwaltet. Jeder Eintrag hat einen Titel, ein Glyphicon
 und "Aktivierungs-Attribut" (default = false). Alle Attribute sind optional und werden über
-die config.js gesteuert. Auflistung der verfügbaren Tools:
+die config.js gesteuert. Die Konfiguration gibt die Reihenfolge der Tools in der Werkzeuge-Liste
+im Portal wieder. Auflistung der verfügbaren Tools:
 
 * parcelSearch (Flurstückssuche)
 * gfi (GetFeatureInfo)
