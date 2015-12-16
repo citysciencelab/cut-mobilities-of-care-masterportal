@@ -38,12 +38,7 @@ define([
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            if ($("#coordSystemField").val() === "ETRS89") {
-                this.model.setCoordinates($("#coordinatesEastingField").val(), $("#coordinatesNorthingField").val());
-            }
-            else {
-                this.model.setCoordinates([$("#coordinatesEastingDegreeField").val(),$("#coordinatesEastingMinuteField").val(),$("#coordinatesEastingSecondField").val()], [$("#coordinatesNorthingDegreeField").val(),$("#coordinatesNorthingMinuteField").val(),$("#coordinatesNorthingSecondField").val()]);
-            }
+            this.model.setCoordinates($("#coordinatesEastingField").val(), $("#coordinatesNorthingField").val());
         },
         setFocusToCoordSystemInput: function () {
             $("#coordSystemField").focus();
