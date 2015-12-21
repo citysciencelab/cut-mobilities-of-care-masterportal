@@ -53,7 +53,9 @@ define([
                     EventBus.trigger("layerlist:sendLayerByID", this.get(id));
                 },
                 "layerlist:setAttributionsByID": function (id, attrs) {
-                    this.get(id).set(attrs);
+                    if (this.get(id) !== undefined) {
+                        this.get(id).set(attrs);
+                    }
                 },
                 "layerlist:addNewModel": function (model) {
                     this.addExternalLayer(model);

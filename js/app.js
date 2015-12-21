@@ -112,7 +112,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                         });
                     }
                     if (Config.tools.measure === true) {
-                        require(["modules/measure/view"], function (MeasureView) {
+                        require(["modules/tools/measure/view"], function (MeasureView) {
                             new MeasureView();
                         });
                     }

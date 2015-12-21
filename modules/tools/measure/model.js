@@ -28,6 +28,8 @@ define([
                 })
             }),
             type: "LineString",
+            unit: "m",
+            decimal: 100,
             measureTooltips: []
         },
 
@@ -69,6 +71,9 @@ define([
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
+                this.listenTo(EventBus, {
+                    "pointerMoveOnMap": this.placeMeasureTooltip
+                });
                 this.set("sketch", evt.feature);
                 this.createMeasureTooltip();
             }, this);
@@ -79,6 +84,7 @@ define([
                 this.get("sketch", null);
                 // unset tooltip so that a new one can be created
                 this.get("measureTooltipElement", null);
+                this.stopListening(EventBus, "pointerMoveOnMap");
             }, this);
             EventBus.trigger("addInteraction", this.get("draw"));
         },
@@ -134,6 +140,20 @@ define([
          */
         setGeometryType: function (value) {
             this.set("type", value);
+            if (this.get("type") === "LineString") {
+                this.setUnit("m");
+            }
+            else {
+                this.setUnit("m²");
+            }
+        },
+
+        setUnit: function (value) {
+            this.set("unit", value);
+        },
+
+        setDecimal: function (value) {
+            this.set("decimal", parseInt(value, 10));
         },
 
         /**
@@ -154,14 +174,14 @@ define([
          * @param {ol.geom.LineString} line - Linestring geometry
          */
         formatLength: function (line) {
-            var length = Math.round(line.getLength() * 100) / 100,
+            var length = line.getLength(),
                 output;
 
-            if (length > 100) {
-                output = (Math.round(length / 1000 * 100) / 100) + " " + "km";
+            if (this.get("unit") === "km") {
+                output = (Math.round(length / 1000 * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
             }
             else {
-                output = (Math.round(length * 100) / 100) + " " + "m";
+                output = (Math.round(length * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
             }
             return output;
         },
@@ -174,11 +194,11 @@ define([
             var area = polygon.getArea(),
                 output;
 
-            if (area > 10000) {
-                output = (Math.round(area / 1000000 * 100) / 100) + " " + "km<sup>2</sup>";
+            if (this.get("unit") === "km<sup>2</sup>") {
+                output = (Math.round(area / 1000000 * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
             }
             else {
-                output = (Math.round(area * 100) / 100) + " " + "m<sup>2</sup>";
+                output = (Math.round(area * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
             }
             return output;
         }
