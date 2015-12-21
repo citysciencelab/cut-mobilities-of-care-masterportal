@@ -396,30 +396,31 @@ define(function () {
         * @memberof config
         * @type {Object}
         * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
-        * @property {Object} [parcelSearch] - Flurstückssuche.
-        * @property {string} [parcelSearch.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [parcelSearch.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [parcelSearch.isActive] - Tool initial aktiviert.
-        * @property {Object} [gfi] - GFI-Abfrage.
-        * @property {string} [gfi.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [gfi.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [gfi.isActive] - Tool initial aktiviert.
-        * @property {Object} [print] - Drucken.
-        * @property {string} [print.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [print.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [print.isActive] - Tool initial aktiviert.
-        * @property {Object} [coord] - Koordinateabfrage.
-        * @property {string} [coord.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [coord.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [coord.isActive] - Tool initial aktiviert.
-        * @property {Object} [measure] - Messen.
-        * @property {string} [measure.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [measure.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [measure.isActive] - Tool initial aktiviert.
-        * @property {Object} [draw] - Zeichnen.
-        * @property {string} [draw.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [draw.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [draw.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools] - Das Konfigurationsobjekt für die Tools/Werkzeuge.
+        * @property {Object} [tools.parcelSearch] - Flurstückssuche.
+        * @property {string} [tools.parcelSearch.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.parcelSearch.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.parcelSearch.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.gfi] - GFI-Abfrage.
+        * @property {string} [tools.gfi.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.gfi.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.gfi.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.print] - Drucken.
+        * @property {string} [tools.print.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.print.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.print.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.coord] - Koordinateabfrage.
+        * @property {string} [tools.coord.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.coord.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.coord.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.measure] - Messen.
+        * @property {string} [tools.measure.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.measure.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.measure.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.draw] - Zeichnen.
+        * @property {string} [tools.draw.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.draw.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.draw.isActive] - Tool initial aktiviert.
         */
         tools: {
             parcelSearch: {
