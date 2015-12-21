@@ -4,9 +4,9 @@ define(function () {
         tree: {
             type: "light",
             layer: [
-                {id: "453", visible: true},
-                {id: "452", visible: false},
-                {id: "2092", visible: false},
+                {id: "453", visibility: true},
+                {id: "452", visibility: false},
+                {id: "2092", visibility: false},
                 {id:
                  [
                      {
@@ -21,9 +21,9 @@ define(function () {
                          id: "947"
                      }
                  ],
-                 name: "Verkehrslage auf Autobahnen", visible: false
+                 name: "Verkehrslage auf Autobahnen", visibility: false
                 },
-                {id: "1935", visible: false, styles: ["geofox_Faehre", "geofox-bahn"], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
+                {id: "1935", visibility: false, styles: ["geofox_Faehre", "geofox-bahn"], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
                 {id:
                  [
                     {
@@ -37,22 +37,22 @@ define(function () {
                  ],
                  visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
                 },
-                {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-                {id: "676", visible: false, name: "Positivnetz Lang-LKW"},
-                {id: "46", visible: false, style: "46", clusterDistance: 60, searchField: "", mouseHoverField: "", filterOptions: [], routable: true},
-                {id: "48", visible: false, style: "48", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
-                {id: "50", visible: false, style: "50", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
-                {id: "53", visible: false, style: "53", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
-                {id: "2404", visible: false, style: "45", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
-                {id: "2403", visible: false, style: "51", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
-                {id: "52", visible: false, style: "52", clusterDistance: 30, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "situation", routable: true},
-                {id: "2128", visible: false, style: "2128", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
-                {id: "47", visible: true, style: "47", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "id_kost", styleField: "typ", routable: false},
-                {id: "2156", visible: true, style: "2156", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "name", routable: false},
-                {id: "2714", gfiTheme: "reisezeiten", visible: false, style: "2119", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
-                {id: "2132", visible: false, style: "2132", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
-                {id: "2713", visible: false, displayInTree: false},
-                {id: "2715", visible: false, displayInTree: false}
+                {id: "1933", visibility: false, styles: "geofox_stations", name: "HVV Haltestellen"},
+                {id: "676", visibility: false, name: "Positivnetz Lang-LKW"},
+                {id: "46", visibility: false, style: "46", clusterDistance: 60, searchField: "", mouseHoverField: "", filterOptions: [], routable: true},
+                {id: "48", visibility: false, style: "48", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
+                {id: "50", visibility: false, style: "50", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
+                {id: "53", visibility: false, style: "53", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
+                {id: "2404", visibility: false, style: "45", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
+                {id: "2403", visibility: false, style: "51", clusterDistance: 40, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", routable: true},
+                {id: "52", visibility: false, style: "52", clusterDistance: 30, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "situation", routable: true},
+                {id: "2128", visibility: false, style: "2128", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
+                {id: "47", visibility: true, style: "47", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "id_kost", styleField: "typ", routable: false},
+                {id: "2156", visibility: true, style: "2156", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "name", routable: false},
+                {id: "2714", gfiTheme: "reisezeiten", visibility: false, style: "2119", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
+                {id: "2132", visibility: false, style: "2132", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: ""},
+                {id: "2713", visibility: false, displayInTree: false},
+                {id: "2715", visibility: false, displayInTree: false}
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
