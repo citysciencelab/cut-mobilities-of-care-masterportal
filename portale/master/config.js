@@ -403,6 +403,7 @@ define(function () {
         * @property {Boolean}  [coord=false] - Koordinaten-Abfrage.
         * @property {String}  [active=false] - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         * @property {Boolean}  [record=false] - Legt fest, ob das WFS-T Modul geladen werden soll.
+        * @property {Boolean}  [searchByCoord=false] - Zentriert die Karte auf die eingegebene Koordinate.
         */
         tools: {
             gfi: true,
@@ -412,7 +413,8 @@ define(function () {
             draw: true,
             parcelSearch: true,
             active: "gfi",
-            record: false
+            record: false,
+            searchByCoord: true
         },
         /**
         * @memberof config

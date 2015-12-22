@@ -136,6 +136,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new ParcelSearchView();
                         });
                     }
+                    if (_.has(Config.tools, "searchByCoord") && Config.tools.searchByCoord === true) {
+                        require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                            new SearchByCoordView();
+                        });
+                    }
                     require(["modules/tools/view"], function (ToolsView) {
                         new ToolsView();
                     });

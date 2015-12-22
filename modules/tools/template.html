@@ -33,6 +33,10 @@ if (typeof parcelSearch !== "undefined" && parcelSearch === true) { %>
 <li id="parcelSearchMenu" <% if (active === "parcelSearch") { %> class="active" <% } %>>
     <a href="#"><span class="glyphicon glyphicon-search"></span>Flurstückssuche</a>
 </li>
+<% }if (typeof searchByCoord !== "undefined" && searchByCoord === true) { %>
+<li id="searchByCoordSearchMenu" <% if (active === "searchByCoord") { %> class="active" <% } %>>
+    <a href="#"><span class="glyphicon glyphicon-search"></span>Suche per Koordinaten</a>
+</li>
 <% }
 if (typeof print !== "undefined" && print === true) { %>
 <li class="divider hidden-xs"></li>
