@@ -12,11 +12,7 @@ define([
             this.set("userAgent", navigator.userAgent);
             _.each(Config.menu, this.setAttributes, this);
             // Wenn nur ein Tool aktiviert ist, wird der Menüeintrag Werkzeuge nicht erzeugt. --> Abfrage im template
-            var oneTool = _.filter(_.values(Config.tools), function (value) {
-                return value === true;
-            });
-
-            if (oneTool.length === 1) {
+            if (_.toArray(Config.tools).length === 1) {
                 this.set("oneTool", true);
             }
             else {

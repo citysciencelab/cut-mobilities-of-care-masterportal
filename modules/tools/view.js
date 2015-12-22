@@ -4,66 +4,36 @@ define([
     "modules/tools/model",
     "eventbus"
     ], function (Backbone, ToolsTemplate, Tools, EventBus) {
-
-        var ToolsView = Backbone.View.extend({
-            model: Tools,
-            el: "#tools",
-            template: _.template(ToolsTemplate),
-            initialize: function () {
-                this.render();
-                this.listenTo(this.model, "change", this.render);
-                EventBus.trigger("registerToolsClickInClickCounter", this.$el);
-            },
-            events: {
-                "click #coordinateMenu": "activateCoordinate",
-                "click #gfiMenu": "activateGFI",
-                "click #measureMenu": "activateMeasure",
-                "click #printMenu": "activatePrint",
-                "click #drawMenu": "activateDraw",
-                "click #recordMenu": "activateRecord",
-                "click #parcelSearchMenu": "activateParcelSearch",
-                "click #searchByCoordSearchMenu": "activateSearchByCoord"
-            },
-            render: function () {
-                var attr = this.model.toJSON();
-
-                this.$el.html(this.template(attr));
-            },
-            activateCoordinate: function () {
-                this.model.setActive("coords");
-                EventBus.trigger("winParams", [false, false, ""]);
-                EventBus.trigger("closeWindow", false);
-            },
-            activateGFI: function () {
-                this.model.setActive("gfi");
-                EventBus.trigger("winParams", [false, false, ""]);
-                EventBus.trigger("closeWindow", false);
-            },
-            activateMeasure: function () {
-                EventBus.trigger("toggleWin", ["measure", "Messen", "glyphicon-resize-full"]);
-                this.model.setActive("measure");
-            },
-            activateDraw: function () {
-                EventBus.trigger("toggleWin", ["draw", "Zeichnen", "glyphicon-pencil"]);
-                this.model.setActive("draw");
-            },
-            activatePrint: function () {
-                EventBus.trigger("toggleWin", ["print", "Druckeinstellungen", "glyphicon-print"]);
-                this.model.setActive("print");
-            },
-            activateRecord: function () {
-                this.model.setActive("record");
-                EventBus.trigger("toggleWin", ["record", "Datenerfassung", "glyphicon-edit"]);
-            },
-            activateParcelSearch: function () {
-                this.model.setActive("parcelSearch");
-                EventBus.trigger("toggleWin", ["parcelSearch", "Flurstückssuche", "glyphicon-search"]);
-            },
-            activateSearchByCoord: function () {
-                this.model.setActive("searchByCoord");
-                EventBus.trigger("toggleWin", ["searchByCoord", "Suche per Koordinate", "glyphicon-search"]);
+    var ToolsView = Backbone.View.extend({
+        tagName: "li",
+        template: _.template(ToolsTemplate),
+        events: {
+            "click": "setActiveToTrue"
+        },
+        initialize: function () {
+            this.listenTo(this.model, {
+                "change:isActive": this.toggleStyle
+            });
+                if (this.model.get("isActive") === true) {
+                this.toggleStyle();
+                EventBus.trigger("activateClick", this.model.get("name"));
             }
-        });
+            this.render();
+            EventBus.trigger("registerToolsClickInClickCounter", this.$el);
+        },
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+            return this;
+        },
+        toggleStyle: function () {
+            this.$el.toggleClass("active");
+        },
+        setActiveToTrue: function () {
+            this.model.setActiveToTrue();
+        }
+    });
 
         return ToolsView;
     });

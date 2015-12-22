@@ -95,7 +95,7 @@ define([
         },
 
         activateClick: function (tool) {
-            if (tool === "coords") {
+            if (tool === "coord") {
                 this.get("map").un("click", this.setGFIParams, this);
                 this.get("map").on("click", this.setPositionCoordPopup);
                 this.get("map").un("pointermove", this.pointerMoveOnMap);

@@ -58,14 +58,19 @@ define(function () {
             geoLocateHit: true
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: false,
-            coord: true,
-            draw: false,
-            record: false,
-            searchByCoord: true,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
+            }
         }
     };
 
