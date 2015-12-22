@@ -83,7 +83,7 @@ define([
             "keyup input": "setSearchString",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
-            "click .btn-deleteSearch": "deleteSearchString",
+            "click .form-control-feedback": "deleteSearchString",
             "click .btn-search": "renderHitList",
             "click .list-group-item.hit": "hitSelected",
             "click .list-group-item.results": "renderHitList",
@@ -219,6 +219,12 @@ define([
                     this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 }
             }
+            if (evt.target.value.length > 0) {
+                $("#searchInput + span").show();
+            }
+            else {
+                $("#searchInput + span").hide();
+            }
         },
         /**
         *
@@ -258,6 +264,7 @@ define([
         */
         deleteSearchString: function () {
             this.model.setSearchString("");
+            $("#searchInput").val("");
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
             EventBus.trigger("mapHandler:clearMarker", this);

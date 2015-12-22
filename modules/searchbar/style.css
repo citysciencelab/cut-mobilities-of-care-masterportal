@@ -18,6 +18,9 @@
         min-width: 200px;
         max-width: 330px;
     }
+    #searchInput + span {
+        font-size: 14px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -73,10 +76,20 @@
 #searchInput {
     box-shadow: none;
     font-size: 12px;
+    padding-right: 32.5px;
 }
 
 #searchInput::-ms-clear {
     display: none;
+}
+
+#searchInput + span {
+    right: 38px;
+    z-index: 3;
+    color: rgb( 119, 119, 119);
+    display: none;
+    pointer-events: all;
+    cursor: pointer;
 }
 
 .dropdown-menu-search {
