@@ -4,7 +4,6 @@ define([
     "modules/tools/model",
     "eventbus"
     ], function (Backbone, ToolsTemplate, Tools, EventBus) {
-
     var ToolsView = Backbone.View.extend({
         tagName: "li",
         template: _.template(ToolsTemplate),

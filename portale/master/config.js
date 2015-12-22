@@ -394,8 +394,7 @@ define(function () {
         },
         /**
         * @memberof config
-        * @type {Object}
-        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
+        * @type {Object}        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
         * @property {Object} [tools] - Das Konfigurationsobjekt für die Tools/Werkzeuge.
         * @property {Object} [tools.parcelSearch] - Flurstückssuche.
         * @property {string} [tools.parcelSearch.title] - Der Title in der Liste unter Werkzeuge.
@@ -421,6 +420,10 @@ define(function () {
         * @property {string} [tools.draw.title] - Der Title in der Liste unter Werkzeuge.
         * @property {string} [tools.draw.glyphicon] - Das Glyphicon (Bootstrap Class).
         * @property {Boolean} [tools.draw.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.searchByCoord] - Koordinatensuche.
+        * @property {string} [tools.searchByCoord.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {string} [tools.searchByCoord.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.searchByCoord.isActive] - Tool initial aktiviert.
         */
         tools: {
             parcelSearch: {
@@ -447,6 +450,10 @@ define(function () {
             draw: {
                 title: "Zeichnen",
                 glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
             }
         },
         /**

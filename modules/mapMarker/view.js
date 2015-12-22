@@ -119,6 +119,11 @@ define([
                     EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
+                case "SearchByCoord": {
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
+                    this.showMarker(hit.coordinate);
+                    break;
+                }
             }
         },
         /*
