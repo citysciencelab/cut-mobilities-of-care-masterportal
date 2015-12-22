@@ -8,7 +8,6 @@ define([
         defaults: {
             marker: new ol.Overlay({
                 positioning: "bottom-center",
-                element: $("#searchMarker"), // Element aus der index.html
                 stopEvent: false
             }),
             wkt: "",

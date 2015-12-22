@@ -265,6 +265,7 @@ define([
         deleteSearchString: function () {
             this.model.setSearchString("");
             $("#searchInput").val("");
+            $("#searchInput + span").hide();
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
             EventBus.trigger("mapHandler:clearMarker", this);
