@@ -120,6 +120,7 @@ define([
                 this.set("onlyOneStreetName", "");
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
             }
+            $("#searchInput").val(searchString);
             EventBus.trigger("createRecommendedList");
         },
         /**
