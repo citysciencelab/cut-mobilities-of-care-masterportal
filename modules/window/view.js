@@ -1,16 +1,15 @@
 define([
     "backbone",
-    "config",
     "modules/window/model",
     "text!modules/window/templateMax.html",
     "text!modules/window/templateMin.html",
     "eventbus",
     "jqueryui/draggable"
-], function (Backbone, Config, Window, templateMax, templateMin, EventBus) {
+], function (Backbone, Window, templateMax, templateMin, EventBus) {
 
     var WindowView = Backbone.View.extend({
         id: "window",
-        className: "win-max ui-widget-content",
+        className: "tool-window ui-widget-content",
         model: Window,
         templateMax: _.template(templateMax),
         templateMin: _.template(templateMin),
@@ -18,7 +17,7 @@ define([
             this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             this.$el.draggable({
                 containment: "#map",
-                handle: ".win-heading"
+                handle: ".header"
             });
             this.$el.css({
                 "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
@@ -30,9 +29,9 @@ define([
             }, this));
         },
         events: {
-            "click .win-minimize": "minimize",
-            "click .win-maximze": "maximize",
-            "click .win-close": "hide"
+            "click .glyphicon-minus": "minimize",
+            "click .header-min > .title": "maximize",
+            "click .glyphicon-remove": "hide"
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -40,13 +39,11 @@ define([
             if (this.model.get("isVisible") === true) {
                 if (this.model.get("isCollapsed") === true) {
                     $("body").append(this.$el.html(this.templateMin(attr)));
-                    this.$el.addClass("win-min");
-                    this.$el.removeClass("win-max");
+                    this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "25px"});
                 }
                 else {
                     $("body").append(this.$el.html(this.templateMax(attr)));
-                    this.$el.addClass("win-max");
-                    this.$el.removeClass("win-min");
+                    this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
                 }
                 this.model.sendParamsToWinCotent();
                 this.$el.show("slow");
@@ -56,14 +53,12 @@ define([
             }
         },
         minimize: function () {
-            this.$el.addClass("win-min");
-            this.$el.removeClass("win-max");
+            this.model.set("maxPosTop", this.$el.css("top"));
+            this.model.set("maxPosLeft", this.$el.css("left"));
             this.model.setCollapse(true);
         },
         maximize: function () {
             this.model.setCollapse(false);
-            this.$el.addClass("win-max");
-            this.$el.removeClass("win-min");
         },
         hide: function () {
             if (this.model.get("winType") === "routing") {

@@ -1,14 +1,23 @@
 define([
     "backbone",
+    "config",
     "eventbus"
-    ], function (Backbone, EventBus) {
+], function (Backbone, Config, EventBus) {
 
         var Window = Backbone.Model.extend({
             defaults: {
                 isCollapsed: false,
-                isVisible: false
+                isVisible: false,
+                maxPosLeft: "",
+                maxPosTop: "10px"
             },
             initialize: function () {
+                if (Config.tree.type === "light") {
+                    this.set("marginBottom", "0");
+                }
+                else {
+                    this.set("marginBottom", "24px");
+                }
                 EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
