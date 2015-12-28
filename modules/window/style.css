@@ -9,11 +9,13 @@
     z-index: 999;
 }
 
-.tool-window > .header, .tool-window > .header-min {
+.tool-window > .header {
     padding-left: 10px;
+    border-bottom: 1px solid rgb(229, 229, 229);
 }
 
 .tool-window > .header-min {
+    padding-left: 10px;
     background-color: rgb(182, 0, 0);
     min-width: 120px;
     box-shadow: 6px -6px 12px rgba(0, 0, 0, 0.176);
@@ -31,7 +33,6 @@
     padding-top: 8px;
     padding-bottom: 5px;
     color: rgb(85, 85, 85);
-    border-bottom: 1px solid rgb(229, 229, 229);
 }
 
 .tool-window > .header-min > .title {
@@ -44,6 +45,7 @@
 .tool-window > .header > .buttons {
     color: rgb(85, 85, 85);
     font-size: 14px;
+    margin: 0;
 }
 
 .tool-window > .header-min > .buttons {
@@ -56,7 +58,7 @@
 }
 
 .tool-window > .header > .buttons > span {
-    padding: 8px 3px;
+    padding: 8px 8px 8px 0px;
 }
 
 .tool-window > .header-min > .buttons > span {

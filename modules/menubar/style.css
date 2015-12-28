@@ -15,7 +15,7 @@
 }
 
 .navbar-default .navbar-nav > li > a {
-    color: rgb(85, 85, 85);
+    color: rgb(85, 85, 85) !important;
 }
 
 .in > .menubarlgv {
@@ -23,12 +23,7 @@
 }
 
 .nav > li {
-    border-left: 1px solid #fff;
     border-right: 1px solid #e5e5e5;
-}
-
-.nav > li:first-child {
-    border-left: 1px solid #e5e5e5;
 }
 
 .nav > li:hover {

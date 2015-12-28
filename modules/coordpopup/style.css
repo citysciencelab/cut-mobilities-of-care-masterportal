@@ -5,6 +5,7 @@
 
 #coord-popup > .header {
     padding-left: 10px;
+    border-bottom: 1px solid rgb(229, 229, 229);
 }
 
 #coord-popup > .header > .title {
@@ -12,12 +13,12 @@
     padding-top: 10px;
     padding-bottom: 5px;
     color: rgb(85, 85, 85);
-    border-bottom: 1px solid rgb(229, 229, 229);
 }
 
 #coord-popup > .header > .buttons {
     color: rgb(85, 85, 85);
     font-size: 14px;
+    margin: 0;
 }
 
 #coord-popup > .header > .buttons > span {
