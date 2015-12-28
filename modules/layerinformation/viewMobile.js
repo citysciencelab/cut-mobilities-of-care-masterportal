@@ -6,10 +6,10 @@ define([
 
     var LayerInformationView = Backbone.View.extend({
         model: new Layerinformation(),
-        className: "modal fade layerinformation-mobile-win",
+        className: "modal fade",
         template: _.template(LayerInformationMobileTemplate),
         events: {
-            "click .layerinformation-win-header > .glyphicon-remove": "hide"
+            "click .glyphicon-remove": "hide"
         },
 
         initialize: function () {
