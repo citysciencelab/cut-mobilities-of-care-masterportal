@@ -1,27 +1,44 @@
-.coord-header {
-    color: #777;
-    height: 34px;
-    font-size: 16px;
-    background: -moz-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -webkit-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -o-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -ms-linear-gradient(top , white 0px, #f3f3f3 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border-bottom: 1px solid rgb(215, 215, 215);
-}
-
-.coord-title {
-    float: left;
-    padding: 6px;
+#coord-popup {
+    min-width: 250px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-.coord-close {
-    float: right;
-    padding: 8px 4px;
+#coord-popup > .header {
+    padding-left: 10px;
+}
+
+#coord-popup > .header > .title {
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    color: rgb(85, 85, 85);
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+#coord-popup > .header > .buttons {
+    color: rgb(85, 85, 85);
+    font-size: 14px;
+}
+
+#coord-popup > .header > .buttons > span {
+    padding: 8px;
     cursor: pointer;
 }
 
-.coord-content {
-    padding: 10px;
+#coord-popup > .header > .buttons > span:hover {
+    opacity: 0.7;
+}
+
+#coord-popup > .content {
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+#coord-popup > .content > p {
+    font-size: 12px;
+    color: rgb(85, 85, 85);
+}
+
+#coord-popup > .content > .subtitle {
+    color: rgb(182, 0, 0);
 }
