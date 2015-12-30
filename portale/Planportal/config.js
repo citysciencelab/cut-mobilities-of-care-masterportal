@@ -77,13 +77,23 @@ define(function () {
             geoLocateHit: true
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: false,
-            active: "gfi",
-            record: false
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            }
         },
         print: {
             printID: "99999",
