@@ -56,7 +56,7 @@ define([
                     this.$el.css("color", "rgb(255, 127, 0)");
                 }
                 else {
-                    this.$el.css("color", "rgb(119, 119, 119)");
+                    this.$el.css("color", "rgb(85, 85, 85)");
                 }
             }
         });

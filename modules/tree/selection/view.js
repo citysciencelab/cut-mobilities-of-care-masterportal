@@ -69,10 +69,10 @@ define([
         },
         toggleStyle: function () {
             if (this.model.get("isResolutionInRange") === true) {
-                this.$el.css("color", "rgb(119, 119, 119)");
+                this.$el.css("color", "rgb(85, 85, 85)");
             }
             else {
-                this.$el.css("color", "rgba(119, 119, 119, 0.6)");
+                this.$el.css("color", "rgba(85, 85, 85, 0.6)");
             }
         },
         moveModelDelta: function (evt, index) {

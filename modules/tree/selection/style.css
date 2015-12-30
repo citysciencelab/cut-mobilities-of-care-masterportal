@@ -1,6 +1,6 @@
 /* Liste der ausgewählten Layer -- listView.js */
 .layer-selected-list {
-    color: rgb(119, 119, 119);
+    color: rgb(85, 85, 85);
     overflow-y: auto;
 }
 
@@ -37,7 +37,7 @@
 .layer-settings > .layer-name {
     font-size: 12px;
     padding-right: 5px;
-    color: rgb(82, 82, 82);
+    color: rgb(85, 85, 85);
     width: 5em;
 }
 
