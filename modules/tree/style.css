@@ -19,7 +19,9 @@
 
 .base-layer-catalog > .header, .layer-catalog > .header, .layer-selection > .header, .layer-catalog-extern > .header {
     padding: 8px;
-    background-color: rgb(153, 153, 153);
+    background-color: rgb(85, 85, 85);
+    /*background-color: rgb(182, 0, 0);*/
+    /*background-color: rgb(8, 88, 158);*/
     color: rgb(255, 255, 255);
 }
 
