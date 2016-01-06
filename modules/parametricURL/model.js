@@ -18,28 +18,42 @@ define([
             });
             /**
              * Gibt die initiale Zentrumskoordinate zurück.
-             * Ist der Parameter 'center' vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
+             * Ist der Parameter "center" vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
              */
             if (_.has(result, "CENTER")) {
                 var values = _.values(_.pick(result, "CENTER"))[0].split(",");
 
-                _.each(values, function (value, index, list) {
-                    value = parseInt(value);
+                _.each(values, function (value, index) {
+                    value = parseInt(value, 10);
                     values[index] = value;
                 });
                 Config.view.center = values;
             }
 
+            if (_.has(result, "BEZIRK")) {
+                var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
+                    bezirke = [
+                        {name: "ALTONA", position: [556681.41400000267, 5937664.2504997626]},
+                        {name: "HAMBURG-HARBURG", position: [560291.99599999934, 5925817.3924998753]},
+                        {name: "HAMBURG-Nord", position: [567677.65033335425, 5941650.9999997634]},
+                        {name: "BERGEDORF", position: [578779.00000000931, 5924255.4999997523]},
+                        {name: "EIMSBÜTTEL", position: [556681.41400000267, 5937664.2504997626]},
+                        {name: "HAMBURG-Mitte", position: [521946.60199999996, 5949591.9799998915]},
+                        {name: "WANDSBEK", position: [561985.88999999873, 5940143.2499997634]}
+                    ];
+
+                Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
+            }
+
             /**
              * Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
-             * Ist der Parameter 'layerIDs' vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
+             * Ist der Parameter "layerIDs" vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
              */
             if (_.has(result, "LAYERIDS")) {
                 var valuesString = _.values(_.pick(result, "LAYERIDS"))[0],
                     visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
                     values = [],
-                    visibilityList = [],
-                    newLayerIDs = Config.tree.layer;
+                    visibilityList = [];
 
                 if (valuesString.indexOf(",") !== -1) {
                     values = valuesString.split(",");
@@ -74,7 +88,7 @@ define([
                                 visibility: visibleParam
                             });
                         }
-                        // wenn nicht, alle defaultmäßig 'true'setzen
+                        // wenn nicht, alle defaultmäßig "true"setzen
                         else {
                             params.push({
                                 id: values[i],
@@ -99,6 +113,7 @@ define([
                             }
                             return layerid === param.id;
                         });
+
                         if (!layer) {
                             Config.tree.layer = [];
                             Config.tree.layer.push({
@@ -149,7 +164,7 @@ define([
 
             /**
              * Gibt die initiale Resolution (Zoomlevel) zurück.
-             * Ist der Parameter 'zoomLevel' vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
+             * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
              */
             if (_.has(result, "ZOOMLEVEL")) {
                 var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
@@ -159,7 +174,7 @@ define([
 
             /**
             * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter 'isMenubarVisible' vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
             *
             */
             if (_.has(result, "ISMENUBARVISIBLE")) {
@@ -175,7 +190,7 @@ define([
 
             /**
             * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter 'isMenubarVisible' vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
             *
             */
             if (_.has(result, "STARTUPMODUL")) {
