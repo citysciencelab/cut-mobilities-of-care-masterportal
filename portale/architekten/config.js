@@ -16,7 +16,8 @@ define(function () {
                 {
                     "id": "1933",
                     "styles": "geofox_stations",
-                    "name": "Haltestellen"
+                    "name": "Haltestellen",
+                    "legendURL":"http://87.106.16.168/legende_mrh/hvv-bus.png"
                 },
                 {
                     "id": "1935",
@@ -48,8 +49,8 @@ define(function () {
         },
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
 
         print: {
