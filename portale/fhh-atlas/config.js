@@ -152,6 +152,10 @@ define(function () {
                 title: "Koordinate abfragen",
                 glyphicon: "glyphicon-screenshot"
             },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-record"
+            },
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
