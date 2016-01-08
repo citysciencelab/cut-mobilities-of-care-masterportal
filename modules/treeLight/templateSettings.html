@@ -1,18 +1,13 @@
-<div class="settings">
-    <div class="layer-name pull-left">
-        <span data-toggle="tooltip" data-placement="bottom" title="<%= name %>"><%= name.substr(0,6) + "..." %></span>
-    </div>
-    <div class="transparence pull-left">
-        <span class="text">Transparenz:</span>
-        <button type="button" class="btn-glyphicon plus" data-toggle="tooltip" data-placement="bottom" title="Transparenz erhöhen"><span class="glyphicon glyphicon-plus-sign"></span></button>
-        <button type="button" class="btn-glyphicon"><span class="badge"><%= transparence + '%'%></span></button>
-        <button type="button" class="btn-glyphicon minus" data-toggle="tooltip" data-placement="bottom" title="Transparenz verringern"><span class="glyphicon glyphicon-minus-sign"></span></button>
-    </div>
-    <div class="cog pull-right">
-        <button type="button" class="btn-glyphicon refresh" data-toggle="tooltip" data-placement="bottom" title="Einstellungen"><span class="glyphicon glyphicon-cog"></span></button>
-    </div>
-    <div>
-        <button type="button" class="btn-glyphicon down" data-toggle="tooltip" data-placement="bottom" title="Ebene nach unten"><span class="glyphicon glyphicon-arrow-down"></span></button>
+<div class="row layer">
+    <div class="transparence col-md-10 col-xs-10">
+        <span class="text" title="<%= name %>">Transparenz:</span>
+        <button type="button" class="btn-glyphicon plus buttons" data-toggle="tooltip" data-placement="bottom" title="Transparenz erhöhen"><span class="glyphicon glyphicon-plus-sign"></span></button>
+        <span class="badge"><%= transparence + '%'%></span>
+        <button type="button" class="btn-glyphicon minus buttons" data-toggle="tooltip" data-placement="bottom" title="Transparenz verringern"><span class="glyphicon glyphicon-minus-sign"></span></button>
+        <button style="margin-left: 15px;" type="button" class="btn-glyphicon down" data-toggle="tooltip" data-placement="bottom" title="Ebene nach unten"><span class="glyphicon glyphicon-arrow-down"></span></button>
         <button type="button" class="btn-glyphicon up" data-toggle="tooltip" data-placement="bottom" title="Ebene nach oben"><span class="glyphicon glyphicon-arrow-up"></span></button>
+    </div>
+    <div class="col-md-2 col-xs-2">
+        <button type="button" class="btn-glyphicon refresh buttons" data-toggle="tooltip" data-placement="bottom" title="Einstellungen"><span class="glyphicon glyphicon-cog"></span></button>
     </div>
 </div>

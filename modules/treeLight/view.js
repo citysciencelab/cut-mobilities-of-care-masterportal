@@ -19,7 +19,7 @@ define([
             "click .plus": "upTransparence",
             "click .minus": "downTransparence",
             "click .info": "getMetadata",
-            "click .check, .unchecked, .layer-name": "toggleVisibility",
+            "click .check, .unchecked, .layer > div > .name": "toggleVisibility",
             "click .up": "moveModelUp",
             "click .down": "moveModelDown",
             "click .refresh": "toggleSettings"
