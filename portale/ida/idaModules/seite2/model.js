@@ -253,6 +253,7 @@ define([
 
                     _.each(brwList, function (obj) {
                         if (obj.bezeichnung === nutzung && obj.jahr === jahrgang) {
+                            console.log(this.get("lage"));
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,
@@ -264,10 +265,11 @@ define([
                                 ergnuta: ergnuta,
                                 wgfz: wgfz,
                                 bauw: bauw,
-                                flae: flae
+                                flae: flae,
+                                ermittlungsart: this.get("lage").type
                             });
                         }
-                    });
+                    }, this);
                     this.unset("brwList", {silent: true});
                     this.set("brwList", brwList);
                 }

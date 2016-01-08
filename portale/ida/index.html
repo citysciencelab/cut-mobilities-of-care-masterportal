@@ -28,6 +28,7 @@
 			<p class="intro">Lorem ipsum dolor sit amet, sit velit harum cu, his ea rebum viderer, id constituto ullamcorper vix. Ne ancillae delectus complectitur sit. Sed augue mandamus no, platonem gloriatur democritum his te, ad cum admodum vivendum. No mei legere meliore, possim epicuri neglegentur at vim, mel ne autem decore. Usu facilisi qualisque theophrastus et. </p></br>
 			<hr/>
 
+
 	<div id="seite_eins">
    		<h2>Lage</h2>
 
@@ -70,7 +71,7 @@
                             <option value="0104">Billwerder Ausschlag</option>
                             <option value="0604">Billwerder</option>
                             <option value="0203">Blankenese</option>
-                            <option value="0605">Boberg	BOBERG</option>
+                            <option value="0605">Boberg</option>
                             <option value="0105">Borgfelde</option>
                             <option value="0546">Bramfeld</option>
                             <option value="0702">Cranz</option>
@@ -129,7 +130,7 @@
                             <option value="0718">Neuland</option>
                             <option value="0114">Neustadt Nord</option>
                             <option value="0115">Neustadt Süd</option>
-                            <option value="0125">Neuwerk	0101</option>
+                            <option value="0125">Neuwerk</option>
                             <option value="0307">Niendorf</option>
                             <option value="0205">Nienstedten</option>
                             <option value="0708">Nincop	NINCOP</option>
@@ -196,9 +197,8 @@
 					<label>Für welches Jahr wünschen Sie eine Auskunft? <span id="validjahre" style="display:inline" class="fzr_add-on">(xxx - xxx)</span><br>
 					  Die aktuellsten Daten beziehen sich auf das Jahr <span id="maxjahr" style="display:inline" class="fzr_add-on">xxx</span>
 					</label>
-					<input id="jahresfeld" type="text" placeholder="Jahr" name="jahr" />
+					<input id="jahresfeld" type="number" placeholder="Jahr" name="jahr" pattern="[0-9]" min="1973"/>
 			</div><!-- fzr_col -->
-
 
 			<div id="nutzung" class="fzr_col fzr_6">
 			  <h2>Nutzung</h2>

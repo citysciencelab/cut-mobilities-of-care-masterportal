@@ -12,7 +12,22 @@ define([
         template: _.template(Template),
         events: {
             "click #seite3_weiter": "weiter",
-            "change #requestedParamsListe": "paramChanged"
+            "change #requestedParamsListe": "paramChanged",
+            "change #WGFZ": "commaChanger",
+            "change #FLAE": "commaChanger",
+            "change #WOFL": "commaChanger",
+            "change #EGFL": "commaChanger",
+            "change #OGFL": "commaChanger",
+            "change #WONKM": "commaChanger",
+            "change #SONKM": "commaChanger",
+            "change #JEZ": "commaChanger"
+        },
+        commaChanger: function (evt) {
+            var id = evt.target.id,
+                value = evt.target.value.replace(",", ".");
+
+            $("#" + id).val(value);
+            alert (value);
         },
         initialize: function (lage, params, nutzung, produkt, brwList, jahr) {
             this.model.set("lage", lage),

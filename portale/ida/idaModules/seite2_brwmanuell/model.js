@@ -50,7 +50,6 @@ define([
                         zusatz = $(ergebnis).find("wps\\:zusatz,zusatz")[0].textContent,
                         brw = $(ergebnis).find("wps\\:brw,brw")[0].textContent,
                         wnum = $(ergebnis).find("wps\\:wnum,wnum")[0].textContent,
-                        nutzung = $(ergebnis).find("wps\\:nutzung,nutzung")[0].textContent,
                         ortsteil = $(ergebnis).find("wps\\:ortsteil,ortsteil")[0].textContent,
                         stichtag = $(ergebnis).find("wps\\:stichtag,stichtag")[0].textContent,
                         entw = ergebnis.find("wps\\:entw,entw")[0].textContent,
@@ -63,7 +62,7 @@ define([
                         brwList = this.get("brwList");
 
                     _.each(brwList, function (obj) {
-                        if (obj.bezeichnung === nutzung && obj.jahr === jahrgang) {
+                        if ((obj.bezeichnung === nuta || obj.bezeichnung === ergnuta) && obj.jahr === jahrgang) {
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,
@@ -75,7 +74,8 @@ define([
                                 ergnuta: ergnuta,
                                 wgfz: wgfz,
                                 bauw: bauw,
-                                flae: flae
+                                flae: flae,
+                                ermittlungsart: "WNUM"
                             });
                         }
                     });

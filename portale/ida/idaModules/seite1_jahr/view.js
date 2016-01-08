@@ -8,7 +8,7 @@ define([
         el: "#jahr",
         model: Model,
         events: {
-            "keyup input[type=text]": "checkJahr"
+            "keyup input[type=number]": "checkJahr"
         },
         initialize: function () {
             this.listenTo(this.model, "change:jahr", this.changeJahr);

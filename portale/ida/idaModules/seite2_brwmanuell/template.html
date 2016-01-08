@@ -5,6 +5,50 @@
                 <div class="fzr_col fzr_3" id="br_sp1">
                     <label>Nutzung: <%= brw.bezeichnung %>, Jahrgang: <%= brw.jahr%></label>
                     <input id="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="BRW-Nummer" title="Bitte Bodenrichtwertnummer eingeben." value="<%= brw.wnum %>"/>
+                    <span title="<%
+                    var pre = 'Bitte wählen Sie in der interaktiven Bodenrichtwertkarte (Boris-HH) den passenden ',
+                        post = ' aus und geben die Bodenrichtwert-Nummer hier ein.',
+                        msg = '';
+
+                    switch (brw.bezeichnung) {
+                        case 'EFH':
+                            msg = 'EFH-Bodenrichtwert (grünes Dreieck)';
+                            break;
+                        case 'MFH':
+                            msg = 'MFH-Bodenrichtwert (gelbes Quadrat)';
+                            break;
+                        case 'WGH':
+                            msg = 'WGH-Bodenrichtwert (gelber Stern)';
+                            break;
+                        case 'BH':
+                            msg = 'BH-Bodenrichtwert (hellblaues Quadrat)';
+                            break;
+                        case 'BGH':
+                            msg = 'BGH-Bodenrichtwert (roter Stern)';
+                            break;
+                        case 'GH':
+                            msg = 'GH-Bodenrichtwert (violetter Stern)';
+                            break;
+                        case 'LAD':
+                            msg = 'LAD-Bodenrichtwert (violettes Quadrat)';
+                            break;
+                        case 'PL':
+                            msg = 'PL-Bodenrichtwert (dunkelblaues Quadrat)';
+                            break;
+                        case 'MFH oder WGH (mit MFH-Anteil)':
+                            msg = 'MFH-Bodenrichtwert (gelbes Quadrat) oder WGH-Bodenrichtwert (gelber Stern mit Schichtwert für MFH)';
+                            break;
+                        case 'GH oder WGH, BGH (mit GH-Anteil)':
+                            msg = 'GH-Bodenrichtwert (violetter Stern) oder WGH-Bodenrichtwert (gelber Stern) oder BGH-Bodenrichtwert (roter Stern mit Schichtwert für GH)';
+                            break;
+                        case 'BH oder WGH, BGH (mit BH-Anteil)':
+                            msg = 'BH-Bodenrichtwert (hellblaues Quadrat) oder WGH-Bodenrichtwert (gelber Stern) oder BGH-Bodenrichtwert (roter Stern mit Schichtwert für BH)';
+                            break;
+                        default:
+                            msg = 'Bodenrichtwert';
+                    }
+                    print (pre + msg + post); %>" class="glyphicon glyphicon-question-sign"></span>
                 </div>
             </div>
-<% }}) %>
+<%  }
+   }) %>

@@ -114,13 +114,13 @@
     <% if (requestedParams.WGFZ === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Wertrelevante Geschossflächenzahl</label>
-            <input id="WGFZ" type="number" min="0.4" max="4" value="1" step="0.1"/>
+            <input id="WGFZ" type="number" min="0.4" max="4" value="1" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.FLAE === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Grundstücksgröße [m²]</label>
-            <input id="FLAE" type="number" min="150" max="10000" value="1000" step="1"/>
+            <input id="FLAE" type="number" min="150" max="10000" value="1000" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.BAUW === true) { %>
@@ -164,103 +164,103 @@
     <% if (requestedParams.BAUJ === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Baujahr (Bezugsfertigstellung der wesentlichen Gebäudeteile)</label>
-            <input id="BAUJ" type="number" min="1700" max="2030" value="1950"/>
+            <input id="BAUJ" type="number" min="1700" max="2030" value="1950" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.MODG === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Modernisierungsgrad (0..20 Punkte, 21 = Neubau/Erstbezug)</label>
-            <input id="MODG" type="number" min="0" max="21" value="21"/>
+            <input id="MODG" type="number" min="0" max="21" value="21" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.WOFL === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Wohnfläche in m²</label>
-            <input id="WOFL" type="number" min="0" max="2400" value="100"/>
+            <input id="WOFL" type="number" min="0" max="2400" value="100" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.ZAWO === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Anzahl Wohnungen</label>
-            <input id="ZAWO" type="number" min="0" max="50" value="1"/>
+            <input id="ZAWO" type="number" min="0" max="50" value="1" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.GARI === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Anzahl Tiefgaragenstellplätze</label>
-            <input id="GARI" type="number" min="0" max="5" value="0"/>
+            <input id="GARI" type="number" min="0" max="5" value="0" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.GARA === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Anzahl Einzelgaragen</label>
-            <input id="GARA" type="number" min="0" max="5" value="0"/>
+            <input id="GARA" type="number" min="0" max="5" value="0" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.STEA === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Anzahl offene Stellplätze</label>
-            <input id="STEA" type="number" min="0" max="5" value="0"/>
+            <input id="STEA" type="number" min="0" max="5" value="0" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.EGFL === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Gewerbliche Nutzfläche im Erdgeschoss in m²</label>
-            <input id="EGFL" type="number" min="0" max="10000" value="0" step="1"/>
+            <input id="EGFL" type="number" min="0" max="10000" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.OGFL === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Gewerbliche Nutzfläche in den Obergeschossen in m²</label>
-            <input id="OGFL" type="number" min="0" max="5000" value="0" step="1"/>
+            <input id="OGFL" type="number" min="0" max="5000" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.WONKM === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Jahresnettokaltmiete für Wohnungen in DM (bis 31.12.2001) bzw. Euro (ab 1.1.2002)</label>
-            <input id="WONKM" type="number" min="0" max="25" value="0" step="1"/>
+            <input id="WONKM" type="number" min="0" max="25" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.SONKM === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Jahresnettokaltmiete für Sonstiges / Gewerbe in DM (bis 31.12.2001) bzw. Euro (ab 1.1.2002)</label>
-            <input id="SONKM" type="number" min="0" max="2400" value="0" step="1"/>
+            <input id="SONKM" type="number" min="0" max="2400" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.RLZ === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Restlaufzeit des Erbbaurechts</label>
-            <input id="RLZ" type="number" min="0" max="99" value="0" step="1"/>
+            <input id="RLZ" type="number" min="0" max="99" value="0" step="1" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.JEZ === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Erbbauzins / Jahr in Prozent</label>
-            <input id="JEZ" type="number" min="0" max="100" value="0" step="0.1"/>
+            <input id="JEZ" type="number" min="0" max="100" value="0" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
     <% } %>
     <% if (requestedParams.STST === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Standardstufe nach Sachwert-Richtlinie (ab 2011)</label>
-            <input id="STST" type="number" min="0" max="100000" value="0" step="1"/>
+            <input id="STST" type="number" min="0" max="100000" value="0" step="1" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.FKWERT === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Feuerkassenwert bzw. Neuherstellungskosten in Mark 1914</label>
-            <input id="FKWERT" type="number" min="30" max="150" value="30" step="1"/>
+            <input id="FKWERT" type="number" min="30" max="150" value="30" step="1" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.SACH === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Vorläufiger Sachwert in DM (bis 31.12.2001) bzw. Euro (ab 1.1.2002)</label>
-            <input id="SACH" type="number" min="500" max="4000" value="500" step="1"/>
+            <input id="SACH" type="number" min="500" max="4000" value="500" step="1" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.ENER === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Endenergiebedarf in kWh / m² a</label>
-            <input id="ENER" type="number" min="30" max="250" value="30" step="0.1"/>
+            <input id="ENER" type="number" min="30" max="250" value="30" step="0.1" pattern="[0-9]"/>
         </div>
     <% } %>
     <% if (requestedParams.KELL === true) { %>
