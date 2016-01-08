@@ -16,12 +16,14 @@ define(function () {
                 {
                     "id": "1933",
                     "styles": "geofox_stations",
-                    "name": "Haltestellen"
+                    "name": "Haltestellen",
+                    "legendURL":"http://87.106.16.168/legende_mrh/hvv-bus.png"
                 },
                 {
                     "id": "1935",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"]
+                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
+                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",  "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ],
             baseLayer: [
@@ -32,7 +34,7 @@ define(function () {
             {id: "1043", visibility: true}, // stadtplan g-b
             {id: "368", visibility: false}, // alkis farbig
             {id: "149", visibility: false} // alkis g-b
-        ],
+          ],
             customConfig: "../components/lgv-config/tree-config/architekten.json"
         },
         controls: {
@@ -77,7 +79,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
