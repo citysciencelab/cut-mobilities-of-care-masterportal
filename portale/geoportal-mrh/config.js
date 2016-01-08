@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Geoportal der Metropolregion Hamburg",
+        title: "Geoportal der MRH",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
@@ -22,7 +22,8 @@ define(function () {
                 {
                     "id": "221",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"]
+                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"],
+                 "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",  "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ]
         },
