@@ -150,7 +150,7 @@ define([
                     }
                     wktArray.push(geom);
                 });
-                wkt = this.getWKTFromString("MULTIPOLYGON", wktArray);
+                wkt = this.model.getWKTFromString("MULTIPOLYGON", wktArray);
             }
             else if (hits.length === 1) {
                 geom = $(hits).find("gml\\:posList,posList")[0].textContent;
