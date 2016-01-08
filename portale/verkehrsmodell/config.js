@@ -30,6 +30,12 @@ define(function () {
             resolution: 66.14579761460263, // 1:250.000
             extent: [454591, 5809000, 700000, 6075769]
         },
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: false,
+            poi: true
+        },
         layerConf: "../components/lgv-config/services-verkehrsmodell.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
@@ -94,8 +100,7 @@ define(function () {
                 glyphicon: "glyphicon-pencil"
             }
         },
-        orientation: true,
-        poi: false
+       
     };
 
     return config;
