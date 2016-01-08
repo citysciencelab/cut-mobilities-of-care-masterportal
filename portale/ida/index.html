@@ -13,9 +13,8 @@
 			.wrapper{width: 100%; margin: 0px auto;}
 		</style>
 
-	 	<!--link rel="stylesheet" href="css/formanizr.css"-->
-        <link rel="stylesheet" href="http://www.hamburg.de/resources/9944/0/-1623059459/de.css">
-        <link rel="stylesheet" href="../../css/style.css">
+        <link rel="stylesheet" href="css/formanizr.css">
+        <link rel="stylesheet" href="css/style.css">
         <script type="text/javascript" data-main="main" src="../../components/requirejs/require.js"></script>
 	</head>
 	<body>
@@ -23,14 +22,14 @@
 	<section class="wrapper">
 
 	<!--  -->
+    <form class="formanizr fzr_legend-inside fzr_label-top" action="">
 		<fieldset>
 			<legend>IDA.HH – die Immobilienwertdatenauskunft von Hamburg</legend>
 			<p class="intro">Lorem ipsum dolor sit amet, sit velit harum cu, his ea rebum viderer, id constituto ullamcorper vix. Ne ancillae delectus complectitur sit. Sed augue mandamus no, platonem gloriatur democritum his te, ad cum admodum vivendum. No mei legere meliore, possim epicuri neglegentur at vim, mel ne autem decore. Usu facilisi qualisque theophrastus et. </p></br>
 			<hr/>
 
-
 	<div id="seite_eins">
-   		<h2>Lage</h2>
+   		<h2 class="fzr_headline">Lage</h2>
 
             <div id="lage" class="fzr_row">
 				<div class="fzr_col fzr_12">
@@ -45,12 +44,10 @@
 					</div><!-- /.fzr_inline -->
 				</div><!-- fzr_col -->
 
-                <div style="display:block;" id="adresse" class="fzr_row">
-                    <div id="adressfeld" class="fzr_col fzr_11"></div><!-- fzr_col -->
-
+<div style="display:block; padding:15px;" id="adresse" class="fzr_row">
+                    <div id="adressfeld" class="fzr_col fzr_12"></div><!-- fzr_col -->
                 </div><!-- .fzr_row -->
-
-                <div style="display:none;" id="gemarkung" class="fzr_row">
+                <div style="display:none; padding-left:15px;" id="gemarkung" class="fzr_row">
                     <div class="fzr_col fzr_3">
                         <select id="gemarkungsnummer" name="gemarkung">
                             <option value="0601">Allermöhe</option>
@@ -126,30 +123,30 @@
                             <option value="0543">Neu-Rahlstedt</option>
                             <option value="0610">Neuengamme</option>
                             <option value="0707">Neugraben</option>
-                            <option value="0146">Neuhof	NEUHOF</option>
+                            <option value="0146">Neuhof</option>
                             <option value="0718">Neuland</option>
                             <option value="0114">Neustadt Nord</option>
                             <option value="0115">Neustadt Süd</option>
                             <option value="0125">Neuwerk</option>
                             <option value="0307">Niendorf</option>
                             <option value="0205">Nienstedten</option>
-                            <option value="0708">Nincop	NINCOP</option>
+                            <option value="0708">Nincop</option>
                             <option value="0611">Ochsenwerder</option>
                             <option value="0116">Öjendorf</option>
                             <option value="0423">Ohlsdorf</option>
                             <option value="0537">Ohlstedt</option>
                             <option value="0542">Oldenfelde</option>
-                            <option value="0206">Osdorf	OSDORF</option>
+                            <option value="0206">Osdorf</option>
                             <option value="0612">Ost-Krauel</option>
                             <option value="0210">Othmarschen</option>
                             <option value="0212">Ottensen</option>
                             <option value="0613">Overhaken</option>
                             <option value="0532">Poppenbüttel</option>
                             <option value="0614">Reitbrook</option>
-                            <option value="0201">Rissen	RISEN</option>
+                            <option value="0201">Rissen</option>
                             <option value="0301">Rotherbaum</option>
                             <option value="0720">Rönneburg</option>
-                            <option value="0539">Sasel	SASEL</option>
+                            <option value="0539">Sasel</option>
                             <option value="0117">Schiffbek</option>
                             <option value="0308">Schnelsen</option>
                             <option value="0719">Sinstorf</option>
@@ -189,19 +186,18 @@
                 </div><!-- .fzr_row -->
             </div><!-- .fzr_row -->
 
-            <br></br>
-
 			<div class="fzr_row">
 
-			<div id="jahr" class="fzr_col fzr_6"><h2>Jahr</h2>
+			<div id="jahr" class="fzr_col fzr_6"><h2 class="fzr_headline">Jahr</h2>
 					<label>Für welches Jahr wünschen Sie eine Auskunft? <span id="validjahre" style="display:inline" class="fzr_add-on">(xxx - xxx)</span><br>
 					  Die aktuellsten Daten beziehen sich auf das Jahr <span id="maxjahr" style="display:inline" class="fzr_add-on">xxx</span>
 					</label>
 					<input id="jahresfeld" type="number" placeholder="Jahr" name="jahr" pattern="[0-9]" min="1973"/>
 			</div><!-- fzr_col -->
 
+
 			<div id="nutzung" class="fzr_col fzr_6">
-			  <h2>Nutzung</h2>
+			  <h2 class="fzr_headline">Nutzung</h2>
 					<label>
 						<br>
 				    Wählen Sie die Nutzung Ihrer Immobilie aus. </label>
@@ -242,8 +238,7 @@
 						<span class="fzr_add-on">Falls keine Produkte angezeigt werden, ändern Sie Ihre vorherigen Angaben.</span>
 					</label>
 					<select id="produktdropdown" name="produkte">
-						<option value="-">Lorem</option>
-						<option value="1">Ipsum</option>
+						<option value="-">Bitte auswählen</option>
 					</select>
 				</div><!-- fzr_col -->
                 <div class="fzr_col fzr_12 fzr_right"><br></br><br></br>
@@ -297,6 +292,7 @@
 </div><!-- .seite_ende -->
 
 	  </fieldset>
+     </form>
 
 	</section>
 
