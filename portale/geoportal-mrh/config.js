@@ -23,7 +23,7 @@ define(function () {
                     "id": "221",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
                     "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"],
-                 "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",  "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",  "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ]
         },
@@ -38,19 +38,19 @@ define(function () {
             urls: [
                     {
                         "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/kontakte.htm",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/kontakte.htm",
                         "alias": "Kontakte",
                         "alias_mobil": "Kontakte"
                     },
                     {
                         "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/copyright.htm",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/copyright.htm",
                         "alias": "Copyright",
                         "alias_mobil": "Copyright"
                     },
                     {
                         "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal/fusszeile/links.htm",
+                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/links.htm",
                         "alias": "Linkliste",
                         "alias_mobil": "Linkliste"
                     }
@@ -64,55 +64,64 @@ define(function () {
             resolution: 152.87436231907702,
             options: [
                 {
-                    resolution: 152.87436231907702,
-                    scale: "250000",
+                    resolution: 611.4974492763076,
+                    scale: "2311167",
                     zoomLevel: 0
                 },
                 {
-                    resolution: 76.43718115953851,
-                    scale: "100000",
+                    resolution: 305.7487246381551,
+                    scale: "1155583",
                     zoomLevel: 1
                 },
                 {
-                    resolution: 38.21859057976939,
-                    scale: "60000",
+                    resolution: 152.87436231907702,
+                    scale: "577791",
                     zoomLevel: 2
                 },
                 {
-                    resolution: 19.109295289884642,
-                    scale: "40000",
+                    resolution: 76.43718115953851,
+                    scale: "288896",
                     zoomLevel: 3
                 },
                 {
-                    resolution: 9.554647644942321,
-                    scale: "20000",
+                    resolution: 38.21859057976939,
+                    scale: "144448",
                     zoomLevel: 4
                 },
                 {
-                    resolution: 4.7773238224711605,
-                    scale: "10000",
+                    resolution: 19.109295289884642,
+                    scale: "72223",
                     zoomLevel: 5
                 },
                 {
-                    resolution: 2.3886619112355802,
-                    scale: "5000",
+                    resolution: 9.554647644942321,
+                    scale: "36112",
                     zoomLevel: 6
                 },
                 {
-                    resolution: 1.1943309556178034,
-                    scale: "2500",
+                    resolution: 4.7773238224711605,
+                    scale: "18056",
                     zoomLevel: 7
                 },
                 {
-                    resolution: 0.5971654778089017,
-                    scale: "1000",
+                    resolution: 2.3886619112355802,
+                    scale: "9028",
                     zoomLevel: 8
+                },
+                {
+                    resolution: 1.1943309556178034,
+                    scale: "4514",
+                    zoomLevel: 9
+                },
+                {
+                    resolution: 0.5971654778089017,
+                    scale: "2257",
+                    zoomLevel: 10
                 }
             ]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
@@ -144,17 +153,17 @@ define(function () {
         },
         tools: {
             gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
+              title: "Informationen abfragen",
+               glyphicon: "glyphicon-info-sign",
+               isActive: true
             },
             print: {
                 title: "Karte drucken",
                 glyphicon: "glyphicon-print"
             },
             coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
+               title: "Koordinate abfragen",
+               glyphicon: "glyphicon-screenshot"
             },
             measure: {
                 title: "Strecke / Fläche messen",
@@ -165,8 +174,8 @@ define(function () {
                 glyphicon: "glyphicon-pencil"
             },
             searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-search"
+               title: "Koordinatensuche",
+               glyphicon: "glyphicon-search"
             }
         },
         print: {
