@@ -1,11 +1,12 @@
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: "../components/ol3-bower/ol",
+        openlayers: "../components/ol3-bower/ol-debug",
         jquery: "../components/jquery/dist/jquery",
         jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore",
         backbone: "../components/backbone/backbone",
+        "backbone.radio": "../components/backbone.radio/build/backbone.radio.min",
         text: "../components/requirejs-text/text",
         bootstrap: "../components/bootstrap/js",
         proj4: "../components/proj4/dist/proj4",
