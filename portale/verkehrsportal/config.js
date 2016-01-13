@@ -58,9 +58,9 @@ define(function () {
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         view: {
-            center: [561210, 5932600],
-            extent: [454591, 5809000, 700000, 6075769],
-            epsg: "EPSG:25832"
+            center: [561210, 5932600]
+            // extent: [454591, 5809000, 700000, 6075769],
+            // epsg: "EPSG:25832"
         },
         controls: {
             zoom: true,
@@ -164,12 +164,19 @@ define(function () {
             gfi: false
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: false,
-            coord: true,
-            draw: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            }
         }
     };
 
