@@ -35,10 +35,10 @@ define([
             },
             toggleStyle: function () {
                 if (this.model.get("selected") === true) {
-                    this.$el.css("color", "#fc8d62");
+                    this.$el.css("color", "rgb(255, 127, 0)");
                 }
                 else {
-                    this.$el.css("color", "rgb(153, 153, 153)");
+                    this.$el.css("color", "rgb(85, 85, 85)");
                 }
                 this.model.get("parentView").toggleStyle();
             }

@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+label {
+    font-weight: normal;
+}
+
 *:not(.badge) {
     border-radius: 0 !important;
 }

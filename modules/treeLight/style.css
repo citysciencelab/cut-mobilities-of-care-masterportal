@@ -1,80 +1,38 @@
 .tree-light-list {
-    padding: 10px 12px;
-    color: #777;
+    padding: 4px 0;
+    color: rgb(85, 85, 85);
     font-size: 12px;
 }
 
-/***** Mobil *****/
-@media (max-width: 767px) {
-    .tree-light-list > .content > .pull-right > .refresh > .glyphicon-cog {
-        font-size: 18px;
-    }
-    .tree-light-list > .settings > .layer-name > span {
-        vertical-align: sub;
-    }
-
-    .tree-light-list > .content > .layer-name > span {
-        vertical-align: sub;
-    }
-
-    .settings > .transparence {
-        margin-right: 10px;
-    }
+.tree-light-list > .layer > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
 }
 
-/***** Desktop *****/
-@media (min-width: 768px) {
-    .tree-light-list > .content, .settings {
-        width: 24em;
-    }
-    .tree-light-list > .content > .cog > button {
-        font-size: 16px;
-    }
-    .tree-light-list > .settings > .cog > button {
-        font-size: 16px;
-    }
-}
-
-.tree-light-list > .content > .layer-name {
-    font-size: 12px;
-    cursor: pointer;
-    margin-left: 2em;
-    margin-right: 6em
-}
-
-.tree-light-list > .content > .layer-name:hover {
-    opacity: 0.6;
-}
-
-.tree-light-list > .content > .folder-icons > .btn-glyphicon > .glyphicon:hover {
-    opacity: 0.6;
-}
-
-.tree-light-list > .content > .pull-right > .btn-glyphicon > .glyphicon:hover {
-    opacity: 0.6;
-}
-
-.tree-light-list > .content > .btn-glyphicon > .glyphicon {
+.layer > div > button {
     font-size: 16px;
 }
 
-.content > .btn-glyphicon > .glyphicon:hover {
-    opacity: 0.6;
-}
-
-.settings > .layer-name {
-    font-size: 12px;
-    color: rgb(82, 82, 82);
-    width: 5em;
-}
-.settings > .transparence > .minus, .plus {
+.layer > div > .name {
+    padding: 8px 0;
     vertical-align: sub;
 }
 
-.settings > .transparence > .text {
-    padding-right: 4px;
+.layer > div > .buttons {
+    padding: 4px 7px;
 }
 
-.settings > .transparence {
-    width: 170px;
+.buttons:hover, .name:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.layer > div > button > span {
+    vertical-align: middle;
+}
+
+.text {
+    padding-left: 10px;
+    vertical-align: sub;
 }

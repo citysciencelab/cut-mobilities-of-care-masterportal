@@ -18,7 +18,8 @@ define(function() {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: false
+            routing: false,
+            addWMS: true
         },
         menubar: true,
         print: {

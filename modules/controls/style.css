@@ -6,7 +6,7 @@
 
 .controls-view > .row > div > .glyphicon {
     color: #f3f3f3;
-    background-color: #d42132;
+    background-color: rgb(182, 0, 0);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 }
 

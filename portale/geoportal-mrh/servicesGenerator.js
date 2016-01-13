@@ -77,7 +77,7 @@ run: function () {
 
 	}
 
-    //this.writeLgvTreeConfig();
+    this.writeLgvTreeConfig();
     console.log("###");
     this.writeServicesJson();
 
@@ -154,7 +154,7 @@ writeServicesJson: function () {
             "tilesize": layer.tileSize.h.toString(),
             "gutter": gutter.toString(),
             "minScale": "0",
-            "maxScale": "1000000",
+            "maxScale": "2500000",
             "gfiAttributes": this.translateGfiProps(layer),
             "layerAttribution": layer.attribution || "nicht vorhanden",
             "legendURL": layer.legendURL || "",

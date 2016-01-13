@@ -24,16 +24,31 @@ define([
 
     return Backbone.View.extend({
         model: MapHandlerModel,
+        id: "searchMarker",
+        className: "glyphicon glyphicon-map-marker",
+        template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
+        events: {
+            "click .glyphicon": "hideMarker"
+        },
         /**
         * @description View des Map Handlers
         */
         initialize: function () {
-            EventBus.on("mapHandler:clearMarker", this.clearMarker, this);
-            EventBus.on("mapHandler:zoomTo", this.zoomTo, this);
-            EventBus.on("mapHandler:hideMarker", this.hideMarker, this);
-            EventBus.on("mapHandler:showMarker", this.showMarker, this);
-            EventBus.on("mapHandler:zoomToBPlan", this.zoomToBPlan, this);
-            EventBus.on("mapHandler:zoomToBKGSearchResult", this.zoomToBKGSearchResult, this);
+            this.listenTo(EventBus, {
+                "mapHandler:clearMarker": this.clearMarker,
+                "mapHandler:zoomTo": this.zoomTo,
+                "mapHandler:hideMarker": this.hideMarker,
+                "mapHandler:showMarker": this.showMarker,
+                "mapHandler:zoomToBPlan": this.zoomToBPlan,
+                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
+            }, this);
+
+            this.render();
+        },
+        render: function () {
+            this.$el.html(this.template());
+
+            this.model.get("marker").setElement(this.$el);
         },
         /**
         * @description Entfernt den searchVector
@@ -104,6 +119,11 @@ define([
                     EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
+                case "SearchByCoord": {
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
+                    this.showMarker(hit.coordinate);
+                    break;
+                }
             }
         },
         /*
@@ -130,7 +150,7 @@ define([
                     }
                     wktArray.push(geom);
                 });
-                wkt = this.getWKTFromString("MULTIPOLYGON", wktArray);
+                wkt = this.model.getWKTFromString("MULTIPOLYGON", wktArray);
             }
             else if (hits.length === 1) {
                 geom = $(hits).find("gml\\:posList,posList")[0].textContent;
@@ -158,7 +178,7 @@ define([
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                var wkt = this.model.getWKTFromString("POLYGON", coordinates.trim());
+                this.model.getWKTFromString("POLYGON", coordinates.trim());
                 EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
             }
         },
@@ -167,13 +187,13 @@ define([
         */
         showMarker: function (coordinate) {
             this.model.get("marker").setPosition(coordinate);
-            $("#searchMarker").css("display", "block");
+            this.$el.css("display", "block");
         },
         /**
         *
         */
         hideMarker: function () {
-            $("#searchMarker").css("display", "none");
+            this.$el.css("display", "none");
         }
     });
 });

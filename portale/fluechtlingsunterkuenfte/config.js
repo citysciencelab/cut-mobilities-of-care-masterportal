@@ -15,7 +15,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
-        allowParametricURL: false,
+        allowParametricURL: true,
         tree: {
             type: "custom",
             baseLayer: [
@@ -198,24 +198,16 @@ define(function () {
             title: "",
             gfi: false
         },
-        /**
-        * @memberof config
-        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
-        * @property {Boolean}  gfi - GetFeatureInfo-Abfrage.
-        * @property {Boolean}  measure - Messen.
-        * @property {Boolean}  draw - Zeichnen.
-        * @property {Boolean}  print - Drucken.
-        * @property {Boolean}  coord - Koordinaten-Abfrage.
-        * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
-        */
         tools: {
-            gfi: true,
-            measure: false,
-            print: true,
-            coord: false,
-            draw: false,
-            active: "gfi",
-            record: false
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            }
         },
         /**
         * @memberof config

@@ -55,7 +55,8 @@ define(function () {
                 "DDB01922-D7B5-4323-9DDF-B68A42C559E6", // Olympiastandorte
                 "AA06AD76-6110-4718-89E1-F1EDDA1DF4CF", // Regionales Raumordnungsprogramm Stade+Rotenburg
                 "1C8086F7-059F-4ACF-96C5-7AFEB8F8B751", // Fachdaten der Metropolregion
-                "A46086BA-4A4C-48A4-AC1D-9735DDB4FDDE" // Denkmalkartierung FIS
+                "A46086BA-4A4C-48A4-AC1D-9735DDB4FDDE", // Denkmalkartierung FIS
+                "98377F7D-84AB-4089-BDF1-F962B2C173CC" // Ausgleichsflächen Internet
             ]
         },
         controls: {
@@ -134,21 +135,42 @@ define(function () {
             geoLocateHit: true
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            record: false,
-            parcelSearch: true,
-            active: "gfi"
+            parcelSearch: {
+                title: "Flurstückssuche",
+                glyphicon: "glyphicon-search"
+            },
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-record"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",
         print: {
             printID: "99999",
             title: "Freie und Hansestadt Hamburg - Atlas",
             outputFilename: "Ausdruck FHH - Atlas",
-            gfi: false
+            gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };

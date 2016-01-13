@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<div class="win-heading">
-    <span class="glyphicon <%= icon %> win-icon"></span>
-    <span class="win-title"><%= title %></span>
-    <span class="glyphicon glyphicon-remove win-close"></span>
-    <span class="glyphicon glyphicon-minus win-minimize"></span>
+<div class="win-heading header">
+    <p class="buttons pull-right">
+        <span class="glyphicon glyphicon-minus" title="Minimieren"></span>
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+    </p>
+    <p class="buttons pull-left">
+        <span class="glyphicon <%= icon %> win-icon"></span>
+    </p>
+    <p class="title">
+        <span><%= title %></span>
+    </p>
 </div>

@@ -11,7 +11,7 @@ define([
         className: "legend-win",
         template: _.template(LegendTemplate),
         events: {
-            "click .legend-win-header > .win-close": "toggle"
+            "click .glyphicon-remove": "toggle"
         },
         initialize: function () {
             $(window).resize(function() {

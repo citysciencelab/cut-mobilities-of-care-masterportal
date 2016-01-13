@@ -2,7 +2,8 @@ define([
     "backbone",
     "modules/layer/list",
     "modules/treeLight/view",
-    "eventbus"
+    "eventbus",
+        "jqueryui/sortable"
 ], function (Backbone, LayerList, LayerView, EventBus) {
 
     var LayerListView = Backbone.View.extend({
@@ -31,6 +32,7 @@ define([
         setMaxHeight: function () {
             this.$el.css("max-height", $(window).height() - 100);
             this.$el.css("overflow-y", "auto");
+            this.$el.css("overflow-x", "hidden");
         }
     });
 

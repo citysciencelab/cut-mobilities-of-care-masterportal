@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Geoportal der MRH",
+        title: "Geoportal MRH",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
@@ -17,12 +17,14 @@ define(function () {
                 {
                     "id": "223",
                     "styles": "geofox_stations",
-                    "name": "HVV-Haltestellen"
+                    "name": "HVV-Haltestellen",
+                    "legendURL": "http://87.106.16.168/legende_mrh/hvv-bus.png"
                 },
                 {
                     "id": "221",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"]
+                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"],
+                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ]
         },
@@ -126,7 +128,7 @@ define(function () {
             ]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
@@ -157,13 +159,31 @@ define(function () {
             geoLocateHit: true
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            record: false,
-            active: "gfi"
+            gfi: {
+              title: "Informationen abfragen",
+               glyphicon: "glyphicon-info-sign",
+               isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+               title: "Koordinate abfragen",
+               glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+               title: "Koordinatensuche",
+               glyphicon: "glyphicon-search"
+            }
         },
         print: {
             printID: "99999",

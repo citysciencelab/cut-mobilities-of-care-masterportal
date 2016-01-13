@@ -180,7 +180,7 @@ Die Dokumentation erzeugen. Zurzeit nur für portale/master/config.js.
 
 ## grunt copyExamples
 ```
-# grunt buildExamples --env=internet
+# grunt copyExamples --env=internet
 ```
 - leert den Ordner examples
 - kopiert den aktuellen dist-Ordner nach examples

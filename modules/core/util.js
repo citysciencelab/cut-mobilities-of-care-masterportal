@@ -151,6 +151,9 @@ define([
             else if (url.indexOf("http://geodaten.metropolregion.hamburg.de") !== -1) {
                 newURL = url.replace("http://geodaten.metropolregion.hamburg.de", "/mrh");
             }
+            else if (url.indexOf("http://10.61.143.52:8399") !== -1) {
+                newURL = url.replace("http://10.61.143.52:8399", "/alkis");
+            }
             else {
                 newURL = url;
             }
