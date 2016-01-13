@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/layer/WMSLayer",
     "modules/layer/WFSLayer",
     "modules/layer/GroupLayer",
@@ -7,7 +8,7 @@ define([
     "config",
     "eventbus",
     "modules/core/util"
-], function (Backbone, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus, Util) {
+], function (Backbone, Radio, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus, Util) {
 
     var LayerList = Backbone.Collection.extend({
         url: Util.getPath(Config.layerConf),
@@ -27,6 +28,14 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("LayerList");
+
+            channel.reply({
+                "getLayerListWhere": function (properties) {
+                    return this.where(properties);
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "layerlist:getOverlayerList": function () {
                     EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
