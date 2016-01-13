@@ -52,13 +52,11 @@ define(function () {
         },
         startUpModul: "",
         tools: {
-            gfi: true,
-            measure: false,
-            print: false,
-            coord: false,
-            draw: false,
-            record: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            }
         }
     };
 
