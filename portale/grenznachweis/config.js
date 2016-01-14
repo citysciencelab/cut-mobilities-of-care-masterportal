@@ -173,7 +173,7 @@ define(function () {
             },
             geoLocateHit: true
         },
-                 /**
+        /**
         * @memberof config
         * @desc Konfiguration für den Druckdienst.
         * @property {String}  url - Die Druckdienst-URL
@@ -196,13 +196,27 @@ define(function () {
         * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
         */
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: false,
-            draw: false,
-            record: false,
-            active: ""
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-record"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            }
         }
     };
 

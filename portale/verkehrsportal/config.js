@@ -164,12 +164,15 @@ define(function () {
             gfi: false
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: false,
-            coord: true,
-            draw: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            }
         }
     };
 

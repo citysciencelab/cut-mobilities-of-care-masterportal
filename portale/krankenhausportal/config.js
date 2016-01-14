@@ -83,6 +83,18 @@ define(function () {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
                 isActive: true
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-record"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
             }
         }
     }
