@@ -131,37 +131,15 @@ define([
         * @param {string} data - Die Data-XML des request.
         */
         zoomToBPlan: function (data) {
-            var wkt,
-                format,
-                feature,
-                hits = $("gml\\:Polygon,Polygon", data),
-                wktArray = [],
-                geom;
+            var GMLReader = new ol.format.GML(),
+                feature = GMLReader.readFeatures(data)[0],
+                extent;
 
-            if (hits.length > 1) {
-                _.each(hits, function (hit) {
-                    var geoms = $(hit).find("gml\\:posList,posList");
-
-                    if (geoms.length === 1) {
-                        geom = geoms[0].textContent;
-                    }
-                    else {
-                        geom = geoms[0].textContent + " )?(" + geoms[1].textContent;
-                    }
-                    wktArray.push(geom);
-                });
-                wkt = this.model.getWKTFromString("MULTIPOLYGON", wktArray);
-            }
-            else if (hits.length === 1) {
-                geom = $(hits).find("gml\\:posList,posList")[0].textContent;
-                wkt = this.model.getWKTFromString("POLYGON", geom);
-            }
             this.clearMarker();
-            format = new ol.format.WKT(),
-            feature = format.readFeature(wkt);
+            extent = feature.getGeometry().getExtent();
             searchVector.getSource().addFeature(feature);
             searchVector.setVisible(true);
-            EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
+            EventBus.trigger("zoomToExtent", extent);
         },
         /*
         * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
