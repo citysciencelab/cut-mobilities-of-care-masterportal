@@ -500,7 +500,7 @@ define([
             if (!_.isEmpty(externalLayers)) {
 
                 //  Testet, ob die Layer schon in der Liste ist
-                var layerInList = externalLayers.find(function (layer) {
+                var layerInList = _.find(externalLayers, function (layer) {
                     var attr = layer.attributes,
                     result = false;
 

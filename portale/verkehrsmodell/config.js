@@ -15,7 +15,8 @@ define(function () {
                 {
                     "id": "1933",
                     "styles": "geofox_stations",
-                    "name": "Haltestellen"
+                    "name": "Haltestellen",
+                    "legendURL":"http://87.106.16.168/legende_mrh/hvv-bus.png"
                 },
                 {
                     "id": "1935",

@@ -95,8 +95,11 @@ define([
                     STYLES: this.get("styles")
                 });
             }
+            this.set("tileloaderror", false);
             if (this.get("singleTile") !== true) {
-                this.set("source", new ol.source.TileWMS({
+                this.set("tileCountloaderror", 0);
+                this.set("tileCount", 0);
+                var source = new ol.source.TileWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
                     gutter: this.get("gutter"),
@@ -109,7 +112,23 @@ define([
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
                     })
-                }));
+                });
+
+                var context = this;
+
+                source.on("tileloaderror", function(event) {
+                  if (context.get("tileloaderror") === false) {
+                    context.set("tileloaderror", true);
+                    if (!navigator.cookieEnabled) {
+                        if (context.get("url").indexOf("wms_webatlasde") !== -1) {
+                            EventBus.trigger("alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
+                        }
+                    }
+                  }
+
+                });
+
+                this.set("source", source);
             }
             else {
                 this.set("source", new ol.source.ImageWMS({

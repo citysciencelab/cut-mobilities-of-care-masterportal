@@ -131,13 +131,26 @@ define([
         },
 
         createParamsForURL: function (center, zoom) {
-            var layerIDs,
-                layerVisibility,
-                url;
+            var layerIDs = [],
+                layerVisibility = [],
+                url,
+                layerListNoExternals;
 
+                if (typeof zoom === "undefined") {
+                    zoom = 0;
+                }
             $(".layer-selection-save").popover("destroy");
-            layerIDs = this.pluck("id");
-            layerVisibility = this.pluck("visibility");
+
+            layerListNoExternals = this.filter(function (layer) {
+                return !layer.attributes.isExternal;
+            });
+            _.each(layerListNoExternals, function (layer) {
+                layerIDs.push(layer.attributes.id);
+            });
+            _.each(layerListNoExternals, function (layer) {
+                layerVisibility.push(layer.attributes.visibility);
+            });
+
             url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility + "&center=" + center + "&zoomlevel=" + zoom;
             $(".layer-selection-save").popover({
                 html: true,

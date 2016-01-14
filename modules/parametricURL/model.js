@@ -97,6 +97,9 @@ define([
                             }
                     });
                     // Wenn Layer nicht im tree.layer enthalten ist, diesen hinzufügen
+                    if (_.has(Config.tree, "layer") === false) {
+                         Config.tree.layer = [];
+                    }
                     _.each(params, function (param) {
                         var layer = _.find(Config.tree.layer, function (layer) {
                             var layerid = "";
@@ -115,7 +118,6 @@ define([
                         });
 
                         if (!layer) {
-                            Config.tree.layer = [];
                             Config.tree.layer.push({
                                 id: param.id,
                                 visibility: false
@@ -153,10 +155,10 @@ define([
                     Config.tree.layerIDsToSelect = [];
                     _.each(values, function (value, index) {
                         if (visibilityList[index] === "TRUE") {
-                            Config.tree.layerIDsToSelect.push({id: value.toLowerCase(), visibility: true});
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: true});
                         }
                         else {
-                            Config.tree.layerIDsToSelect.push({id: value.toLowerCase(), visibility: false});
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: false});
                         }
                     });
                 }
