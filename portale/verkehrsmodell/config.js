@@ -38,7 +38,7 @@ define(function () {
             poi: true
         },
         layerConf: "../components/lgv-config/services-verkehrsmodell.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
             printID: "99999",
