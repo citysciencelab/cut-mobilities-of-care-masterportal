@@ -141,6 +141,7 @@ define([
 
                     // parse result, try built-in ol-format first
                     gfiFormat = new ol.format.WMSGetFeatureInfo();
+                    // das reverse wird fürs Planportal gebraucht SD 18.01.2016
                     gfiFeatures = gfiFormat.readFeatures(data, {
                         dataProjection: Config.view.proj
                     }).reverse();
