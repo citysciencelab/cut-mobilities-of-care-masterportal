@@ -7,8 +7,9 @@ define([
     "modules/layer/Layer",
     "modules/layer/wfsStyle/list",
     "modules/core/util",
-    "modules/core/mapView"
-], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
+    "modules/core/mapView",
+    "modules/layer/wfsList/view"
+], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util, WFSList) {
 
     /**
      *
