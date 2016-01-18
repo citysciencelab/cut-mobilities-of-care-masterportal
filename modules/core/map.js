@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "config",
     "modules/core/mapView",
     "eventbus"
-], function (Backbone, ol, Config, MapView, EventBus) {
+], function (Backbone, Radio, ol, Config, MapView, EventBus) {
 
     var Map = Backbone.Model.extend({
 
@@ -213,25 +214,64 @@ define([
          * style Anfrage bei WFS, ob Style auf unsichtbar.
          */
         setGFIParams: function (evt) {
-            var layersVisible, gfiParams = [],
-                resolution, projection, layers, coordinate, scale;
+            var visibleWMSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WMS"}),
+                visibleGeoJSONLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "GeoJSON"}),
+                visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
+                gfiParams = [],
+                scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale,
+                eventPixel = this.get("map").getEventPixel(evt.originalEvent),
+                isFeatureAtPixel = this.get("map").hasFeatureAtPixel(eventPixel),
+                resolution = this.get("view").getResolution(),
+                projection = this.get("view").getProjection(),
+                coordinate = evt.coordinate;
 
-            coordinate = evt.coordinate;
-            layers = this.get("map").getLayers().getArray();
-            resolution = this.get("view").getResolution();
-            projection = this.get("view").getProjection();
-            scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale;
-            layersVisible = _.filter(layers, function (element) {
-                // NOTE GFI-Filter Nur Sichtbar
-                return element.getVisible() === true;
-            });
-            _.each(layersVisible, function (element) {
+            // WFS
+            if (isFeatureAtPixel === true) {
+                var layerByFeature,
+                    visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
+
+                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
+                    // cluster-source
+                    if (_.has(featureAtPixel.getProperties(), "features") === true) {
+                        _.each(featureAtPixel.get("features"), function (feature) {
+                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
+                                return layer.get("source").getSource().getFeatureById(feature.getId());
+                            });
+                            if (_.isUndefined(layerByFeature) === false) {
+                                gfiParams.push({
+                                    typ: "WFS",
+                                    feature: feature,
+                                    attributes: layerByFeature.get("gfiAttributes"),
+                                    name: layerByFeature.get("name"),
+                                    ol_layer: layerByFeature.get("layer")
+                                });
+                            }
+                        });
+                    }
+                    // vector-source
+                    else {
+                        layerByFeature = _.find(visibleWFSLayerList, function (layer) {
+                            return layer.get("source").getFeatureById(featureAtPixel.getId());
+                        });
+                        gfiParams.push({
+                            typ: "WFS",
+                            feature: featureAtPixel,
+                            attributes: layerByFeature.get("gfiAttributes"),
+                            name: layerByFeature.get("name"),
+                            ol_layer: layerByFeature.get("layer")
+                        });
+                    }
+                });
+            }
+
+            // WMS und GeoJSON
+            _.each(visibleLayerList, function (element) {
                 if (element.get("typ") !== "GROUP") {
                     var gfiAttributes = element.get("gfiAttributes");
 
                     if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
-                        if (element.getProperties().typ === "WMS") {
-                            var gfiURL = element.getSource().getGetFeatureInfoUrl(
+                        if (element.get("typ") === "WMS") {
+                            var gfiURL = element.get("source").getGetFeatureInfoUrl(
                                 coordinate, resolution, projection,
                                 {INFO_FORMAT: element.get("infoFormat") || "text/xml"}
                             );
@@ -241,46 +281,28 @@ define([
                                 scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
-                                ol_layer: element,
-                                id: element.id
-                            });
-                        }
-                        else if (element.getProperties().typ === "WFS") {
-                            gfiParams.push({
-                                typ: "WFS",
-                                scale: scale,
-                                source: element.getSource(),
-                                style: element.getStyle(),
-                                name: element.get("name"),
-                                ol_layer: element,
-                                id: element.id
+                                ol_layer: element
                             });
                         }
                     }
-                    else if (element.getProperties().typ === "GeoJSON") {
-                        var pixel = this.get("map").getEventPixel(evt.originalEvent),
-                            hit = this.get("map").hasFeatureAtPixel(pixel);
-
-                        if (hit === true) {
-                            this.get("map").forEachFeatureAtPixel(evt.pixel, function (feature) {
-                                gfiParams.push({
-                                    typ: "GeoJSON",
-                                    feature: feature,
-                                    name: element.get("name"),
-                                    ol_layer: element,
-                                    id: element.id
-                                });
+                    else if (element.get("typ") === "GeoJSON" && isFeatureAtPixel === true) {
+                        this.get("map").forEachFeatureAtPixel(evt.pixel, function (feature) {
+                            gfiParams.push({
+                                typ: "GeoJSON",
+                                feature: feature,
+                                name: element.get("name"),
+                                ol_layer: element
                             });
-                        }
+                        });
                     }
                 }
                 else {
-                    element.getLayers().forEach(function (layer) {
+                    element.get("backbonelayers").forEach(function (layer) {
                         var gfiAttributes = layer.get("gfiAttributes");
 
                         if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
-                            if (layer.getProperties().typ === "WMS") {
-                                var gfiURL = layer.getSource().getGetFeatureInfoUrl(
+                            if (layer.get("typ") === "WMS") {
+                                var gfiURL = layer.get("source").getGetFeatureInfoUrl(
                                     coordinate, resolution, projection,
                                     {INFO_FORMAT: layer.get("infoFormat") || "text/xml"}
                                 );
@@ -290,19 +312,7 @@ define([
                                     // scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
-                                    ol_layer: layer,
-                                    id: layer.id
-                                });
-                            }
-                            else if (layer.getProperties().typ === "WFS") {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    // scale: scale,
-                                    source: layer.getSource(),
-                                    style: layer.getStyle(),
-                                    name: layer.get("name"),
-                                    ol_layer: layer,
-                                    id: layer.id
+                                    ol_layer: layer
                                 });
                             }
                         }
