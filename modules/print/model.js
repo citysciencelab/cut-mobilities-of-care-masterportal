@@ -140,6 +140,9 @@ define([
                 if (layer.get("id") === "2298") {
                     style.push("strassenbaumkataster_grau");
                 }
+                if (layer.has("style")) {
+                    style.push(layer.get("style"));
+                }
                 this.push("layerToPrint", {
                     type: layer.get("typ"),
                     layers: layer.get("layers").split(),
