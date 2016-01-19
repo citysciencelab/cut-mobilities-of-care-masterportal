@@ -382,7 +382,7 @@ define([
                     // Model wird kopiert
                     var cloneModel = model.clone();
                     // Die Attribute name und die ID werden für das kopierte Model gesetzt
-                    cloneModel.set("legendURL", model.get("legendURL")[0] + "&STYLE" + style);
+                    cloneModel.set("legendURL", model.get("legendURL")[index]);
                     cloneModel.set("name", model.get("name")[index]);
                     cloneModel.set("id", model.get("id") + model.get("styles")[index].toLowerCase());
                     // Die Source vom Model/Layer bekommt ein Update(neuen Style)
