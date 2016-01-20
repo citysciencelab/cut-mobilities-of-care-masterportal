@@ -120,7 +120,7 @@ define([
             else {
                 EventBus.trigger("layerlist:getVisibleWMSlayerList");
             }
-            if (Config.tools.draw === true) {
+            if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
             this.sendGFIForPrint();
