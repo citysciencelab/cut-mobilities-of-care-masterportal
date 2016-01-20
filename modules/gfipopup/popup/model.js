@@ -11,8 +11,9 @@ define([
     "modules/gfipopup/themes/mietenspiegel/view",
     "modules/gfipopup/themes/mietenspiegel/view-formular",
     "modules/gfipopup/themes/reisezeiten/view",
+    "modules/gfipopup/themes/trinkwasser/view",
     "modules/core/requestor"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, Requestor) {
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, TrinkwasserTheme, Requestor) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -74,6 +75,10 @@ define([
                         }
                         case "reisezeiten": {
                             templateView = new ReisezeitenTheme(content);
+                            break;
+                        }
+                        case "trinkwasser": {
+                            templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
                             break;
                         }
                         default: {
