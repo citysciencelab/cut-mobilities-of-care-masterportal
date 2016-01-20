@@ -120,7 +120,7 @@ define([
             else {
                 EventBus.trigger("layerlist:getVisibleWMSlayerList");
             }
-            if (Config.tools.draw === true) {
+            if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
             this.sendGFIForPrint();
@@ -139,6 +139,9 @@ define([
                 }
                 if (layer.get("id") === "2298") {
                     style.push("strassenbaumkataster_grau");
+                }
+                if (layer.has("style")) {
+                    style.push(layer.get("style"));
                 }
                 this.push("layerToPrint", {
                     type: layer.get("typ"),

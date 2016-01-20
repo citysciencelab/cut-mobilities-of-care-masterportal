@@ -382,6 +382,7 @@ define([
                     // Model wird kopiert
                     var cloneModel = model.clone();
                     // Die Attribute name und die ID werden für das kopierte Model gesetzt
+                    cloneModel.set("style", style);
                     cloneModel.set("legendURL", model.get("legendURL")[index]);
                     cloneModel.set("name", model.get("name")[index]);
                     cloneModel.set("id", model.get("id") + model.get("styles")[index].toLowerCase());
