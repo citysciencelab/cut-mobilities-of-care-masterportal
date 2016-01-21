@@ -14,6 +14,7 @@ define([
             bkgSuggestURL: "",
             bkgSearchURL: "",
             extent: [454591, 5809000, 700000, 6075769],
+            suggestCount: 20,
             epsg: "EPSG:25832",
             filter: "filter=(typ:*)",
             score: 0.6
@@ -25,6 +26,7 @@ define([
          * @param {string} config.bkgSuggestURL - URL für schnelles Suggest.
          * @param {string} [config.bkgSearchURL] - URL für ausführliche Search.
          * @param {[float]} [config.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+         * @param {integer} [config.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
          * @param {string} [config.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
          * @param {string} [config.filter=filter=(typ:*)] - Filterstring
          * @param {float} [config.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
@@ -39,6 +41,9 @@ define([
             }
             if (config.extent) {
                 this.set("extent", config.extent);
+            }
+            if (config.suggestCount) {
+                this.set("suggestCount", config.suggestCount);
             }
             if (config.epsg) {
                 this.set("epsg", config.epsg);
@@ -67,7 +72,7 @@ define([
          *
          */
         suggestByBKG: function (searchString) {
-            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter");
+            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
 
             this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, false);
         },
