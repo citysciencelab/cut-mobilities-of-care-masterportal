@@ -98,7 +98,6 @@ define([
             else {
                 url = params.url;
             }
-
             // Für B-Pläne wird Feature_Count auf 3 gesetzt --> besser über ID (hier aber nicht vorhanden)
             if (params.name === "Festgestellte Bebauungspläne" || params.name === "Sportstätten") {
                 data = "FEATURE_COUNT=3";
@@ -113,7 +112,8 @@ define([
                 var index = -1;
 
                 _.each(Config.feature_count, function (layer, idx) {
-                    if (layer.id + "" === params.id) {
+
+                    if (layer.id + "" === params.ol_layer.id) {
                         index = idx;
                         return;
                     }

@@ -33,6 +33,72 @@ define(function () {
             toggleMenu: true,
             orientation: true
         },
+        feature_count: [
+            {
+                id: 73,
+                count: 10
+            },
+			{
+                id: 77,
+                count: 10
+            },
+			{
+                id: 79,
+                count: 10
+            },
+			{
+                id: 81,
+                count: 10
+            },
+			{
+                id: 83,
+                count: 10
+            },
+			{
+                id: 85,
+                count: 10
+            },
+			{
+                id: 87,
+                count: 10
+            },
+			{
+                id: 89,
+                count: 10
+            },
+			{
+                id: 91,
+                count: 10
+            },
+			{
+                id: 93,
+                count: 10
+            },
+			{
+                id: 95,
+                count: 10
+            },
+			{
+                id: 97,
+                count: 10
+            },
+			{
+                id: 99,
+                count: 100
+            },
+			{
+                id: 101,
+                count: 10
+            },
+			{
+                id: 103,
+                count: 10
+            },
+			{
+                id: 105,
+                count: 10
+            }
+        ],
         attributions: true,
         footer: {
             visibility: true,
