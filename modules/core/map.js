@@ -209,9 +209,6 @@ define([
         },
         /**
          * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
-         * scale ist zur Definition der BoundingBox um den Klickpunkt - nur bei WFS
-         * routable legt fest, ob das Feature als RoutingDestination gesetzt werden darf.
-         * style Anfrage bei WFS, ob Style auf unsichtbar.
          */
         setGFIParams: function (evt) {
             var visibleWMSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WMS"}),

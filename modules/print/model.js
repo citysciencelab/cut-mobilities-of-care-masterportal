@@ -132,7 +132,8 @@ define([
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},
-                    style = [];
+                    style = [],
+                    layerURL = layer.get("url");
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -143,10 +144,17 @@ define([
                 if (layer.has("style")) {
                     style.push(layer.get("style"));
                 }
+                // Damit Web-Atlas gedruckt werden kann
+                if (layer.get("id") === "51" || layer.get("id") === "53") {
+                    layerURL = layer.get("url") + "__108a7035-f163-6294-f7dc-a81a2cfa13d6";
+                }
+                if (layer.get("id") === "55") {
+                    layerURL = layer.get("url") + "__e5742a5e-f48c-9470-19c0-9d522cfa13d6";
+                }
                 this.push("layerToPrint", {
                     type: layer.get("typ"),
                     layers: layer.get("layers").split(),
-                    baseURL: layer.get("url"),
+                    baseURL: layerURL,
                     format: "image/png",
                     opacity: layer.get("opacity"),
                     customParams: params,

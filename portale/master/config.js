@@ -328,6 +328,7 @@ define(function () {
         * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
         * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
         * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @property {integer} [bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
         * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
         * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
         * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
@@ -354,6 +355,7 @@ define(function () {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
                 extent: [454591, 5809000, 700000, 6075769],
+                suggestCount:10,
                 epsg: "EPSG:25832",
                 filter: "filter=(typ:*)",
                 score: 0.6
@@ -394,7 +396,8 @@ define(function () {
         },
         /**
         * @memberof config
-        * @type {Object}        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
+        * @type {Object}
+        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
         * @property {Object} [tools] - Das Konfigurationsobjekt für die Tools/Werkzeuge.
         * @property {Object} [tools.parcelSearch] - Flurstückssuche.
         * @property {string} [tools.parcelSearch.title] - Der Title in der Liste unter Werkzeuge.
