@@ -27,7 +27,6 @@ define([
                 value = evt.target.value.replace(",", ".");
 
             $("#" + id).val(value);
-            alert (value);
         },
         initialize: function (lage, params, nutzung, produkt, brwList, jahr) {
             this.model.set("lage", lage),
@@ -51,6 +50,7 @@ define([
             new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"));
         },
         show: function () {
+            this.model.calcDefaultsForTemplate();
             this.render();
             $("#seite_drei").show();
             $("#seite_zwei").hide();

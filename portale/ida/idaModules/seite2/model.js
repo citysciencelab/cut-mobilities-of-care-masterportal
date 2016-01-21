@@ -253,7 +253,6 @@ define([
 
                     _.each(brwList, function (obj) {
                         if (obj.bezeichnung === nutzung && obj.jahr === jahrgang) {
-                            console.log(this.get("lage"));
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,

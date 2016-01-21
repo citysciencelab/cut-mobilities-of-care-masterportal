@@ -13,284 +13,164 @@ define([
             produkt: "",
             jahr: "",
             page: "",
-            wpsWorkbenchnameNormBRW: "BRWUmrechnungHH",
+            wpsWorkbenchnameBRW: "BRWUmrechnungHH",
             wpsWorkbenchnameIDAUmrechnung: "IDABerechnungHH"
         },
         initialize: function () {
-            EventBus.on("wps:response", this.handleNormBRMResponse, this), // Result von wpsWorkbenchnameNormBRW
+            this.listenTo(this, "change:brwList", this.checkResponseReceived);
+
+            EventBus.on("wps:response", this.handleBRWResponse, this), // Result von wpsWorkbenchnameBRW
             EventBus.on("wps:response", this.handleIDAResponse, this); // Result von wpsWorkbenchnameIDAUmrechnung
         },
-        startCalculation: function () {
+        checkResponseReceived: function () {
             var brwList = this.get("brwList"),
-                aktbrwList = _.filter(brwList, {art: "Akt.BRW"}),
-                normBRWParams = _.values(_.filter(brwList, {art: "Norm.BRW"}))[0];
+                rr = _.pluck(brwList, "responseReceived"),
+                every = _.every(rr, function (r) {
+                    if (r === true) {
+                        return true;
+                    }
+                });
 
-            this.set("aktBRW", this.calcAktBRW(aktbrwList));
-            if (normBRWParams) {
-                this.requestNormBRW(normBRWParams);
-            }
-            else {
-                this.set("normBRW", "");
+            if (every === true) {
                 this.requestIDA();
             }
         },
         /*
-        * berechnet den Mittelwert der Gruppen und deren arithmetisches Mittel oder gibt null zurück
+        * Ergänze alle Objekte um id
         */
-        calcAktBRW: function (list) {
-            if (list.length > 0) {
-                var groupedAktBRW = _.groupBy(list, function (brw) {
-                    return brw.bezeichnung;
-                }),
-                    aktbrw = 0,
-                    groupValue = 0;
+        addId: function (obj) {
+            _.each(obj, function (o) {
+                var uniqueID = _.uniqueId("ida_");
 
-                _.each(groupedAktBRW, function (group) {
-                    groupValue = 0;
-                    _.each (group, function (brw) {
-                        groupValue = (groupValue + (brw.brw * brw.anteil));
-                    });
-                    if (aktbrw === 0) {
-                        aktbrw = groupValue;
-                    }
-                    else {
-                        aktbrw = ((aktbrw + groupValue) / 2);
-                    }
-                });
-                return aktbrw;
-            }
-            else {
-                return null;
-            }
+                o = _.extend(o, {id: uniqueID});
+                o = _.extend(o, {responseReceived: false});
+            });
+            return obj;
         },
         /*
-        * stellt Request zur Abfrage des NormBRW zusammen
+        * wird von View bei init gerufen
         */
-        requestNormBRW: function (brw) {
-            if (brw) {
-                var dataInputs = "<wps:Execute xmlns:wps='http://www.opengis.net/wps/1.0.0' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ows='http://www.opengis.net/ows/1.1' service='WPS' version='1.0.0' xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'>";
+        startCalculation: function () {
+            var brwList = this.addId(this.get("brwList")),
+                params = this.get("params"),
+                STRL = _.has(params, "STRL") === true ? params.STRL : "",
+                BAUW = _.has(params, "BAUW") === true ? params.BAUW : "",
+                WGFZ = _.has(params, "WGFZ") === true ? params.WGFZ : "",
+                FLAE = _.has(params, "FLAE") === true ? params.FLAE : "";
 
-                dataInputs += "<ows:Identifier>BRWUmrechnungHH.fmw</ows:Identifier>";
-                dataInputs += "    <wps:DataInputs>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>BRW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'>" + brw.brw + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>STAG</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.stichtag + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ENTW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.entw + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>BEIT</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.beit + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>NUTA</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.nuta + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ERGNUTA</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.ergnuta + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>BAUW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.bauw + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>WGFZ</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'>" + brw.wgfz + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>FLAE</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'>" + brw.flae + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZENTW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.entw + "</wps:LiteralData>"; // identisch mit Quellgrundstück
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZBEIT</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.beit + "</wps:LiteralData>"; // identisch mit Quellgrundstück
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZNUTA</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.nuta + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZBAUW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>" + brw.bauw + "</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZWGFZ</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'>1</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZFLAE</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'>1000</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZGTIE</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZStrLage</ows:Identifier>"; // dropdownEintrag
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'>F</wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>EGNutzung</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>EGGFZAnt</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>EGW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>IGNutzung</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>IGGFZAnt</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>IGW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZGNutzung</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZGGFZAnt</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>ZGW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>OGNutzung</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='string'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>OGGFZAnt</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>OGW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>NWohnW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>NBueroW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "      <wps:Input>";
-                dataInputs += "        <ows:Identifier>NLadenW</ows:Identifier>";
-                dataInputs += "        <wps:Data>";
-                dataInputs += "          <wps:LiteralData dataType='float'></wps:LiteralData>";
-                dataInputs += "        </wps:Data>";
-                dataInputs += "      </wps:Input>";
-                dataInputs += "    </wps:DataInputs>";
-                dataInputs += "</wps:Execute>";
-                EventBus.trigger("wps:request", {
-                    workbenchname: this.get("wpsWorkbenchnameNormBRW"),
-                    dataInputs: dataInputs
-                });
-            }
+            this.set("brwList", brwList);
+            _.each(brwList, function (brw) {
+                switch (brw.art) {
+                    case "Akt.BRW": {
+                        this.requestBRW(brw, STRL, BAUW, WGFZ, FLAE);
+                        break;
+                    }
+                    case "Norm.BRW": {
+                        this.requestBRW(brw, "F", "eh", "1", "1000"); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
+                        break;
+                    }
+                }
+            }, this);
         },
         /*
-        * speichert den NormBRW und startetcalcIDA
+        * stellt Requests zur Abfrage der einzelnen BRW zusammen
         */
-        handleNormBRMResponse: function (obj) {
-            if (obj.request.workbenchname === this.get("wpsWorkbenchnameNormBRW")) {
-                var ergebnis = $(obj.data).find("wps\\:Ergebnis,Ergebnis"),
-                    brw = $(ergebnis).find("wps\\:brw,brw")[0].textContent,
+        requestBRW: function (brw, STRL, BAUW, WGFZ, FLAE, id) {
+            var stichtag = brw.stichtag.split("."),
+                dataInputs = "<wps:DataInputs>";
+
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ExtID", brw.id, "string")); // Externer Identifikator des WPS-Prozesses, wird mit ausgegeben.
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BRW", brw.brw, "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("STAG", stichtag[2] + "-" + stichtag[1] + "-" + stichtag[0], "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ENTW", brw.entw, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BEIT", brw.beit, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("NUTA", brw.nuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ERGNUTA", brw.ergnuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BAUW", brw.bauw, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("WGFZ", brw.wgfz, "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("FLAE", brw.flae, "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZENTW", brw.entw, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBEIT", brw.beit, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", brw.ergnuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBAUW", BAUW, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZWGFZ", WGFZ, "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZFLAE", FLAE, "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZStrLage", STRL, "string"));
+            dataInputs += "</wps:DataInputs>";
+            EventBus.trigger("wps:request", {
+                workbenchname: this.get("wpsWorkbenchnameBRW"),
+                dataInputs: dataInputs
+            });
+        },
+        /*
+        * empfängt Teile des AktBRW
+        */
+        handleBRWResponse: function (obj) {
+            if (obj.request.workbenchname === this.get("wpsWorkbenchnameBRW")) {
+                var brwList = this.get("brwList"),
+                    aktbrwList = _.filter(brwList, {art: "Akt.BRW"}),
+                    normBRWParams = _.values(_.filter(brwList, {art: "Norm.BRW"}))[0],
+                    ergebnis = $(obj.data).find("wps\\:Ergebnis,Ergebnis"),
+                    umgerechneterbrw = $(ergebnis).find("wps\\:brw,brw")[0].textContent,
                     error = $(ergebnis).find("wps\\:ErrorOccured,ErrorOccured")[0].textContent,
-                    fehlertext = $(ergebnis).find("wps\\:Fehlermeldung,Fehlermeldung")[0].textContent;
+                    fehlertext = $(ergebnis).find("wps\\:Fehlermeldung,Fehlermeldung")[0].textContent,
+                    parameter = $(obj.data).find("wps\\:parameter,parameter"),
+                    id = $(parameter).attr("ExtID");
 
                 if (error === "No") {
-                    this.set("normBRW", brw);
-                    this.requestIDA();
-                }
-                else {
-                    console.log(fehlertext);
-                    alert("Normierter Bodenrichtwert konnte nicht berechnet werden. Abbruch!");
+                    var brw = _.find(brwList, function (brw) {
+                        return brw.id === id;
+                    });
+                    if (brw) {
+                        switch (brw.art) {
+                            case "Akt.BRW": {
+                                this.setAktBRW(brw, umgerechneterbrw);
+                                break;
+                            }
+                            case "Norm.BRW": {
+                                this.setNormBRW(brw.id, umgerechneterbrw);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+        },
+        /*
+        * Verarbeite den NormBRW und vermerke rsponseReceived
+        */
+        setNormBRW: function (brwid, wert) {
+            var brwList = this.get("brwList");
+
+            this.set("normBRW", wert);
+
+            _.each(brwList, function (brw) {
+                if (brw.id === brwid) {
+                    brw.responseReceived = true;
+                }
+            });
+            this.unset("brwList", {silent: true});
+            this.set("brwList", brwList);
+        },
+        /*
+        * Verarbeite den AktBRW und vermerke rsponseReceived
+        */
+        setAktBRW: function (brw, wert) {
+            var wertanteil = wert * brw.anteil,
+                aktBRW = this.get("aktBRW") === "" ? 0 : this.get("aktBRW"),
+                newAktBRW = 0,
+                brwList = this.get("brwList");
+
+            newAktBRW = parseFloat(aktBRW) + parseFloat(wertanteil);
+            this.set("aktBRW", newAktBRW);
+
+            _.each(brwList, function (b) {
+                if (b.id === brw.id) {
+                    b.responseReceived = true;
+                }
+            });
+            this.unset("brwList", {silent: true});
+            this.set("brwList", brwList);
         },
         /*
         * stellt Request zur Abfrage von IDA-Werten zusammen
@@ -299,48 +179,51 @@ define([
             var params = this.get("params"),
                 dataInputs = "<wps:DataInputs>";
 
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("nutzung", "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("produkt", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("nutzung", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("produkt", "string"));
             dataInputs += "<wps:Input>";
             dataInputs += "<ows:Identifier>DATU</ows:Identifier>";
             dataInputs += "<wps:Data>";
             dataInputs += "<wps:LiteralData dataType='string'>" + this.get("jahr") + "-07-01</wps:LiteralData>"; // immer 1. Juli des gewählten Jahres
             dataInputs += "</wps:Data>";
             dataInputs += "</wps:Input>";
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("StadtteilName", "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("normBRW", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("aktBRW", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("WGFZ", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("FLAE", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("BAUW", "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("STRL", "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("GESL", "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("BAUJ", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("MODG", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("WOFL", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("ZAWO", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("GARI", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("GARA", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("STEA", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("EGFL", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("OGFL", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("WONKM", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("SONKM", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("RLZ", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("JEZ", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("ENER", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("KELL", "boolean"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("LIFT", "boolean"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("STST", "integer"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("FKWERT", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnDataInputSnippet("SACH", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("StadtteilName", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("normBRW", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("aktBRW", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("WGFZ", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FLAE", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("BAUW", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("STRL", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("GESL", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("BAUJ", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("MODG", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("WOFL", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("ZAWO", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("GARI", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("GARA", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("STEA", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("EGFL", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("OGFL", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("WONKM", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("SONKM", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("RLZ", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("JEZ", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("ENER", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("KELL", "boolean"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("LIFT", "boolean"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("STST", "integer"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FKWERT", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("SACH", "float"));
             dataInputs += "</wps:DataInputs>";
             EventBus.trigger("wps:request", {
                 workbenchname: this.get("wpsWorkbenchnameIDAUmrechnung"),
                 dataInputs: dataInputs
             });
         },
-        returnDataInputSnippet: function (name, typ) {
+        returnBRWInputSnippet: function (name, value, typ) {
+            return "<wps:Input><ows:Identifier>" + name + "</ows:Identifier><wps:Data><wps:LiteralData dataType='" + typ + "'>" + value + "</wps:LiteralData></wps:Data></wps:Input>";
+        },
+        returnIDAInputSnippet: function (name, typ) {
             var params = this.get("params"),
                 par = this.get(name);
 
