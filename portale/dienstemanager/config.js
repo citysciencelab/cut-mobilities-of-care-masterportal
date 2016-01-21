@@ -1,17 +1,18 @@
 define(function () {
     var config = {
         allowParametricURL: true,
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true},
+                {id: "8", visible: false}
+            ]
+        },
         view: {
             center: [565874, 5934140] // Rathausmark
         },
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
-        layerIDs:
-        [
-            {id: "453", visible: true},
-            {id: "8", visible: false}
-        ],
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
@@ -26,7 +27,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: "",
@@ -36,14 +37,24 @@ define(function () {
                 return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
             }
         },
-        // bPlanURL: locations.host + "/fachdaten_public/services/wfs_hh_bebauungsplaene",
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            }
         },
         orientation: true,
         poi: false,

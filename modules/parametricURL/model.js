@@ -33,16 +33,21 @@ define([
             if (_.has(result, "BEZIRK")) {
                 var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
                     bezirke = [
-                        {name: "ALTONA", position: [556681.41400000267, 5937664.2504997626]},
-                        {name: "HAMBURG-HARBURG", position: [560291.99599999934, 5925817.3924998753]},
-                        {name: "HAMBURG-Nord", position: [567677.65033335425, 5941650.9999997634]},
-                        {name: "BERGEDORF", position: [578779.00000000931, 5924255.4999997523]},
-                        {name: "EIMSBÜTTEL", position: [556681.41400000267, 5937664.2504997626]},
-                        {name: "HAMBURG-Mitte", position: [521946.60199999996, 5949591.9799998915]},
-                        {name: "WANDSBEK", position: [561985.88999999873, 5940143.2499997634]}
+                        {name: "ALTONA", number: "2", position: [556681, 5937664]},
+                        {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
+                        {name: "HAMBURG-Nord", number: "4", position: [567677, 5941650]},
+                        {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
+                        {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
+                        {name: "HAMBURG-Mitte", number: "1", position: [566380, 5932134]},
+                        {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
                     ];
 
-                Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
+                    if (bezirk.length === 1) {
+                        Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
+                    }
+                    else {
+                        Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
+                    }
             }
 
             /**

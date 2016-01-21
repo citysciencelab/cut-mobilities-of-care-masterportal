@@ -6,6 +6,7 @@ require.config({
         jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore",
         backbone: "../components/backbone/backbone",
+        "backbone.radio": "../components/backbone.radio/build/backbone.radio.min",
         text: "../components/requirejs-text/text",
         bootstrap: "../components/bootstrap/js",
         proj4: "../components/proj4/dist/proj4",

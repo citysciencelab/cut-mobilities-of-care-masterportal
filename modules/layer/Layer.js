@@ -28,11 +28,13 @@ define([
             });
 
             this.listenToOnce(this, {
-                "change:layer": function () {
+                "change:layer": function (model) {
                     this.setMetadataURL(); // setzen der MetadatenURL, vlt. besser in layerlist??
                     EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
                     EventBus.trigger("mapView:getMaxResolution", this.get("maxScale"));
-                    this.setLegendURL();
+                    if (model.get("typ") !== "GeoJSON") {
+                        this.setLegendURL();
+                    }
                 }
             });
 

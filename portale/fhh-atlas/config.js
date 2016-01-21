@@ -28,12 +28,14 @@ define(function () {
                 {
                     "id": "1933",
                     "styles": "geofox_stations",
-                    "name": "Haltestellen"
+                    "name": "Haltestellen",
+                    "legendURL": "http://87.106.16.168/legende_mrh/hvv-bus.png"
                 },
                 {
                     "id": "1935",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"]
+                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
+                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ],
             metaIDsToMerge: [
