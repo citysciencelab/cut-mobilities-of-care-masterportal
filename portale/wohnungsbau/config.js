@@ -6,9 +6,9 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
+                {id: "1886", visible: false, name: "Bezirksgrenzen"},
                 {id: "1724", visible: false, name: "Fertiggestellte Wohnungen"}, // fertiggest.whg.2013
                 {id: "1530", visible: false, name: "Ausgewählte Bauprojekte"}, // wohnungsbauproj.
-                {id: "1886", visible: false, name: "Bezirksgrenzen"},
                 {id: "1173", visible: false, name: "Genehmigte Wohnungen pro Bezirk"}, // baugen.hh
                 {id: "1532", visible: true, name: "Wohnbauflächenenpotentiale"},
                 {id: "2130", visible: true}, //  gef.mietw.2014
@@ -29,8 +29,8 @@ define(function () {
                 26.458319045841044, // 1:100 0000
                 15.874991427504629, // 1:60 0000
                 10.583327618336419, // 1:40 00000
-                5.2916638091682096, // 1:20 0000
-                2.6458319045841048 // 1:10 0000
+                5.2916638091682096 // 1:20 0000
+                // 2.6458319045841048 // 1:10 0000
                 // 1.3229159522920524, // 1:5000
                 // 0.6614579761460262, // 1:2500
                 // 0.2645831904584105, // 1:1000
@@ -46,8 +46,8 @@ define(function () {
         },
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -62,7 +62,7 @@ define(function () {
             layerTree: true,
             helpButton: false,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
+            tools: false,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
@@ -73,7 +73,7 @@ define(function () {
         searchBar: {
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -94,7 +94,7 @@ define(function () {
             gfi: true,
             measure: false,
             print: false,
-            coord: true,
+            coord: false,
             draw: false,
             active: "gfi"
         }
