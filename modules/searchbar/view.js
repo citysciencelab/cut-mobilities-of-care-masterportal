@@ -80,6 +80,7 @@ define([
             }
         },
         events: {
+            "paste input": "setSearchString",
             "keyup input": "setSearchString",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
@@ -206,7 +207,15 @@ define([
         *
         */
         setSearchString: function (evt) {
-            if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40) {
+            if (evt.type === "paste") {
+                var that = this;
+
+                // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+                setTimeout(function () {
+                    that.model.setSearchString(evt.target.value, evt.type);
+                }, 0);
+            }
+            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && evt.keyCode !== 17) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length === 1) {
                         this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -219,6 +228,8 @@ define([
                     this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 }
             }
+
+            // Der "x-Button" in der Suchleiste
             if (evt.target.value.length > 0) {
                 $("#searchInput + span").show();
             }
