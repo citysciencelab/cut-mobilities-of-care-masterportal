@@ -27,7 +27,7 @@ define([
                         break;
                     }
                     case "WFS": {
-                        gfiContent = this.setWFSPopupContent(visibleLayer.attributes, visibleLayer.feature);
+                        gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
                         break;
                     }
                     case "GeoJSON": {
@@ -57,36 +57,6 @@ define([
                 });
             }
             return featureList;
-        },
-        /**
-         *
-         */
-        setWFSPopupContent: function (gfiAttributes, feature) {
-            var featureProperties = feature.getProperties(),
-                gfi = {};
-
-                if (gfiAttributes === "showAll") {
-                    _.each(featureProperties, function (value, key) {
-                        key = key.substring(0, 1).toUpperCase() + key.substring(1).replace("_", " ");
-                        if (_.isNumber(value) || _.isBoolean(value)) {
-                            value = value.toString();
-                        }
-                        if (!value || !_.isString(value)) {
-                            return;
-                        }
-                        gfi[key] = value;
-                    });
-                }
-                else {
-                    _.each(gfiAttributes, function (value, key) {
-                        var attributeValue = _.propertyOf(featureProperties)(key);
-
-                        if (attributeValue) {
-                            gfi[value] = attributeValue;
-                        }
-                    });
-                }
-            return [gfi];
         },
 
         setWMSPopupContent: function (params) {
@@ -174,38 +144,7 @@ define([
                     }
 
                     if (gfiList) {
-                        _.each(gfiList, function (element) {
-                            var preGfi = {},
-                                gfi = {};
-
-                            // get rid of invalid keys and keys with invalid values; trim values
-                            _.each(element, function (value, key) {
-                                if (this.isValidKey(key) && this.isValidValue(value)) {
-                                    preGfi[key] = value.trim();
-                                }
-                            }, this);
-                            if (params.ol_layer.get("gfiAttributes") === "showAll") {
-                                // beautify keys
-                                _.each(preGfi, function (value, key) {
-                                    var key;
-
-                                    key = this.beautifyString(key);
-                                    gfi[key] = value;
-                                }, this);
-                            }
-                            else {
-                                // map object keys to gfiAttributes from layer model
-                                _.each(preGfi, function (value, key) {
-                                    key = params.ol_layer.get("gfiAttributes")[key];
-                                    if (key) {
-                                        gfi[key] = value;
-                                    }
-                                });
-                            }
-                            if (_.isEmpty(gfi) !== true) {
-                                pgfi.push(gfi);
-                            }
-                        }, this);
+                        pgfi = this.translateGFI(gfiList, params.ol_layer.get("gfiAttributes"));
                     }
                 },
                 error: function (jqXHR, textStatus) {
@@ -232,7 +171,44 @@ define([
         /** helper function: first letter upperCase, _ becomes " " */
         beautifyString: function (str) {
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
-        }
+        },
+        translateGFI: function (gfiList, gfiAttributes) {
+            var pgfi = [];
+
+            _.each(gfiList, function (element) {
+                var preGfi = {},
+                    gfi = {};
+
+                // get rid of invalid keys and keys with invalid values; trim values
+                _.each(element, function (value, key) {
+                    if (this.isValidKey(key) && this.isValidValue(value)) {
+                        preGfi[key] = value.trim();
+                    }
+                }, this);
+                if (gfiAttributes === "showAll") {
+                    // beautify keys
+                    _.each(preGfi, function (value, key) {
+                        var key;
+
+                        key = this.beautifyString(key);
+                        gfi[key] = value;
+                    }, this);
+                }
+                else {
+                    // map object keys to gfiAttributes from layer model
+                    _.each(preGfi, function (value, key) {
+                        key = gfiAttributes[key];
+                        if (key) {
+                            gfi[key] = value;
+                        }
+                    });
+                }
+                if (_.isEmpty(gfi) !== true) {
+                    pgfi.push(gfi);
+                }
+            }, this);
+            return pgfi;
+    }
     });
 
     return new Requestor();
