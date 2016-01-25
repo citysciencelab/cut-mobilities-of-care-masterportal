@@ -11,8 +11,11 @@ define([
         template: _.template(Template),
         events: {
             "click .glyphicon-remove": "toggle",
-            "click .navbar-nav": "switchActiveTab",
+            "click .wfslist-navtabs": "switchActiveTab",
             "click .wfslist-themes-li": "newTheme"
+        },
+        newTheme: function (evt) {
+            this.model.set("layerid", evt.currentTarget.id);
         },
         switchActiveTab: function (evt) {
             // Setzte/entferne active
@@ -32,10 +35,10 @@ define([
                     $("#wfslist-themes").show();
                 }
                 case "wfslistFeaturelist": {
-                    console.log("1");
+                    $("#wfslist-list").show();
                 }
                 case "wfslistFeaturedetails": {
-                    console.log("2");
+                    $("#wfslist-details").show();
                 }
             }
         },
@@ -49,9 +52,9 @@ define([
         updateVisibleLayer: function (layerlist) {
             var ll = this.model.get("layerlist");
 
-            $("#wfslist-themes-ul").clear();
+            $("#wfslist-themes-ul").empty();
             _.each(ll, function (layer) {
-                $("#wfslist-themes-ul").append("<li id='<%= layer.id %>' class='wfslist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
+                $("#wfslist-themes-ul").append("<li id='" + layer.id + "' class='wfslist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
             });
         },
         render: function () {

@@ -68,6 +68,7 @@ define([
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer, index, list) {
                 _.each(layer.content, function (content, index, list) {
+                    console.log(content);
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
