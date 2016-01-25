@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<div class="wfslist-win-header">
+    <p class="buttons pull-right">
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+    </p>
+    <p class="buttons pull-left">
+        <span class="glyphicon glyphicon-menu-hamburger win-icon"></span>
+    </p>
+    <p class="title">
+        <span>Featureliste</span>
+    </p>
+</div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#wfslist-navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Liste</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="wfslist-navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active wfslist-navbar-li text-center" id="wfslistThemeChooser"><a href="#">Thema wählen</a></li>
+        <li class="wfslist-navbar-li text-center" id="wfslistFeaturelist"><a href="#">Featureliste</a></li>
+        <li class="wfslist-navbar-li text-center" id="wfslistFeaturedetails"><a href="#">Featuredetails</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div id="wfslist-themes">
+    <% _.each(layerlist, function (layer) { %>
+        <ul id="wfslist-themes-ul" class="nav nav-pills nav-stacked">
+            <li id="<%= layer.id %>" class="wfslist-themes-li" role="presentation"><a href="#"><%= layer.name %></a></li>
+        </ul>
+    <% }); %>
+</div>
