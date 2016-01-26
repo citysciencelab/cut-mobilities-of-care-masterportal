@@ -215,7 +215,7 @@ define([
                     that.model.setSearchString(evt.target.value, evt.type);
                 }, 0);
             }
-            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && evt.keyCode !== 17) {
+            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && evt.keyCode !== 17 && evt.ctrlKey !== true) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length === 1) {
                         this.hitSelected(); // erster und einziger Eintrag in Liste
