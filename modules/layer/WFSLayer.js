@@ -10,14 +10,7 @@ define([
     "modules/core/mapView",
     "modules/wfslist/view"
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
-
-    /**
-     *
-     */
     var WFSLayer = Layer.extend({
-        /**
-         *
-         */
         updateData: function () {
             Util.showLoader();
 
@@ -54,7 +47,8 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get("gfiTheme")
+                                gfiTheme: this.get("gfiTheme"),
+                                visible: true
                             }));
                             this.reload();
                         }
@@ -80,11 +74,17 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get("gfiTheme")
+                                gfiTheme: this.get("gfiTheme"),
+                                visible: true
                             }));
                             this.reload();
                         }
                         this.get("layer").id = this.get("id");
+                        // schmutzig, aber einzihe Möglichkeit... :-(
+                        var that = this;
+                        window.setTimeout(function () {
+                            that.set("visibility", true);
+                        }, 1);
                     }
                     catch (e) {
                         EventBus.trigger("alert", {
@@ -136,9 +136,12 @@ define([
             this.toggleEventAttribution(visibility);
             if (visibility === true) {
                 if (this.get("layer").getSource().getFeatures().length === 0) {
+                    this.set("visibility", false);
                     this.updateData();
                 }
-                this.get("layer").setVisible(true);
+                else {
+                    this.get("layer").setVisible(true);
+                }
             }
             else {
                 this.get("layer").setVisible(false);
