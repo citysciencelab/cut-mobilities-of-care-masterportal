@@ -30,6 +30,8 @@ define([
         toggle: function () {
             $(".mouse-position > div").toggle("slow");
             $(".mouse-position > .glyphicon").toggleClass("glyphicon-chevron-right glyphicon-chevron-left");
+            $(".mouse-position > .glyphicon-chevron-right").attr("title", "Einblenden");
+            $(".mouse-position > .glyphicon-chevron-left").attr("title", "Ausblenden");
         }
     });
 
