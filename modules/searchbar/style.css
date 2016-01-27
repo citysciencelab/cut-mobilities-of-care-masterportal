@@ -201,3 +201,7 @@ li.results:hover {
     font-size: 16px;
     vertical-align: middle;
 }
+
+#searchInputUL .selected {
+    background: rgb(204, 204, 204);
+}

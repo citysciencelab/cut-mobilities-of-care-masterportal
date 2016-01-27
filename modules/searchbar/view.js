@@ -43,7 +43,10 @@ define([
             EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
 
             // this.listenTo(this.model, "change:searchString", this.render);
-            this.listenTo(this.model, "change:recommendedList", this.renderRecommendedList);
+            this.listenTo(this.model, "change:recommendedList", function () {
+                this.renderRecommendedList();
+            });
+
             this.render();
             $(window).on("orientationchange", function () {
                 this.render();
@@ -92,7 +95,8 @@ define([
             "click .list-group-item.type": "collapseHits",
             "click .btn-search-question": function () {
                 EventBus.trigger("showWindowHelp", "search");
-            }
+            },
+            "keydown": "navigateList"
         },
         /**
         *
@@ -202,11 +206,143 @@ define([
             // 5. Beende Event
             evt.stopPropagation();
         },
+        navigateList: function () {
+
+            var selector = "#searchInputUL ",
+
+            selected = this.selectedElement(selector),
+
+            firstListElement = this.firstElement(selector);
+
+            if (selected.length === 0) {
+                firstListElement.addClass("selected");
+            }
+            else {
+                // uparrow
+                if (event.keyCode === 38) {
+                      this.prevElement(selected);
+                }
+                // down arrow
+                if (event.keyCode === 40) {
+                    this.nextElement(selected);
+                }
+                if (event.keyCode === 13) {
+                    selected.click();
+                }
+            }
+        },
+        selectedElement: function (selector) {
+            return this.$el.find(selector + " .selected");
+        },
+
+        clearSelection: function () {
+            this.selectedElement("#searchInputUL").removeClass("selected");
+        },
+
+        isFirstChildelement: function (element) {
+            return (element.parent().prev().hasClass("type") && element.is(":first-child"));
+        },
+
+        isLastChildelement: function (element) {
+            return (element.parent().prev().hasClass("type") && element.is(":last-child"));
+        },
+
+        firstChildElement: function (selected) {
+            return selected.next().children().first();
+        },
+      /*  // Berechnet ob das element im sichtbaren ausschnitt ist
+        isElementVisible: function (element) {
+           var viewport = {};
+            viewport.top = 0; // element.parent().scrollTop();
+            viewport.bottom = element.parent().height(); // + viewport.top
+            var bounds = {};
+            // Das oberste Element fängt nicht bei null an warum ist nicht klar.
+            bounds.top = element.position().top - element.innerHeight();
+            bounds.bottom = bounds.top + element.outerHeight();
+            return ((bounds.bottom <= viewport.bottom) && (bounds.top >= viewport.top));
+        },*/
+        isFolderElement: function (element) {
+            return element.hasClass("type");
+        },
+
+        scrollToNext: function (li) {
+            var parent = li.parent(),
+            pos = parent.scrollTop(),
+            scrollHeight = pos + li.outerHeight(true);
+
+            parent.scrollTop(scrollHeight);
+        },
+        scrollToPrev: function (li) {
+            var parent = li.parent(),
+            pos = parent.scrollTop(),
+            scrollHeight = pos - li.outerHeight(true);
+
+            parent.scrollTop(scrollHeight);
+        },
+        resetScroll: function (element) {
+            element.scrollTop(0);
+        },
+
+        nextElement: function (selected) {
+            selected.removeClass("selected");
+            var next = {};
+
+            if (this.isFolderElement(selected) && selected.hasClass("open")) {
+                next = this.firstChildElement(selected);
+                this.resetScroll(selected.nextAll("div:first"));
+            }
+            else {
+                if (this.isLastChildelement(selected)) {
+                    if (selected.parent().is(":last")) {
+                       selected.addClass("selected");
+                    }
+                    else {
+                        next = selected.parent().nextAll("li:first");
+                    }
+                }
+                else {
+                    // $.next() funktioniert hier nicht wg der Div zwischen den li
+                    next = selected.nextAll("li:first");
+
+                    this.scrollToNext(selected);
+                }
+            }
+            next.addClass("selected");
+
+        },
+
+        prevElement: function (selected) {
+            selected.removeClass("selected");
+            var prev = {};
+
+            if (this.isFirstChildelement(selected)) {
+                prev = selected.parent().prevAll("li:first");
+                this.resetScroll(selected.parent());
+            }
+            else {
+                prev = selected.prevAll("li:first");
+                if (this.isFolderElement(selected)) {
+                    this.resetScroll(selected.prevAll("div:first"));
+                }
+                else {
+                    this.scrollToPrev(selected);
+                }
+            }
+            prev.addClass("selected");
+        },
+        firstElement: function (selector) {
+            return this.$el.find(selector + " li").first();
+        },
+        lastElement: function (selector) {
+            return this.$el.find(selector).last();
+        },
+
+
         /**
         *
         */
         setSearchString: function (evt) {
-            if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40) {
+            if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.selectedElement("#searchInputUL").length > 0 && this.selectedElement("#searchInputUL").hasClass("type"))) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length === 1) {
                         this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -233,9 +369,11 @@ define([
             $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
             if ($(evt.currentTarget.nextElementSibling).css("display") === "block") {
                 $(evt.currentTarget.nextElementSibling).hide("slow");
+                $(evt.currentTarget).removeClass("open");
             }
             else {
                 $(evt.currentTarget.nextElementSibling).show("slow");
+                $(evt.currentTarget).addClass("open");
             }
         },
         /**
@@ -269,6 +407,7 @@ define([
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
             EventBus.trigger("mapHandler:clearMarker", this);
+            this.clearSelection();
         },
         /**
         *
