@@ -49,6 +49,8 @@ define([
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
+
+            this.get("map").on("pointermove", this.pointerMoveOnMap);
             // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
             if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
                 var startx = 0,
@@ -99,22 +101,22 @@ define([
             if (tool === "coord") {
                 this.get("map").un("click", this.setGFIParams, this);
                 this.get("map").on("click", this.setPositionCoordPopup);
-                this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === "gfi") {
                 this.get("map").un("click", this.setPositionCoordPopup);
                 this.get("map").on("click", this.setGFIParams, this);
-                this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === "measure") {
                 this.get("map").un("click", this.setPositionCoordPopup);
                 this.get("map").un("click", this.setGFIParams, this);
-                this.get("map").on("pointermove", this.pointerMoveOnMap);
+                // this.get("map").on("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === "draw" || tool === "record") {
                 this.get("map").un("click", this.setPositionCoordPopup);
                 this.get("map").un("click", this.setGFIParams, this);
-                this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
         },
 

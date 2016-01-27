@@ -27,8 +27,8 @@ define(function () {
                 }
             ],
             baseLayer: [
-            {id: "94", visibility: false}, // luftbilder unbelaubt
-            {id: "756", visibility: false}, // luftbilder belaubt
+            {id: "8", visibility: false}, // luftbilder unbelaubt
+            {id: "148", visibility: false}, // luftbilder belaubt
             {id: "713", visibility: false}, // stadtplan s-w
             {id: "717", visibility: false}, // stadtplan farbig
             {id: "1043", visibility: true}, // stadtplan g-b
@@ -72,7 +72,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: "",
@@ -91,6 +91,10 @@ define(function () {
             geoLocateHit: true
         },
         tools: {
+            parcelSearch: {
+                title: "Flurstückssuche",
+                glyphicon: "glyphicon-search"
+            },
             gfi: {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
@@ -107,8 +111,17 @@ define(function () {
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
             }
         },
+        gemarkungen: "../components/lgv-config/gemarkung.json",
         orientation: false,
         poi: false
     };

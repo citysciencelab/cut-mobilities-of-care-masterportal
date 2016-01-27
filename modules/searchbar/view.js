@@ -11,6 +11,7 @@ define([
         model: Searchbar,
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
+        searchbarKeyNavSelector: "#searchInputUL",
         template: _.template(SearchbarTemplate),
         /**
         * @description View der Searchbar
@@ -83,6 +84,7 @@ define([
             }
         },
         events: {
+            "paste input": "setSearchString",
             "keyup input": "setSearchString",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
@@ -96,7 +98,8 @@ define([
             "click .btn-search-question": function () {
                 EventBus.trigger("showWindowHelp", "search");
             },
-            "keydown": "navigateList"
+            "keydown": "navigateList",
+            "click": "clearSelection"
         },
         /**
         *
@@ -207,12 +210,13 @@ define([
             evt.stopPropagation();
         },
         navigateList: function () {
+            var selected = {},
+            firstListElement = {};
 
-            var selector = "#searchInputUL ",
-
-            selected = this.selectedElement(selector),
-
-            firstListElement = this.firstElement(selector);
+            if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
+                var selected =  this.getSelectedElement(),
+                firstListElement = this.getFirstElement();
+            }
 
             if (selected.length === 0) {
                 firstListElement.addClass("selected");
@@ -227,27 +231,33 @@ define([
                     this.nextElement(selected);
                 }
                 if (event.keyCode === 13) {
-                    selected.click();
+                    if (this.isFolderElement(selected)) {
+                        this.collapseHits(slected.event);
+                    }
+                    else {
+                        selected.click();
+                    }
                 }
             }
         },
-        selectedElement: function (selector) {
-            return this.$el.find(selector + " .selected");
+        getSelectedElement: function () {
+            return this.$el.find(this.searchbarKeyNavSelector + " .selected");
         },
 
         clearSelection: function () {
-            this.selectedElement("#searchInputUL").removeClass("selected");
+            this.getSelectedElement().removeClass("selected");
+        },
+        isLastElement : function (element) {
+            return element.is(":last-child");
+        },
+        isFirstElement : function (element) {
+            return element.is(":first-child");
+        },
+        isChildElement: function (element) {
+            return (element.parent().prev().hasClass("type"));
         },
 
-        isFirstChildelement: function (element) {
-            return (element.parent().prev().hasClass("type") && element.is(":first-child"));
-        },
-
-        isLastChildelement: function (element) {
-            return (element.parent().prev().hasClass("type") && element.is(":last-child"));
-        },
-
-        firstChildElement: function (selected) {
+       getFirstChildElement: function (selected) {
             return selected.next().children().first();
         },
       /*  // Berechnet ob das element im sichtbaren ausschnitt ist
@@ -288,22 +298,29 @@ define([
             var next = {};
 
             if (this.isFolderElement(selected) && selected.hasClass("open")) {
-                next = this.firstChildElement(selected);
+                next = this.getFirstChildElement(selected);
                 this.resetScroll(selected.nextAll("div:first"));
             }
             else {
-                if (this.isLastChildelement(selected)) {
-                    if (selected.parent().is(":last")) {
-                       selected.addClass("selected");
+                if (this.isLastElement(selected)) {
+                    if (this.isChildElement(selected)) {
+                        if (this.isLastElement(selected.parent())) {
+                           this.getFirstElement().addClass("selected");
+                           return;
+                        }
+                        else {
+                            next = this.getNextElement(selected.parent());
+                            this.scrollToNext(selected);
+                        }
                     }
                     else {
-                        next = selected.parent().nextAll("li:first");
+                        this.getFirstElement().addClass("selected");
+                        return;
                     }
                 }
                 else {
                     // $.next() funktioniert hier nicht wg der Div zwischen den li
-                    next = selected.nextAll("li:first");
-
+                    next = this.getNextElement(selected);
                     this.scrollToNext(selected);
                 }
             }
@@ -311,13 +328,24 @@ define([
 
         },
 
+        getNextElement: function (selected) {
+            return selected.nextAll("li:first");
+        },
+
         prevElement: function (selected) {
             selected.removeClass("selected");
             var prev = {};
 
-            if (this.isFirstChildelement(selected)) {
-                prev = selected.parent().prevAll("li:first");
-                this.resetScroll(selected.parent());
+            if (this.isFirstElement(selected)) {
+                if (this.isChildElement(selected)) {
+                    // child
+                    prev = selected.parent().prevAll("li:first");
+                    this.resetScroll(selected.parent());
+                }
+                else {
+                    // Folder
+                    return;
+                }
             }
             else {
                 prev = selected.prevAll("li:first");
@@ -330,11 +358,11 @@ define([
             }
             prev.addClass("selected");
         },
-        firstElement: function (selector) {
-            return this.$el.find(selector + " li").first();
+        getFirstElement: function () {
+            return this.$el.find(this.searchbarKeyNavSelector + " li").first();
         },
-        lastElement: function (selector) {
-            return this.$el.find(selector).last();
+        getLastElement: function () {
+            return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
 
 
@@ -342,7 +370,15 @@ define([
         *
         */
         setSearchString: function (evt) {
-            if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.selectedElement("#searchInputUL").length > 0 && this.selectedElement("#searchInputUL").hasClass("type"))) {
+            if (evt.type === "paste") {
+                var that = this;
+
+                // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+                setTimeout(function () {
+                    that.model.setSearchString(evt.target.value, evt.type);
+                }, 0);
+            }
+            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length === 1) {
                         this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -355,6 +391,8 @@ define([
                     this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 }
             }
+
+            // Der "x-Button" in der Suchleiste
             if (evt.target.value.length > 0) {
                 $("#searchInput + span").show();
             }
@@ -374,6 +412,7 @@ define([
             else {
                 $(evt.currentTarget.nextElementSibling).show("slow");
                 $(evt.currentTarget).addClass("open");
+                $(evt.currentTarget).siblings().removeClass("open");
             }
         },
         /**

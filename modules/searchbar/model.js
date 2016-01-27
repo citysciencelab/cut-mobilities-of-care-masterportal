@@ -27,9 +27,21 @@ define([
         /**
         * aus View gaufgerufen
         */
-        setSearchString: function (value) {
+        setSearchString: function (value, eventType) {
+            var splitAdress = value.split(" ");
+
             if (value.length >= 3) {
-                this.set("searchString", value);
+                // für Copy/Paste bei Adressen
+                if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
+                    var houseNumber = splitAdress[splitAdress.length - 1],
+                        streetName = value.substr(0, value.length - houseNumber.length - 1);
+
+                    this.set("searchString", streetName);
+                    EventBus.trigger("setPastedHouseNumber", houseNumber);
+                }
+                else {
+                    this.set("searchString", value);
+                }
                 this.set("hitList", []);
                 EventBus.trigger("searchbar:search", this.get("searchString"));
                 $(".dropdown-menu-search").show();
