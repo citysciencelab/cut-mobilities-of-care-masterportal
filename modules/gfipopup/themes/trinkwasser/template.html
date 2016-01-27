@@ -9,7 +9,7 @@
         <strong>Entnahmedatum: </strong>
     </td>
     <td>
-        <%=gfiContent.allgemContent["Probenahmestelle probe_entnahmedatum"] %>
+        <%=gfiContent.allgemContent["Entnahmedatum"] %>
     </td>
 </tr>
 <tr>
@@ -36,15 +36,18 @@
         <%=gfiContent.allgemContent.Stadtteil %>
     </td>
 </tr>
-<tr>
-    <td colspan="2"></td>
-</tr>
-<tr>
-    <td colspan="2">
-        <strong>Mikrobiologische Parameter: </strong>
-    </td>
-</tr>
-<% _.each(gfiContent.mikrobioContent, function(value, key) {
+<% if(_.isEmpty(gfiContent.mikrobioContent) === false){ %>
+
+    <tr>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <strong>Mikrobiologische Parameter: </strong>
+        </td>
+    </tr>
+<%}
+_.each(gfiContent.mikrobioContent, function(value, key) {
         if (_.isString(key) === false || _.isString(value)=== false) return;
     %>
 <tr colspan="2">
