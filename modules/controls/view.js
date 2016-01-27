@@ -22,6 +22,11 @@ define([
                     new OrientationView();
                 });
             }
+            if (_.has(Config.controls, "mousePosition") === true && Config.controls.mousePosition === true) {
+                require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                    new MousePositionView();
+                });
+            }
             this.$el.on({
                 click: function (e) {
                     e.stopPropagation();
