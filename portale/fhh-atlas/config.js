@@ -63,7 +63,8 @@ define(function () {
         },
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            mousePosition: true
         },
         csw: {
             id: "1"
