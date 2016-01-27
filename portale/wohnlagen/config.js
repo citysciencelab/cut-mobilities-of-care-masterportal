@@ -1,46 +1,40 @@
 define(function () {
 
     var config = {
-        metadatenURL: "",
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true, legendUrl: "ignore"},
+                {id: "452", visible: false},
+                {id: "2515", visible: true} // Wohnlagen
+            ]
+        },
 
         view: {
-            center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769],
-            resolution: 66.145965625264583, // 1:250.000
-            resolutions: [
-                66.145965625264583,
-                26.458386250105834,
-                15.875031750063500,
-                10.583354500042333,
-                5.2916772500211667,
-                2.6458386250105834,
-                1.3229193125052917,
-                0.6614596562526458,
-                0.2645838625010583,
-                0.1322919312505292
-            ],
-            epsg: "EPSG:25832"
+            center: [565874, 5934140],  // Rathausmarkt
+            resolution: 10.583327618336419, // 1:40.000
+            scale: 60000, // für print.js benötigt
+            extent: [454591, 5809000, 700000, 6075769]
+            
+           
+        },
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: false,
+            poi: false
         },
         footer: false,
         quickHelp: true,
-
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 
-        layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "2515", visible: true} // Wohnlagen
-        ],
-        controls: {
-            zoom: true,
-            toggleMenu: true
-        },
+        
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -79,14 +73,28 @@ define(function () {
             title: "Wohnlagenverzeichnis Hamburg",
             gfi: false
         },
-        tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            record: false,
-            active: "gfi"
+         tools: {
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+             draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
         },
         orientation: false,
         poi: true
