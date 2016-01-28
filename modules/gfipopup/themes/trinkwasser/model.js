@@ -36,7 +36,7 @@ define([
                 if (_.contains(["Entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"], key)) {
                     allgemContent[key] = value;
                 }
-                else if (_.contains(["Coliforme Bakterien", "Coliforme Bakterien MPN", "Escherichia coli", "Escherichia coli (E.coli) MPN", "Koloniezahl, 36°C (TrinkwV 2001, Anlage 5.I, d, bb / TrinkwV 1990)", "Koloniezahl, 20°C (TrinkwV 1990)", "intestinale Enterokokken", "Coliforme Bakterien Grenzwertwarnung", "Coliforme Bakterien MPN Grenzwertwarnung", "Escherichia coli Grenzwertwarnung", "Escherichia coli (E.coli) MPN Grenzwertwarnung", "Koloniezahl, 36°C (TrinkwV 2001, Anlage 5.I, d, bb / TrinkwV 1990) Grenzwertwarnung", "Koloniezahl, 20°C (TrinkwV 1990) Grenzwertwarnung", "intestinale Enterokokken Grenzwertwarnung"], key)) {
+                else if (_.contains(["Coliforme Bakterien", "Coliforme Bakterien MPN", "Escherichia coli", "Escherichia coli (E.coli) MPN", "Koloniezahl, 36°C", "Koloniezahl, 20°C", "intestinale Enterokokken", "Coliforme Bakterien Grenzwertwarnung", "Coliforme Bakterien MPN Grenzwertwarnung", "Escherichia coli Grenzwertwarnung", "Escherichia coli (E.coli) MPN Grenzwertwarnung", "Koloniezahl, 36°C Grenzwertwarnung", "Koloniezahl, 20°C Grenzwertwarnung", "intestinale Enterokokken Grenzwertwarnung"], key)) {
                     mikrobioContent[key] = value;
                 }
                 else {
