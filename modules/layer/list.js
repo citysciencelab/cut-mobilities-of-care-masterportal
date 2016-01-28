@@ -50,7 +50,6 @@ define([
                     EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({visibility: true, typ: "WMS"}));
                 },
                 "layerlist:getVisibleWFSlayerList": function () {
-                    console.log('layerlist:getVisibleWFSlayerList');
                     var visibleWFS = this.where({visibility: true, typ: "WFS"}),
                         loadedWFS = _.reject(visibleWFS, function (layer) {
                             return layer.get("layer").getSource().getFeatures().length === 0;

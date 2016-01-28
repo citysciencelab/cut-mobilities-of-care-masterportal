@@ -7,8 +7,7 @@ define([
     "modules/layer/Layer",
     "modules/layer/wfsStyle/list",
     "modules/core/util",
-    "modules/core/mapView",
-    "modules/wfslist/view"
+    "modules/core/mapView"
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
     var WFSLayer = Layer.extend({
         updateData: function () {

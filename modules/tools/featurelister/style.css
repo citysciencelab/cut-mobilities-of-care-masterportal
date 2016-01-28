@@ -1,9 +1,58 @@
 /***** Destop *****/
+.wfslist-list-button {
+    position: relative;
+    left: 35%;
+    display: none;
+}
+
+.wfslist-details-li {
+    cursor: text;
+}
+
+.wfslist-details-ul {
+    max-height: 400px;;
+    overflow: auto;
+    cursor: auto;
+}
+
+.wfslist-list-table-td {
+    height: 15px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+.wfslist-list-table-tr{
+    cursor: pointer;
+}
+
+.wfslist-details {
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    max-height: 800px;
+}
+
+.wfslist-list {
+    display: none;
+    max-width:500px;
+
+}
+
+.wfslist-list-table {
+    max-height: 400px;
+}
+
+.wfslist-themes {
+    width: 100%;
+}
+
 .wfslist-win {
     position: absolute;
     top: 20px;
     left: 20px;
-    min-width: 40%;
+    min-width: 25%;
     margin: 60px 10px 30px 10px;
     display: none;
     background-color: rgb(255, 255, 255);

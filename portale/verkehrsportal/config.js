@@ -172,6 +172,11 @@ define(function () {
             coord: {
                 title: "Koordinate abfragen",
                 glyphicon: "glyphicon-screenshot"
+            },
+            featureLister: {
+                title: "Feature-Lister",
+                maxFeatures: 0,
+                glyphicon: "glyphicon-menu-hamburger"
             }
         }
     };

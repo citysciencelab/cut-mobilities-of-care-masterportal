@@ -427,6 +427,11 @@ define(function () {
         * @property {string} [tools.searchByCoord.title] - Der Title in der Liste unter Werkzeuge.
         * @property {string} [tools.searchByCoord.glyphicon] - Das Glyphicon (Bootstrap Class).
         * @property {Boolean} [tools.searchByCoord.isActive] - Tool initial aktiviert.
+        * @property {Object} [tools.featureLister] - Konfigurationseinstellung des FeatureListers.
+        * @property {string} [tools.featureLister.title] - Der Title in der Liste unter Werkzeuge.
+        * @property {integer} [tools.featureLister.maxFeatures=20] - Gibt an, wieviele Features initial in den Table geladen werden sollen. maxFeatures > 0.
+        * @property {string} [tools.featureLister.glyphicon] - Das Glyphicon (Bootstrap Class).
+        * @property {Boolean} [tools.featureLister.isActive=false] - Tool initial aktiviert.
         */
         tools: {
             parcelSearch: {
@@ -457,6 +462,12 @@ define(function () {
             searchByCoord: {
                 title: "Koordinatensuche",
                 glyphicon: "glyphicon-search"
+            },
+            featureLister: {
+                title: "Feature-Lister",
+                maxFeatures: 0,
+                glyphicon: "glyphicon-menu-hamburger",
+                isActive: true
             }
         },
         /**

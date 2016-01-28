@@ -144,6 +144,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new SearchByCoordView();
                         });
                     }
+                    if (_.has(Config.tools, "featureLister") === true) {
+                        require(["modules/tools/featurelister/view"], function (FeatureLister) {
+                            new FeatureLister();
+                        });
+                    }
                 }
                 if (Config.menu.treeFilter === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
