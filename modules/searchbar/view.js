@@ -94,12 +94,17 @@ define([
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": "collapseHits",
+            "click .list-group-item.type": function () {
+                this.collapseHits($(event.target));
+            },
             "click .btn-search-question": function () {
                 EventBus.trigger("showWindowHelp", "search");
             },
             "keydown": "navigateList",
-            "click": "clearSelection"
+            "click": function () {
+                this.clearSelection();
+                $("#searchInput").focus();
+            }
         },
         /**
         *
@@ -232,7 +237,7 @@ define([
                 }
                 if (event.keyCode === 13) {
                     if (this.isFolderElement(selected)) {
-                        this.collapseHits(slected.event);
+                        this.collapseHits(selected);
                     }
                     else {
                         selected.click();
@@ -403,7 +408,7 @@ define([
         /**
         *
         */
-        collapseHits: function (evt) {
+        /*collapseHits: function (evt) {
             $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
             if ($(evt.currentTarget.nextElementSibling).css("display") === "block") {
                 $(evt.currentTarget.nextElementSibling).hide("slow");
@@ -413,6 +418,18 @@ define([
                 $(evt.currentTarget.nextElementSibling).show("slow");
                 $(evt.currentTarget).addClass("open");
                 $(evt.currentTarget).siblings().removeClass("open");
+            }
+        },*/
+        collapseHits: function (target) {
+            $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
+            if (target.next().css("display") === "block") {
+                target.next().hide("slow");
+                target.removeClass("open");
+            }
+            else {
+                target.next().show("slow");
+                target.addClass("open");
+                target.siblings().removeClass("open");
             }
         },
         /**
