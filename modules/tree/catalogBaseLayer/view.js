@@ -1,7 +1,8 @@
 define([
     "backbone",
-    "text!modules/tree/catalogBaseLayer/template.html"
-    ], function (Backbone, NodeLayerTemplate) {
+    "text!modules/tree/catalogBaseLayer/template.html",
+    "eventbus"
+], function (Backbone, NodeLayerTemplate, EventBus) {
 
         var NodeLayerView = Backbone.View.extend({
             className: "list-group-item base-layer",
@@ -34,8 +35,12 @@ define([
                 this.model.openMetadata();
             },
             toggleStyle: function () {
+                if (this.model.get("visibility") === true) {
+                    this.model.set("selected", true);
+                }
                 if (this.model.get("selected") === true) {
                     this.$el.css("color", "rgb(255, 127, 0)");
+                    EventBus.trigger("addModelToSelectionList", this.model);
                 }
                 else {
                     this.$el.css("color", "rgb(85, 85, 85)");
