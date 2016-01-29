@@ -265,17 +265,6 @@ define([
        getFirstChildElement: function (selected) {
             return selected.next().children().first();
         },
-      /*  // Berechnet ob das element im sichtbaren ausschnitt ist
-        isElementVisible: function (element) {
-           var viewport = {};
-            viewport.top = 0; // element.parent().scrollTop();
-            viewport.bottom = element.parent().height(); // + viewport.top
-            var bounds = {};
-            // Das oberste Element fängt nicht bei null an warum ist nicht klar.
-            bounds.top = element.position().top - element.innerHeight();
-            bounds.bottom = bounds.top + element.outerHeight();
-            return ((bounds.bottom <= viewport.bottom) && (bounds.top >= viewport.top));
-        },*/
         isFolderElement: function (element) {
             return element.hasClass("type");
         },
@@ -324,7 +313,6 @@ define([
                     }
                 }
                 else {
-                    // $.next() funktioniert hier nicht wg der Div zwischen den li
                     next = this.getNextElement(selected);
                     this.scrollToNext(selected);
                 }
@@ -405,21 +393,6 @@ define([
                 $("#searchInput + span").hide();
             }
         },
-        /**
-        *
-        */
-        /*collapseHits: function (evt) {
-            $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
-            if ($(evt.currentTarget.nextElementSibling).css("display") === "block") {
-                $(evt.currentTarget.nextElementSibling).hide("slow");
-                $(evt.currentTarget).removeClass("open");
-            }
-            else {
-                $(evt.currentTarget.nextElementSibling).show("slow");
-                $(evt.currentTarget).addClass("open");
-                $(evt.currentTarget).siblings().removeClass("open");
-            }
-        },*/
         collapseHits: function (target) {
             $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
             if (target.next().css("display") === "block") {
