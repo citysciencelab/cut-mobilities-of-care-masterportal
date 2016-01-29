@@ -17,7 +17,7 @@ define([
             featureProps: {} // Properties des Features mit gesuchter featureid
         },
         initialize: function () {
-            this.set("maxFeatures", Config.featureLister);
+            this.set("maxFeatures", Config.menu.featureLister);
 
             EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
 
@@ -76,6 +76,10 @@ define([
                     this.addLayerToList(layer);
                 }
             }, this);
+            // wenn nur ein Layer gefunden, lade diesen sofort
+            if (this.get("layerlist").length === 1) {
+                this.set("layerid", this.get("layerlist")[0].id);
+            }
         },
         getFeatureList: function (layer) {
             var gfiAttributes = layer.get("gfiAttributes"),
