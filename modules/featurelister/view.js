@@ -5,7 +5,8 @@ define([
     "text!modules/featurelister/template.html",
     "modules/featurelister/model",
     "modules/core/util",
-    "modules/menubar/view"
+    "modules/menubar/view",
+    "jqueryui/draggable"
 ], function (Backbone, EventBus, Config, Template, Model, Util) {
 
     var WFSListView = Backbone.View.extend({
@@ -181,6 +182,10 @@ define([
 
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".wfslist-win-header"
+            });
         },
         toggle: function () {
             this.$el.toggle();
