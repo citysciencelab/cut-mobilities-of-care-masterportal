@@ -284,6 +284,7 @@ define(function () {
         * @property {string}  menu.formular.title - Bezeichnung des Formulars
         * @property {string}  menu.formular.symbol - Symbolname
         * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
+        * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
         * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
         * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
         * @todo helpButton
@@ -294,6 +295,7 @@ define(function () {
             layerTree: true,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
+            featureLister: 20,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
@@ -427,11 +429,6 @@ define(function () {
         * @property {string} [tools.searchByCoord.title] - Der Title in der Liste unter Werkzeuge.
         * @property {string} [tools.searchByCoord.glyphicon] - Das Glyphicon (Bootstrap Class).
         * @property {Boolean} [tools.searchByCoord.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.featureLister] - Konfigurationseinstellung des FeatureListers.
-        * @property {string} [tools.featureLister.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {integer} [tools.featureLister.maxFeatures=20] - Gibt an, wieviele Features initial in den Table geladen werden sollen. maxFeatures > 0.
-        * @property {string} [tools.featureLister.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.featureLister.isActive=false] - Tool initial aktiviert.
         */
         tools: {
             parcelSearch: {
@@ -462,12 +459,6 @@ define(function () {
             searchByCoord: {
                 title: "Koordinatensuche",
                 glyphicon: "glyphicon-search"
-            },
-            featureLister: {
-                title: "Feature-Lister",
-                maxFeatures: 0,
-                glyphicon: "glyphicon-menu-hamburger",
-                isActive: true
             }
         },
         /**

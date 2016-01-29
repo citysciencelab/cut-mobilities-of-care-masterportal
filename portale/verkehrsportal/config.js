@@ -137,7 +137,8 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: true,
-            addWMS: false
+            addWMS: false,
+            featureLister: 20
         },
         startUpModul: "",
         clickCounter: {
@@ -172,11 +173,6 @@ define(function () {
             coord: {
                 title: "Koordinate abfragen",
                 glyphicon: "glyphicon-screenshot"
-            },
-            featureLister: {
-                title: "Feature-Lister",
-                maxFeatures: 0,
-                glyphicon: "glyphicon-menu-hamburger"
             }
         }
     };

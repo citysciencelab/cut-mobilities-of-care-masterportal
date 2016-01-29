@@ -144,11 +144,6 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new SearchByCoordView();
                         });
                     }
-                    if (_.has(Config.tools, "featureLister") === true) {
-                        require(["modules/tools/featurelister/view"], function (FeatureLister) {
-                            new FeatureLister();
-                        });
-                    }
                 }
                 if (Config.menu.treeFilter === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
@@ -192,6 +187,11 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                     require(["modules/addwms/view"
                         ], function (AddWMSView) {
                         new AddWMSView();
+                    });
+                }
+                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0) {
+                    require(["modules/featurelister/view"], function (FeatureLister) {
+                        new FeatureLister();
                     });
                 }
                 if ($.isArray(Config.menu.formular)) {

@@ -24,7 +24,7 @@ define([
         activateTool: function () {
             if (this.get("isActive") === true) {
                 EventBus.trigger("activateClick", this.get("name"));
-                if (this.get("name") !== "gfi" && this.get("name") !== "coord" && this.get("name") !== "featureLister") {
+                if (this.get("name") !== "gfi" && this.get("name") !== "coord") {
                     EventBus.trigger("toggleWin", [this.get("name"), this.get("title"), this.get("glyphicon")]);
                 }
                 else {

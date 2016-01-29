@@ -31,11 +31,19 @@
                     </ul>
                 </li>
             <% } %>
-            <% if (routing === true) { %>
+            <% if (typeof routing !== "undefined" && routing === true) { %>
                 <li>
                     <a href="#" class="menuitem routingModul">
                         <span class="glyphicon glyphicon-road hidden-sm"></span>
                         <span class="menuitem">Routenplaner</span>
+                    </a>
+                </li>
+            <% } %>
+            <% if (typeof featureLister !== "undefined" && featureLister > 0) { %>
+                <li>
+                    <a href="#" class="menuitem featureLister">
+                        <span class="glyphicon glyphicon-menu-hamburger hidden-sm"></span>
+                        <span class="menuitem">Featureliste</span>
                     </a>
                 </li>
             <% } %>

@@ -17,9 +17,8 @@ define([
             featureProps: {} // Properties des Features mit gesuchter featureid
         },
         initialize: function () {
-            if (Config.tools.featureLister.maxFeatures) {
-                this.set("maxFeatures", Config.tools.featureLister.maxFeatures);
-            }
+            this.set("maxFeatures", Config.featureLister);
+
             EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
 
             this.listenTo(this, {"change:layerid": this.createList});

@@ -28,7 +28,8 @@ define([
             "click .legend": "activateLegend",
             "click .routingModul": "activateRoutingModul",
             "click .addWMS": "activateAddWMSModul",
-            "click .wfsFeatureFilter": "activateWfsFeatureFilter"
+            "click .wfsFeatureFilter": "activateWfsFeatureFilter",
+            "click .featureLister": "activateFeatureLister"
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -64,6 +65,9 @@ define([
             $("." + obj.classname).on("click", function (evt) {
                 EventBus.trigger("toggleWin", [evt.target.className.split(" ")[1], evt.target.text, evt.target.children[0].className]);
             });
+        },
+        activateFeatureLister: function () {
+            EventBus.trigger("toggleFeatureListerWin");
         },
         activateFilterTree: function () {
             EventBus.trigger("toggleWin", ["treefilter", "Filtereinstellungen", "glyphicon-filter"]);

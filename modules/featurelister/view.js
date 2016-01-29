@@ -2,9 +2,10 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "text!modules/tools/featurelister/template.html",
-    "modules/tools/featurelister/model",
-    "modules/core/util"
+    "text!modules/featurelister/template.html",
+    "modules/featurelister/model",
+    "modules/core/util",
+    "modules/menubar/view"
 ], function (Backbone, EventBus, Config, Template, Model, Util) {
 
     var WFSListView = Backbone.View.extend({
@@ -28,8 +29,9 @@ define([
                 this.listenTo(this.model, {"change:layer": this.updateLayerList});
                 this.listenTo(this.model, {"change:layer": this.switchTabToListe});
                 this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
+                this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
                 this.render();
-                if (Config.tools.featureLister.isActive === true) {
+                if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
                     this.toggle();
                 }
             }
