@@ -4,8 +4,10 @@ define([
     "text!modules/searchbar/templateRecommendedList.html",
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
-    "eventbus"
-    ], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus) {
+    "eventbus",
+    "config",
+    "backbone.radio"
+], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config, Radio) {
     "use strict";
     return Backbone.View.extend({
         model: Searchbar,
@@ -76,6 +78,11 @@ define([
             if (_.has(config, "tree") === true) {
                 require(["modules/searchbar/tree/model"], function (TreeModel) {
                     new TreeModel(config.tree);
+                });
+            }
+            if (_.has(config, "layer") === true) {
+                require(["modules/searchbar/layer/model"], function (LayerSearch) {
+                    new LayerSearch(config.layer);
                 });
             }
         },
@@ -173,19 +180,23 @@ define([
         * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
-            var hit;
+            var hit,
+                hitID;
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
-                var hitID = evt.currentTarget.id;
-
+                hitID = evt.currentTarget.id;
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
             }
             else {
                 hit = this.model.get("hitList")[0];
+            }
+            // 0. Füge Layer ggf. zum Themenbaum hinzu
+            if (_.isUndefined(hitID) === false && Config.tree.type === "light") {
+                Radio.trigger("RawLayerList", "addModelToLayerListById", hitID);
             }
             // 1. Schreibe Text in Searchbar
             if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
