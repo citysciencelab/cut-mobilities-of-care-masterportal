@@ -41,6 +41,12 @@ define(function () {
             zoom: true,
             toggleMenu: true
         },
+        feature_count: [
+            {
+                id: 1561,
+                count: 5
+            }
+        ],
         view: {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],
@@ -79,7 +85,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
