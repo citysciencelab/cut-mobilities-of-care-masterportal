@@ -41,6 +41,12 @@ define(function () {
             zoom: true,
             toggleMenu: true
         },
+        feature_count: [
+            {
+                id: 1561,
+                count: 5
+            }
+        ],
         view: {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],
@@ -55,7 +61,7 @@ define(function () {
 
         print: {
             printID: "99999",
-            title: "Architekten-Portal",
+            title: "Grundstücksbezogene Fachinformationen",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi",
