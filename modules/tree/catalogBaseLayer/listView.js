@@ -9,9 +9,7 @@ define([
         tagName: "ul",
         className: "list-group base-layer-list",
         initialize: function () {
-            this.listenTo(this.collection, "add", this.render);
-            this.collection.on("add", this.render, this);
-            this.collection.on("sync", this.render, this);
+            this.collection.on("reset", this.render, this);
             this.setMaxHeight();
             this.render();
         },

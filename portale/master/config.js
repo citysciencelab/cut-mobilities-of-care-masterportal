@@ -378,6 +378,9 @@ define(function () {
             visibleWFS: {
                 minChars: 3
             },
+            layer: {
+                minChar: 3
+            },
             placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
             geoLocateHit: true
         },

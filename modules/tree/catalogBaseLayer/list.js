@@ -1,25 +1,23 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus"
-], function (Backbone, EventBus) {
+], function (Backbone, Radio, EventBus) {
 
     var List = Backbone.Collection.extend({
-
+        comparator: "name",
         initialize: function () {
-            this.listenToOnce(EventBus, {
+            this.listenTo(EventBus, {
                 "layerlist:sendBaselayerList": this.addBaseLayer
             });
-            EventBus.trigger("layerlist:getBaselayerList");
+
+            this.addBaseLayer();
         },
 
-        addBaseLayer: function (baselayer) {
-            baselayer = _.sortBy(baselayer, function (layer) {
-                return layer.get("name");
-            });
+        addBaseLayer: function () {
+            var baseLayer = Radio.request("LayerList", "getLayerListWhere", {isbaselayer: true});
 
-            _.each(baselayer, function (layer) {
-                this.add(layer);
-            }, this);
+            this.reset(baseLayer);
         }
     });
 
