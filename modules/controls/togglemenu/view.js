@@ -5,7 +5,7 @@ define([
 
     var ToggleControlView = Backbone.View.extend({
         className: "row",
-        template: _.template("<div class='toggleButton col-md-1'><span class='glyphicon glyphicon-chevron-up'></span></div>"),
+        template: _.template("<div class='toggleButton col-md-1' title='Menü ausblenden'><span class='glyphicon glyphicon-chevron-up'></span></div>"),
         events: {
             "click .glyphicon-chevron-up, .glyphicon-chevron-down": "toggleNavigation"
         },
@@ -24,9 +24,11 @@ define([
             $(".toggleButton > span").toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
             if ($(".controls-view").css("top") === "0px") {
                 $(".controls-view").css("top", "50px");
+                $(".toggleButton").attr("title", "Menü ausblenden");
             }
             else {
                 $(".controls-view").css("top", "0px");
+                $(".toggleButton").attr("title", "Menü einblenden");
             }
         }
     });

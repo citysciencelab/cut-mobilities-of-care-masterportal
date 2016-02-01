@@ -4,13 +4,16 @@ define([
     "text!modules/searchbar/templateRecommendedList.html",
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
-    "eventbus"
-    ], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus) {
+    "eventbus",
+    "config",
+    "backbone.radio"
+], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config, Radio) {
     "use strict";
     return Backbone.View.extend({
         model: Searchbar,
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
+        searchbarKeyNavSelector: "#searchInputUL",
         template: _.template(SearchbarTemplate),
         /**
         * @description View der Searchbar
@@ -43,7 +46,10 @@ define([
             EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
 
             // this.listenTo(this.model, "change:searchString", this.render);
-            this.listenTo(this.model, "change:recommendedList", this.renderRecommendedList);
+            this.listenTo(this.model, "change:recommendedList", function () {
+                this.renderRecommendedList();
+            });
+
             this.render();
             $(window).on("orientationchange", function () {
                 this.render();
@@ -78,8 +84,14 @@ define([
                     new TreeModel(config.tree);
                 });
             }
+            if (_.has(config, "layer") === true) {
+                require(["modules/searchbar/layer/model"], function (LayerSearch) {
+                    new LayerSearch(config.layer);
+                });
+            }
         },
         events: {
+            "paste input": "setSearchString",
             "keyup input": "setSearchString",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
@@ -89,9 +101,16 @@ define([
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": "collapseHits",
+            "click .list-group-item.type": function () {
+                this.collapseHits($(event.target));
+            },
             "click .btn-search-question": function () {
                 EventBus.trigger("showWindowHelp", "search");
+            },
+            "keydown": "navigateList",
+            "click": function () {
+                this.clearSelection();
+                $("#searchInput").focus();
             }
         },
         /**
@@ -172,19 +191,23 @@ define([
         * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
-            var hit;
+            var hit,
+                hitID;
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
-                var hitID = evt.currentTarget.id;
-
+                hitID = evt.currentTarget.id;
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
             }
             else {
                 hit = this.model.get("hitList")[0];
+            }
+            // 0. Füge Layer ggf. zum Themenbaum hinzu
+            if (_.isUndefined(hitID) === false && Config.tree.type === "light") {
+                Radio.trigger("RawLayerList", "addModelToLayerListById", hitID);
             }
             // 1. Schreibe Text in Searchbar
             if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
@@ -202,11 +225,164 @@ define([
             // 5. Beende Event
             evt.stopPropagation();
         },
+        navigateList: function () {
+            var selected = {},
+            firstListElement = {};
+
+            if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
+                var selected =  this.getSelectedElement(),
+                firstListElement = this.getFirstElement();
+            }
+
+            if (selected.length === 0) {
+                firstListElement.addClass("selected");
+            }
+            else {
+                // uparrow
+                if (event.keyCode === 38) {
+                      this.prevElement(selected);
+                }
+                // down arrow
+                if (event.keyCode === 40) {
+                    this.nextElement(selected);
+                }
+                if (event.keyCode === 13) {
+                    if (this.isFolderElement(selected)) {
+                        this.collapseHits(selected);
+                    }
+                    else {
+                        selected.click();
+                    }
+                }
+            }
+        },
+        getSelectedElement: function () {
+            return this.$el.find(this.searchbarKeyNavSelector + " .selected");
+        },
+
+        clearSelection: function () {
+            this.getSelectedElement().removeClass("selected");
+        },
+        isLastElement : function (element) {
+            return element.is(":last-child");
+        },
+        isFirstElement : function (element) {
+            return element.is(":first-child");
+        },
+        isChildElement: function (element) {
+            return (element.parent().prev().hasClass("type"));
+        },
+
+       getFirstChildElement: function (selected) {
+            return selected.next().children().first();
+        },
+        isFolderElement: function (element) {
+            return element.hasClass("type");
+        },
+
+        scrollToNext: function (li) {
+            var parent = li.parent(),
+            pos = parent.scrollTop(),
+            scrollHeight = pos + li.outerHeight(true);
+
+            parent.scrollTop(scrollHeight);
+        },
+        scrollToPrev: function (li) {
+            var parent = li.parent(),
+            pos = parent.scrollTop(),
+            scrollHeight = pos - li.outerHeight(true);
+
+            parent.scrollTop(scrollHeight);
+        },
+        resetScroll: function (element) {
+            element.scrollTop(0);
+        },
+
+        nextElement: function (selected) {
+            selected.removeClass("selected");
+            var next = {};
+
+            if (this.isFolderElement(selected) && selected.hasClass("open")) {
+                next = this.getFirstChildElement(selected);
+                this.resetScroll(selected.nextAll("div:first"));
+            }
+            else {
+                if (this.isLastElement(selected)) {
+                    if (this.isChildElement(selected)) {
+                        if (this.isLastElement(selected.parent())) {
+                           this.getFirstElement().addClass("selected");
+                           return;
+                        }
+                        else {
+                            next = this.getNextElement(selected.parent());
+                            this.scrollToNext(selected);
+                        }
+                    }
+                    else {
+                        this.getFirstElement().addClass("selected");
+                        return;
+                    }
+                }
+                else {
+                    next = this.getNextElement(selected);
+                    this.scrollToNext(selected);
+                }
+            }
+            next.addClass("selected");
+
+        },
+
+        getNextElement: function (selected) {
+            return selected.nextAll("li:first");
+        },
+
+        prevElement: function (selected) {
+            selected.removeClass("selected");
+            var prev = {};
+
+            if (this.isFirstElement(selected)) {
+                if (this.isChildElement(selected)) {
+                    // child
+                    prev = selected.parent().prevAll("li:first");
+                    this.resetScroll(selected.parent());
+                }
+                else {
+                    // Folder
+                    return;
+                }
+            }
+            else {
+                prev = selected.prevAll("li:first");
+                if (this.isFolderElement(selected)) {
+                    this.resetScroll(selected.prevAll("div:first"));
+                }
+                else {
+                    this.scrollToPrev(selected);
+                }
+            }
+            prev.addClass("selected");
+        },
+        getFirstElement: function () {
+            return this.$el.find(this.searchbarKeyNavSelector + " li").first();
+        },
+        getLastElement: function () {
+            return this.$el.find(this.searchbarKeyNavSelector + " li").last();
+        },
+
+
         /**
         *
         */
         setSearchString: function (evt) {
-            if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40) {
+            if (evt.type === "paste") {
+                var that = this;
+
+                // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+                setTimeout(function () {
+                    that.model.setSearchString(evt.target.value, evt.type);
+                }, 0);
+            }
+            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length === 1) {
                         this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -219,6 +395,8 @@ define([
                     this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                 }
             }
+
+            // Der "x-Button" in der Suchleiste
             if (evt.target.value.length > 0) {
                 $("#searchInput + span").show();
             }
@@ -226,16 +404,16 @@ define([
                 $("#searchInput + span").hide();
             }
         },
-        /**
-        *
-        */
-        collapseHits: function (evt) {
+        collapseHits: function (target) {
             $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
-            if ($(evt.currentTarget.nextElementSibling).css("display") === "block") {
-                $(evt.currentTarget.nextElementSibling).hide("slow");
+            if (target.next().css("display") === "block") {
+                target.next().hide("slow");
+                target.removeClass("open");
             }
             else {
-                $(evt.currentTarget.nextElementSibling).show("slow");
+                target.next().show("slow");
+                target.addClass("open");
+                target.siblings().removeClass("open");
             }
         },
         /**
@@ -269,6 +447,7 @@ define([
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
             EventBus.trigger("mapHandler:clearMarker", this);
+            this.clearSelection();
         },
         /**
         *

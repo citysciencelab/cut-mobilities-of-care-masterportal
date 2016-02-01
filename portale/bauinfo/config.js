@@ -27,8 +27,8 @@ define(function () {
                 }
             ],
             baseLayer: [
-            {id: "94", visibility: false}, // luftbilder unbelaubt
-            {id: "756", visibility: false}, // luftbilder belaubt
+            {id: "8", visibility: false}, // luftbilder unbelaubt
+            {id: "148", visibility: false}, // luftbilder belaubt
             {id: "713", visibility: false}, // stadtplan s-w
             {id: "717", visibility: false}, // stadtplan farbig
             {id: "1043", visibility: true}, // stadtplan g-b
@@ -41,6 +41,12 @@ define(function () {
             zoom: true,
             toggleMenu: true
         },
+        feature_count: [
+            {
+                id: 1561,
+                count: 5
+            }
+        ],
         view: {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],
@@ -72,14 +78,14 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -91,6 +97,10 @@ define(function () {
             geoLocateHit: true
         },
         tools: {
+            parcelSearch: {
+                title: "Flurstückssuche",
+                glyphicon: "glyphicon-search"
+            },
             gfi: {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
@@ -107,8 +117,17 @@ define(function () {
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
             }
         },
+        gemarkungen: "../components/lgv-config/gemarkung.json",
         orientation: false,
         poi: false
     };

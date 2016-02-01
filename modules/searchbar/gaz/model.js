@@ -32,6 +32,12 @@ define([
          * @param {string} [initialQuery] - Initialer Suchstring.
          */
         initialize: function (config, initialQuery) {
+            this.listenTo(EventBus, {
+                "setPastedHouseNumber": this.setPastedHouseNumber,
+                "searchbar:search": this.search,
+                "gaz:adressSearch": this.adressSearch
+            });
+
             this.set("gazetteerURL", config.url);
             if (config.searchStreets) {
                 this.set("searchStreets", config.searchStreets);
@@ -48,12 +54,16 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            EventBus.on("searchbar:search", this.search, this);
-            EventBus.on("gaz:adressSearch", this.adressSearch, this);
             if (initialQuery && _.isString(initialQuery) === true) {
                 this.directSearch(initialQuery);
             }
         },
+
+        // für Copy/Paste bei Adressen
+        setPastedHouseNumber: function (value) {
+            this.set("pastedHouseNumber", value);
+        },
+
         /**
         *
         */
@@ -203,13 +213,27 @@ define([
         searchInHouseNumbers: function () {
             var address;
 
-            _.each(this.get("houseNumbers"), function (houseNumber) {
-                address = houseNumber.name.replace(/ /g, "");
-                // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (address.search(this.get("searchStringRegExp")) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
-                }
-            }, this);
+            // Adressuche über Copy/Paste
+            if (this.get("pastedHouseNumber") !== undefined) {
+                _.each(this.get("houseNumbers"), function (houseNumber) {
+                    address = houseNumber.name.replace(/ /g, "");
+                    var number = houseNumber.adress.housenumber + houseNumber.adress.affix;
+
+                    if (number === this.get("pastedHouseNumber")) {
+                        EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
+                    }
+                }, this);
+                this.unset("pastedHouseNumber");
+            }
+            else {
+                _.each(this.get("houseNumbers"), function (houseNumber) {
+                    address = houseNumber.name.replace(/ /g, "");
+
+                    if (address.search(this.get("searchStringRegExp")) !== -1) {
+                        EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
+                    }
+                }, this);
+            }
         },
         /**
          * [getHouseNumbers description]

@@ -7,12 +7,10 @@ define([
     "modules/layer/GeoJSONLayer",
     "config",
     "eventbus",
-    "modules/core/util",
     "modules/featurelister/model" // featureLister muss schon geladen sein, damit dieses Event initial empfangen kann
-], function (Backbone, Radio, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus, Util) {
+], function (Backbone, Radio, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus) {
 
     var LayerList = Backbone.Collection.extend({
-        url: Util.getPath(Config.layerConf),
         model: function (attrs, options) {
             if (attrs.typ === "WMS") {
                 return new WMSLayer(attrs, options);
@@ -32,17 +30,26 @@ define([
             var channel = Radio.channel("LayerList");
 
             channel.reply({
+                "getLayerList": function () {
+                    return this.models;
+                },
+                "getLayerListAttributes": function () {
+                    return this.toJSON();
+                },
                 "getLayerListWhere": function (properties) {
                     return this.where(properties);
+                }
+            }, this);
+
+            channel.on({
+                "addModel": function (model) {
+                    this.add(model);
                 }
             }, this);
 
             this.listenTo(EventBus, {
                 "layerlist:getOverlayerList": function () {
                     EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
-                },
-                "layerlist:getBaselayerList": function () {
-                    EventBus.trigger("layerlist:sendBaselayerList", this.where({isbaselayer: true}));
                 },
                 "layerlist:getVisiblelayerList": function () {
                     EventBus.trigger("layerlist:sendVisiblelayerList", this.where({visibility: true}));
@@ -75,6 +82,9 @@ define([
                 "layerlist:addNewModel": function (model) {
                     this.addExternalLayer(model);
                 },
+                "layerlist:addModel": function (model) {
+                    console.log(model);
+                },
                 "layerList:sendExternalFolders": this.sendExternalNodeNames,
                 "getNodeNames": this.sendNodeNames,
                 "layerlist:getLayerListForNode": function (nodeName) {
@@ -104,50 +114,39 @@ define([
                     EventBus.trigger("layerlist:sendVisibleWFSlayerList", loadedWFS);
                     EventBus.trigger("layerlist:sendVisiblelayerList", this.where({visibility: true}));
                 },
-                "sync": function () {
-                    EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
-                    if (Config.tree.type === "default") {
-                        this.sendNodeNames();
+                "reset": function (models, options) {
+                    var previousModels = options.previousModels;
+
+                    // gelöschte Models müssen auf der Karte immer entfernt werden.
+                    if (previousModels.length) {
+                        _.each(previousModels, function (prevModel) {
+                            EventBus.trigger("removeLayer", prevModel.get("layer"));
+                        }, this);
                     }
+
+                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
+                    this.cloneByStyle();
+                    EventBus.trigger("mapView:getOptions");
+                    EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
                     if (Config.tree.type === "light") {
-                        this.forEach(function (model) {
+                        this.forEach(function (model) {// erst noch removen?
                             EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
                         }, this);
                     }
-                    EventBus.trigger("layerlist:updateOverlayerSelection");
+                    EventBus.trigger("layerlist:sendBaselayerList");
                 }
             });
+
             this.fetchLayer();
         },
 
-        // Holt sich die Layer aus der services-*.json.
-        // Zuvor werden die Geofachdaten aus der Auswahl gelöscht.
         fetchLayer: function () {
-            EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true, "isbaselayer": false}));
+            var response = Radio.request("RawLayerList", "getLayerList");
 
-            this.fetch({
-                cache: false,
-                async: false,
-                reset: true,
-                error: function () {
-                    EventBus.trigger("alert", {
-                        text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
-                        kategorie: "alert-warning"
-                    });
-                },
-                success: function (collection) {
-                    // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
-                    if (Config.tree.type === "default") {
-                        collection.resetModels();
-                    }
-                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
-                    collection.cloneByStyle();
-                    EventBus.trigger("mapView:getOptions");
-                }
-            });
-        },
+            if (this.length) {
+                EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true}));
+            }
 
-        parse: function (response) {
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config.tree, "type") && Config.tree.type === "default") {
                 // nur vom Typ WMS
@@ -165,7 +164,10 @@ define([
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
-                return response;
+
+                this.reset(response);
+                this.resetModels();
+                this.sendNodeNames();
             }
             // Ansonsten Layer über ID
             else if (_.has(Config.tree, "type") && Config.tree.type === "light" || Config.tree.type === "custom") {
@@ -231,18 +233,8 @@ define([
                     }
                 });
                 this.setBaseLayer(modelsArray);
-                if (_.has(Config, "tree")) {
-                    this.setLayerStyle(modelsArray);
-                }
-                return modelsArray;
-            }
-            else {
-                if (!_.has(Config.tree, "type")) {
-                    EventBus.trigger("alert", "Config.tree.type nicht vorhanden");
-                }
-                else {
-                    EventBus.trigger("alert", "Config.tree nicht vorhanden");
-                }
+                this.setLayerStyle(modelsArray);
+                this.reset(modelsArray);
             }
         },
 

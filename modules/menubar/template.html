@@ -13,7 +13,7 @@
             <ul class="menubarlgv nav navbar-nav">
             <% if (layerTree === true) { %>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Themenbaum öffnen">
                         <span class="glyphicon glyphicon-list hidden-sm"></span>
                         <span class="menuitem">Themen</span>
                     </a>
@@ -23,7 +23,7 @@
             <% } %>
             <% if (tools === true && oneTool === false) { %>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Werkzeug auswählen">
                         <span class="glyphicon glyphicon-wrench hidden-sm"></span>
                         <span class="menuitem">Werkzeuge</span>
                     </a>
@@ -33,7 +33,7 @@
             <% } %>
             <% if (typeof routing !== "undefined" && routing === true) { %>
                 <li>
-                    <a href="#" class="menuitem routingModul">
+                    <a href="#" class="menuitem routingModul" title="Routenplaner öffnen">
                         <span class="glyphicon glyphicon-road hidden-sm"></span>
                         <span class="menuitem">Routenplaner</span>
                     </a>
@@ -49,7 +49,7 @@
             <% } %>
             <% if (typeof addWMS !== "undefined" && addWMS === true) { %>
                 <li>
-                    <a href="#" title="WMS Hinzufügen" class="menuitem addWMS">
+                    <a href="#" title="WMS Hinzufügen" class="menuitem addWMS" title="WMS hinzufügen">
                         <span class="glyphicon glyphicon-plus hidden-sm"></span>
                         <span class="menuitem">WMS</span>
                     </a>
@@ -57,7 +57,7 @@
             <% } %>
             <% if (wfsFeatureFilter === true) { %>
                 <li>
-                    <a href="#" class="menuitem wfsFeatureFilter">
+                    <a href="#" class="menuitem wfsFeatureFilter" title="Filter öffnen">
                         <span class="glyphicon glyphicon-filter hidden-sm"></span>
                         <span class="menuitem">Filter</span>
                     </a>
@@ -65,7 +65,7 @@
             <% } %>
             <% if (treeFilter === true) { %>
                 <li>
-                    <a href="#" class="filterTree">
+                    <a href="#" class="filterTree" title="Baumfilter öffnen">
                         <span class="glyphicon glyphicon-leaf hidden-sm"></span>
                         <span class="menuitem">Filter</span>
                     </a>
@@ -73,7 +73,7 @@
             <% } %>
             <% if (legend === true) { %>
                 <li>
-                    <a href="#" class="legend">
+                    <a href="#" class="legend" title="Legende anzeigen">
                         <span class="glyphicon glyphicon-book hidden-sm"></span>
                         <span class="menuitem">Legende</span>
                     </a>
@@ -81,7 +81,7 @@
             <% } %>
             <% if (helpButton === true) { %>
                 <li>
-                    <a href="#">
+                    <a href="#" title="Hilfe">
                         <span class="glyphicon glyphicon-question-sign hidden-sm">
                         <span class="menuitem">Hilfe</span>
                     </a>
@@ -93,7 +93,7 @@
                var mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t\n\n Systeminformationen: \n Platform: " + platform + "\n CookiesEnabled: " + cookieEnabled + "\n UserAgent: " + userAgent);
                %></%>
                 <li>
-                    <a href=<%= mailto %>>
+                    <a href=<%= mailto %> title="E-Mail Kontakt">
                         <span class="glyphicon glyphicon-envelope hidden-sm"></span>
                         <span class="menuitem">Kontakt</span>
                     </a>
