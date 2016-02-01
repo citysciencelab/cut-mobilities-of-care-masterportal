@@ -2,10 +2,10 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "modules/core/requestor",
+    "modules/core/requestor"
 ], function (Backbone, EventBus, Config, Requestor) {
 
-    var WFSListModel = Backbone.Model.extend({
+    var FeatureListerModel = Backbone.Model.extend({
         defaults: {
             maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
             isActive: false,
@@ -24,6 +24,9 @@ define([
             this.listenTo(this, {"change:layerid": this.createList});
             this.listenTo(this, {"change:featureid": this.showFeature});
         },
+        /*
+        * Nimmt selektiertes Feature, wertet dessen Properties aus und zoomt ggf. auf Feature
+        */
         showFeature: function () {
             var featureid = this.get("featureid"),
                 features = this.get("layer").features,
@@ -43,6 +46,9 @@ define([
             // Zeigen der Details
             this.set("featureProps", properties);
         },
+        /*
+        * Ruft über EventBus Hover des selektierten Features
+        */
         showMarker: function (id) {
             var features = this.get("layer").features,
                 feature = _.find(features, function (feat) {
@@ -57,6 +63,9 @@ define([
                 });
             }
         },
+        /*
+        * Merkt sich selektierten Layer.
+        */
         createList: function () {
             var layers = this.get("layerlist"),
                 layer = _.find(layers, {id: this.get("layerid")});
@@ -65,6 +74,9 @@ define([
                 this.set("layer", layer);
             }
         },
+        /*
+        * Werter Layerlist aus und übernimmt neue Layer
+        */
         checkVisibleLayer: function (layers) {
             var layerlist = this.get("layerlist");
 
@@ -76,11 +88,10 @@ define([
                     this.addLayerToList(layer);
                 }
             }, this);
-            // wenn nur ein Layer gefunden, lade diesen sofort
-            if (this.get("layerlist").length === 1) {
-                this.set("layerid", this.get("layerlist")[0].id);
-            }
         },
+        /*
+        * Übernimmt Features bei Selektion eines Layers.
+        */
         getFeatureList: function (layer) {
             var gfiAttributes = layer.get("gfiAttributes"),
                 features = layer.get("layer").getSource().getFeatures(),
@@ -117,6 +128,9 @@ define([
             }, this);
             return ll;
         },
+        /*
+        * Fügt Layer zur Liste hinzu.
+        */
         addLayerToList: function (layer) {
             var layerlist = this.get("layerlist"),
                 featurelist = this.getFeatureList(layer);
@@ -126,10 +140,10 @@ define([
                 name: layer.get("name"),
                 features: featurelist
             });
-            this.unset("layerlist", {silent: true});
+            this.unset(layerlist, {silent: true});
             this.set("layerlist", layerlist);
         }
     });
 
-    return new WFSListModel();
+    return new FeatureListerModel();
 });

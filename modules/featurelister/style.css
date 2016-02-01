@@ -1,4 +1,18 @@
 /***** Destop *****/
+.wfslist-list-table-th-sorted {
+    color: black !important;
+}
+
+.wfslist-list-table-th {
+    cursor: pointer;
+}
+
+.wfslist-list-table-th > span {
+    float:left;
+    width: 15px;
+    color: gray;
+}
+
 .wfslist-list-button {
     position: relative;
     left: 35%;

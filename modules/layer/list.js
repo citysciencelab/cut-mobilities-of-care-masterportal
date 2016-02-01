@@ -7,7 +7,8 @@ define([
     "modules/layer/GeoJSONLayer",
     "config",
     "eventbus",
-    "modules/core/util"
+    "modules/core/util",
+    "modules/featurelister/model" // featureLister muss schon geladen sein, damit dieses Event initial empfangen kann
 ], function (Backbone, Radio, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus, Util) {
 
     var LayerList = Backbone.Collection.extend({
