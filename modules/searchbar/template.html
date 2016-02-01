@@ -4,7 +4,7 @@
         <input id="searchInput" class="form-control" type="text" name="text" placeholder="<%= placeholder %>" value="<%= searchString %>">
         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
         <div class="input-group-btn">
-            <button class="btn btn-default btn-search" type="button">
+            <button class="btn btn-default btn-search" type="button" title="Suchen">
                 <span class="glyphicon glyphicon-search"></span>
             </button>
             <ul id="searchInputUL" class="dropdown-menu-search dropdown-menu-right">
@@ -13,7 +13,7 @@
     </div>
 </div>
 <% if (quickHelp === true) { %>
-<button class="btn btn-search-question hidden-xs" type="button">
+<button class="btn btn-search-question hidden-xs" type="button" title="Hilfe öffnen">
     <span class="glyphicon glyphicon-question-sign"></span>
 </button>
 <% } %>
