@@ -11,7 +11,7 @@ define(function () {
             layer: [
                 {id: "453", visible: true},
                 {id: "94", visibility: false, name: "Luftbilder"},
-                {id: "1392", visibility: true},
+                {id: "2426", visibility: true},
                 {id: "1750", visibility: false},
                 // {id: "522,521,523,524,525,526,527,528,529,530,531,532,533,534,535,536", visibility: false},
                 {id: "1747", visibility: false, name: "Flächennutzungsplan (FNP) ab 1:10000"},
@@ -82,10 +82,10 @@ define(function () {
                 glyphicon: "glyphicon-info-sign",
                 isActive: true
             },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
+            // print: {
+            //     title: "Karte drucken",
+            //     glyphicon: "glyphicon-print"
+            // },
             coord: {
                 title: "Koordinate abfragen",
                 glyphicon: "glyphicon-screenshot"
