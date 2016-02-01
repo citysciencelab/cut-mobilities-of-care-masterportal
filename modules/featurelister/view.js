@@ -214,7 +214,6 @@ define([
         */
         writeFeaturesToTable: function (features) {
             var totalFeaturesCount = this.model.get("layer").features.length,
-                shownFeaturesCount = features.length, // muss noch Länge des Tables werden
                 properties = "",
                 headers = this.model.get("headers");
 
@@ -236,14 +235,18 @@ define([
                 }, this);
                 properties += "</tr>";
             }, this);
-            // Prüfe, ob alle Features geladen sind, falls nicht, zeige Button
+            $("#wfslist-list-table tbody").append(properties);
+
+            // Prüfe, ob alle Features geladen sind, falls nicht, zeige Button zum Erweitern
+            var shownFeaturesCount = $("#wfslist-list-table tr").length - 1;
+
             if (shownFeaturesCount < totalFeaturesCount) {
-                $(".wfslist-list-button").show();
+                $(".wfslist-list-footer").show();
+                $(".wfslist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
             }
             else {
-                $(".wfslist-list-button").hide();
+                $(".wfslist-list-footer").hide();
             }
-            $("#wfslist-list-table tbody").append(properties);
         },
         /*
         * Ändert den Titel des Tabellen-Tabs auf Layernamen.

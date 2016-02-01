@@ -15,8 +15,13 @@
 
 .wfslist-list-button {
     position: relative;
-    left: 35%;
-    display: none;
+    right: 0px;
+}
+
+.wfslist-list-message {
+    float: left;
+    text-align: center;
+    align-items: center;
 }
 
 .wfslist-details-li {
