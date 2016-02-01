@@ -31,12 +31,37 @@ define([
                 this.listenTo(this.model, {"change:layer": this.updateLayerList});
                 this.listenTo(this.model, {"change:layer": this.switchTabToListe});
                 this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
+                this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
+                this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
                 this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
                 this.render();
                 if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
                     this.toggle();
                 }
             }
+        },
+        /*
+        * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
+        */
+        deselectGFIHit: function () {
+            $("#wfslist-list-table tr").each(function (int, tr) {
+                $(tr).removeClass("info");
+            });
+        },
+        /*
+        * Wenn im Model ein GFI empfangen wurde, wird dieses in der Liste gesucht und ggf. gehighlighted.
+        */
+        selectGFIHit: function (evt) {
+            var gesuchteId = evt.id;
+
+            this.deselectGFIHit();
+            $("#wfslist-list-table tr").each(function (int, tr) {
+                var trId = parseInt($(tr).attr("id"));
+
+                if (trId === gesuchteId) {
+                    $(tr).addClass("info");
+                }
+            });
         },
         /*
         * Findet das Spanelement der Spalte, die geklickt wurde. Liest dann die derzeit dargestellten Features aus und sortiert diese. Leert die aktuelle (unsortierte) Tabelle

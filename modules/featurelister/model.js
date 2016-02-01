@@ -20,9 +20,29 @@ define([
             this.set("maxFeatures", Config.menu.featureLister);
 
             EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
-
+            EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.createList});
             this.listenTo(this, {"change:featureid": this.showFeature});
+        },
+        /*
+        * Wird ein GFI geöffnet, wird versucht das entsprechende Feature in der Liste zu finden und zu selektieren
+        */
+        highlightMouseFeature: function (evt) {
+            var features = this.get("layer").features,
+                mapFeatures = evt[0],
+                layername = this.get("layer").name,
+                treffer = [];
+
+            this.trigger("gfiClose"); // entfernt evtl. Highlights
+            _.each(features, function (feature) {
+                _.each(mapFeatures, function (mapFeature) {
+                    if (mapFeature.typ === "WFS" && mapFeature.name === layername) {
+                        if (_.isEqual(feature.geometry, mapFeature.feature.getGeometry().getExtent())) {
+                            this.trigger("gfiHit", feature);
+                        }
+                    }
+                }, this);
+            }, this);
         },
         /*
         * Nimmt selektiertes Feature, wertet dessen Properties aus und zoomt ggf. auf Feature
