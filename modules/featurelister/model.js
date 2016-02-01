@@ -140,7 +140,7 @@ define([
                 name: layer.get("name"),
                 features: featurelist
             });
-            this.unset(layerlist, {silent: true});
+            this.unset("layerlist", {silent: true});
             this.set("layerlist", layerlist);
         }
     });
