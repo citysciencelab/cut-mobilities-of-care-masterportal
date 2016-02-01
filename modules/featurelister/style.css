@@ -1,40 +1,40 @@
 /***** Destop *****/
-.wfslist-list-table-th-sorted {
+.featurelist-list-table-th-sorted {
     color: black !important;
 }
 
-.wfslist-list-table-th {
+.featurelist-list-table-th {
     cursor: pointer;
 }
 
-.wfslist-list-table-th > span {
+.featurelist-list-table-th > span {
     float:left;
     width: 15px;
     color: gray;
 }
 
-.wfslist-list-button {
+.featurelist-list-button {
     position: relative;
     right: 0px;
 }
 
-.wfslist-list-message {
+.featurelist-list-message {
     float: left;
     text-align: center;
     align-items: center;
 }
 
-.wfslist-details-li {
+.featurelist-details-li {
     cursor: text;
 }
 
-.wfslist-details-ul {
+.featurelist-details-ul {
     max-height: 400px;;
     overflow: auto;
     cursor: auto;
 }
 
-.wfslist-list-table-td {
+.featurelist-list-table-td {
     height: 15px;
     max-width: 150px;
     overflow: hidden;
@@ -42,32 +42,32 @@
     white-space:nowrap;
 }
 
-.wfslist-list-table-tr{
+.featurelist-list-table-tr{
     cursor: pointer;
 }
 
-.wfslist-details {
+.featurelist-details {
     display: none;
     width: 100%;
     max-width: 500px;
     max-height: 800px;
 }
 
-.wfslist-list {
+.featurelist-list {
     display: none;
     max-width:500px;
 
 }
 
-.wfslist-list-table {
+.featurelist-list-table {
     max-height: 400px;
 }
 
-.wfslist-themes {
+.featurelist-themes {
     width: 100%;
 }
 
-.wfslist-win {
+.featurelist-win {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -77,22 +77,22 @@
     background-color: rgb(255, 255, 255);
 }
 
-.wfslist-win > .wfslist-win-header {
+.featurelist-win > .featurelist-win-header {
     color: #777;
     cursor: move;
 }
 
-.wfslist-win > .wfslist-win-content {
+.featurelist-win > .featurelist-win-content {
     overflow-y: auto;
     padding: 5px;
 }
 
-.wfslist-win-header {
+.featurelist-win-header {
     padding-left: 10px;
     border-bottom: 1px solid rgb(229, 229, 229);
 }
 
-.wfslist-win-header > .title {
+.featurelist-win-header > .title {
     white-space: nowrap;
     min-width: 250px;
     cursor: move;
@@ -102,39 +102,39 @@
     color: rgb(85, 85, 85);
 }
 
-.wfslist-win-header > .buttons {
+.featurelist-win-header > .buttons {
     color: rgb(85, 85, 85);
     font-size: 14px;
 }
 
-.wfslist-win-header > .buttons > span {
+.featurelist-win-header > .buttons > span {
     padding: 8px 3px;
 }
 
-.wfslist-win-header > .buttons > span:hover:not(.win-icon) {
+.featurelist-win-header > .buttons > span:hover:not(.win-icon) {
     opacity: 0.7;
     cursor: pointer;
 }
 
-.wfslist-win-content > .panel-group {
+.featurelist-win-content > .panel-group {
     padding: 12px;
     margin-bottom: 0;
 }
 
-.wfslist-win-content > .panel-group .panel {
+.featurelist-win-content > .panel-group .panel {
     margin-top: 8px;
 }
 
-.wfslist-heading {
+.featurelist-heading {
     padding: 8px;
 }
 
-.wfslist-heading > .wfslist-title {
+.featurelist-heading > .featurelist-title {
     font-size: 12px;
 }
 
 /***** Mobil *****/
-.wfslistModal {
+.featurelistModal {
     background-color: rgb(255, 255, 255);
     /*background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -147,11 +147,11 @@
     padding: 10px;
 }
 
-.wfslistModal > button {
+.featurelistModal > button {
     padding: 4px 0px;
 }
 
-.wfslistModal > h4 > span {
+.featurelistModal > h4 > span {
     padding: 0 8px;
 }
 
@@ -167,21 +167,21 @@
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-.tdwfslist {
+.tdfeaturelist {
     padding: 3px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-.tdwfslist > img {
+.tdfeaturelist > img {
     max-height: 35px;
 }
 
-.panel-wfslist {
+.panel-featurelist {
     overflow-x: auto;
     max-height: 300px;
     padding: 8px;
 }
 
-.panel-wfslist > p {
+.panel-featurelist > p {
     margin: 0;
 }

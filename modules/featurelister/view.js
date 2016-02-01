@@ -11,18 +11,18 @@ define([
 
     var FeatureLister = Backbone.View.extend({
         model: Model,
-        className: "wfslist-win",
+        className: "featurelist-win",
         template: _.template(Template),
         events: {
             "click .glyphicon-remove": "toggle",
-            "click #wfslistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
-            "click #wfslistThemeChooser": "switchTabToTheme", // wechselt den sichtbaren Tab
-            "click #wfslistFeaturedetails": "switchTabToDetails", // wechselt den sichtbaren Tab
-            "click .wfslist-themes-li": "newTheme", // übernimmt Layer
-            "mouseover .wfslist-list-table-tr": "hoverTr", // HoverEvent auf Tabelleneintrag
-            "click .wfslist-list-table-tr": "selectTr", // Klick-Event auf Tabelleneintrag
-            "click .wfslist-list-button": "moreFeatures", // Klick auf Button zum Nachladen von Features
-            "click .wfslist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
+            "click #featurelistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
+            "click #featurelistThemeChooser": "switchTabToTheme", // wechselt den sichtbaren Tab
+            "click #featurelistFeaturedetails": "switchTabToDetails", // wechselt den sichtbaren Tab
+            "click .featurelist-themes-li": "newTheme", // übernimmt Layer
+            "mouseover .featurelist-list-table-tr": "hoverTr", // HoverEvent auf Tabelleneintrag
+            "click .featurelist-list-table-tr": "selectTr", // Klick-Event auf Tabelleneintrag
+            "click .featurelist-list-button": "moreFeatures", // Klick auf Button zum Nachladen von Features
+            "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
         initialize: function () {
             if (!Util.isAny()) { // nicht in mobiler Variante
@@ -44,7 +44,7 @@ define([
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
         */
         deselectGFIHit: function () {
-            $("#wfslist-list-table tr").each(function (int, tr) {
+            $("#featurelist-list-table tr").each(function (int, tr) {
                 $(tr).removeClass("info");
             });
         },
@@ -55,7 +55,7 @@ define([
             var gesuchteId = evt.id;
 
             this.deselectGFIHit();
-            $("#wfslist-list-table tr").each(function (int, tr) {
+            $("#featurelist-list-table tr").each(function (int, tr) {
                 var trId = parseInt($(tr).attr("id"));
 
                 if (trId === gesuchteId) {
@@ -71,7 +71,7 @@ define([
             var spanTarget = $(evt.target).find("span")[0] ? $(evt.target).find("span")[0] : evt.target,
                 sortOrder = $(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
                 sortColumn = spanTarget.parentElement.textContent,
-                tableLength = $("#wfslist-list-table tr").length - 1,
+                tableLength = $("#featurelist-list-table tr").length - 1,
                 features = _.filter(this.model.get("layer").features, function (feature) {
                     return feature.id >= 0 && feature.id <= tableLength;
                 }),
@@ -80,27 +80,27 @@ define([
                 }),
                 featuresSorted = _.sortBy(featuresExtended, sortColumn);
 
-            $(".wfslist-list-table-th-sorted").removeClass("wfslist-list-table-th-sorted");
+            $(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
             if (sortOrder === "ascending") {
                 $(spanTarget).removeClass("glyphicon-sort-by-alphabet-alt");
                 $(spanTarget).addClass("glyphicon-sort-by-alphabet");
-                $(spanTarget).addClass("wfslist-list-table-th-sorted");
+                $(spanTarget).addClass("featurelist-list-table-th-sorted");
             }
             else {
                 featuresSorted = featuresSorted.reverse();
                 $(spanTarget).removeClass("glyphicon-sort-by-alphabet");
                 $(spanTarget).addClass("glyphicon-sort-by-alphabet-alt");
-                $(spanTarget).addClass("wfslist-list-table-th-sorted");
+                $(spanTarget).addClass("featurelist-list-table-th-sorted");
             }
 
-            $("#wfslist-list-table tbody").empty();
+            $("#featurelist-list-table tbody").empty();
             this.writeFeaturesToTable (featuresSorted);
         },
         /*
         * Ermittelt die Anzahl der derzeit dargestellten Features, erhöht diese und liest diese Features aus. Stellt sie dann dar.
         */
         moreFeatures: function () {
-            var countFeatures = $("#wfslist-list-table tbody").children().length,
+            var countFeatures = $("#featurelist-list-table tbody").children().length,
                 maxFeatures = this.model.get("maxFeatures"),
                 toFeatures = countFeatures + maxFeatures - 1;
 
@@ -113,59 +113,59 @@ define([
             var props = this.model.get("featureProps");
 
             this.switchTabToDetails();
-            $(".wfslist-details-li").remove();
+            $(".featurelist-details-li").remove();
             _.each(props, function (value, key) {
-                $(".wfslist-details-ul").append("<li class='list-group-item list-group-item-info wfslist-details-li'>" + key + "</li>");
-                $(".wfslist-details-ul").append("<li class='list-group-item wfslist-details-li'>" + value + "</li>");
+                $(".featurelist-details-ul").append("<li class='list-group-item list-group-item-info featurelist-details-li'>" + key + "</li>");
+                $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
             });
         },
         /*
         * Wechselt den Tab
         */
         switchTabToListe: function () {
-            _.each($(".wfslist-navtabs").children(), function (child) {
-                if (child.id === "wfslistFeaturelist") {
+            _.each($(".featurelist-navtabs").children(), function (child) {
+                if (child.id === "featurelistFeaturelist") {
                     $(child).addClass("active");
                 }
                 else {
                     $(child).removeClass("active");
                 }
             });
-            $("#wfslist-themes").hide();
-            $("#wfslist-list").show();
-            $("#wfslist-details").hide();
+            $("#featurelist-themes").hide();
+            $("#featurelist-list").show();
+            $("#featurelist-details").hide();
         },
         /*
         * Wechselt den Tab
         */
         switchTabToTheme: function () {
-            _.each($(".wfslist-navtabs").children(), function (child) {
-                if (child.id === "wfslistThemeChooser") {
+            _.each($(".featurelist-navtabs").children(), function (child) {
+                if (child.id === "featurelistThemeChooser") {
                     $(child).addClass("active");
                 }
                 else {
                     $(child).removeClass("active");
                 }
             });
-            $("#wfslist-themes").show();
-            $("#wfslist-list").hide();
-            $("#wfslist-details").hide();
+            $("#featurelist-themes").show();
+            $("#featurelist-list").hide();
+            $("#featurelist-details").hide();
         },
         /*
         * Wechselt den Tab
         */
         switchTabToDetails: function () {
-            _.each($(".wfslist-navtabs").children(), function (child) {
-                if (child.id === "wfslistFeaturedetails") {
+            _.each($(".featurelist-navtabs").children(), function (child) {
+                if (child.id === "featurelistFeaturedetails") {
                     $(child).addClass("active");
                 }
                 else {
                     $(child).removeClass("active");
                 }
             });
-            $("#wfslist-themes").hide();
-            $("#wfslist-list").hide();
-            $("#wfslist-details").show();
+            $("#featurelist-themes").hide();
+            $("#featurelist-list").hide();
+            $("#featurelist-details").show();
         },
         /*
         * Setted FeatureId bei Klick auf Feature in Tabelle
@@ -213,12 +213,12 @@ define([
                 }, this);
             }, this);
             this.model.set("headers", keyslist);
-            $("#wfslist-list-table thead").remove(); // leere Tabelle
-            $("#wfslist-list-table tbody").remove(); // leere Tabelle
-            $("#wfslist-list-table").prepend("<thead><tr><th class='wfslist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='wfslist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
-            $("#wfslist-list-table").append("<tbody>");
+            $("#featurelist-list-table thead").remove(); // leere Tabelle
+            $("#featurelist-list-table tbody").remove(); // leere Tabelle
+            $("#featurelist-list-table").prepend("<thead><tr><th class='featurelist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='featurelist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
+            $("#featurelist-list-table").append("<tbody>");
             this.readFeatures(0, maxFeatures, true);
-            $("#wfslist-list-table").append("</tbody>");
+            $("#featurelist-list-table").append("</tbody>");
         },
         /*
         * Liest Features von - bis aus Layer aus. Löscht ggf. bisherige Inhalte der Tabelle.
@@ -229,10 +229,10 @@ define([
                 });
 
             if (dropTableFirst === true) {
-                $("#wfslist-list-table tbody").empty();
+                $("#featurelist-list-table tbody").empty();
             }
             // entferne evtl. Sortierungshinweise aus Überschriften
-            $(".wfslist-list-table-th-sorted").removeClass("wfslist-list-table-th-sorted");
+            $(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
             this.writeFeaturesToTable (features);
         },
         /*
@@ -245,7 +245,7 @@ define([
 
             // Schreibe jedes Feature in tbody
             _.each(features, function (feature) {
-                properties += "<tr id='" + feature.id + "' class='wfslist-list-table-tr'>";
+                properties += "<tr id='" + feature.id + "' class='featurelist-list-table-tr'>";
                 // entsprechend der Reihenfolge der Überschriften...
                 _.each(headers, function (header) {
                     var attvalue = "";
@@ -255,30 +255,30 @@ define([
                             attvalue = value;
                         }
                     }, this);
-                    properties += "<td headers='" + header + "'><div class='wfslist-list-table-td' title='" + attvalue + "'>";
+                    properties += "<td headers='" + header + "'><div class='featurelist-list-table-td' title='" + attvalue + "'>";
                     properties += attvalue;
                     properties += "</div></td>";
                 }, this);
                 properties += "</tr>";
             }, this);
-            $("#wfslist-list-table tbody").append(properties);
+            $("#featurelist-list-table tbody").append(properties);
 
             // Prüfe, ob alle Features geladen sind, falls nicht, zeige Button zum Erweitern
-            var shownFeaturesCount = $("#wfslist-list-table tr").length - 1;
+            var shownFeaturesCount = $("#featurelist-list-table tr").length - 1;
 
             if (shownFeaturesCount < totalFeaturesCount) {
-                $(".wfslist-list-footer").show();
-                $(".wfslist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
+                $(".featurelist-list-footer").show();
+                $(".featurelist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
             }
             else {
-                $(".wfslist-list-footer").hide();
+                $(".featurelist-list-footer").hide();
             }
         },
         /*
         * Ändert den Titel des Tabellen-Tabs auf Layernamen.
         */
         updateLayerHeader: function () {
-            $("#wfslist-list-header").text(this.model.get("layer").name);
+            $("#featurelist-list-header").text(this.model.get("layer").name);
         },
         /*
         * Erzeugt Auflistung der selektierbaren Layer über EventBus.
@@ -286,9 +286,9 @@ define([
         updateVisibleLayer: function (layerlist) {
             var ll = this.model.get("layerlist");
 
-            $("#wfslist-themes-ul").empty();
+            $("#featurelist-themes-ul").empty();
             _.each(ll, function (layer) {
-                $("#wfslist-themes-ul").append("<li id='" + layer.id + "' class='wfslist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
+                $("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
             });
         },
         render: function () {
@@ -298,7 +298,7 @@ define([
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: "#map",
-                handle: ".wfslist-win-header"
+                handle: ".featurelist-win-header"
             });
         },
         toggle: function () {
