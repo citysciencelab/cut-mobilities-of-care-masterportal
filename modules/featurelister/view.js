@@ -188,7 +188,8 @@ define([
                 }, this);
             }, this);
             this.model.set("headers", keyslist);
-            $("#wfslist-list-table tr").remove(); // leere Tabelle
+            $("#wfslist-list-table thead").remove(); // leere Tabelle
+            $("#wfslist-list-table tbody").remove(); // leere Tabelle
             $("#wfslist-list-table").prepend("<thead><tr><th class='wfslist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='wfslist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
             $("#wfslist-list-table").append("<tbody>");
             this.readFeatures(0, maxFeatures, true);
