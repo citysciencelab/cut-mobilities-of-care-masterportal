@@ -4,8 +4,9 @@ define([
     "openlayers",
     "config",
     "modules/core/mapView",
-    "eventbus"
-], function (Backbone, Radio, ol, Config, MapView, EventBus) {
+    "eventbus",
+     "modules/core/util"
+], function (Backbone, Radio, ol, Config, MapView, EventBus, Util) {
 
     var Map = Backbone.Model.extend({
 
@@ -202,7 +203,40 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
+            if (!_.isUndefined(layer.getSource())) {
+                this.getLayerLoadStatus(layer);
+            }
+
         },
+        getTileLoadFunction: function (numLoadingTiles, tileLoadFn) {
+            return function (tile, src) {
+                    if (numLoadingTiles === 0) {
+                        Util.showLoader();
+                    }
+                    ++numLoadingTiles;
+                    var image = tile.getImage();
+
+                    image.onload = image.onerror =  function () {
+                        --numLoadingTiles;
+                        if (numLoadingTiles === 0) {
+                            Util.hideLoader();
+                        }
+                    };
+                tileLoadFn(tile, src);
+                };
+        },
+
+        getLayerLoadStatus: function (layer) {
+            var context = this;
+
+            layer.getSource().setTileLoadFunction(( function () {
+                var numLoadingTiles = 0,
+                tileLoadFn = layer.getSource().getTileLoadFunction();
+
+                return context.getTileLoadFunction(numLoadingTiles, tileLoadFn);
+            })());
+        },
+
         /**
         *
         */
