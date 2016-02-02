@@ -203,7 +203,8 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
-            if (!_.isUndefined(layer.getSource())) {
+
+            if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
                 this.getLayerLoadStatus(layer);
             }
 
