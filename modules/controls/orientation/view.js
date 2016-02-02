@@ -5,59 +5,65 @@ define([
     "config",
     "eventbus"
 ], function (Backbone, OrientationTemplate, OrientationModel, Config, EventBus) {
-
+    "use strict";
     var OrientationView = Backbone.View.extend({
         className: "row",
         template: _.template(OrientationTemplate),
+        model: OrientationModel,
         events: {
             "click .orientationButtons > .glyphicon-map-marker": "getOrientation",
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
+            this.model.set("zoomMode", Config.controls.orientation);
+
             if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
                 require(["modules/controls/orientation/poi/view", "modules/controls/orientation/poi/feature/view"], function (PoiView, FeatureView) {
                     new PoiView();
                 });
             }
-            if (!navigator.geolocation) {
-                return;
+            this.listenTo(this.model, {
+                "change:tracking": this.trackingChanged
+            }, this);
+            this.render();
+            // erst nach render kann auf document.getElementById zugegriffen werden
+            this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
+        },
+        /*
+        * Steuert die Darstellung des Geolocate-buttons
+        */
+        trackingChanged: function (evt) {
+            if (this.model.get("tracking") === true) {
+                $("#geolocate").addClass("toggleButtonPressed");
             }
             else {
-                var that = this;
-
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    that.finalize();
-                }, function (error) {
-//                    alert ("Standortbestimmung nicht verfügbar: " + error.message);
-                    return;
-                });
+                $("#geolocate").removeClass("toggleButtonPressed");
             }
-        },
-        finalize: function () {
-            EventBus.on("showGeolocationMarker", this.showGeolocationMarker, this);
-            EventBus.on("clearGeolocationMarker", this.clearGeolocationMarker, this);
-            this.model = OrientationModel;
-            this.render();
-        },
-        showGeolocationMarker: function () {
-            $("#geolocation_marker").addClass("glyphicon glyphicon-map-marker geolocation_marker");
-        },
-        clearGeolocationMarker: function () {
-            $("#geolocation_marker").removeClass("geolocation_marker glyphicon glyphicon-map-marker");
         },
         render: function () {
             var attr = Config;
 
             $(".controls-view").append(this.$el.html(this.template(attr)));
         },
+        /*
+        * ButtonCall
+        */
         getOrientation: function () {
-            this.model.setOrientation("stdPkt");
+            if (this.model.get("tracking") === false) {
+                this.model.track();
+            }
+            else {
+                this.model.untrack();
+            }
         },
+        /*
+        * ButtonCall
+        */
         getPOI: function () {
             $(function () {
                 $("#loader").show();
             });
-            this.model.setOrientation("poi");
+            this.model.trackPOI(500);
         }
     });
 

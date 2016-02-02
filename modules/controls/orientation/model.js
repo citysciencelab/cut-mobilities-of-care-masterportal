@@ -6,59 +6,137 @@ define([
     "modules/layer/wfsStyle/list",
     "config"
 ], function (Backbone, EventBus, ol, proj4, StyleList, Config) {
-
-    var Orientation = Backbone.Model.extend({
+    "use strict";
+    var OrientationModel = Backbone.Model.extend({
         defaults: {
-            "marker": new ol.Overlay({positioning: "center-center", stopEvent: false}),
-            "newCenter": ""
+            "zoomMode": "once", // once oder allways entsprechend Config
+            "counter": 0, // Counter der Standortbestimmung
+            "marker": new ol.Overlay({
+                positioning: "center-center",
+                stopEvent: false
+            }),
+            "tracking": false, // Flag, ob derzeit getrackt wird.
+            "geolocation": null // ol.geolocation wird bei erstmaliger Nutzung initiiert.
         },
         initialize: function () {
-            EventBus.on("setOrientation", this.setOrientation, this);
+            EventBus.on("setOrientation", this.track, this);
             EventBus.on("getPOI", this.getPOI, this);
             EventBus.on("layerlist:sendVisiblePOIlayerList", this.getPOIParams, this);
+            EventBus.on("orientation:removeOverlay", this.removeOverlay, this);
         },
-        setOrientation: function (btn) {
-            var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
+        removeOverlay: function () {
+            EventBus.trigger("removeOverlay", this.get("marker"));
+        },
+        untrack: function () {
+            var geolocation = this.get("geolocation");
 
-            geolocation.on ("change", function () {
-                var position = geolocation.getPosition();
+            geolocation.un ("change", this.positioning, this);
+            geolocation.un ("error", this.onError, this);
+            this.set("counter", 0);
+            this.set("tracking", false);
+            this.removeOverlay();
+        },
+        track: function () {
+            EventBus.trigger("addOverlay", this.get("marker"));
+            if (this.get("geolocation") === null) {
+                var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
 
-                this.set("newCenter", proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position));
-                EventBus.trigger("mapView:setCenter", this.get("newCenter"), 6);
-                EventBus.trigger("setGeolocation", [this.get("newCenter"), position]);
-                var marker = this.get("marker");
+                this.set("geolocation", geolocation);
+            }
+            else {
+                var geolocation = this.get("geolocation");
 
-                marker.setElement(document.getElementById("geolocation_marker"));
-                marker.setPosition(this.get("newCenter"));
-                this.set("marker", marker);
-                EventBus.trigger("addOverlay", marker);
-                geolocation.setTracking(false);
-                if (btn === "poi") {
-                    this.getPOI(500);
+                this.positioning();
+            }
+            this.set("tracking", true);
+            geolocation.on ("change", this.positioning, this);
+            geolocation.on ("error", this.onError, this);
+        },
+        positionMarker: function (position) {
+            this.get("marker").setPosition(position);
+        },
+        zoomAndCenter: function (position) {
+            EventBus.trigger("mapView:setCenter", position, 6);
+        },
+        positioning: function () {
+            var geolocation = this.get("geolocation"),
+                position = geolocation.getPosition(),
+                counter = this.get("counter") + 1,
+                zoomMode = this.get("zoomMode"),
+                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
+
+            // Setze evt. Routing-Start
+            EventBus.trigger("setGeolocation", [centerPosition, position]);
+
+            if (zoomMode === "once") {
+                if (counter === 1) {
+                    this.positionMarker(centerPosition);
+                    this.zoomAndCenter(centerPosition);
                 }
-                EventBus.trigger("showGeolocationMarker", this);
-            }, this);
-            geolocation.once("error", function () {
-                EventBus.trigger("alert", {
-                    text: "<strong>Problem ermittelt.</strong> Standpunktbestimmung momentan nicht verfügbar!",
-                    kategorie: "alert-warning"
-                });
-                $(function () {
-                    $("#loader").hide();
-                });
-                EventBus.trigger("clearGeolocationMarker", this);
-            }, this);
+                else {
+                    this.positionMarker(centerPosition);
+                }
+            }
+            else {
+                this.positionMarker(centerPosition);
+                this.zoomAndCenter(centerPosition);
+            }
+            this.set("counter", counter);
+        },
+        onError: function (evt) {
+            EventBus.trigger("alert", {
+                text: "<strong>Lokalisierung nicht verfügbar: </strong>" + evt.message,
+                kategorie: "alert-danger"
+            });
+            this.untrack();
+        },
+        onPOIError: function (evt) {
+            EventBus.trigger("alert", {
+                text: "<strong>'In meiner Nähe' nicht verfügbar: </strong>" + evt.message,
+                kategorie: "alert-danger"
+            });
+            this.untrack();
+        },
+        trackPOI: function () {
+            EventBus.trigger("addOverlay", this.get("marker"));
+            if (this.get("geolocation") === null) {
+                var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
+
+                this.set("geolocation", geolocation);
+            }
+            else {
+                var geolocation = this.get("geolocation");
+
+                this.callGetPOI();
+            }
+            geolocation.once ("change", this.callGetPOI, this);
+            geolocation.once ("error", this.onPOIError, this);
+        },
+        untrackPOI: function () {
+            var geolocation = this.get("geolocation");
+
+            geolocation.un ("change", this.callGetPOI, this);
+            geolocation.un ("error", this.onPOIError, this);
+        },
+        callGetPOI: function () {
+            this.getPOI(500);
+            this.untrackPOI();
         },
         getPOI: function (distance) {
+            var geolocation = this.get("geolocation"),
+                position = geolocation.getPosition(),
+                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
+
+            this.positionMarker(centerPosition);
             this.set("distance", distance);
-            var circle = new ol.geom.Circle(this.get("newCenter"), this.get("distance")),
+            this.set("newCenter", centerPosition);
+            var circle = new ol.geom.Circle(centerPosition, this.get("distance")),
                 circleExtent = circle.getExtent();
 
             this.set("circleExtent", circleExtent);
             EventBus.trigger("layerlist:getVisiblePOIlayerList", this);
         },
         getPOIParams: function (visibleWFSLayers) {
-
             if (this.get("circleExtent") && visibleWFSLayers) {
                 _.each(visibleWFSLayers, function (layer) {
                     if (layer.has("source") === true) {
@@ -72,5 +150,5 @@ define([
         }
     });
 
-    return new Orientation();
+    return new OrientationModel();
 });

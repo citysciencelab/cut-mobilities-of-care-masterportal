@@ -4,6 +4,10 @@
     right: 0;
 }
 
+.toggleButtonPressed {
+    background-color: blue!important;
+}
+
 .controls-view > .row > div > .glyphicon {
     color: #f3f3f3;
     background-color: rgb(182, 0, 0);
