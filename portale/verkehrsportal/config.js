@@ -65,7 +65,7 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "allways",
             poi: true
         },
         customModules: ["../portale/verkehrsportal/verkehrsfunctions"],

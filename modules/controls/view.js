@@ -17,7 +17,7 @@ define([
                     new ZoomControlView();
                 });
             }
-            if (_.has(Config.controls, "orientation") === true && Config.controls.orientation === true) {
+            if (_.has(Config.controls, "orientation") === true && Config.controls.orientation === "allways" || Config.controls.orientation === "once") {
                 require(["modules/controls/orientation/view"], function (OrientationView) {
                     new OrientationView();
                 });
