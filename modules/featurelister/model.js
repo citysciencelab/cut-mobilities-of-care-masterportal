@@ -100,6 +100,16 @@ define([
         checkVisibleLayer: function (layers) {
             var layerlist = this.get("layerlist");
 
+            // entferne nicht mehr sichtbare Layer
+            _.each(layerlist, function (layer) {
+                var tester = _.filter(layers, function (lay) {
+                    return lay.id === layer.id;
+                });
+                if (tester.length === 0) {
+                    this.removeLayerFromList(layer);
+                }
+            }, this);
+            // füge neue Layer hinzu
             _.each(layers, function (layer) {
                 var tester = _.filter(layerlist, function (lay) {
                     return lay.id === layer.id;
@@ -108,6 +118,18 @@ define([
                     this.addLayerToList(layer);
                 }
             }, this);
+        },
+        /*
+        * Entfernt nicht mehr sichtbare Layer aus Liste
+        */
+        removeLayerFromList: function (layer) {
+            var layerlist = this.get("layerlist"),
+                remainLayer = _.filter(layerlist, function (lay) {
+                    return lay.id !== layer.id;
+                });
+
+            this.unset("layerlist", {silent: true});
+            this.set("layerlist", remainLayer);
         },
         /*
         * Übernimmt Features bei Selektion eines Layers.
