@@ -112,19 +112,22 @@ define([
         // Holt sich die Layer aus der services-*.json.
         // Zuvor werden die Geofachdaten aus der Auswahl gelöscht.
         fetchLayer: function () {
+            Util.showLoader();
             EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true, "isbaselayer": false}));
 
             this.fetch({
                 cache: false,
-                async: false,
+                async: true,
                 reset: true,
                 error: function () {
+                    Util.hideLoader();
                     EventBus.trigger("alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
                         kategorie: "alert-warning"
                     });
                 },
                 success: function (collection) {
+                    Util.hideLoader();
                     // Nur für Ordnerstruktur im Layerbaum (z.B. FHH-Atlas)
                     if (Config.tree.type === "default") {
                         collection.resetModels();
