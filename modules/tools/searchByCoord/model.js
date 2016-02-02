@@ -2,9 +2,8 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "proj4",
-    "config"
-], function (Backbone, ol, EventBus, proj4, Config) {
+    "proj4"
+], function (Backbone, ol, EventBus, proj4) {
 
     var SearchByCoord = Backbone.Model.extend({
 
@@ -120,10 +119,10 @@ define([
 
                 this.set("eastingCoords", easting.split(/[\s°′″'"]+/));
                 this.set("northingCoords", northing.split(/[\s°′″'"]+/));
-                coordinateArray = [{"coord": resultEasting, "key": "Rechtswert", "example": "53° 33′ 25″"}, {"coord": resultNorthing, "key": "Hochwert", "example": "5934685.516"}];
+                coordinateArray = [{"coord": resultEasting, "key": "Ostwert", "example": "53° 33′ 25″"}, {"coord": resultNorthing, "key": "Nordwert", "example": "9° 59′ 50″"}];
             }
             else {
-                coordinateArray = [{"coord": easting, "key": "Rechtswert", "example": "9° 59′ 50″"}, {"coord": northing, "key": "Hochwert", "example": "5934685.516"}];
+                coordinateArray = [{"coord": easting, "key": "Rechtswert", "example": "562617.630"}, {"coord": northing, "key": "Hochwert", "example": "5934685.516"}];
             }
             this.set("coordinates", coordinateArray);
             this.validateCoordinates();
