@@ -32,7 +32,6 @@ define([
              chemContent = {};
 
             _.each(content, function (value, key) {
-                console.log(key);
                 if (_.contains(["Entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"], key)) {
                     allgemContent[key] = value;
                 }
