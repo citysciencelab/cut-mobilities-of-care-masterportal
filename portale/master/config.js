@@ -142,13 +142,13 @@ define(function () {
         * @desc Konfiguration der Controls auf der Map
         * @property {Boolean}  [zoom=false] - Legt fest ob die Zoombuttons angezeigt werden sollen.
         * @property {Boolean}  [toggleMenu=false] - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
-        * @property {Boolean}  [orientation=false] - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
+        * @property {'none'|'allways'|'once'} [orientation=none] - Legt fest ob das Orientation-Modul geladen werden soll, oder nicht ('none'). Bei 'allways' wird zusätzlich zur Standpunktdarstellung auch auf die Position gezoomt. Bei 'once' wird nur einmalig gezoomt.
         * @property {Boolean}  [poi=false] - Legt fest ob die Points of Interest angezeigt werden sollen. Nur möglich, bei orientation: true.
         */
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "once",
             poi: true
         },
         /**
