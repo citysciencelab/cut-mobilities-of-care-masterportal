@@ -5,7 +5,12 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "2426", visible: false} // Bezirksgrenzen
+                {id: "2426", visible: false}, // Bezirksgrenzen
+                {id: "3291", visible: false},
+                {id: "3292", visible: false},
+                {id: "3293", visible: false},
+                {id: "2941", visible: false},
+                {id: "2945", visible: false}
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
@@ -69,12 +74,32 @@ define(function () {
             gfi: false
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: false,
-            active: "gfi"
+            
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
+            }
         }
     };
 
