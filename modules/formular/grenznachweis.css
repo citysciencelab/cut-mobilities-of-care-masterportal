@@ -20,6 +20,7 @@
     padding-left: 5px;
     padding-right: 5px;
 }
-.grenznachweisscroll{
+.grenznachweisdiv{
     max-height: inherit;
+    width: 500px;
 }

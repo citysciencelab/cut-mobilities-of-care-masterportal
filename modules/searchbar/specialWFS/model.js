@@ -1,20 +1,22 @@
 define([
     "backbone",
     "eventbus",
-    "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
-    "use strict";
-    return Backbone.Model.extend({
+    "modules/searchbar/model"],
+    function (Backbone, EventBus)
+       {
+        "use strict";
+        return Backbone.Model.extend({
         /**
         *
         */
-        defaults: {
-            inUse: false,
-            minChars: 3,
-            bPlans: [],
-            olympia: [],
-            bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
-        },
+            defaults: {
+                inUse: false,
+                minChars: 3,
+                bPlans: [],
+                olympia: [],
+                kita: [],
+                bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
+            },
         /**
          * @description Initialisierung der wfsFeature Suche.
          * @param {Objekt} config - Das Konfigurationsarray für die specialWFS-Suche
@@ -41,6 +43,9 @@ define([
                     this.set("bplanURL", element.url);
                     this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
                 }
+                else if (element.name === "kita") {
+                    this.sendRequest(element.url, element.data, this.getFeaturesForKita, false);
+                }
             }, this);
             EventBus.on("searchbar:search", this.search, this);
             EventBus.on("specialWFS:requestbplan", this.requestbplan, this);
@@ -64,6 +69,9 @@ define([
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInBPlans(searchStringRegExp);
                 }
+                if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
+                    this.searchInKita(searchStringRegExp);
+                }                
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
             }
@@ -85,6 +93,17 @@ define([
         */
         getExtentFromBPlan: function (data) {
             EventBus.trigger("mapHandler:zoomToBPlan", data);
+        },
+        /**
+        *
+        */
+        searchInKita: function (searchStringRegExp) {
+            _.each(this.get("kita"), function (kita) {
+                // Prüft ob der Suchstring ein Teilstring vom kita ist
+                if (kita.name.search(searchStringRegExp) !== -1) {
+                    EventBus.trigger("searchbar:pushHits", "hitList", kita);
+                }
+            }, this);
         },
         /**
         *
@@ -199,6 +218,35 @@ define([
                             coordinate: coordinate,
                             glyphicon: "glyphicon-fire",
                             id: hitName.replace(/ /g, "") + "Paralympia"
+                        });
+                    }
+               }
+            }, this);
+        },
+            
+        /**
+         * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
+         * @param  {xml} data - getFeature-Request
+         */
+        getFeaturesForKita: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                coordinate,
+                position,
+                hitType,
+                hitName;
+
+            _.each(hits, function (hit) {
+               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                    if ($(hit).find("app\\:name, name")[0] !== undefined) {
+                        hitName = $(hit).find("app\\:name, name")[0].textContent;
+                        this.get("kita").push({
+                            name: hitName,
+                            type: "Kita",
+                            coordinate: coordinate,
+                            glyphicon: "glyphicon-home",
+                            id: hitName.replace(/ /g, "") + "Kita"
                         });
                     }
                }

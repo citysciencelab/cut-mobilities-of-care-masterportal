@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<div class="featurelist-win-header">
+    <p class="buttons pull-right">
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+    </p>
+    <p class="buttons pull-left">
+        <span class="glyphicon glyphicon-menu-hamburger win-icon"></span>
+    </p>
+    <p class="title">
+        <span>Feature-Lister</span>
+    </p>
+</div>
+<ul class="nav nav-tabs featurelist-navtabs">
+    <li class="active featurelist-navtabs-li text-center" role="presentation" id="featurelistThemeChooser"><a href="#">Thema wählen</a></li>
+    <li class="featurelist-navtabs-li text-center disabled" role="presentation" id="featurelistFeaturelist"><a href="#">Liste</a></li>
+    <li class="featurelist-navtabs-li text-center disabled" role="presentation" id="featurelistFeaturedetails"><a href="#">Details</a></li>
+</ul>
+<div id="featurelist-themes" class="featurelist-themes panel panel-default">
+    <div id="featurelist-header" class="panel-heading">Sichtbare Vektorlayer</div>
+    <ul id="featurelist-themes-ul" class="nav nav-pills nav-stacked"></ul>
+</div>
+<div id="featurelist-list" class="panel featurelist-list panel-default">
+    <div id="featurelist-list-header" class="panel-heading"></div>
+    <div class="table-responsive  featurelist-list-table">
+        <table id="featurelist-list-table" class="table table-striped table-hover table-condensed table-bordered"></table>
+    </div>
+    <div class="panel-footer featurelist-list-footer">
+        <button type="button" class="btn btn-default navbar-btn featurelist-list-button" aria-label="Left Align">
+            <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Mehr...
+        </button>
+        <p class="navbar-text featurelist-list-message"></p>
+    </div>
+</div>
+<div id="featurelist-details" class="featurelist-details panel panel-default">
+    <div id="featurelist-header" class="panel-heading">Details des ausgewählten Features</div>
+    <ul class="list-group featurelist-details-ul">
+    </ul>
+</div>
