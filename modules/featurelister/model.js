@@ -21,8 +21,8 @@ define([
 
             EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
             EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
-            this.listenTo(this, {"change:layerid": this.createList});
-            this.listenTo(this, {"change:featureid": this.showFeature});
+            this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
+            this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
         },
         /*
         * Wird ein GFI geöffnet, wird versucht das entsprechende Feature in der Liste zu finden und zu selektieren
@@ -47,24 +47,30 @@ define([
         /*
         * Nimmt selektiertes Feature, wertet dessen Properties aus und zoomt ggf. auf Feature
         */
-        showFeature: function () {
+        getFeatureWithFeatureId: function () {
             var featureid = this.get("featureid"),
                 features = this.get("layer").features,
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === featureid;
-                }),
-                geometry = feature.geometry,
-                properties = feature.properties;
-
-            // Zoom auf Extent
-            if (geometry) {
-                EventBus.trigger("mapHandler:zoomTo", {
-                    type: "Feature-Lister-Click",
-                    coordinate: geometry
                 });
+
+            if (feature) {
+                var geometry = feature.geometry,
+                    properties = feature.properties;
+
+                // Zoom auf Extent
+                if (geometry) {
+                    EventBus.trigger("mapHandler:zoomTo", {
+                        type: "Feature-Lister-Click",
+                        coordinate: geometry
+                    });
+                }
+                // Zeigen der Details
+                this.set("featureProps", properties);
             }
-            // Zeigen der Details
-            this.set("featureProps", properties);
+            else {
+                this.set("featureProps", {});
+            }
         },
         /*
         * Ruft über EventBus Hover des selektierten Features
@@ -86,19 +92,24 @@ define([
         /*
         * Merkt sich selektierten Layer.
         */
-        createList: function () {
+        getLayerWithLayerId: function () {
             var layers = this.get("layerlist"),
                 layer = _.find(layers, {id: this.get("layerid")});
 
             if (layer) {
                 this.set("layer", layer);
             }
+            else {
+                this.set("layer", {});
+                this.set("featureid", ""); // wenn kein Layer mehr aktiv ist, kann auch kein Feature mehr aktiv sein.
+            }
         },
         /*
         * Werter Layerlist aus und übernimmt neue Layer
         */
         checkVisibleLayer: function (layers) {
-            var layerlist = this.get("layerlist");
+            var layerlist = this.get("layerlist"),
+                activeLayerId = this.get("layerid");
 
             // entferne nicht mehr sichtbare Layer
             _.each(layerlist, function (layer) {
@@ -106,6 +117,12 @@ define([
                     return lay.id === layer.id;
                 });
                 if (tester.length === 0) {
+                    // layer ist nun nicht sichtbar...
+                    if (activeLayerId && activeLayerId === layer.id) {
+                        // entfernter Layer wird in Tabelle angezeigt. Diese muss nun gelöscht werden.
+                        this.set("layerid", "");
+                    }
+                    // ... und muss aus Liste entfernt werden
                     this.removeLayerFromList(layer);
                 }
             }, this);

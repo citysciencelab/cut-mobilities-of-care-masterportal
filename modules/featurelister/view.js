@@ -29,7 +29,6 @@ define([
                 this.listenTo(this.model, {"change:layerlist": this.updateVisibleLayer});
                 this.listenTo(this.model, {"change:layer": this.updateLayerHeader});
                 this.listenTo(this.model, {"change:layer": this.updateLayerList});
-                this.listenTo(this.model, {"change:layer": this.switchTabToListe});
                 this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
                 this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
                 this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
@@ -112,12 +111,12 @@ define([
         showFeatureProps: function () {
             var props = this.model.get("featureProps");
 
-            this.switchTabToDetails();
             $(".featurelist-details-li").remove();
             _.each(props, function (value, key) {
                 $(".featurelist-details-ul").append("<li class='list-group-item list-group-item-info featurelist-details-li'>" + key + "</li>");
                 $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
             });
+            this.switchTabToDetails();
         },
         /*
         * Wechselt den Tab
@@ -200,25 +199,34 @@ define([
         */
         updateLayerList: function () {
             // lt. Mathias liefern Dienste, bei denen ein Feature in einem Attribut ein null-Value hat, dieses nicht aus und es erscheint gar nicht am Feature.
-            var features = this.model.get("layer").features,
+            var layer = this.model.get("layer"),
+                features = layer.features,
                 maxFeatures = this.model.get("maxFeatures") - 1,
                 keyslist = [];
 
-            // Extrahiere vollständige Überschriftenliste, funktioniert nicht, sollten Kommas im Key stehen. Darf aber wohl nicht vorkommen.
-            _.each(features, function (feature) {
-                _.each(_.keys(feature.properties), function (key) {
-                    if (_.contains(keyslist, key) === false) {
-                        keyslist.push(key);
-                    }
+            if (layer && features && features.length > 0) {
+                // Extrahiere vollständige Überschriftenliste, funktioniert nicht, sollten Kommas im Key stehen. Darf aber wohl nicht vorkommen.
+                _.each(features, function (feature) {
+                    _.each(_.keys(feature.properties), function (key) {
+                        if (_.contains(keyslist, key) === false) {
+                            keyslist.push(key);
+                        }
+                    }, this);
                 }, this);
-            }, this);
-            this.model.set("headers", keyslist);
-            $("#featurelist-list-table thead").remove(); // leere Tabelle
-            $("#featurelist-list-table tbody").remove(); // leere Tabelle
-            $("#featurelist-list-table").prepend("<thead><tr><th class='featurelist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='featurelist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
-            $("#featurelist-list-table").append("<tbody>");
-            this.readFeatures(0, maxFeatures, true);
-            $("#featurelist-list-table").append("</tbody>");
+                this.model.set("headers", keyslist);
+                $("#featurelist-list-table thead").remove(); // leere Tabelle
+                $("#featurelist-list-table tbody").remove(); // leere Tabelle
+                $("#featurelist-list-table").prepend("<thead><tr><th class='featurelist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='featurelist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
+                $("#featurelist-list-table").append("<tbody>");
+                this.readFeatures(0, maxFeatures, true);
+                $("#featurelist-list-table").append("</tbody>");
+                this.switchTabToListe();
+            }
+            else {
+                $("#featurelist-list-table tr").remove();
+                $(".featurelist-list-footer").hide();
+                this.switchTabToTheme();
+            }
         },
         /*
         * Liest Features von - bis aus Layer aus. Löscht ggf. bisherige Inhalte der Tabelle.
@@ -278,7 +286,9 @@ define([
         * Ändert den Titel des Tabellen-Tabs auf Layernamen.
         */
         updateLayerHeader: function () {
-            $("#featurelist-list-header").text(this.model.get("layer").name);
+            var name = this.model.get("layer").name ? this.model.get("layer").name : "";
+
+            $("#featurelist-list-header").text(name);
         },
         /*
         * Erzeugt Auflistung der selektierbaren Layer über EventBus.
