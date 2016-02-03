@@ -96,12 +96,14 @@ define([
             var layers = this.get("layerlist"),
                 layer = _.find(layers, {id: this.get("layerid")});
 
+             // wenn Layer wechselt, kann auch kein Feature mehr aktiv sein.
+            this.set("featureid", "");
+            // Layer wegen Tab-switch-Reihenfolge erst hinterher setten.
             if (layer) {
                 this.set("layer", layer);
             }
             else {
                 this.set("layer", {});
-                this.set("featureid", ""); // wenn kein Layer mehr aktiv ist, kann auch kein Feature mehr aktiv sein.
             }
         },
         /*
