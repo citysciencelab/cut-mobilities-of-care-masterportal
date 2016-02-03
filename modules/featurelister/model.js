@@ -30,8 +30,7 @@ define([
         highlightMouseFeature: function (evt) {
             var features = this.get("layer").features,
                 mapFeatures = evt[0],
-                layername = this.get("layer").name,
-                treffer = [];
+                layername = this.get("layer").name;
 
             this.trigger("gfiClose"); // entfernt evtl. Highlights
             _.each(features, function (feature) {
