@@ -32,6 +32,7 @@ define([
                 this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
                 this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
                 this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
+                this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
                 this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
                 this.render();
                 if (Config.startUpModul.toUpperCase() === "FEATURELIST") {

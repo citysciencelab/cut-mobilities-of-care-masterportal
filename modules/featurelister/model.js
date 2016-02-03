@@ -202,6 +202,7 @@ define([
             });
             this.unset("layerlist", {silent: true});
             this.set("layerlist", layerlist);
+            this.trigger("switchTabToTheme"); // bei zusätzlichen Layern soll sich gleich der Tab öffnen.
         }
     });
 
