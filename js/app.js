@@ -190,6 +190,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         new AddWMSView();
                     });
                 }
+                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0) {
+                    require(["modules/featurelister/view"], function (FeatureLister) {
+                        new FeatureLister();
+                    });
+                }
                 if ($.isArray(Config.menu.formular)) {
                     $.each(Config.menu.formular, function (name, obj) {
                         if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {

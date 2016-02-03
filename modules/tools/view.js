@@ -14,7 +14,7 @@ define([
             this.listenTo(this.model, {
                 "change:isActive": this.toggleStyle
             });
-                if (this.model.get("isActive") === true) {
+            if (this.model.get("isActive") === true) {
                 this.toggleStyle();
                 EventBus.trigger("activateClick", this.model.get("name"));
             }

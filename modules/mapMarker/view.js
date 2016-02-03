@@ -124,6 +124,14 @@ define([
                     this.showMarker(hit.coordinate);
                     break;
                 }
+                case "Feature-Lister-Hover": {
+                    this.showMarker(hit.coordinate);
+                    break;
+                }
+                case "Feature-Lister-Click": {
+                    EventBus.trigger("zoomToExtent", hit.coordinate);
+                    break;
+                }
             }
         },
         /*

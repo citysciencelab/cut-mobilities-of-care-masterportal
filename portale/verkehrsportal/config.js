@@ -137,7 +137,8 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: true,
-            addWMS: false
+            addWMS: false,
+            featureLister: 20
         },
         startUpModul: "",
         clickCounter: {

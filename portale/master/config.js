@@ -284,6 +284,7 @@ define(function () {
         * @property {string}  menu.formular.title - Bezeichnung des Formulars
         * @property {string}  menu.formular.symbol - Symbolname
         * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
+        * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
         * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
         * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
         * @todo helpButton
@@ -294,6 +295,7 @@ define(function () {
             layerTree: true,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
+            featureLister: 20,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
