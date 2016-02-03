@@ -111,19 +111,30 @@ define([
         showFeatureProps: function () {
             var props = this.model.get("featureProps");
 
-            $(".featurelist-details-li").remove();
-            _.each(props, function (value, key) {
-                $(".featurelist-details-ul").append("<li class='list-group-item list-group-item-info featurelist-details-li'>" + key + "</li>");
-                $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
-            });
-            this.switchTabToDetails();
+            if (_.keys(props).length > 0) {
+                $("#featurelistFeaturedetails").removeClass("disabled");
+                $(".featurelist-details-li").remove();
+                _.each(props, function (value, key) {
+                    $(".featurelist-details-ul").append("<li class='list-group-item list-group-item-info featurelist-details-li'>" + key + "</li>");
+                    $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
+                });
+                this.switchTabToDetails();
+            }
+            else {
+                $(".featurelist-details-li").remove();
+                $("#featurelistFeaturedetails").addClass("disabled");
+            }
         },
         /*
         * Wechselt den Tab
         */
-        switchTabToListe: function () {
+        switchTabToListe: function (evt) {
+            if (evt && $("#featurelistFeaturelist").hasClass("disabled")) {
+                return;
+            }
             _.each($(".featurelist-navtabs").children(), function (child) {
                 if (child.id === "featurelistFeaturelist") {
+                    $(child).removeClass("disabled");
                     $(child).addClass("active");
                 }
                 else {
@@ -140,6 +151,7 @@ define([
         switchTabToTheme: function () {
             _.each($(".featurelist-navtabs").children(), function (child) {
                 if (child.id === "featurelistThemeChooser") {
+                    $(child).removeClass("disabled");
                     $(child).addClass("active");
                 }
                 else {
@@ -153,9 +165,13 @@ define([
         /*
         * Wechselt den Tab
         */
-        switchTabToDetails: function () {
+        switchTabToDetails: function (evt) {
+            if (evt && $("#featurelistFeaturedetails").hasClass("disabled")) {
+                return;
+            }
             _.each($(".featurelist-navtabs").children(), function (child) {
                 if (child.id === "featurelistFeaturedetails") {
+                    $(child).removeClass("disabled");
                     $(child).addClass("active");
                 }
                 else {
@@ -226,6 +242,7 @@ define([
                 $("#featurelist-list-table tr").remove();
                 $(".featurelist-list-footer").hide();
                 this.switchTabToTheme();
+                $("#featurelistFeaturelist").addClass("disabled");
             }
         },
         /*
