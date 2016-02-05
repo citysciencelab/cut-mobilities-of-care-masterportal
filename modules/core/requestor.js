@@ -24,13 +24,9 @@ define([
             _.each(sortedParams, function (visibleLayer) {
                 gfiContent = null;
                 switch (visibleLayer.ol_layer.get("typ")) {
-                    case "WMS": {
-                        gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
-                        break;
-                    }
                     case "WFS": {
                         gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
-
+                        this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                     case "GeoJSON": {
@@ -40,6 +36,24 @@ define([
                     }
                 }
             }, this);
+            var containsWMS = false;
+
+            _.each(sortedParams, function (visibleLayer) {
+                if (visibleLayer.ol_layer.get("typ") === "WMS") {
+                    containsWMS = true;
+                }
+             });
+             if (containsWMS === true) {
+                _.each(sortedParams, function (visibleLayer) {
+                    if (visibleLayer.ol_layer.get("typ") === "WMS") {
+                            gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
+                        }
+                }, this);
+            }
+            else {
+                this.buildTemplate(positionGFI);
+            }
+
             Util.hideLoader();
             return [this.pContent, positionGFI];
         },
@@ -107,7 +121,6 @@ define([
                 type: "GET",
                 context: this, // das model
                 success: function (data) {
-                    --this.requestCount;
                     var gfiList = [],
                         gfiFormat ,
                         gfiFeatures;
@@ -155,17 +168,21 @@ define([
                         pgfi = this.translateGFI(gfiList, params.ol_layer.get("gfiAttributes"));
                     }
                     this.pushGFIContent(pgfi, params);
-                    if (this.requestCount === 0) {
-                        EventBus.trigger("renderResults", [this.pContent, positionGFI]);
-                    }
                 },
                 error: function (jqXHR, textStatus) {
+                    alert("Ajax-Request " + textStatus);
+                },
+                complete: function () {
                      --this.requestCount;
 
-                    alert("Ajax-Request " + textStatus);
+                    if (this.requestCount === 0) {
+                        this.buildTemplate(positionGFI);
+                    }
                 }
             });
-
+        },
+        buildTemplate: function (positionGFI) {
+                EventBus.trigger("renderResults", [this.pContent, positionGFI]);
         },
         isValidKey: function (key) {
             var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID"];

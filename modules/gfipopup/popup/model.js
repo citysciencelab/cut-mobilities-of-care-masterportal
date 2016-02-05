@@ -60,11 +60,9 @@ define([
         },
         setGFIParams: function (params) {
             EventBus.trigger("closeGFIParams", this);
-            var response = Requestor.requestFeatures(params);
-            //this.createTemplate(response);
+            Requestor.requestFeatures(params);
         },
         createTemplate: function (response) {
-                                    console.log(response);
             var features = response[0],
                 coordinate = response[1],
                 pContent = [],
@@ -72,7 +70,7 @@ define([
                 templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer, index, list) {
-                console.log(layer.content);
+
                 _.each(layer.content, function (content, index, list) {
 
                     switch (layer.ol_layer.get("gfiTheme")) {
