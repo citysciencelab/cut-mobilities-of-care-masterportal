@@ -38,6 +38,7 @@ define([
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
+            EventBus.on("renderResults", this.createTemplate, this);
         },
         /**
          * Vernichtet das Popup.
@@ -59,15 +60,21 @@ define([
         },
         setGFIParams: function (params) {
             EventBus.trigger("closeGFIParams", this);
-            var response = Requestor.requestFeatures(params),
-                features = response[0],
+            var response = Requestor.requestFeatures(params);
+            //this.createTemplate(response);
+        },
+        createTemplate: function (response) {
+                                    console.log(response);
+            var features = response[0],
                 coordinate = response[1],
                 pContent = [],
                 pTitles = [],
                 templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer, index, list) {
+                console.log(layer.content);
                 _.each(layer.content, function (content, index, list) {
+
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
