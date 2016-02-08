@@ -7,6 +7,9 @@ define([
 ], function (Backbone, EventBus, ol, Util, Config) {
 
     var Requestor = Backbone.Model.extend({
+        requestCount: 0,
+        response: [],
+        pContent: [],
         /**
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
@@ -15,34 +18,52 @@ define([
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], "name"),
                 gfiContent,
-                pContent = [],
                 positionGFI = params[1];
 
             // Abfrage jedes Layers der von der map übermittelt wurde.
             _.each(sortedParams, function (visibleLayer) {
                 gfiContent = null;
                 switch (visibleLayer.ol_layer.get("typ")) {
-                    case "WMS": {
-                        gfiContent = this.setWMSPopupContent(visibleLayer);
-                        break;
-                    }
                     case "WFS": {
                         gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
+                        this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                     case "GeoJSON": {
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
+                        this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                 }
-                pContent.push({
+            }, this);
+            var containsWMS = false;
+
+            _.each(sortedParams, function (visibleLayer) {
+                if (visibleLayer.ol_layer.get("typ") === "WMS") {
+                    containsWMS = true;
+                }
+             });
+             if (containsWMS === true) {
+                _.each(sortedParams, function (visibleLayer) {
+                    if (visibleLayer.ol_layer.get("typ") === "WMS") {
+                            gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
+                        }
+                }, this);
+            }
+            else {
+                this.buildTemplate(positionGFI);
+            }
+
+            Util.hideLoader();
+            return [this.pContent, positionGFI];
+        },
+
+        pushGFIContent: function (gfiContent, visibleLayer) {
+            this.pContent.push({
                     content: gfiContent,
                     name: visibleLayer.name,
                     ol_layer: visibleLayer.ol_layer
                 });
-            }, this);
-            Util.hideLoader();
-            return [pContent, positionGFI];
         },
 
         setGeoJSONPopupContent: function (feature) {
@@ -59,7 +80,7 @@ define([
             return featureList;
         },
 
-        setWMSPopupContent: function (params) {
+        setWMSPopupContent: function (params, positionGFI) {
             var url, data, pgfi = [];
 
             if (params.url.search(location.host) === -1) {
@@ -92,11 +113,11 @@ define([
                     data += "FEATURE_COUNT=" + Config.feature_count[index].count;
                 }
             }
-
+            ++this.requestCount;
             $.ajax({
                 url: url,
                 data: data,
-                async: false,
+                async: true,
                 type: "GET",
                 context: this, // das model
                 success: function (data) {
@@ -146,12 +167,22 @@ define([
                     if (gfiList) {
                         pgfi = this.translateGFI(gfiList, params.ol_layer.get("gfiAttributes"));
                     }
+                    this.pushGFIContent(pgfi, params);
                 },
                 error: function (jqXHR, textStatus) {
                     alert("Ajax-Request " + textStatus);
+                },
+                complete: function () {
+                     --this.requestCount;
+
+                    if (this.requestCount === 0) {
+                        this.buildTemplate(positionGFI);
+                    }
                 }
             });
-            return pgfi;
+        },
+        buildTemplate: function (positionGFI) {
+                EventBus.trigger("renderResults", [this.pContent, positionGFI]);
         },
         isValidKey: function (key) {
             var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID"];
