@@ -3,6 +3,12 @@ LGV Master-Portal
 
 [TOC]
 
+#Allgemeines
+
+#Readmeund Kommentare/md Dateien stylen:
+http://markdown.de/
+
+
 # lokale Entwicklungsumgebung einrichten
 
 ## [git](http://git-scm.com/)
@@ -152,7 +158,7 @@ Ein Portal für die Veröffentlichung fertig machen.
 
 ```
 // grunt build --path=<pfad-zum-portal> --name=<Portalname> [--env=internet| default:fhhnet]
-# grunt build --path=portale/local --name=FHH-Atlas 
+# grunt build --path=portale/local --name=FHH-Atlas
 ```
 
 - baut das Portal und alles, was es braucht in den Ordner dist/<pkg.version>

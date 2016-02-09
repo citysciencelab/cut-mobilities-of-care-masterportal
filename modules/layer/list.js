@@ -6,7 +6,8 @@ define([
     "modules/layer/GroupLayer",
     "modules/layer/GeoJSONLayer",
     "config",
-    "eventbus"
+    "eventbus",
+    "modules/featurelister/model" // featureLister muss schon geladen sein, damit dieses Event initial empfangen kann
 ], function (Backbone, Radio, WMSLayer, WFSLayer, GroupLayer, GeoJSONLayer, Config, EventBus) {
 
     var LayerList = Backbone.Collection.extend({
@@ -57,7 +58,12 @@ define([
                     EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({visibility: true, typ: "WMS"}));
                 },
                 "layerlist:getVisibleWFSlayerList": function () {
-                    EventBus.trigger("layerlist:sendVisibleWFSlayerList", this.where({visibility: true, typ: "WFS"}));
+                    var visibleWFS = this.where({visibility: true, typ: "WFS"}),
+                        loadedWFS = _.reject(visibleWFS, function (layer) {
+                            return layer.get("layer").getSource().getFeatures().length === 0;
+                        });
+
+                    EventBus.trigger("layerlist:sendVisibleWFSlayerList", loadedWFS);
                 },
                 "layerlist:getVisiblePOIlayerList": function () {
                     EventBus.trigger("layerlist:sendVisiblePOIlayerList", this.where({visibility: true, typ: "WFS"}));
@@ -100,7 +106,12 @@ define([
                     EventBus.trigger("removeLayer", model.get("layer"));
                 },
                 "change:visibility": function () {
-                    EventBus.trigger("layerlist:sendVisibleWFSlayerList", this.where({visibility: true, typ: "WFS"}));
+                    var visibleWFS = this.where({visibility: true, typ: "WFS"}),
+                        loadedWFS = _.reject(visibleWFS, function (layer) {
+                            return layer.get("layer").getSource().getFeatures().length === 0;
+                        });
+
+                    EventBus.trigger("layerlist:sendVisibleWFSlayerList", loadedWFS);
                     EventBus.trigger("layerlist:sendVisiblelayerList", this.where({visibility: true}));
                 },
                 "reset": function (models, options) {

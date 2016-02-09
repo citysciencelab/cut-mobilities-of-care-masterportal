@@ -181,15 +181,22 @@ define([
                         type: feature.getGeometry().getType()
                     }
                 });
-
-                featureStyles[index] = {
-                    fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
-                    fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
-                    pointRadius: feature.getStyle().getImage().getRadius(),
-                    strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
-                    strokeWidth: feature.getStyle().getStroke().getWidth(),
-                    strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
-                };
+                if (feature.getStyle().getText() === null) {
+                    featureStyles[index] = {
+                        fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
+                        fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
+                        pointRadius: feature.getStyle().getImage().getRadius(),
+                        strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
+                        strokeWidth: feature.getStyle().getStroke().getWidth(),
+                        strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
+                    };
+                }
+                else {
+                    featureStyles[index] = {
+                        label: feature.getStyle().getText().getText(),
+                        fontColor: this.getColor(feature.getStyle().getText().getFill().getColor()).color
+                    };
+                }
             }, this);
             this.push("layerToPrint", {
                 type: "Vector",

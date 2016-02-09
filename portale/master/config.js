@@ -142,13 +142,13 @@ define(function () {
         * @desc Konfiguration der Controls auf der Map
         * @property {Boolean}  [zoom=false] - Legt fest ob die Zoombuttons angezeigt werden sollen.
         * @property {Boolean}  [toggleMenu=false] - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
-        * @property {Boolean}  [orientation=false] - Legt fest ob der Knopf zur Standpunktpositionierung angezeigt werden soll.
+        * @property {'none'|'allways'|'once'} [orientation=none] - Legt fest ob das Orientation-Modul geladen werden soll, oder nicht ('none'). Bei 'allways' wird zusätzlich zur Standpunktdarstellung auch auf die Position gezoomt. Bei 'once' wird nur einmalig gezoomt.
         * @property {Boolean}  [poi=false] - Legt fest ob die Points of Interest angezeigt werden sollen. Nur möglich, bei orientation: true.
         */
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "once",
             poi: true
         },
         /**
@@ -284,6 +284,7 @@ define(function () {
         * @property {string}  menu.formular.title - Bezeichnung des Formulars
         * @property {string}  menu.formular.symbol - Symbolname
         * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
+        * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
         * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
         * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
         * @todo helpButton
@@ -294,6 +295,7 @@ define(function () {
             layerTree: true,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
+            featureLister: 20,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
@@ -454,7 +456,7 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             },
             draw: {
-                title: "Zeichnen",
+                title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
             },
             searchByCoord: {

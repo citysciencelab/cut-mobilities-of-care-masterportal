@@ -65,7 +65,7 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "allways",
             poi: true
         },
         customModules: ["../portale/verkehrsportal/verkehrsfunctions"],
@@ -137,7 +137,8 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: true,
-            addWMS: false
+            addWMS: false,
+            featureLister: 20
         },
         startUpModul: "",
         clickCounter: {

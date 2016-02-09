@@ -1,33 +1,98 @@
 /***** Destop *****/
-.wfslist-navbar-li {
-    width: 100px;
+.featurelist-list-table-th-sorted {
+    color: black !important;
 }
 
-.legend-win {
+.featurelist-list-table-th {
+    cursor: pointer;
+}
+
+.featurelist-list-table-th > span {
+    float:left;
+    width: 15px;
+    color: gray;
+}
+
+.featurelist-list-button {
+    position: relative;
+    right: 0px;
+}
+
+.featurelist-list-message {
+    float: left;
+    text-align: center;
+    align-items: center;
+}
+
+.featurelist-details-li {
+    cursor: text;
+}
+
+.featurelist-details-ul {
+    max-height: 400px;;
+    overflow: auto;
+    cursor: auto;
+}
+
+.featurelist-list-table-td {
+    height: 15px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+.featurelist-list-table-tr{
+    cursor: pointer;
+}
+
+.featurelist-details {
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    max-height: 800px;
+}
+
+.featurelist-list {
+    display: none;
+    max-width:500px;
+
+}
+
+.featurelist-list-table {
+    max-height: 400px;
+}
+
+.featurelist-themes {
+    width: 100%;
+}
+
+.featurelist-win {
     position: absolute;
     top: 20px;
     left: 20px;
-    min-width: 40%;
+    min-width: 25%;
     margin: 60px 10px 30px 10px;
     display: none;
     background-color: rgb(255, 255, 255);
 }
 
-.legend-win > .legend-win-header {
+.featurelist-win > .featurelist-win-header {
     color: #777;
     cursor: move;
 }
 
-.legend-win > .legend-win-content {
+.featurelist-win > .featurelist-win-content {
     overflow-y: auto;
+    padding: 5px;
 }
 
-.legend-win-header {
+.featurelist-win-header {
     padding-left: 10px;
     border-bottom: 1px solid rgb(229, 229, 229);
 }
 
-.legend-win-header > .title {
+.featurelist-win-header > .title {
     white-space: nowrap;
     min-width: 250px;
     cursor: move;
@@ -37,39 +102,39 @@
     color: rgb(85, 85, 85);
 }
 
-.legend-win-header > .buttons {
+.featurelist-win-header > .buttons {
     color: rgb(85, 85, 85);
     font-size: 14px;
 }
 
-.legend-win-header > .buttons > span {
+.featurelist-win-header > .buttons > span {
     padding: 8px 3px;
 }
 
-.legend-win-header > .buttons > span:hover:not(.win-icon) {
+.featurelist-win-header > .buttons > span:hover:not(.win-icon) {
     opacity: 0.7;
     cursor: pointer;
 }
 
-.legend-win-content > .panel-group {
+.featurelist-win-content > .panel-group {
     padding: 12px;
     margin-bottom: 0;
 }
 
-.legend-win-content > .panel-group .panel {
+.featurelist-win-content > .panel-group .panel {
     margin-top: 8px;
 }
 
-.legend-heading {
+.featurelist-heading {
     padding: 8px;
 }
 
-.legend-heading > .legend-title {
+.featurelist-heading > .featurelist-title {
     font-size: 12px;
 }
 
 /***** Mobil *****/
-.legendModal {
+.featurelistModal {
     background-color: rgb(255, 255, 255);
     /*background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -82,11 +147,11 @@
     padding: 10px;
 }
 
-.legendModal > button {
+.featurelistModal > button {
     padding: 4px 0px;
 }
 
-.legendModal > h4 > span {
+.featurelistModal > h4 > span {
     padding: 0 8px;
 }
 
@@ -102,21 +167,21 @@
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-.tdLegend {
+.tdfeaturelist {
     padding: 3px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-.tdLegend > img {
+.tdfeaturelist > img {
     max-height: 35px;
 }
 
-.panel-legend {
+.panel-featurelist {
     overflow-x: auto;
     max-height: 300px;
     padding: 8px;
 }
 
-.panel-legend > p {
+.panel-featurelist > p {
     margin: 0;
 }
