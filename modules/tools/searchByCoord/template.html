@@ -41,9 +41,8 @@
                 </div>
         </div>
        
-    <% }
-       
-    else if (this.model.get("coordSystem") === "WGS84_dez") {%>
+    <% }    
+    else if (this.model.get("coordSystem") === "WGS84(Dezimalgrad)") {%>
          <div class="form-group form-group-sm">
             <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Nordwert</label>
             <div class="col-md-7 col-sm-7">
@@ -56,7 +55,6 @@
                     <input type="text" class="form-control" id="coordinatesEastingField" placeholder="Bsp: 10.01234°">
                 </div>
         </div>
-       
     <% }%>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">

@@ -9,7 +9,7 @@ define([
 
         defaults: {
             "coordSystem": "ETRS89",
-            "coordSystems": ["ETRS89", "WGS84", "WGS84_dez"],
+            "coordSystems": ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             "coordinatesEasting": "",
             "coordinatesNorthing": ""
         },
@@ -22,7 +22,7 @@ define([
         validate: function (attributes) {
             var validETRS89 = /^[0-9]{6,7}[.]{0,1}[0-9]{0,3}$/,
                 validWGS84 = /^\d[0-9]{0,2}[°′″'"]{0,1}$/,
-                validWGS84_dez = /^[0-9]{1,3}[.]{0,1}[0-9]{0,5}\d[°]{0,1}$/;
+                validWGS84_dez = /^[0-9]{1,3}[.]{1}[0-9]{0,5}\d[°]{0,1}$/;
 
             if (attributes.coordSystem === "ETRS89") {
                 _.each(attributes.coordinates, function (value, key) {
@@ -100,7 +100,7 @@ define([
                     });
             }
             
-            else if (attributes.coordSystem === "WGS84_dez") {
+            else if (attributes.coordSystem === "WGS84(Dezimalgrad)") {
                 _.each(attributes.coordinates[0].coord, function (value, key) {
                     if (attributes.coordinates[0].coord[key].length < 1) {
                         attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " ein";
@@ -168,7 +168,7 @@ define([
                 this.set("northingCoords", northing.split(/[\s°′″'"]+/));
                 coordinateArray = [{"coord": resultEasting, "key": "Ostwert", "example": "9° 59′ 50″"}, {"coord": resultNorthing, "key": "Nordwert", "example": "53° 33′ 25″"}];
             }
-            else if (this.get("coordSystem") === "WGS84_dez") {
+            else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
                 var resultEasting = easting.split(/[\s]+/),
                 resultNorthing = northing.split(/[\s]+/);
 
@@ -195,7 +195,7 @@ define([
 
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
                 }
-            else if (this.get("coordSystem") === "WGS84_dez") {
+            else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
                var easting = this.get("eastingCoords")[0],
                 northing = this.get("northingCoords")[0];
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
