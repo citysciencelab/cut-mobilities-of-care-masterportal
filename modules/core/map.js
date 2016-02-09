@@ -4,8 +4,9 @@ define([
     "openlayers",
     "config",
     "modules/core/mapView",
-    "eventbus"
-], function (Backbone, Radio, ol, Config, MapView, EventBus) {
+    "eventbus",
+     "modules/core/util"
+], function (Backbone, Radio, ol, Config, MapView, EventBus, Util) {
 
     var Map = Backbone.Model.extend({
 
@@ -202,7 +203,46 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
+
+            //Laden des Layers überwachen
+            if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
+                this.getLayerLoadStatus(layer);
+            }
+
         },
+        // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
+        // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
+        getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
+            return function (tile, src) {
+                    if (numLoadingTiles === 0) {
+                        Util.showLoader();
+                    }
+                    ++numLoadingTiles;
+                    var image = tile.getImage();
+
+                    image.onload = image.onerror =  function () {
+                        --numLoadingTiles;
+                        if (numLoadingTiles === 0) {
+                            Util.hideLoader();
+                            //Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
+                            source.setTileLoadFunction(tileLoadFn);
+                        }
+                    };
+                tileLoadFn(tile, src);
+                };
+        },
+        // Setzt eine neue "setTileLoadFunction" an die source der übergebenen Layer
+        getLayerLoadStatus: function (layer) {
+            var context = this;
+
+            layer.getSource().setTileLoadFunction(( function () {
+                var numLoadingTiles = 0,
+                tileLoadFn = layer.getSource().getTileLoadFunction();
+
+                return context.getTileLoadFunction(numLoadingTiles, tileLoadFn, layer.getSource());
+            })());
+        },
+
         /**
         *
         */
