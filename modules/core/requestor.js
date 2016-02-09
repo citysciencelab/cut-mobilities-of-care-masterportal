@@ -14,7 +14,6 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         requestFeatures: function (params) {
-            Util.showLoader();
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], "name"),
                 gfiContent,

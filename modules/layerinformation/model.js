@@ -43,14 +43,19 @@ define([
         },
 
         fetchData: function (data) {
+            Util.showLoader();
             this.fetch({
                 data: data,
                 dataType: "xml",
                 error: function () {
+                    Util.hideLoader();
                     EventBus.trigger("alert", {
                         text: "Informationen zurzeit nicht verfügbar",
                         kategorie: "alert-warning"
                     });
+                },
+                success: function () {
+                    Util.hideLoader();
                 }
             });
         },
