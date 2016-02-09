@@ -106,21 +106,21 @@ define([
         activateClick: function (tool) {
             if (tool === "coord") {
                 this.get("map").un("click", this.setGFIParams, this);
-                this.get("map").on("click", this.setPositionCoordPopup);
+                this.get("map").on("click", this.setPositionCoordPopup, this);
                 // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === "gfi") {
-                this.get("map").un("click", this.setPositionCoordPopup);
+                this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").on("click", this.setGFIParams, this);
                 // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === "measure") {
-                this.get("map").un("click", this.setPositionCoordPopup);
+                this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").un("click", this.setGFIParams, this);
                 // this.get("map").on("pointermove", this.pointerMoveOnMap);
             }
             else if (tool === "draw" || tool === "record") {
-                this.get("map").un("click", this.setPositionCoordPopup);
+                this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").un("click", this.setGFIParams, this);
                 // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
@@ -213,7 +213,30 @@ define([
         *
         */
         setPositionCoordPopup: function (evt) {
-            EventBus.trigger("setPositionCoordPopup", evt.coordinate);
+            // Abbruch, wenn auf SearchMarker x geklickt wird.
+            if (this.checkInsideSearchMarker(evt.pixel[1], evt.pixel[0]) === true) {
+                return;
+            }
+            else {
+                EventBus.trigger("setPositionCoordPopup", evt.coordinate);
+            }
+        },
+        /**
+        * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
+        */
+        checkInsideSearchMarker: function (top, left) {
+            var button = Radio.request("MapMarker", "getCloseButtonCorners"),
+                bottomSM = button.bottom,
+                leftSM = button.left,
+                topSM = button.top,
+                rightSM = button.right;
+
+            if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
+                return true;
+            }
+            else {
+                return false;
+            }
         },
         /**
          * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
@@ -230,6 +253,10 @@ define([
                 projection = this.get("view").getProjection(),
                 coordinate = evt.coordinate;
 
+            // Abbruch, wenn auf SearchMarker x geklickt wird.
+            if (this.checkInsideSearchMarker(eventPixel[1], eventPixel[0]) === true) {
+                return;
+            }
             // WFS
             if (isFeatureAtPixel === true) {
                 var layerByFeature,
