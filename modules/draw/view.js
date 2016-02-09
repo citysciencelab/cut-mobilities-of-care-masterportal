@@ -14,7 +14,8 @@ define([
             "change .drawPointRadius": "setPointRadius",
             "change .drawStrokeWidth": "setStrokeWidth",
             "change .drawOpacity": "setOpacity",
-            "click button": "deleteFeatures"
+            "click button.delete": "deleteFeatures",
+            "click button.download": "getKML"
         },
         initialize: function () {
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
@@ -56,6 +57,9 @@ define([
 
         deleteFeatures: function () {
             this.model.deleteFeatures();
+        },
+        getKML: function () {
+            this.model.getKML();
         }
     });
 

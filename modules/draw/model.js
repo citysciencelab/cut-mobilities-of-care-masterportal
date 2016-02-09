@@ -1,8 +1,9 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus"
-], function (Backbone, ol, EventBus) {
+    "eventbus",
+    "backbone.radio"
+], function (Backbone, ol, EventBus, Radio) {
 
     var Draw = Backbone.Model.extend({
 
@@ -168,7 +169,19 @@ define([
 
         getLayer: function () {
             EventBus.trigger("sendDrawLayer", this.get("layer"));
+        },
+
+        getKML: function () {
+            var features = this.get("layer").getSource().getFeatures();
+            var view = Radio.request("map", "getView");
+
+            var format = new ol.format.KML({
+                dataProjection: view.getProjection()
+            });
+            console.log(format);
+             console.log(format.writeFeatures(features));
         }
+
     });
 
     return new Draw();
