@@ -13,6 +13,8 @@ define([
                 "change select": "setSelection",
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
+                "click .rotate-adjust": "greyBackground",
+                "click .rotate-adjust-back": "whiteBackground",
                 "click .base-layer-catalog > .header > .glyphicon-question-sign": function () {
                     EventBus.trigger("showWindowHelp", "tree");
                 },
@@ -80,6 +82,17 @@ define([
                 $("body").off("click", "#searchbar", this.helpForFixing);
                 $(".glyphicon-pushpin").removeClass("rotate-pin");
                 $(".glyphicon-pushpin").addClass("rotate-pin-back");
+            },
+            whiteBackground: function () {
+                this.model.set("defaultBackground", $("#map").css("background"));
+                $("#map").css("background", "white");
+                $(".glyphicon-adjust").addClass("rotate-adjust");
+                $(".glyphicon-adjust").removeClass("rotate-adjust-back");
+            },
+            greyBackground: function () {
+                $("#map").css("background", this.model.get("defaultBackground"));
+                $(".glyphicon-adjust").removeClass("rotate-adjust");
+                $(".glyphicon-adjust").addClass("rotate-adjust-back");
             },
             helpForFixing: function (evt) {
                 evt.stopPropagation();
