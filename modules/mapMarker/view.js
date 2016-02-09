@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "modules/mapMarker/model",
     "eventbus"
-    ], function (Backbone, ol, MapHandlerModel, EventBus) {
+    ], function (Backbone, Radio, ol, MapHandlerModel, EventBus) {
     "use strict";
 
     var searchVector = new ol.layer.Vector({
@@ -34,6 +35,35 @@ define([
         * @description View des Map Handlers
         */
         initialize: function () {
+            var channel = Radio.channel("MapMarker");
+
+            channel.reply({
+                "getCloseButtonCorners": function () {
+                    if (this.$el.is(":visible") === false) {
+                        return {
+                            top: -1,
+                            bottom: -1,
+                            left: -1,
+                            right: -1
+                        };
+                    }
+                    else {
+                        var bottomSM = $("#searchMarker .glyphicon-remove").offset().top,
+                            leftSM = $("#searchMarker .glyphicon-remove").offset().left,
+                            widthSM = $("#searchMarker .glyphicon-remove").outerWidth(),
+                            heightSM = $("#searchMarker .glyphicon-remove").outerHeight(),
+                            topSM = bottomSM + heightSM,
+                            rightSM = leftSM + widthSM;
+
+                        return {
+                            top: topSM,
+                            bottom: bottomSM,
+                            left: leftSM,
+                            right: rightSM
+                        };
+                    }
+                }
+            }, this);
             this.listenTo(EventBus, {
                 "mapHandler:clearMarker": this.clearMarker,
                 "mapHandler:zoomTo": this.zoomTo,

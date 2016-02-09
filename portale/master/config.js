@@ -456,7 +456,7 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             },
             draw: {
-                title: "Zeichnen",
+                title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
             },
             searchByCoord: {
