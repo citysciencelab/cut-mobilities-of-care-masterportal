@@ -9,7 +9,8 @@ define([
                 topicList: ["Opendata", "Inspire"], // --> Config
                 currentSelection: Config.tree.orderBy,
                 type: Config.tree.type,
-                quickHelp: false
+                quickHelp: false,
+                defaultBackground: "" // wird beim Umschalten der Hintergrundfarbe gefüllt
             },
             initialize: function () {
                 this.listenTo(EventBus, {
