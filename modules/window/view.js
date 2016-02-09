@@ -39,7 +39,7 @@ define([
             if (this.model.get("isVisible") === true) {
                 if (this.model.get("isCollapsed") === true) {
                     $("body").append(this.$el.html(this.templateMin(attr)));
-                    this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "25px"});
+                    this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "60px"});
                 }
                 else {
                     $("body").append(this.$el.html(this.templateMax(attr)));
