@@ -64,6 +64,12 @@ define([
                         coordinate: geometry
                     });
                 }
+                else {
+                    EventBus.trigger("alert", {
+                        text: "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
+                        kategorie: "alert-warning"
+                    });
+                }
                 // Zeigen der Details
                 this.set("featureProps", properties);
             }
@@ -158,11 +164,12 @@ define([
                 ll = [],
                 counter = 0;
 
+            // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
             _.each(features, function (feature) {
                 if (feature.get("features")) {
                     _.each(feature.get("features"), function (feat) {
                         var props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0],
-                            geom = feat.getGeometry().getExtent();
+                            geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                         ll.push({
                             id: counter,
@@ -175,7 +182,7 @@ define([
                 }
                 else {
                     var props = Requestor.translateGFI([feature.getProperties()], gfiAttributes)[0],
-                        geom = feature.getGeometry().getExtent();
+                        geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                     ll.push({
                         id: counter,
