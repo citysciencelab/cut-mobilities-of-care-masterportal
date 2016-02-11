@@ -57,8 +57,8 @@ define(function () {
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
                 {id: "1748", visible: false},
-                {id: "1562", visible: true},
-                {id: "1561", visible: true},
+                {id: "1562", visible: false},
+                {id: "1561", visible: false},
                 {id: "2003", visible: false, style: "2003"},
                 {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
@@ -94,7 +94,8 @@ define(function () {
                      }
                  ],
                  routable: true
-                }
+                },
+                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "", routable: false}
             ]
         },
         /**
