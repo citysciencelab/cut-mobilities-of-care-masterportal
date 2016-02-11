@@ -1,5 +1,7 @@
 .base-layer-list {
     overflow-y: auto;
+    display: none;
+    max-height: 45vh;
 }
 
 /*.base-layer {
