@@ -269,15 +269,13 @@ define([
         getLayer: function () {
             EventBus.trigger("sendDrawLayer", this.get("layer"));
         },
-        getKML: function () {
+        /**
+         * Startet das Downloadmodul
+         */
+        downloadFeatures: function () {
             var features = this.get("layer").getSource().getFeatures();
-            var view = Radio.request("map", "getView");
 
-            var format = new ol.format.KML({
-                dataProjection: view.getProjection()
-            });
-            console.log(format);
-             console.log(format.writeFeatures(features));
+            Radio.trigger("download", "start", {data: features, formats: ["kml"]});
         },
         setDrawendCoords: function (geom) {
             var geoJSON = new ol.format.GeoJSON();
@@ -288,7 +286,6 @@ define([
         triggerDrawendCoords: function () {
             EventBus.trigger("getDrawendCoords", this.get("drawendCoords"));
         }
-
     });
 
     return DrawTool;

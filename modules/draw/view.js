@@ -25,7 +25,7 @@ define([
             "change .drawStrokeWidth": "setStrokeWidth",
             "change .drawOpacity": "setOpacity",
             "click button.delete": "deleteFeatures",
-            "click button.download": "getKML",
+            "click button.download": "downloadFeatures",
             "keyup .drawText": "setText"
         },
         initialize: function () {
@@ -111,8 +111,8 @@ define([
         deleteFeatures: function () {
             this.model.deleteFeatures();
         },
-        getKML: function () {
-            this.model.getKML();
+        downloadFeatures: function () {
+            this.model.downloadFeatures();
         }
     });
 
