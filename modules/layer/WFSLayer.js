@@ -11,6 +11,7 @@ define([
 ], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
     var WFSLayer = Layer.extend({
         updateData: function () {
+            console.log("_l");
             Util.showLoader();
 
             this.buildGetRequest();
@@ -83,7 +84,7 @@ define([
                         var that = this;
                         window.setTimeout(function () {
                             that.set("visibility", true);
-                        }, 1);
+                        }, 20000);
                     }
                     catch (e) {
                         EventBus.trigger("alert", {
