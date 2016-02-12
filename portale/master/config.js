@@ -77,7 +77,7 @@ define(function () {
                  ],
                  name: "aktuelle Meldungen der TBZ", visible: false
                 },
-                {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  filterOptions: [
                      {
@@ -95,7 +95,7 @@ define(function () {
                  ],
                  routable: true
                 },
-                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "", filterOptions: [], styleLabelField: "", styleField: "", routable: false}
+                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [], styleLabelField: "", styleField: "", routable: false}
             ]
         },
         /**
