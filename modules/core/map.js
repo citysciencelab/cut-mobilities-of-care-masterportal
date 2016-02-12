@@ -22,6 +22,13 @@ define([
         *
         */
         initialize: function () {
+            var channel = Radio.channel("MouseHover");
+
+            channel.reply({
+                "getMap": function () {
+                    return this.get("map");
+                }
+            }, this);
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
             EventBus.on("removeLayer", this.removeLayer, this);
