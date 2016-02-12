@@ -15,7 +15,7 @@ define([
          */
         defaults: {
             MM_PER_INCHES: 25.4,
-            DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
+            POINTS_PER_INCH: 72
         },
 
         /**
@@ -409,8 +409,8 @@ define([
                 height = this.get("layoutPrintPage").height,
                 view = this.get("map").getView(),
                 resolution = view.getResolution(),
-                w = width / this.get("DOTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                h = height / this.get("DOTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 mapSize = this.get("map").getSize(),
                 center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
                 mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
