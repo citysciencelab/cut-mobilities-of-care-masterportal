@@ -32,10 +32,10 @@ define([
              chemContent = {};
 
             _.each(content, function (value, key) {
-                if (_.contains(["Probenahmestelle probe_entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"], key)) {
+                if (_.contains(["Entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"], key)) {
                     allgemContent[key] = value;
                 }
-                else if (_.contains(["Coliforme bakterien", "Coliforme bakterien_mpn", "Escherichia coli", "Escherichia coli__e_coli__mpn", "Koloniezahl 36c__trinkwv_2001_anlage_5_i_d_bb___trinkwv_00", "Koloniezahl 20c__trinkwv_1990_", "intestinale_enterokokken", "Coliforme bakterien_grenzwertwarnung", "Coliforme bakterien_mpn_grenzwertwarnung", "Escherichia coli_grenzwertwarnung", "Escherichia coli__e_coli__mpn_grenzwertwarnung", "Koloniezahl 36c__trinkwv_2001_anlage_5_i_d_bb___trinkwv_00_grenzwertwarnung", "Koloniezahl 20c__trinkwv_1990__grenzwertwarnung", "intestinale_enterokokken_grenzwertwarnung"], key)) {
+                else if (_.contains(["Coliforme Bakterien", "Coliforme Bakterien MPN", "Escherichia coli", "Escherichia coli (E.coli) MPN", "Koloniezahl, 36°C", "Koloniezahl, 20°C", "intestinale Enterokokken", "Coliforme Bakterien Grenzwertwarnung", "Coliforme Bakterien MPN Grenzwertwarnung", "Escherichia coli Grenzwertwarnung", "Escherichia coli (E.coli) MPN Grenzwertwarnung", "Koloniezahl, 36°C Grenzwertwarnung", "Koloniezahl, 20°C Grenzwertwarnung", "intestinale Enterokokken Grenzwertwarnung"], key)) {
                     mikrobioContent[key] = value;
                 }
                 else {

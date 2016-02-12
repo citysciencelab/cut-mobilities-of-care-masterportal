@@ -4,8 +4,9 @@ define([
     "openlayers",
     "config",
     "modules/core/mapView",
-    "eventbus"
-], function (Backbone, Radio, ol, Config, MapView, EventBus) {
+    "eventbus",
+     "modules/core/util"
+], function (Backbone, Radio, ol, Config, MapView, EventBus, Util) {
 
     var Map = Backbone.Model.extend({
 
@@ -14,7 +15,7 @@ define([
          */
         defaults: {
             MM_PER_INCHES: 25.4,
-            DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
+            POINTS_PER_INCH: 72
         },
 
         /**
@@ -25,6 +26,11 @@ define([
 
             channel.reply({
                 "getView": MapView.get("view")
+            }, this);
+            channel.reply({
+                "getMap": function () {
+                    return this.get("map");
+                }
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
@@ -208,7 +214,46 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
+
+            //Laden des Layers überwachen
+            if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
+                this.getLayerLoadStatus(layer);
+            }
+
         },
+        // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
+        // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
+        getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
+            return function (tile, src) {
+                    if (numLoadingTiles === 0) {
+                        Util.showLoader();
+                    }
+                    ++numLoadingTiles;
+                    var image = tile.getImage();
+
+                    image.onload = image.onerror =  function () {
+                        --numLoadingTiles;
+                        if (numLoadingTiles === 0) {
+                            Util.hideLoader();
+                            //Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
+                            source.setTileLoadFunction(tileLoadFn);
+                        }
+                    };
+                tileLoadFn(tile, src);
+                };
+        },
+        // Setzt eine neue "setTileLoadFunction" an die source der übergebenen Layer
+        getLayerLoadStatus: function (layer) {
+            var context = this;
+
+            layer.getSource().setTileLoadFunction(( function () {
+                var numLoadingTiles = 0,
+                tileLoadFn = layer.getSource().getTileLoadFunction();
+
+                return context.getTileLoadFunction(numLoadingTiles, tileLoadFn, layer.getSource());
+            })());
+        },
+
         /**
         *
         */
@@ -375,8 +420,8 @@ define([
                 height = this.get("layoutPrintPage").height,
                 view = this.get("map").getView(),
                 resolution = view.getResolution(),
-                w = width / this.get("DOTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                h = height / this.get("DOTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 mapSize = this.get("map").getSize(),
                 center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
                 mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],

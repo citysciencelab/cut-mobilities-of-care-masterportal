@@ -162,6 +162,12 @@ define([
                     EventBus.trigger("zoomToExtent", hit.coordinate);
                     break;
                 }
+                case "Kita": {
+                    zoomLevel = 8;
+                    this.showMarker(hit.coordinate);
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    break;
+                }
             }
         },
         /*

@@ -32,8 +32,10 @@ define(function () {
         menubar: true,
         print: {
             printID: "99999",
-            title: "Bodenschutz-Portal",
-            gfi: false
+            title: "Geoportal der Metropolregion Hamburg",
+            outputFilename: "Ausdruck Geoportal GDI-MRH",
+            gfi: false,
+            configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
@@ -56,13 +58,31 @@ define(function () {
         },
         styleConf: "../components/lgv-config/style.json",
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            active: "gfi",
-            record: false
+            gfi: {
+              title: "Informationen abfragen",
+               glyphicon: "glyphicon-info-sign",
+               isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+               title: "Koordinate abfragen",
+               glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+               title: "Koordinatensuche",
+               glyphicon: "glyphicon-search"
+            }
         },
         view: {
             center: [565874, 5934140],

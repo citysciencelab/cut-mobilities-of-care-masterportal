@@ -26,13 +26,17 @@ define([
             channel.on({
                 "addModelToLayerListById": this.addModelToLayerListById
             }, this);
-
+            Util.showLoader();
             this.fetch({
                 error: function () {
                     EventBus.trigger("alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
                         kategorie: "alert-warning"
                     });
+                    Util.hideLoader();
+                },
+                success: function () {
+                    Util.hideLoader();
                 }
             });
         },

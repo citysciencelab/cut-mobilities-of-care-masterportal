@@ -12,8 +12,9 @@ define([
     "modules/gfipopup/themes/mietenspiegel/view-formular",
     "modules/gfipopup/themes/reisezeiten/view",
     "modules/gfipopup/themes/trinkwasser/view",
-    "modules/core/requestor"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, TrinkwasserTheme, Requestor) {
+    "modules/core/requestor",
+    "moment"
+], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, TrinkwasserTheme, Requestor, Moment) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -69,10 +70,9 @@ define([
                 pTitles = [],
                 templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
-            _.each(features, function (layer, index, list) {
-
-                _.each(layer.content, function (content, index, list) {
-
+            _.each(features, function (layer) {
+                _.each(layer.content, function (content) {
+                    content = this.getManipulateDate(content);
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
@@ -93,7 +93,7 @@ define([
                     }
                     pContent.push(templateView);
                     pTitles.push(layer.name);
-                });
+                }, this);
             }, this);
 
             // Abspeichern der gesammelten Informationen
@@ -128,6 +128,21 @@ define([
             _.each(this.get("gfiContent"), function (element) {
                 element.remove();
             }, this);
+        },
+
+        /**
+         * Guckt alle Werte durch und prüft, ob es sich dabei um ein ISO8601-konformes Datum handelt.
+         * Falls ja, wird es in das Format DD.MM.YYYY umgewandelt.
+         * @param  {object} content - GFI Attribute
+         * @return {object} content
+         */
+        getManipulateDate: function (content) {
+            _.each(content, function (value, key, list) {
+                if (Moment(value).parsingFlags().overflow === -1) {
+                    list[key] = Moment(value).format("DD.MM.YYYY");
+                }
+            });
+            return content;
         }
     });
 

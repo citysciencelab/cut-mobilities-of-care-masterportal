@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config",
     "bootstrap/popover"
-], function (Backbone, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
@@ -16,15 +17,14 @@ define([
         },
         initialize: function () {
             $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
+
             this.set("mhpOverlay", new ol.Overlay({
                 element: $("#mousehoverpopup")
             }));
             this.set("element", this.get("mhpOverlay").getElement());
             EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            EventBus.on("setMap", this.checkLayersAndRegisterEvent, this); // initieren. Wird in Map.js getriggert, nachdem dort auf getMap reagiert wurde.
-
-            EventBus.trigger("getMap", this);
+            this.checkLayersAndRegisterEvent(Radio.request("map", "getMap"));
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
             this.set("GFIPopupVisibility", GFIPopupVisibility);
@@ -36,25 +36,15 @@ define([
 
             _.each(layerIDs, function (element) {
                 if (_.has(element, "mouseHoverField")) {
+                    var id = element.id,
+                        mhf = element.mouseHoverField;
+
                     wfsList.push({
-                        layerId: element.id,
-                        fieldname: element.mouseHoverField
+                        layerId: id,
+                        fieldname: mhf
                     });
                 }
             });
-            // Füge zugehörige Layer der wfsList hinzu
-            map.getLayers().forEach(function (layer) {
-                if (layer.getProperties().typ === "WFS") {
-                    var layerId = layer.id,
-                        wfslistlayer = _.find(wfsList, function (listlayer) {
-                        return listlayer.layerId === layerId;
-                    });
-
-                    if (wfslistlayer) {
-                        wfslistlayer.layer = layer;
-                    }
-                }
-            }, this);
             // speichere Ergebnisse in wfsList
             this.set("wfsList", wfsList);
             if (wfsList && wfsList.length > 0) {
@@ -202,7 +192,7 @@ define([
                     }
 
                     if (listEintrag) {
-                        var mouseHoverField = listEintrag.fieldname;
+                        var mouseHoverField = String(listEintrag.fieldname);
 
                         if (mouseHoverField) {
                             if (_.has(featureProperties, mouseHoverField)) {

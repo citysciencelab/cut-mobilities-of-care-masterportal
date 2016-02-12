@@ -217,7 +217,8 @@ define(function () {
             placeholder: "Suchen nach Adresse, Thema",
             bkg: {
                 bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch"
+                bkgSearchURL: "/bkg_geosearch",
+                suggestCount: 100
             },
             tree: {
                 minChars: 3

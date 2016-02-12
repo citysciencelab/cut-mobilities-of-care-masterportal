@@ -21,7 +21,10 @@ define([
          *
          */
         render: function () {
+
             var attr = this.model.toJSON();
+
+            this.el.className += "popover-trinkwasser";
 
             this.$el.html(this.template(attr));
             this.appendChildren();
