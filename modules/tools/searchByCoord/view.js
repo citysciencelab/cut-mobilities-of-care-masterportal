@@ -38,7 +38,7 @@ define([
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            this.model.setCoordinates($("#coordinatesEastingField").val(), $("#coordinatesNorthingField").val());
+            this.model.setCoordinates($("#coordinatesEastingField").val(),$("#coordinatesNorthingField").val());
         },
         setFocusToCoordSystemInput: function () {
             $("#coordSystemField").focus();
