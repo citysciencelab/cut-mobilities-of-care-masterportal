@@ -50,7 +50,6 @@ define([
                                 gfiTheme: this.get("gfiTheme"),
                                 visible: true
                             }));
-                            this.reload();
                         }
                         else {
                             var src = new ol.source.Vector({
@@ -77,14 +76,12 @@ define([
                                 gfiTheme: this.get("gfiTheme"),
                                 visible: true
                             }));
-                            this.reload();
                         }
                         this.get("layer").id = this.get("id");
-                        // schmutzig, aber einzihe Möglichkeit... :-(
-                        var that = this;
-                        window.setTimeout(function () {
-                            that.set("visibility", true);
-                        }, 20000);
+                        this.get("layer").once("postcompose", function (e) {
+                            this.set("visibility", true);
+                        }, this);
+                        this.reload();
                     }
                     catch (e) {
                         EventBus.trigger("alert", {
