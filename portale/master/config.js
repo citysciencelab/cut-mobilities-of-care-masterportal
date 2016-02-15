@@ -57,9 +57,9 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "1748", visible: false, featureCount: 1},
+                {id: "1748", visible: false},
                 {id: "1562", visible: false},
-                {id: "1561", visible: false},
+                {id: "1561", visible: false, featureCount: 10},
                 {id: "2003", visible: false, style: "2003"},
                 {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
