@@ -79,7 +79,7 @@ define([
             createDOM: function (data, filename) {
                 var a = document.createElement("a");
 
-                data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+                data = "text/json;charset=utf-8," + data ; //JSON.stringify(data);
 
                 a.href = "data:" + data;
                 a.download = filename;
@@ -126,11 +126,10 @@ define([
              * @return {KML-String} das Resultierende KML
              */
             convertFeaturesToKML: function (data) {
-                var view = Radio.request("map", "getView"),
-                format = new ol.format.KML({
-                    dataProjection: view.getProjection()
-                });
-
+                var view = Radio.request("map", "getView");
+                debugger;
+                var format = new ol.format.KML();
+                data[0].getGeometry().transform(view.getProjection(), ol.proj.get("EPSG:4326"));
                 data = format.writeFeatures(data);
                 return data;
             }
