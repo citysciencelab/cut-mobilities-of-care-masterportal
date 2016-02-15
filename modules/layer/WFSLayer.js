@@ -125,13 +125,7 @@ define([
                     visible: false
                 }));
             }
-            var channel = Radio.channel("MapView");
-
-            channel.on({
-                "changedOptions": function (options) {
-                    this.optionsChanged(options);
-                }
-            }, this);
+            Radio.on("MapView", "changedOptions", this.optionsChanged, this);
         },
         optionsChanged: function () {
             if (this.get("visibility") === true) {
