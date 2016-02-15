@@ -79,6 +79,8 @@ define(function () {
                 },
                 {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
+                 maxScale: 60000,
+                 minScale: 10000,
                  filterOptions: [
                      {
                          fieldName: "teilnahme_geburtsklinik",

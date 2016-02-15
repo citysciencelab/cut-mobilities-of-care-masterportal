@@ -1,6 +1,7 @@
 define([
     "underscore",
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config",
@@ -8,10 +9,9 @@ define([
     "modules/layer/wfsStyle/list",
     "modules/core/util",
     "modules/core/mapView"
-], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
+], function (_, Backbone, Radio, ol, EventBus, Config, Layer, StyleList, Util) {
     var WFSLayer = Layer.extend({
         updateData: function () {
-            console.log("_l");
             Util.showLoader();
 
             this.buildGetRequest();
@@ -115,34 +115,79 @@ define([
             }
         },
         /**
-         * wird von Layer.js aufgerufen
+         * wird von Layer.js aufgerufen. Baut einen Dummy-Layer, damit initialize des Layer durchläuft.
          */
         setAttributionLayer: function () {
-            // Dummy-Layer, damit initialize des Layer durchläuft. Nur einmalig und nicht beim reload.
+            // Nur einmalig und nicht beim reload.
             if (this.get("layer") === undefined) {
                 this.set("layer", new ol.layer.Vector({
                     source: new ol.source.Vector(),
                     visible: false
                 }));
-                this.setVisibility();
             }
-        },
-        setVisibility: function () {
-            var visibility = this.get("visibility");
+            var channel = Radio.channel("MapView");
 
-            this.toggleEventAttribution(visibility);
-            if (visibility === true) {
-                if (this.get("layer").getSource().getFeatures().length === 0) {
-                    this.set("visibility", false);
-                    this.updateData();
+            channel.on({
+                "changedOptions": function (options) {
+                    this.optionsChanged(options);
                 }
-                else {
+            }, this);
+        },
+        optionsChanged: function () {
+            if (this.get("visibility") === true) {
+                if (this.checkScale() === true) {
                     this.get("layer").setVisible(true);
                 }
+                else {
+                    this.get("layer").setVisible(false);
+                }
             }
-            else {
-                this.get("layer").setVisible(false);
+        },
+        /*
+        * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
+        */
+        checkScale: function () {
+            var visibility = this.get("visibility"),
+                layerMaxScale = parseFloat(this.get("maxScale")),
+                layerMinScale = parseFloat(this.get("minScale")),
+                mapOptions = Radio.request("MapView", "getOptions"),
+                mapScale = parseFloat(mapOptions.scale);
+
+            if (layerMaxScale && mapScale) {
+                if (mapScale > layerMaxScale) {
+                    return false;
+                }
             }
+            if (layerMinScale && mapScale) {
+                if (mapScale < layerMinScale) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        setVisibility: function () {
+             var visibility = this.get("visibility");
+
+             if (visibility === true) {
+                if (this.checkScale() === true) {
+                    if (this.get("layer").getSource().getFeatures().length === 0) {
+                        this.updateData();
+                        visibility = false;
+                    }
+                    else {
+                        this.get("layer").setVisible(true);
+                    }
+                 }
+                 else {
+                    visibility = false;
+                    this.get("layer").setVisible(false);
+                 }
+                this.set("visibility", visibility, {silent: true});
+             }
+             else {
+                 this.get("layer").setVisible(false);
+             }
+            this.toggleEventAttribution(visibility);
         },
         styling: function () {
             // NOTE Hier werden die Styles zugeordnet
