@@ -230,7 +230,7 @@ define([
             firstListElement = {};
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
-                var selected =  this.getSelectedElement(),
+                var selected = this.getSelectedElement(),
                 firstListElement = this.getFirstElement();
             }
 
@@ -263,10 +263,10 @@ define([
         clearSelection: function () {
             this.getSelectedElement().removeClass("selected");
         },
-        isLastElement : function (element) {
+        isLastElement: function (element) {
             return element.is(":last-child");
         },
-        isFirstElement : function (element) {
+        isFirstElement: function (element) {
             return element.is(":first-child");
         },
         isChildElement: function (element) {
@@ -368,7 +368,6 @@ define([
         getLastElement: function () {
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
-
 
         /**
         *
@@ -478,9 +477,6 @@ define([
 
             element.focus();
             element[0].setSelectionRange(strLength, strLength);
-        },
-        showHelpWindow: function () {
-            EventBus.trigger("showWindowHelp", "search");
         }
     });
 });
