@@ -10,12 +10,18 @@ define(function () {
             {id: "2414,2416", visible: false, name:'Nacht-Schutzzonen mit Isolinien LAeq in dB(A)'}
             ]
         },
-        
+
         view: {
             center: [565686, 5942986], //Flughafen
             resolution: 15.874991427504629, //1.60.00
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
+        },
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: false,
+            poi: true
         },
         footer: true,
         quickHelp: true,
@@ -24,8 +30,8 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
-        
+
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -78,9 +84,7 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         },
-        orientation: true,
-       
-        poi: false
+        
     };
 
     return config;
