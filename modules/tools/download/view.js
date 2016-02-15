@@ -43,6 +43,10 @@ define([
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.appendOptions();
+                this.delegateEvents();
+            }
+            else {
+                this.undelegateEvents();
             }
         },
         /**
