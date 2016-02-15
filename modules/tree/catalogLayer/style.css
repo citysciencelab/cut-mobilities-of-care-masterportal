@@ -4,6 +4,7 @@
     overflow-x: hidden;
     font-size: 14px;
     color: rgb(85, 85, 85);
+    max-height: 40vh;
 }
 
 /***** Catalog - Node *****/

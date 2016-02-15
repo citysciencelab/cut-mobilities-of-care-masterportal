@@ -18,9 +18,9 @@ define([
                 "click .base-layer-catalog > .header > .glyphicon-question-sign": function () {
                     EventBus.trigger("showWindowHelp", "tree");
                 },
-                "click .layer-catalog > .header > .glyphicon-minus-sign, .layer-catalog > .header > .glyphicon-plus-sign, .layer-catalog > .header > .control-label": "toggleCatalog",
+                "click .layer-catalog > .header > .glyphicon-minus-sign, .layer-catalog > .header > .glyphicon-plus-sign, .layer-catalog > .header > .control-label": "toggleCatalogAndBaseLayer",
                 "click .layer-selection > .header > .glyphicon-minus-sign, .layer-selection > .header > .glyphicon-plus-sign, .layer-selection > .header > .control-label": "toggleSelection",
-                "click .base-layer-catalog > .header > .control-label, .base-layer-catalog > .header > .glyphicon-minus-sign, .base-layer-catalog > .header > .glyphicon-plus-sign": "toggleBaseLayer",
+                "click .base-layer-catalog > .header > .control-label, .base-layer-catalog > .header > .glyphicon-minus-sign, .base-layer-catalog > .header > .glyphicon-plus-sign": "toggleCatalogAndBaseLayer",
                 "click .layer-selection-save": function () {
                     EventBus.trigger("mapView:getCenterAndZoom");
                 },
@@ -65,6 +65,10 @@ define([
                 $(".base-layer-list").toggle("slow");
                 $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
                 $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+            },
+            toggleCatalogAndBaseLayer: function() {
+              this.toggleCatalog();
+              this.toggleBaseLayer();
             },
             toggleExternLayer: function () {
                 $(".layer-extern-list").toggle("slow");

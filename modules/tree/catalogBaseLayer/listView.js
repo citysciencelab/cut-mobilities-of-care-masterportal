@@ -10,7 +10,6 @@ define([
         className: "list-group base-layer-list",
         initialize: function () {
             this.collection.on("reset", this.render, this);
-            this.setMaxHeight();
             this.render();
         },
         render: function () {
@@ -23,9 +22,6 @@ define([
             nodeView = new BaseLayerView({model: baselayer});
             this.$el.append(nodeView.render().el);
         },
-        setMaxHeight: function () {
-            this.$el.css("max-height", $(window).height() / 6);
-        }
     });
 
     return listView;

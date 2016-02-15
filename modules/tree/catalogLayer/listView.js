@@ -13,7 +13,6 @@ define([
             this.listenTo(this.collection, {
                 "reset": this.render
             });
-            this.setMaxHeight();
             this.render();
         },
         render: function () {
@@ -25,9 +24,6 @@ define([
 
             this.$el.append(nodeView.render().el);
         },
-        setMaxHeight: function () {
-            this.$el.css("max-height", $(window).height() / 4);
-        }
     });
 
     return listView;
