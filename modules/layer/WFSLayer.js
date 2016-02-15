@@ -127,20 +127,25 @@ define([
             }
             Radio.on("MapView", "changedOptions", this.optionsChanged, this);
         },
+        /*
+        * Wenn MapView Option verändert werden: bei neuem Maßstab
+        */
         optionsChanged: function () {
-            if (this.get("visibility") === true) {
-                if (this.checkScale() === true) {
-                    this.get("layer").setVisible(true);
-                }
-                else {
-                    this.get("layer").setVisible(false);
-                }
+            var isResolutionInRange = this.isResolutionInRange(),
+                visibility = this.get("visibility");
+
+            if (visibility === true && isResolutionInRange === true) {
+                this.get("layer").setVisible(true);
             }
+            else {
+                this.get("layer").setVisible(false);
+            }
+            this.set("isResolutionInRange", isResolutionInRange);
         },
         /*
         * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
         */
-        checkScale: function () {
+        isResolutionInRange: function () {
             var visibility = this.get("visibility"),
                 layerMaxScale = parseFloat(this.get("maxScale")),
                 layerMinScale = parseFloat(this.get("minScale")),
@@ -160,28 +165,27 @@ define([
             return true;
         },
         setVisibility: function () {
-             var visibility = this.get("visibility");
+            console.log(this.get("visibility"));
+            var visibility = this.get("visibility"),
+                isResolutionInRange = this.isResolutionInRange();
 
-             if (visibility === true) {
-                if (this.checkScale() === true) {
-                    if (this.get("layer").getSource().getFeatures().length === 0) {
-                        this.updateData();
-                        visibility = false;
-                    }
-                    else {
-                        this.get("layer").setVisible(true);
-                    }
-                 }
-                 else {
-                    visibility = false;
-                    this.get("layer").setVisible(false);
-                 }
-                this.set("visibility", visibility, {silent: true});
-             }
-             else {
-                 this.get("layer").setVisible(false);
-             }
-            this.toggleEventAttribution(visibility);
+            this.set("isResolutionInRange", isResolutionInRange);
+            if (visibility === true && isResolutionInRange == true) {
+                if (this.get("layer").getSource().getFeatures().length === 0) {
+                    this.updateData();
+                    this.set("visibility", false, {silent: true});
+                }
+                else {
+                    this.get("layer").setVisible(true);
+                }
+                this.toggleEventAttribution(true);
+            }
+            else {
+                console.log("umsetzen von false");
+                this.get("layer").setVisible(false);
+                this.set("visibility", false, {silent: true});
+                this.toggleEventAttribution(false);
+            }
         },
         styling: function () {
             // NOTE Hier werden die Styles zugeordnet
