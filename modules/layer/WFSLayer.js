@@ -165,7 +165,6 @@ define([
             return true;
         },
         setVisibility: function () {
-            console.log(this.get("visibility"));
             var visibility = this.get("visibility"),
                 isResolutionInRange = this.isResolutionInRange();
 
@@ -181,7 +180,6 @@ define([
                 this.toggleEventAttribution(true);
             }
             else {
-                console.log("umsetzen von false");
                 this.get("layer").setVisible(false);
                 this.set("visibility", false, {silent: true});
                 this.toggleEventAttribution(false);
