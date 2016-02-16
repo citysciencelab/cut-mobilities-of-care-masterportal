@@ -81,7 +81,6 @@ define([
                 }));
                 if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
                     this.ladeMetaDaten();
-//                    this.calculateMerkmale();
                 }
                 else {
                     EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
