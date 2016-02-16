@@ -80,8 +80,8 @@ define([
                     return layer.id === "2731" || layer.id === "2831";
                 }));
                 if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
-                    this.ladeDaten();
-                    this.calculateMerkmale();
+                    this.ladeMetaDaten();
+//                    this.calculateMerkmale();
                 }
                 else {
                     EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
@@ -127,17 +127,15 @@ define([
         /*
          * Lese Mietenspiegel-Daten aus msLayerMetaDaten und msLayerDaten. REQUESTOR kann nicht verwendet werden, weil es geometrielose Dienste sind.
          */
-        ladeDaten: function () {
+        ladeMetaDaten: function () {
             Util.showLoader();
             var urlMetaDaten = this.get("msLayerMetaDaten").get("url"),
-                featureTypeMetaDaten = this.get("msLayerMetaDaten").get("featureType"),
-                urlDaten = this.get("msLayerDaten").get("url"),
-                featureTypeDaten = this.get("msLayerDaten").get("featureType");
+                featureTypeMetaDaten = this.get("msLayerMetaDaten").get("featureType");
 
             $.ajax({
                 url: Util.getProxyURL(urlMetaDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeMetaDaten,
-                async: false,
+                async: true,
                 type: "GET",
                 cache: false,
                 dataType: "xml",
@@ -161,14 +159,20 @@ define([
                     this.set("msHinweis", hinweis);
                     this.set("msTitel", titel);
                     this.set("msMerkmaleText", merkmaletext);
+                    this.ladeDaten();
                 }
             });
+        },
+        ladeDaten: function () {
             // Lade Mietenspiegel-Daten
             Util.showLoader();
+            var urlDaten = this.get("msLayerDaten").get("url"),
+                featureTypeDaten = this.get("msLayerDaten").get("featureType");
+
             $.ajax({
                 url: Util.getProxyURL(urlDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeDaten,
-                async: false,
+                async: true,
                 type: "GET",
                 cache: false,
                 dataType: "xml",
@@ -198,6 +202,10 @@ define([
                     // Prüfe den Ladevorgang
                     if (daten.length > 0 && this.get("msTitel") !== "") {
                         this.set("readyState", true);
+                        this.calculateMerkmale();
+                    }
+                    else {
+                        EventBus.trigger("alert", {text: "<strong>Fehlende Wohnlagendaten.</strong> Dieses Portal ist derzeit nicht einsatzbereit. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
                     }
                 }
             });
@@ -256,18 +264,18 @@ define([
             this.set("coordinate", coordinate);
             this.defaultErgebnisse();
             if (response) {
-                this.set("msWohnlage", response.bezeichnung);
-                if (response.hausnummer_zusatz) {
-                    this.set("msStrasse", response.strasse + " " + response.hausnummer + response.hausnummer_zusatz);
+                this.set("msWohnlage", response.Bezeichnung);
+                if (response["Hausnummer zusatz"]) {
+                    this.set("msStrasse", response.Strasse + " " + response.Hausnummer + response["Hausnummer zusatz"]);
                 }
-                else if (response.hausnummer) {
-                    this.set("msStrasse", response.strasse + " " + response.hausnummer);
+                else if (response.Hausnummer) {
+                    this.set("msStrasse", response.Strasse + " " + response.Hausnummer);
                 }
                 else {
-                    this.set("msStrasse", response.strasse);
+                    this.set("msStrasse", response.Strasse);
                 }
-                this.set("msPLZ", response.plz + " " + response.ort);
-                this.set("msStadtteil", response.stadtteil);
+                this.set("msPLZ", response.Plz + " " + response.Ort);
+                this.set("msStadtteil", response.Stadtteil);
             }
             else {
                 this.set("msWohnlage", "unbekannte Wohnlage");
