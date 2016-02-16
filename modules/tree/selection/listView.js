@@ -25,7 +25,6 @@ define([
                     ui.item.trigger("movemodel", ui.item.startPos - ui.item.index());
                 }
             });
-            this.setMaxHeight();
             this.render();
         },
         render: function () {
@@ -39,9 +38,6 @@ define([
             var view = new View({model: model});
             this.$el.prepend(view.render().el);
         },
-        setMaxHeight: function () {
-            this.$el.css("max-height", $(window).height() / 4);
-        }
     });
 
     return listView;
