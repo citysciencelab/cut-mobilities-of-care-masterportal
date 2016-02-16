@@ -3,7 +3,8 @@ define([
     "backbone.radio",
     "config",
     "modules/core/util",
-    "eventbus"
+    "eventbus",
+    "modules/layer/list" // Layerlist muss geladen sein, weil Radio.trigger("LayerList", "fetchLayer") aufgerunfen wird
 ], function () {
 
     var Backbone = require("backbone"),
@@ -37,6 +38,7 @@ define([
                 },
                 success: function () {
                     Util.hideLoader();
+                    Radio.trigger("LayerList", "fetchLayer");
                 }
             });
         },

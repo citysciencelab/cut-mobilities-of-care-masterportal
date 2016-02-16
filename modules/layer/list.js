@@ -44,6 +44,9 @@ define([
             channel.on({
                 "addModel": function (model) {
                     this.add(model);
+                },
+                "fetchLayer": function (model) {
+                    this.fetchLayer();
                 }
             }, this);
 
@@ -136,8 +139,6 @@ define([
                     EventBus.trigger("layerlist:sendBaselayerList");
                 }
             });
-
-            this.fetchLayer();
         },
 
         fetchLayer: function () {
@@ -446,7 +447,7 @@ define([
         },
 
         // Schiebt das Model in der Collection eine Position nach oben.
-         moveModelUp: function (model) {
+        moveModelUp: function (model) {
             var fromIndex = this.indexOf(model),
                 toIndex = fromIndex + 1;
 
