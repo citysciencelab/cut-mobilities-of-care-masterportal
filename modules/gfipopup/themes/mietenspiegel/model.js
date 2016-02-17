@@ -1,10 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "config",
     "eventbus",
-    "modules/core/util",
-    "modules/layer/list"
-], function (Backbone, Config, EventBus, Util, LayerList) {
+    "modules/core/util"
+], function (Backbone, Radio, Config, EventBus, Util) {
     "use strict";
     var GFIModel = Backbone.Model.extend({
         /**
@@ -64,27 +64,23 @@ define([
             return [ms, "Mietenspiegel-Auswertung"];
         },
         /*
-         * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
-         * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.
+         * Initialize wird erst beim initialen Aufruf der View ausgeführt.
          */
         initialize: function () {
-            var ms = _.find(Config.tree.layer, function (layer) {
-                return _.values(_.pick(layer, "gfiTheme"))[0] === "mietenspiegel";
-            });
-            if (ms) {
-                // lade Layerinformationen aus Config
-                this.set("msLayerDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2730" || layer.id === "2830";
-                }));
-                this.set("msLayerMetaDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2731" || layer.id === "2831";
-                }));
-                if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
-                    this.ladeMetaDaten();
-                }
-                else {
-                    EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
-                }
+            var layerList = Radio.request("LayerList", "getLayerList");
+
+            // lade Layerinformationen aus Config
+            this.set("msLayerDaten", _.find(layerList, function (layer) {
+                return layer.id === "2730" || layer.id === "2830";
+            }));
+            this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
+                return layer.id === "2731" || layer.id === "2831";
+            }));
+            if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
+                this.ladeMetaDaten();
+            }
+            else {
+                EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
             }
         },
         /*
@@ -200,7 +196,6 @@ define([
                     this.set("msDaten", daten);
                     // Prüfe den Ladevorgang
                     if (daten.length > 0 && this.get("msTitel") !== "") {
-                        this.set("readyState", true);
                         this.calculateMerkmale();
                     }
                     else {
@@ -223,6 +218,7 @@ define([
                     return _.unique(_.pluck(merkmale, key));
                 });
             this.set("msMerkmale", merkmaleReduced);
+            this.set("readyState", true);
         },
         /*
          * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten.

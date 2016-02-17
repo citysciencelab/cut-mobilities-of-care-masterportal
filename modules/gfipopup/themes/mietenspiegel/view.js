@@ -104,6 +104,11 @@ define([
          */
         initialize: function (layer, response, coordinate) {
             EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
+            this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
+                this.model.newWindow (layer, response, coordinate);
+                $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
+                this.focusNextMerkmal(0);
+            });
             this.listenTo(this.model, "change:msMittelwert", this.changedMittelwert);
             this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
             this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
