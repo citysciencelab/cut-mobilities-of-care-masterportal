@@ -24,8 +24,8 @@ define([
             "change .drawPointRadius": "setPointRadius",
             "change .drawStrokeWidth": "setStrokeWidth",
             "change .drawOpacity": "setOpacity",
-            "click button.delete": "deleteFeatures",
-            "click button.download": "downloadFeatures",
+            "click .delete": "deleteFeatures",
+            "click .download": "downloadFeatures",
             "keyup .drawText": "setText"
         },
         initialize: function () {
@@ -50,28 +50,29 @@ define([
         },
 
         renderForm: function () {
-            var attr = this.model.toJSON();
+            var attr = this.model.toJSON(),
+            selector = ".win-body > .form-horizontal.style";
 
-            $(".win-body > .form-horizontal").empty();
+            $(selector).empty();
             switch (this.model.get("selectedInteraction")){
                 case "drawPoint": {
-                    $(".win-body > .form-horizontal").append(this.templatePoint(attr));
+                    $(selector).append(this.templatePoint(attr));
                     break;
                 }
                 case "writeText": {
-                    $(".win-body > .form-horizontal").append(this.templateText(attr));
+                    $(selector).append(this.templateText(attr));
                     break;
                 }
                 case "drawLine": {
-                    $(".win-body > .form-horizontal").append(this.templateLine(attr));
+                    $(selector).append(this.templateLine(attr));
                     break;
                 }
                 case "drawArea": {
-                    $(".win-body > .form-horizontal").append(this.templatePolygon(attr));
+                    $(selector).append(this.templatePolygon(attr));
                     break;
                 }
                 default: {
-                    $(".win-body > .form-horizontal").append(this.templatePoint(attr));
+                    $(selector).append(this.templatePoint(attr));
                 }
             }
         },
