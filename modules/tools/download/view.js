@@ -11,7 +11,8 @@ define([
         model: DownloadModel,
         template: _.template(DownloadWin),
         events: {
-        "click button.download": "triggerDownload"
+        "click button.download": "triggerDownload",
+        "click button.back": "back"
         },
         initialize: function () {
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
@@ -26,9 +27,20 @@ define([
          * @param  {ol.feature} features die Features die heruntergeladen werden sollen
          */
         start: function (features) {
+            if (features.data.length === 0) {
+                EventBus.trigger("alert", "Bitte erstellen sie zuerst eine Zeichnung oder eínen Text!");
+                return;
+            }
             this.model.setData(features.data);
             this.model.setFormats(features.formats);
+            this.model.setCaller(features.caller);
             EventBus.trigger("toggleWin", ["download", "Download", "glyphicon-plus"]);
+        },
+        /**
+         * Ruft das Tool auf, das den Download gestartet hat
+         */
+        back: function () {
+            EventBus.trigger("toggleWin", [this.model.getCaller().name, this.model.getCaller().name, "glyphicon-pencil"]);
         },
         /**
          * startet den Download, wenn auf den Button geklickt wird
