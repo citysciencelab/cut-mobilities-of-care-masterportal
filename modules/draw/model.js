@@ -275,7 +275,13 @@ define([
         downloadFeatures: function () {
             var features = this.get("layer").getSource().getFeatures();
 
-            Radio.trigger("download", "start", {data: features, formats: ["kml"]});
+            Radio.trigger("download", "start", {
+                data: features,
+                formats: ["kml"],
+                caller: {
+                    name: "draw",
+                    glyph: "glyphicon-pencil"
+                }});
         },
         setDrawendCoords: function (geom) {
             var geoJSON = new ol.format.GeoJSON();
