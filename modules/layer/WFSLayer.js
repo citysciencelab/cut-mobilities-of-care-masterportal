@@ -1,6 +1,7 @@
 define([
     "underscore",
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config",
@@ -8,10 +9,9 @@ define([
     "modules/layer/wfsStyle/list",
     "modules/core/util",
     "modules/core/mapView"
-], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
+], function (_, Backbone, Radio, ol, EventBus, Config, Layer, StyleList, Util) {
     var WFSLayer = Layer.extend({
         updateData: function () {
-            console.log("_l");
             Util.showLoader();
 
             this.buildGetRequest();
@@ -115,33 +115,74 @@ define([
             }
         },
         /**
-         * wird von Layer.js aufgerufen
+         * wird von Layer.js aufgerufen. Baut einen Dummy-Layer, damit initialize des Layer durchläuft.
          */
         setAttributionLayer: function () {
-            // Dummy-Layer, damit initialize des Layer durchläuft. Nur einmalig und nicht beim reload.
+            // Nur einmalig und nicht beim reload.
             if (this.get("layer") === undefined) {
                 this.set("layer", new ol.layer.Vector({
                     source: new ol.source.Vector(),
                     visible: false
                 }));
-                this.setVisibility();
             }
+            Radio.on("MapView", "changedOptions", this.optionsChanged, this);
+        },
+        /*
+        * Wenn MapView Option verändert werden: bei neuem Maßstab
+        */
+        optionsChanged: function () {
+            var isResolutionInRange = this.isResolutionInRange(),
+                visibility = this.get("visibility");
+
+            if (visibility === true && isResolutionInRange === true) {
+                this.get("layer").setVisible(true);
+            }
+            else {
+                this.get("layer").setVisible(false);
+            }
+            this.set("isResolutionInRange", isResolutionInRange);
+        },
+        /*
+        * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
+        */
+        isResolutionInRange: function () {
+            var visibility = this.get("visibility"),
+                layerMaxScale = parseFloat(this.get("maxScale")),
+                layerMinScale = parseFloat(this.get("minScale")),
+                mapOptions = Radio.request("MapView", "getOptions"),
+                mapScale = parseFloat(mapOptions.scale);
+
+            if (layerMaxScale && mapScale) {
+                if (mapScale > layerMaxScale) {
+                    return false;
+                }
+            }
+            if (layerMinScale && mapScale) {
+                if (mapScale < layerMinScale) {
+                    return false;
+                }
+            }
+            return true;
         },
         setVisibility: function () {
-            var visibility = this.get("visibility");
+            var visibility = this.get("visibility"),
+                isResolutionInRange = this.isResolutionInRange();
 
-            this.toggleEventAttribution(visibility);
-            if (visibility === true) {
+            this.set("isResolutionInRange", isResolutionInRange);
+            if (visibility === true && isResolutionInRange == true) {
                 if (this.get("layer").getSource().getFeatures().length === 0) {
-                    this.set("visibility", false);
                     this.updateData();
+                    this.set("visibility", false, {silent: true});
                 }
                 else {
                     this.get("layer").setVisible(true);
                 }
+                this.toggleEventAttribution(true);
             }
             else {
                 this.get("layer").setVisible(false);
+                this.set("visibility", false, {silent: true});
+                this.toggleEventAttribution(false);
             }
         },
         styling: function () {

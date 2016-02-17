@@ -19,6 +19,7 @@ define([
                 gfiContent,
                 positionGFI = params[1];
 
+            this.pContent = [];
             // Abfrage jedes Layers der von der map übermittelt wurde.
             _.each(sortedParams, function (visibleLayer) {
                 gfiContent = null;
