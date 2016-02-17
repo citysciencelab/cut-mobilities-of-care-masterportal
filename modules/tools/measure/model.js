@@ -51,7 +51,7 @@ define([
             }));
 
             EventBus.trigger("addLayer", this.get("layer"));
-            
+
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
             }
@@ -176,6 +176,10 @@ define([
         setScale: function(options){
             this.set("scale",options.scale)
         },
+
+        /** Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
+        * @param {number} scale - Maßstabszahl
+        */
         getScaleError:function(scale){
            var scaleError=0;
             switch(scale){
@@ -212,13 +216,19 @@ define([
             }
             return scaleError;
         },
-        
+
+        /** Berechnet das Quadrat der deltas (für x und y) von zwei Koordinaten
+        * @param {Array[n][2]} coordinates - Koordinatenliste der Geometrie
+        * @param {number} pos0 - 1. Koordinate
+        * @param {number} pos1 - 2. Koordinate
+        */
         calcDeltaPow: function(coordinates,pos0,pos1){
             var dx=coordinates[pos0][0]-coordinates[pos1][0];
-            var dy=coordinates[pos0][1]-coordinates[pos1][1];  
+            var dy=coordinates[pos0][1]-coordinates[pos1][1];
             var deltaPow=(Math.pow(dx,2)+Math.pow(dy,2));
             return deltaPow;
         },
+
         /**
          * Berechnet die Länge der Strecke.
          * @param {ol.geom.LineString} line - Linestring geometry
@@ -232,13 +242,13 @@ define([
                 fehler = 0,
                 scale = parseInt(this.get("scale")),
                 scaleError = this.getScaleError(scale);
-            
+
             for (var i=0; i<coords.length; i++){
                 rechtswertMittel+=coords[i][0];
                 if(i<coords.length-1){
                     //http://www.hs-bochum.de/fb5/baeumker/download/vermessungskundes1-36einseitig.pdf
                     //Seite 28 oben:
-                    //fehler+= 2*Math.pow(scaleError,2); 
+                    //fehler+= 2*Math.pow(scaleError,2);
                     //http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
                     //Seite 5:
                     fehler+= Math.pow(scaleError,2);
@@ -248,7 +258,7 @@ define([
             fehler=Math.sqrt(fehler);
             rechtswertMittel=(rechtswertMittel/coords.length)/1000;
             lengthRed=length-(0.9996*length*(Math.pow(rechtswertMittel-500,2)/(2*Math.pow(6381,2)))-(0.0004*length));
-            
+
             if (this.get("unit") === "km") {
                  output = (lengthRed/1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler/1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
             }
