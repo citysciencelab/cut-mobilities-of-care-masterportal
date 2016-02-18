@@ -68,20 +68,26 @@ define([
          * Initialize wird erst beim initialen Aufruf der View ausgeführt.
          */
         initialize: function () {
+            EventBus.on("layerlist:sendBaselayerList", this.layerListReady, this); // in gebauter Version
+            this.layerListReady(); // bei Entwicklung
+        },
+        layerListReady: function () {
             var layerList = Radio.request("LayerList", "getLayerList");
 
-            // lade Layerinformationen aus Config
-            this.set("msLayerDaten", _.find(layerList, function (layer) {
-                return layer.id === "2730" || layer.id === "2830";
-            }));
-            this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
-                return layer.id === "2731" || layer.id === "2831";
-            }));
-            if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
-                this.ladeMetaDaten();
-            }
-            else {
-                EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
+            if (layerList.length > 0) {
+                // lade Layerinformationen aus Config
+                this.set("msLayerDaten", _.find(layerList, function (layer) {
+                    return layer.id === "2730" || layer.id === "2830";
+                }));
+                this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
+                    return layer.id === "2731" || layer.id === "2831";
+                }));
+                if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
+                    this.ladeMetaDaten();
+                }
+                else {
+                    EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
+                }
             }
         },
         /*

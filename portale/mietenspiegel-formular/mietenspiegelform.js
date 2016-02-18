@@ -24,6 +24,10 @@ define([
         initialize: function () {
             EventBus.on("renderResults", this.receiveWohnlage, this); // Event der gfiAbfrage
             EventBus.on("mapView:setCenter", this.newSearch, this); // Event der Searchbar bei erfolgreicher Suche
+            EventBus.on("layerlist:sendBaselayerList", this.layerListReady, this); // in gebauter Version
+            this.layerListReady(); // bei Entwicklung
+        },
+        layerListReady: function () {
             var layerList = Radio.request("LayerList", "getLayerList"),
                 proj = Radio.request("MapView", "getProjection");
 
