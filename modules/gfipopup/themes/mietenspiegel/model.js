@@ -3,7 +3,8 @@ define([
     "backbone.radio",
     "config",
     "eventbus",
-    "modules/core/util"
+    "modules/core/util",
+    "modules/layer/list"
 ], function (Backbone, Radio, Config, EventBus, Util) {
     "use strict";
     var GFIModel = Backbone.Model.extend({
