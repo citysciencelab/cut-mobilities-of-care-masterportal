@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "config",
     "eventbus",
     "proj4"
-], function (Backbone, ol, Config, EventBus, proj4) {
+], function (Backbone, Radio, ol, Config, EventBus, proj4) {
     "use strict";
     var MapView = Backbone.Model.extend({
         /**
@@ -74,6 +75,14 @@ define([
          *
          */
         initialize: function () {
+            var channel = Radio.channel("MapView");
+
+            channel.reply({
+                "getProjection": function () {
+                    return this.get("projection");
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
