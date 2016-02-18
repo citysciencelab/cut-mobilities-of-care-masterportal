@@ -80,6 +80,9 @@ define([
             channel.reply({
                 "getProjection": function () {
                     return this.get("projection");
+                },
+                "getOptions": function () {
+                    return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 }
             }, this);
 
@@ -106,6 +109,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    Radio.trigger("MapView", "changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
                     EventBus.trigger("mapView:sendCenter", this.get("center"));
