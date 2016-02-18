@@ -154,6 +154,7 @@ define([
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
                     template = _.template(SearchbarRecommendedListTemplate);
 
+                $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
                 $("ul.dropdown-menu-search").html(template(attr));
             // }
             // Wird gerufen
