@@ -5,10 +5,9 @@ define([
     "openlayers",
     "config",
     "bootstrap/popover",
-    "modules/gfipopup/themes/mietenspiegel/view-formular",
     "modules/core/requestor",
     "moment"
-], function (Backbone, Radio, EventBus, ol, Config, Popover, MietenspiegelThemeForm, Requestor, Moment) {
+], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
