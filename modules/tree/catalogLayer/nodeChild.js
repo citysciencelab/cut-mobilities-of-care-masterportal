@@ -2,9 +2,8 @@ define([
     "backbone",
     "eventbus",
     "config",
-    "modules/layer/list",
     "modules/tree/catalogLayer/viewNodeChildLayer"
-    ], function (Backbone, EventBus, Config, LayerList, NodeChildLayerView) {
+    ], function (Backbone, EventBus, Config, NodeChildLayerView) {
 
         var TreeNodeChild = Backbone.Model.extend({
 

@@ -45,7 +45,7 @@ define([
                 "addModel": function (model) {
                     this.add(model);
                 },
-                "fetchLayer": function (model) {
+                "fetchLayer": function () {
                     this.fetchLayer();
                 }
             }, this);
@@ -139,6 +139,7 @@ define([
                     EventBus.trigger("layerlist:sendBaselayerList");
                 }
             });
+            this.fetchLayer();
         },
 
         fetchLayer: function () {
