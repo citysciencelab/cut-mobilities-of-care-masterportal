@@ -1,20 +1,13 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "openlayers",
     "config",
     "bootstrap/popover",
-    "modules/gfipopup/gfiObjects/img/view",
-    "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routable/view",
-    "modules/gfipopup/themes/default/view",
-    "modules/gfipopup/themes/mietenspiegel/view",
-    "modules/gfipopup/themes/mietenspiegel/view-formular",
-    "modules/gfipopup/themes/reisezeiten/view",
-    "modules/gfipopup/themes/trinkwasser/view",
     "modules/core/requestor",
     "moment"
-], function (Backbone, EventBus, ol, Config, Popover, ImgView, VideoView, RoutableView, DefaultTheme, MietenspiegelTheme, MietenspiegelThemeForm, ReisezeitenTheme, TrinkwasserTheme, Requestor, Moment) {
+], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -34,12 +27,18 @@ define([
          *
          */
         initialize: function () {
+            var channel = Radio.channel("GFIPopup");
+
+            channel.on({
+                "themeLoaded": this.themeLoaded
+            }, this);
+
             this.set("element", this.get("gfiOverlay").getElement());
 
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
-            EventBus.on("renderResults", this.createTemplate, this);
+            EventBus.on("renderResults", this.getThemes, this);
         },
         /**
          * Vernichtet das Popup.
@@ -48,6 +47,8 @@ define([
             this.get("element").popover("destroy");
             this.set("isPopupVisible", false);
             this.unset("coordinate", {silent: true});
+            this.set("gfiContent", [], {silent: true});
+            this.set("gfiTitles", [], {silent: true});
         },
         /**
          * Zeigt das Popup.
@@ -63,47 +64,66 @@ define([
             EventBus.trigger("closeGFIParams", this);
             Requestor.requestFeatures(params);
         },
-        createTemplate: function (response) {
+        getThemes: function (response) {
             var features = response[0],
                 coordinate = response[1],
                 pContent = [],
                 pTitles = [],
-                templateView;
+                templateView,
+                that = this;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer) {
                 _.each(layer.content, function (content) {
                     content = this.getManipulateDate(content);
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
-                            templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
+                            require(["modules/gfipopup/themes/mietenspiegel/view", "backbone.radio"], function (MietenspiegelTheme, Radio) {
+                                templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
+                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                            });
                             break;
                         }
                         case "reisezeiten": {
-                            templateView = new ReisezeitenTheme(content);
+                            require(["modules/gfipopup/themes/reisezeiten/view", "backbone.radio"], function (ReisezeitenTheme, Radio) {
+                                templateView = new ReisezeitenTheme(content);
+                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                            });
                             break;
                         }
                         case "trinkwasser": {
-                            templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                            require(["modules/gfipopup/themes/trinkwasser/view", "backbone.radio"], function (TrinkwasserTheme, Radio) {
+                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                            });
                             break;
                         }
                         default: {
-                            templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
+                            require(["modules/gfipopup/themes/default/view", "backbone.radio"], function (DefaultTheme, Radio) {
+                                templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
+                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                            });
                             break;
                         }
                     }
-                    pContent.push(templateView);
-                    pTitles.push(layer.name);
                 }, this);
             }, this);
+        },
+        /*
+        * Wenn Theme geladen wurde, wird dieses in gfiContent hineingeschrieben. Über setPosition wird Overlay jedesmal neu gerendert.
+        */
+        themeLoaded: function (templateView, layername, coordinate) {
+            var pContent = this.get("gfiContent"),
+                pTitles = this.get("gfiTitles");
 
-            // Abspeichern der gesammelten Informationen
-            if (pContent.length > 0) {
-                this.get("gfiOverlay").setPosition(coordinate);
-                this.set("gfiContent", pContent);
-                this.set("gfiTitles", pTitles);
-                this.set("gfiCounter", pContent.length);
-                this.set("coordinate", coordinate);
-            }
+            pContent.push(templateView);
+            pTitles.push(layername);
+
+            this.set("gfiContent", pContent);
+            this.set("gfiTitles", pTitles);
+            this.set("gfiCounter", pContent.length);
+            this.get("gfiOverlay").setPosition(coordinate);
+            this.unset("coordinate", {silent: true});
+            this.set("coordinate", coordinate);
         },
         /*
         * @description Liefert die GFI-Infos ans Print-Modul.

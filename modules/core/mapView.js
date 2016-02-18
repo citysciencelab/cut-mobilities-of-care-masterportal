@@ -78,6 +78,9 @@ define([
             var channel = Radio.channel("MapView");
 
             channel.reply({
+                "getProjection": function () {
+                    return this.get("projection");
+                },
                 "getOptions": function () {
                     return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 }
