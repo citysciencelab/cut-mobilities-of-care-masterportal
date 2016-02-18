@@ -7,7 +7,7 @@ define([
     "use strict";
     var GFIContentMietenspiegelView = Backbone.View.extend({
         /*
-         + Die Mietenspiegel-View öffnet sich auf jede GFI-Abfrage. Sein Model hingegen bleibt konstant.
+         * Die Mietenspiegel-View öffnet sich auf jede GFI-Abfrage. Sein Model hingegen bleibt konstant.
          * Diese View unterscheidet sich von view.js in der methode 'reset' und durch disabled listeners
          */
         model: GFIModel,
@@ -19,6 +19,7 @@ define([
         },
         reset: function () {
             this.model.defaultErgebnisse();
+
             this.render();
             EventBus.trigger("searchInput:setFocus", this);
             this.focusNextMerkmal(0);
@@ -28,6 +29,7 @@ define([
          */
         changedMerkmal: function (evt) {
             var id;
+
             if (evt) {
                 $(".msmerkmal").each(function (index) {
                     if ($(this).attr("id") === evt.target.id) {
@@ -44,6 +46,7 @@ define([
          */
         returnMerkmaleListe: function () {
             var merkmale = _.object(["Wohnlage"], [$(".mswohnlage").text()]);
+
             $(".msmerkmal").each(function () {
                 if (this.value !== "-1") { // = bitte wählen
                     merkmale = _.extend(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
@@ -101,6 +104,11 @@ define([
          */
         initialize: function (layer, response, coordinate) {
             EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
+            this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
+                this.model.newWindow (layer, response, coordinate);
+                $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
+                this.focusNextMerkmal(0);
+            });
             this.listenTo(this.model, "change:msMittelwert", this.changedMittelwert);
             this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
             this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
@@ -145,6 +153,7 @@ define([
          */
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
         },
         /**
