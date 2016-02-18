@@ -6,7 +6,8 @@ define([
     "config",
     "bootstrap/popover",
     "modules/core/requestor",
-    "moment"
+    "moment",
+    "modules/gfipopup/themes/mietenspiegel/view-formular" // muss hier definiert werden, weil in mietenspiegelform.js nicht in gebauter Version verfügbar
 ], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
