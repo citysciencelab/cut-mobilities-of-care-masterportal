@@ -50,9 +50,9 @@ define([
             // get print config (info.json)
             this.fetch({
                 cache: false,
-                async: false,
                 success: function (model) {
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                    EventBus.trigger("mapView:getOptions");
                 }
             });
 
@@ -60,8 +60,6 @@ define([
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
-
-            EventBus.trigger("mapView:getOptions");
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
