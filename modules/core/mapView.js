@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "config",
     "eventbus",
     "proj4"
-], function (Backbone, ol, Config, EventBus, proj4) {
+], function (Backbone, Radio, ol, Config, EventBus, proj4) {
     "use strict";
     var MapView = Backbone.Model.extend({
         /**
@@ -74,6 +75,14 @@ define([
          *
          */
         initialize: function () {
+            var channel = Radio.channel("MapView");
+
+            channel.reply({
+                "getOptions": function () {
+                    return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
@@ -97,6 +106,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    Radio.trigger("MapView", "changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
                     EventBus.trigger("mapView:sendCenter", this.get("center"));
