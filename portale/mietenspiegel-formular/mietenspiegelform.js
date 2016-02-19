@@ -3,7 +3,7 @@ define([
     "backbone.radio",
     "eventbus",
     "config",
-    "modules/gfipopup/themes/mietenspiegel/view-formular",
+    "modules/gfipopup/themes/mietenspiegel/view",
     "modules/core/requestor",
     "modules/core/util"
 ], function (Backbone, Radio, EventBus, Config, MSView, Requestor, Util) {
@@ -35,7 +35,7 @@ define([
             this.set("msLayer", _.find(layerList, function (layer) {
                 return layer.id === "2834" || layer.id === "2835";
             }));
-            var msWin = new MSView(this.get("msLayer"), "");
+            var msWin = new MSView(this.get("msLayer"), "", "", true);
 
             $("#mietenspiegel-formular").append(msWin.$el); // leerer Dummy-Eintrag
         },
@@ -66,7 +66,7 @@ define([
                 feature = _.values(_.pick(content, "0"))[0],
                 coord = response[1];
 
-            if (feature) {
+            if (!feature) {
                 this.fillFormular(feature);
             }
             else {
@@ -74,7 +74,7 @@ define([
             }
         },
         noFeature: function () {
-            var msWin = new MSView(this.get("msLayer"), "");
+            var msWin = new MSView(this.get("msLayer"), "", "", true);
             $("#mietenspiegel-formular").empty();
             $("#mietenspiegel-formular").append(msWin.$el);
             $("#noWohnlageMsg").fadeIn(500);
@@ -84,7 +84,7 @@ define([
             msWin.focusNextMerkmal(-1);
         },
         fillFormular: function (feature) {
-            var msWin = new MSView(this.get("msLayer"), feature);
+            var msWin = new MSView(this.get("msLayer"), feature, "", true);
             $("#mietenspiegel-formular").empty();
             $("#mietenspiegel-formular").append(msWin.$el);
             msWin.focusNextMerkmal(0);
