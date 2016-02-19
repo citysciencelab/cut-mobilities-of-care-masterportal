@@ -44,7 +44,6 @@ define([
             EventBus.on("zoomToExtent", this.zoomToExtent, this);
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
             EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
-            EventBus.on("initWfsFeatureFilter", this.initWfsFeatureFilter, this);
             EventBus.on("setMeasurePopup", this.setMeasurePopup, this); // warte auf Fertigstellung des MeasurePopup für Übergabe
 
             this.set("view", MapView.get("view"));
@@ -95,10 +94,6 @@ define([
             else {
                 this.set("GFIPopupVisibility", false);
             }
-        },
-
-        initWfsFeatureFilter: function () {
-            EventBus.trigger("checkwfsfeaturefilter", this.get("map"));
         },
 
         getMap: function () {
