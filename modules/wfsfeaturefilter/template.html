@@ -1,37 +1,25 @@
-<!--<div class="panel-heading">
-    <h3 class="panel-title" style="font-size: 14px; float: left; padding: 10px 0px;"><span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;Filtereinstellungen</h3>
-    <span class="close" style="padding: 8px;">×</span>
-    <span class="glyphicon glyphicon-chevron-up toggleChevron"></span>
-</div>-->
-
 <% if (wfsList[0]) { %>
 <div class="wfsfeaturefilter-body">
-<% _.each(wfsList, function (wfslayer, index, list) { %>
-    <span style="font-size: 14px; "><%=wfslayer.layer.getProperties().name %></span>
+<% _.each(wfsList, function (wfslayer) { %>
+    <span style="font-size: 14px; "><%=wfslayer.name %></span>
     <form class="form-horizontal" role="form">
-<% _.each(wfslayer.filterOptions, function (filter, index, list) {
+<% _.each(wfslayer.filterOptions, function (filter) {
    if (filter.filterType === 'combo') { %>
         <div class="form-group form-group-sm">
             <label for="" class="control-label col-md-5"><%=filter.filterName%></label>
             <div class="col-md-7">
-                <select class="form-control input-sm" id="<%=wfslayer.layerId %>_<%=filter.fieldName %>">
-<% _.each(filter.filterString, function (value, index, list) {
+                <select class="form-control input-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
+<% _.each(filter.filterString, function (value) {
    if (value === '*') { %>
         <option title="keine Filterung der Elemente auf dieses Attribut">*</option>
-<%
-   }else { %>
+<% } else { %>
         <option title='nur Elemente mit "<%=value%>" darstellen'><%=value%></option>
-<%   }
-%>
-
-<% });
-%>
+<% } %>
+<% }); %>
                 </select>
             </div>
         </div>
-<% }
-   else {
-%>
+<% } else { %>
         <div class="form-group form-group-sm">
             <label for="" class="control-label col-md-5">Unbekannter Filtertyp.</label>
         </div>
@@ -48,12 +36,8 @@
         </div>
     </form>
 </div>
-
-<% }
-else {
-%>
+<% } else { %>
     <div class="wfsfeaturefilter-body">
         <label class=".text-center h4">Keine Themen sichtbar.</label>
     </div>
-<% }
-%>
+<% } %>
