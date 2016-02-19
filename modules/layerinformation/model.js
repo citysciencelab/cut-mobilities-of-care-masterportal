@@ -63,7 +63,7 @@ define([
         parse: function (xmlDoc) {
             return {
                 "abstractText": function () {
-                    var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
+                    var abstractText = $("gmd\\:abstract,abstract, ns1\\:abstract,abstract", xmlDoc)[0].textContent;
 
                     if (abstractText.length > 1000) {
                         return abstractText.substring(0, 600) + "...";
@@ -82,7 +82,7 @@ define([
                     else {
                         dates.each(function (index, element) {
                             if ($(element).attr("codeListValue") === "revision") {
-                                dateTime = $("gco\\:DateTime,DateTime", xmlDoc)[index].textContent;
+                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[index].textContent;
                             }
                         });
                     }
