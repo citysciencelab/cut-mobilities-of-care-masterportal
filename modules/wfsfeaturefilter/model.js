@@ -1,18 +1,14 @@
 define([
-    'underscore',
-    'backbone',
-    'eventbus',
-    'config',
-], function (_, Backbone, EventBus, Config) {
-
+    "backbone",
+    "backbone.radio",
+    "eventbus"
+], function (Backbone, Radio, EventBus) {
+    "use strict";
     var wfsFeatureFilter = Backbone.Model.extend({
         defaults: {
-            wfsList: [],
-            map: {}
+            wfsList: []
         },
         initialize: function () {
-            EventBus.on('checkwfsfeaturefilter', this.prep, this); // initieren. Wird in Map.js getriggert, nachdem dort auf initWfsFeatureFilter reagiert wurde.
-            EventBus.trigger('initWfsFeatureFilter', this);
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
         },
         setStatus: function (args) {   // Fenstermanagement
@@ -24,62 +20,26 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
-        prep: function (map) {
-            // Trigger übergibt map -> abspeichern
-            // view nutzt map ohne Übergabe
-            if (map) {
-                this.set('map', map);
-            }
-            var countConfig = this.readConfig();
-            if (countConfig != 0) {
-                this.readLayers();
-            }
-        },
-        readConfig: function () {
-            // Lese Config-Optionen ein und speichere Ergebnisse
-            var layerIDs = Config.tree.layer;
-            var wfsList = new Array();
-            _.each(layerIDs, function(element, key, list) {
-                if (_.has(element, 'filterOptions')) {
-                    wfsList.push({
-                        layerId : element.id,
-                        filterOptions : element.filterOptions
-                    });
-                }
+        getLayers: function () {
+            var layers = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"}),
+                featureLayers = _.filter(layers, function (layer) {
+                    return layer.get("layer").getSource().getFeatures().length > 0;
+                }),
+                filterLayers = _.filter(featureLayers, function (layer) {
+                    return layer.get("filterOptions").length > 0;
+                }),
+                wfsList = [];
+
+            _.each (filterLayers, function (layer) {
+                wfsList.push({
+                    id: layer.id,
+                    name: layer.get("name"),
+                    filterOptions: layer.get("filterOptions"),
+                    layer: layer.get("layer")
+                });
             });
-            this.set('wfsList', wfsList);
-            return wfsList.length;
-        },
-        readLayers: function () {
-            var map = this.get('map');
-            var wfsList = this.get('wfsList');
-            map.getLayers().forEach(function(layer) {
-                if (layer.getProperties() && layer.getProperties().typ === 'WFS') {
-                    var layerID = layer.id;
-                        if (layerID) {
-                            var wfsListEntry = _.find(wfsList, function (ele) {
-                                return ele.layerId == layerID
-                            });
-                            if (wfsListEntry) {
-                                if (layer.getVisible() === true) {
-                                    _.extend(wfsListEntry, {
-                                        layer: layer
-                                    });
-                                }
-                                else {
-                                    var shortedList = _.reject(wfsList, function(ele) {
-                                        return ele.layerId == layerID
-                                    });
-                                    wfsList = shortedList;
-                                }
-                            }
-                        }
-//                    }
-                }
-            }, this);
-            this.set('wfsList', wfsList);
+            this.set("wfsList", wfsList);
         }
     });
-
     return new wfsFeatureFilter();
 });
