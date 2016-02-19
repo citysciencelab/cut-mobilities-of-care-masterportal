@@ -66,7 +66,7 @@ define([
                 feature = _.values(_.pick(content, "0"))[0],
                 coord = response[1];
 
-            if (!feature) {
+            if (feature) {
                 this.fillFormular(feature);
             }
             else {
