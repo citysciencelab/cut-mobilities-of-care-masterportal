@@ -118,7 +118,6 @@ define([
             this.model.set("layerfilters", layerfilters);
         },
         render: function () {
-            console.log(1);
             var attr,
                 layerfilters;
 
