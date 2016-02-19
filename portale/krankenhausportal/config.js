@@ -15,13 +15,13 @@ define(function () {
                          "fieldName": "teilnahme_geburtsklinik",
                          "filterType": "combo",
                          "filterName": "Geburtshilfe",
-                         "filterString": ["*", "ja", "nein"]
+                         "filterString": ["*", "Ja", "Nein"]
                      },
                      {
                          "fieldName": "teilnahme_notversorgung",
                          "filterType": "combo",
                          "filterName": "Not- und Unfallversorgung",
-                         "filterString": ["*", "ja", "eingeschränkt", "nein"]
+                         "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
                      }
                  ]
                 }
