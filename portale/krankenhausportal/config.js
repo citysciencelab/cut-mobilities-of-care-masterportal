@@ -14,7 +14,7 @@ define(function () {
                      {
                          "fieldName": "teilnahme_geburtsklinik",
                          "filterType": "combo",
-                         "filterName": "Geburtsklinik",
+                         "filterName": "Geburtshilfe",
                          "filterString": ["*", "ja", "nein"]
                      },
                      {
