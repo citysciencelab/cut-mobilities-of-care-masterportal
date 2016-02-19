@@ -1,29 +1,20 @@
 define(function () {
     var config = {
         allowParametricURL: false,
-        view: {
-            center: [565874, 5934140]
-        },
-        customModules: ["../portale/mietenspiegel-formular/mietenspiegelform"],
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
-        proxyURL: "/cgi-bin/proxy.cgi",
+        view: {},
+        customModules: ["../mietenspiegelform"],
+        layerConf: "/lgv-config/services-fhhnet.json",
+        restConf: "/lgv-config/rest-services-fhhnet.json",
+        styleConf: "/lgv-config/style.json",
         tree: {
             type: "light",
             layer: [
-                {id: "2834", visible: true, gfiTheme: "mietenspiegel"},
+                {id: "2834", visible: true, gfiTheme: "mietenspiegel", displayInTree: false},
                 {id: "2730", visible: false, displayInTree: false},
                 {id: "2731", visible: false, displayInTree: false}
             ]
         },
-        controls: {
-            zoom: false,
-            toggleMenu: false,
-            orientation: false,
-            poi: false
-        },
+        controls: {},
         menubar: true,
         isMenubarVisible: true,
         menu: {
@@ -48,21 +39,6 @@ define(function () {
                 searchParcels: false
             },
             geoLocateHit: true
-        },
-        print: {
-            printID: "99997",
-            title: "Freie und Hansestadt Hamburg - Mietenspiegel",
-            outputFilename: "Ausdruck Hamburger Mietenspiegel",
-            gfi: true
-        },
-        tools: {
-            gfi: false,
-            measure: false,
-            print: false,
-            coord: false,
-            draw: false,
-            record: false,
-            active: "gfi"
         }
     };
 
