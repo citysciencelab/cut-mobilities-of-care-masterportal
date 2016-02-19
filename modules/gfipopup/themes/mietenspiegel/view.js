@@ -1,26 +1,57 @@
 define([
     "backbone",
     "text!modules/gfipopup/themes/mietenspiegel/template.html",
+    "text!modules/gfipopup/themes/mietenspiegel/template-formular.html",
     "modules/gfipopup/themes/mietenspiegel/model",
     "eventbus"
-], function (Backbone, GFITemplate, GFIModel, EventBus) {
+], function (Backbone, GFITemplate, GFITemplateFormular, GFIModel, EventBus) {
     "use strict";
     var GFIContentMietenspiegelView = Backbone.View.extend({
         /*
          + Die Mietenspiegel-View öffnet sich auf jede GFI-Abfrage. Sein Model hingegen bleibt konstant.
          */
         model: GFIModel,
-        template: _.template(GFITemplate),
         events: {
             "remove": "destroy",
             "change .msmerkmal": "changedMerkmal",
             "click #msreset": "reset"
         },
+        /**
+        * Wird aufgerufen wenn die View erzeugt wird.
+        * Unterscheide anhand isMietenspiegelFormular, ob Aufruf in mietenspiegel oder mietenspiegel-formular.
+        */
+        initialize: function (layer, response, coordinate, isMietenspiegelFormular) {
+            if (isMietenspiegelFormular === true) {
+                this.template = _.template(GFITemplateFormular);
+
+                this.listenTo(this, "setFocusToInput", this.setFocusToInput);
+            }
+            else {
+                this.template = _.template(GFITemplate);
+                this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
+                this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
+            }
+            EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
+            this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
+                this.model.newWindow (layer, response, coordinate);
+                $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
+                this.focusNextMerkmal(0);
+            });
+            this.listenTo(this.model, "change:msMittelwert", this.changedMittelwert);
+            this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
+            this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
+            this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
+            if (this.model.get("readyState") === true) {
+                this.model.newWindow (layer, response, coordinate);
+                this.render();
+            }
+        },
         reset: function () {
             this.model.defaultErgebnisse();
 
             this.render();
-            EventBus.trigger ("gfipopup:rerender", this);
+            EventBus.trigger ("gfipopup:rerender", this); // im mietenspiegel-formular keine Auswirkung, weil Modul nicht geladen.
+            this.trigger("setFocusToInput"); // triggere im mietenspiegel und mietenspiegel-formular immer setFocusToInput, Methode aber nicht immer registriert.
             this.focusNextMerkmal(0);
         },
         /**
@@ -99,26 +130,11 @@ define([
                 this.model.calculateVergleichsmiete(merkmale);
             }
         },
-        /**
-         * Wird aufgerufen wenn die View erzeugt wird.
-         */
-        initialize: function (layer, response, coordinate) {
-            EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
-            this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
-                this.model.newWindow (layer, response, coordinate);
-                $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
-                this.focusNextMerkmal(0);
-            });
-            this.listenTo(this.model, "change:msMittelwert", this.changedMittelwert);
-            this.listenTo(this.model, "change:msSpanneMin", this.changedSpanneMin);
-            this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
-            this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
-            this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
-            this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
-            if (this.model.get("readyState") === true) {
-                this.model.newWindow (layer, response, coordinate);
-                this.render();
-            }
+        /*
+        * Methode wird nur im Mietenspiegel-Formular registriert
+        */
+        setFocusToInput: function () {
+            EventBus.trigger("searchInput:setFocus", this);
         },
         /*
          * Wenn GFI-Popup gerendert wurde. --> initialzize der View
@@ -150,17 +166,11 @@ define([
             $("#msmetadaten").show();
 
         },
-        /**
-         *
-         */
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
         },
-        /**
-         *
-         */
         destroy: function () {
         }
     });
