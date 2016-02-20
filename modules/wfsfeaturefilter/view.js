@@ -13,7 +13,23 @@ define([
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
         },
         events: {
-            "click #filterbutton": "getFilterInfos"
+            "click #filterbutton": "getFilterInfos",
+            "click .panel-heading": "toggleHeading"
+        },
+        toggleHeading: function (evt) {
+            var id = $(evt.currentTarget)[0].id;
+
+            $("." + id + "_wfs_panel").each(function (index, ele) {
+                $(ele).toggle();
+            });
+            if ($("#wfsfeaturefilter_resizemarker").hasClass("glyphicon-resize-small")) {
+                $("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-small");
+                $("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-full");
+            }
+            else {
+                $("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-small");
+                $("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-full");
+            }
         },
         getFilterInfos: function () {
             var wfsList = this.model.get("wfsList"),
