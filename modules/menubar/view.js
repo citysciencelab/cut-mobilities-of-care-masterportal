@@ -58,7 +58,7 @@ define([
             var html = "<li>";
 
             html += "<a href='#' class='menuitem " + obj.classname + "'>";
-            html += "<span class='' + obj.symbol + ''></span>&nbsp;" + obj.title;
+            html += "<span class='" + obj.symbol + "'></span>" + obj.title;
             html += "</a>";
             html += "</li>";
             $(".menubarlgv").append(html);
