@@ -25,27 +25,25 @@ define([
             "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
         initialize: function () {
-            if (!Util.isAny()) { // nicht in mobiler Variante
-                EventBus.trigger("appendItemToMenubar", {
-                    title: "Liste",
-                    symbol: "glyphicon glyphicon-menu-hamburger hidden-sm",
-                    classname: "featureLister",
-                    clickFunction: function () {
-                        EventBus.trigger("toggleFeatureListerWin");
-                    }
-                });
-                this.listenTo(this.model, {"change:layerlist": this.updateVisibleLayer});
-                this.listenTo(this.model, {"change:layer": this.updateLayerHeader});
-                this.listenTo(this.model, {"change:layer": this.updateLayerList});
-                this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
-                this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
-                this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
-                this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
-                this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
-                this.render();
-                if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
-                    this.toggle();
+            EventBus.trigger("appendItemToMenubar", {
+                title: "Liste",
+                symbol: "glyphicon glyphicon-menu-hamburger hidden-sm",
+                classname: "featureLister",
+                clickFunction: function () {
+                    EventBus.trigger("toggleFeatureListerWin");
                 }
+            });
+            this.listenTo(this.model, {"change:layerlist": this.updateVisibleLayer});
+            this.listenTo(this.model, {"change:layer": this.updateLayerHeader});
+            this.listenTo(this.model, {"change:layer": this.updateLayerList});
+            this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
+            this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
+            this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
+            this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
+            this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
+            this.render();
+            if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
+                this.toggle();
             }
         },
         /*
