@@ -30,6 +30,14 @@ define([
         * @param {string} [initialQuery] - Initiale Suche.
         */
         initialize: function (config, querySearchString) {
+            var mediaQuery = window.matchMedia("(orientation: portrait)"),
+                that = this;
+
+            // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
+            mediaQuery.addListener(function () {
+                that.render();
+            });
+
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
@@ -51,9 +59,7 @@ define([
             });
 
             this.render();
-            $(window).on("orientationchange", function () {
-                this.render();
-            }, this);
+
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                 $("#searchInput").val(this.model.get("placeholder"));
             }
@@ -230,7 +236,7 @@ define([
             firstListElement = {};
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
-                var selected =  this.getSelectedElement(),
+                var selected = this.getSelectedElement(),
                 firstListElement = this.getFirstElement();
             }
 
@@ -263,10 +269,10 @@ define([
         clearSelection: function () {
             this.getSelectedElement().removeClass("selected");
         },
-        isLastElement : function (element) {
+        isLastElement: function (element) {
             return element.is(":last-child");
         },
-        isFirstElement : function (element) {
+        isFirstElement: function (element) {
             return element.is(":first-child");
         },
         isChildElement: function (element) {
@@ -368,7 +374,6 @@ define([
         getLastElement: function () {
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
-
 
         /**
         *
