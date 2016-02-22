@@ -35,8 +35,8 @@ define([
 
             scaleValue = this.get("scaleValue").toString();
 
-            if (this.get("scaleValue") >= 1000) {
-                scale = "Maßstab = 1: " + scaleValue.substring(0, scaleValue.length - 3) + "." + scaleValue.substring(scaleValue.length - 3);
+            if (this.get("scaleValue") >= 10000) {
+                scale = "Maßstab = 1: " + scaleValue.substring(0, scaleValue.length - 3) + " " + scaleValue.substring(scaleValue.length - 3);
             }
             else {
                 scale = "Maßstab = 1: " + scaleValue;
