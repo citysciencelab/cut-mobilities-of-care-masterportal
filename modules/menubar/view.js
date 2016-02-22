@@ -62,9 +62,7 @@ define([
             html += "</a>";
             html += "</li>";
             $(".menubarlgv").append(html);
-            $("." + obj.classname).on("click", function (evt) {
-                EventBus.trigger("toggleWin", [evt.target.className.split(" ")[1], evt.target.text, evt.target.children[0].className]);
-            });
+            $("." + obj.classname).on("click", obj.clickFunction);
         },
         activateFeatureLister: function () {
             EventBus.trigger("toggleFeatureListerWin");

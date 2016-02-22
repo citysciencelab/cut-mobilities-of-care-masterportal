@@ -15,11 +15,15 @@ define([
                 this.model = grenznachweismodel;
                 this.template = _.template(grenznachweistemplate);
                 $("head").prepend("<style>" + grenznachweiscss + "</style>");
+                var clickFunction = function () {
+                    EventBus.trigger("toggleWin", ["grenznachweis", "Bestellung Grenznachweis", "glyphicon glyphicon-shopping-cart"]);
+                };
             }
             EventBus.trigger("appendItemToMenubar", {
                 title: title,
                 symbol: symbol,
-                classname: modelname
+                classname: modelname,
+                clickFunction: clickFunction
             });
             this.model.on("change:isCollapsed render invalid change:isCurrentWin", this.render, this);
         },
