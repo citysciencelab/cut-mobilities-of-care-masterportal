@@ -51,6 +51,11 @@ define([
             this.fetch({
                 cache: false,
                 success: function (model) {
+                    _.each(model.get("scales"), function (scale) {
+                        var scaletext = scale.value <= 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+
+                        scale.name = "1: " + scaletext;
+                    });
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                     EventBus.trigger("mapView:getOptions");
                 }
