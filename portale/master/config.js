@@ -303,7 +303,6 @@ define(function () {
             helpButton: false,
             searchBar: true,
             layerTree: true,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             featureLister: 20,
             treeFilter: false,
