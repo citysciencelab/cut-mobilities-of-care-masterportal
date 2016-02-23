@@ -111,6 +111,7 @@ define([
                 toFeatures = countFeatures + maxFeatures - 1;
 
             this.readFeatures(countFeatures, toFeatures, false);
+            this.setMaxHeight();
         },
         /*
         * Bei change der Feature-Props wird in den Details-Tab gewechselt und dort werden die Detailinformationen des Features (wie GFI) aufgelistet.
@@ -332,18 +333,37 @@ define([
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: "#map",
-                handle: ".featurelist-win-header"
+                handle: ".featurelist-win-header",
+                drag: function () {
+                    this.setMaxHeight();
+                }.bind(this)
             });
         },
         toggle: function () {
             if ($(this.$el).is(":visible") === false) {
                 this.updateVisibleLayer();
+                this.setMaxHeight();
                 // wenn nur ein Layer gefunden, lade diesen sofort
                 if (this.model.get("layerlist").length === 1) {
                     this.model.set("layerid", this.model.get("layerlist")[0].id);
                 }
             }
             this.$el.toggle();
+        },
+        setMaxHeight: function () {
+            var posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top) : parseInt(this.$el.css("top")),
+                winHeight = $(window).height(),
+                marginTop = parseInt(this.$el.css("marginTop")),
+                marginBottom = parseInt(this.$el.css("marginBottom")),
+                header = 107,
+                footer = $(".featurelist-list-footer").is(":visible") ? 71 : 0,
+                maxHeight = winHeight - posY - marginTop - marginBottom - header - footer - 5,
+                maxWidth = $(window).width() * 0.4;
+
+            $(".featurelist-list-table").css("max-height", maxHeight);
+            $(".featurelist-list-table").css("max-width", maxWidth);
+            $(".featurelist-details-ul").css("max-height", maxHeight);
+            $(".featurelist-details-ul").css("max-width", maxWidth);
         }
     });
 
