@@ -111,7 +111,6 @@ define([
                 toFeatures = countFeatures + maxFeatures - 1;
 
             this.readFeatures(countFeatures, toFeatures, false);
-            this.setMaxHeight();
         },
         /*
         * Bei change der Feature-Props wird in den Details-Tab gewechselt und dort werden die Detailinformationen des Features (wie GFI) aufgelistet.
@@ -306,6 +305,7 @@ define([
             else {
                 $(".featurelist-list-footer").hide();
             }
+            this.setMaxHeight();
         },
         /*
         * Ändert den Titel des Tabellen-Tabs auf Layernamen.
