@@ -2,7 +2,7 @@ define(function () {
     var config = {
         allowParametricURL: false,
         view: {},
-        customModules: ["../mietenspiegelform"],
+        customModules: ["../portale/mietenspiegel-formular/mietenspiegelform"],
         layerConf: "/lgv-config/services-fhhnet.json",
         restConf: "/lgv-config/rest-services-fhhnet.json",
         styleConf: "/lgv-config/style.json",

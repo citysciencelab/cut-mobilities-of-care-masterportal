@@ -86,18 +86,25 @@ define(function () {
                          fieldName: "teilnahme_geburtsklinik",
                          filterType: "combo",
                          filterName: "Geburtsklinik",
-                         filterString: ["*", "ja", "nein"]
+                         filterString: ["*", "Ja", "Nein"]
                      },
                      {
                          fieldName: "teilnahme_notversorgung",
                          filterType: "combo",
                          filterName: "Not- und Unfallversorgung",
-                         filterString: ["*", "ja", "eingeschränkt", "nein"]
+                         filterString: ["*", "Ja", "Eingeschränkt", "Nein"]
                      }
                  ],
                  routable: true
                 },
-                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [], styleLabelField: "", styleField: "", routable: false}
+                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+                     {
+                         fieldName: "Bezirk",
+                         filterType: "combo",
+                         filterName: "Bezirk",
+                         filterString: ["*", "Altona"]
+                     }
+                 ], styleLabelField: "", styleField: "", routable: false}
             ]
         },
         /**

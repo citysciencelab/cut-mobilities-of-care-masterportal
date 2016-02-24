@@ -44,7 +44,6 @@ define([
             EventBus.on("zoomToExtent", this.zoomToExtent, this);
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
             EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
-            EventBus.on("initWfsFeatureFilter", this.initWfsFeatureFilter, this);
             EventBus.on("setMeasurePopup", this.setMeasurePopup, this); // warte auf Fertigstellung des MeasurePopup für Übergabe
 
             this.set("view", MapView.get("view"));
@@ -60,32 +59,32 @@ define([
 
             this.get("map").on("pointermove", this.pointerMoveOnMap);
             // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
-            if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
-                var startx = 0,
-                    starty = 0;
-
-                this.get("map").getViewport().addEventListener("touchstart", function (e) {
-                    var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
-
-                    startx = parseInt(touchobj.clientX, 10); // get x position of touch point relative to left edge of browser
-                    e.preventDefault();
-                }, false);
-                this.get("map").getViewport().addEventListener("touchend", function (e) {
-                    var touchobj = e.changedTouches[0], // reference first touch point (ie: first finger)
-                    // Calculate if there was "significant" movement of the finger
-                    movementX = Math.abs(startx - touchobj.clientX),
-                    movementY = Math.abs(starty - touchobj.clientY);
-
-                    if (movementX < 5 || movementY < 5) {
-                        var x = _.values(_.pick(touchobj, "pageX"))[0],
-                            y = _.values(_.pick(touchobj, "pageY"))[0],
-                            coordinates = this.get("map").getCoordinateFromPixel([x, y]);
-                        // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
-                        this.setGFIParams({coordinate: coordinates});
-                    }
-                    // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
-                }.bind(this), false);
-            }
+            // if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
+            //     var startx = 0,
+            //         starty = 0;
+            //
+            //     this.get("map").getViewport().addEventListener("touchstart", function (e) {
+            //         var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
+            //
+            //         startx = parseInt(touchobj.clientX, 10); // get x position of touch point relative to left edge of browser
+            //         // e.preventDefault();
+            //     }, false);
+            //     this.get("map").getViewport().addEventListener("touchend", function (e) {
+            //         var touchobj = e.changedTouches[0], // reference first touch point (ie: first finger)
+            //         // Calculate if there was "significant" movement of the finger
+            //         movementX = Math.abs(startx - touchobj.clientX),
+            //         movementY = Math.abs(starty - touchobj.clientY);
+            //
+            //         if (movementX < 5 || movementY < 5) {
+            //             var x = _.values(_.pick(touchobj, "pageX"))[0],
+            //                 y = _.values(_.pick(touchobj, "pageY"))[0],
+            //                 coordinates = this.get("map").getCoordinateFromPixel([x, y]);
+            //             // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
+            //             // this.setGFIParams({coordinate: coordinates});
+            //         }
+            //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
+            //     }.bind(this), false);
+            // }
         },
 
         GFIPopupVisibility: function (value) {
@@ -95,10 +94,6 @@ define([
             else {
                 this.set("GFIPopupVisibility", false);
             }
-        },
-
-        initWfsFeatureFilter: function () {
-            EventBus.trigger("checkwfsfeaturefilter", this.get("map"));
         },
 
         getMap: function () {
@@ -211,7 +206,7 @@ define([
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
 
-            //Laden des Layers überwachen
+            // Laden des Layers überwachen
             if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
                 this.getLayerLoadStatus(layer);
             }
@@ -227,11 +222,11 @@ define([
                     ++numLoadingTiles;
                     var image = tile.getImage();
 
-                    image.onload = image.onerror =  function () {
+                    image.onload = image.onerror = function () {
                         --numLoadingTiles;
                         if (numLoadingTiles === 0) {
                             Util.hideLoader();
-                            //Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
+                            // Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
                             source.setTileLoadFunction(tileLoadFn);
                         }
                     };
@@ -242,7 +237,7 @@ define([
         getLayerLoadStatus: function (layer) {
             var context = this;
 
-            layer.getSource().setTileLoadFunction(( function () {
+            layer.getSource().setTileLoadFunction((function () {
                 var numLoadingTiles = 0,
                 tileLoadFn = layer.getSource().getTileLoadFunction();
 
