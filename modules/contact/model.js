@@ -8,6 +8,7 @@ define([
     "use strict";
     var ContactModel = Backbone.Model.extend({
         defaults: {
+            maxLines: Util.isAny() ? "5" : "10",
             from: Config.menu.contact.from,
             to: Config.menu.contact.from,
             cc: Config.menu.contact.cc ? Config.menu.contact.cc : "",
@@ -18,7 +19,10 @@ define([
             text: "",
             systemInfo: Config.menu.contact.includeSystemInfo && Config.menu.contact.includeSystemInfo === true ? "Platform: " + navigator.platform + "</br>" + "Cookies enabled: " + navigator.cookieEnabled + "</br>" + "UserAgent: " + navigator.userAgent : "",
             url: "",
-            ticketID: ""
+            ticketID: "",
+            userName: "",
+            userEmail: "",
+            userTel: ""
         },
         initialize: function () {
             var date = new Date(),
@@ -42,37 +46,27 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
-        // Validation
-        validators: {
-            minLength: function (value, minLength) {
-                return value.length >= minLength;
-            },
-            maxLength: function (value, maxLength) {
-                return value.length <= maxLength;
-            },
-            maxValue: function (value, maxValue) {
-                return value <= maxValue;
-            },
-            minValue: function (value, minValue) {
-                return value >= minValue;
-            },
-            isLessThan: function (min, max) {
-                return min <= max;
-            },
-            pattern: function (value, pattern) {
-                return new RegExp(pattern, "gi").test(value) ? true : false;
+        validate: function (attributes, identifier) {
+            var userNameValid = attributes.userName.length >= 3,
+                userEmailValid1 = attributes.userEmail.length >= 1,
+                userEmailValid2 = attributes.userEmail.match(/^[A-Z0-9\.\_\%\+\-]+@{1}[A-Z0-9\.\-]+\.{1}[A-Z]{2,4}$/igm) === null ? false : true,
+                userTelValid = attributes.userTel.match(/^[0-9]{1}[0-9\-\+\(\)]*[0-9]$/ig) === null ? false : true,
+                textValid = attributes.text.length >= 10;
+
+            if (userNameValid === false || userEmailValid1 === false || userEmailValid2 === false || userTelValid === false || textValid === false) {
+                return {
+                    userName: userNameValid,
+                    userEmail: userEmailValid1 === true && userEmailValid2 === true ? true : false,
+                    userTel: userTelValid,
+                    text: textValid
+                };
+            }
+            else {
+                return true;
             }
         },
-        validate: function (attributes, identifier) {
-            var errors = {};
-
-            if (identifier.validate === true) {
-            }
-            // return die Errors
-            this.set("errors", errors);
-            if (_.isEmpty(errors) === false) {
-                return errors;
-            }
+        send: function () {
+            console.log("implementiere Senden");
         }
     });
 

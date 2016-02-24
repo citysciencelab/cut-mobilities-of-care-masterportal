@@ -1,3 +1,13 @@
 .contactInput {
     max-width: 400px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.contactHide {
+    display: none;
+}
+
+.contactResizeNone {
+    resize: none;
 }

@@ -1,35 +1,39 @@
 <div class="panel panel-default contactInput">
-    <div class="panel-heading">Ihr Anliegen</div>
+    <div class="panel-heading"><%= subject + " (#" + ticketID + ")" %></div>
     <div class="panel-body">
-        <div class="form-group has-success has-feedback">
+        <div id="contactNameDiv" class="form-group has-feedback">
             <div class="input-group">
                 <span class="input-group-addon">Name</span>
-                <input type="text" class="form-control" id="inputGroupSuccess1" aria-describedby="inputGroupSuccess1Status" placeholder="Ihr Name">
+                <input type="text" class="form-control" id="contactName" aria-describedby="contactNameStatus" placeholder="Ihr Name" value="<%= userName %>">
             </div>
-            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-            <span id="inputGroupSuccess1Status" class="sr-only">(success)</span>
+            <span id="contactNameFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactNameStatus" class="sr-only">(success)</span>
         </div>
-        <div class="form-group has-success has-feedback">
+        <div id="contactEmailDiv" class="form-group has-feedback">
             <div class="input-group">
                 <span class="input-group-addon">Email</span>
-                <input type="email" class="form-control" id="inputGroupSuccess1" aria-describedby="inputGroupSuccess1Status" placeholder="Ihre Emailadresse">
+                <input type="email" class="form-control" id="contactEmail" aria-describedby="contactEmailStatus" placeholder="Ihre Emailadresse" value="<%= userEmail %>">
             </div>
-            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-            <span id="inputGroupSuccess1Status" class="sr-only">(success)</span>
+            <span id="contactEmailFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactEmailStatus" class="sr-only">(success)</span>
         </div>
-        <div class="form-group has-success has-feedback">
+        <div id="contactTelDiv" class="form-group has-feedback">
             <div class="input-group">
                 <span class="input-group-addon">Tel.</span>
-                <input type="tel" class="form-control" id="inputGroupSuccess1" aria-describedby="inputGroupSuccess1Status" placeholder="Ihre Telefonnummer">
+                <input type="tel" class="form-control" id="contactTel" aria-describedby="contactTelStatus" placeholder="Ihre Telefonnummer" value="<%= userTel %>">
             </div>
-            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-            <span id="inputGroupSuccess1Status" class="sr-only">(success)</span>
+            <span id="contactTelFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactTelStatus" class="sr-only">(success)</span>
         </div>
-        <div class="form-group has-success has-feedback">
-            <textarea class="form-control" rows="4" maxlength="2000" placeholder="<%= textPlaceholder %>" aria-describedby="inputSuccess2Status"></textarea>
-            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-            <span id="inputSuccess2Status" class="sr-only">(success)</span>
+        <div id="textDiv" class="form-group has-feedback">
+            <textarea class="contactResizeNone form-control" id="contactText" rows="<%= maxLines %>" maxlength="2000" placeholder="<%= textPlaceholder %>" aria-describedby="contactTextStatus"><%= text %></textarea>
+            <span id="contactTextFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactTextStatus" class="sr-only">(success)</span>
         </div>
     </div>
-    <div class="panel-footer">Panel footer</div>
+    <div class="panel-footer">
+        <button type="button" class="disabled contactButton btn btn-default" title="Eingaben jetzt abschicken.">
+            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Abschicken
+        </button>
+    </div>
 </div>

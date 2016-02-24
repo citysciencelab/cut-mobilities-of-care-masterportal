@@ -19,17 +19,125 @@ define([
                     EventBus.trigger("toggleWin", ["contact", "Kontakt", "glyphicon glyphicon-envelope"]);
                 }
             });
-            this.model.on("change:isCollapsed render invalid change:isCurrentWin", this.render, this);
+            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
+            this.model.on("invalid", this.showValidity, this);
         },
         events: {
+            "focusout .contactInput": "focusout",
+            "click .contactButton": "send"
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+
                 var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.setMaxHeight();
                 this.delegateEvents();
+            }
+        },
+        setMaxHeight: function () {
+            var height = $(window).height() - 160;
+
+            $(".contactInput").css("max-height", height);
+        },
+        focusout: function (evt) {
+            switch (evt.target.id) {
+                case "contactEmail": {
+                    this.model.set("userEmail", evt.target.value);
+                    break;
+                }
+                case "contactName": {
+                    this.model.set("userName", evt.target.value);
+                    break;
+                }
+                case "contactTel": {
+                    this.model.set("userTel", evt.target.value);
+                    break;
+                }
+                case "contactText": {
+                    this.model.set("text", evt.target.value);
+                    break;
+                }
+            }
+            this.model.isValid();
+        },
+        send: function () {
+            this.model.send();
+        },
+        showValidity: function () {
+            if (_.isObject(this.model.validationError)) {
+                var errors = this.model.validationError;
+
+                this.toggleUserNameValid(errors.userName);
+                this.toggleUserEmailValid(errors.userEmail);
+                this.toggleUserTelValid(errors.userTel);
+                this.toggleTextValid(errors.text);
+                this.toggleSendButton(false);
+            }
+            else if (this.model.validationError === true) {
+                this.toggleUserNameValid(true);
+                this.toggleUserEmailValid(true);
+                this.toggleUserTelValid(true);
+                this.toggleTextValid(true);
+                this.toggleSendButton(true);
+            }
+        },
+        toggleSendButton: function (val) {
+            if (val === true) {
+                $(".contactButton").removeClass("disabled");
+            }
+            else {
+                $(".contactButton").addClass("disabled");
+            }
+        },
+        toggleUserNameValid: function (val) {
+            if (val === true) {
+                $("#contactNameDiv").addClass("has-success");
+                $("#contactNameDiv").removeClass("has-error");
+                $("#contactNameFeedback").removeClass("contactHide");
+            }
+            else {
+                $("#contactNameDiv").removeClass("has-success");
+                $("#contactNameDiv").addClass("has-error");
+                $("#contactNameFeedback").addClass("contactHide");
+            }
+        },
+        toggleUserEmailValid: function (val) {
+            if (val === true) {
+                $("#contactEmailDiv").addClass("has-success");
+                $("#contactEmailDiv").removeClass("has-error");
+                $("#contactEmailFeedback").removeClass("contactHide");
+            }
+            else {
+                $("#contactEmailDiv").removeClass("has-success");
+                $("#contactEmailDiv").addClass("has-error");
+                $("#contactEmailFeedback").addClass("contactHide");
+            }
+        },
+        toggleUserTelValid: function (val) {
+            if (val === true) {
+                $("#contactTelDiv").addClass("has-success");
+                $("#contactTelDiv").removeClass("has-error");
+                $("#contactTelFeedback").removeClass("contactHide");
+            }
+            else {
+                $("#contactTelDiv").removeClass("has-success");
+                $("#contactTelDiv").addClass("has-error");
+                $("#contactTelFeedback").addClass("contactHide");
+            }
+        },
+        toggleTextValid: function (val) {
+            if (val === true) {
+                $("#textDiv").addClass("has-success");
+                $("#textDiv").removeClass("has-error");
+                $("#contactTextFeedback").removeClass("contactHide");
+            }
+            else {
+                $("#textDiv").removeClass("has-success");
+                $("#textDiv").addClass("has-error");
+                $("#contactTextFeedback").addClass("contactHide");
             }
         }
     });
