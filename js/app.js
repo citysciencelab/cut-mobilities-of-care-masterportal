@@ -204,6 +204,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         }
                     });
                 }
+                if (_.has(Config.menu, "contact") === true && _.isObject(Config.menu.contact) === true) {
+                    require(["modules/contact/view"], function (Contact) {
+                        new Contact();
+                    });
+                }
             });
         }
     });
