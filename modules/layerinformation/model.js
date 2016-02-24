@@ -82,7 +82,7 @@ define([
                     else {
                         dates.each(function (index, element) {
                             if ($(element).attr("codeListValue") === "revision") {
-                                dateTime = $("gco\\:DateTime,DateTime", xmlDoc)[index].textContent;
+                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[index].textContent;
                             }
                         });
                     }
