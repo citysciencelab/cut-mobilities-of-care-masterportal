@@ -38,3 +38,13 @@ require.config({
 
 define(["app"], function () {
 });
+
+//funktioniert obwohl der Linter meckert
+requirejs.onError = function (err) {
+    if (err.requireType === "timeout") {
+        alert("error: " + err);
+    }
+    else {
+        throw err;
+    }
+};
