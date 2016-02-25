@@ -1,0 +1,8 @@
+.form-save-selection {
+    max-width: 450px;
+    min-width: 350px;
+}
+
+.form-save-selection p.info {
+    font-size: 12px;
+}
