@@ -236,7 +236,7 @@ define([
             html += "<span>" + olFeature.get("EndDescription").substr(olFeature.get("EndDescription").indexOf(". ") + 1) + "</span>";
             html += "</div>";
             $("#map").append(html);
-            this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")}));
+            this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")[0]}));
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             EventBus.trigger("addOverlay", this.get("mhpOverlay"));
         }

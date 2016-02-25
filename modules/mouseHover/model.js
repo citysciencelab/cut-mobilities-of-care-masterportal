@@ -19,7 +19,7 @@ define([
             $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
 
             this.set("mhpOverlay", new ol.Overlay({
-                element: $("#mousehoverpopup")
+                element: $("#mousehoverpopup")[0]
             }));
             this.set("element", this.get("mhpOverlay").getElement());
             EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
@@ -79,13 +79,13 @@ define([
         destroyPopup: function () {
             this.set("oldSelection", "");
             this.unset("mhpresult", {silent: true});
-            this.get("element").tooltip("destroy");
+            $(this.get("element")).tooltip("destroy");
         },
         /**
          * Zeigt das Popup.
          */
         showPopup: function () {
-            this.get("element").tooltip("show");
+            $(this.get("element")).tooltip("show");
         },
         /**
         * forEachFeatureAtPixel greift nur bei sichtbaren Features.

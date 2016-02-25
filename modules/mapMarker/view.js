@@ -78,7 +78,7 @@ define([
         render: function () {
             this.$el.html(this.template());
 
-            this.model.get("marker").setElement(this.$el);
+            this.model.get("marker").setElement(this.$el[0]);
         },
         /**
         * @description Entfernt den searchVector
