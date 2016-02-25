@@ -11,3 +11,7 @@
 .contactResizeNone {
     resize: none;
 }
+
+.contactInputGroup {
+    min-width: 65px;
+}
