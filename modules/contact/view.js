@@ -97,11 +97,13 @@ define([
                 $("#contactNameDiv").addClass("has-success");
                 $("#contactNameDiv").removeClass("has-error");
                 $("#contactNameFeedback").removeClass("contactHide");
+                $("#contactNameLabel").addClass("contactHide");
             }
             else {
                 $("#contactNameDiv").removeClass("has-success");
                 $("#contactNameDiv").addClass("has-error");
                 $("#contactNameFeedback").addClass("contactHide");
+                $("#contactNameLabel").removeClass("contactHide");
             }
         },
         toggleUserEmailValid: function (val) {
@@ -109,11 +111,13 @@ define([
                 $("#contactEmailDiv").addClass("has-success");
                 $("#contactEmailDiv").removeClass("has-error");
                 $("#contactEmailFeedback").removeClass("contactHide");
+                $("#contactEmailLabel").addClass("contactHide");
             }
             else {
                 $("#contactEmailDiv").removeClass("has-success");
                 $("#contactEmailDiv").addClass("has-error");
                 $("#contactEmailFeedback").addClass("contactHide");
+                $("#contactEmailLabel").removeClass("contactHide");
             }
         },
         toggleUserTelValid: function (val) {
@@ -121,11 +125,13 @@ define([
                 $("#contactTelDiv").addClass("has-success");
                 $("#contactTelDiv").removeClass("has-error");
                 $("#contactTelFeedback").removeClass("contactHide");
+                $("#contactTelLabel").addClass("contactHide");
             }
             else {
                 $("#contactTelDiv").removeClass("has-success");
                 $("#contactTelDiv").addClass("has-error");
                 $("#contactTelFeedback").addClass("contactHide");
+                $("#contactTelLabel").removeClass("contactHide");
             }
         },
         toggleTextValid: function (val) {
