@@ -10,14 +10,14 @@ define([
         defaults: {
             maxLines: Util.isAny() ? "5" : "10",
             from: Config.menu.contact.from,
-            to: Config.menu.contact.from,
+            to: Config.menu.contact.to,
             cc: Config.menu.contact.cc ? Config.menu.contact.cc : "",
             ccToUser: Config.menu.contact.ccToUser ? Config.menu.contact.ccToUser : false,
             bcc: Config.menu.contact.bcc ? Config.menu.contact.bcc : "",
             subject: Config.menu.contact.subject ? Config.menu.contact.subject : "Supportanfrage zum Portal " + document.title,
-            textPlaceholder: Config.menu.contact.textPlaceholder ? Config.menu.contact.textPlaceholder : "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Senden&quot;",
+            textPlaceholder: Config.menu.contact.textPlaceholder ? Config.menu.contact.textPlaceholder : "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
             text: "",
-            systemInfo: Config.menu.contact.includeSystemInfo && Config.menu.contact.includeSystemInfo === true ? "Platform: " + navigator.platform + "</br>" + "Cookies enabled: " + navigator.cookieEnabled + "</br>" + "UserAgent: " + navigator.userAgent : "",
+            systemInfo: Config.menu.contact.includeSystemInfo && Config.menu.contact.includeSystemInfo === true ? "</br>==================</br>Platform: " + navigator.platform + "</br>" + "Cookies enabled: " + navigator.cookieEnabled + "</br>" + "UserAgent: " + navigator.userAgent : "",
             url: "",
             ticketID: "",
             userName: "",
@@ -66,7 +66,47 @@ define([
             }
         },
         send: function () {
-            console.log("implementiere Senden");
+            if (this.get("ccToUser") === true) {
+                if (this.get("cc") !== "") {
+                    var cc = this.get("userEmail") + ", " + this.get("cc");
+                }
+                else {
+                    var cc = this.get("cc");
+                }
+            }
+            else {
+                var cc = this.get("cc");
+            }
+
+            var text = "Nutzer: " + this.get("userName") + "</br>Email: " + this.get("userEmail") + "</br>Tel: " + this.get("userTel") + "</br>==================</br>" + this.get("text") + this.get("systemInfo"),
+                dataToSend = JSON.stringify({
+                    from: this.get("from"),
+                    to: this.get("to"),
+                    cc: cc,
+                    bcc: this.get("bcc"),
+                    subject: this.get("ticketID") + ": " + this.get("subject"),
+                    text: text
+                });
+
+            Util.showLoader();
+            $.ajax({
+                url: this.get("url"),
+                data: "data=" + dataToSend,
+                async: true,
+                type: "POST",
+                cache: false,
+                dataType: "json",
+                context: this,
+                complete: function (jqXHR) {
+                    Util.hideLoader();
+                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+                        EventBus.trigger("alert", {text: "<strong>Email nicht versandt.</strong> Interner Fehler aufgetreten.", kategorie: "alert-warning"});
+                    }
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
         }
     });
 
