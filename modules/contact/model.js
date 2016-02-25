@@ -31,11 +31,13 @@ define([
                 ticketID = month + day + "-" + _.random(1000, 9999),
                 resp = RestReader.getServiceById(Config.menu.contact.serviceID);
 
-            this.set("url", _.first(resp).get("url"));
-            this.set("ticketID", ticketID);
-            this.listenTo(EventBus, {
-                "winParams": this.setStatus
-            });
+            if (resp && resp.length === 1) {
+                this.set("url", _.first(resp).get("url"));
+                this.set("ticketID", ticketID);
+                this.listenTo(EventBus, {
+                    "winParams": this.setStatus
+                });
+            }
         },
         setStatus: function (args) { // Fenstermanagement
             if (args[2] === "contact") {
