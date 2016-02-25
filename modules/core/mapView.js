@@ -83,6 +83,12 @@ define([
                 },
                 "getOptions": function () {
                     return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                },
+                "getCenter": function () {
+                    return this.getCenter();
+                },
+                "getZoomLevel": function () {
+                    return this.getZoom();
                 }
             }, this);
 
@@ -109,7 +115,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
-                    Radio.trigger("MapView", "changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
                     EventBus.trigger("mapView:sendCenter", this.get("center"));
@@ -136,9 +142,11 @@ define([
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
                 this.set("resolution", this.get("view").getResolution());
+                channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
+                channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
 
