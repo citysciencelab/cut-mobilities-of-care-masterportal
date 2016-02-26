@@ -27,19 +27,13 @@
         float: right;
         padding-left: 10px;
         padding-right: 10px;
-        /*min-width: 400px;*/
-        /*margin-right: 20px;*/
-        /*width: 100%;*/
     }
     #searchInput {
-        min-width: 300px;
+        max-width: 350px;
     }
     #searchInputUL {
         min-width: 300px;
     }
-    /*#searchForm {
-        float: right;
-    }*/
 }
 
 #searchInputLi {
