@@ -25,6 +25,8 @@ define([
                     EventBus.trigger("toggleWin", ["saveSelection", "Auswahl speichern", "glyphicon-share"]);
                     // Schließt den Baum
                     $(".nav li:first-child").removeClass("open");
+                    // Schließt die Mobile Navigation
+                    $(".navbar-collapse").removeClass("in");
                     // Selektiert die URL
                     $(".input-save-url").select();
                 },
