@@ -8,7 +8,7 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "2515", visible: true} // Wohnlagen
+                {id: "2834", visible: true} // Wohnlagen
             ]
         },
 

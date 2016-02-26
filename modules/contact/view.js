@@ -23,7 +23,10 @@ define([
             this.model.on("invalid", this.showValidity, this);
         },
         events: {
-            "focusout .contactInput": "focusout",
+            "focusout #contactName": "focusout",
+            "focusout #contactEmail": "focusout",
+            "focusout #contactTel": "focusout",
+            "focusout #contactText": "focusout",
             "click .contactButton": "send"
         },
         render: function () {
@@ -38,9 +41,10 @@ define([
             }
         },
         setMaxHeight: function () {
-            var height = $(window).height() - 160;
+            var height = $(window).height() - 130;
 
-            $(".contactInput").css("max-height", height);
+            $(".win-body").css("max-height", height);
+            $(".win-body").css("max-width", 400);
         },
         focusout: function (evt) {
             switch (evt.target.id) {

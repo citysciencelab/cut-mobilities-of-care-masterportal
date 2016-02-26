@@ -98,7 +98,7 @@ define([
          * @param  {string} name - Gesuchter String
          */
         bkgSearch: function (name) {
-            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + name;
+            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + encodeURIComponent(name);
 
             this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this);
         },
