@@ -108,7 +108,7 @@ define([
                         EventBus.trigger("alert", {text: data.message, kategorie: "alert-warning"});
                     }
                     else {
-                        EventBus.trigger("alert", {text: data.message, kategorie: "alert-success"});
+                        EventBus.trigger("alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
                     }
                 }
             });
