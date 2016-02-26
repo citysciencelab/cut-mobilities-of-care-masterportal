@@ -10,7 +10,12 @@ define(function () {
                 {id: "51", visibility: true}, // WebAtlas
                 {id: "53", visibility: false}, // WebAtlas_grau
                 {id: "55", visibility: false}, // Luftbilder
-                {id: "57", visibility: false} // 1:5000
+                {id: "57", visibility: false}, // 1:5000
+                {id: "99999", visibility: true}, // Erreichbarkeitsanalysen
+                {id: "99998", visibility: true}, // Erreichbarkeitsanalysen
+                {id: "99997", visibility: true}, // Erreichbarkeitsanalysen
+                {id: "99996", visibility: true}, // Erreichbarkeitsanalysen
+                {id: "99995", visibility: true} // Erreichbarkeitsanalysen
             ]
         },
         controls: {
@@ -47,7 +52,7 @@ define(function () {
         view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
-            resolution: 152.87436231907702,
+            resolution: 76.43718115953851,
             options: [
                 {
                     resolution: 611.4974492763076,
