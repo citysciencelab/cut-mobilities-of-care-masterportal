@@ -158,7 +158,7 @@ define([
             }
         },
         setMaxHeight: function () {
-            var maxHeight = $("#window").height() - 60;
+            var maxHeight = $(window).height() - 160;
 
             $("#wfsFilterWin").css("max-height", maxHeight);
         }
