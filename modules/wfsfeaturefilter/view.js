@@ -142,6 +142,7 @@ define([
                 attr = this.model.toJSON();
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.setMaxHeight();
                 this.delegateEvents();
             }
             else if (this.model.get("isCurrentWin") === false) {
@@ -155,6 +156,11 @@ define([
                     this.filterLayers(layerfilters);
                 }
             }
+        },
+        setMaxHeight: function () {
+            var maxHeight = $("#window").height() - 60;
+
+            $("#wfsFilterWin").css("max-height", maxHeight);
         }
     });
     return wfsFeatureFilterView;
