@@ -99,7 +99,7 @@ define([
          */
         bkgSearch: function (name) {
             var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + encodeURIComponent(name);
-            console.log(request);
+
             this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this);
         },
         /**
