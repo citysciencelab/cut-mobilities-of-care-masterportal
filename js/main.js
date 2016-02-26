@@ -38,3 +38,15 @@ require.config({
 
 define(["app"], function () {
 });
+
+// Überschreibt das Errorhandling von Require so,
+// dass der ursprüngliche Fehler sammt Stacjtrace ausgegeben wird.
+// funktioniert obwohl der Linter meckert
+requirejs.onError = function (err) {
+    if (err.requireType === "timeout") {
+        alert("error: " + err);
+    }
+    else {
+        throw err;
+    }
+};

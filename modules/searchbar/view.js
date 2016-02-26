@@ -30,6 +30,24 @@ define([
         * @param {string} [initialQuery] - Initiale Suche.
         */
         initialize: function (config, querySearchString) {
+            // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
+            var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
+                mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
+                mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
+                that = this;
+
+            // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
+            mediaQueryOrientation.addListener(function () {
+                that.render();
+            });
+            // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
+            mediaQueryMinWidth.addListener(function () {
+                that.render();
+            });
+            mediaQueryMaxWidth.addListener(function () {
+                that.render();
+            });
+
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
@@ -51,9 +69,7 @@ define([
             });
 
             this.render();
-            $(window).on("orientationchange", function () {
-                this.render();
-            }, this);
+
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                 $("#searchInput").val(this.model.get("placeholder"));
             }
@@ -88,6 +104,16 @@ define([
                 require(["modules/searchbar/layer/model"], function (LayerSearch) {
                     new LayerSearch(config.layer);
                 });
+            }
+
+            // Hack für flexible Suchleiste
+            $(window).on("resize", function () {
+                if ($(window).width() >= 768) {
+                    $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
+                }
+            });
+            if ($(window).width() >= 768) {
+                $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
             }
         },
         events: {
@@ -154,6 +180,7 @@ define([
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
                     template = _.template(SearchbarRecommendedListTemplate);
 
+                $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
                 $("ul.dropdown-menu-search").html(template(attr));
             // }
             // Wird gerufen
@@ -230,7 +257,7 @@ define([
             firstListElement = {};
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
-                var selected =  this.getSelectedElement(),
+                var selected = this.getSelectedElement(),
                 firstListElement = this.getFirstElement();
             }
 
@@ -263,10 +290,10 @@ define([
         clearSelection: function () {
             this.getSelectedElement().removeClass("selected");
         },
-        isLastElement : function (element) {
+        isLastElement: function (element) {
             return element.is(":last-child");
         },
-        isFirstElement : function (element) {
+        isFirstElement: function (element) {
             return element.is(":first-child");
         },
         isChildElement: function (element) {
@@ -368,7 +395,6 @@ define([
         getLastElement: function () {
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
-
 
         /**
         *
