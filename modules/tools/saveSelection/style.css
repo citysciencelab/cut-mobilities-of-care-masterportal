@@ -1,4 +1,7 @@
 .form-save-selection {
     max-width: 450px;
-    min-width: 350px;
+}
+
+.help-block {
+    font-size: 12px;
 }
