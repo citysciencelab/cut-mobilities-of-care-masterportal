@@ -122,7 +122,7 @@ define([
                 $("#featurelistFeaturedetails").removeClass("disabled");
                 $(".featurelist-details-li").remove();
                 _.each(props, function (value, key) {
-                    $(".featurelist-details-ul").append("<li class='list-group-item list-group-item-info featurelist-details-li'>" + key + "</li>");
+                    $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
                     $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
                 });
                 this.switchTabToDetails();
@@ -299,13 +299,14 @@ define([
             var shownFeaturesCount = $("#featurelist-list-table tr").length - 1;
 
             if (shownFeaturesCount < totalFeaturesCount) {
-                $(".featurelist-list-footer").show();
+                $(".featurelist-list-footer").show(0, function () {
+                    this.setMaxHeight();
+                }.bind(this));
                 $(".featurelist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
             }
             else {
                 $(".featurelist-list-footer").hide();
             }
-            this.setMaxHeight();
         },
         /*
         * Ändert den Titel des Tabellen-Tabs auf Layernamen.
@@ -340,23 +341,25 @@ define([
             });
         },
         toggle: function () {
-            if ($(this.$el).is(":visible") === false) {
+            this.$el.toggle();
+            if ($(this.$el).is(":visible") === true) {
                 this.updateVisibleLayer();
-                this.setMaxHeight();
                 // wenn nur ein Layer gefunden, lade diesen sofort
                 if (this.model.get("layerlist").length === 1) {
                     this.model.set("layerid", this.model.get("layerlist")[0].id);
                 }
+                this.setMaxHeight();
             }
-            this.$el.toggle();
         },
         setMaxHeight: function () {
-            var posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top) : parseInt(this.$el.css("top")),
+            var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
+                shownFeaturesCount = $("#featurelist-list-table tr").length - 1,
+                posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top) : parseInt(this.$el.css("top")),
                 winHeight = $(window).height(),
                 marginTop = parseInt(this.$el.css("marginTop")),
                 marginBottom = parseInt(this.$el.css("marginBottom")),
                 header = 107,
-                footer = $(".featurelist-list-footer").is(":visible") ? 71 : 0,
+                footer = shownFeaturesCount < totalFeaturesCount ? 71 : 0,
                 maxHeight = winHeight - posY - marginTop - marginBottom - header - footer - 5,
                 maxWidth = $(window).width() * 0.4;
 
