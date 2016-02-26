@@ -30,11 +30,21 @@ define([
         * @param {string} [initialQuery] - Initiale Suche.
         */
         initialize: function (config, querySearchString) {
-            var mediaQuery = window.matchMedia("(orientation: portrait)"),
+            // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
+            var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
+                mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
+                mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
                 that = this;
 
-            // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
-            mediaQuery.addListener(function () {
+            // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
+            mediaQueryOrientation.addListener(function () {
+                that.render();
+            });
+            // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
+            mediaQueryMinWidth.addListener(function () {
+                that.render();
+            });
+            mediaQueryMaxWidth.addListener(function () {
                 that.render();
             });
 
@@ -94,6 +104,16 @@ define([
                 require(["modules/searchbar/layer/model"], function (LayerSearch) {
                     new LayerSearch(config.layer);
                 });
+            }
+
+            // Hack für flexible Suchleiste
+            $(window).on("resize", function () {
+                if ($(window).width() >= 768) {
+                    $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
+                }
+            });
+            if ($(window).width() >= 768) {
+                $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
             }
         },
         events: {
