@@ -1,6 +1,8 @@
 define(function () {
 
     var config = {
+        title: "BauInfoDienst",
+        logo: "../img/hh-logo.png",
         wfsImgPath: "..components/lgv-config/img",
         allowParametricURL: true,
         tree: {
@@ -43,7 +45,7 @@ define(function () {
         },
         feature_count: [
             {
-                id: 1561,
+                id: 1561,   //festgestellte B-Pläne
                 count: 5
             }
         ],
@@ -53,7 +55,22 @@ define(function () {
             resolution: 2.6458319045841048 // 1:10 000
 
         },
-        footer: false,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV Hamburg"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/fhh-atlas_alt/",
+                    "alias": "Zum alten BauInfoDienst"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
@@ -78,7 +95,7 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: false
         },
         startUpModul: "",
