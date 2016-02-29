@@ -18,7 +18,7 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            $(this.model.get("element")).popover({
+            this.model.getElement().popover({
                 placement: function () {
                     if (this.getPosition().top > window.innerWidth / 2) {
                         return "top";
