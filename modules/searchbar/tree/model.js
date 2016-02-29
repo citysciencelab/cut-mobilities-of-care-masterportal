@@ -1,9 +1,8 @@
 define([
     "backbone",
-    "eventbus",
-    "modules/layer/list",
-    "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
+    "backbone.radio",
+    "eventbus"
+    ], function (Backbone, Radio, EventBus) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -25,14 +24,15 @@ define([
                 this.set("minChars", config.minChars);
             }
             EventBus.on("searchbar:search", this.search, this);
-            EventBus.on("layerlist:sendOverlayerList", this.getLayerForSearch, this);
             EventBus.on("sendNodeChild", this.getNodesForSearch, this);
-            EventBus.trigger("layerlist:getOverlayerList");
         },
         /**
         *
         */
         search: function (searchString) {
+            if (this.get("layers").length === 0) {
+                this.getLayerForSearch();
+            }
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
@@ -99,10 +99,11 @@ define([
         },
 
         /**
-         * @description Lädt initial die Layer in eine Variable.
-         * @param {[Object]} layerModels - Layerlist
+         *
          */
-        getLayerForSearch: function (layerModels) {
+        getLayerForSearch: function () {
+            var layerModels = Radio.request("LayerList", "getOverlayerList");
+
             this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
