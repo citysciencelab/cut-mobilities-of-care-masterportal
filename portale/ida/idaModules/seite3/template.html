@@ -114,8 +114,12 @@
     <% if (requestedParams.WGFZ === true) { %>
         <div class="fzr_col fzr_6" id="p_sp1">
             <label>Wertrelevante Geschossflächenzahl</label>
-            <input id="WGFZ" type="number" min="0.4" max="4" value="<%= defaultWGFZ %>" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Wenn Ihnen die WGFZ nicht bekannt ist, verwenden Sie die Wohn-/Nutzfläche dividiert durch das 0,78-fache der Grundstücksfläche."></span>
+            <div class="input-group">
+                <input id="WGFZ" class="form-control" aria-describedby="wgfz-addon" type="number" min="0.4" max="4" value="<%= defaultWGFZ %>" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
+                <span class="input-group-addon" id="wgfz-addon" title="Wenn Ihnen die WGFZ nicht bekannt ist, verwenden Sie die Wohn-/Nutzfläche dividiert durch das 0,78-fache der Grundstücksfläche.">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                </span>
+            </div>
         </div>
     <% } %>
     <% if (requestedParams.FLAE === true) { %>

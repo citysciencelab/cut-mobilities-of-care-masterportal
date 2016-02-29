@@ -2,10 +2,10 @@
 <%  _.each(brwList, function(brw) {
         if (!brw.wnum || brw.wnum === "") { %>
             <div class="fzr_row" id="br_tab">
-                <div class="fzr_col fzr_3" id="br_sp1">
-                    <label>Nutzung: <%= brw.bezeichnung %>, Jahrgang: <%= brw.jahr%></label>
-                    <input id="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="BRW-Nummer" title="Bitte Bodenrichtwertnummer eingeben." value="<%= brw.wnum %>"/>
-                    <span title="<%
+                <label><strong>Nutzung: </strong><%= brw.bezeichnung %>, <strong>Jahrgang: </strong><%= brw.jahr%></label>
+                <div class="fzr_col fzr_6 input-group" id="br_sp1">
+                    <input id="<%= brw.bezeichnung %>_<%= brw.jahr %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="BRW-Nummer" title="Bitte Bodenrichtwertnummer eingeben." value="<%= brw.wnum %>"/>
+                    <span class="input-group-addon" id="<%= brw.bezeichnung %>_<%= brw.jahr %>" title="<%
                     var pre = 'Bitte wählen Sie in der interaktiven Bodenrichtwertkarte (Boris-HH) den passenden ',
                         post = ' aus und geben die Bodenrichtwert-Nummer hier ein.',
                         msg = '';
@@ -47,7 +47,9 @@
                         default:
                             msg = 'Bodenrichtwert';
                     }
-                    print (pre + msg + post); %>" class="glyphicon glyphicon-question-sign"></span>
+                    print (pre + msg + post); %>" class="glyphicon glyphicon-question-sign">
+                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    </span>
                 </div>
             </div>
 <%  }
