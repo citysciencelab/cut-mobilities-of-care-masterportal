@@ -105,6 +105,7 @@ define([
             },
             backupCoords: function (data) {
                 var coords = [];
+
                 _.each(data, function (feature) {
                     coords.push(feature.getGeometry().getCoordinates());
                 });
@@ -114,7 +115,6 @@ define([
                 _.each(data, function (feature, index) {
                     feature.getGeometry().setCoordinates(backup[index]);
                 });
-                console.log(data);
             },
             /**
              * Erzeugt ein unsichtbares <a> mit Hilfe dessen ein download getriggert werden kann
