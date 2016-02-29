@@ -1,6 +1,7 @@
 define([
     "backbone",
-    "eventbus"
+    "eventbus",
+    "modules/alerting/view"
 ], function (Backbone, EventBus) {
     "use strict";
     var Seite2BRWModel = Backbone.Model.extend({
@@ -62,7 +63,8 @@ define([
                         brwList = this.get("brwList");
 
                     _.each(brwList, function (obj) {
-                        if ((obj.bezeichnung === nuta || obj.bezeichnung === ergnuta) && obj.jahr === jahrgang) {
+                        // obj.bezeichnung z.B. "MFH oder WGH (mit MFH-Anteil)"
+                        if ((obj.bezeichnung.indexOf(nuta) !== -1 || obj.bezeichnung.indexOf(ergnuta) !== -1) && obj.jahr === jahrgang) {
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,
@@ -80,6 +82,9 @@ define([
                         }
                     });
                     EventBus.trigger("seite2:setBRWList", brwList);
+                }
+                else {
+                    EventBus.trigger("alert", "Die eingegebene BRW-Nummer existiert nicht.");
                 }
             }
         }
