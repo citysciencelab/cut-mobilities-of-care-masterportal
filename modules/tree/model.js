@@ -13,11 +13,6 @@ define([
                 defaultBackground: "" // wird beim Umschalten der Hintergrundfarbe gefüllt
             },
             initialize: function () {
-                this.listenTo(EventBus, {
-                    "mapView:sendCenterAndZoom": function (center, zoom) {
-                        EventBus.trigger("layerselectionlist:createParamsForURL", center, zoom);
-                    }
-                });
                 this.listenTo(this, "change:currentSelection", this.sendSelection);
 
                 if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
