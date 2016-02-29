@@ -24,7 +24,7 @@ define([
             this.set("element", this.get("mhpOverlay").getElement());
             EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            this.checkLayersAndRegisterEvent(Radio.request("MouseHover", "getMap"));
+            this.checkLayersAndRegisterEvent(Radio.request("map", "getMap"));
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
             this.set("GFIPopupVisibility", GFIPopupVisibility);
