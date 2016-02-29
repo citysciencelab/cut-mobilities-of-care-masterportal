@@ -14,7 +14,8 @@ define([
             outputFilename: Config.print.outputFilename,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
-            center: Config.view.center
+            center: Config.view.center,
+            scale: {}
         },
 
         //
@@ -50,9 +51,14 @@ define([
             // get print config (info.json)
             this.fetch({
                 cache: false,
-                async: false,
                 success: function (model) {
+                    _.each(model.get("scales"), function (scale) {
+                        var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+
+                        scale.name = "1: " + scaletext;
+                    });
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                    EventBus.trigger("mapView:getOptions");
                 }
             });
 
@@ -60,8 +66,6 @@ define([
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
-
-            EventBus.trigger("mapView:getOptions");
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
@@ -78,13 +82,18 @@ define([
 
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
-            this.set("scale", this.get("scales")[index].value);
-            EventBus.trigger("mapView:setScale", this.get("scale"));
+            var scaleval = this.get("scales")[index].value;
+
+            EventBus.trigger("mapView:setScale", scaleval);
         },
 
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
         setScaleByMapView: function (obj) {
-            this.set("scale", parseInt(obj.scale, 10));
+            var scale = _.find(this.get("scales"), function (scale) {
+                return scale.value === obj.scale;
+            });
+
+            this.set("scale", scale);
         },
 
         // Setzt die Zentrumskoordinate.
@@ -106,7 +115,9 @@ define([
             this.set("isActive", this.get("isCurrentWin"));
         },
         updatePrintPage: function () {
-            EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale")]);
+            if (this.get("scale").value) {
+                EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
+            }
         },
 
         /**
@@ -222,7 +233,8 @@ define([
                 pages: [
                     {
                         center: this.get("center"),
-                        scale: this.get("scale"),
+                        scale: this.get("scale").value,
+                        scaleText: this.get("scale").name,
                         dpi: 96,
                         mapTitle: this.get("title")
                     }

@@ -77,12 +77,12 @@ define([
                         dateTime;
 
                     if (dates.length === 1) {
-                        dateTime = $("gco\\:DateTime,DateTime", xmlDoc)[0].textContent;
+                        dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[0].textContent;
                     }
                     else {
                         dates.each(function (index, element) {
                             if ($(element).attr("codeListValue") === "revision") {
-                                dateTime = $("gco\\:DateTime,DateTime", xmlDoc)[index].textContent;
+                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[index].textContent;
                             }
                         });
                     }

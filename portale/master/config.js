@@ -80,23 +80,32 @@ define(function () {
                 },
                 {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
+                 maxScale: 60000,
+                 minScale: 10000,
                  filterOptions: [
                      {
                          fieldName: "teilnahme_geburtsklinik",
                          filterType: "combo",
                          filterName: "Geburtsklinik",
-                         filterString: ["*", "ja", "nein"]
+                         filterString: ["*", "Ja", "Nein"]
                      },
                      {
                          fieldName: "teilnahme_notversorgung",
                          filterType: "combo",
                          filterName: "Not- und Unfallversorgung",
-                         filterString: ["*", "ja", "eingeschränkt", "nein"]
+                         filterString: ["*", "Ja", "Eingeschränkt", "Nein"]
                      }
                  ],
                  routable: true
                 },
-                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [], styleLabelField: "", styleField: "", routable: false}
+                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+                     {
+                         fieldName: "Bezirk",
+                         filterType: "combo",
+                         filterName: "Bezirk",
+                         filterString: ["*", "Altona"]
+                     }
+                 ], styleLabelField: "", styleField: "", routable: false}
             ]
         },
         /**

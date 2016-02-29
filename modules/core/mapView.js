@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "config",
     "eventbus",
     "proj4"
-], function (Backbone, ol, Config, EventBus, proj4) {
+], function (Backbone, Radio, ol, Config, EventBus, proj4) {
     "use strict";
     var MapView = Backbone.Model.extend({
         /**
@@ -74,6 +75,23 @@ define([
          *
          */
         initialize: function () {
+            var channel = Radio.channel("MapView");
+
+            channel.reply({
+                "getProjection": function () {
+                    return this.get("projection");
+                },
+                "getOptions": function () {
+                    return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                },
+                "getCenter": function () {
+                    return this.getCenter();
+                },
+                "getZoomLevel": function () {
+                    return this.getZoom();
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
@@ -97,6 +115,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
                     EventBus.trigger("mapView:sendCenter", this.get("center"));
@@ -123,9 +142,11 @@ define([
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
                 this.set("resolution", this.get("view").getResolution());
+                channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
+                channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
 

@@ -28,6 +28,7 @@ define([
             }, this);
             Util.showLoader();
             this.fetch({
+                async: false,
                 error: function () {
                     EventBus.trigger("alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.layerConf),
@@ -37,6 +38,7 @@ define([
                 },
                 success: function () {
                     Util.hideLoader();
+                    // Radio.trigger("LayerList", "fetchLayer");
                 }
             });
         },

@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config"
-], function (Backbone, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
     /**
     * Bereitstellung des Layers
     */

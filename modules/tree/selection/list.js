@@ -1,12 +1,14 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "bootstrap/popover"
-], function (Backbone, EventBus, Config) {
+], function (Backbone, Radio, EventBus, Config) {
 
     var list = Backbone.Collection.extend({
         initialize: function () {
+            var channel = Radio.channel("SelectedList");
 
             // EventBus Listener
             this.listenTo(EventBus, {
@@ -19,9 +21,15 @@ define([
 
             // Eigene Listener
             this.listenTo(this, {
+                "update": function () {
+                    channel.trigger("changedList", this.models);
+                },
                 "add": this.addLayerToMap,
-                "remove": this.removeLayerFromMap
-            }, this);
+                "remove": this.removeLayerFromMap,
+                "change:visibility": function () {
+                    channel.trigger("changedList", this.models);
+                }
+            });
 
             // Selektierte Layer werden in die Auswahl übernommen
             this.loadSelection();
@@ -128,37 +136,6 @@ define([
          */
         sendVisibleWMSLayer: function () {
             EventBus.trigger("layerlist:sendVisibleWMSlayerList", this.where({typ: "WMS", selected: true, visibility: true}));
-        },
-
-        createParamsForURL: function (center, zoom) {
-            var layerIDs = [],
-                layerVisibility = [],
-                url,
-                layerListNoExternals;
-
-                if (typeof zoom === "undefined") {
-                    zoom = 0;
-                }
-            $(".layer-selection-save").popover("destroy");
-
-            layerListNoExternals = this.filter(function (layer) {
-                return !layer.attributes.isExternal;
-            });
-            _.each(layerListNoExternals, function (layer) {
-                layerIDs.push(layer.attributes.id);
-            });
-            _.each(layerListNoExternals, function (layer) {
-                layerVisibility.push(layer.attributes.visibility);
-            });
-
-            url = location.origin + location.pathname + "?layerIDs=" + layerIDs + "&visibility=" + layerVisibility + "&center=" + center + "&zoomlevel=" + zoom;
-            $(".layer-selection-save").popover({
-                html: true,
-                title: "Speichern Sie sich diese URL als Lesezeichen ab!" + "<button type='button' class='close' onclick='$(&quot;.layer-selection-save&quot;).popover(&quot;hide&quot;);'>&times;</button>",
-                content: "<input type='text' class='form-control input-sm' value=" + url + ">",
-                trigger: "click"
-            });
-            $(".layer-selection-save").popover("show");
         }
     });
 

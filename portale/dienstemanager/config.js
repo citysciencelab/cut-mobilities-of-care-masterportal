@@ -1,19 +1,22 @@
 define(function () {
     var config = {
         allowParametricURL: true,
-        tree: {
-            type: "light",
-            layer: [
-                {id: "453", visible: true},
-                {id: "8", visible: false}
-            ]
-        },
         view: {
             center: [565874, 5934140] // Rathausmark
         },
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        styleConf: "../components/lgv-config/style.json",
+        layerConf: "/lgv-config/services-fhhnet-ALL.json",
+        restConf: "/lgv-config/rest-services-fhhnet.json",
+         tree: {
+            type: "light",
+            layer: [
+               {id: "453", visible: true},
+               {id: "8", visible: false}
+            ]
+        },
+        controls: {
+            zoom: true
+        },
+        styleConf: "/lgv-config/style.json",
         menubar: true,
         mouseHover: false,
         scaleLine: true,
@@ -27,17 +30,28 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: true,
+            legend: false,
             routing: false
         },
         startUpModul: "",
+		attributions: true,
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true
+            },
+            geoLocateHit: true
         },
+        gemarkungen: "../components/lgv-config/gemarkung.json",
         tools: {
+            parcelSearch: {
+                title: "Flurstückssuche",
+                glyphicon: "glyphicon-search"
+            },
             gfi: {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
@@ -54,16 +68,23 @@ define(function () {
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
             }
         },
-        orientation: true,
-        poi: false,
         print: {
             printID: "99999",
             title: "Hamburg",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi"
-    }
+    };
+
     return config;
 });

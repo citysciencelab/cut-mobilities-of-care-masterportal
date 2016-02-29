@@ -18,20 +18,27 @@ define([
                 "click .base-layer-catalog > .header > .glyphicon-question-sign": function () {
                     EventBus.trigger("showWindowHelp", "tree");
                 },
-                "click .layer-catalog > .header > .glyphicon-minus-sign, .layer-catalog > .header > .glyphicon-plus-sign, .layer-catalog > .header > .control-label": "toggleCatalog",
+                "click .layer-catalog > .header > .glyphicon-minus-sign, .layer-catalog > .header > .glyphicon-plus-sign, .layer-catalog > .header > .control-label": "toggleCatalogAndBaseLayer",
                 "click .layer-selection > .header > .glyphicon-minus-sign, .layer-selection > .header > .glyphicon-plus-sign, .layer-selection > .header > .control-label": "toggleSelection",
-                "click .base-layer-catalog > .header > .control-label, .base-layer-catalog > .header > .glyphicon-minus-sign, .base-layer-catalog > .header > .glyphicon-plus-sign": "toggleBaseLayer",
+                "click .base-layer-catalog > .header > .control-label, .base-layer-catalog > .header > .glyphicon-minus-sign, .base-layer-catalog > .header > .glyphicon-plus-sign": "toggleCatalogAndBaseLayer",
                 "click .layer-selection-save": function () {
-                    EventBus.trigger("mapView:getCenterAndZoom");
+                    EventBus.trigger("toggleWin", ["saveSelection", "Auswahl speichern", "glyphicon-share"]);
+                    // Schließt den Baum
+                    $(".nav li:first-child").removeClass("open");
+                    // Schließt die Mobile Navigation
+                    $(".navbar-collapse").removeClass("in");
+                    // Selektiert die URL
+                    $(".input-save-url").select();
                 },
                 "click .layer-catalog-extern > .header > span": "toggleExternLayer"
             },
             initialize: function () {
-                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
+                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView", "modules/tools/saveSelection/view"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView, SaveSelectionView) {
                     new LayerSelectionListView();
                     new LayerTreeView();
                     new BaseLayerListView();
                     new CataExView();
+                    new SaveSelectionView();
                 });
                 this.$el.on({
                     click: function (e) {
@@ -65,6 +72,10 @@ define([
                 $(".base-layer-list").toggle("slow");
                 $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
                 $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+            },
+            toggleCatalogAndBaseLayer: function () {
+              this.toggleCatalog();
+              this.toggleBaseLayer();
             },
             toggleExternLayer: function () {
                 $(".layer-extern-list").toggle("slow");

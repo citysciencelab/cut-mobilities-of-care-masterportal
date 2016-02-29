@@ -41,19 +41,29 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true
+            },
+            geoLocateHit: true
         },
         tools: {
-            gfi: true,
-            measure: false,
-            print: true,
-            coord: true,
-            draw: false,
-            orientation: false,
-            active: "gfi",
-            record: false
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            }
         },
         print: {
             printID: "99999",
