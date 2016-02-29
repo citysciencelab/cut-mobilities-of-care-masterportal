@@ -6,8 +6,11 @@ define([
     "proj4"
 ], function (ol, Backbone, EventBus, Radio, proj4) {
         var Download = Backbone.Model.extend({
+            // Die Features
             data: {},
+            // Die Fromate
             formats: {},
+            // Das Modul, das den Download gestartet hat
             caller: {},
             initialize: function () {
                  EventBus.on("winParams", this.setStatus, this);
@@ -47,7 +50,7 @@ define([
             },
             /**
              * setter für Format
-             * @param {String} formats die möglich Fromate in die die Features umgewandelt werden können
+             * @param {String} formats die möglich Formate in die die Features umgewandelt werden können
              */
              setFormats: function (formats) {
                 this.formats = formats;
@@ -65,11 +68,12 @@ define([
                 this.caller = caller;
             },
             /**
-             * Startet den Download einer nach vorgaben der Form konvertierten Objektes
+             * Startet den Download eines konvertierten Objektes
              */
             download: function () {
                 var filename = $("input.file-name").val(),
-                data = this.data;
+                data = this.data,
+                converted = {};
 
                 filename.trim();
                 if (!filename.match(/^[0-9a-zA-Z ]+(\.[0-9a-zA-Z]+)?$/)) {
@@ -82,18 +86,35 @@ define([
                          EventBus.trigger("alert", "Bitte Format auswählen");
                     }
                     else {
-                        data = this.convert(format, data);
-                        if (data !== "invalid Format") {
+                        var backup = this.backupCoords(data);
+
+                        converted = this.convert(format, data);
+
+                        this.restoreCoords(data, backup);
+                        if (converted !== "invalid Format") {
                             if (!name.endsWith("." + format)) {
                                 filename += "." + format;
                             }
-                            var a = this.createDOM(data, filename);
+                            var a = this.createDOM(converted, filename);
 
                             a.click();
                             EventBus.trigger("alert", "Die Datei: <br><strong>" + filename + "</strong><br> wurde in Ihr Downloadverzeichnis heruntergeladen");
                         }
                     }
                 }
+            },
+            backupCoords: function (data) {
+                var coords = [];
+                _.each(data, function (feature) {
+                    coords.push(feature.getGeometry().getCoordinates());
+                });
+                return coords;
+            },
+            restoreCoords: function (data, backup) {
+                _.each(data, function (feature, index) {
+                    feature.getGeometry().setCoordinates(backup[index]);
+                });
+                console.log(data);
             },
             /**
              * Erzeugt ein unsichtbares <a> mit Hilfe dessen ein download getriggert werden kann
@@ -240,6 +261,7 @@ define([
 
                 }, context);
                 features = format.writeFeatures(features);
+
                 return features;
             },
             /**
