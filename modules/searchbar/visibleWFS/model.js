@@ -1,8 +1,6 @@
 define([
     "backbone",
-    "eventbus",
-    "modules/layer/list",
-    "modules/searchbar/model"
+    "eventbus"
     ], function (Backbone, EventBus) {
     "use strict";
     return Backbone.Model.extend({
