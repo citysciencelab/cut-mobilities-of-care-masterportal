@@ -1,11 +1,11 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus"
-], function (Backbone, ol, EventBus) {
+    "eventbus",
+    "config"
+], function (Backbone, ol, EventBus,Config) {
 
     var Measure = Backbone.Model.extend({
-
         defaults: {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
@@ -29,14 +29,16 @@ define([
             }),
             type: "LineString",
             unit: "m",
-            decimal: 100,
-            measureTooltips: []
+            decimal: 1,
+            measureTooltips: [],
+            quickHelp: false
         },
 
         initialize: function () {
             this.listenTo(EventBus, {
                 "winParams": this.setStatus,
-                "pointerMoveOnMap": this.placeMeasureTooltip
+                "pointerMoveOnMap": this.placeMeasureTooltip,
+                "mapView:sendOptions": this.setScale
             });
 
             this.listenTo(this, {
@@ -49,8 +51,11 @@ define([
             }));
 
             EventBus.trigger("addLayer", this.get("layer"));
-        },
 
+            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
+                this.set("quickHelp", true);
+            }
+        },
         setStatus: function (args) {
             if (args[2] === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
@@ -168,6 +173,61 @@ define([
             });
             this.set("measureTooltips", []);
         },
+        setScale: function(options){
+            this.set("scale",options.scale)
+        },
+
+        /** Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
+        * @param {number} scale - Maßstabszahl
+        */
+        getScaleError:function(scale){
+           var scaleError=0;
+            switch(scale){
+                case 500:
+                    scaleError=0.5;
+                    break;
+                case 1000:
+                    scaleError=1;
+                    break;
+                case 2500:
+                    scaleError=2.5;
+                    break;
+                case 5000:
+                    scaleError=5;
+                    break;
+                case 10000:
+                    scaleError=10;
+                    break;
+                case 20000:
+                    scaleError=20;
+                    break;
+                case 40000:
+                    scaleError=40;
+                    break;
+                case 60000:
+                    scaleError=60;
+                    break;
+                case 100000:
+                    scaleError=100;
+                    break;
+                case 250000:
+                    scaleError=250;
+                    break;
+            }
+            return scaleError;
+        },
+
+        /** Berechnet das Quadrat der deltas (für x und y) von zwei Koordinaten
+        * @param {Array[n][2]} coordinates - Koordinatenliste der Geometrie
+        * @param {number} pos0 - 1. Koordinate
+        * @param {number} pos1 - 2. Koordinate
+        */
+        calcDeltaPow: function(coordinates,pos0,pos1){
+            var dx=coordinates[pos0][0]-coordinates[pos1][0];
+            var dy=coordinates[pos0][1]-coordinates[pos1][1];
+            var deltaPow=(Math.pow(dx,2)+Math.pow(dy,2));
+            return deltaPow;
+        },
 
         /**
          * Berechnet die Länge der Strecke.
@@ -175,13 +235,35 @@ define([
          */
         formatLength: function (line) {
             var length = line.getLength(),
-                output;
+                output,
+                coords = line.getCoordinates(),
+                rechtswertMittel = 0,
+                lengthRed,
+                fehler = 0,
+                scale = parseInt(this.get("scale")),
+                scaleError = this.getScaleError(scale);
+
+            for (var i=0; i<coords.length; i++){
+                rechtswertMittel+=coords[i][0];
+                if(i<coords.length-1){
+                    //http://www.hs-bochum.de/fb5/baeumker/download/vermessungskundes1-36einseitig.pdf
+                    //Seite 28 oben:
+                    //fehler+= 2*Math.pow(scaleError,2);
+                    //http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
+                    //Seite 5:
+                    fehler+= Math.pow(scaleError,2);
+                }
+            }
+            //fehler=Math.sqrt((2/1)*fehler);
+            fehler=Math.sqrt(fehler);
+            rechtswertMittel=(rechtswertMittel/coords.length)/1000;
+            lengthRed=length-(0.9996*length*(Math.pow(rechtswertMittel-500,2)/(2*Math.pow(6381,2)))-(0.0004*length));
 
             if (this.get("unit") === "km") {
-                output = (Math.round(length / 1000 * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
+                 output = (lengthRed/1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler/1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
             }
             else {
-                output = (Math.round(length * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
+                output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
             }
             return output;
         },
@@ -192,13 +274,31 @@ define([
          */
         formatArea: function (polygon) {
             var area = polygon.getArea(),
-                output;
+                output,
+                coords = polygon.getLinearRing(0).getCoordinates(),
+                rechtswertMittel=0,
+                areaRed,
+                fehler = 0,
+                scale = parseInt(this.get("scale")),
+                scaleError = this.getScaleError(scale);
 
+            for (var i=0;i<coords.length;i++){
+                rechtswertMittel+=parseInt(coords[i][0]);
+                if(i===coords.length-1){
+                    fehler+= this.calcDeltaPow(coords,i,0);
+                }
+                else{
+                    fehler+= this.calcDeltaPow(coords,i,i+1);
+                }
+            }
+            fehler=0.5*scaleError*Math.sqrt(fehler);
+            rechtswertMittel=(rechtswertMittel/coords.length)/1000;
+            areaRed=area-(Math.pow(0.9996,2)*area*(Math.pow(rechtswertMittel-500,2)/Math.pow(6381,2))-(0.0008*area));
             if (this.get("unit") === "km<sup>2</sup>") {
-                output = (Math.round(area / 1000000 * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
+                output =(areaRed/1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler/1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
             }
             else {
-                output = (Math.round(area * this.get("decimal")) / this.get("decimal")) + " " + this.get("unit");
+                 output =areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
             }
             return output;
         }

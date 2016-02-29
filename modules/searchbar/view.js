@@ -504,9 +504,6 @@ define([
 
             element.focus();
             element[0].setSelectionRange(strLength, strLength);
-        },
-        showHelpWindow: function () {
-            EventBus.trigger("showWindowHelp", "search");
         }
     });
 });
