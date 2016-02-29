@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<div class="coord-header">
-    <span class="coord-title">Position</span>
-    <span class="glyphicon glyphicon-remove coord-close"></span>
+<div class="header">
+    <p class="buttons pull-right">
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+    </p>
+    <p class="title">
+        <span>Position</span>
+    </p>
 </div>
 
-<div class="coord-content">
-<p><small>UTM-Koordinate (ETRS 89):</small>
-    <pre>Rechtswert: <%= Math.round(coordinateUTM[0] * 100) / 100 %> m<br>Hochwert: <%= Math.round(coordinateUTM[1] * 100) / 100 %> m</pre>
-</p>
-<p><small>Geografische-Koordinate (WGS 84):</small>
-    <pre><%= coordinateGeo %></pre>
-</p>
+<div class="content">
+    <h5 class="subtitle">UTM-Koordinate (ETRS 89)</h5>
+    <p>
+        <span>Rechtswert: <%= Math.round(coordinateUTM[0] * 100) / 100 %> m</span>
+        <br>
+        <span>Hochwert: <%= Math.round(coordinateUTM[1] * 100) / 100 %> m</span>
+    </p>
+    <h5 class="subtitle">Geografische-Koordinate (WGS 84)</h5>
+    <p>
+        <span>Breite: <%= coordinateGeo.substr(0,13) %></span>
+        <br>
+        <span>L&auml;nge: <%= coordinateGeo.substr(14) %></span>
+    </p>
 </div>

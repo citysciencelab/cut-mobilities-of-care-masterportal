@@ -17,7 +17,8 @@ define([
             "click .close, button,table,#500m,#1000m,#2000m": "removeAllModels",
             "click #500m": "onClick500m",
             "click #1000m": "onClick1000m",
-            "click #2000m": "onClick2000m"
+            "click #2000m": "onClick2000m",
+            "click #poiList": "destroy"
         },
         initialize: function () {
             EventBus.on("showPOIModal", this.show, this);
@@ -63,6 +64,9 @@ define([
         onClick2000m: function () {
             EventBus.trigger("getPOI", 2000);
             $("#2000m a[href='#2000Meter']").tab("show");
+        },
+        destroy: function () {
+            EventBus.trigger("orientation:removeOverlay", this);
         }
     });
 

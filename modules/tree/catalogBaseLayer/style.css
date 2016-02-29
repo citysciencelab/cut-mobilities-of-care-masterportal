@@ -1,0 +1,30 @@
+.base-layer-list {
+    overflow-y: auto;
+    display: none;
+    max-height: 45vh;
+}
+
+/*.base-layer {
+    color: rgb(119, 119, 119);
+    font-size: 14px;
+    padding: 8px 15px;
+}*/
+
+.base-layer-content > .layer-name {
+    margin-left: 2em;
+    margin-right: 2em;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.base-layer-content > .layer-name:hover {
+    opacity: 0.6;
+}
+
+.base-layer-content > .glyphicon:hover {
+    opacity: 0.6;
+}
+
+.base-layer-content > .glyphicon-info-sign {
+    font-size: 16px;
+}

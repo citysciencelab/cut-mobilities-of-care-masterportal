@@ -55,8 +55,31 @@ define([
         hideLoader: function () {
             $("#loader").hide();
         },
+       getProxyURL: function (url) {
+            var parser = document.createElement("a"),
+            protocol = "",
+            result = "",
+            hostname = "",
+            port = "";
+
+            parser.href = url;
+            protocol = parser.protocol;
+
+            if (protocol.indexOf("//") === -1) {
+                protocol += "//";
+            }
+
+            port = parser.port;
+
+            result = url.replace(protocol, "").replace(":" + port, "");
+            // www und www2 usw. raus
+            // hostname = result.replace(/www\d?\./, "");
+            hostname = parser.hostname.split(".").join("_");
+            result = result.replace(parser.hostname, "/" + hostname);
+            return result;
+        }
         /** Umwandeln der services*.json-URLs in lokale Proxy-URL*/
-        getProxyURL: function (url) {
+       /* getProxyURL: function (url) {
             var newURL;
             if (url.indexOf("http://WSCA0620.fhhnet.stadt.hamburg.de") !== -1) {
                 newURL = url.replace("http://WSCA0620.fhhnet.stadt.hamburg.de", "/wsca0620");
@@ -109,6 +132,9 @@ define([
             else if (url.indexOf("http://wscd0096") !== -1) {
                 newURL = url.replace("http://wscd0096", "/wscd0096");
             }
+            else if (url.indexOf("http://hmdk.fhhnet.stadt.hamburg.de") !== -1) {
+                newURL = url.replace("http://hmdk.fhhnet.stadt.hamburg.de", "/hmdk");
+            }
             // ab hier Internet
             else if (url.indexOf("http://extmap.hbt.de") !== -1) {
                 newURL = url.replace("http://extmap.hbt.de", "/extmap");
@@ -125,12 +151,15 @@ define([
             else if (url.indexOf("http://geodaten.metropolregion.hamburg.de") !== -1) {
                 newURL = url.replace("http://geodaten.metropolregion.hamburg.de", "/mrh");
             }
+            else if (url.indexOf("http://10.61.143.52:8399") !== -1) {
+                newURL = url.replace("http://10.61.143.52:8399", "/alkis");
+            }
             else {
                 newURL = url;
             }
 
             return newURL;
-        }
+        }*/
     });
 
     return new Util();

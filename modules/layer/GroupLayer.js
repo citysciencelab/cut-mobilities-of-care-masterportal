@@ -33,7 +33,6 @@ define([
                 newlayer.get("layer").setVisible(true);
                 newlayer.visibility = true;
                 newlayer.get("layer").setOpacity(1);
-                newlayer.get("layer").setSaturation(1);
                 layers.push(newlayer.get("layer"));
                 backbonelayers.push(newlayer);
             });
@@ -65,6 +64,15 @@ define([
             this.get("layer").getLayers().forEach(function () {
                 reloadLayer(this);
             });
+        },
+
+        setLegendURL: function () {
+            var legendURL = [];
+
+            _.each(this.get("backbonelayers"), function (layer) {
+                legendURL.push(layer.get("legendURL")[0]);
+            });
+            this.set("legendURL", legendURL);
         }
     });
 

@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     #searchbar {
         margin-top: 8px;
         margin-bottom: 8px;
@@ -14,21 +14,32 @@
     #searchInput {
         min-width: 200px;
     }
+    #searchInputUL {
+        min-width: 200px;
+    }
+    #searchInput + span {
+        font-size: 14px;
+    }
 }
 
 @media (min-width: 768px) {
     #searchbar {
         float: right;
-        /*min-width: 400px;*/
-        /*margin-right: 20px;*/
-        /*width: 100%;*/
+        padding-left: 10px;
+        padding-right: 10px;
     }
     #searchInput {
+        max-width: 350px;
+    }
+    #searchInputUL {
         min-width: 300px;
     }
-    /*#searchForm {
-        float: right;
-    }*/
+}
+
+#searchInputLi {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #searchForm > .input-group {
@@ -58,10 +69,20 @@
 #searchInput {
     box-shadow: none;
     font-size: 12px;
+    padding-right: 32.5px;
 }
 
 #searchInput::-ms-clear {
     display: none;
+}
+
+#searchInput + span {
+    right: 38px;
+    z-index: 3;
+    color: rgb( 119, 119, 119);
+    display: none;
+    pointer-events: all;
+    cursor: pointer;
 }
 
 .dropdown-menu-search {
@@ -140,7 +161,7 @@
     /*padding-left: 10px;*/
     margin-top: 3px;
     /*display: none;*/
-    opacity: 0;
+    opacity: 1;
 }
 
 .btn-search-question > span {
@@ -172,4 +193,13 @@ li.results:hover {
     color: #fff;
     font-size: 16px;
     vertical-align: middle;
+}
+
+#searchInputUL .selected {
+
+    background: rgb(8, 88, 158);
+    color: #fff;
+}
+#searchInputUL .selected #searchInputLi {
+    color: #fff;
 }

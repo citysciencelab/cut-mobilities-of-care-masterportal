@@ -2,6 +2,31 @@
 define(function () {
 
     var config = {
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true},
+                {id: "452", visible: false},
+                {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name",
+                 attribution: "<strong><a href='http://www.tagesschau.de/' target='_blank'>Weitere Informationen</a></strong>",
+                 displayInTree: true,
+                 filterOptions: [
+                     {
+                         "fieldName": "teilnahme_geburtsklinik",
+                         "filterType": "combo",
+                         "filterName": "Geburtshilfe",
+                         "filterString": ["*", "Ja", "Nein"]
+                     },
+                     {
+                         "fieldName": "teilnahme_notversorgung",
+                         "filterType": "combo",
+                         "filterName": "Not- und Unfallversorgung",
+                         "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+                     }
+                 ]
+                }
+            ]
+        },
         wfsImgPath: "../components/lgv-config/img/",
         view: {
             center: [565874, 5934140] // Rathausmarkt
@@ -11,28 +36,6 @@ define(function () {
         categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        layerIDs: [
-            {id: "453", visible: true},
-            {id: "452", visible: false},
-            {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name",
-             attribution: "<strong><a href='http://www.tagesschau.de/' target='_blank'>Weitere Informationen</a></strong>",
-             displayInTree: true,
-             filterOptions: [
-                 {
-                     "fieldName": "teilnahme_geburtsklinik",
-                     "filterType": "combo",
-                     "filterName": "Geburtsklinik",
-                     "filterString": ["*", "ja", "nein"]
-                 },
-                 {
-                     "fieldName": "teilnahme_notversorgung",
-                     "filterType": "combo",
-                     "filterName": "Not- und Unfallversorgung",
-                     "filterString": ["*", "ja", "eingeschränkt", "nein"]
-                 }
-             ]
-            }
-        ],
         controls: {
             zoom: true,
             toggleMenu: true,
@@ -76,13 +79,23 @@ define(function () {
             gfi: true
         },
         tools: {
-            gfi: true,
-            measure: false,
-            print: false,
-            coord: false,
-            draw: false,
-            record: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            searchByCoord: {
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-record"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            }
         }
     }
     return config;

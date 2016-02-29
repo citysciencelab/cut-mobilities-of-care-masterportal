@@ -1,42 +1,40 @@
 define(function () {
 
     var config = {
-        metadatenURL: "",
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true, legendUrl: "ignore"},
+                {id: "452", visible: false},
+                {id: "2834", visible: true} // Wohnlagen
+            ]
+        },
 
         view: {
-            center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769],
-            resolution: 66.145965625264583, // 1:250.000
-            resolutions: [
-                66.145965625264583,
-                26.458386250105834,
-                15.875031750063500,
-                10.583354500042333,
-                5.2916772500211667,
-                2.6458386250105834,
-                1.3229193125052917,
-                0.6614596562526458,
-                0.2645838625010583,
-                0.1322919312505292
-            ],
-            epsg: "EPSG:25832"
-        },
-        footer: true,
-        quickHelp: true,
+            center: [565874, 5934140],  // Rathausmarkt
+            resolution: 10.583327618336419, // 1:40.000
+            scale: 60000, // für print.js benötigt
+            extent: [454591, 5809000, 700000, 6075769]
 
+
+        },
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: false,
+            poi: false
+        },
+        footer: false,
+        quickHelp: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 
-        layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "452", visible: false},
-            {id: "2515", visible: true}        //Wohnlagen
-                    ],
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -48,22 +46,25 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton:  true,
+            contactButton: true,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
             routing: false
         },
+        startUpModul: "",
         searchBar: {
-            placeholder: "Suche nach Adresse, Stadtteil",
+            placeholder: "Suche Adresse, Stadtteil",
             gazetteer: {
-                minChars: 3,
                 url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
+            },
+            tree: {
+                minChars: 3
             },
             geoLocateHit: true
         },
@@ -72,15 +73,30 @@ define(function () {
             title: "Wohnlagenverzeichnis Hamburg",
             gfi: false
         },
-        tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            active: "gfi"
+         tools: {
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+             draw: {
+                title: "Zeichnen",
+                glyphicon: "glyphicon-pencil"
+            },
         },
-        orientation: true,
+        orientation: false,
         poi: true
     };
 

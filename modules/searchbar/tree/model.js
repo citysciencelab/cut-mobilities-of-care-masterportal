@@ -103,6 +103,7 @@ define([
          * @param {[Object]} layerModels - Layerlist
          */
         getLayerForSearch: function (layerModels) {
+            this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
             layerModels = _.uniq(layerModels, function (model) {

@@ -9,12 +9,19 @@ define([
         className: "layerinformation-win",
         template: _.template(LayerInformationTemplate),
         events: {
-            "click .layerinformation-win-header > .glyphicon-remove": "hide"
+            "click .glyphicon-remove": "hide",
+            "click .glyphicon-minus": "minimize",
+            "click .glyphicon-print": "print"
         },
 
         initialize: function () {
             this.listenTo(this.model, {
                 "sync": this.render
+            });
+            this.$el.on({
+                click: function (e) {
+                    e.stopPropagation();
+                }
             });
         },
 
@@ -24,7 +31,7 @@ define([
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: "#map",
-                handle: ".layerinformation-win-header"
+                handle: ".header > .title"
             });
             this.$el.show();
         },

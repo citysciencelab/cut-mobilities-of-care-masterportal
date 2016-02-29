@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <div id="searchForm" class="form-group" role="search">
-    <div class="input-group">
-        <input id="searchInput" class="form-control" type="text" name="text" placeholder="<%= placeholder %>" value="<%= searchString %>">
+    <div class="input-group has-feedback">
+        <input id="searchInput" class="form-control" type="text" name="text" placeholder="<%= placeholder %>" value="<%= searchString %>" autocomplete="off">
+        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
         <div class="input-group-btn">
-            <% if (searchString.length !== 0) { %>
-            <button type="button" class="btn btn-default btn-deleteSearch">
-                <span class="glyphicon glyphicon-remove"></span>
-            </button>
-            <% } %>
-            <button class="btn btn-default btn-search" type="button">
+            <button class="btn btn-default btn-search" type="button" title="Suchen">
                 <span class="glyphicon glyphicon-search"></span>
             </button>
-            <ul class="dropdown-menu-search dropdown-menu-right">
+            <ul id="searchInputUL" class="dropdown-menu-search dropdown-menu-right">
             </ul>
         </div>
     </div>
 </div>
 <% if (quickHelp === true) { %>
-<button class="btn btn-search-question hidden-xs" type="button">
+<button class="btn btn-search-question hidden-xs" type="button" title="Hilfe öffnen">
     <span class="glyphicon glyphicon-question-sign"></span>
 </button>
 <% } %>

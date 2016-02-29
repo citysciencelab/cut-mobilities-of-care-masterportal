@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config"
-], function (Backbone, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
     /**
     * Bereitstellung des Layers
     */
@@ -13,7 +14,7 @@ define([
             selected: false,
             settings: false,
             visibility: false,
-            kategorieCustom: undefined,
+            treeType: Config.tree.type,
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
@@ -28,12 +29,12 @@ define([
             });
 
             this.listenToOnce(this, {
-                "change:layer": function () {
+                "change:layer": function (model) {
                     this.setMetadataURL(); // setzen der MetadatenURL, vlt. besser in layerlist??
                     EventBus.trigger("mapView:getMinResolution", this.get("minScale"));
                     EventBus.trigger("mapView:getMaxResolution", this.get("maxScale"));
-                    if (this.get("typ") === "WMS") {
-                        this.setLegendURL(); // -> WMSLayer.js
+                    if (model.get("typ") !== "GeoJSON") {
+                        this.setLegendURL();
                     }
                 }
             });
@@ -101,20 +102,31 @@ define([
             if (datasets && datasets.length > 0) {
                 if (datasets[0] !== undefined) {
                     dataset = this.get("datasets")[0];
-                    this.set("metaID", dataset.md_id);
-                    this.set("metaName", dataset.md_name);
-                    if (dataset.kategorie_opendata.length > 1) {
-                        this.set("kategorieOpendata", dataset.kategorie_opendata);
+                    if (this.id === "1561") { // Ausnahme für festgestellte Bebauungspläne
+                        this.set("metaID", "EBA4BF12-3ED2-4305-9B67-8E689FE8C445");
+                        this.set("metaName", "Bebauungspläne Hamburg");
                     }
                     else {
-                        this.set("kategorieOpendata", dataset.kategorie_opendata[0]);
+                        this.set("metaID", dataset.md_id);
+                        if (_.isNull(this.get("metaName"))) {
+                            this.set("metaName", dataset.md_name);
+                        }
                     }
-                    // besser auf type kontrollieren (Array oder String)
-                    if (dataset.kategorie_inspire.length > 1) {
-                        this.set("kategorieInspire", dataset.kategorie_inspire);
+                    if (Config.tree.orderBy === "opendata") {
+                        if (dataset.kategorie_opendata.length > 1) {
+                            this.set("node", dataset.kategorie_opendata);
+                        }
+                        else {
+                            this.set("node", dataset.kategorie_opendata[0]);
+                        }
                     }
-                    else {
-                        this.set("kategorieInspire", dataset.kategorie_inspire[0]);
+                    else if (Config.tree.orderBy === "inspire") {
+                        if (dataset.kategorie_inspire.length > 1) {
+                            this.set("node", dataset.kategorie_inspire);
+                        }
+                        else {
+                            this.set("node", dataset.kategorie_inspire[0]);
+                        }
                     }
                 }
             }
@@ -228,10 +240,6 @@ define([
         },
 
         openMetadata: function () {
-            // console.log(this.get("legendURL"));
-            // console.log(this.get("metaURL"));
-            // console.log(this.get("metaID"));
-            // console.log(this.get("name"));
             EventBus.trigger("layerinformation:add", {
                 "id": this.get("id"),
                 "legendURL": this.get("legendURL"),
@@ -261,9 +269,11 @@ define([
                 else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
                     if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
                         this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                     }
                     else {
                         this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
+                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                     }
                 }
                 else {

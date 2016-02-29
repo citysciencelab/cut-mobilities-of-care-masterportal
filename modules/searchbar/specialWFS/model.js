@@ -1,20 +1,22 @@
 define([
     "backbone",
     "eventbus",
-    "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
-    "use strict";
-    return Backbone.Model.extend({
+    "modules/searchbar/model"],
+    function (Backbone, EventBus)
+       {
+        "use strict";
+        return Backbone.Model.extend({
         /**
         *
         */
-        defaults: {
-            inUse: false,
-            minChars: 3,
-            bPlans: [],
-            olympia: [],
-            bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
-        },
+            defaults: {
+                inUse: false,
+                minChars: 3,
+                bPlans: [],
+                olympia: [],
+                kita: [],
+                bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
+            },
         /**
          * @description Initialisierung der wfsFeature Suche.
          * @param {Objekt} config - Das Konfigurationsarray für die specialWFS-Suche
@@ -39,7 +41,10 @@ define([
                 }
                 else if (element.name === "bplan") {
                     this.set("bplanURL", element.url);
-                    this.sendRequest(element.url, element.data, this.getFeaturesForBPlan, false);
+                    this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
+                }
+                else if (element.name === "kita") {
+                    this.sendRequest(element.url, element.data, this.getFeaturesForKita, false);
                 }
             }, this);
             EventBus.on("searchbar:search", this.search, this);
@@ -53,6 +58,7 @@ define([
          * @param {string} searchString - Der Suchstring.
         */
         search: function (searchString) {
+            this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
@@ -62,6 +68,9 @@ define([
                 }
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInBPlans(searchStringRegExp);
+                }
+                if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
+                    this.searchInKita(searchStringRegExp);
                 }
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
@@ -74,7 +83,7 @@ define([
         requestbplan: function (type, name) {
             var typeName = (type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
                 propertyName = (type === "festgestellt") ? "planrecht" : "plan",
-                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature SERVICE='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
+                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
             this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true, true);
         },
@@ -84,6 +93,17 @@ define([
         */
         getExtentFromBPlan: function (data) {
             EventBus.trigger("mapHandler:zoomToBPlan", data);
+        },
+        /**
+        *
+        */
+        searchInKita: function (searchStringRegExp) {
+            _.each(this.get("kita"), function (kita) {
+                // Prüft ob der Suchstring ein Teilstring vom kita ist
+                if (kita.name.search(searchStringRegExp) !== -1) {
+                    EventBus.trigger("searchbar:pushHits", "hitList", kita);
+                }
+            }, this);
         },
         /**
         *
@@ -203,6 +223,35 @@ define([
                }
             }, this);
         },
+
+        /**
+         * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
+         * @param  {xml} data - getFeature-Request
+         */
+        getFeaturesForKita: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                coordinate,
+                position,
+                hitType,
+                hitName;
+
+            _.each(hits, function (hit) {
+               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                    if ($(hit).find("app\\:name, name")[0] !== undefined) {
+                        hitName = $(hit).find("app\\:name, name")[0].textContent;
+                        this.get("kita").push({
+                            name: hitName,
+                            type: "Kita",
+                            coordinate: coordinate,
+                            glyphicon: "glyphicon-home",
+                            id: hitName.replace(/ /g, "") + "Kita"
+                        });
+                    }
+               }
+            }, this);
+        },
         /**
          * @description Führt einen HTTP-GET-Request aus.
          *
@@ -224,6 +273,21 @@ define([
                 success: successFunction,
                 timeout: 6000,
                 contentType: "text/xml",
+                error: function () {
+                    EventBus.trigger("alert", url + " nicht erreichbar.");
+                }
+            });
+        },
+
+        sendGetRequest: function (url, data, successFunction, asyncBool) {
+            $.ajax({
+                url: url,
+                data: data,
+                context: this,
+                async: asyncBool,
+                type: "GET",
+                success: successFunction,
+                timeout: 6000,
                 error: function () {
                     EventBus.trigger("alert", url + " nicht erreichbar.");
                 }
