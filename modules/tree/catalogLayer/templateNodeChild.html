@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<div class="node-child-content">
+    <% if (isExpanded === false) { %>
+        <span class="glyphicon glyphicon-plus-sign pull-left" title="Verzeichnis öffnen"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-minus-sign pull-left" title="Verzeichnis schließen"></span>
+    <% } %>
+    <% if (isSelected === true) { %>
+        <span class="glyphicon glyphicon-check pull-left" title="Layer entfernen"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left" title="Layer hinzufügen"></span>
+    <% } %>
+    <div class="node-child-name"><%= name %></div>
+</div>

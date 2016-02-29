@@ -1,5 +1,15 @@
 #searchMarker {
-    color: #d42132;
+    color: rgb(182, 0, 0);
     font-size: 38px;
     display: none;
+}
+
+#searchMarker > .glyphicon {
+    top: -38px;
+    left: -2px;
+    font-size: 10px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    background-color: rgb(182, 0, 0);
+    padding: 3px;
 }

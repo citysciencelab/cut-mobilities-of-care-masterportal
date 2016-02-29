@@ -1,22 +1,38 @@
 define([
     "backbone",
     "text!modules/draw/template.html",
+    "text!modules/draw/templatePoint.html",
+    "text!modules/draw/templateText.html",
+    "text!modules/draw/templateLine.html",
+    "text!modules/draw/templatePolygon.html",
     "modules/draw/model"
-], function (Backbone, DrawTemplate, Draw) {
+], function (Backbone, DrawTemplate, PointTemplate, TextTemplate, LineTemplate, PolygonTemplate, DrawTool) {
 
-    var DrawView = Backbone.View.extend({
-        model: Draw,
+    var DrawToolView = Backbone.View.extend({
+        model: new DrawTool(),
         className: "win-body",
         template: _.template(DrawTemplate),
+        templatePoint: _.template(PointTemplate),
+        templateLine: _.template(LineTemplate),
+        templatePolygon: _.template(PolygonTemplate),
+        templateText: _.template(TextTemplate),
         events: {
-            "change .drawType": "setType",
+            "change .interaction": "setInteraction",
+            "change .drawFont": "setFont",
+            "change .fontSize": "setFontSize",
             "change .drawColor": "setColor",
             "change .drawPointRadius": "setPointRadius",
             "change .drawStrokeWidth": "setStrokeWidth",
-            "click button": "deleteFeatures"
+            "change .drawOpacity": "setOpacity",
+            "click .delete": "deleteFeatures",
+            "click .download": "downloadFeatures",
+            "keyup .drawText": "setText"
         },
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render,
+                "change:selectedInteraction": this.renderForm
+            });
         },
 
         render: function () {
@@ -30,11 +46,51 @@ define([
             else {
                 this.undelegateEvents();
             }
+            this.renderForm();
         },
 
-        setType: function (evt) {
-            this.model.setType(evt.target.value);
-            this.render();
+        renderForm: function () {
+            var attr = this.model.toJSON(),
+            selector = ".win-body > .form-horizontal.style";
+
+            $(selector).empty();
+            switch (this.model.get("selectedInteraction")){
+                case "drawPoint": {
+                    $(selector).append(this.templatePoint(attr));
+                    break;
+                }
+                case "writeText": {
+                    $(selector).append(this.templateText(attr));
+                    break;
+                }
+                case "drawLine": {
+                    $(selector).append(this.templateLine(attr));
+                    break;
+                }
+                case "drawArea": {
+                    $(selector).append(this.templatePolygon(attr));
+                    break;
+                }
+                default: {
+                    $(selector).append(this.templatePoint(attr));
+                }
+            }
+        },
+
+        setInteraction: function (evt) {
+            this.model.setInteraction(evt.target.value);
+        },
+
+        setFont: function (evt) {
+            this.model.setFont(evt.target.value);
+        },
+
+        setText: function (evt) {
+            this.model.setText(evt.target.value);
+        },
+
+        setFontSize: function (evt) {
+            this.model.setFontSize(evt.target.value);
         },
 
         setColor: function (evt) {
@@ -49,10 +105,17 @@ define([
             this.model.setStrokeWidth(evt.target.value);
         },
 
+        setOpacity: function (evt) {
+            this.model.setOpacity(evt.target.value);
+        },
+
         deleteFeatures: function () {
             this.model.deleteFeatures();
+        },
+        downloadFeatures: function () {
+            this.model.downloadFeatures();
         }
     });
 
-    return DrawView;
+    return DrawToolView;
 });

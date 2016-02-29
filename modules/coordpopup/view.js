@@ -6,9 +6,10 @@ define([
 
     var CoordPopupView = Backbone.View.extend({
         model: CoordPopup,
+        id: "coord-popup",
         template: _.template(CoordPopupTemplate),
         events: {
-            "click .coord-close": "destroy"
+            "click .glyphicon-remove": "destroy"
         },
         initialize: function () {
             this.listenTo(this.model, "change:coordinateGeo", this.render);
@@ -17,9 +18,9 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            $(this.model.get("element")).popover({
+            this.model.getElement().popover({
                 placement: function () {
-                    if (this.getPosition().y > window.innerWidth / 2) {
+                    if (this.getPosition().top > window.innerWidth / 2) {
                         return "top";
                     }
                     else {
@@ -27,8 +28,7 @@ define([
                     }
                 },
                 html: true,
-                content: this.$el,
-                viewport: "canvas"
+                content: this.$el
             });
             this.model.showPopup();
         },

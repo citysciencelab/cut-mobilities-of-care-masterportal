@@ -55,8 +55,10 @@ define([
             if (args[2] === "treefilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
+                $("#window").css("max-width", "420px");
             }
             else {
+                $("#window").css("max-width", "");
                 this.set("isCurrentWin", false);
             }
         },

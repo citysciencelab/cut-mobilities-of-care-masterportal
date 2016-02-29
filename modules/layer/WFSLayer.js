@@ -1,22 +1,16 @@
 define([
     "underscore",
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config",
     "modules/layer/Layer",
-    "collections/StyleList",
+    "modules/layer/wfsStyle/list",
     "modules/core/util",
     "modules/core/mapView"
-], function (_, Backbone, ol, EventBus, Config, Layer, StyleList, Util) {
-
-    /**
-     *
-     */
+], function (_, Backbone, Radio, ol, EventBus, Config, Layer, StyleList, Util) {
     var WFSLayer = Layer.extend({
-        /**
-         *
-         */
         updateData: function () {
             Util.showLoader();
 
@@ -53,9 +47,9 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get("gfiTheme")
+                                gfiTheme: this.get("gfiTheme"),
+                                visible: true
                             }));
-                            this.reload();
                         }
                         else {
                             var src = new ol.source.Vector({
@@ -79,11 +73,15 @@ define([
                                 style: this.get("style"),
                                 gfiAttributes: this.get("gfiAttributes"),
                                 routable: this.get("routable"),
-                                gfiTheme: this.get("gfiTheme")
+                                gfiTheme: this.get("gfiTheme"),
+                                visible: true
                             }));
-                            this.reload();
                         }
                         this.get("layer").id = this.get("id");
+                        this.get("layer").once("postcompose", function (e) {
+                            this.set("visibility", true);
+                        }, this);
+                        this.reload();
                     }
                     catch (e) {
                         EventBus.trigger("alert", {
@@ -105,7 +103,7 @@ define([
             // Nur einmalig und nicht beim reload.
             if (this.get("layer") === undefined) {
                 var id = this.get("id"),
-                    layerIDs = _.find(Config.layerIDs, function (num) {
+                    layerIDs = _.find(Config.tree.layer, function (num) {
                         return num.id === id;
                     });
 
@@ -117,30 +115,74 @@ define([
             }
         },
         /**
-         * wird von Layer.js aufgerufen
+         * wird von Layer.js aufgerufen. Baut einen Dummy-Layer, damit initialize des Layer durchläuft.
          */
         setAttributionLayer: function () {
-            // Dummy-Layer, damit initialize des Layer durchläuft. Nur einmalig und nicht beim reload.
+            // Nur einmalig und nicht beim reload.
             if (this.get("layer") === undefined) {
                 this.set("layer", new ol.layer.Vector({
                     source: new ol.source.Vector(),
                     visible: false
                 }));
-                this.setVisibility();
             }
+            Radio.on("MapView", "changedOptions", this.optionsChanged, this);
         },
-        setVisibility: function () {
-            var visibility = this.get("visibility");
+        /*
+        * Wenn MapView Option verändert werden: bei neuem Maßstab
+        */
+        optionsChanged: function () {
+            var isResolutionInRange = this.isResolutionInRange(),
+                visibility = this.get("visibility");
 
-            this.toggleEventAttribution(visibility);
-            if (visibility === true) {
-                if (this.get("layer").getSource().getFeatures().length === 0) {
-                    this.updateData();
-                }
+            if (visibility === true && isResolutionInRange === true) {
                 this.get("layer").setVisible(true);
             }
             else {
                 this.get("layer").setVisible(false);
+            }
+            this.set("isResolutionInRange", isResolutionInRange);
+        },
+        /*
+        * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
+        */
+        isResolutionInRange: function () {
+            var visibility = this.get("visibility"),
+                layerMaxScale = parseFloat(this.get("maxScale")),
+                layerMinScale = parseFloat(this.get("minScale")),
+                mapOptions = Radio.request("MapView", "getOptions"),
+                mapScale = parseFloat(mapOptions.scale);
+
+            if (layerMaxScale && mapScale) {
+                if (mapScale > layerMaxScale) {
+                    return false;
+                }
+            }
+            if (layerMinScale && mapScale) {
+                if (mapScale < layerMinScale) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        setVisibility: function () {
+            var visibility = this.get("visibility"),
+                isResolutionInRange = this.isResolutionInRange();
+
+            this.set("isResolutionInRange", isResolutionInRange);
+            if (visibility === true && isResolutionInRange == true) {
+                if (this.get("layer").getSource().getFeatures().length === 0) {
+                    this.updateData();
+                    this.set("visibility", false, {silent: true});
+                }
+                else {
+                    this.get("layer").setVisible(true);
+                }
+                this.toggleEventAttribution(true);
+            }
+            else {
+                this.get("layer").setVisible(false);
+                this.set("visibility", false, {silent: true});
+                this.toggleEventAttribution(false);
             }
         },
         styling: function () {
@@ -148,7 +190,7 @@ define([
             if (this.get("styleField") && this.get("styleField") !== "") {
                 if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
                     if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        // TODO
+                        this.setSimpleStyleForStyleFieldAndLabel();
                     }
                     else {
                         this.setSimpleStyleForStyleField();
@@ -202,6 +244,19 @@ define([
                     stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
 
                 return stylelistmodel.getSimpleStyle();
+            });
+        },
+        setSimpleStyleForStyleFieldAndLabel: function () {
+            var styleId = this.get("styleId"),
+                styleLabelField = this.get("styleLabelField"),
+                styleField = this.get("styleField");
+
+            this.set("style", function (feature) {
+                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
+                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
+                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
+
+                return stylelistmodel.getCustomLabeledStyle(label);
             });
         },
         setClusterStyleForStyleField: function () {
@@ -263,6 +318,14 @@ define([
         },
         setProjection: function (proj) {
             this.set("projection", proj);
+        },
+        // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
+        setLegendURL: function () {
+            if (!_.isUndefined(this.get("styleId"))) {
+                var style = StyleList.returnModelById(this.get("styleId"));
+
+                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+            }
         }
     });
 

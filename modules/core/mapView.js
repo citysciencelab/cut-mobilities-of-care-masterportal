@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "config",
     "eventbus",
     "proj4"
-], function (Backbone, ol, Config, EventBus, proj4) {
+], function (Backbone, Radio, ol, Config, EventBus, proj4) {
     "use strict";
     var MapView = Backbone.Model.extend({
         /**
@@ -16,67 +17,54 @@ define([
                 {
                     resolution: 66.14579761460263,
                     scale: "250000",
-                    zoomLevel: 1
+                    zoomLevel: 0
                 },
                 {
                     resolution: 26.458319045841044,
                     scale: "100000",
-                    zoomLevel: 2
+                    zoomLevel: 1
                 },
                 {
                     resolution: 15.874991427504629,
                     scale: "60000",
-                    zoomLevel: 3
+                    zoomLevel: 2
                 },
                 {
                     resolution: 10.583327618336419,
                     scale: "40000",
-                    zoomLevel: 4
+                    zoomLevel: 3
                 },
                 {
                     resolution: 5.2916638091682096,
                     scale: "20000",
-                    zoomLevel: 5
+                    zoomLevel: 4
                 },
                 {
                     resolution: 2.6458319045841048,
                     scale: "10000",
-                    zoomLevel: 6
+                    zoomLevel: 5
                 },
                 {
                     resolution: 1.3229159522920524,
                     scale: "5000",
-                    zoomLevel: 7
+                    zoomLevel: 6
                 },
                 {
                     resolution: 0.6614579761460262,
                     scale: "2500",
-                    zoomLevel: 8
+                    zoomLevel: 7
                 },
                 {
                     resolution: 0.2645831904584105,
                     scale: "1000",
-                    zoomLevel: 9
+                    zoomLevel: 8
                 },
                 {
                     resolution: 0.13229159522920521,
                     scale: "500",
-                    zoomLevel: 10
+                    zoomLevel: 9
                 }
             ],
-            resolutions: [
-                66.14579761460263, // 1:250000
-                26.458319045841044, // 1:100000
-                15.874991427504629, // 1:60000
-                10.583327618336419, // 1:40000
-                5.2916638091682096, // 1:20000
-                2.6458319045841048, // 1:10000
-                1.3229159522920524, // 1:5000
-                0.6614579761460262, // 1:2500
-                0.2645831904584105, // 1:1000
-                0.13229159522920521 // 1:500
-            ],
-            zoomLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // zoomLevel 1 = 1:250000
             resolution: 15.874991427504629,
             startCenter: [565874, 5934140],
             units: "m",
@@ -87,18 +75,36 @@ define([
          *
          */
         initialize: function () {
+            var channel = Radio.channel("MapView");
+
+            channel.reply({
+                "getProjection": function () {
+                    return this.get("projection");
+                },
+                "getOptions": function () {
+                    return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                },
+                "getCenter": function () {
+                    return this.getCenter();
+                },
+                "getZoomLevel": function () {
+                    return this.getZoom();
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
                 },
-                "mapView:getMinResolution": function (scale) {
-                    EventBus.trigger("mapView:sendMinResolution", this.getResolution(scale));
-                },
+                "mapView:getMinResolution": this.sendMinResolution,
                 "mapView:getMaxResolution": function (scale) {
                     EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
                 },
                 "mapView:getOptions": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                },
+                "mapView:getCenterAndZoom": function () {
+                    EventBus.trigger("mapView:sendCenterAndZoom", this.getCenter(), this.getZoom());
                 },
                 "mapView:setScale": this.setScale,
                 "mapView:setZoomLevelUp": this.setZoomLevelUp,
@@ -109,6 +115,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
                     EventBus.trigger("mapView:sendCenter", this.get("center"));
@@ -122,9 +129,12 @@ define([
             });
 
             this.setOptions();
+            this.setScales();
+            this.setResolutions();
+            this.setZoomLevels();
+
             this.setExtent();
             this.setResolution();
-            this.setResolutions();
             this.setStartCenter();
             this.setProjection();
             this.setView();
@@ -132,18 +142,33 @@ define([
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
                 this.set("resolution", this.get("view").getResolution());
+                channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
+                channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
 
         setOptions: function () {
             if (_.has(Config.view, "options")) {
+                this.set("options", []);
                 _.each(Config.view.options, function (opt) {
                     this.pushHits("options", opt);
                 }, this);
             }
+        },
+
+        setScales: function () {
+            this.set("scales", _.pluck(this.get("options"), "scale"));
+        },
+
+        setResolutions: function () {
+            this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+        },
+
+        setZoomLevels: function () {
+            this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
         },
 
         /**
@@ -161,25 +186,13 @@ define([
                 this.set("resolution", Config.view.resolution);
             }
             if (_.has(Config.view, "zoomLevel")) {
-                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel - 1]);
+                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel]);
             }
         },
 
         // Setzt den Maßstab.
         setScale: function (scale) {
             this.set("scale", scale);
-        },
-
-        /**
-         *
-         */
-        setResolutions: function () {
-            if (_.has(Config.view, "options")) {
-                this.set("resolutions", _.pluck(Config.view.options, "resolution"));
-            }
-            else if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
-                this.set("resolutions", Config.view.resolutions);
-            }
         },
 
         /**
@@ -262,6 +275,10 @@ define([
             this.get("view").setZoom(this.getZoom() - 1);
         },
 
+        getCenter: function () {
+            return this.get("view").getCenter();
+        },
+
         getResolution: function (scale) {
             var units = this.get("units"),
                 mpu = ol.proj.METERS_PER_UNIT[units],
@@ -277,6 +294,23 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
+        },
+
+        sendMinResolution: function (minScale) {
+            if (_.contains(this.get("scales"), minScale)) {
+                EventBus.trigger("mapView:sendMinResolution", _.findWhere(this.get("options"), {scale: minScale}).resolution);
+            }
+            else if (minScale !== "0") {
+                var scales = _.union([minScale], this.get("scales"));
+
+                scales = _.sortBy(scales, function (scale) {
+                    return parseInt(scale, 10);
+                }).reverse();
+                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[_.indexOf(scales, minScale) - 1]);
+            }
+            else {
+                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[this.get("resolutions").length - 1]);
+            }
         },
 
         pushHits: function (attribute, value) {

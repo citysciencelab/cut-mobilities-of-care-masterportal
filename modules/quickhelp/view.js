@@ -2,14 +2,16 @@ define([
     "backbone",
     "text!modules/quickhelp/templateSearch.html",
     "text!modules/quickhelp/templateTree.html",
+    "text!modules/quickhelp/templateMeasureTool.html",
     "eventbus",
     "modules/core/util",
     "jqueryui/draggable"
-], function (Backbone, TemplateSearch, TemplateTree, EventBus, Util) {
+], function (Backbone, TemplateSearch, TemplateTree, TemplateMeasureTool, EventBus, Util) {
 
     var view = Backbone.View.extend({
         templateSearch: _.template(TemplateSearch),
         templateTree: _.template(TemplateTree),
+        templateMeasureTool: _.template(TemplateMeasureTool),
         className: "quick-help-window ui-widget-content",
         events: {
             "click .glyphicon-remove": "removeWindow",
@@ -19,7 +21,8 @@ define([
             this.render();
             EventBus.on("showWindowHelp", this.showWindow, this);
             this.$el.draggable({
-                containment: "#map"
+                containment: "#map",
+                handle: ".header"
             });
         },
         render: function () {
@@ -40,6 +43,10 @@ define([
                 }
                 case "tree": {
                     this.$el.html(this.templateTree({util: Util}));
+                    break;
+                }
+                case "measure": {
+                    this.$el.html(this.templateMeasureTool({util: Util}));
                     break;
                 }
                 default: {

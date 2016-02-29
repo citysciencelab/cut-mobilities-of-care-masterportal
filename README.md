@@ -3,6 +3,12 @@ LGV Master-Portal
 
 [TOC]
 
+#Allgemeines
+
+#Readmeund Kommentare/md Dateien stylen:
+http://markdown.de/
+
+
 # lokale Entwicklungsumgebung einrichten
 
 ## [git](http://git-scm.com/)
@@ -31,7 +37,7 @@ Test in cmd:
 
 ## [Node.js](http://nodejs.org)
 
-Via Windows-Installer von der Seite.
+Via Windows-Installer von der Seite. Letzte als funktionierend bekannte Version: node-v4.2.2-x64 mit NPM 2.14.7
 
 Test in cmd:
 
@@ -151,7 +157,7 @@ yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 Ein Portal für die Veröffentlichung fertig machen.
 
 ```
-// grunt build --path=<pfad-zum-portal> --name=<Portalname>
+// grunt build --path=<pfad-zum-portal> --name=<Portalname> [--env=internet| default:fhhnet]
 # grunt build --path=portale/local --name=FHH-Atlas
 ```
 
@@ -170,6 +176,23 @@ Die Dokumentation erzeugen. Zurzeit nur für portale/master/config.js.
 ```
 
 - schreibt die Dokumentation nach doc
+
+## grunt buildExamples
+```
+# grunt buildExamples --env=internet
+```
+- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen (zurzeit simple und simpleTree) enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
+- erzeugt zusätzlich examples.zip
+
+## grunt copyExamples
+```
+# grunt copyExamples --env=internet
+```
+- leert den Ordner examples
+- kopiert den aktuellen dist-Ordner nach examples
+- kopiert notwednige Dateien aus lgv-config und die beiden Portale und nimmt Ersetzungen vor
+- wird aus grunt buildExamples aufgerufen
+
 
 ## Alle grunt-Tasks
 

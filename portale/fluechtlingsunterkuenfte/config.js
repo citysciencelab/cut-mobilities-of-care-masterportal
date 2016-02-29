@@ -15,7 +15,31 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js models/ParametricURL.js geladen. Dieses Modul übernimmt spezielle Attribute eines parametrisierten Aufrufs und überschreibt damit Einstellungen der config.js
         */
-        allowParametricURL: false,
+        allowParametricURL: true,
+        tree: {
+            type: "custom",
+            baseLayer: [
+                {id: "8", visibility: false},
+                {id: "453", visibility: true}
+            ],
+            customConfig: "../components/lgv-config/tree-config/fluechtlinge.json"
+        },
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
+        /**
+        * @desc Erlaubt für einzelne Layer mehr Objekte pro GFI-request zuzulassen.
+        * @memberof config
+        * @property {number} id - Die Id der Layer
+        * @property {number} count -Anzahl der Objekte pro GFI
+        */
+        feature_count: [
+            {
+                id: 4,
+                count: 5
+            }
+        ],
         /**
         * @memberof config
         * @desc Optionale Konfigurations-Einstellungen für die Map View
@@ -73,45 +97,7 @@ define(function () {
         * @desc Pfad zur Proxy-CGI
         */
         proxyURL: "/cgi-bin/proxy.cgi",
-        /**
-        * @memberof config
-        * @type {Object[]}
-        * @property {String}  id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
-        * @property {Boolean}  visible - Initiale Sichtbarkeit des Layers.
-        * @property {String}  style - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
-        * @property {String}  styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number}  clusterDistance - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
-        * @property {String}  searchField - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
-        * @property {String}  styleField - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
-        * @property {String}  styleLabelField - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String}  mouseHoverField - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]}  filterOptions - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
-        * @property {String}  filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
-        * @property {String}  filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
-        * @property {String}  filterOptions.filterName - Name des Filters in der Oberfläche.
-        * @property {String}  filterOptions.filterString - Einträge des Filters, auf die gefiltert werden kann.
-        * @property {String}  attribution - Setzt die Attributierung des Layers auf diesen String.
-        * @property {Object}  attribution - Setzt die Attributierung des Layers in Abhängigkeit eines Events. Eine Funktion muss den Value "eventValue" am Layer setzen, um ihn zu übernehmen.
-        * @property {String}  attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {String}  attribution.timeout - Dauer in Millisekunden für setInterval.
-        * @property {String}  opacity - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String}  minScale -
-        * @property {String}  maxScale -
-        * @property {Boolean}   routable - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
-        * @desc Beschreibung.
-        */
-        layerIDs: [
-            {id: "453", visible: true, legendUrl: "ignore"},
-            {id: "8", visible: false},
-            {id: "1112,1113,1114,1115,1116,1117", name: "RISE-Fördergebiete", visible: false},
-            {id: "2097", visible: false},
-            {id: "1585", visible: false},
-            {id: "7", visible: false, editable: true},
-            // {id: "2", visible: true},
-             {id: "3", visible: true},
-             {id: "4", visible: true},
-             {id: "5", visible: true}
-        ],
+
         /**
         * @memberof config
         * @type {Boolean}
@@ -179,11 +165,20 @@ define(function () {
         * @property {String}  placeholder - Der Text der initial in der Suchmaske steht.
         * @property {Function}  gazetteerURL - Die Gazetteer-URL.
         */
-        searchBar: {
-            placeholder: "Suche nach Adresse",
-            gazetteerURL: function () {
-                    return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
-            }
+         searchBar: {
+            placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            tree: {
+                minChars: 3
+            },
+            geoLocateHit: true
         },
 
         bPlan: {
@@ -203,24 +198,16 @@ define(function () {
             title: "",
             gfi: false
         },
-        /**
-        * @memberof config
-        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" aktiviert/deaktiviert werden können.
-        * @property {Boolean}  gfi - GetFeatureInfo-Abfrage.
-        * @property {Boolean}  measure - Messen.
-        * @property {Boolean}  draw - Zeichnen.
-        * @property {Boolean}  print - Drucken.
-        * @property {Boolean}  coord - Koordinaten-Abfrage.
-        * @property {String}  active - Die Funktion die initial auf der Karte registriert ist. Mögliche Werte: "gfi", "coord" oder "measure".
-        */
         tools: {
-            gfi: true,
-            measure: false,
-            print: true,
-            coord: false,
-            draw: false,
-            active: "gfi",
-            record: true
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            }
         },
         /**
         * @memberof config

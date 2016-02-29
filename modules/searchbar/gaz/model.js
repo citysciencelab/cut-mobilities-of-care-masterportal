@@ -32,6 +32,12 @@ define([
          * @param {string} [initialQuery] - Initialer Suchstring.
          */
         initialize: function (config, initialQuery) {
+            this.listenTo(EventBus, {
+                "setPastedHouseNumber": this.setPastedHouseNumber,
+                "searchbar:search": this.search,
+                "gaz:adressSearch": this.adressSearch
+            });
+
             this.set("gazetteerURL", config.url);
             if (config.searchStreets) {
                 this.set("searchStreets", config.searchStreets);
@@ -48,16 +54,21 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            EventBus.on("searchbar:search", this.search, this);
-            EventBus.on("gaz:adressSearch", this.adressSearch, this);
             if (initialQuery && _.isString(initialQuery) === true) {
                 this.directSearch(initialQuery);
             }
         },
+
+        // für Copy/Paste bei Adressen
+        setPastedHouseNumber: function (value) {
+            this.set("pastedHouseNumber", value);
+        },
+
         /**
         *
         */
         search: function (searchString) {
+            this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
@@ -65,7 +76,7 @@ define([
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
                 }
                 if (this.get("searchDistricts") === true) {
-                    if (!_.isNull(searchString.match(/^[a-z]+$/i))) {
+                    if (!_.isNull(searchString.match(/^[a-z\-]+$/i))) {
                         this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true);
                     }
                 }
@@ -105,6 +116,7 @@ define([
         * @param {string} searchString - Suchstring
         */
         directSearch: function (searchString) {
+            this.set("searchString", searchString);
             if (searchString.search(",") !== -1) {
                 var splitInitString = searchString.split(",");
 
@@ -118,6 +130,7 @@ define([
                 this.set("onlyOneStreetName", "");
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
             }
+            $("#searchInput").val(searchString);
             EventBus.trigger("createRecommendedList");
         },
         /**
@@ -134,11 +147,13 @@ define([
         getStreets: function (data) {
             var hits = $("wfs\\:member,member", data),
                 coordinates,
+                hitNames = [],
                 hitName;
 
             _.each(hits, function (hit) {
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                hitNames.push(hitName);
                 // "Hitlist-Objekte"
                 EventBus.trigger("searchbar:pushHits", "hitList", {
                     name: hitName,
@@ -157,6 +172,15 @@ define([
                 else if (hits.length === 0) {
                     this.searchInHouseNumbers();
                 }
+                else {
+                    _.each(hitNames, function (hitName) {
+                        if (hitName.toLowerCase() === this.get("searchString").toLowerCase()) {
+                            this.set("onlyOneStreetName", hitName);
+                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false);
+                            this.searchInHouseNumbers();
+                        }
+                    }, this);
+                }
             }
             EventBus.trigger("createRecommendedList");
         },
@@ -174,7 +198,7 @@ define([
             _.each(hits, function (hit) {
                 position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                 coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                hitName = $(hit).find("dog\\:kreisname_normalisiert, kreisname_normalisiert")[0].textContent;
+                hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
                 // "Hitlist-Objekte"
                 EventBus.trigger("searchbar:pushHits", "hitList", {
                     name: hitName,
@@ -189,13 +213,27 @@ define([
         searchInHouseNumbers: function () {
             var address;
 
-            _.each(this.get("houseNumbers"), function (houseNumber) {
-                address = houseNumber.name.replace(/ /g, "");
-                // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (address.search(this.get("searchStringRegExp")) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
-                }
-            }, this);
+            // Adressuche über Copy/Paste
+            if (this.get("pastedHouseNumber") !== undefined) {
+                _.each(this.get("houseNumbers"), function (houseNumber) {
+                    address = houseNumber.name.replace(/ /g, "");
+                    var number = houseNumber.adress.housenumber + houseNumber.adress.affix;
+
+                    if (number === this.get("pastedHouseNumber")) {
+                        EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
+                    }
+                }, this);
+                this.unset("pastedHouseNumber");
+            }
+            else {
+                _.each(this.get("houseNumbers"), function (houseNumber) {
+                    address = houseNumber.name.replace(/ /g, "");
+
+                    if (address.search(this.get("searchStringRegExp")) !== -1) {
+                        EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
+                    }
+                }, this);
+            }
         },
         /**
          * [getHouseNumbers description]

@@ -1,23 +1,34 @@
 <!DOCTYPE html>
-<div class="layerinformation-win-header">
-    <span class="glyphicon glyphicon-book win-icon"></span>
-    <span class="win-title">Datensatz Informationen</span>
-    <span class="glyphicon glyphicon-remove win-close"></span>
+<div class="header">
+    <p class="buttons pull-right">
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+    </p>
+    <p class="title">
+        <span>Informationen und Legende</span>
+    </p>
 </div>
-
-<div class="layerinformation-win-content">
-    <h4><%= name %></h4>
-    <p class="abstract"><%= abstractText %></p>
-    <br>
-    <p class="metaLink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
-    <p>Stand der Daten: <%= date %></p>
-    <% if (legendURL !== "ignore") { %>
-        <hr>
-        <h4>Legende</h4>
+<div class="content">
+    <h4 class="subtitle"><%= name %></h4>
+    <% if (typeof metaID !== "undefined") { %>
+        <p class="abstract"><%= abstractText %></p>
+        <br>
+        <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
+        <p>Stand der Daten: <%= date %></p>
+    <% } %>
+    <% if (legendURL !== "ignore" && legendURL !== "" && typeof metaID !== "undefined") { %> <hr> <% } %>
+    <% if (legendURL !== "ignore" && legendURL !== "") { %>
+        <h4 class="subtitle">Legende</h4>
         <p>
-            <% if (legendURL[0].search(".pdf") !== -1) { %>
-                <a href=<%= legendURL[0] %> target="_blank">weitere Informationen</a>
-            <% }
+            <% if (typeof legendURL === "string") {
+                if (legendURL.search(".pdf") !== -1) { %>
+                    <a href=<%= legendURL %> target="_blank">weitere Informationen</a>
+                <% }
+                else { %>
+                    <p>
+                        <img src=<%= legendURL %>>
+                    </p>
+                <% }
+            }
             else { %>
                 <% if (legendURL.length > 1) {
                     _.each(legendURL, function (legend) { %>

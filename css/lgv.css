@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+label {
+    font-weight: normal;
+}
+
 *:not(.badge) {
     border-radius: 0 !important;
 }
@@ -16,193 +20,56 @@ html, body {
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-envelope, .glyphicon-book {
         font-size: 18px !important;
     }
     html, body {
         font-size: 16px;
     }
-    .menuitem {
-        font-size: 16px !important;
-        margin-left: 15px !important;
-    }
-    .dropdown-menu {
-        font-size: 18px;
-    }
-}
-
-#toggleDiv {
-    position: relative;
-    top:50px;
-    right: 17px;
-    z-index: 999;
-}
-
-.color {
-    color: #cdcdcd;
-}
-@media (min-height:0px){
-    #tree {
-        max-height:100px;
-    }
-    .legendbody{
-        max-height:100px;
-    }
 }
 
 @media (min-height:200px){
-    #tree {
-        max-height:160px;
-    }
-    .legendbody{
-        max-height:120px;
-    }
     #poibody{
         max-height:120px;
     }
-    .legenddiv{
-        max-height:100px;
-    }
 }
+
 @media (min-height:250px){
-    #tree {
-        max-height:230px;
-    }
-    .legendbody{
-        max-height:200px;
-    }
     #poibody{
         max-height:200px;
     }
-    .legenddiv{
-        max-height:120px;
-    }
-
 }
+
 @media (min-height:300px){
-    #tree {
-        max-height:260px;
-    }
-    .legendbody{
-        max-height:220px;
-    }
     #poibody{
         max-height:220px;
     }
-    .legenddiv{
-        max-height:120px;
-    }
-
 }
+
 @media (min-height:480px){
-    #tree {
-        max-height:440px;
-    }
-    .legendbody{
-        max-height:400px;
-    }
     #poibody{
         max-height:400px;
     }
-    .legenddiv{
-        max-height:300px;
-    }
-
 }
+
 @media (min-height: 768px) {
-    #tree {
-        max-height:768px;
-    }
-    .legendbody{
-        max-height:700px;
-    }
     #poibody{
         max-height:700px;
     }
-    .legenddiv{
-        max-height:540px;
-    }
+}
 
-}
-#tree{
-    border:0;
-    overflow:auto;
-    overflow-x: hidden;
-}
 #poibody{
     overflow:auto;
 }
-.legendbody{
-    overflow:auto;
-}
-#legend{
-    overflow:hidden;
-}
-
-
-#tree small {
-    cursor: pointer;
-}
-
-
-.layername{
-    margin-left: 5px;
-}
-
-.menuitem{
-    margin-left: 5px;
-    font-size: 12px;
-    text-transform: uppercase;
-}
-
-.legend{
-    overflow:hidden;
-}
-.legenddiv{
-    overflow-y: auto;
-}
-#tree small {
-    cursor: pointer;
-}
 
 /*bootstrap überschreiben*/
-.tree-panel {
-    margin-bottom: 0 !important;
-    border: 0 !important;
-    min-width: 290px;
-}
-
-.panel-heading {
-    background-color: #ffffff !important;
-    padding-left: 10px !important;
-}
-
-.glyphicon {
-    vertical-align: baseline;
-    /*top: 0px;*/
-}
-/*
-.list-group-item {
-    padding-top:  6px !important;
-    padding-bottom:  6px !important;
-}
-*/
 .list-group {
     margin-bottom: 0px !important;
 }
 
-.list-group-item:last-child {
-    /*border-bottom: 1px solid #ddd !important;*/
-}
-
 .form-group:last-child {
     margin-bottom: 0px;
-}
-
-#measurePopup {
-    position: absolute;
-    top: 70px;
 }
 
 /******* Ajax Loader *******/
@@ -222,31 +89,6 @@ html, body {
     top: 50%;
     margin-left: -50px;
     margin-top: -50px;
-}
-
-#coordPopup {
-    padding: 10px;
-}
-#poiPanel{
-    visibility: hidden;
-}
-
-.treeFilterError {
-    font-size: 10px;
-    color: #a94442;
-/*    display: none;*/
-}
-
-.mouseHover {
-    font-size: 12px;
-    max-width: inherit;
-    padding: 6px;
-    background-color: rgb(255, 255, 255);
-    color: #777;
-    font-weight: bold;
-    /*display: block;*/
-    white-space: pre;
-    border: 1px solid #777;
 }
 
 .cluster{

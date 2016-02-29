@@ -2,7 +2,8 @@ define([
     "backbone",
     "text!modules/legend/template.html",
     "modules/legend/model",
-    "eventbus"
+    "eventbus",
+    "jqueryui/draggable"
 ], function (Backbone, LegendTemplate, Legend, EventBus) {
 
     var LegendView = Backbone.View.extend({
@@ -10,7 +11,7 @@ define([
         className: "legend-win",
         template: _.template(LegendTemplate),
         events: {
-            "click .legend-win-header > .win-close": "toggle"
+            "click .glyphicon-remove": "toggle"
         },
         initialize: function () {
             $(window).resize(function() {

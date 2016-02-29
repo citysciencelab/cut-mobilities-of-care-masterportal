@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <label for="districtField" class="col-md-5 col-sm-5 control-label">Gemarkung</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm pull-left" id="districtField">
+                <% _.each(this.model.get("districts"), function(value, key) { %>
+                    <option class="pull-left" value=<%= value %>><%= key + " (" + value + ")" %></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="parcelField" class="col-md-5 col-sm-5 control-label">Flurst&uuml;cksnummer</label>
+        <div class="col-md-7 col-sm-7">
+            <input type="text" class="form-control" id="parcelField">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button class="btn btn-panel-submit col-md-12 col-sm-12">Suchen</button>
+        </div>
+    </div>
+</div>

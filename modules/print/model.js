@@ -14,7 +14,8 @@ define([
             outputFilename: Config.print.outputFilename,
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
-            center: Config.view.center
+            center: Config.view.center,
+            scale: {}
         },
 
         //
@@ -25,7 +26,13 @@ define([
             if (resp[0] && resp[0].get("url")) {
                 this.set("printurl", resp[0].get("url"));
             }
-            return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
+
+            if (_.has(Config.print, "configYAML") === true) {
+                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json"
+            }
+            else {
+                return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
+            }
         },
 
         //
@@ -44,9 +51,14 @@ define([
             // get print config (info.json)
             this.fetch({
                 cache: false,
-                async: false,
                 success: function (model) {
+                    _.each(model.get("scales"), function (scale) {
+                        var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+
+                        scale.name = "1: " + scaletext;
+                    });
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                    EventBus.trigger("mapView:getOptions");
                 }
             });
 
@@ -54,8 +66,6 @@ define([
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
             EventBus.on("sendDrawLayer", this.setDrawLayer, this);
-
-            EventBus.trigger("mapView:getOptions");
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
@@ -72,13 +82,18 @@ define([
 
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
-            this.set("scale", this.get("scales")[index].value);
-            EventBus.trigger("mapView:setScale", this.get("scale"));
+            var scaleval = this.get("scales")[index].value;
+
+            EventBus.trigger("mapView:setScale", scaleval);
         },
 
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
         setScaleByMapView: function (obj) {
-            this.set("scale", parseInt(obj.scale, 10));
+            var scale = _.find(this.get("scales"), function (scale) {
+                return scale.value === obj.scale;
+            });
+
+            this.set("scale", scale);
         },
 
         // Setzt die Zentrumskoordinate.
@@ -100,7 +115,9 @@ define([
             this.set("isActive", this.get("isCurrentWin"));
         },
         updatePrintPage: function () {
-            EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale")]);
+            if (this.get("scale").value) {
+                EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
+            }
         },
 
         /**
@@ -108,13 +125,13 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            if (_.has(Config, "tree") === true) {
+            if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
                 EventBus.trigger("getSelectedVisibleWMSLayer");
             }
             else {
                 EventBus.trigger("layerlist:getVisibleWMSlayerList");
             }
-            if (Config.tools.draw === true) {
+            if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
             this.sendGFIForPrint();
@@ -126,7 +143,8 @@ define([
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},
-                    style = [];
+                    style = [],
+                    layerURL = layer.get("url");
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -134,10 +152,20 @@ define([
                 if (layer.get("id") === "2298") {
                     style.push("strassenbaumkataster_grau");
                 }
+                if (layer.has("style")) {
+                    style.push(layer.get("style"));
+                }
+                // Damit Web-Atlas gedruckt werden kann
+                if (layer.get("id") === "51" || layer.get("id") === "53") {
+                    layerURL = layer.get("url") + "__108a7035-f163-6294-f7dc-a81a2cfa13d6";
+                }
+                if (layer.get("id") === "55") {
+                    layerURL = layer.get("url") + "__e5742a5e-f48c-9470-19c0-9d522cfa13d6";
+                }
                 this.push("layerToPrint", {
                     type: layer.get("typ"),
                     layers: layer.get("layers").split(),
-                    baseURL: layer.get("url"),
+                    baseURL: layerURL,
                     format: "image/png",
                     opacity: layer.get("opacity"),
                     customParams: params,
@@ -164,13 +192,23 @@ define([
                         type: feature.getGeometry().getType()
                     }
                 });
-                featureStyles[index] = {
-                    fillColor: feature.getStyle().getFill().getColor(),
-                    pointRadius: feature.getStyle().getImage().getRadius(),
-                    strokeColor: feature.getStyle().getStroke().getColor(),
-                    strokeWidth: feature.getStyle().getStroke().getWidth()
-                };
-            });
+                if (feature.getStyle().getText() === null) {
+                    featureStyles[index] = {
+                        fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
+                        fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
+                        pointRadius: feature.getStyle().getImage().getRadius(),
+                        strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
+                        strokeWidth: feature.getStyle().getStroke().getWidth(),
+                        strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
+                    };
+                }
+                else {
+                    featureStyles[index] = {
+                        label: feature.getStyle().getText().getText(),
+                        fontColor: this.getColor(feature.getStyle().getText().getFill().getColor()).color
+                    };
+                }
+            }, this);
             this.push("layerToPrint", {
                 type: "Vector",
                 styles: featureStyles,
@@ -195,7 +233,8 @@ define([
                 pages: [
                     {
                         center: this.get("center"),
-                        scale: this.get("scale"),
+                        scale: this.get("scale").value,
+                        scaleText: this.get("scale").name,
                         dpi: 96,
                         mapTitle: this.get("title")
                     }
@@ -266,7 +305,7 @@ define([
             this.setSpecification();
         },
         /**
-        * Abfrage an popupmodel starten.
+        * Abfrage an popupmodel starten. Bedingt Config.tools.gfi: true.
         */
         sendGFIForPrint: function () {
             EventBus.trigger("sendGFIForPrint");
@@ -284,7 +323,13 @@ define([
                 this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             }
             else {
-                this.set("createURL", this.get("printurl") + "/master/create.json");
+                if (_.has(Config.print, "configYAML") === true) {
+                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
+                }
+                else {
+                    this.set("createURL", this.get("printurl") + "/master/create.json");
+                }
+
             }
             this.setGFIPos();
         },
@@ -303,7 +348,10 @@ define([
                 },
                 success: this.openPDF,
                 error: function (error) {
-                    alert ("Druck fehlgeschlagen: " + error.statusText);
+                    EventBus.trigger("alert", {
+                        text: "Druck fehlgeschlagen: " + error.statusText,
+                        kategorie: "alert-warning"
+                    });
                 },
                 complete: Util.hideLoader,
                 beforeSend: Util.showLoader
@@ -328,6 +376,48 @@ define([
 
             tempArray.push(value);
             this.set(attribute, _.flatten(tempArray));
+        },
+
+        // Prüft ob es sich um einen rgb(a) oder hexadezimal String handelt.
+        // Ist es ein rgb(a) String, wird er in ein hexadezimal String umgewandelt.
+        // Wenn vorhanden, wird die Opacity(default = 1) überschrieben.
+        // Gibt den hexadezimal String und die Opacity zurück.
+        getColor: function (value) {
+            var color = value,
+                opacity = 1;
+
+            if (color.search("#") === -1) {
+                var begin = color.indexOf("(") + 1;
+
+                color = color.substring(begin, color.length - 1);
+                color = color.split(",");
+                if (color.length === 4) {
+                    opacity = parseFloat(color[3], 10);
+                }
+                color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
+                return {
+                    "color": color,
+                    "opacity": opacity
+                };
+            }
+            else {
+                return {
+                    "color": color,
+                    "opacity": opacity
+                };
+            }
+        },
+
+        // Setzt den hexadezimal String zusammen und gibt ihn zurück.
+        rgbToHex: function (red, green, blue) {
+            return "#" + this.componentToHex(red) + this.componentToHex(green) + this.componentToHex(blue);
+        },
+
+        // Ein Integer (color) wird in ein hexadezimal String umgewandelt und zurückgegeben.
+        componentToHex: function (color) {
+            var hex = color.toString(16);
+
+            return hex.length === 1 ? "0" + hex : hex;
         }
     });
 

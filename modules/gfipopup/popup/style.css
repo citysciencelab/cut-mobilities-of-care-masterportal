@@ -4,7 +4,7 @@
 
 .popover {
     padding: 0px;
-    max-width:450px;
+    max-width:600px;
 }
 
 .popover-content {
@@ -61,7 +61,7 @@
 .gfi-content {
     font-size: 12px;
     max-height: 66%;
-    min-width:350px;
+    min-width:400px;
     overflow-y: auto;
 }
 
@@ -96,6 +96,17 @@
 
 .gfi-footer > .pager-right {
     float: right;
+}
+
+.popover-trinkwasser {
+        height: 400px;
+        width: 500px;
+        overflow-x: auto;
+        white-space: nowrap;
+}
+
+.trinkwasserParams {
+    white-space: normal;
 }
 
 /* minimiertes Info-Fenster*/

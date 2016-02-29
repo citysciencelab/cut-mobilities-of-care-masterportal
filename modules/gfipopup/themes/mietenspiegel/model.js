@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "config",
     "eventbus",
     "modules/core/util",
     "modules/layer/list"
-], function (Backbone, Config, EventBus, Util, LayerList) {
+], function (Backbone, Radio, Config, EventBus, Util) {
     "use strict";
     var GFIModel = Backbone.Model.extend({
         /**
@@ -64,24 +65,25 @@ define([
             return [ms, "Mietenspiegel-Auswertung"];
         },
         /*
-         * Initialize wird immer ausgeführt, auch wenn kein mietenspiegel angezeigt wird.
-         * Deshalb prüfen, ob Layerdefinition im Config mit gfiTheme: mietenspiegel gesetzt.
+         * Initialize wird erst beim initialen Aufruf der View ausgeführt.
          */
         initialize: function () {
-            var ms = _.find(Config.layerIDs, function (layer) {
-                return _.values(_.pick(layer, "gfiTheme"))[0] === "mietenspiegel";
-            });
-            if (ms) {
+            EventBus.on("layerlist:sendBaselayerList", this.layerListReady, this); // in gebauter Version
+            this.layerListReady(); // bei Entwicklung
+        },
+        layerListReady: function () {
+            var layerList = Radio.request("LayerList", "getLayerList");
+
+            if (layerList.length > 0) {
                 // lade Layerinformationen aus Config
-                this.set("msLayerDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2730";
+                this.set("msLayerDaten", _.find(layerList, function (layer) {
+                    return layer.id === "2730" || layer.id === "2830";
                 }));
-                this.set("msLayerMetaDaten", _.find(LayerList.models, function (layer) {
-                    return layer.id === "2731";
+                this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
+                    return layer.id === "2731" || layer.id === "2831";
                 }));
                 if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
-                    this.ladeDaten();
-                    this.calculateMerkmale();
+                    this.ladeMetaDaten();
                 }
                 else {
                     EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
@@ -95,7 +97,9 @@ define([
             var daten = this.get("msDaten"),
                 merkmale,
                 merkmaleReduced,
-                possibleValues;
+                possibleValues,
+                uniqueValues,
+                sortedValues;
 
             merkmale = _.map(daten, function (value, key) {
                 return value.merkmale;
@@ -106,22 +110,34 @@ define([
             possibleValues = _.map(merkmaleReduced, function (merkmal) {
                 return _.values(_.pick(merkmal, merkmalId))[0];
             });
-            return _.unique(possibleValues);
+            uniqueValues = _.unique(possibleValues);
+
+            if (merkmalId === "Baualtersklasse/Bezugsfertigkeit") {
+                // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
+                sortedValues = _.sortBy(uniqueValues, function (val) {
+                    return val.substring(val.length - 4);
+                });
+            }
+            else {
+                // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
+                sortedValues = _.sortBy(uniqueValues, function (val) {
+                    return val.substring(0, 1);
+                });
+            }
+            return sortedValues;
         },
         /*
          * Lese Mietenspiegel-Daten aus msLayerMetaDaten und msLayerDaten. REQUESTOR kann nicht verwendet werden, weil es geometrielose Dienste sind.
          */
-        ladeDaten: function () {
+        ladeMetaDaten: function () {
             Util.showLoader();
             var urlMetaDaten = this.get("msLayerMetaDaten").get("url"),
-                featureTypeMetaDaten = this.get("msLayerMetaDaten").get("featureType"),
-                urlDaten = this.get("msLayerDaten").get("url"),
-                featureTypeDaten = this.get("msLayerDaten").get("featureType");
+                featureTypeMetaDaten = this.get("msLayerMetaDaten").get("featureType");
 
             $.ajax({
                 url: Util.getProxyURL(urlMetaDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeMetaDaten,
-                async: false,
+                async: true,
                 type: "GET",
                 cache: false,
                 dataType: "xml",
@@ -145,14 +161,20 @@ define([
                     this.set("msHinweis", hinweis);
                     this.set("msTitel", titel);
                     this.set("msMerkmaleText", merkmaletext);
+                    this.ladeDaten();
                 }
             });
+        },
+        ladeDaten: function () {
             // Lade Mietenspiegel-Daten
             Util.showLoader();
+            var urlDaten = this.get("msLayerDaten").get("url"),
+                featureTypeDaten = this.get("msLayerDaten").get("featureType");
+
             $.ajax({
                 url: Util.getProxyURL(urlDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeDaten,
-                async: false,
+                async: true,
                 type: "GET",
                 cache: false,
                 dataType: "xml",
@@ -181,7 +203,10 @@ define([
                     this.set("msDaten", daten);
                     // Prüfe den Ladevorgang
                     if (daten.length > 0 && this.get("msTitel") !== "") {
-                        this.set("readyState", true);
+                        this.calculateMerkmale();
+                    }
+                    else {
+                        EventBus.trigger("alert", {text: "<strong>Fehlende Wohnlagendaten.</strong> Dieses Portal ist derzeit nicht einsatzbereit. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
                     }
                 }
             });
@@ -200,6 +225,7 @@ define([
                     return _.unique(_.pluck(merkmale, key));
                 });
             this.set("msMerkmale", merkmaleReduced);
+            this.set("readyState", true);
         },
         /*
          * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten.
@@ -240,15 +266,7 @@ define([
             this.set("coordinate", coordinate);
             this.defaultErgebnisse();
             if (response) {
-                if (response["Wohnlage typ"] === "normal") {
-                    this.set("msWohnlage", "Normale Wohnlage");
-                }
-                else if (response["Wohnlage typ"] === "gut") {
-                    this.set("msWohnlage", "Gute Wohnlage");
-                }
-                else {
-                    this.set("msWohnlage", "unbekannte Wohnlage");
-                }
+                this.set("msWohnlage", response.Bezeichnung);
                 if (response["Hausnummer zusatz"]) {
                     this.set("msStrasse", response.Strasse + " " + response.Hausnummer + response["Hausnummer zusatz"]);
                 }
@@ -258,7 +276,7 @@ define([
                 else {
                     this.set("msStrasse", response.Strasse);
                 }
-                this.set("msPLZ", response.Plz + " Hamburg");
+                this.set("msPLZ", response.Plz + " " + response.Ort);
                 this.set("msStadtteil", response.Stadtteil);
             }
             else {

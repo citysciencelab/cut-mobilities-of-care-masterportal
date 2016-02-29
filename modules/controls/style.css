@@ -4,9 +4,13 @@
     right: 0;
 }
 
+.toggleButtonPressed {
+    background-color: blue!important;
+}
+
 .controls-view > .row > div > .glyphicon {
     color: #f3f3f3;
-    background-color: #d42132;
+    background-color: rgb(182, 0, 0);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 }
 
@@ -20,11 +24,11 @@
     font-size: 24px;
 }
 
-.toggleButton > .glyphicon-up {
+.toggleButton > .glyphicon-chevron-up {
     padding: 5px 4px 6px 7px;
 }
 
-.toggleButton > .glyphicon-down {
+.toggleButton > .glyphicon-chevron-down {
     padding: 7px 4px 4px 7px;
 }
 
@@ -46,7 +50,7 @@
     padding: 5px 7px 6px 5px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .zoomButtons {
         display: none;
     }
@@ -77,4 +81,3 @@
     border-radius: 50px !important;
     font-size: 20px;
 }
-

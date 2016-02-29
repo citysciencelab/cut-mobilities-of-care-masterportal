@@ -104,7 +104,10 @@ undefined:
 ```
 _.isUndefined(variable)
 ```
-
+undefined im Template:
+```
+typeof variable !== "undefined"
+```
 #### Auswertungen
 * Vergleiche mit **"==="** und **"!=="** anstatt mit **"=="** und **"!="**
 
@@ -257,7 +260,7 @@ insert_final_newline = true
 * Die Commits werden mit thematisch umschließenden Pushes ins Repository geschrieben, wobei es nicht Ziel ist, ganze Features in einem Push zu umschließen, sondern Tätigkeiten. Mit der lokalen Entwicklungsumgebung ist eine tägliche Sicherung ins Repository empfehlenswert um Datenverlust zu verhindern.
 
 ## Pullrequests
-* Die in Branches abgelegten Commits werden vorm mergen in Pullrequests dem restlichen (verfügbaren) Team zum reviewen angeboten. Diese werden gebeten, möglichst zeitnah einen Blick auf den Code zu werfen, um evtl. Schwachstellen aufzudecken. Es ist nicht notwendig, den Code hinsichtlich seiner Funktionsfähigkeit zu untersuchen. Fehler können dann im Code oder im Pullrequest kommentiert werden. Es reicht bereits ein accept aus, um den Pullrequest in dev zu mergen. 
+* Die in Branches abgelegten Commits werden vorm mergen in Pullrequests dem restlichen (verfügbaren) Team zum reviewen angeboten. Diese werden gebeten, möglichst zeitnah einen Blick auf den Code zu werfen, um evtl. Schwachstellen aufzudecken. Es ist nicht notwendig, den Code hinsichtlich seiner Funktionsfähigkeit zu untersuchen. Fehler können dann im Code oder im Pullrequest kommentiert werden. Es reicht bereits ein accept aus, um den Pullrequest in dev zu mergen.
 
 ### Accept
 * Werden keine produktionsverhindernden Gründe gefunden, soll der Pullrequest baldmöglichst accepted werden.

@@ -8,17 +8,31 @@ define([
         defaults: {
             marker: new ol.Overlay({
                 positioning: "bottom-center",
-                element: $("#searchMarker"), // Element aus der index.html
                 stopEvent: false
-            })
+            }),
+            wkt: "",
+            source: new ol.source.Vector()
         },
         initialize: function () {
+            this.set("layer", new ol.layer.Vector({
+                source: this.get("source")
+            }));
+            EventBus.trigger("addLayer", this.get("layer"));
             EventBus.trigger("addOverlay", this.get("marker"));
         },
+
+        getExtentFromString: function () {
+            var format = new ol.format.WKT(),
+                feature = format.readFeature(this.get("wkt")),
+                extent = feature.getGeometry().getExtent();
+
+            return extent;
+        },
+
         /**
         * @description Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
         */
-        getExtentFromString: function (type, geom) {
+        getWKTFromString: function (type, geom) {
             var wkt;
 
             if (type === "POLYGON") {
@@ -71,11 +85,9 @@ define([
 
                 wkt = wkt.replace(regExp, "),(");
             }
-            var format = new ol.format.WKT(),
-                feature = format.readFeature(wkt),
-                extent = feature.getGeometry().getExtent();
+            this.set("wkt", wkt);
 
-            return extent;
+            return wkt;
         }
     });
 

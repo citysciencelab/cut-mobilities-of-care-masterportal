@@ -132,7 +132,7 @@ define([
             }
         },
         returnConfig: function (layer) {
-            var config = _.find(Config.layerIDs, function (layerdef) {
+            var config = _.find(Config.tree.layer, function (layerdef) {
                 if (layerdef.styles && layerdef.styles !== "") {
                     var checkid = layerdef.id + "_" + layerdef.styles;
                 }
@@ -144,7 +144,7 @@ define([
 
             if (!config) {
                 // Erzege ein Array der Gruppenlayer
-                var configs = _.filter(Config.layerIDs, function (layerdef) {
+                var configs = _.filter(Config.tree.layer, function (layerdef) {
                     return _.isArray(layerdef.id);
                 }),
                 config;

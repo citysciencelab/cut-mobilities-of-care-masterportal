@@ -1,21 +1,90 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "modules/mapMarker/model",
     "eventbus"
-    ], function (Backbone, ol, MapHandlerModel, EventBus) {
+    ], function (Backbone, Radio, ol, MapHandlerModel, EventBus) {
     "use strict";
+
+    var searchVector = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: "#08775f",
+                lineDash: [8],
+                width: 4
+            }),
+            fill: new ol.style.Fill({
+                color: "rgba(8, 119, 95, 0.3)"
+            })
+        })
+    });
+
+    EventBus.trigger("addLayer", searchVector);
+
     return Backbone.View.extend({
         model: MapHandlerModel,
+        id: "searchMarker",
+        className: "glyphicon glyphicon-map-marker",
+        template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
+        events: {
+            "click .glyphicon": "hideMarker"
+        },
         /**
         * @description View des Map Handlers
         */
         initialize: function () {
-            EventBus.on("mapHandler:zoomTo", this.zoomTo, this);
-            EventBus.on("mapHandler:hideMarker", this.hideMarker, this);
-            EventBus.on("mapHandler:showMarker", this.showMarker, this);
-            EventBus.on("mapHandler:zoomToBPlan", this.zoomToBPlan, this);
-            EventBus.on("mapHandler:zoomToBKGSearchResult", this.zoomToBKGSearchResult, this);
+            var channel = Radio.channel("MapMarker");
+
+            channel.reply({
+                "getCloseButtonCorners": function () {
+                    if (this.$el.is(":visible") === false) {
+                        return {
+                            top: -1,
+                            bottom: -1,
+                            left: -1,
+                            right: -1
+                        };
+                    }
+                    else {
+                        var bottomSM = $("#searchMarker .glyphicon-remove").offset().top,
+                            leftSM = $("#searchMarker .glyphicon-remove").offset().left,
+                            widthSM = $("#searchMarker .glyphicon-remove").outerWidth(),
+                            heightSM = $("#searchMarker .glyphicon-remove").outerHeight(),
+                            topSM = bottomSM + heightSM,
+                            rightSM = leftSM + widthSM;
+
+                        return {
+                            top: topSM,
+                            bottom: bottomSM,
+                            left: leftSM,
+                            right: rightSM
+                        };
+                    }
+                }
+            }, this);
+            this.listenTo(EventBus, {
+                "mapHandler:clearMarker": this.clearMarker,
+                "mapHandler:zoomTo": this.zoomTo,
+                "mapHandler:hideMarker": this.hideMarker,
+                "mapHandler:showMarker": this.showMarker,
+                "mapHandler:zoomToBPlan": this.zoomToBPlan,
+                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
+            }, this);
+
+            this.render();
+        },
+        render: function () {
+            this.$el.html(this.template());
+
+            this.model.get("marker").setElement(this.$el[0]);
+        },
+        /**
+        * @description Entfernt den searchVector
+        */
+        clearMarker: function () {
+            searchVector.getSource().clear();
         },
         /**
         * @description Zoom auf Treffer
@@ -24,17 +93,19 @@ define([
         zoomTo: function (hit) {
             var zoomLevel;
 
+            this.clearMarker();
             switch (hit.type) {
-                case "Ortssuche": {
+                case "Ort": {
                     EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
                     break;
                 }
                 case "Straße": {
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString("POLYGON", hit.coordinate));
+                    this.model.getWKTFromString("POLYGON", hit.coordinate);
+                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
                     break;
                 }
                 case "Parcel": {
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString("POINT", hit.coordinate));
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
                     this.showMarker(hit.coordinate);
                     break;
                 }
@@ -78,6 +149,25 @@ define([
                     EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
+                case "SearchByCoord": {
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
+                    this.showMarker(hit.coordinate);
+                    break;
+                }
+                case "Feature-Lister-Hover": {
+                    this.showMarker(hit.coordinate);
+                    break;
+                }
+                case "Feature-Lister-Click": {
+                    EventBus.trigger("zoomToExtent", hit.coordinate);
+                    break;
+                }
+                case "Kita": {
+                    zoomLevel = 8;
+                    this.showMarker(hit.coordinate);
+                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    break;
+                }
             }
         },
         /*
@@ -85,30 +175,14 @@ define([
         * @param {string} data - Die Data-XML des request.
         */
         zoomToBPlan: function (data) {
-            var wkt,
-                hits = $("gml\\:Polygon,Polygon", data),
-                wktArray = [],
-                geom,
+            var GMLReader = new ol.format.GML(),
+                feature = GMLReader.readFeatures(data)[0],
                 extent;
 
-            if (hits.length > 1) {
-                _.each(hits, function (hit) {
-                    var geoms = $(hits).find("gml\\:posList,posList");
-
-                    if (geoms.length === 1) {
-                        geom = geoms[0].textContent;
-                    }
-                    else {
-                        geom = geoms[0].textContent + " )?(" + geoms[1].textContent;
-                    }
-                    wktArray.push(geom);
-                });
-                extent = this.model.getExtentFromString("MULTIPOLYGON", wktArray);
-            }
-            else if (hits.length === 1) {
-                geom = $(hits).find("gml\\:posList,posList")[0].textContent;
-                extent = this.model.getExtentFromString("POLYGON", geom);
-            }
+            this.clearMarker();
+            extent = feature.getGeometry().getExtent();
+            searchVector.getSource().addFeature(feature);
+            searchVector.setVisible(true);
             EventBus.trigger("zoomToExtent", extent);
         },
         /*
@@ -116,19 +190,18 @@ define([
         * @param {string} data - Die Data-Object des request.
         */
         zoomToBKGSearchResult: function (data) {
-            if (data.features[0].properties.typ === "Haus") {
+            if (data.features[0].properties.bbox.type === "Point") {
                 EventBus.trigger("mapView:setCenter", data.features[0].properties.bbox.coordinates, 5);
                 this.showMarker(data.features[0].properties.bbox.coordinates);
             }
-            else {
+            else if (data.features[0].properties.bbox.type === "Polygon") {
                 var coordinates = "";
 
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                var extent = this.model.getExtentFromString("POLYGON", coordinates.trim());
-
-                EventBus.trigger("zoomToExtent", extent);
+                this.model.getWKTFromString("POLYGON", coordinates.trim());
+                EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
             }
         },
         /**
@@ -136,13 +209,13 @@ define([
         */
         showMarker: function (coordinate) {
             this.model.get("marker").setPosition(coordinate);
-            $("#searchMarker").css("display", "block");
+            this.$el.css("display", "block");
         },
         /**
         *
         */
         hideMarker: function () {
-            $("#searchMarker").css("display", "none");
+            this.$el.css("display", "none");
         }
     });
 });

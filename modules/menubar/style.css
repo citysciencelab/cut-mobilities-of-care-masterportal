@@ -1,3 +1,7 @@
+.navbar-fixed-top {
+    border-bottom-width: 0;
+}
+
 .navbar {
     min-height: 0; /*wichtig für toggleButton, muss nochmal schöner gemacht werden*/
     background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -5,14 +9,13 @@
     background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    /*font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;*/
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 12px;
+    /*font-size: 12px;*/
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.176);
 }
 
-.in > .nav > li {
-    /*border-bottom: 1px dashed rgb(215, 215, 215);*/
+.navbar-default .navbar-nav > li > a {
+    color: rgb(85, 85, 85) !important;
 }
 
 .in > .menubarlgv {
@@ -20,12 +23,7 @@
 }
 
 .nav > li {
-    border-left: 1px solid #fff;
     border-right: 1px solid #e5e5e5;
-}
-
-.nav > li:first-child {
-    border-left: 1px solid #e5e5e5;
 }
 
 .nav > li:hover {
@@ -34,27 +32,36 @@
 
 .dropdown-menu {
     padding:  0;
+    margin-left: -2px;
 }
-
 
 .dropdown-menu > li > a {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
 }
 
-@media (min-width: 768px) {
-    .navbar {
-        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
-    }
+.menuitem {
+    font-size: 14px;
+    letter-spacing: 0.6px;
 }
 
 @media (min-width: 768px) {
     a.dropdown-toggle > span.glyphicon {
         font-size: 12px;
     }
+    .navbar {
+        max-height: 52px; /* alter wert 50px, warum weiß ich nicht mehr*/
+    }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     a.dropdown-toggle > span.glyphicon {
         font-size: 16px;
+    }
+    .menuitem {
+        font-size: 16px !important;
+        margin-left: 15px !important;
+    }
+    .dropdown-menu {
+        font-size: 18px;
     }
 }

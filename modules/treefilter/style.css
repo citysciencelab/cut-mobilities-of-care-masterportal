@@ -23,6 +23,7 @@
     max-width: 300px;
 }
 
-.form-tree-filter {
-    max-width: 420px;
+.treeFilterError {
+    font-size: 10px;
+    color: #a94442;
 }

@@ -1,7 +1,8 @@
 define([
     "backbone",
-    "eventbus"
-    ], function (Backbone, EventBus) {
+    "eventbus",
+    "config"
+], function (Backbone, EventBus, Config) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
@@ -10,13 +11,15 @@ define([
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
             hitList: []
+            // isHitListReady: true
         },
         /**
         *
         */
         initialize: function () {
-            this.on("change:searchString", this.checkStringAndSearch, this);
-
+            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
+                this.set("quickHelp", true);
+            }
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
             EventBus.on("searchbar:pushHits", this.pushHits, this);
         },
@@ -24,8 +27,28 @@ define([
         /**
         * aus View gaufgerufen
         */
-        setSearchString: function (value) {
-            this.set("searchString", value);
+        setSearchString: function (value, eventType) {
+            var splitAdress = value.split(" ");
+
+            if (value.length >= 3) {
+                // für Copy/Paste bei Adressen
+                if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
+                    var houseNumber = splitAdress[splitAdress.length - 1],
+                        streetName = value.substr(0, value.length - houseNumber.length - 1);
+
+                    this.set("searchString", streetName);
+                    EventBus.trigger("setPastedHouseNumber", houseNumber);
+                }
+                else {
+                    this.set("searchString", value);
+                }
+                this.set("hitList", []);
+                EventBus.trigger("searchbar:search", this.get("searchString"));
+                $(".dropdown-menu-search").show();
+            }
+            else {
+                $(".dropdown-menu-search").hide();
+            }
         },
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
@@ -41,18 +64,12 @@ define([
         /**
         *
         */
-        checkStringAndSearch: function () {
-            this.set("hitList", []);
-            EventBus.trigger("searchbar:search", this.get("searchString"));
-        },
-        /**
-        *
-        */
         createRecommendedList: function () {
-            var max = this.get("recommandedListLength");
+            var max = this.get("recommandedListLength"),
+                recommendedList = [];
 
-            if (this.get("hitList").length > 0) {
-                this.set("isHitListReady", false);
+            // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
+            //     this.set("isHitListReady", false);
                 if (this.get("hitList").length > max) {
                     var hitList = this.get("hitList"),
                         foundTypes = [],
@@ -74,13 +91,14 @@ define([
                             usedNumbers.push(randomNumber);
                         }
                     }
-                    this.set("recommendedList", singleTypes);
+                    recommendedList = singleTypes;
                 }
                 else {
-                    this.set("recommendedList", this.get("hitList"));
+                    recommendedList = this.get("hitList");
                 }
-                this.set("isHitListReady", true);
-            }
+                this.set("recommendedList", _.sortBy(recommendedList, "name"));
+                // this.set("isHitListReady", true);
+            // }
         }
     });
 

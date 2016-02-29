@@ -1,10 +1,12 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Util) {
+define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList"], function ($, Config, Util, RawLayerList) {
     "use strict";
     require(["modules/alerting/view"]);
     Util.showLoader();
+    new RawLayerList();
+
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
         require(["modules/parametricURL/model"], function (ParametricURL) {
@@ -12,7 +14,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         });
     }
 
-    if (_.has(Config.tree, "custom") && Config.tree.custom === true) {
+    if (Config.tree.type === "custom") {
         require(["modules/treeconfig/list"], function (TreeConfig) {
             new TreeConfig();
         });
@@ -56,7 +58,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
             });
         }
 
-        if (Config.footer && Config.footer === true) {
+        if (Config.footer && Config.footer.visibility === true) {
             require(["modules/footer/view"], function (FooterView) {
                 new FooterView();
             });
@@ -69,7 +71,7 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         }
 
         if (Config.mouseHover && Config.mouseHover === true) {
-            require(["views/MouseHoverPopupView"], function (MouseHoverPopupView) {
+            require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
         }
@@ -89,19 +91,22 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
         if (Config.menubar === true) {
             require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
                 new MenubarView();
-                if ($('#map').is(":visible") === true) {
+                if ($("#map").is(":visible") === true) {
                     new ControlsView();
                 }
-                require(["views/WindowView"], function (WindowView) {
+                require(["modules/window/view"], function (WindowView) {
                     new WindowView();
                 });
-                if (Config.menu.tools === true) {
-                    if (Config.tools.coord === true) {
+                if (_.has(Config, "tools") === true) {
+                    require(["modules/tools/listView"], function (ToolsListView) {
+                        new ToolsListView();
+                    });
+                    if (_.has(Config.tools, "coord") === true) {
                         require(["modules/coordpopup/view"], function (CoordPopupView) {
                             new CoordPopupView();
                         });
                     }
-                    if (Config.tools.gfi === true) {
+                    if (_.has(Config.tools, "gfi") === true) {
                         require(["modules/gfipopup/popup/view", "modules/gfipopup/popup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
                             if (Util.isAny()) {
                                 new MobileGFIPopupView();
@@ -111,12 +116,12 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             }
                         });
                     }
-                    if (Config.tools.measure === true) {
-                        require(["modules/measure/view"], function (MeasureView) {
+                    if (_.has(Config.tools, "measure") === true) {
+                        require(["modules/tools/measure/view"], function (MeasureView) {
                             new MeasureView();
                         });
                     }
-                    if (Config.tools.draw === true) {
+                    if (_.has(Config.tools, "draw") === true) {
                         require(["modules/draw/view"], function (DrawView) {
                             new DrawView();
                         });
@@ -126,14 +131,21 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                             new WFS_TView();
                         });
                     }
-                    if (Config.tools.print === true) {
+                    if (_.has(Config.tools, "print") === true) {
                         require(["modules/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
-                    require(["modules/tools/view"], function (ToolsView) {
-                        new ToolsView();
-                    });
+                    if (_.has(Config.tools, "parcelSearch") === true) {
+                        require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
+                            new ParcelSearchView();
+                        });
+                    }
+                    if (_.has(Config.tools, "searchByCoord") === true) {
+                        require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                            new SearchByCoordView();
+                        });
+                    }
                 }
                 if (Config.menu.treeFilter === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
@@ -177,6 +189,15 @@ define("app", ["jquery", "config", "modules/core/util"], function ($, Config, Ut
                     require(["modules/addwms/view"
                         ], function (AddWMSView) {
                         new AddWMSView();
+                    });
+                }
+                require(["modules/tools/download/view"
+                    ], function (DownloadView) {
+                        new DownloadView();
+                    });
+                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0) {
+                    require(["modules/featurelister/view"], function (FeatureLister) {
+                        new FeatureLister();
                     });
                 }
                 if ($.isArray(Config.menu.formular)) {

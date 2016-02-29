@@ -1,49 +1,86 @@
 // run this in the console of http://geoportal.metropolregion.hamburg.de/mrhportal/index.html
 // to write services-mrh.json to console
 
-var mrhServicesGenerator = {
+var servicesGenerator = {
 
 layers: [],
-preServicesJson: [],
+mrhTreeConfig: {},
+lgvTreeConfig: [],
 
 run: function () {
-	// iterate global treeConfig
-	for (var i = 0; i < treeConfig.length; i++) {
+
+    // iterate global treeConfig
+    for (var i = 0; i < treeConfig.length; i++) {
 		var treeConfigRecord = treeConfig[i],
 			layerStore = treeConfigRecord.layerStore,
 			isBaseLayerStore = (treeConfigRecord.nodeType === "gx_baselayercontainer"),
-			category;
+			parentFolder = treeConfigRecord.text,
+			firstLevel = {};
 
-		category = treeConfigRecord.text;
+		// console.log(parentFolder);
+        if (!isBaseLayerStore) {
+            firstLevel = {node: parentFolder, childnodes: [], layerIDs: []};
+        }
+        else {
+            firstLevel = {layerIDs: []};
+        }
 
-		// console.log(treeConfigRecord);
-		if (layerStore)	{
-			// console.log("  no children");
-			this.addLayers(layerStore, isBaseLayerStore, category);
+
+		// no childFolders
+        if (layerStore)	{
+			firstLevel = this.addLayers(layerStore, isBaseLayerStore, firstLevel);
 		}
+		// has childFolders
 		else {
 			for (var k = 0; k < treeConfigRecord.children.length; k++) {
 
 				var childLayerStore = treeConfigRecord.children[k].layerStore,
 					layer = treeConfigRecord.children[k].layer,
-					md = {};
-
-				md.name = treeConfigRecord.children[k].text;
-				md.id = md.name + k;
+					childFolder = treeConfigRecord.children[k].text,
+                    secondLevel = {};
 
 				if (childLayerStore) {
-					// console.log("  " + md.name);
-					this.addLayers(childLayerStore, isBaseLayerStore, category, md);
-
+					secondLevel = {node: childFolder, layerIDs: []};
+					secondLevel = this.addLayers(childLayerStore, isBaseLayerStore, secondLevel);
 				}
+				// Freizeit & Tourismus
 				else if (layer) {
-					this.addLayer(layer, category, md);
+					layer.id = this.getId(layer.id);
+                    this.layers.push(layer);
+                    firstLevel.layerIDs.push({id: layer.id, visible:false});
+				}
+                // Freizeit Cuxhaven
+                else {
+                    var cuxhavenConfig = treeConfigRecord.children[k];
+
+                    for (var j = 0; j < cuxhavenConfig.children.length; j++) {
+                        var childFolder = cuxhavenConfig.children[j].text,
+                            childLayerStore = cuxhavenConfig.children[j].layerStore;
+
+                        secondLevel = {node: "Cuxhaven: " + childFolder, layerIDs: []};
+                        secondLevel = this.addLayers(childLayerStore, false, secondLevel);
+                        secondLevel.layerIDs = secondLevel.layerIDs.reverse();
+
+                        firstLevel.childnodes.push(secondLevel);
+                    }
+                }
+
+                // check for empty secondLevel object - happens with Freizeit & Tourismus
+				if (Object.keys(secondLevel).length !== 0) {
+                    secondLevel.layerIDs = secondLevel.layerIDs.reverse();
+					firstLevel.childnodes.push(secondLevel);
 				}
 			}
 		}
+
+        this.lgvTreeConfig.push(firstLevel);
+
 	}
 
-	this.writeServicesJson();
+    this.writeLgvTreeConfig();
+    console.log("###");
+    this.writeServicesJson();
+
 	return "copy json from console.";
 },
 
@@ -55,6 +92,7 @@ translateGfiProps: function (layer) {
 	if (gfiProps) {
 		for (var i = 0; i < gfiProps.length; i++) {
 			var key = gfiProps[i][0];
+
 			gfiAttributes[key] = gfiProps[i][1];
 		}
 		return gfiAttributes;
@@ -67,78 +105,72 @@ translateGfiProps: function (layer) {
 	}
 },
 
-// adds a single layer to this.layers
-addLayer: function (layer, category, md) {
-	// console.log("    " +  layer.name);
-	this.layers.push({
-		layer: layer,
-		category: category,
-		md: md
-	});
+getId: function (str) {
+	var index = str.lastIndexOf("_") + 1;
+
+	return str.substring(index);
 },
 
-// read layers from layer store and call addLayers
-addLayers: function (layerStore, isBaseLayerStore, category, md) {
+// read layers from layer store and adds to this.layers
+addLayers: function (layerStore, isBaseLayerStore, level) {
+    var id;
 
-	// iterate layerStore
-	layerStore.each(function (rec) {
-			if (isBaseLayerStore) {
-				if(rec.data.layer.isBaseLayer) {
-					this.addLayer(rec.data.layer, category, md);
-				}
+    layerStore.each(function (rec, index) {
+        id = rec.data.layer.id = this.getId(rec.data.layer.id);
+		if (isBaseLayerStore) {
+            if (rec.data.layer.isBaseLayer) {
+                this.layers.push(rec.data.layer);
+				level.layerIDs.push({id: id, visible: (rec.data.layer.name === "WebatlasDE")});
 			}
-			else {
-				this.addLayer(rec.data.layer, category, md);
-			}
+		}
+		else {
+			this.layers.push(rec.data.layer);
+            level.layerIDs.push({id: id, visible: false});
+		}
 	}, this);
 
-	return true;
+	return level;
 },
 
-// write servicesJson array
+// write servicesJson array from this.layers
 writeServicesJson: function () {
 	var servicesJson = [];
-
+    // console.log(this.layers);
 	for (var i = 0; i < this.layers.length; i++) {
 
-		var layer = this.layers[i].layer,
-			category = this.layers[i].category,
-			md = this.layers[i].md;
+		var layer = this.layers[i],
+            gutter = layer.tileSize.h || 0;
 
-            console.log(layer);
-		servicesJson.push({
-			"id" : i.toString(),
-		    "name" : layer.name,
-		    "url" : layer.url,
-		    "typ" : "WMS",
-		    "layers" : layer.params.LAYERS,
-		    "format" : layer.params.FORMAT,
-		    "version" : layer.params.VERSION,
-		    "singleTile" : layer.singleTile || false,
-		    "transparent" : layer.params.TRANSPARENT ||false,
-		    "tilesize" : layer.tileSize.h,
-		    "gutter" : layer.options.gutter || 0,
-		    "minScale" : 0,
-		    "maxScale" : 1000000,
-		    "isbaselayer" : layer.isBaseLayer,
-		    "gfiAttributes" : this.translateGfiProps(layer),
-		    "layerAttribution" : layer.attribution || "nicht vorhanden",
-		    "cache" : false,
-		    "datasets" : [
-		       {
-		          "md_id" : md ? md.id : i.toString(),
-		          "md_name" : md ? md.name : layer.name,
-		          "bbox" : "nicht vorhanden",
-		          "kategorie_opendata" : [category],
-		          "kategorie_inspire": "Kein INSPIRE-Thema"
-		       }
-		    ]
+        servicesJson.push({
+            "id": layer.id,
+            "name": layer.name,
+            "url": layer.url,
+            "typ": "WMS",
+            "layers": layer.params.LAYERS,
+            "format": layer.params.FORMAT,
+            "version": layer.params.VERSION,
+            "singleTile": layer.singleTile || false,
+            "transparent": layer.params.TRANSPARENT || false,
+            "tilesize": layer.tileSize.h.toString(),
+            "gutter": gutter.toString(),
+            "minScale": "0",
+            "maxScale": "2500000",
+            "gfiAttributes": this.translateGfiProps(layer),
+            "layerAttribution": layer.attribution || "nicht vorhanden",
+            "legendURL": layer.legendURL || "",
+            "cache": false,
+            "datasets": [],
+            "infoFormat": "application/vnd.ogc.gml"
 		});
-	}
 
+	}
 	console.log(JSON.stringify(servicesJson));
+},
+
+writeLgvTreeConfig: function () {
+	console.log(JSON.stringify(this.lgvTreeConfig));
 }
 
 };
 
-mrhServicesGenerator.run();
+servicesGenerator.run();
