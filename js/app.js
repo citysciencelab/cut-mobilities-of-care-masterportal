@@ -195,7 +195,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                     ], function (DownloadView) {
                         new DownloadView();
                     });
-                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0) {
+                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0 && !Util.isAny()) {
                     require(["modules/featurelister/view"], function (FeatureLister) {
                         new FeatureLister();
                     });
