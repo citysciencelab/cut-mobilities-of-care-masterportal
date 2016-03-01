@@ -97,6 +97,18 @@ define(function () {
 			{
                 id: 105,
                 count: 10
+            },
+            {
+                id: 303,
+                count: 10
+            },
+            {
+                id: 301,
+                count: 10
+            },
+            {
+                id: 293,
+                count: 10
             }
         ],
         attributions: true,
@@ -216,9 +228,13 @@ define(function () {
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
             bkg: {
+                minChars: 3,
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
-                suggestCount: 100
+                extent: [454591, 5809000, 700000, 6075769],
+                epsg: "EPSG:25832",
+                filter: "filter=(typ:*)",
+                score: 0.6
             },
             tree: {
                 minChars: 3
