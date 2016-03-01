@@ -233,7 +233,7 @@ define([
                 hit = this.model.get("hitList")[0];
             }
             // 0. Füge Layer ggf. zum Themenbaum hinzu
-            if (_.isUndefined(hitID) === false && Config.tree.type === "light" && hit.type === "Thema") {
+            if (_.isUndefined(hitID) === false && Config.tree && Config.tree.type === "light" && hit.type === "Thema") {
                 Radio.trigger("RawLayerList", "addModelToLayerListById", hitID);
             }
             // 1. Schreibe Text in Searchbar
@@ -504,9 +504,6 @@ define([
 
             element.focus();
             element[0].setSelectionRange(strLength, strLength);
-        },
-        showHelpWindow: function () {
-            EventBus.trigger("showWindowHelp", "search");
         }
     });
 });

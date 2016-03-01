@@ -7,6 +7,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
     Util.showLoader();
     new RawLayerList();
 
+
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
         require(["modules/parametricURL/model"], function (ParametricURL) {
             new ParametricURL();
@@ -190,6 +191,10 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         new AddWMSView();
                     });
                 }
+                require(["modules/tools/download/view"
+                    ], function (DownloadView) {
+                        new DownloadView();
+                    });
                 if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0 && !Util.isAny()) {
                     require(["modules/featurelister/view"], function (FeatureLister) {
                         new FeatureLister();

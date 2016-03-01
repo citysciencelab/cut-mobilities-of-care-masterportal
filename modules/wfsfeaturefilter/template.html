@@ -1,5 +1,5 @@
 <% if (wfsList.length > 0) { %>
-<div class="panel panel-default">
+<div class="panel panel-default" style="margin: 0px;">
 <% _.each(wfsList, function (wfslayer) { %>
     <div id="<%= wfslayer.id %>" class="panel-heading">
         <p class="buttons pull-right">
@@ -9,7 +9,7 @@
     </div>
 <% _.each(wfslayer.filterOptions, function (filter) { if (filter.filterType === 'combo') { %>
     <div class="panel-body <%= wfslayer.id %>_wfs_panel">
-        <label for="" class="control-label col-md-5"><%=filter.filterName%></label>
+        <label for="" class="control-label"><%=filter.filterName%></label>
         <select class="form-control input-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
 <% _.each(filter.filterString, function (value) { if (value === '*') { %>
             <option title="keine Filterung der Elemente auf dieses Attribut">*</option>
@@ -18,7 +18,7 @@
 <% } }); %>
         </select>
 <% } else { %>
-        <label for="" class="control-label col-md-5">Unbekannter Filtertyp.</label>
+        <label for="" class="control-label">Unbekannter Filtertyp.</label>
 <% } %>
    </div>
 <% }); }); %>

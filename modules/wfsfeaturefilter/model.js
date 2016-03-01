@@ -26,7 +26,7 @@ define([
                     return layer.get("layer").getSource().getFeatures().length > 0;
                 }),
                 filterLayers = _.filter(featureLayers, function (layer) {
-                    return layer.get("filterOptions").length > 0;
+                    return layer.get("filterOptions") && layer.get("filterOptions").length > 0;
                 }),
                 wfsList = [];
 
