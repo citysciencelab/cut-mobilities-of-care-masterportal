@@ -12,8 +12,10 @@ define([
         events: {
             "change select#geomField": "setGeometryType",
             "change select#unitField": "setUnit",
-            "change select#decimalField": "setDecimal",
-            "click button": "deleteFeatures"
+            "click button": "deleteFeatures",
+            "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
+                    EventBus.trigger("showWindowHelp", "measure");
+            }
         },
 
         initialize: function () {
@@ -44,14 +46,9 @@ define([
             this.model.setUnit(evt.target.value);
         },
 
-        setDecimal: function (evt) {
-            this.model.setDecimal(evt.target.value);
-        },
-
         deleteFeatures: function () {
             this.model.deleteFeatures();
         }
-
     });
 
     return MeasureView;

@@ -38,6 +38,7 @@ define(function () {
         * @property {String} [tree.layer.minScale] - Mindestmaßstab zum Anzeigen dieses Layers.
         * @property {String} [tree.layer.maxScale] - Maximalmaßstab zum Anzeigen dieses Layers.
         * @property {Boolean} [tree.layer.routable] - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
+        * @property {integer} [tree.layer.featureCount=[featureCount in layerConf]{@link config.layerConf}|1] - Nur bei WMS-Layern. Anzahl der im GetFeatureInfo abzufragenden Features, wird dem request angefügt. Wird hier kein Wert eingegeben, so wird der Wert aus der layerConf genommen. Wird dort kein Wert gefunden, dann default = 1.
         * @property {Array} [tree.layerIDsToMerge] - Bei type: custom|default. Arrays der Definitionen, die im Baum zusammengefasst werden.
         * @property {string[]} tree.layerIDsToMerge. - Array der LayerIDs.
         * @property {Object[]} [tree.layerIDsToStyle] - Bei type: custom|default. Array der Konfigurationsobjekte zur Styledefinition.
@@ -58,7 +59,7 @@ define(function () {
                 {id: "452", visible: false},
                 {id: "1748", visible: false},
                 {id: "1562", visible: false},
-                {id: "1561", visible: false},
+                {id: "1561", visible: false, featureCount: 10},
                 {id: "2003", visible: false, style: "2003"},
                 {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
                 {id:

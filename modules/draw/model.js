@@ -1,12 +1,13 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus"
+    "eventbus",
+    "backbone.radio"
 ], function () {
-
     var Backbone = require("backbone"),
         ol = require("openlayers"),
         EventBus = require("eventbus"),
+        Radio = require("backbone.radio"),
         DrawTool;
 
     DrawTool = Backbone.Model.extend({
@@ -268,7 +269,20 @@ define([
         getLayer: function () {
             EventBus.trigger("sendDrawLayer", this.get("layer"));
         },
+        /**
+         * Startet das Downloadmodul
+         */
+        downloadFeatures: function () {
+            var features = this.get("layer").getSource().getFeatures();
 
+            Radio.trigger("download", "start", {
+                data: features,
+                formats: ["kml"],
+                caller: {
+                    name: "draw",
+                    glyph: "glyphicon-pencil"
+                }});
+        },
         setDrawendCoords: function (geom) {
             var geoJSON = new ol.format.GeoJSON();
 
