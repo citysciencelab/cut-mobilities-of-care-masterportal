@@ -48,19 +48,12 @@
 
 .featurelist-details {
     display: none;
-    width: 100%;
-    max-width: 500px;
-    max-height: 800px;
+    margin-bottom: 0px;
 }
 
 .featurelist-list {
     display: none;
-    max-width:500px;
-
-}
-
-.featurelist-list-table {
-    max-height: 400px;
+    margin-bottom: 0px;
 }
 
 .featurelist-themes {

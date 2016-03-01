@@ -29,6 +29,9 @@ define([
             "keyup .drawText": "setText"
         },
         initialize: function () {
+            require(["modules/tools/download/view"], function (DownloadView) {
+                new DownloadView();
+            });
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
                 "change:selectedInteraction": this.renderForm

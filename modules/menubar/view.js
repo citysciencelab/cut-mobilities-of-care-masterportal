@@ -28,8 +28,7 @@ define([
             "click .legend": "activateLegend",
             "click .routingModul": "activateRoutingModul",
             "click .addWMS": "activateAddWMSModul",
-            "click .wfsFeatureFilter": "activateWfsFeatureFilter",
-            "click .featureLister": "activateFeatureLister"
+            "click .wfsFeatureFilter": "activateWfsFeatureFilter"
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -58,16 +57,11 @@ define([
             var html = "<li>";
 
             html += "<a href='#' class='menuitem " + obj.classname + "'>";
-            html += "<span class='' + obj.symbol + ''></span>&nbsp;" + obj.title;
+            html += "<span class='" + obj.symbol + "'></span>" + obj.title;
             html += "</a>";
             html += "</li>";
             $(".menubarlgv").append(html);
-            $("." + obj.classname).on("click", function (evt) {
-                EventBus.trigger("toggleWin", [evt.target.className.split(" ")[1], evt.target.text, evt.target.children[0].className]);
-            });
-        },
-        activateFeatureLister: function () {
-            EventBus.trigger("toggleFeatureListerWin");
+            $("." + obj.classname).on("click", obj.clickFunction);
         },
         activateFilterTree: function () {
             EventBus.trigger("toggleWin", ["treefilter", "Filtereinstellungen", "glyphicon-filter"]);

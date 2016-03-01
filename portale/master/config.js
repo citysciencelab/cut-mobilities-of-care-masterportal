@@ -306,7 +306,7 @@ define(function () {
             layerTree: true,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
-            featureLister: 20,
+            featureLister: 10,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
