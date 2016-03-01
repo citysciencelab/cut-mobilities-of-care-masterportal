@@ -38,6 +38,9 @@ define([
                 },
                 "getLayerListWhere": function (properties) {
                     return this.where(properties);
+                },
+                "getOverlayerList": function () {
+                    return this.where({isbaselayer: false});
                 }
             }, this);
 

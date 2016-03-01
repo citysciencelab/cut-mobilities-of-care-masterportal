@@ -15,6 +15,7 @@ define([
             settings: false,
             visibility: false,
             treeType: Config.tree.type,
+            featureCount: 1,
             metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
         },
         initialize: function () {
@@ -62,7 +63,6 @@ define([
             else {
                 this.postInit();
             }
-            // EventBus.trigger("mapView:getViewStartResolution");
         },
 
         postInit: function () {
