@@ -5,9 +5,9 @@ define([
     "use strict";
     var Seite2Model = Backbone.Model.extend({
         defaults: {
-            jahr: "",
-            nutzung: "",
-            produkt: "",
+            jahr: "", // Benutzereingabe
+            nutzung: "", // Benutzereingabe
+            produkt: "", // Benutzereingabe
             lage: "",
             brwList: [],
             params: {
@@ -50,12 +50,15 @@ define([
             EventBus.on("wps:response", this.saveBRWDetails, this); // Result von wpsWorkbenchnameDetails
             EventBus.on("seite2:setBRWList", this.setBrwList, this);
         },
+        /*
+        * Prüft, ob alle BRW gefunden wurden und setzt ggf. complete auf true oder öffnet die Seite zur manuellen Eingabe.
+        */
         checkBRWList: function () {
             var brwList = this.get("brwList"),
                 complete = true;
 
             complete = _.every(brwList, function (brw) {
-                return (brw.art && brw.brw && brw.jahr && brw.anteil && brw.wnum && brw.bezeichnung && brw.stichtag && brw.ortsteil);
+                return (brw.art && brw.brw && brw.anteil && brw.wnum && brw.bezeichnung && brw.stichtag && brw.ortsteil);
             });
             if (complete === true) {
                 this.set("complete", true);
@@ -115,7 +118,7 @@ define([
                             art: brw.getAttribute("art"),
                             bezeichnung: brw.getAttribute("bezeichnung"),
                             anteil: brw.getAttribute("anteil"),
-                            jahr: brw.getAttribute("jahr")
+                            stichtag: brw.getAttribute("stichtag")
                         });
                     }
                 });
@@ -167,9 +170,9 @@ define([
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "<wps:Input>";
-                    dataInputs += "<ows:Identifier>jahrgang</ows:Identifier>";
+                    dataInputs += "<ows:Identifier>stichtag</ows:Identifier>";
                     dataInputs += "<wps:Data>";
-                    dataInputs += "<wps:LiteralData dataType='integer'>" + brw.jahr + "</wps:LiteralData>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.stichtag + "</wps:LiteralData>";
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "</wps:DataInputs>";
@@ -217,9 +220,9 @@ define([
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "<wps:Input>";
-                    dataInputs += "<ows:Identifier>jahrgang</ows:Identifier>";
+                    dataInputs += "<ows:Identifier>stichtag</ows:Identifier>";
                     dataInputs += "<wps:Data>";
-                    dataInputs += "<wps:LiteralData dataType='integer'>" + brw.jahr + "</wps:LiteralData>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.stichtag + "</wps:LiteralData>";
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "</wps:DataInputs>";
@@ -235,7 +238,6 @@ define([
                 var ergebnis = $(obj.data).find("wps\\:Ergebnis,Ergebnis"),
                     parameter = $(obj.data).find("wps\\:Parameter,Parameter"),
                     nutzung = parameter[0].getAttribute("nutzung"),
-                    jahrgang = parameter[0].getAttribute("jahrgang"),
                     brwList = this.get("brwList");
 
                 if ($(ergebnis[0]).children().length > 0) {
@@ -252,12 +254,11 @@ define([
                     stichtag = ergebnis.find("wps\\:stichtag,stichtag")[0].textContent;
 
                     _.each(brwList, function (obj) {
-                        if (obj.bezeichnung === nutzung && obj.jahr === jahrgang) {
+                        if (obj.bezeichnung === nutzung && obj.stichtag === stichtag) {
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,
                                 ortsteil: ortsteil,
-                                stichtag: stichtag,
                                 entw: entw,
                                 beit: beit,
                                 nuta: nuta,
