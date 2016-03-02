@@ -39,7 +39,6 @@ define([
             this.listenTo(EventBus, {
                 "winParams": this.setStatus,
                 "pointerMoveOnMap": this.placeMeasureTooltip
-               // "mapView:sendOptions": this.setScale
             });
 
            this.listenTo(Radio.channel("MapView"), {
