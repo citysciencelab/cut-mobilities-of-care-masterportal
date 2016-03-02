@@ -255,7 +255,7 @@ insert_final_newline = true
 
 ## Branches
 * Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
-* Bezeichnung der Branches: #43_add_GFI oder #56_update_draw (IssueNummer_Verb_Modul)
+* Bezeichnung der Branches: #43_add_GFI oder 56_update_draw (IssueNummer_Verb_Modul)
 * Branches werden nach dem Mergen gelöscht
 
 ## Pushen
