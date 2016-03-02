@@ -41,10 +41,6 @@ define([
                 "pointerMoveOnMap": this.placeMeasureTooltip
             });
 
-           this.listenTo(Radio.channel("MapView"), {
-               "changedOptions": this.setScale
-            });
-
             this.listenTo(this, {
                 "change:type": this.createInteraction
             });
@@ -55,8 +51,6 @@ define([
             }));
 
             EventBus.trigger("addLayer", this.get("layer"));
-
-            this.setScale(Radio.request("MapView", "getOptions"));
 
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
@@ -125,6 +119,8 @@ define([
                 return;
             }
             if (this.get("measureTooltips").length > 0) {
+                this.setScale(Radio.request("MapView", "getOptions"));
+
                 var tooltipCoord = evt.coordinate;
 
                 if (this.get("sketch")) {
@@ -188,6 +184,7 @@ define([
         */
         getScaleError: function (scale) {
             var scaleError = 0;
+
             switch (scale) {
                 case 500:
                     scaleError = 0.5;
