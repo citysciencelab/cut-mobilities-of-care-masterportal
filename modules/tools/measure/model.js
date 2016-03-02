@@ -179,7 +179,7 @@ define([
             });
             this.set("measureTooltips", []);
         },
-        setScale: function (options) {console.log(options.scale);
+        setScale: function (options) {
             this.set("scale", options.scale);
         },
 
