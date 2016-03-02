@@ -255,6 +255,8 @@ insert_final_newline = true
 
 ## Branches
 * Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
+* Bezeichnung der Branches: #43_add_GFI oder #56_update_draw (IssueNummer_Verb_Modul)
+* Branches werden nach dem Mergen gelöscht
 
 ## Pushen
 * Die Commits werden mit thematisch umschließenden Pushes ins Repository geschrieben, wobei es nicht Ziel ist, ganze Features in einem Push zu umschließen, sondern Tätigkeiten. Mit der lokalen Entwicklungsumgebung ist eine tägliche Sicherung ins Repository empfehlenswert um Datenverlust zu verhindern.
