@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config"
-], function (Backbone, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
 
     var Measure = Backbone.Model.extend({
         defaults: {
@@ -37,8 +38,12 @@ define([
         initialize: function () {
             this.listenTo(EventBus, {
                 "winParams": this.setStatus,
-                "pointerMoveOnMap": this.placeMeasureTooltip,
-                "mapView:sendOptions": this.setScale
+                "pointerMoveOnMap": this.placeMeasureTooltip
+               // "mapView:sendOptions": this.setScale
+            });
+
+           this.listenTo(Radio.channel("MapView"), {
+               "changedOptions": this.setScale
             });
 
             this.listenTo(this, {
@@ -51,6 +56,8 @@ define([
             }));
 
             EventBus.trigger("addLayer", this.get("layer"));
+
+            this.setScale(Radio.request("MapView", "getOptions"));
 
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
@@ -173,7 +180,7 @@ define([
             });
             this.set("measureTooltips", []);
         },
-        setScale: function (options) {
+        setScale: function (options) {console.log(options.scale);
             this.set("scale", options.scale);
         },
 
@@ -181,8 +188,7 @@ define([
         * @param {number} scale - Maßstabszahl
         */
         getScaleError: function (scale) {
-           var scaleError = 0;
-
+            var scaleError = 0;
             switch (scale) {
                 case 500:
                     scaleError = 0.5;

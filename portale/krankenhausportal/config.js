@@ -44,6 +44,7 @@ define(function () {
         },
         attributions: false,
         allowParametricURL: true,
+        quickHelp: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
