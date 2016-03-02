@@ -109,6 +109,13 @@ define(function () {
         },
         /**
         * @memberof config
+        * @type {Boolean}
+        * @desc Erstellt einen SimpleMap-Link (Nur die Karte mit Layern ohne Menü).
+        * @example simpleMap: true
+        */
+        simpleMap: false,
+        /**
+        * @memberof config
         * @type {String}
         * @desc Pfad zum Ordner mit IMGs, die für WFS-Styles benutzt werden ausgehend von main.js.
         * @example wfsImgPath: "../components/lgv-config/img/"
