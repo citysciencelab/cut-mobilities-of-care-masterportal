@@ -4,7 +4,7 @@
             <div class="fzr_row" id="br_tab">
                 <label><strong>Nutzung: </strong><%= brw.bezeichnung %>, <strong>Stichtag: </strong><%= brw.stichtag%></label>
                 <div class="fzr_col fzr_6 input-group" id="br_sp1">
-                    <input id="<%= brw.bezeichnung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="BRW-Nummer" title="Bitte Bodenrichtwertnummer eingeben." value="<%= brw.wnum %>"/>
+                    <input id="<%= brw.bezeichnung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
                     <span class="input-group-addon" title="<%
                     var pre = 'Bitte wählen Sie in der interaktiven Bodenrichtwertkarte (Boris-HH) den passenden ',
                         post = ' aus und geben die Bodenrichtwert-Nummer hier ein.',
