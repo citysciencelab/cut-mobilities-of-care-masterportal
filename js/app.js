@@ -206,6 +206,9 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                     });
                 }
             });
+                require(["modules/treeMobile/listView"], function (ListView) {
+            new ListView();
+        });
         }
     });
     Util.hideLoader();
