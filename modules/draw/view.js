@@ -5,8 +5,9 @@ define([
     "text!modules/draw/templateText.html",
     "text!modules/draw/templateLine.html",
     "text!modules/draw/templatePolygon.html",
+    "text!modules/draw/templateCircle.html",
     "modules/draw/model"
-], function (Backbone, DrawTemplate, PointTemplate, TextTemplate, LineTemplate, PolygonTemplate, DrawTool) {
+], function (Backbone, DrawTemplate, PointTemplate, TextTemplate, LineTemplate, PolygonTemplate, CircleTemplate, DrawTool) {
 
     var DrawToolView = Backbone.View.extend({
         model: new DrawTool(),
@@ -16,6 +17,7 @@ define([
         templateLine: _.template(LineTemplate),
         templatePolygon: _.template(PolygonTemplate),
         templateText: _.template(TextTemplate),
+        templateCircle: _.template(CircleTemplate),
         events: {
             "change .interaction": "setInteraction",
             "change .drawFont": "setFont",
@@ -54,7 +56,7 @@ define([
 
         renderForm: function () {
             var attr = this.model.toJSON(),
-            selector = ".win-body > .form-horizontal.style";
+                selector = ".win-body > .form-horizontal.style";
 
             $(selector).empty();
             switch (this.model.get("selectedInteraction")){
@@ -72,6 +74,10 @@ define([
                 }
                 case "drawArea": {
                     $(selector).append(this.templatePolygon(attr));
+                    break;
+                }
+                case "drawCircle": {
+                    $(selector).append(this.templateCircle(attr));
                     break;
                 }
                 default: {

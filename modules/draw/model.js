@@ -19,9 +19,10 @@ define([
                 { text: "Linie zeichnen", type: "LineString", name: "drawLine" },
                 { text: "Polygon zeichnen", type: "Polygon", name: "drawArea" },
                 { text: "Text schreiben", type: "Point", name: "writeText" }
+                // ,
+                // { text: "Kreis zeichnen", type: "Circle", name: "drawCircle" }
             ],
             selectedInteraction: "drawPoint",
-            types: ["Point", "LineString", "Polygon"],
             selectedType: "Point",
             fonts: ["Arial", "Times New Roman", "Calibri"],
             selectedFont: "Arial",
@@ -49,7 +50,7 @@ define([
                 { name: "Schwarz", value: "rgba(0, 0, 0, 0.5)" },
                 { name: "Weiß", value: "rgba(255, 255, 255, 0.5)" }
             ],
-            selectedColor: "rgba(255, 127, 0, 0.5)",
+            selectedColor: "rgba(55, 126, 184, 0.5)",
             pointRadiuses: [
                 { name: "6 px", value: 6 },
                 { name: "8 px", value: 8 },
@@ -80,7 +81,8 @@ define([
                 {name: "80 %", value: "0.2"},
                 {name: "90 %", value: "0.1"}
             ],
-            selectedOpacity: "0.5"
+            selectedOpacity: "0.5",
+            circleTooltips: []
         },
 
         initialize: function () {
@@ -123,9 +125,22 @@ define([
                 type: this.get("selectedType"),
                 style: this.get("style")
             }));
+            if (this.get("selectedType") === "Circle") {
+                this.get("draw").on("drawstart", function (evt) {
+                    this.listenTo(EventBus, {
+                        "pointerMoveOnMap": this.placecircleTooltip
+                    });
+                    this.set("sketch", evt.feature);
+                    this.createcircleTooltip();
+                }, this);
+            }
             this.get("draw").on("drawend", function (evt) {
                 this.setDrawendCoords(evt.feature.getGeometry());
                 evt.feature.setStyle(this.get("style"));
+                _.each(this.get("circleTooltips"), function (tooltip) {
+                    EventBus.trigger("removeOverlay", tooltip, "circle");
+                });
+                this.stopListening(EventBus, "pointerMoveOnMap");
             }, this);
             EventBus.trigger("addInteraction", this.get("draw"));
         },
@@ -264,6 +279,11 @@ define([
         // Löscht alle Geometrien
         deleteFeatures: function () {
             this.get("source").clear();
+            // lösche alle Overlays (Tooltips)
+            _.each(this.get("circleTooltips"), function (tooltip) {
+                EventBus.trigger("removeOverlay", tooltip, "circle");
+            });
+            this.set("circleTooltips", []);
         },
 
         getLayer: function () {
@@ -291,6 +311,42 @@ define([
 
         triggerDrawendCoords: function () {
             EventBus.trigger("getDrawendCoords", this.get("drawendCoords"));
+        },
+
+        createcircleTooltip: function () {
+            var circleTooltipElement,
+                circleTooltip;
+
+            if (circleTooltipElement) {
+                circleTooltipElement.parentNode.removeChild(circleTooltipElement);
+            }
+            circleTooltipElement = document.createElement("div");
+            circleTooltipElement.className = "tooltip-default-circle";
+            circleTooltip = new ol.Overlay({
+                element: circleTooltipElement,
+                offset: [0, -15],
+                positioning: "bottom-center"
+            });
+            this.set("circleTooltipElement", circleTooltipElement);
+            this.set("circleTooltip", circleTooltip);
+            EventBus.trigger("addOverlay", circleTooltip, "circle");
+            this.get("circleTooltips").push(circleTooltip);
+        },
+        placecircleTooltip: function (evt) {
+            if (evt.dragging) {
+                return;
+            }
+            if (this.get("circleTooltips").length > 0) {
+                var tooltipCoord = evt.coordinate;
+
+                if (this.get("sketch")) {
+                    var geom = this.get("sketch").getGeometry();
+
+                    tooltipCoord = geom.getLastCoordinate();
+                    this.get("circleTooltipElement").innerHTML = "Radius: " + Math.round(geom.getRadius()) + "m";
+                    this.get("circleTooltip").setPosition(tooltipCoord);
+                }
+            }
         }
     });
 
