@@ -7,7 +7,6 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
     Util.showLoader();
     new RawLayerList();
 
-
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
         require(["modules/parametricURL/model"], function (ParametricURL) {
             new ParametricURL();
@@ -116,12 +115,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                             }
                         });
                     }
-                    if (_.has(Config.tools, "measure") === true) {
+                    if (_.has(Config.tools, "measure") === true && !Util.isAny()) {
                         require(["modules/tools/measure/view"], function (MeasureView) {
                             new MeasureView();
                         });
                     }
-                    if (_.has(Config.tools, "draw") === true) {
+                    if (_.has(Config.tools, "draw") === true && !Util.isAny()) {
                         require(["modules/draw/view"], function (DrawView) {
                             new DrawView();
                         });
