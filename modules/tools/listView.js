@@ -17,7 +17,8 @@ define([
             $("#tools li:last-child").remove();
         },
         addTool: function (tool) {
-            if (!(tool.attributes.name === "draw" || tool.attributes.name === "measure" && Util.isAny())) {
+            debugger;
+            if (!((tool.attributes.name === "draw" || tool.attributes.name === "measure") && Util.isAny())) {
                 var toolView = new ToolView({model: tool});
 
                 this.$el.append(toolView.render().el);
