@@ -238,6 +238,7 @@ define([
                 var ergebnis = $(obj.data).find("wps\\:Ergebnis,Ergebnis"),
                     parameter = $(obj.data).find("wps\\:Parameter,Parameter"),
                     nutzung = parameter[0].getAttribute("nutzung"),
+                    stichtag = parameter[0].getAttribute("stichtag"),
                     brwList = this.get("brwList");
 
                 if ($(ergebnis[0]).children().length > 0) {
@@ -250,8 +251,7 @@ define([
                     ergnuta = ergebnis.find("wps\\:ergnuta,ergnuta")[0].textContent,
                     wgfz = ergebnis.find("wps\\:wgfz,wgfz")[0].textContent,
                     bauw = ergebnis.find("wps\\:bauw,bauw")[0].textContent,
-                    flae = ergebnis.find("wps\\:flae,flae")[0].textContent,
-                    stichtag = ergebnis.find("wps\\:stichtag,stichtag")[0].textContent;
+                    flae = ergebnis.find("wps\\:flae,flae")[0].textContent;
 
                     _.each(brwList, function (obj) {
                         if (obj.bezeichnung === nutzung && obj.stichtag === stichtag) {
