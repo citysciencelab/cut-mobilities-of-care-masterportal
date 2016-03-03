@@ -18,7 +18,7 @@ define([
             this.unset("brwList", {silent: true});
             this.set("brwList", val);
         },
-        requestBRWDetails: function (wnum, jahrgang) {
+        requestBRWDetails: function (wnum, stichtag) {
             var dataInputs = "<wps:DataInputs>";
 
             dataInputs += "<wps:Input>";
@@ -28,9 +28,9 @@ define([
             dataInputs += "</wps:Data>";
             dataInputs += "</wps:Input>";
             dataInputs += "<wps:Input>";
-            dataInputs += "<ows:Identifier>jahrgang</ows:Identifier>";
+            dataInputs += "<ows:Identifier>stichtag</ows:Identifier>";
             dataInputs += "<wps:Data>";
-            dataInputs += "<wps:LiteralData dataType='string'>" + jahrgang + "</wps:LiteralData>";
+            dataInputs += "<wps:LiteralData dataType='string'>" + stichtag + "</wps:LiteralData>";
             dataInputs += "</wps:Data>";
             dataInputs += "</wps:Input>";
             dataInputs += "</wps:DataInputs>";
@@ -45,14 +45,13 @@ define([
 
                 if ($(ergebnis[0]).children().length > 0) {
                     var parameter = $(obj.data).find("wps\\:parameter,parameter"),
-                        jahrgang = $(parameter).attr("jahrgang"),
+                        stichtag = $(parameter).attr("stichtag"),
                         strassenname = $(ergebnis).find("wps\\:strassenname,strassenname")[0].textContent,
                         hausnummer = $(ergebnis).find("wps\\:hausnummer,hausnummer")[0].textContent,
                         zusatz = $(ergebnis).find("wps\\:zusatz,zusatz")[0].textContent,
                         brw = $(ergebnis).find("wps\\:brw,brw")[0].textContent,
                         wnum = $(ergebnis).find("wps\\:wnum,wnum")[0].textContent,
                         ortsteil = $(ergebnis).find("wps\\:ortsteil,ortsteil")[0].textContent,
-                        stichtag = $(ergebnis).find("wps\\:stichtag,stichtag")[0].textContent,
                         entw = ergebnis.find("wps\\:entw,entw")[0].textContent,
                         beit = ergebnis.find("wps\\:beit,beit")[0].textContent,
                         nuta = ergebnis.find("wps\\:nuta,nuta")[0].textContent,
@@ -64,12 +63,11 @@ define([
 
                     _.each(brwList, function (obj) {
                         // obj.bezeichnung z.B. "MFH oder WGH (mit MFH-Anteil)"
-                        if ((obj.bezeichnung.indexOf(nuta) !== -1 || obj.bezeichnung.indexOf(ergnuta) !== -1) && obj.jahr === jahrgang) {
+                        if ((obj.bezeichnung.indexOf(nuta) !== -1 || obj.bezeichnung.indexOf(ergnuta) !== -1) && obj.stichtag === stichtag) {
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,
                                 ortsteil: ortsteil,
-                                stichtag: stichtag,
                                 entw: entw,
                                 beit: beit,
                                 nuta: nuta,
@@ -84,7 +82,7 @@ define([
                     EventBus.trigger("seite2:setBRWList", brwList);
                 }
                 else {
-                    EventBus.trigger("alert", "Die eingegebene BRW-Nummer existiert nicht.");
+                    EventBus.trigger("alert", "Die eingegebene BRW-Nummer existiert nicht zum Stichtag.");
                 }
             }
         }

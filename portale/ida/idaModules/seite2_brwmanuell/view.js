@@ -27,8 +27,8 @@ define([
             if (evt.ctrlKey === false && evt.shiftKey === false && evt.altKey === false) { // verhindert doppeltes ausführen
                 if (evt.keyCode === 13 || evt.currentTarget.value.length === 8) { // return
                     var wnum = evt.currentTarget.value,
-                        nutzung = evt.currentTarget.id.split("_")[0],
-                        jahr = evt.currentTarget.id.split("_")[1];
+                        nutzung = evt.currentTarget.id.split("#")[0],
+                        jahr = evt.currentTarget.id.split("#")[1];
 
                     this.model.requestBRWDetails(wnum, jahr);
                 }
