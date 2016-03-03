@@ -3,8 +3,9 @@ define([
     "modules/core/util",
     "eventbus",
     "config",
-    "modules/restReader/collection"
-], function (Backbone, Util, EventBus, Config, RestReader) {
+    "modules/restReader/collection",
+    "openlayers"
+], function (Backbone, Util, EventBus, Config, RestReader, ol) {
     "use strict";
     var model = Backbone.Model.extend({
 
@@ -179,34 +180,45 @@ define([
          */
         setDrawLayer: function (layer) {
             var features = [],
+                circleFeatures = [], // Kreise können nicht gedruckt werden
                 featureStyles = {};
 
-            _.each(layer.getSource().getFeatures(), function (feature, index) {
-                features.push({
-                    type: "Feature",
-                    properties: {
-                        _style: index
-                    },
-                    geometry: {
-                        coordinates: feature.getGeometry().getCoordinates(),
-                        type: feature.getGeometry().getType()
-                    }
-                });
-                if (feature.getStyle().getText() === null) {
-                    featureStyles[index] = {
-                        fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
-                        fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
-                        pointRadius: feature.getStyle().getImage().getRadius(),
-                        strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
-                        strokeWidth: feature.getStyle().getStroke().getWidth(),
-                        strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
-                    };
+            // Alle features die eine Kreis-Geometrie haben
+            _.each(layer.getSource().getFeatures(), function (feature) {
+                if (feature.getGeometry.getCoordinates === undefined) {
+                    circleFeatures.push(feature);
                 }
-                else {
-                    featureStyles[index] = {
-                        label: feature.getStyle().getText().getText(),
-                        fontColor: this.getColor(feature.getStyle().getText().getFill().getColor()).color
-                    };
+            });
+
+            _.each(layer.getSource().getFeatures(), function (feature, index) {
+                // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
+                if (_.contains(circleFeatures, feature) === false) {
+                    features.push({
+                        type: "Feature",
+                        properties: {
+                            _style: index
+                        },
+                        geometry: {
+                            coordinates: feature.getGeometry().getCoordinates(),
+                            type: feature.getGeometry().getType()
+                        }
+                    });
+                    if (feature.getStyle().getText() === null) {
+                        featureStyles[index] = {
+                            fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
+                            fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
+                            pointRadius: feature.getStyle().getImage().getRadius(),
+                            strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
+                            strokeWidth: feature.getStyle().getStroke().getWidth(),
+                            strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
+                        };
+                    }
+                    else {
+                        featureStyles[index] = {
+                            label: feature.getStyle().getText().getText(),
+                            fontColor: this.getColor(feature.getStyle().getText().getFill().getColor()).color
+                        };
+                    }
                 }
             }, this);
             this.push("layerToPrint", {
