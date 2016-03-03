@@ -115,7 +115,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                             }
                         });
                     }
-                    if (_.has(Config.tools, "measure") === true) {
+                    if (_.has(Config.tools, "measure") === true && !Util.isAny()) {
                         require(["modules/tools/measure/view"], function (MeasureView) {
                             new MeasureView();
                         });
