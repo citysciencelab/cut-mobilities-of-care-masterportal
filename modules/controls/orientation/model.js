@@ -53,7 +53,11 @@ define([
             geolocation.on ("error", this.onError, this);
         },
         positionMarker: function (position) {
-            this.get("marker").setPosition(position);
+            try {
+                this.get("marker").setPosition(position);
+            }
+            catch (e) {
+            }
         },
         zoomAndCenter: function (position) {
             EventBus.trigger("mapView:setCenter", position, 6);
