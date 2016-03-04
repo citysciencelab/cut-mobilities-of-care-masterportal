@@ -68,6 +68,10 @@ define([
                 this.renderRecommendedList();
             });
 
+            this.listenTo(Radio.channel("MenuBar"), {
+                "switchedMenu": this.render
+            });
+
             this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
