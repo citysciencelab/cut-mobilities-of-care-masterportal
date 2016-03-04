@@ -1,8 +1,8 @@
-#tools {
+.dropdown-menu {
     border: 1px solid #ccc;
 }
 
-#tools > li > a:hover {
+.dropdown-menu > li > a:hover {
     /*background-color: rgb(55, 55, 55);*/
     /*background-color: rgb(182, 0, 0);*/
     background-color: rgb(8, 88, 158);
@@ -10,16 +10,17 @@
     /*padding-right: 8px;*/
 }
 
-#tools > .active > a {
+.dropdown-menu > .active > a {
     /*background-color: rgb(55, 55, 55);*/
     /*background-color: rgb(182, 0, 0);*/
     background-color: rgb(8, 88, 158);
     color: rgb(255, 255, 255);
 }
 
-#tools {
+.dropdown-menu {
     padding: 6px 0;
 }
+
 .dropdown-menu > li > a {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     font-size: 12px;
@@ -30,12 +31,12 @@
     padding-right: 8px;
 }
 
-#tools > .divider {
+.dropdown-menu > .divider {
     margin: 6px 0;
 }
 
 @media (max-width: 767px) {
-    #tools {
+    .dropdown-menu {
         border-right: 0;
         border-left: 0;
     }
