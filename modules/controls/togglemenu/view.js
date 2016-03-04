@@ -1,7 +1,8 @@
 define([
     "backbone",
+    "backbone.radio",
     "config"
-], function (Backbone, Config) {
+], function (Backbone, Radio, Config) {
 
     var ToggleControlView = Backbone.View.extend({
         className: "row",
@@ -15,20 +16,20 @@ define([
         render: function () {
             $(".controls-view").append(this.$el.html(this.template));
             if (Config.isMenubarVisible === false) {
-                $(".controls-view").css("top", "0px");
-                $(".toggleButton > span").toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
+                this.toggleNavigation();
             }
         },
         toggleNavigation: function () {
-            $("#navbarRow").toggle();
             $(".toggleButton > span").toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
             if ($(".controls-view").css("top") === "0px") {
                 $(".controls-view").css("top", "50px");
                 $(".toggleButton").attr("title", "Menü ausblenden");
+                Radio.trigger("MenuBar", "setVisible", true);
             }
             else {
                 $(".controls-view").css("top", "0px");
                 $(".toggleButton").attr("title", "Menü einblenden");
+                Radio.trigger("MenuBar", "setVisible", false);
             }
         }
     });
