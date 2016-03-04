@@ -1,15 +1,22 @@
 define([
-    "text!modules/menubar/template.html",
+    "backbone",
+    "backbone.radio",
+    "config",
+    "text!modules/menubar/templateMobile.html",
     "text!modules/menubar/templateDesktop.html",
     "modules/menubar/model",
     "modules/tree/view",
     "modules/treeLight/listView",
     "eventbus"
-], function (MenubarTemplate, DesktopMenubarTemplate, Menubar, EventBus) {
+], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
+        MenubarTemplate = require("text!modules/menubar/templateMobile.html"),
+        DesktopMenubarTemplate = require("text!modules/menubar/templateDesktop.html"),
+        Menubar = require("modules/menubar/model"),
+        EventBus = require("eventbus"),
         MenubarView;
 
     MenubarView = Backbone.View.extend({
@@ -17,7 +24,7 @@ define([
         tagName: "nav",
         className: "navbar navbar-default navbar-fixed-top",
         attributes: {role: "navigation"},
-        template: _.template(MenubarTemplate),
+        templateMobile: _.template(MenubarTemplate),
         templateDesktop: _.template(DesktopMenubarTemplate),
         events: {
             "click .filterTree": "activateFilterTree",
@@ -33,7 +40,8 @@ define([
          */
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isMobile": this.renderDesktopMenu
+                "change:isMobile": this.render,
+                "change:isVisible": this.toggle
             });
 
             this.listenTo(EventBus, {
@@ -47,34 +55,31 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.append(this.template(attr)));
-
-            this.renderDesktopMenu();
-            // this.loadTrees();
-            // Radio.trigger("MenuBar", "switchedMenu");
-
-            if (Config.isMenubarVisible === false) {
-                $("#navbarRow").toggle();
+            this.$el.empty();
+            if (this.model.getIsMobile() === true) {
+                $("body").append(this.$el.append(this.templateMobile(attr)));
             }
+            else {
+                $("body").append(this.$el.append(this.templateDesktop(attr)));
+            }
+            Radio.trigger("MenuBar", "switchedMenu");
+
             if (_.has(Config, "title") === true) {
                 require(["modules/title/view"], function (TitleView) {
                     new TitleView();
                 });
             }
         },
-        renderDesktopMenu: function () {
-            $(".navbar-collapse").empty();
 
-            if (this.model.getIsMobile() === false) {
-                var attr = this.model.toJSON();
-
-                $(".navbar-collapse").append(this.templateDesktop(attr));
-                Radio.trigger("MenuBar", "switchedMenu");
+        toggle: function () {
+            if (this.model.getIsVisible() === true) {
+                this.$el.show();
             }
             else {
-                this.renderTreeMobile();
+                this.$el.hide();
             }
         },
+
         loadTrees: function () {
             if (this.model.getTreeType() !== "light") {
                 var TreeView = require("modules/tree/view");
@@ -87,9 +92,7 @@ define([
                 new TreeLightView();
             }
         },
-        renderTreeMobile: function () {
-            console.log(54);
-        },
+
         appendItemToMenubar: function (obj) {
             var html = "<li>";
 

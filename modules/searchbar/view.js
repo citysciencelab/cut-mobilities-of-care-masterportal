@@ -160,6 +160,7 @@ define([
             if (this.model.get("searchString").length !== 0) {
                 $("#searchInput:focus").css("border-right-width", "0");
             }
+            this.delegateEvents(this.events);
         },
         /**
         * @description Methode, um den Searchstring über den Eventbus zu steuern ohne Event auszulösen

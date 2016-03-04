@@ -18,7 +18,9 @@ define([
             // true wenn nur ein Tool konfiguriert ist
             onlyOneTool: false,
             // Baumtyp - default/custom/light
-            treeType: ""
+            treeType: "",
+            // true wenn die Menubar sichtbar ist
+            isVisible: true
         },
         initialize: function () {
             var channel = Radio.channel("MenuBar");
@@ -27,11 +29,12 @@ define([
                 "isMobile": this.getIsMobile
             }, this);
 
+            channel.on({
+                "setVisible": this.setIsVisible
+            }, this),
+
             $(window).on("resize", _.bind(this.setIsMobile, this));
 
-            // this.listenTo(this, {
-            //     "change:isMobile"
-            // })
             _.each(Config.menu, this.setAttributes, this);
             // Wenn nur ein Tool aktiviert ist, wird der Menüeintrag Werkzeuge nicht erzeugt. --> Abfrage im template
             if (_.toArray(Config.tools).length === 1) {
@@ -40,6 +43,7 @@ define([
             else {
                 this.set("oneTool", false);
             }
+
             this.setIsMobile();
             this.setTreeType(Config.tree.type);
         },
@@ -62,6 +66,12 @@ define([
         },
         getTreeType: function () {
             return this.get("treeType");
+        },
+        setIsVisible: function (value) {
+            this.set("isVisible", value);
+        },
+        getIsVisible: function () {
+            return this.get("isVisible");
         }
     });
 
