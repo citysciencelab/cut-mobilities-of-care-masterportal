@@ -1,3 +1,7 @@
+.dropdown-tree {
+    padding: 0 !important;
+}
+
 .tree-light-list {
     padding: 4px 0;
     color: rgb(85, 85, 85);

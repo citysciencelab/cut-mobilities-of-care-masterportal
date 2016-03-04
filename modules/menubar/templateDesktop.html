@@ -22,13 +22,11 @@
                 </li>
             <% } %>
             <% if (tools === true && oneTool === false) { %>
-                <li class="dropdown">
+                <li class="dropdown dropdown-tools">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Werkzeug auswählen">
                         <span class="glyphicon glyphicon-wrench hidden-sm"></span>
                         <span class="menuitem">Werkzeuge</span>
                     </a>
-                    <ul id="tools" class="dropdown-menu">
-                    </ul>
                 </li>
             <% } %>
             <% if (typeof routing !== "undefined" && routing === true) { %>
@@ -80,12 +78,9 @@
                 </li>
             <% } %>
             <% // two possible configs
-              if (contactButton.on === true || contactButton === true) {
-                var email = contactButton.email || "LGVGeoPortal-Hilfe@gv.hamburg.de";
-               var mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t\n\n Systeminformationen: \n Platform: " + platform + "\n CookiesEnabled: " + cookieEnabled + "\n UserAgent: " + userAgent);
-               %></%>
+              if (contactButton.on === true || contactButton === true) { %>
                 <li>
-                    <a href=<%= mailto %> title="E-Mail Kontakt">
+                    <a href="#" title="E-Mail Kontakt">
                         <span class="glyphicon glyphicon-envelope hidden-sm"></span>
                         <span class="menuitem">Kontakt</span>
                     </a>
