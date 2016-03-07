@@ -185,7 +185,7 @@ define([
 
             // Alle features die eine Kreis-Geometrie haben
             _.each(layer.getSource().getFeatures(), function (feature) {
-                if (feature.getGeometry.getCoordinates === undefined) {
+                if (feature.getGeometry() instanceof ol.geom.Circle) {
                     circleFeatures.push(feature);
                 }
             });
