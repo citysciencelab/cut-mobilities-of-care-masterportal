@@ -401,8 +401,7 @@ define(function () {
             layer: {
                 minChar: 3
             },
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            geoLocateHit: true
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan"
         },
         /**
         * @memberof config
