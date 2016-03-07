@@ -82,15 +82,18 @@ define([
 
         loadTrees: function () {
             if (this.model.getTreeType() !== "light") {
-                var TreeView = require("modules/tree/view");
-
-                new TreeView();
+                require(["modules/tree/view"], function (TreeView) {
+                    new TreeView();
+                });
             }
             else {
-                var TreeLightView = require("modules/treeLight/listView");
-
-                new TreeLightView();
+                require(["modules/treeLight/listView"], function (TreeLightView) {
+                    new TreeLightView();
+                });
             }
+            require(["modules/treeMobile/listView"], function (TreeMobileView) {
+                new TreeMobileView();
+            });
         },
 
         appendItemToMenubar: function (obj) {
