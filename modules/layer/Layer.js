@@ -24,7 +24,6 @@ define([
                 "mapView:sendMinResolution": this.setMinResolution,
                 "mapView:sendMaxResolution": this.setMaxResolution
             });
-
             this.listenTo(EventBus, {
                 "mapView:sendOptions": this.setViewResolution
             });
@@ -87,6 +86,7 @@ define([
                 this.set("visibility", this.get("visible"));
             }
             this.get("layer").setVisible(this.get("visibility"));
+            this.setVisibility();
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {

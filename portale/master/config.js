@@ -55,13 +55,13 @@ define(function () {
         tree: {
             type: "light",
             layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "1748", visible: false},
-                {id: "1562", visible: false},
-                {id: "1561", visible: false, featureCount: 10},
-                {id: "2003", visible: false, style: "2003"},
-                {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
+                {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "452", visibility: false},
+                {id: "1748", visibility: false},
+                {id: "1562", visibility: false},
+                {id: "1561", visibility: false, featureCount: 10},
+                {id: "2003", visibility: false, style: "2003"},
+                {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
                      {
@@ -76,9 +76,9 @@ define(function () {
                          id: "947"
                      }
                  ],
-                 name: "aktuelle Meldungen der TBZ", visible: false
+                 name: "aktuelle Meldungen der TBZ", visibility: false
                 },
-                {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  maxScale: 60000,
                  minScale: 10000,
@@ -98,7 +98,7 @@ define(function () {
                  ],
                  routable: true
                 },
-                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
                      {
                          fieldName: "Bezirk",
                          filterType: "combo",

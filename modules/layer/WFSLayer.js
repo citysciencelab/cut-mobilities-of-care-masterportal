@@ -169,7 +169,7 @@ define([
                 isResolutionInRange = this.isResolutionInRange();
 
             this.set("isResolutionInRange", isResolutionInRange);
-            if (visibility === true && isResolutionInRange == true) {
+            if (visibility === true && isResolutionInRange === true) {
                 if (this.get("layer").getSource().getFeatures().length === 0) {
                     this.updateData();
                     this.set("visibility", false, {silent: true});
