@@ -60,8 +60,8 @@ define([
             },
             toggleCatalog: function () {
                 $(".layer-catalog-list").toggle("slow");
-                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
-                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             },
             toggleSelection: function () {
                 $(".layer-selected-list").toggle("slow");
@@ -70,8 +70,8 @@ define([
             },
             toggleBaseLayer: function () {
                 $(".base-layer-list").toggle("slow");
-                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
-                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+                $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             },
             toggleCatalogAndBaseLayer: function () {
               this.toggleCatalog();
