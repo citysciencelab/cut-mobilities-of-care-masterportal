@@ -50,7 +50,7 @@ define([
                 { name: "Schwarz", value: "rgba(0, 0, 0, 0.5)" },
                 { name: "Weiß", value: "rgba(255, 255, 255, 0.5)" }
             ],
-            selectedColor: "rgba(55, 126, 184, 0.5)",
+            selectedColor: { name: "Blau", value: "rgba(55, 126, 184, 0.5)" },
             pointRadiuses: [
                 { name: "6 px", value: 6 },
                 { name: "8 px", value: 8 },
@@ -96,7 +96,7 @@ define([
                 "change:text": this.setStyle,
                 "change:selectedFont": this.setStyle,
                 "change:selectedFontSize": this.setStyle,
-                "change:selectedColor change:radius change:selectedStrokeWidth": this.setStyle,
+                "change:selectedColor change:radius change:selectedStrokeWidth change:selectedOpacity": this.setStyle,
                 "change:drawendCoords": this.triggerDrawendCoords
             });
 
@@ -184,12 +184,12 @@ define([
 
         /**
          * Setzt die Farbe für Schrift und Geometrie.
-         * @param {string} value - rgba-Wert
+         * @param {string} value - Farbe
          */
         setColor: function (value) {
-            var color = value.substr(0, value.length - 4) + this.get("selectedOpacity");
+            var color = _.findWhere(this.get("colors"), {name: value});
 
-            this.set("selectedColor", color + ")");
+            this.set("selectedColor", color);
         },
 
         /**
@@ -198,7 +198,6 @@ define([
          */
         setOpacity: function (value) {
             this.set("selectedOpacity", parseFloat(value, 10).toFixed(1));
-            this.setColor(this.get("selectedColor"));
         },
 
         /**
@@ -243,18 +242,24 @@ define([
          * @return {ol.style.Style}
          */
         getDrawStyle: function () {
+            var rgbColor = this.get("selectedColor").value,
+                opacity = this.get("selectedOpacity"),
+                color;
+
+            color = rgbColor.substr(0, rgbColor.length - 4) + opacity + ")";
+
             return new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: this.get("selectedColor")
+                    color: color
                 }),
                 stroke: new ol.style.Stroke({
-                    color: this.get("selectedColor").substr(0, this.get("selectedColor").length - 6) + ", 1)",
+                    color: color.substr(0, color.length - 6) + ", 1)",
                     width: this.get("selectedStrokeWidth")
                 }),
                 image: new ol.style.Circle({
                     radius: this.get("radius"),
                     fill: new ol.style.Fill({
-                        color: this.get("selectedColor")
+                        color: color
                     })
                 })
             });
@@ -265,12 +270,14 @@ define([
          * @return {ol.style.Style}
          */
         getTextStyle: function () {
+            var rgbColor = this.get("selectedColor").value;
+
             return new ol.style.Style({
                 text: new ol.style.Text({
                     text: this.get("text"),
                     font: this.get("selectedFontSize") + "px " + this.get("selectedFont"),
                     fill: new ol.style.Fill({
-                        color: this.get("selectedColor").substr(0, this.get("selectedColor").length - 6) + ", 1)"
+                        color: rgbColor.substr(0, rgbColor.length - 6) + ", 1)"
                     })
                 })
             });

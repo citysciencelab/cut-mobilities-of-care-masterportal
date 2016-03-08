@@ -13,7 +13,7 @@
     <div class="col-md-7 col-sm-7">
         <select class="form-control input-sm drawColor">
             <% _.each(colors, function (element) { %>
-                <option value="<%= element.value %>" <% if (selectedColor === element.value) { print ("SELECTED")} %>><%= element.name %></option>
+                <option value="<%= element.name %>" <% if (selectedColor.name === element.name) { print ("SELECTED")} %>><%= element.name %></option>
             <% }); %>
         </select>
     </div>
