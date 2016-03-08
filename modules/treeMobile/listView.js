@@ -1,70 +1,79 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/treeMobile/list",
+    "modules/treeMobile/FolderView",
+    "modules/treeMobile/LayerView",
+    "modules/treeMobile/ItemView",
     "modules/treeMobile/dummyView"
 ], function () {
+
     var Backbone = require("backbone"),
-    Radio = require("backbone.radio"),
-    DummyView = require("modules/treeMobile/dummyView"),
-    TreeCollection = require("modules/treeMobile/list"),
+        Radio = require("backbone.radio"),
+        DummyView = require("modules/treeMobile/dummyView"),
+        FolderView = require("modules/treeMobile/FolderView"),
+        LayerView = require("modules/treeMobile/LayerView"),
+        ItemView = require("modules/treeMobile/ItemView"),
+        TreeCollection = require("modules/treeMobile/list"),
+        ListView;
+
     ListView = Backbone.View.extend({
         collection: new TreeCollection(),
         tagName: "ul",
         className: "tree-mobile",
-        targetElement: $(".changelog-content"), // $("div.collapse.navbar-collapse"),
+        targetElement: "div.collapse.navbar-collapse",
         initialize: function () {
-            // Baue Baum in collection
-            this.collection.init();
+            this.listenTo(Radio.channel("MenuBar"), {
+                "switchedMenu": this.render
+            });
 
-            // Wird getriggert, wenn der Baum fertig ist.
-            this.listenTo(this.collection, "change:isInitialized", this.setUpAndRender());
+            this.collection.forEach(this.addViews, this);
+            this.render();
         },
         render: function () {
-            this.targetElement.empty();
+            var isMobile = Radio.request("MenuBar", "isMobile");
 
-            this.targetElement.append(this.$el);
-        },
-        /**
-         * Den Models Views zuordnen
-         * Rendern
-         */
-        setUpAndRender: function () {
-            this.setViews();
-            this.render();
-            // Veranlasst die Oberste Ebene sich zu rendern
-            this.collection.setModelsVisible(0);
+            if (isMobile === true) {
+                $(this.targetElement).append(this.$el);
+                this.collection.setModelsVisible(0);
+                console.log(this.collection.models);
+            }
+            else {
+                this.collection.setAllModelsInvisible();
+            }
         },
         /**
          * Ordnet den Models die richtigen Views zu
          */
-        setViews: function () {
-            if (this.collection.isInitialized) {
-                this.collection.forEach(function (model) {
-                    switch (model.getType()){
-                        case "folder": {
-                            if (model.getIsLeafFolder()) {
-                                // Model das alle Layer dieser Ebene auszuwählen kann
-                            }
-                            else {
-                                // Model das seine Kinder lädt
-                            }
-                            break;
-                        }
-                        case "layer": {
-                                // Model für ein Layer
-                            break;
-                        }
-                        case "item": {
-                                // Model für Tools/Links/ander Funktionen
-                            break;
-                        }
-                         case "dummy": {
-                                // Model für Testzwecke
-                                new DummyView(model,this.$el);
-                            break;
-                        }
+        addViews: function (model) {
+            switch (model.getType()){
+                case "folder": {
+                    if (model.getIsLeafFolder()) {
+                        // Model das alle Layer dieser Ebene auszuwählen kann
+                        new FolderView({model: model});
                     }
-                }, this);
+                    else {
+                        // Model das seine Kinder lädt
+                        new FolderView({model: model});
+                    }
+                    break;
+                }
+                case "layer": {
+                    // Model für ein Layer
+                    new LayerView({model: model});
+                    break;
+                }
+                case "item": {
+                    // Model für Tools/Links/ander Funktionen
+                    new ItemView({model: model});
+                    break;
+                }
+                 case "dummy": {
+                    // Model für Testzwecke
+                    new DummyView({model: model});
+                    // this.$el.prepend(t.render().el);
+                    break;
+                }
             }
         }
     });
