@@ -134,8 +134,7 @@ define(function () {
             },
             tree: {
                 minChars: 3
-            },
-            geoLocateHit: true
+            }
         },
         tools: {
             parcelSearch: {
