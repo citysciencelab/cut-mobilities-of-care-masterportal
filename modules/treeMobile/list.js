@@ -3,32 +3,50 @@ define([
     "backbone.radio",
     "modules/core/util",
     "config",
-    "modules/treeMobile/dummyModel"
+    "modules/treeMobile/dummyModel",
+    "modules/treeMobile/folderModel",
+    "modules/treeMobile/itemModel",
+    "modules/treeMobile/layerModel"
 ], function () {
 
      var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Util = require("modules/core/util"),
-        DummyModel = require("modules/treeMobile/dummyModel"),
-        Config = require("config"),
-        TreeCollection = Backbone.Collection.extend({
+         Util = require("modules/core/util"),
+         Dummy = require("modules/treeMobile/dummyModel"),
+         Folder = require("modules/treeMobile/folderModel"),
+         Item = require("modules/treeMobile/itemModel"),
+         Layer = require("modules/treeMobile/layerModel"),
+         Config = require("config"),
+         TreeCollection;
+
+    TreeCollection = Backbone.Collection.extend({
+        model: function (attrs, options) {
+            if (attrs.type === "folder") {
+                return new Folder(attrs, options);
+            }
+            else if (attrs.type === "layer") {
+                return new Layer(attrs, options);
+            }
+            else if (attrs.type === "item") {
+                return new Item(attrs, options);
+            }
+            else if (attrs.type === "dummy") {
+                return new Dummy(attrs, options);
+            }
+        },
+        comparator: "id",
         // Pfad zur treeconfig
         url: "",
-        isInitialized: false,
 
-        initialize: function () {},
-        init: function () {
+        initialize: function () {
              this.parseMainMenue();
 
             switch (Config.tree.type){
                 case "default": {
                     this.parseLayerList();
-                    this.isInitialized = true;
                     break;
                 }
                 case "ligth": {
                     this.parseLightTree();
-                    this.isInitialized = true;
                     break;
                 }
                 case "custom": {
@@ -37,9 +55,11 @@ define([
                 }
                 case "dummy": {
                     for (var i = 0; i < 10; i++) {
-                        this.add(new DummyModel(0));
+                        this.add({type: "dummy"});
                     }
-                    this.isInitialized = true;
+                    for (var i = 0; i < 10; i++) {
+                        this.add({type: "dummy", parentID: 1});
+                    }
                 }
             }
         },
@@ -63,8 +83,7 @@ define([
             this.fetch({
                 beforeSend: Util.showLoader(),
                 success: function () {
-                    Util.hideLoader();
-                    this.isInitialized = true;
+                    // Util.hideLoader();
                 }
             });
         },
@@ -89,6 +108,14 @@ define([
 
             _.each(children, function (model) {
                 model.setIsVisible(true);
+            });
+        },
+        /**
+         * Setzt alle Model unsichtbar
+         */
+        setAllModelsInvisible: function () {
+            this.forEach(function (model) {
+                model.setIsVisible(false);
             });
         },
         /**
