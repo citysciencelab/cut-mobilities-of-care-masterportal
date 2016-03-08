@@ -1,26 +1,29 @@
 define([
-    "backbone",
-    "backbone.radio",
-    "modules/core/util",
-    "config"
+    "backbone"
 ], function () {
 
     var Backbone = require("backbone"),
-    Radio = require("backbone.radio"),
-    Util = require("modules/core/util"),
-    Config = require("config"),
+        DummView;
+
     DummView = Backbone.View.extend({
-        model: {},
-        targetElement: "",
-        initialize: function (DummyModel, el) {
-            this.model = DummyModel;
-            this.listenTo(this.model, "change:isVisible", this.render);
-            this.targetElement = el;
+        tagName: "li",
+        events: {
+            "click": "test"
+        },
+        initialize: function () {
+            this.listenTo(this.model, {
+                 "change:isVisible": this.render
+            });
+        },
+        test: function (t) {
+            // this.setParentID();
+            console.log(t);
         },
         render: function () {
-            if (this.model.attributes.isVisible) {
-                this.$el.html("");
-                this.targetElement.append($("<li>dummyLiJones</li>"));
+            if (this.model.getIsVisible() === true) {
+                $(this.model.get("targetElement")).append(this.$el.html("<span>dummyLiJones</span>"));
+                // Events müssen wieder zugewiesen werden!! aber warum??
+                this.delegateEvents(this.events);
             }
         }
     });

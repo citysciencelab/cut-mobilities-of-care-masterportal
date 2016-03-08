@@ -1,37 +1,22 @@
 define([
-    "backbone",
-    "backbone.radio",
-    "modules/core/util",
-    "config"
+    "modules/treeMobile/nodeModel"
 ], function () {
 
-    var Backbone = require("backbone"),
-    Radio = require("backbone.radio"),
-    Util = require("modules/core/util"),
-    Config = require("config"),
-    DummyModel = Backbone.Model.extend({
+    var Node = require("modules/treeMobile/nodeModel"),
+        DummyModel;
+
+    DummyModel = Node.extend({
         defaults: {
+            // true wenn die Node sichtbar
             isVisible: false,
-            type: "dummy",
-            parentID: -1
-        },
-        initialize: function (parentID) {
-            this.setParentID(parentID);
-        },
-        setIsVisible: function (value) {
-            this.set("isVisible", value);
-        },
-        getIsVisible: function () {
-            this.get("isVisible");
-        },
-        getType: function () {
-            return this.get("type");
-        },
-        getParentID: function () {
-            return this.get("parentID");
-        },
-        setParentID: function (value) {
-            return this.set("parentID", value);
+            // true wenn die Node zur ersten Ebene gehört
+            isRoot: false,
+            // welcher Node-Type - folder/layer/item
+            type: "",
+            // die ID der Parent-Node
+            parentID: 0,
+            // parent-View (listView)
+            targetElement: "ul.tree-mobile"
         }
     });
 
