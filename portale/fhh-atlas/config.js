@@ -3,7 +3,7 @@ define(function () {
         title: "FHH - Atlas",
         logo: "../img/hh-logo.png",
         tree: {
-            type: "default",
+            type: "dummy",
             orderBy: "opendata",
             baseLayer: [
                 {id: "453", minScale: "500"},
@@ -120,6 +120,24 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: false
+        },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope"
+            }
         },
         startUpModul: "",
         searchBar: {
