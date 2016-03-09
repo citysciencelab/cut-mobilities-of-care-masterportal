@@ -18,6 +18,11 @@
     color: rgb(85, 85, 85) !important;
 }
 
+.navbar-collapse.in {
+    padding: 0;
+    border-top: 0;
+}
+
 .in > .menubarlgv {
     background: rgb(245, 245, 245);
 }
