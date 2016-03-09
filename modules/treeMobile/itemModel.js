@@ -14,7 +14,7 @@ define([
             // welcher Node-Type - folder/layer/item
             type: "",
             // die ID der Parent-Node
-            parentID: "",
+            parentId: "",
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // Name der Funktion
