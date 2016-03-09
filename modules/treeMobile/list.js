@@ -38,13 +38,14 @@ define([
 
         initialize: function () {
              this.parseMainMenue();
+             this.parseTools();
 
             switch (Config.tree.type){
                 case "default": {
                     this.parseLayerList();
                     break;
                 }
-                case "ligth": {
+                case "light": {
                     this.parseLightTree();
                     break;
                 }
@@ -70,25 +71,51 @@ define([
         parseMainMenue: function () {
             _.each(Config.menuItems, function (value, key) {
                 if (key === "tree" || key === "tools") {
-                    this.add({type: "folder", title: value.title, glyphicon: value.glyphicon, isRoot: true});
+                    this.add({
+                        type: "folder",
+                        title: value.title,
+                        glyphicon: value.glyphicon,
+                        isRoot: true,
+                        id: key
+                    });
                 }
                 else {
-                    this.add({type: "item", title: value.title, glyphicon: value.glyphicon, isRoot: true});
+                    this.add({
+                        type: "item",
+                        title: value.title,
+                        glyphicon: value.glyphicon,
+                        isRoot: true,
+                        id: key
+                    });
                 }
             }, this);
+        },
 
-            // console.log(this.where({isRoot: true, title: "Werkzeuge"}[0].id));
-            _.each(Config.tools, function (value) {
-                this.add({type: "item", title: value.title, glyphicon: value.glyphicon});
-            }, this);
-            // console.log(menuItems);
+        parseTools: function () {
+            var toolId = this.findWhere({isRoot: true, id: "tools"}).id;
+
+            if (_.isUndefined(toolId) === false) {
+                _.each(Config.tools, function (value) {
+                    this.add({type: "item", title: value.title, glyphicon: value.glyphicon, parentId: toolId});
+                }, this);
+            }
         },
         /**
         * Ließt aus der Config die Layer aus und
         * erzeugt daraus einen Baum mit nur einer Ebene.
         * In dieser Ebene sind alle Layer
         */
-        parseLightTree: function () {},
+        parseLightTree: function () {
+            var treeId = this.findWhere({isRoot: true, id: "tree"}).id;
+
+            _.each(Config.tree.layer, function (element) {
+                this.add({
+                    type: "layer",
+                    parentId: treeId,
+                    layerId: element.id
+                });
+            }, this);
+        },
         /**
         * Lädt eine Treeconfig und erzeugt daraus einen Baum
         * die Treeconfig wird in parse() geparst
@@ -115,10 +142,10 @@ define([
         /**
         * Setzt bei Änderung der Ebene, alle Model
         * auf der neuen Ebene auf sichtbar
-        * @param {int} parentID Die ID des Objektes dessen Kinder angezeigt werden sollen
+        * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
         */
-        setModelsVisible: function (parentID) {
-            var children = this.where({parentID: parentID});
+        setModelsVisible: function (parentId) {
+            var children = this.where({parentId: parentId});
 
             _.each(children, function (model) {
                 model.setIsVisible(true);
@@ -137,9 +164,9 @@ define([
         * auf der alten Ebene auf unsichtbar
         * darf erst aufgerufen werden, nachdem
         * die Animation der ebenänderung fertig ist
-        * @param {int} parentID Die ID des Objektes dessen Kinder nicht mehr angezeigt werden sollen
+        * @param {int} parentId Die ID des Objektes dessen Kinder nicht mehr angezeigt werden sollen
         */
-        setModelsInVisible: function (parentID) {}
+        setModelsInVisible: function (parentId) {}
     });
 
     return TreeCollection;
