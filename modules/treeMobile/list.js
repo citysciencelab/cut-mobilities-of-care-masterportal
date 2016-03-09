@@ -11,6 +11,7 @@ define([
 
      var Backbone = require("backbone"),
          Util = require("modules/core/util"),
+         Radio = require("backbone.radio"),
          Dummy = require("modules/treeMobile/dummyModel"),
          Folder = require("modules/treeMobile/folderModel"),
          Item = require("modules/treeMobile/itemModel"),
@@ -58,7 +59,7 @@ define([
                         this.add({type: "dummy"});
                     }
                     for (var i = 0; i < 10; i++) {
-                        this.add({type: "dummy", parentID: 1});
+                        this.add({type: "dummy", parentId: "1"});
                     }
                 }
             }
@@ -106,13 +107,15 @@ define([
         * In dieser Ebene sind alle Layer
         */
         parseLightTree: function () {
-            var treeId = this.findWhere({isRoot: true, id: "tree"}).id;
+            var treeId = this.findWhere({isRoot: true, id: "tree"}).id,
+                layerList = Radio.request("LayerList", "getLayerList");
 
-            _.each(Config.tree.layer, function (element) {
+            _.each(layerList, function (element) {
                 this.add({
                     type: "layer",
                     parentId: treeId,
-                    layerId: element.id
+                    layerId: element.get("id"),
+                    title: element.get("name")
                 });
             }, this);
         },
