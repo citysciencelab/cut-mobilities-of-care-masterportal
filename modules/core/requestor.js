@@ -163,7 +163,7 @@ define([
                 EventBus.trigger("renderResults", [this.pContent, positionGFI]);
         },
         isValidKey: function (key) {
-            var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID"];
+            var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH"];
 
             if (_.indexOf(invalidKeys, key.toUpperCase()) !== -1) {
                 return false;
