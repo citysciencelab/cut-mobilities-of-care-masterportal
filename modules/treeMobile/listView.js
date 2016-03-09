@@ -35,8 +35,7 @@ define([
 
             if (isMobile === true) {
                 $(this.targetElement).append(this.$el);
-                this.collection.setModelsVisible(0);
-                console.log(this.collection.models);
+                this.collection.setModelsVisible("");
             }
             else {
                 this.collection.setAllModelsInvisible();

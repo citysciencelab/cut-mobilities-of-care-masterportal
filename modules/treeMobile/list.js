@@ -33,7 +33,6 @@ define([
                 return new Dummy(attrs, options);
             }
         },
-        comparator: "id",
         // Pfad zur treeconfig
         url: "",
 
@@ -68,7 +67,22 @@ define([
         * angezeigt werden sollen und erzeugt daraus die
         * oberen statischen Menüelmente (alles außer den Baum)
         */
-        parseMainMenue: function () {},
+        parseMainMenue: function () {
+            _.each(Config.menuItems, function (value, key) {
+                if (key === "tree" || key === "tools") {
+                    this.add({type: "folder", title: value.title, glyphicon: value.glyphicon, isRoot: true});
+                }
+                else {
+                    this.add({type: "item", title: value.title, glyphicon: value.glyphicon, isRoot: true});
+                }
+            }, this);
+
+            // console.log(this.where({isRoot: true, title: "Werkzeuge"}[0].id));
+            _.each(Config.tools, function (value) {
+                this.add({type: "item", title: value.title, glyphicon: value.glyphicon});
+            }, this);
+            // console.log(menuItems);
+        },
         /**
         * Ließt aus der Config die Layer aus und
         * erzeugt daraus einen Baum mit nur einer Ebene.
