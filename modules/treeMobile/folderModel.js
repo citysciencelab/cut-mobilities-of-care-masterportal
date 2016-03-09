@@ -21,7 +21,7 @@ define([
             isLeafFolder: false
         },
         initialize: function () {
-            // this.setId(this.cid);
+            // console.log(this.attributes);
         },
         setIsLeafFolder: function (value) {
             this.set("isLeafFolder", value);
