@@ -28,9 +28,9 @@ define(function () {
                 }
             ],
             baseLayer: [
-            {id: "452", visibility: false}, // luftbilder u
-            {id: "713", visibility: false}, // stadtplan s-w
+            {id: "452", visibility: false}, // luftbilder 
             {id: "453", visibility: false}, // stadtplan farbig
+            {id: "713", visibility: false}, // stadtplan s-w
             {id:
              [
                  {
@@ -52,18 +52,21 @@ define(function () {
         },
         controls: {
             zoom: true,
-            toggleMenu: true
+            toggleMenu: true,
+            orientation: "once",
+            poi: true
         },
         feature_count: [
             {
-                id: 1561,
+                id: 1561,   //festgestelte B-Pläne
                 count: 5
             }
         ],
-        view: {
-            center: [566770, 5935620], // Alster
-            extent: [454591, 5809000, 700000, 6075769]
-            // resolution: 2.6458319045841048 // 1:10 000
+         view: {
+            center: [565874, 5934140],
+            extent: [454591, 5809000, 700000, 6075769],
+            //resolution: 26.458319045841044,
+            epsg: "EPSG:25832"
         },
         footer: false,
         quickHelp: true,
@@ -73,11 +76,12 @@ define(function () {
 
         print: {
             printID: "99999",
-            title: "BauInfoDienst-Portal",
+            title: "Geoportal-Verkehr",
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi",
         menubar: true,
+        attributions: true,
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
