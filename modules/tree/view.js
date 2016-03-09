@@ -45,6 +45,7 @@ define([
                     new CataExView();
                     new SaveSelectionView();
                 });
+                this.render();
             },
             render: function () {
                 var isMobile = Radio.request("MenuBar", "isMobile");
