@@ -5,7 +5,7 @@ define([
     var Node = require("modules/treeMobile/nodeModel"),
         ItemModel;
 
-    LayerModel = Node.extend({
+    ItemModel = Node.extend({
         defaults: {
             // true wenn die Node sichtbar
             isVisible: false,
@@ -14,9 +14,13 @@ define([
             // welcher Node-Type - folder/layer/item
             type: "",
             // die ID der Parent-Node
-            parentID: 0,
+            parentID: "",
             // parent-View (listView)
-            targetElement: "ul.tree-mobile"
+            targetElement: "ul.tree-mobile",
+            // Name der Funktion
+            title: "",
+            // Bootstrap Glyphicon Class
+            glyphicon: ""
         }
     });
 

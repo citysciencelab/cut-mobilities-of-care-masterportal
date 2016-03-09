@@ -6,6 +6,12 @@ define([
         Node;
 
     Node = Backbone.Model.extend({
+        setId: function (value) {
+            this.set("id", value);
+        },
+        getId: function () {
+            return this.get("id");
+        },
         setIsVisible: function (value) {
             this.set("isVisible", value);
         },

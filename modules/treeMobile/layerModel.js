@@ -14,7 +14,7 @@ define([
             // welcher Node-Type - folder/layer/item
             type: "",
             // die ID der Parent-Node
-            parentID: 0,
+            parentID: "",
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // true wenn der Layer ausgewählt ist
