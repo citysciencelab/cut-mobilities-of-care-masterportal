@@ -18,17 +18,21 @@ define([
         getIsVisible: function () {
             return this.get("isVisible");
         },
-        setParentID: function (value) {
-            this.set("parentID", value);
+        setParentId: function (value) {
+            this.set("parentId", value);
         },
-        getParentID: function () {
-            return this.get("parentID");
+        getParentId: function () {
+            return this.get("parentId");
         },
         getType: function () {
             return this.get("type");
         },
         getTargetElement: function () {
             return this.get("targetElement");
+        },
+        changeMenuById: function (value) {
+            this.collection.setAllModelsInvisible();
+            this.collection.setModelsVisible(value);
         }
     });
 
