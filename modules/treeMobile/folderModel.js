@@ -14,14 +14,14 @@ define([
             // welcher Node-Type - folder/layer/item
             type: "",
             // die ID der Parent-Node
-            parentID: "",
+            parentId: "",
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // true wenn der Ordner nur Leafs als Kinder hat
             isLeafFolder: false
         },
         initialize: function () {
-            this.setId(this.cid);
+            // this.setId(this.cid);
         },
         setIsLeafFolder: function (value) {
             this.set("isLeafFolder", value);
