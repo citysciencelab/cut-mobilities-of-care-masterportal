@@ -321,6 +321,24 @@ define(function () {
             addWMS: true,
             formular: {}
         },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope"
+            }
+        },
         /**
         * @memberof config
         * @type {String}
