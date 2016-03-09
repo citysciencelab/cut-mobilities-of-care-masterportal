@@ -20,7 +20,7 @@ define([
     ListView = Backbone.View.extend({
         collection: new TreeCollection(),
         tagName: "ul",
-        className: "tree-mobile",
+        className: "tree-mobile list-group",
         targetElement: "div.collapse.navbar-collapse",
         initialize: function () {
             this.listenTo(Radio.channel("MenuBar"), {
@@ -47,6 +47,7 @@ define([
         addViews: function (model) {
             switch (model.getType()){
                 case "folder": {
+                    // gleiche View/model Komponente mit zwei Templates??
                     if (model.getIsLeafFolder()) {
                         // Model das alle Layer dieser Ebene auszuwählen kann
                         new FolderView({model: model});
