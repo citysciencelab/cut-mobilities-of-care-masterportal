@@ -14,11 +14,19 @@ define([
             // welcher Node-Type - folder/layer/item
             type: "",
             // die ID der Parent-Node
-            parentID: "",
+            parentId: "",
+            // Id vom Layer Objekt
+            layerId: "",
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // true wenn der Layer ausgewählt ist
             isSelected: false
+        },
+        setIsSelected: function (value) {
+            this.set("isSelected", value);
+        },
+        getIsSelected: function () {
+            return this.get("isSelected");
         }
     });
 
