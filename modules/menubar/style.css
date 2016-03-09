@@ -20,6 +20,10 @@
 
 .navbar-collapse.in {
     padding: 0;
+    max-height: 90%;
+}
+
+.navbar-collapse.in > ul > li:first-child {
     border-top: 0;
 }
 
