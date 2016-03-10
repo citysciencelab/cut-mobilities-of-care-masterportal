@@ -27,6 +27,7 @@ define([
             "change .drawStrokeWidth": "setStrokeWidth",
             "change .drawOpacity": "setOpacity",
             "click .delete": "deleteFeatures",
+            "click .trash": "activateDeleteFeature",
             "click .download": "downloadFeatures",
             "keyup .drawText": "setText"
         },
@@ -121,6 +122,20 @@ define([
         deleteFeatures: function () {
             this.model.deleteFeatures();
         },
+
+        activateDeleteFeature: function () {
+            $(".trash").toggleClass("btn-primary");
+
+            if ($(".trash").hasClass("btn-primary") === true) {
+                $(".win-body select").prop("disabled", true);
+            }
+            else {
+                $(".win-body select").prop("disabled", false);
+            }
+
+            this.model.activateDeleteFeature();
+        },
+
         downloadFeatures: function () {
             this.model.downloadFeatures();
         }
