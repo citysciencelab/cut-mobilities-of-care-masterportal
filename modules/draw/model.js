@@ -11,8 +11,8 @@ define([
         DrawTool;
 
     DrawTool = Backbone.Model.extend({
-
         defaults: {
+            selectClick: new ol.interaction.Select(),
             source: new ol.source.Vector(),
             interactions: [
                 { text: "Punkt zeichnen", type: "Point", name: "drawPoint" },
@@ -104,6 +104,21 @@ define([
                 source: this.get("source")
             }));
             EventBus.trigger("addLayer", this.get("layer"));
+
+            this.get("selectClick").on("select", function (evt) {
+                var feature = evt.target.getFeatures().getArray()[0];
+
+                if (_.isUndefined(feature) === false) {
+                    // Feature aus der Source entfernen
+                    this.get("source").removeFeature(feature);
+                    // Selektierte Features werden in einem internen Layer gespeichert und auf der Karte dargestellt
+                    // Selektierte Features wieder löschen
+                    evt.target.getFeatures().clear();
+                }
+            }, this);
+
+            this.get("selectClick").setActive(false);
+            EventBus.trigger("addInteraction", this.get("selectClick"));
         },
 
         setStatus: function (args) {
@@ -115,6 +130,7 @@ define([
             else {
                 this.set("isCurrentWin", false);
                 EventBus.trigger("removeInteraction", this.get("draw"));
+                this.get("selectClick").setActive(false);
             }
         },
 
@@ -291,6 +307,18 @@ define([
                 EventBus.trigger("removeOverlay", tooltip, "circle");
             });
             this.set("circleTooltips", []);
+        },
+
+        // Aktiviert/Deaktiviert ol.interaction.select. Auf Click wird das Feature gelöscht.
+        toggleInteractions: function () {
+            if (this.get("selectClick").getActive() === true) {
+                this.get("selectClick").setActive(false);
+                this.get("draw").setActive(true);
+            }
+            else {
+                this.get("selectClick").setActive(true);
+                this.get("draw").setActive(false);
+            }
         },
 
         getLayer: function () {
