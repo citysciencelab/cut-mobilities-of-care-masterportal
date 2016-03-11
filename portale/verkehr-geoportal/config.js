@@ -23,32 +23,32 @@ define(function () {
                     "id": "1935",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
                     "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
-                        "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png",
+                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",          "http://87.106.16.168/legende_mrh/hvv-bahn.png",
                         "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ],
             baseLayer: [
-            {id: "452", visibility: false}, // luftbilder 
-            {id: "453", visibility: false}, // stadtplan farbig
-            {id: "713", visibility: false}, // stadtplan s-w
-            {id:
-             [
-                 {
-                     id: "946",
-                     attribution:
-                     {
-                         eventname: "aktualisiereverkehrsnetz",
-                         timeout: (10 * 60000)
-                     }
-                 },
-                 {
-                     id: "947"
-                 }
-             ],
-             name: "Verkehrslage auf Autobahnen", visibility: false
-            }
-          ],
-            customConfig: "../components/lgv-config/tree-config/verkehr_geoportal.json"
+                {id: "452", visibility: false}, // luftbilder 
+                {id: "453", visibility: false}, // stadtplan farbig
+                {id: "713", visibility: false}, // stadtplan s-w
+                {id:
+                    [
+                        {
+                            id: "946",
+                            attribution:
+                                {
+                                    eventname: "aktualisiereverkehrsnetz",
+                                    timeout: (10 * 60000)
+                                }
+                        },
+                        {
+                            id: "947"
+                        }
+                    ],
+                    name: "Verkehrslage auf Autobahnen", visibility: false
+                        }
+            ],
+            customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
         },
         controls: {
             zoom: true,
@@ -62,12 +62,13 @@ define(function () {
                 count: 5
             }
         ],
-         view: {
+        view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             //resolution: 26.458319045841044,
             epsg: "EPSG:25832"
         },
+        //customModules: ["../portale/verkehr-geoportal/verkehrsfunctions"],
         footer: false,
         quickHelp: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
