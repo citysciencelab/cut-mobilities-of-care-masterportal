@@ -301,7 +301,7 @@ define([
             if (isFeatureAtPixel === true) {
                 var layerByFeature,
                     visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
-
+                
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
                     // cluster-source
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
@@ -322,16 +322,21 @@ define([
                     }
                     // vector-source
                     else {
-                        layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                            return layer.get("source").getFeatureById(featureAtPixel.getId());
-                        });
-                        gfiParams.push({
-                            typ: "WFS",
-                            feature: featureAtPixel,
-                            attributes: layerByFeature.get("gfiAttributes"),
-                            name: layerByFeature.get("name"),
-                            ol_layer: layerByFeature.get("layer")
-                        });
+                        if (featureAtPixel.getId() !== undefined) {
+                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
+                                return layer.get("source").getFeatureById(featureAtPixel.getId());
+                            });
+
+                            gfiParams.push({
+                                typ: "WFS",
+                                feature: featureAtPixel,
+                                attributes: layerByFeature.get("gfiAttributes"),
+                                name: layerByFeature.get("name"),
+                                ol_layer: layerByFeature.get("layer")
+                            });
+                        }
+                        else{
+                        }
                     }
                 });
             }
