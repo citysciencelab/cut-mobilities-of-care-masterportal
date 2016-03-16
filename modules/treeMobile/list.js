@@ -35,7 +35,7 @@ define([
             }
         },
         // Pfad zur treeconfig
-        url: "",
+        url: "tree-config.json",
 
         initialize: function () {
              this.parseMainMenue();
@@ -51,7 +51,9 @@ define([
                     break;
                 }
                 case "custom": {
-                    this.parseTreeConfig();
+                    this.addTreeMenu();
+                    console.log(this.models);
+                    this.loadTreeConfig();
                     break;
                 }
                 case "dummy": {
@@ -92,6 +94,39 @@ define([
             }, this);
         },
 
+        /**
+         * Erstellt die 1. Themenbaum-Ebene bei custom und default (Hintergrundkarten, Fachdaten und Auswahlt der Karten).
+         */
+        addTreeMenu: function () {
+            var treeId = this.findWhere({isRoot: true, id: "tree"}).id;
+
+            this.add({
+                type: "folder",
+                title: "Hintergrundkarten",
+                glyphicon: "glyphicon-plus-sign",
+                isRoot: false,
+                id: "BaseLayer",
+                parentId: treeId
+            });
+            this.add({
+                type: "folder",
+                title: "Fachdaten",
+                glyphicon: "glyphicon-plus-sign",
+                isRoot: false,
+                id: "OverLayer",
+                parentId: treeId
+            });
+            this.add({
+                type: "folder",
+                title: "Auswahl der Karten",
+                glyphicon: "glyphicon-plus-sign",
+                isRoot: false,
+                id: "SelectedLayer",
+                parentId: treeId,
+                isLeafFolder: true
+            });
+        },
+
         parseTools: function () {
             var toolId = this.findWhere({isRoot: true, id: "tools"}).id;
 
@@ -123,7 +158,7 @@ define([
         * Lädt eine Treeconfig und erzeugt daraus einen Baum
         * die Treeconfig wird in parse() geparst
         */
-        parseTreeConfig: function () {
+        loadTreeConfig: function () {
             this.fetch({
                 beforeSend: Util.showLoader(),
                 success: function () {
@@ -136,6 +171,7 @@ define([
          * @param  {[type]} response [description]
          */
         parse: function (response) {
+            console.log(response);
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
