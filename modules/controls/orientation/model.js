@@ -100,6 +100,7 @@ define([
                 kategorie: "alert-danger"
             });
             this.untrack();
+            $("#loader").hide();
         },
         trackPOI: function () {
             EventBus.trigger("addOverlay", this.get("marker"));
