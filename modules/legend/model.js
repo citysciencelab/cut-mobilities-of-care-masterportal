@@ -99,7 +99,9 @@ define([
                     });
                 }
                 else {
-                    image.push(styleList[0].getSimpleStyle()[0].getImage().getSrc());
+                    if (styleList[0].getSimpleStyle()[0].getImage() != null) {
+                        image.push(styleList[0].getSimpleStyle()[0].getImage().getSrc());
+                    }
                     name.push(layer.get("name"));
                 }
                 this.push("tempArray", {
