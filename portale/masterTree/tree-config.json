@@ -6,49 +6,63 @@
           "id": "453",
           "visible": true
         }
-      ],
-      "Gruppenlayer": {
-        "Titel": "Orthophotos",
-        "Layer": [
-          {
-            "id": "452",
-            "visible": false
-          }
-        ]
-      }
+      ]
+    },
+    {
+      "Ordner": [
+        {
+          "Titel": "Orthophotos",
+          "Layer": [
+            {
+              "id": "452",
+              "visible": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "Fachdaten": [
     {
-      "Gruppenlayer": {
-        "Title": "Wasserwirtschaft",
-        "Layer": [
-          {
-            "id": "1918",
-            "visible": false
-          },
-          {
-            "id": "1919",
-            "visible": false
-          },
-          {
-            "id": "1920",
-            "visible": false
-          },
-          {
-            "id": "1921",
-            "visible": false
-          },
-          {
-            "id": "1922",
-            "visible": false
-          },
-          {
-            "id": "1923",
-            "visible": false
-          }
-        ],
-        "Gruppenlayer": {
+      "Layer": [
+        {
+          "id": "685",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "Ordner": [
+        {
+          "Title": "Wasserwirtschaft",
+          "Layer": [
+            {
+              "id": "1918",
+              "visible": false
+            },
+            {
+              "id": "1919",
+              "visible": false
+            },
+            {
+              "id": "1920",
+              "visible": false
+            },
+            {
+              "id": "1921",
+              "visible": false
+            },
+            {
+              "id": "1922",
+              "visible": false
+            },
+            {
+              "id": "1923",
+              "visible": false
+            }
+          ]
+        },
+        {
           "Titel": "Überschwemmungsgebiete",
           "Layer": [
             {
@@ -59,95 +73,89 @@
               "id": "1104",
               "visible": false
             }
-          ],
-          "Gruppenlayer": {
-            "Titel": "Schützenswerte Böden",
-            "Layer": [
-              {
-                "id": "1568",
-                "visible": false
-              },
-              {
-                "id": "1569",
-                "visible": false
-              },
-              {
-                "id": "1570",
-                "visible": false
-              }
-            ]
-          }
-        }
-      },
-      "Layer": [
+          ]
+        },
         {
-          "id": "685",
-          "visible": false
-        }
-      ]
-    },
-    {
-      "Gruppenlayer": {
-        "Titel": "Naturschutz",
-        "Gruppenlayer": {
-          "Titel": "Schutzgebiete",
+          "Titel": "Schützenswerte Böden",
           "Layer": [
             {
-              "id": "1992",
+              "id": "1568",
               "visible": false
             },
             {
-              "id": "1993",
+              "id": "1569",
               "visible": false
             },
             {
-              "id": "1994",
-              "visible": false
-            },
-            {
-              "id": "1995",
-              "visible": false
-            },
-            {
-              "id": "1997",
-              "visible": false
-            },
-            {
-              "id": "1998",
-              "visible": false
-            },
-            {
-              "id": "1999",
+              "id": "1570",
               "visible": false
             }
           ]
         },
-        "Gruppenlayer": {
-          "Titel": "Gesetzlich geschützte Biotope",
-          "Layer": [
+        {
+          "Titel": "Naturschutz",
+          "Ordner": [
             {
-              "id": "8006",
-              "visible": false
+              "Titel": "Schutzgebiete",
+              "Layer": [
+                {
+                  "id": "1992",
+                  "visible": false
+                },
+                {
+                  "id": "1993",
+                  "visible": false
+                },
+                {
+                  "id": "1994",
+                  "visible": false
+                },
+                {
+                  "id": "1995",
+                  "visible": false
+                },
+                {
+                  "id": "1997",
+                  "visible": false
+                },
+                {
+                  "id": "1998",
+                  "visible": false
+                },
+                {
+                  "id": "1999",
+                  "visible": false
+                }
+              ]
             },
             {
-              "id": "8007",
-              "visible": false
-            },
-            {
-              "id": "8008",
-              "visible": false
-            },
-            {
-              "id": "8009",
-              "visible": false
-            },
-            {
-              "id": "8010",
-              "visible": false
+              "Titel": "Gesetzlich geschützte Biotope",
+              "Layer": [
+                {
+                  "id": "8006",
+                  "visible": false
+                },
+                {
+                  "id": "8007",
+                  "visible": false
+                },
+                {
+                  "id": "8008",
+                  "visible": false
+                },
+                {
+                  "id": "8009",
+                  "visible": false
+                },
+                {
+                  "id": "8010",
+                  "visible": false
+                }
+              ]
             }
           ]
         }
-      }
+      ]
     }
   ]
 }
