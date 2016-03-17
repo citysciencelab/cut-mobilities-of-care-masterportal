@@ -1,14 +1,6 @@
 {
   "Hintergrundkarten": [
     {
-      "Layer": [
-        {
-          "id": "453",
-          "visible": true
-        }
-      ]
-    },
-    {
       "Ordner": [
         {
           "Titel": "Orthophotos",
@@ -20,21 +12,21 @@
           ]
         }
       ]
+    },
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visible": true
+        }
+      ]
     }
   ],
   "Fachdaten": [
     {
-      "Layer": [
-        {
-          "id": "685",
-          "visible": false
-        }
-      ]
-    },
-    {
       "Ordner": [
         {
-          "Title": "Wasserwirtschaft",
+          "Titel": "Wasserwirtschaft",
           "Layer": [
             {
               "id": "1918",
@@ -154,6 +146,14 @@
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "Layer": [
+        {
+          "id": "685",
+          "visible": false
         }
       ]
     }
