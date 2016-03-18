@@ -15,11 +15,13 @@ define([
         template: _.template(FolderTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
-            "click .folder-item": "changeMenuById"
+            "click .folder-item": "changeMenuById",
+            "click .checked-all-item": "toggleIsChecked"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isVisible": this.render
+                 "change:isVisible": this.render,
+                 "change:isChecked": this.render
             });
         },
         render: function () {
@@ -42,6 +44,9 @@ define([
         changeMenuById: function () {
             this.model.setIsSelected(true);
             this.model.changeMenuById(this.model.getId());
+        },
+        toggleIsChecked: function () {
+            this.model.toggleIsChecked();
         }
     });
 

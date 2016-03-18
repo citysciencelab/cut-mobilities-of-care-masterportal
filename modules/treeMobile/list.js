@@ -245,9 +245,31 @@ define([
                 model.setIsVisible(false);
             });
         },
-        // setLayerModelsSelected: function () {
-        //
-        // }
+
+        /**
+         * Alle Models von einem Leaffolder werden selektiert
+         * @param {String} parentId Die ID des Objektes dessen Kinder alle auf "checked" gesetzt werden
+         */
+        setModelsChecked: function (parentId) {
+            var children = this.where({parentId: parentId});
+
+            _.each(children, function (model) {
+                model.setIsChecked(true);
+            });
+        },
+
+        /**
+         * Alle Models von einem Leaffolder werden selektiert
+         * @param {String} parentId Die ID des Objektes dessen Kinder alle auf "unchecked" gesetzt werden
+         */
+        setModelsUnchecked: function (parentId) {
+            var children = this.where({parentId: parentId});
+
+            _.each(children, function (model) {
+                model.setIsChecked(false);
+            });
+        },
+
         /**
         * Setzt bei Änderung der Ebene, alle Model
         * auf der alten Ebene auf unsichtbar
