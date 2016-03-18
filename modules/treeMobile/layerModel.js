@@ -20,7 +20,9 @@ define([
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // true wenn der Layer ausgewählt ist
-            isSelected: false
+            isSelected: false,
+            // Layer Titel
+            title: "dummy"
         },
         setIsSelected: function (value) {
             this.set("isSelected", value);

@@ -17,6 +17,7 @@ define([
          Item = require("modules/treeMobile/itemModel"),
          Layer = require("modules/treeMobile/layerModel"),
          Config = require("config"),
+         treeNodes = [],
          TreeCollection;
 
     TreeCollection = Backbone.Collection.extend({
@@ -35,7 +36,7 @@ define([
             }
         },
         // Pfad zur treeconfig
-        url: "",
+        url: "tree-config.json",
 
         initialize: function () {
              this.parseMainMenue();
@@ -51,7 +52,8 @@ define([
                     break;
                 }
                 case "custom": {
-                    this.parseTreeConfig();
+                    this.addTreeMenu();
+                    this.loadTreeConfig();
                     break;
                 }
                 case "dummy": {
@@ -92,6 +94,39 @@ define([
             }, this);
         },
 
+        /**
+         * Erstellt die 1. Themenbaum-Ebene bei custom und default (Hintergrundkarten, Fachdaten und Auswahlt der Karten).
+         */
+        addTreeMenu: function () {
+            var treeId = this.findWhere({isRoot: true, id: "tree"}).id;
+
+            this.add({
+                type: "folder",
+                title: "Hintergrundkarten",
+                glyphicon: "glyphicon-plus-sign",
+                isRoot: false,
+                id: "BaseLayer",
+                parentId: treeId
+            });
+            this.add({
+                type: "folder",
+                title: "Fachdaten",
+                glyphicon: "glyphicon-plus-sign",
+                isRoot: false,
+                id: "OverLayer",
+                parentId: treeId
+            });
+            this.add({
+                type: "folder",
+                title: "Auswahl der Karten",
+                glyphicon: "glyphicon-plus-sign",
+                isRoot: false,
+                id: "SelectedLayer",
+                parentId: treeId,
+                isLeafFolder: true
+            });
+        },
+
         parseTools: function () {
             var toolId = this.findWhere({isRoot: true, id: "tools"}).id;
 
@@ -123,19 +158,65 @@ define([
         * Lädt eine Treeconfig und erzeugt daraus einen Baum
         * die Treeconfig wird in parse() geparst
         */
-        parseTreeConfig: function () {
+        loadTreeConfig: function () {
             this.fetch({
+                remove: false,
+                async: false,
                 beforeSend: Util.showLoader(),
                 success: function () {
-                    // Util.hideLoader();
+                    Util.hideLoader();
                 }
             });
         },
         /**
          * parsed die gefetchte Treeconfig
-         * @param  {[type]} response [description]
+         * @param  {Object} response - Die treeConfig JSON
          */
         parse: function (response) {
+
+            // key = Hintergrundkarten || Fachdaten || Ordner
+            // value = Array von Objekten (Layer || Ordner)
+            _.each(response, function (value, key) {
+                var parentId = "";
+
+                if (key === "Hintergrundkarten") {
+                    parentId = "BaseLayer";
+                }
+                else if (key === "Fachdaten") {
+                    parentId = "OverLayer";
+                }
+                else {
+                    parentId = value[0].id;
+                }
+
+                _.each(value, function (element) {
+                    if (_.has(element, "Layer")) {
+                        _.each(element.Layer, function (layer) {
+                            treeNodes.push({
+                                type: "layer",
+                                parentId: parentId,
+                                layerId: layer.id
+                            });
+                        });
+                    }
+                    if (_.has(element, "Ordner")) {
+                        _.each(element.Ordner, function (folder) {
+                            folder.id = _.uniqueId(folder.Titel);
+                            treeNodes.push({
+                                type: "folder",
+                                parentId: parentId,
+                                title: folder.Titel,
+                                id: folder.id,
+                                isLeafFolder: (!_.has(folder, "Ordner")) ? true : false
+                            });
+                            // rekursiver Aufruf
+                            this.parse({"Ordner": [folder]});
+                        }, this);
+                    }
+                }, this);
+            }, this);
+
+            return treeNodes;
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul

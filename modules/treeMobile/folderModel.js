@@ -18,10 +18,16 @@ define([
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // true wenn der Ordner nur Leafs als Kinder hat
-            isLeafFolder: false
+            isLeafFolder: false,
+            // UniqueId
+            id: "",
+            // Folder Glyphicon
+            glyphicon: "glyphicon-plus-sign"
         },
         initialize: function () {
-            // console.log(this.attributes);
+            // if (this.get("isLeafFolder") === true) {
+            //     console.log(this.get("title"));
+            // }
         },
         setIsLeafFolder: function (value) {
             this.set("isLeafFolder", value);

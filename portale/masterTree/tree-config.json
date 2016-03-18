@@ -1,0 +1,191 @@
+{
+  "Hintergrundkarten": [
+    {
+      "Ordner": [
+        {
+          "Titel": "Orthophotos",
+          "Layer": [
+            {
+              "id": "452",
+              "visible": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visible": true
+        }
+      ]
+    }
+  ],
+  "Fachdaten": [
+    {
+      "Ordner": [
+        {
+          "Titel": "Wasserwirtschaft",
+          "Layer": [
+            {
+              "id": "1918",
+              "visible": false
+            },
+            {
+              "id": "1919",
+              "visible": false
+            },
+            {
+              "id": "1920",
+              "visible": false
+            },
+            {
+              "id": "1921",
+              "visible": false
+            },
+            {
+              "id": "1922",
+              "visible": false
+            },
+            {
+              "id": "1923",
+              "visible": false
+            }
+          ]
+        },
+        {
+          "Titel": "Überschwemmungsgebiete",
+          "Layer": [
+            {
+              "id": "1103",
+              "visible": false
+            },
+            {
+              "id": "1104",
+              "visible": false
+            }
+          ]
+        },
+        {
+          "Titel": "Schützenswerte Böden",
+          "Layer": [
+            {
+              "id": "1568",
+              "visible": false
+            },
+            {
+              "id": "1569",
+              "visible": false
+            },
+            {
+              "id": "1570",
+              "visible": false
+            }
+          ]
+        },
+        {
+          "Titel": "Naturschutz",
+          "Ordner": [
+            {
+              "Titel": "Schutzgebiete",
+              "Ordner": [
+                {
+                  "Titel": "testtest",
+                  "Ordner": [
+                    {
+                      "Titel": "tes234ttest",
+                      "Layer": [
+                        {
+                          "id": "194234592",
+                          "visible": false
+                        },
+                        {
+                          "id": "194523493",
+                          "visible": false
+                        }
+                      ]
+                    }
+                  ],
+                  "Layer": [
+                    {
+                      "id": "194592",
+                      "visible": false
+                    },
+                    {
+                      "id": "194593",
+                      "visible": false
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "1992",
+                  "visible": false
+                },
+                {
+                  "id": "1993",
+                  "visible": false
+                },
+                {
+                  "id": "1994",
+                  "visible": false
+                },
+                {
+                  "id": "1995",
+                  "visible": false
+                },
+                {
+                  "id": "1997",
+                  "visible": false
+                },
+                {
+                  "id": "1998",
+                  "visible": false
+                },
+                {
+                  "id": "1999",
+                  "visible": false
+                }
+              ]
+            },
+            {
+              "Titel": "Gesetzlich geschützte Biotope",
+              "Layer": [
+                {
+                  "id": "8006",
+                  "visible": false
+                },
+                {
+                  "id": "8007",
+                  "visible": false
+                },
+                {
+                  "id": "8008",
+                  "visible": false
+                },
+                {
+                  "id": "8009",
+                  "visible": false
+                },
+                {
+                  "id": "8010",
+                  "visible": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Layer": [
+        {
+          "id": "685",
+          "visible": false
+        }
+      ]
+    }
+  ]
+}
