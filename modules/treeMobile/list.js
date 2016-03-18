@@ -229,9 +229,11 @@ define([
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
         */
         setModelsVisible: function (parentId) {
-            var children = this.where({parentId: parentId});
+            var children = this.where({parentId: parentId}),
+                // Falls es ein LeafFolder ist --> "Alle auswählen" Template
+                selectedLeafFolder = this.where({isSelected: true, isLeafFolder: true});
 
-            _.each(children, function (model) {
+            _.each(_.union(selectedLeafFolder, children), function (model) {
                 model.setIsVisible(true);
             });
         },
@@ -250,7 +252,7 @@ define([
         * die Animation der ebenänderung fertig ist
         * @param {int} parentId Die ID des Objektes dessen Kinder nicht mehr angezeigt werden sollen
         */
-        setModelsInVisible: function (parentId) {}
+        setModelsInvisible: function (parentId) {}
     });
 
     return TreeCollection;
