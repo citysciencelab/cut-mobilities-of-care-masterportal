@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <div class="layer-item">
-    <span class="glyphicon glyphicon-unchecked"></span>
+    <% if (isChecked === true) { %>
+        <span class="glyphicon glyphicon-check"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked"></span>
+    <% } %>
     <span><%= title %></span>
 </div>

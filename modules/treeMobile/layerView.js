@@ -12,11 +12,12 @@ define([
         className: "list-group-item",
         template: _.template(LayerTemplate),
         events: {
-            "click .layer-item": "toggleIsSelected"
+            "click .layer-item": "toggleIsChecked"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isVisible": this.render
+                 "change:isVisible": this.render,
+                 "change:isChecked": this.render
             });
         },
         render: function () {
@@ -30,10 +31,8 @@ define([
                 this.$el.remove();
             }
         },
-        toggleIsSelected: function () {
-            $(".layer-item > .glyphicon").toggleClass("glyphicon-unchecked");
-            $(".layer-item > .glyphicon").toggleClass("glyphicon-check");
-            this.model.toggleIsSelected();
+        toggleIsChecked: function () {
+            this.model.toggleIsChecked();
         }
     });
 

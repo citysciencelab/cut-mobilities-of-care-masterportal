@@ -245,6 +245,9 @@ define([
                 model.setIsVisible(false);
             });
         },
+        // setLayerModelsSelected: function () {
+        //
+        // }
         /**
         * Setzt bei Änderung der Ebene, alle Model
         * auf der alten Ebene auf unsichtbar
