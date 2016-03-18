@@ -89,6 +89,36 @@
           "Ordner": [
             {
               "Titel": "Schutzgebiete",
+              "Ordner": [
+                {
+                  "Titel": "testtest",
+                  "Ordner": [
+                    {
+                      "Titel": "tes234ttest",
+                      "Layer": [
+                        {
+                          "id": "194234592",
+                          "visible": false
+                        },
+                        {
+                          "id": "194523493",
+                          "visible": false
+                        }
+                      ]
+                    }
+                  ],
+                  "Layer": [
+                    {
+                      "id": "194592",
+                      "visible": false
+                    },
+                    {
+                      "id": "194593",
+                      "visible": false
+                    }
+                  ]
+                }
+              ],
               "Layer": [
                 {
                   "id": "1992",
