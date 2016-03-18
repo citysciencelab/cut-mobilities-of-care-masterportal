@@ -11,6 +11,9 @@ define([
         tagName: "li",
         className: "list-group-item",
         template: _.template(LayerTemplate),
+        events: {
+            "click .layer-item": "toggleIsSelected"
+        },
         initialize: function () {
             this.listenTo(this.model, {
                  "change:isVisible": this.render
@@ -26,6 +29,11 @@ define([
             else {
                 this.$el.remove();
             }
+        },
+        toggleIsSelected: function () {
+            $(".layer-item > .glyphicon").toggleClass("glyphicon-unchecked");
+            $(".layer-item > .glyphicon").toggleClass("glyphicon-check");
+            this.model.toggleIsSelected();
         }
     });
 

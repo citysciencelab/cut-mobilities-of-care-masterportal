@@ -22,13 +22,21 @@ define([
             // true wenn der Layer ausgewählt ist
             isSelected: false,
             // Layer Titel
-            title: "dummy"
+            title: "dummydummydummydummy"
         },
         setIsSelected: function (value) {
             this.set("isSelected", value);
         },
         getIsSelected: function () {
             return this.get("isSelected");
+        },
+        toggleIsSelected: function () {
+            if (this.getIsSelected() === true) {
+                this.setIsSelected(false);
+            }
+            else {
+                this.setIsSelected(true);
+            }
         }
     });
 
