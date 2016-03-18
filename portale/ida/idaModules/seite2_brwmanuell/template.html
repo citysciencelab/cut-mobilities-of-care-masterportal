@@ -9,7 +9,7 @@
             </div>
             <% _.each(brwsZuStichtag, function(brw) { %>
                 <div class="panel-body" style="width=200px;">
-                    <div class="input-group" id="br_sp1">
+                    <div class="input-group" id="<%= brw.bezeichnung %>_<%= brw.jahr %>">
                         <span class="input-group-addon" id="<%= brw.bezeichnung %>_<%= brw.jahr %>" title="<%= brw.art%>">Nutzung: <%= brw.bezeichnung%></span>
                         <input id="<%= brw.bezeichnung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
                         <span class="input-group-addon" title="<%
