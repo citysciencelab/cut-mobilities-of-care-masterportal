@@ -7,7 +7,7 @@
                 <span style="float:left; font-size:14px;" class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                 <h2>&nbsp;<strong>Stichtag: </strong><%= stichtag%></h2>
             </div>
-            <% _.each(brwsZuStichtag, function(brw) {console.log(brw); %>
+            <% _.each(brwsZuStichtag, function(brw) { %>
                 <div class="panel-body">
                     <div class="input-group" id="<%= brw.bezeichnung %>_<%= brw.stichtag %>">
                         <span class="input-group-addon" id="<%= brw.bezeichnung %>_<%= brw.stichtag %>" title="<%= brw.art%>">Nutzung: <%= brw.bezeichnung%></span>
