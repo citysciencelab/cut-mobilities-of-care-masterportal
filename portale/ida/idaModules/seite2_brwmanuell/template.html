@@ -7,11 +7,11 @@
                 <span style="float:left; font-size:14px;" class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                 <h2>&nbsp;<strong>Stichtag: </strong><%= stichtag%></h2>
             </div>
-            <% _.each(brwsZuStichtag, function(brw) { %>
+            <% _.each(brwsZuStichtag, function(brw) {console.log(brw); %>
                 <div class="panel-body" style="width=200px;">
-                    <div class="input-group" id="<%= brw.bezeichnung %>_<%= brw.jahr %>">
-                        <span class="input-group-addon" id="<%= brw.bezeichnung %>_<%= brw.jahr %>" title="<%= brw.art%>">Nutzung: <%= brw.bezeichnung%></span>
-                        <input id="<%= brw.bezeichnung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.jahr %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
+                    <div class="input-group" id="<%= brw.bezeichnung %>_<%= brw.stichtag %>">
+                        <span class="input-group-addon" id="<%= brw.bezeichnung %>_<%= brw.stichtag %>" title="<%= brw.art%>">Nutzung: <%= brw.bezeichnung%></span>
+                        <input id="<%= brw.bezeichnung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.stichtag %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
                         <span class="input-group-addon" title="<%
                         var pre = 'Bitte wählen Sie in der interaktiven Bodenrichtwertkarte (Boris-HH) den passenden ',
                             post = ' aus und geben die Bodenrichtwert-Nummer hier ein.',
