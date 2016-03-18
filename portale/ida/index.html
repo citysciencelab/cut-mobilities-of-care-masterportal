@@ -10,8 +10,10 @@
 			.wrapper{width: 95%; margin: 10px auto;}
 		</style>
         <link rel="stylesheet" href="../../css/style.css">
+<!--
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+-->
         <link rel="stylesheet" href="ida.css">
         <script type="text/javascript" data-main="main" src="../../components/requirejs/require.js"></script>
 	</head>
@@ -34,11 +36,13 @@
 				<div class="panel-heading"><span style="float:left; font-size:14px;" class="glyphicon glyphicon-map-marker" aria-hidden="true"></span><h2>&nbsp;Lage</h2></div>
 				<div class="panel-body">
 					<h4>Wie möchten Sie die Lage Ihrer Immobilie mitteilen?</h4>
-						<label class="radio-inline"><input type="radio" name="lage_radio" value="radio1" checked="checked"><p>Straße / Hausnummer</p></label>
-						<label class="radio-inline"><input type="radio" name="lage_radio" value="radio2"><p>Gemarkung / Flurstück / Straße</p></label><br></br>
-				   <div class="row">
-					<div class="col-lg-12 navbar-form" style="display:block;" id="adresse">
-						<div id="adressfeld"></div></div></div>
+					<label class="radio-inline"><input type="radio" name="lage_radio" value="radio1" checked="checked"><p>Straße / Hausnummer</p></label>
+					<label class="radio-inline"><input type="radio" name="lage_radio" value="radio2"><p>Gemarkung / Flurstück / Straße</p></label><br></br>
+				    <div class="row">
+                        <div class="col-lg-12 navbar-form" style="display:block;" id="adresse">
+                            <div id="adressfeld"></div>
+                        </div>
+                    </div>
 					<div class="row" style="display:none;" id="gemarkung">
 						<div class="col-xs-4 form-group">
 								<select class="form-control" id="gemarkungsnummer" name="gemarkung">
