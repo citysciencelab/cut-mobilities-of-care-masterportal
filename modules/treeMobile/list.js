@@ -17,6 +17,7 @@ define([
          Item = require("modules/treeMobile/itemModel"),
          Layer = require("modules/treeMobile/layerModel"),
          Config = require("config"),
+         treeNodes = [],
          TreeCollection;
 
     TreeCollection = Backbone.Collection.extend({
@@ -52,7 +53,6 @@ define([
                 }
                 case "custom": {
                     this.addTreeMenu();
-                    console.log(this.models);
                     this.loadTreeConfig();
                     break;
                 }
@@ -160,18 +160,63 @@ define([
         */
         loadTreeConfig: function () {
             this.fetch({
+                remove: false,
+                async: false,
                 beforeSend: Util.showLoader(),
                 success: function () {
-                    // Util.hideLoader();
+                    Util.hideLoader();
                 }
             });
         },
         /**
          * parsed die gefetchte Treeconfig
-         * @param  {[type]} response [description]
+         * @param  {Object} response - Die treeConfig JSON
          */
         parse: function (response) {
-            console.log(response);
+
+            // key = Hintergrundkarten || Fachdaten || Ordner
+            // value = Array von Objekten (Layer || Ordner)
+            _.each(response, function (value, key) {
+                var parentId = "";
+
+                if (key === "Hintergrundkarten") {
+                    parentId = "BaseLayer";
+                }
+                else if (key === "Fachdaten") {
+                    parentId = "OverLayer";
+                }
+                else {
+                    parentId = value[0].id;
+                }
+
+                _.each(value, function (element) {
+                    if (_.has(element, "Layer")) {
+                        _.each(element.Layer, function (layer) {
+                            treeNodes.push({
+                                type: "layer",
+                                parentId: parentId,
+                                layerId: layer.id
+                            });
+                        });
+                    }
+                    if (_.has(element, "Ordner")) {
+                        _.each(element.Ordner, function (folder) {
+                            folder.id = _.uniqueId(folder.Titel);
+                            treeNodes.push({
+                                type: "folder",
+                                parentId: parentId,
+                                title: folder.Titel,
+                                id: folder.id,
+                                isLeafFolder: (!_.has(folder, "Ordner")) ? true : false
+                            });
+                            // rekursiver Aufruf
+                            this.parse({"Ordner": [folder]});
+                        }, this);
+                    }
+                }, this);
+            }, this);
+
+            return treeNodes;
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
