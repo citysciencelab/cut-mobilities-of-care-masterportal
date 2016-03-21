@@ -120,7 +120,7 @@ define([
                     break;
                 }
                 case "Stadtteil": {
-                    zoomLevel = 7;
+                    zoomLevel = 4;
                     this.showMarker(hit.coordinate);
                     EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
                     break;
