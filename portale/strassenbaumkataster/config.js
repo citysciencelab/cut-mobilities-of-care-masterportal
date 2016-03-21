@@ -10,7 +10,8 @@ define(function () {
             layer: [
                 {id: "453", visible: true},
                 {id: "94", visible: false},
-                {id: "36", visible: true, gfiAttributes: "ignore"},
+                {id: "36", visible: true, gfiAttributes: "ignore", transparence: "50"},
+                // {id: "191", visible: true, maxScale: "40000", gfiAttributes: "ignore"},
                 {id: "2298", visible: false, name: "StraßenbaumkatasterG", displayInTree: false, styles: "strassenbaumkataster_grau"},
                 {id: "182", visible: false, name: "Straßenbaumkataster", displayInTree: false},
                 {id: "2297", visible: true, name: "Straßenbaumkataster", displayInTree: true}
