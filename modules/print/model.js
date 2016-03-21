@@ -247,6 +247,7 @@ define([
                         center: this.get("center"),
                         scale: this.get("scale").value,
                         scaleText: this.get("scale").name,
+                        geodetic: true,
                         dpi: 96,
                         mapTitle: this.get("title")
                     }
