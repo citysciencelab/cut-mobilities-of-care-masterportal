@@ -67,6 +67,10 @@ define([
             $("#popovermin").fadeOut(500, function () {
                 $("#popovermin").remove();
             });
+            // Für Straßenbaumkataster
+            if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
+                 Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
+            }
             $(this.getElement()).popover("show");
             this.set("isPopupVisible", true);
         },
