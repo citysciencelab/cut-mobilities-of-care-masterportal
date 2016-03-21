@@ -92,6 +92,10 @@ define([
                 }
             }, this);
 
+            channel.on({
+                "setCenter": this.setCenter
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
