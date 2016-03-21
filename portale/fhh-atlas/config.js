@@ -5,6 +5,7 @@ define(function () {
         tree: {
             type: "default",
             orderBy: "opendata",
+            saveSelection: true,
             baseLayer: [
                 {id: "453", minScale: "500"},
                 {id: "8"},
