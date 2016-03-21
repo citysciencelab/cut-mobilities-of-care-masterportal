@@ -10,6 +10,7 @@ define([
                 currentSelection: Config.tree.orderBy,
                 type: Config.tree.type,
                 quickHelp: false,
+                saveSelection: false,
                 defaultBackground: "" // wird beim Umschalten der Hintergrundfarbe gefüllt
             },
             initialize: function () {
@@ -17,6 +18,10 @@ define([
 
                 if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                     this.set("quickHelp", true);
+                }
+
+                if (_.has(Config.tree, "saveSelection") && Config.tree.saveSelection === true) {
+                    this.set("saveSelection", true);
                 }
             },
             setSelection: function (value) {
