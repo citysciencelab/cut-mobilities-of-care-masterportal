@@ -78,19 +78,20 @@ define([
             }
 
             var text = "Nutzer: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
-                dataToSend = JSON.stringify({
+                dataToSend = {
                     from: this.get("from"),
                     to: this.get("to"),
                     cc: cc,
                     bcc: this.get("bcc"),
                     subject: this.get("ticketID") + ": " + this.get("subject"),
                     text: text
-                });
+                };
 
+            console.log(dataToSend);
             Util.showLoader();
             $.ajax({
                 url: this.get("url"),
-                data: "data=" + dataToSend,
+                data: dataToSend,
                 async: true,
                 type: "POST",
                 cache: false,
