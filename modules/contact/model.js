@@ -10,14 +10,14 @@ define([
         defaults: {
             maxLines: Util.isAny() ? "5" : "10",
             from: Config.menu.contact.from,
-            to: Config.menu.contact.from,
-            cc: Config.menu.contact.cc ? Config.menu.contact.cc : "",
+            to: Config.menu.contact.to,
+            cc: Config.menu.contact.cc ? Config.menu.contact.cc : [],
             ccToUser: Config.menu.contact.ccToUser ? Config.menu.contact.ccToUser : false,
-            bcc: Config.menu.contact.bcc ? Config.menu.contact.bcc : "",
+            bcc: Config.menu.contact.bcc ? Config.menu.contact.bcc : [],
             subject: Config.menu.contact.subject ? Config.menu.contact.subject : "Supportanfrage zum Portal " + document.title,
-            textPlaceholder: Config.menu.contact.textPlaceholder ? Config.menu.contact.textPlaceholder : "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Senden&quot;",
+            textPlaceholder: Config.menu.contact.textPlaceholder ? Config.menu.contact.textPlaceholder : "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
             text: "",
-            systemInfo: Config.menu.contact.includeSystemInfo && Config.menu.contact.includeSystemInfo === true ? "Platform: " + navigator.platform + "</br>" + "Cookies enabled: " + navigator.cookieEnabled + "</br>" + "UserAgent: " + navigator.userAgent : "",
+            systemInfo: Config.menu.contact.includeSystemInfo && Config.menu.contact.includeSystemInfo === true ? "<br>==================<br>Platform: " + navigator.platform + "<br>" + "Cookies enabled: " + navigator.cookieEnabled + "<br>" + "UserAgent: " + navigator.userAgent : "",
             url: "",
             ticketID: "",
             userName: "",
@@ -68,7 +68,51 @@ define([
             }
         },
         send: function () {
-            console.log("implementiere Senden");
+            var cc = this.get("cc");
+
+            if (this.get("ccToUser") === true) {
+                cc.push({
+                    email: this.get("userEmail"),
+                    name: this.get("userName")
+                });
+            }
+
+            var text = "Nutzer: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
+                dataToSend = {
+                    from: this.get("from"),
+                    to: this.get("to"),
+                    cc: cc,
+                    bcc: this.get("bcc"),
+                    subject: this.get("ticketID") + ": " + this.get("subject"),
+                    text: text
+                };
+
+            console.log(dataToSend);
+            Util.showLoader();
+            $.ajax({
+                url: this.get("url"),
+                data: dataToSend,
+                async: true,
+                type: "POST",
+                cache: false,
+                dataType: "json",
+                context: this,
+                complete: function (jqXHR) {
+                console.log(jqXHR);
+                    Util.hideLoader();
+                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+                        EventBus.trigger("alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+                    }
+                },
+                success: function (data) {
+                    if (data.success === false) {
+                        EventBus.trigger("alert", {text: data.message, kategorie: "alert-warning"});
+                    }
+                    else {
+                        EventBus.trigger("alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
+                    }
+                }
+            });
         }
     });
 
