@@ -87,7 +87,6 @@ define([
                     text: text
                 };
 
-            console.log(dataToSend);
             Util.showLoader();
             $.ajax({
                 url: this.get("url"),
@@ -98,7 +97,6 @@ define([
                 dataType: "json",
                 context: this,
                 complete: function (jqXHR) {
-                console.log(jqXHR);
                     Util.hideLoader();
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         EventBus.trigger("alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
