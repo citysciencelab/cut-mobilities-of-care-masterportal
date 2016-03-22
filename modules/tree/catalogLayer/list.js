@@ -53,8 +53,13 @@ define([
             $(".nav li:first-child").addClass("open");
             // öffnet die Geofachdaten
             $(".layer-catalog-list").show();
-            $(".layer-catalog-label > .glyphicon").addClass("glyphicon-triangle-bottom");
-            $(".layer-catalog-label > .glyphicon").removeClass("glyphicon-triangle-right");
+            $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").addClass("glyphicon-minus-sign");
+            $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").removeClass("glyphicon-plus-sign");
+            // schließ die Hintergrundkarten
+            $(".base-layer-list").hide();
+            $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").removeClass("glyphicon-minus-sign");
+            $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").addClass("glyphicon-plus-sign");
+
             this.forEach(function (element) {
                 if (model.get("type") !== undefined && model.get("type") === "nodeChild") {
                     if (model.get("children")[0].get("node") === element.get("name")) {

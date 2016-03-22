@@ -1,9 +1,8 @@
 define([
     "backbone",
-    "eventbus",
-    "modules/layer/list",
-    "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
+    "backbone.radio",
+    "eventbus"
+    ], function (Backbone, Radio, EventBus) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -23,18 +22,24 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            EventBus.on("layerlist:sendVisibleWFSlayerList", this.getFeaturesForSearch, this);
-            EventBus.on("searchbar:search", this.search, this);
-            EventBus.trigger("layerlist:getVisibleWFSlayerList");
+            EventBus.on("searchbar:search", this.prepSearch, this);
         },
         /**
         *
         */
-        search: function (searchString) {
+        prepSearch: function (searchString) {
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
-                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
+                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"), // Erst join dann als regulärer Ausdruck
+                    layers = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"}),
+                    featureLayers = _.filter(layers, function (layer) {
+                        return layer.get("layer").getSource().getFeatures().length > 0;
+                    }),
+                    filterLayers = _.filter(featureLayers, function (layer) {
+                        return layer.get("searchField") && layer.get("searchField") !== "" && layer.get("searchField") !== undefined;
+                    });
 
+                this.setFeaturesForSearch(filterLayers);
                 this.searchInFeatures(searchStringRegExp);
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
@@ -56,7 +61,7 @@ define([
         /**
         *
         */
-        getFeaturesForSearch: function (layermodels) {
+        setFeaturesForSearch: function (layermodels) {
             this.set("features", []);
             var featureArray = [],
                 imageSrc;

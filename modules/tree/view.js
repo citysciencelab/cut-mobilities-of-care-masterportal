@@ -22,16 +22,23 @@ define([
                 "click .layer-selection > .header > .glyphicon-minus-sign, .layer-selection > .header > .glyphicon-plus-sign, .layer-selection > .header > .control-label": "toggleSelection",
                 "click .base-layer-catalog > .header > .control-label, .base-layer-catalog > .header > .glyphicon-minus-sign, .base-layer-catalog > .header > .glyphicon-plus-sign": "toggleCatalogAndBaseLayer",
                 "click .layer-selection-save": function () {
-                    EventBus.trigger("mapView:getCenterAndZoom");
+                    EventBus.trigger("toggleWin", ["saveSelection", "Auswahl speichern", "glyphicon-share"]);
+                    // Schließt den Baum
+                    $(".nav li:first-child").removeClass("open");
+                    // Schließt die Mobile Navigation
+                    $(".navbar-collapse").removeClass("in");
+                    // Selektiert die URL
+                    $(".input-save-url").select();
                 },
                 "click .layer-catalog-extern > .header > span": "toggleExternLayer"
             },
             initialize: function () {
-                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
+                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView", "modules/tools/saveSelection/view"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView, SaveSelectionView) {
                     new LayerSelectionListView();
                     new LayerTreeView();
                     new BaseLayerListView();
                     new CataExView();
+                    new SaveSelectionView();
                 });
                 this.$el.on({
                     click: function (e) {
@@ -53,8 +60,8 @@ define([
             },
             toggleCatalog: function () {
                 $(".layer-catalog-list").toggle("slow");
-                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
-                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             },
             toggleSelection: function () {
                 $(".layer-selected-list").toggle("slow");
@@ -63,10 +70,10 @@ define([
             },
             toggleBaseLayer: function () {
                 $(".base-layer-list").toggle("slow");
-                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
-                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+                $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             },
-            toggleCatalogAndBaseLayer: function() {
+            toggleCatalogAndBaseLayer: function () {
               this.toggleCatalog();
               this.toggleBaseLayer();
             },

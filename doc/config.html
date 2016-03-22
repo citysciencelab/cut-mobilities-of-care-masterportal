@@ -5931,6 +5931,8 @@
 		
 		
 		
+		<th>Default</th>
+
 		
 		<th class="last">Description</th>
 	</tr>
@@ -5962,6 +5964,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.</p></td>
         </tr>
@@ -5991,6 +5997,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Initiale Sichtbarkeit des Layers.</p></td>
         </tr>
@@ -6022,6 +6032,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.</p></td>
         </tr>
@@ -6053,6 +6067,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.</p></td>
         </tr>
@@ -6084,6 +6102,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Werte &gt; 0 nutzen Clustering.</p></td>
         </tr>
@@ -6115,6 +6137,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.</p></td>
         </tr>
@@ -6146,6 +6172,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.</p></td>
         </tr>
@@ -6177,6 +6207,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.</p></td>
         </tr>
@@ -6208,6 +6242,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.</p></td>
         </tr>
@@ -6239,6 +6277,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.</p>
                 <h6>Properties</h6>
@@ -6436,6 +6478,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Falls ein String gesetzt wird, wird dieser als Attribution gesetzt. Alternativ kann ein Konfigurationsobjekt einer Atribution übergeben werden.</p>
                 <h6>Properties</h6>
@@ -6537,6 +6583,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Wert für die voreingestellte Transparenz für den Layer.</p></td>
         </tr>
@@ -6568,6 +6618,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Mindestmaßstab zum Anzeigen dieses Layers.</p></td>
         </tr>
@@ -6599,6 +6653,10 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Maximalmaßstab zum Anzeigen dieses Layers.</p></td>
         </tr>
@@ -6630,11 +6688,52 @@
             
             
             
+                <td class="default">
+
+                </td>
+
             
             <td class="description last"><p>Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.</p></td>
         </tr>
 	
 	
+
+        <tr>
+
+                <td class="name"><code>featureCount</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">integer</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    <a href="config.html#.layerConf"><code>featureCount in layerConf</code></a>|1
+
+                </td>
+
+
+            <td class="description last"><p>Nur bei WMS-Layern. Anzahl der im GetFeatureInfo abzufragenden Features, wird dem request angefügt. Wird hier kein Wert eingegeben, so wird der Wert aus der layerConf genommen. Wird dort kein Wert gefunden, dann default = 1.</p></td>
+        </tr>
+
+
 	</tbody>
 </table>
             </td>

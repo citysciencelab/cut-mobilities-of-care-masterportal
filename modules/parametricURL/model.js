@@ -225,6 +225,27 @@ define([
 
                 Config.clickCounter.version = value;
             }
+
+            /**
+            * blendet alle Bedienelemente aus - für MRH
+            *
+            */
+            if (_.has(result, "STYLE")) {
+                var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
+                if (value === "SIMPLE"){
+                    Config.isMenubarVisible = false;
+                    Config.controls = {};
+                    Config.footer = {};
+                    Config.tools = {
+                        gfi: {
+                            title: "Informationen abfragen",
+                            glyphicon: "glyphicon-info-sign",
+                            isActive: true
+                        }
+                    };
+                }
+
+            }
         }
     });
 

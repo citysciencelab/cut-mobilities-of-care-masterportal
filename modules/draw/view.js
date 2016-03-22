@@ -5,8 +5,9 @@ define([
     "text!modules/draw/templateText.html",
     "text!modules/draw/templateLine.html",
     "text!modules/draw/templatePolygon.html",
+    "text!modules/draw/templateCircle.html",
     "modules/draw/model"
-], function (Backbone, DrawTemplate, PointTemplate, TextTemplate, LineTemplate, PolygonTemplate, DrawTool) {
+], function (Backbone, DrawTemplate, PointTemplate, TextTemplate, LineTemplate, PolygonTemplate, CircleTemplate, DrawTool) {
 
     var DrawToolView = Backbone.View.extend({
         model: new DrawTool(),
@@ -16,6 +17,7 @@ define([
         templateLine: _.template(LineTemplate),
         templatePolygon: _.template(PolygonTemplate),
         templateText: _.template(TextTemplate),
+        templateCircle: _.template(CircleTemplate),
         events: {
             "change .interaction": "setInteraction",
             "change .drawFont": "setFont",
@@ -24,10 +26,15 @@ define([
             "change .drawPointRadius": "setPointRadius",
             "change .drawStrokeWidth": "setStrokeWidth",
             "change .drawOpacity": "setOpacity",
-            "keyup .drawText": "setText",
-            "click .delete": "deleteFeatures"
+            "click .delete": "deleteFeatures",
+            "click .trash": "toggleInteractions",
+            "click .download": "downloadFeatures",
+            "keyup .drawText": "setText"
         },
         initialize: function () {
+            require(["modules/tools/download/view"], function (DownloadView) {
+                new DownloadView();
+            });
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
                 "change:selectedInteraction": this.renderForm
@@ -49,28 +56,33 @@ define([
         },
 
         renderForm: function () {
-            var attr = this.model.toJSON();
+            var attr = this.model.toJSON(),
+                selector = ".win-body > .form-horizontal.style";
 
-            $(".win-body > .form-horizontal").empty();
+            $(selector).empty();
             switch (this.model.get("selectedInteraction")){
                 case "drawPoint": {
-                    $(".win-body > .form-horizontal").append(this.templatePoint(attr));
+                    $(selector).append(this.templatePoint(attr));
                     break;
                 }
                 case "writeText": {
-                    $(".win-body > .form-horizontal").append(this.templateText(attr));
+                    $(selector).append(this.templateText(attr));
                     break;
                 }
                 case "drawLine": {
-                    $(".win-body > .form-horizontal").append(this.templateLine(attr));
+                    $(selector).append(this.templateLine(attr));
                     break;
                 }
                 case "drawArea": {
-                    $(".win-body > .form-horizontal").append(this.templatePolygon(attr));
+                    $(selector).append(this.templatePolygon(attr));
+                    break;
+                }
+                case "drawCircle": {
+                    $(selector).append(this.templateCircle(attr));
                     break;
                 }
                 default: {
-                    $(".win-body > .form-horizontal").append(this.templatePoint(attr));
+                    $(selector).append(this.templatePoint(attr));
                 }
             }
         },
@@ -109,6 +121,25 @@ define([
 
         deleteFeatures: function () {
             this.model.deleteFeatures();
+        },
+
+        toggleInteractions: function () {
+            $(".trash").toggleClass("btn-primary");
+
+            if ($(".trash").hasClass("btn-primary") === true) {
+                $(".win-body select").prop("disabled", true);
+                $(".win-body input").prop("disabled", true);
+            }
+            else {
+                $(".win-body select").prop("disabled", false);
+                $(".win-body input").prop("disabled", false);
+            }
+
+            this.model.toggleInteractions();
+        },
+
+        downloadFeatures: function () {
+            this.model.downloadFeatures();
         }
     });
 

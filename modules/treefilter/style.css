@@ -20,7 +20,7 @@
     max-height: 400px;
     overflow-x: hidden;
     overflow-y: auto;
-    max-width: 300px;
+    /*max-width: 300px;*/
 }
 
 .treeFilterError {

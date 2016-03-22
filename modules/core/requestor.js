@@ -81,37 +81,15 @@ define([
         },
 
         setWMSPopupContent: function (params, positionGFI) {
-            var url, data, pgfi = [];
+            var url,
+                data = "FEATURE_COUNT=" + params.ol_layer.get("featureCount").toString(),
+                pgfi = [];
 
             if (params.url.search(location.host) === -1) {
                 url = Util.getProxyURL(params.url);
             }
             else {
                 url = params.url;
-            }
-            // Für B-Pläne wird Feature_Count auf 3 gesetzt --> besser über ID (hier aber nicht vorhanden)
-            if (params.name === "Festgestellte Bebauungspläne" || params.name === "Sportstätten") {
-                data = "FEATURE_COUNT=3";
-            }
-            else if (params.name === "SUB Umringe Historischer Karten") {
-                data = "FEATURE_COUNT=30";
-            }
-            else {
-                data = "";
-            }
-            if (Config.feature_count) {
-                var index = -1;
-
-                _.each(Config.feature_count, function (layer, idx) {
-
-                    if (layer.id + "" === params.ol_layer.id) {
-                        index = idx;
-                        return;
-                    }
-                });
-                if (index !== -1) {
-                    data += "FEATURE_COUNT=" + Config.feature_count[index].count;
-                }
             }
             ++this.requestCount;
             $.ajax({
@@ -185,7 +163,7 @@ define([
                 EventBus.trigger("renderResults", [this.pContent, positionGFI]);
         },
         isValidKey: function (key) {
-            var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID"];
+            var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH"];
 
             if (_.indexOf(invalidKeys, key.toUpperCase()) !== -1) {
                 return false;

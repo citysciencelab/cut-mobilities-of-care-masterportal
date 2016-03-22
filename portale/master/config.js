@@ -38,6 +38,7 @@ define(function () {
         * @property {String} [tree.layer.minScale] - Mindestmaßstab zum Anzeigen dieses Layers.
         * @property {String} [tree.layer.maxScale] - Maximalmaßstab zum Anzeigen dieses Layers.
         * @property {Boolean} [tree.layer.routable] - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
+        * @property {integer} [tree.layer.featureCount=[featureCount in layerConf]{@link config.layerConf}|1] - Nur bei WMS-Layern. Anzahl der im GetFeatureInfo abzufragenden Features, wird dem request angefügt. Wird hier kein Wert eingegeben, so wird der Wert aus der layerConf genommen. Wird dort kein Wert gefunden, dann default = 1.
         * @property {Array} [tree.layerIDsToMerge] - Bei type: custom|default. Arrays der Definitionen, die im Baum zusammengefasst werden.
         * @property {string[]} tree.layerIDsToMerge. - Array der LayerIDs.
         * @property {Object[]} [tree.layerIDsToStyle] - Bei type: custom|default. Array der Konfigurationsobjekte zur Styledefinition.
@@ -54,13 +55,13 @@ define(function () {
         tree: {
             type: "light",
             layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "1748", visible: false},
-                {id: "1562", visible: false},
-                {id: "1561", visible: false},
-                {id: "2003", visible: false, style: "2003"},
-                {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
+                {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "452", visibility: false},
+                {id: "1748", visibility: false},
+                {id: "1562", visibility: false},
+                {id: "1561", visibility: false, featureCount: 10},
+                {id: "2003", visibility: false, style: "2003"},
+                {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
                      {
@@ -75,9 +76,9 @@ define(function () {
                          id: "947"
                      }
                  ],
-                 name: "aktuelle Meldungen der TBZ", visible: false
+                 name: "aktuelle Meldungen der TBZ", visibility: false
                 },
-                {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  maxScale: 60000,
                  minScale: 10000,
@@ -97,7 +98,7 @@ define(function () {
                  ],
                  routable: true
                 },
-                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
                      {
                          fieldName: "Bezirk",
                          filterType: "combo",
@@ -107,6 +108,13 @@ define(function () {
                  ], styleLabelField: "", styleField: "", routable: false}
             ]
         },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Erstellt einen SimpleMap-Link (Nur die Karte mit Layern ohne Menü).
+        * @example simpleMap: true
+        */
+        simpleMap: false,
         /**
         * @memberof config
         * @type {String}
@@ -319,7 +327,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             tools: true,
-            featureLister: 20,
+            featureLister: 10,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
@@ -424,8 +432,7 @@ define(function () {
             layer: {
                 minChar: 3
             },
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            geoLocateHit: true
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan"
         },
         /**
         * @memberof config

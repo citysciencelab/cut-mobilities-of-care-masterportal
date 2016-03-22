@@ -15,7 +15,8 @@ define([
          *
          */
         defaults: {
-            gfiOverlay: new ol.Overlay({ element: $("#gfipopup") }), // ol.Overlay
+            element: $("#gfipopup"),
+            gfiOverlay: {}, // ol.Overlay
             gfiContent: [],
             gfiTitles: [],
             wfsCoordinate: [],
@@ -30,22 +31,30 @@ define([
         initialize: function () {
             var channel = Radio.channel("GFIPopup");
 
+            this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
             channel.on({
                 "themeLoaded": this.themeLoaded
             }, this);
-
-            this.set("element", this.get("gfiOverlay").getElement());
 
             EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
             EventBus.on("renderResults", this.getThemes, this);
         },
+        setGFIOverlay: function (overlay) {
+            this.set("gfiOverlay", overlay);
+        },
+        getElement: function () {
+            return this.get("element");
+        },
+        setElement: function (element) {
+            this.set("element", element);
+        },
         /**
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            this.get("element").popover("destroy");
+            this.getElement().popover("destroy");
             this.set("isPopupVisible", false);
             this.unset("coordinate", {silent: true});
             this.set("gfiContent", [], {silent: true});
@@ -58,7 +67,11 @@ define([
             $("#popovermin").fadeOut(500, function () {
                 $("#popovermin").remove();
             });
-            this.get("element").popover("show");
+            // Für Straßenbaumkataster
+            if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
+                 Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
+            }
+            $(this.getElement()).popover("show");
             this.set("isPopupVisible", true);
         },
         setGFIParams: function (params) {

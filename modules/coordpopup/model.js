@@ -8,24 +8,53 @@ define([
 ], function (Backbone, EventBus, ol, proj4, Config) {
 
     var CoordPopup = Backbone.Model.extend({
+         defaults: {
+            element: $("#popup"),
+            coordOverlay: {},
+            coordinateUTM: {},
+            coordinateGeo: {}
+        },
         initialize: function () {
             EventBus.on("setPositionCoordPopup", this.setPosition, this);
-            this.set("coordOverlay", new ol.Overlay({
-                element: $("#popup")
+            this.setCoordOverlay(new ol.Overlay({
+                element: this.getElement()[0]
             }));
-            this.set("element", this.get("coordOverlay").getElement());
-            EventBus.trigger("addOverlay", this.get("coordOverlay"));
+            EventBus.trigger("addOverlay", this.getCoordOverlay());
+        },
+        getCoordOverlay: function () {
+            return this.get("coordOverlay");
+        },
+        setCoordOverlay: function (coordOverlay) {
+            this.set("coordOverlay", coordOverlay);
+        },
+        getCoordinateUTM: function () {
+            return this.get("coordinateUTM");
+        },
+        setCoordinateUTM: function (coordinateUTM) {
+            this.set("coordinateUTM", coordinateUTM);
+        },
+        getCoordinateGeo: function () {
+            return this.get("coordinateGeo");
+        },
+        setCoordinateGeo: function (coordinateGeo) {
+            this.set("coordinateGeo", coordinateGeo);
+        },
+        getElement: function () {
+            return this.get("element");
+        },
+        setElement: function (element) {
+            this.set("element", element);
         },
         destroyPopup: function () {
-            this.get("element").popover("destroy");
+            this.getElement().popover("destroy");
         },
         showPopup: function () {
-            this.get("element").popover("show");
+            this.getElement().popover("show");
         },
         setPosition: function (coordinate) {
-            this.get("coordOverlay").setPosition(coordinate);
-            this.set("coordinateUTM", coordinate);
-            this.set("coordinateGeo", ol.coordinate.toStringHDMS(proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.get("coordinateUTM"))));
+            this.getCoordOverlay().setPosition(coordinate);
+            this.setCoordinateUTM(coordinate);
+            this.setCoordinateGeo(ol.coordinate.toStringHDMS(proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.getCoordinateUTM())));
         }
     });
 

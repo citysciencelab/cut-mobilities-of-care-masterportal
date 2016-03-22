@@ -39,11 +39,12 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "once",
             poi: false
         },
         attributions: false,
         allowParametricURL: true,
+        quickHelp: false,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
@@ -53,6 +54,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
+            featureLister: 0,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
@@ -83,18 +85,6 @@ define(function () {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
                 isActive: true
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-record"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
             }
         }
     }

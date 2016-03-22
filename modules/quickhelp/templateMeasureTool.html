@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+    <div class="header">
+        <span class="title">Hilfe - Strecke/Fläche messen</span>
+        <span class="glyphicon glyphicon-remove pull-right"></span>
+        <span class="glyphicon glyphicon-print pull-right"></span>
+    </div>
+    <div class="content container-fluid">
+        <div class="inhalt">
+            <a href="#allgemein">Allgemeines</a>
+            <a href="#statistik">Statistische Annäherung</a>
+            <a href="#UTM">Entzerrung in UTM </a>
+            <a href="#useInMap">Umsetzungen in der Karte</a>
+
+        </div>
+        <h3 id="allgemein">Allgemeines</h3>
+        <div class="row">
+                 <p class="col-md-12">
+                     Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden:
+                 </p>
+        </div>
+        <div class="row">
+            <ul>
+                <li>Maßstab,</li>
+                <li>Auflösung der Karte,</li>
+                <li>Auflösung des Bildschirmes,</li>
+                <li>Eingabegenauigkeit und Anzahl der digitalisierten Punkte und</li>
+                <li>Strecke der Messlinie bzw. Größe der Messfläche</li>
+            </ul>
+        </div>
+        <h3 id="statistik">Statistische Annäherung</h3>
+        <div class="row">
+            <p class="col-md-12">
+                Da die oben angegebenen Fehlergrößen von Arbeitsplatz zu Arbeitsplatz unterschiedlich sein können wird eine Standardabweichung von 1mm pro Klick auf der Karte angenommen. Daraus ergibt sich für jeden Messpunkt auf der Karte ein maßstabsabhängiger Punktfehler von:<br><br>
+            </p>
+        </div>
+        <table class="table table-striped table-bordered table-condensed table-small">
+            <thead>
+                <tr>
+                    <th>Punktfehler [m]</th>
+                    <th>Maßstab</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0,5</td>
+                    <td>1:500</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1:1000</td>
+                </tr>
+                <tr>
+                    <td>2,5</td>
+                    <td>1:2500</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>1:5000</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>1:10000</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>1:20000</td>
+                </tr>
+                <tr>
+                    <td>40</td>
+                    <td>1:40000</td>
+                </tr>
+                <tr>
+                    <td>60</td>
+                    <td>1:60000</td>
+                </tr>
+                <tr>
+                    <td>100</td>
+                    <td>1:100000</td>
+                </tr>
+                <tr>
+                    <td>250</td>
+                    <td>1:250000</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <p class="col-md-12">
+                Nach dem Fehlerfortpflanzungsgesetz aus Koordinaten ohne Berücksichtigung von Korrelationen und einheitlicher Standardabweichung nach der Gauß’schen Dreiecksformel gilt:<br><br>
+                Für Flächen:<br><br>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/Statistik_Flaeche_Niemeier.png')) %>"><br>
+                (Niemeier, 2002)<br><br>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                Für Strecken:<br><br>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/Statistik_Strecke_UniErlangen.png')) %>"><br>
+                (<a href="http://www.hs-bochum.de/fb5/baeumker/download/vermessungskundes1-36einseitig.pdf">Uni Erlangen, 2016</a>)<br><br>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-md-12">
+                Der Fehler ist also abhängig von der Standardabweichung des Einzelfehlers, des Maßstabes und der Anzahl der Punkte.<br>
+                Beispiel:<br>
+                Bei einem quadratischen Polygon mit 10m Seitenlänge (Fläche: 100 m²) ergibt sich bei einem Maßstab von 1:1000 ein zu erwartender Fehler von 10,00 m². Dieser Fehler entsteht durch ungenaue Messungen durch den Nutzer auf dem Bildschirm.<br><br>
+            </p>
+        </div>
+        <h3 id="UTM">Entzerrung in UTM</h3>
+        <div class="row">
+            <p class="col-md-12">
+                Das UTM-Koordinaten-System ist ein globales Koordinatensystem, welches die Erdoberfläche in 6° breiten Streifen darstellt. Jeder Streifen stellt eine Zone dar, die fortlaufend von 180° West nach 180° Ost durchnummeriert werden. Deutschland liegt weitestgehend in der Zone 32 (6° bis 12° östliche Länge). Als Projektion der gekrümmten Erdoberfläche auf eine ebene Karte wird eine transversale Mercator-Projektion verwendet. Dabei schneidet der Projektionszylinder (<font color="red">rot</font>) die Erdoberfläche, sodass ein 360km breiter Schnittstreifen entsteht, der "über" den Projektionszylinder herausragt. Die Koordinaten des Schnittstreifens werden folglich verkürzt auf der Abbildungsebene abgebildet, wohingegen die Koordinaten außerhalb des Schnittstreifens gestreckt werden.<br><br>
+            </p>
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/UTM_Streifen.png')) %>"><br>
+                UTM-Abbildung 6° breit<br><br>
+            </p>
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/UTM_Verzerrung.png')) %>"><br>
+                Abbildungsverzerrung bei der UTM-Abbildung<br><br>
+            </p>
+             <p class="col-md-12">
+                Dieser Verzerrung muss entgegengewirkt werden, da bei einer direkten Messung in der Karte die gemessenen Strecken/Flächen verzerrt und somit falsch sind. Für Hamburg macht die Verzerrung bspw. bei einer Streckenmessung von 1000m schon ca. 40cm aus. Dies ist ein nicht unerheblicher Fehler, der weit über den Toleranzen heutiger Messgeräte liegt. Mit Hilfe folgender Formeln lassen sich gemessene Strecken und Flächen wieder entzerren: <br><br>
+            </p>
+            <p class="col-md-12">
+                <img class="img-responsive img-thumbnail .center-block" src="<% print (util.getPath('../img/UTM_Formeln.png')) %>"><br>
+                Formeln zur Entzerrung der in UTM gemessenen Flächen/Strecken<br><br>
+            </p>
+        </div>
+         <h3 id="useInMap">Umsetzungen in der Karte</h3>
+        <div class="row">
+            <p class="col-md-12">
+                Der maximal zu erwartende absolute Fehler wird hinter der gemessenen Fläche/Strecke angezeigt und durch ein Plus-Minus-Symbol ("+/-") gekennzeichnet. Dies bedeutet, dass der wahre Wert maximal um den absoluten Fehler vom Messwert abweicht. Der angezeigte absolute Fehler ist folglich die Ungenauigkeit der gemessenen Fläche/Strecke.<br><br>
+                In dieser Anwendung werden die gemessenen Flächen/Strecken sofort entzerrt, sodass die angezeigte Messung der "echten" Fläche/Strecke auf der Erdoberfläche entspricht. Es muss keine weitere Entzerrung berechnet werden.
+            </p>
+        </div>
+    </div>

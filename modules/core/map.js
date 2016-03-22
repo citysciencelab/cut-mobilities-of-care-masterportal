@@ -22,13 +22,17 @@ define([
         *
         */
         initialize: function () {
-            var channel = Radio.channel("MouseHover");
+             var channel = Radio.channel("map");
 
+            channel.reply({
+                "getView": MapView.get("view")
+            }, this);
             channel.reply({
                 "getMap": function () {
                     return this.get("map");
                 }
             }, this);
+
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
             EventBus.on("removeLayer", this.removeLayer, this);
@@ -318,16 +322,21 @@ define([
                     }
                     // vector-source
                     else {
-                        layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                            return layer.get("source").getFeatureById(featureAtPixel.getId());
-                        });
-                        gfiParams.push({
-                            typ: "WFS",
-                            feature: featureAtPixel,
-                            attributes: layerByFeature.get("gfiAttributes"),
-                            name: layerByFeature.get("name"),
-                            ol_layer: layerByFeature.get("layer")
-                        });
+                        if (featureAtPixel.getId() !== undefined) {
+                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
+                                return layer.get("source").getFeatureById(featureAtPixel.getId());
+                            });
+
+                            gfiParams.push({
+                                typ: "WFS",
+                                feature: featureAtPixel,
+                                attributes: layerByFeature.get("gfiAttributes"),
+                                name: layerByFeature.get("name"),
+                                ol_layer: layerByFeature.get("layer")
+                            });
+                        }
+                        else{
+                        }
                     }
                 });
             }
