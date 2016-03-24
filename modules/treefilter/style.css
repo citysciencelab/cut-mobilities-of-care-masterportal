@@ -10,20 +10,32 @@
 }
 
 .treeList {
-    max-height: 400px;
+    max-height: 240px;
     overflow-x: hidden;
     overflow-y: auto;
     max-width: 300px;
 }
 
 .treeTypeList {
-    max-height: 400px;
+    max-height: 200px;
     overflow-x: hidden;
     overflow-y: auto;
-    /*max-width: 300px;*/
+    max-width: 300px;
+}
+
+.treeTypeList > li > a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .treeFilterError {
     font-size: 10px;
     color: #a94442;
+}
+
+.treefilter-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
