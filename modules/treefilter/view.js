@@ -38,8 +38,8 @@ define([
             // http://holdirbootstrap.de/javascript/#dropdowns
             $(document.body).on("hidden.bs.dropdown", "#categoryToggle", this, function (evt) {
                 if (_.contains(evt.data.model.get("categoryArray"), $("#categoryInput").val()) === false && evt.data.model.get("categoryArray").length !== 73) {
-                    $(".dropdown-toggle-category").dropdown("toggle");
-                    evt.data.focusOnEnd($("#categoryInput"));
+                    // $(".dropdown-toggle-category").dropdown("toggle");
+                    // evt.data.focusOnEnd($("#categoryInput"));
                 }
                 else if ($("#categoryInput").val() === "") {
                     evt.data.model.setCategory();
@@ -58,7 +58,13 @@ define([
             "click #filterbutton": "setFilterParams",
             "click #filterRemoveButton": "removeFilter",
             "keyup #categoryInput": "setSearchCategoryString",
-            "keyup #typeInput": "setSearchTypeString"
+            "keyup #typeInput": "setSearchTypeString",
+            "focusout #yearMin > input": "setYearMin",
+            "focusout #yearMax > input": "setYearMax",
+            "focusout #diameterMin > input": "setDiameterMin",
+            "focusout #diameterMax > input": "setDiamterMax",
+            "focusout #perimeterMin > input": "setPerimeterMin",
+            "focusout #perimeterMax > input": "setPerimeterMax"
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
@@ -116,6 +122,24 @@ define([
         },
         setFilterParams: function () {
              this.model.setFilterParams();
+        },
+        setYearMin: function (evt) {
+            this.model.setYearMin(evt.target.value);
+        },
+        setYearMax: function (evt) {
+            this.model.setYearMax(evt.target.value);
+        },
+        setDiameterMin: function (evt) {
+            this.model.setDiameterMin(evt.target.value);
+        },
+        setDiamterMax: function (evt) {
+            this.model.setDiamterMax(evt.target.value);
+        },
+        setPerimeterMin: function (evt) {
+            this.model.setPerimeterMin(evt.target.value);
+        },
+        setPerimeterMax: function (evt) {
+            this.model.setPerimeterMax(evt.target.value);
         }
     });
 

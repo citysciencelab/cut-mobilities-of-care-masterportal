@@ -249,12 +249,12 @@ define([
                     this.set("treeFilterType", "");
                 }
             }
-            this.set("yearMax", $("#yearMax > input").val());
-            this.set("yearMin", $("#yearMin > input").val());
-            this.set("diameterMax", $("#diameterMax > input").val());
-            this.set("diameterMin", $("#diameterMin > input").val());
-            this.set("perimeterMax", $("#perimeterMax > input").val());
-            this.set("perimeterMin", $("#perimeterMin > input").val());
+            // this.set("yearMax", $("#yearMax > input").val());
+            // this.set("yearMin", $("#yearMin > input").val());
+            // this.set("diameterMax", $("#diameterMax > input").val());
+            // this.set("diameterMin", $("#diameterMin > input").val());
+            // this.set("perimeterMax", $("#perimeterMax > input").val());
+            // this.set("perimeterMin", $("#perimeterMin > input").val());
 
             if (this.isValid() === true) {
                 this.set("isFilter", true);
@@ -282,18 +282,24 @@ define([
 
             this.set("treeCategory", "");
             this.set("treeType", "");
-            this.set("yearMax", "2014");
-            this.set("yearMin", "0");
-            this.set("diameterMax", "50");
-            this.set("diameterMin", "0");
-            this.set("perimeterMax", "1000");
-            this.set("perimeterMin", "0");
-            $("#yearMax > input").val("2014");
-            $("#yearMin > input").val("0");
-            $("#diameterMax > input").val("50");
-            $("#diameterMin > input").val("0");
-            $("#perimeterMax > input").val("1000");
-            $("#perimeterMin > input").val("0");
+            // this.set("yearMax", "2014");
+            this.setYearMax("2015");
+            this.setYearMin("0");
+            // this.set("yearMin", "0");
+            this.setDiamterMax("50");
+            this.setDiameterMin("0");
+            // this.set("diameterMax", "50");
+            // this.set("diameterMin", "0");
+            this.setPerimeterMin("0");
+            this.setPerimeterMax("1000");
+            // this.set("perimeterMax", "1000");
+            // this.set("perimeterMin", "0");
+            // $("#yearMax > input").val("2015");
+            // $("#yearMin > input").val("0");
+            // $("#diameterMax > input").val("50");
+            // $("#diameterMin > input").val("0");
+            // $("#perimeterMax > input").val("1000");
+            // $("#perimeterMin > input").val("0");
         },
         createFilter: function () {
             var filter, filter2, symbolizer, header, footer, filterwfs, filterCategory, filterType, filterYear, filterDiameter, filterPerimeter;
@@ -359,6 +365,24 @@ define([
                     $("#loader").hide();
                 }
             });
+        },
+        setYearMin: function (value) {
+            this.set("yearMin", value);
+        },
+        setYearMax: function (value) {
+            this.set("yearMax", value);
+        },
+        setDiameterMin: function (value) {
+            this.set("diameterMin", value);
+        },
+        setDiamterMax: function (value) {
+            this.set("diameterMax", value);
+        },
+        setPerimeterMin: function (value) {
+            this.set("perimeterMin", value);
+        },
+        setPerimeterMax: function (value) {
+            this.set("perimeterMax", value);
         }
     });
 
