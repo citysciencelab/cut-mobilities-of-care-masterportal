@@ -15,6 +15,7 @@ define(function () {
         * @type {Object}
         * @property {Object} tree - Das tree-Konfigurationsobject
         * @property {('light'|'custom'|'default')} tree.type - Art des trees. 'light' = einfache Auflistung, 'default' = FHH-Atlas, 'custom' = benutzerdefinierte Layerliste anhand json.
+        * @property {Boolean} tree.saveSelection - Aktviert die Funktion "Auswahl speichern" (nur bei tree.type = default oder custom).
         * @property {Object[]} [tree.layer] - Bei type: light. Array, bestehend aus Layer-Konfigurationsobjekten.
         * @property {String} tree.layer.id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
         * @property {Boolean} tree.layer.visible - Initiale Sichtbarkeit des Layers.
@@ -54,6 +55,7 @@ define(function () {
         */
         tree: {
             type: "light",
+            saveSelection: false,
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
