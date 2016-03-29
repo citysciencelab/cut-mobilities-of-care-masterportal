@@ -48,10 +48,12 @@
     <div class="header">
         <span class="glyphicon glyphicon-minus-sign"></span>
         <span class="control-label">Auswahl der Karten</span>
+        <% if (saveSelection === true) { %>
         <div class="layer-selection-save pull-right">
             <span>Auswahl speichern</span>
             <span class="glyphicon glyphicon-share"></span>
         </div>
+        <% } %>
     </div>
     <div class="content">
     </div>
