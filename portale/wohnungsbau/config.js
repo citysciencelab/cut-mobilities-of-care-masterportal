@@ -4,18 +4,18 @@ define(function () {
   tree: {
             type: "light",
             layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "1886", visible: false, name: "Bezirksgrenzen"},
-                {id: "1724", visible: false, name: "Fertiggestellte Wohnungen 2013"}, // fertiggest.whg.2013
-                {id: "1530", visible: false, name: "Ausgewählte Bauprojekte"}, // wohnungsbauproj.
-                {id: "1173", visible: false, name: "Genehmigte Wohnungen pro Bezirk"}, // baugen.hh
-                {id: "1532", visible: true, name: "Wohnbauflächenenpotentiale"},
-                {id: "1417", visible: true}, // gef.mietw.2011
-                {id: "1418", visible: true}, // gef.mietw.2012
-                {id: "1419", visible: true}, // gef.mietw.2013
-                {id: "2130", visible: true}, //  gef.mietw.2014
-                {id: "4009", visible: true} //  gef.mietw.2015
+                {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "452", visibility: false},
+                {id: "1886", visibility: false, name: "Bezirksgrenzen"},
+                {id: "1724", visibility: false, name: "Fertiggestellte Wohnungen 2013"}, // fertiggest.whg.2013
+                {id: "1530", visibility: false, name: "Ausgewählte Bauprojekte"}, // wohnungsbauproj.
+                {id: "1173", visibility: false, name: "Genehmigte Wohnungen pro Bezirk"}, // baugen.hh
+                {id: "1532", visibility: true, name: "Wohnbauflächenenpotentiale"},
+                {id: "1417", visibility: true}, // gef.mietw.2011
+                {id: "1418", visibility: true}, // gef.mietw.2012
+                {id: "1419", visibility: true}, // gef.mietw.2013
+                {id: "2130", visibility: true}, //  gef.mietw.2014
+                {id: "4009", visibility: true} //  gef.mietw.2015
             ]
         },
         metadatenURL: "",
@@ -92,12 +92,11 @@ define(function () {
             gfi: false
         },
         tools: {
-            gfi: true,
-            measure: false,
-            print: false,
-            coord: false,
-            draw: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            }
         }
     };
 
