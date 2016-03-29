@@ -182,8 +182,8 @@ define([
                 return errors;
             }
         },
-        setCategory: function () {
-            this.set("treeCategory", $("#categoryInput").val());
+        setCategory: function (value) {
+            this.set("treeCategory", value);
         },
         setSearchCategoryString: function (value) {
             this.set("searchCategoryString", value);
@@ -204,12 +204,12 @@ define([
             }
             this.set("categoryArray", catArray);
         },
-        setType: function () {
-            this.set("treeType", $("#typeInput").val());
+        setType: function (value) {
+            this.set("treeType", value);
         },
         setSearchTypeString: function (value) {
             this.set("searchTypeString", value);
-            $("#typeInput").val(this.get("searchTypeString"));
+            // $("#typeInput").val(this.get("searchTypeString"));
         },
         setTypeArray: function () {
             var typeArray = [],

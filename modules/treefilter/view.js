@@ -22,7 +22,7 @@ define([
             $(document.body).on("click", ".categoryPick", this, function (evt) {
                 if (evt.target.textContent !== "Keine Treffer") {
                     $("#categoryInput").val(evt.target.textContent);
-                    evt.data.model.setCategory();
+                    evt.data.model.setCategory(evt.target.textContent);
                     $("#typeInput").prop("disabled", false);
                      $(".dropdown-toggle-type").prop("disabled", false);
                     $("#typeInput").val("");
@@ -32,7 +32,7 @@ define([
             $(document.body).on("click", ".typePick", this, function (evt) {
                 // evt.data = this (die View)
                 $("#typeInput").val(evt.target.textContent);
-                evt.data.model.setType();
+                evt.data.model.setType(evt.target.textContent);
                 evt.data.focusOnEnd($("#yearMin > input"));
             });
             // http://holdirbootstrap.de/javascript/#dropdowns
@@ -64,7 +64,9 @@ define([
             "focusout #diameterMin > input": "setDiameterMin",
             "focusout #diameterMax > input": "setDiamterMax",
             "focusout #perimeterMin > input": "setPerimeterMin",
-            "focusout #perimeterMax > input": "setPerimeterMax"
+            "focusout #perimeterMax > input": "setPerimeterMax",
+            "focusout #categoryInput": "setCategory",
+            "focusout #typeInput": "setType"
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
@@ -140,6 +142,12 @@ define([
         },
         setPerimeterMax: function (evt) {
             this.model.setPerimeterMax(evt.target.value);
+        },
+        setCategory: function (evt) {
+            this.model.setCategory(evt.target.value);
+        },
+        setType: function (evt) {
+            this.model.setType(evt.target.value);
         }
     });
 
