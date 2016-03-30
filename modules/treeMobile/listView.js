@@ -35,7 +35,7 @@ define([
 
             if (isMobile === true) {
                 $(this.targetElement).append(this.$el);
-                this.collection.setModelsVisible("");
+                this.collection.showRootModels();
             }
             else {
                 this.collection.setAllModelsInvisible();
