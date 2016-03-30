@@ -25,7 +25,7 @@ define([
             });
         },
         render: function () {
-            if (this.model.getIsVisible() === true && this.model.getIsSelected() === true) {
+            if (this.model.getIsVisible() === true && this.model.getIsExpanded() === true) {
                 var attr = this.model.toJSON();
 
                 $(this.model.get("targetElement")).append(this.$el.html(this.templateLeaf(attr)));
@@ -42,7 +42,7 @@ define([
             }
         },
         changeMenuById: function () {
-            this.model.setIsSelected(true);
+            this.model.setIsExpanded(true);
             this.model.changeMenuById(this.model.getId());
         },
         toggleIsChecked: function () {

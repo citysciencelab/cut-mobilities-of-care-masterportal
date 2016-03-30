@@ -38,7 +38,7 @@ define([
         },
         changeMenuById: function (value) {
             this.collection.setAllModelsInvisible();
-            this.collection.unsetIsSelected(value);
+            this.collection.unsetIsExpanded(value);
             this.collection.setParentIdForBackItem(value);
             if (value !== "") {
                 this.collection.setModelsVisible(value);

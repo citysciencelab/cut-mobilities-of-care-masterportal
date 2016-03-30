@@ -3,7 +3,6 @@ define([
     "backbone.radio",
     "modules/core/util",
     "config",
-    "modules/treeMobile/dummyModel",
     "modules/treeMobile/folderModel",
     "modules/treeMobile/itemModel",
     "modules/treeMobile/layerModel",
@@ -14,7 +13,6 @@ define([
      var Backbone = require("backbone"),
          Util = require("modules/core/util"),
          Radio = require("backbone.radio"),
-         Dummy = require("modules/treeMobile/dummyModel"),
          Folder = require("modules/treeMobile/folderModel"),
          Item = require("modules/treeMobile/itemModel"),
          Layer = require("modules/treeMobile/layerModel"),
@@ -23,6 +21,8 @@ define([
          TreeCollection;
 
     TreeCollection = Backbone.Collection.extend({
+        // Pfad zur custom-treeconfig
+        url: "tree-config.json",
         model: function (attrs, options) {
             if (attrs.type === "folder") {
                 return new Folder(attrs, options);
@@ -33,20 +33,19 @@ define([
             else if (attrs.type === "item") {
                 return new Item(attrs, options);
             }
-            else if (attrs.type === "dummy") {
-                return new Dummy(attrs, options);
-            }
         },
-        // Pfad zur treeconfig
-        url: "tree-config.json",
 
         initialize: function () {
-            this.parseMainMenue();
-            this.parseTools();
-            this.addItemBack();
+            this.listenTo(this, {
+                "change:isChecked": this.toggleIsChecked
+            });
+
+            this.addMenuItems();
+            this.addToolItems();
 
             switch (Config.tree.type){
                 case "default": {
+                    this.addTreeMenuItems();
                     this.parseLayerList();
                     break;
                 }
@@ -55,22 +54,29 @@ define([
                     break;
                 }
                 case "custom": {
-                    this.addTreeMenu();
-                    this.loadTreeConfig();
+                    this.addTreeMenuItems();
+                    this.fetchTreeConfig();
                     break;
-                }
-                case "dummy": {
-                    for (var i = 0; i < 10; i++) {
-                        this.add({type: "dummy"});
-                    }
-                    for (var i = 0; i < 10; i++) {
-                        this.add({type: "dummy", parentId: "1"});
-                    }
                 }
             }
         },
 
-        addItemBack: function () {
+        /**
+        * Ließt aus der Config aus, welche Menüeinträge
+        * angezeigt werden sollen und erzeugt daraus die
+        * oberen statischen Menüelmente (alles außer den Baum)
+        */
+        addMenuItems: function () {
+            _.each(Config.menuItems, function (value, key) {
+                this.add({
+                    type: (key === "tree" || key === "tools") ? "folder" : "item",
+                    title: value.title,
+                    glyphicon: value.glyphicon,
+                    isRoot: true,
+                    id: key
+                });
+            }, this);
+            // Back-Item
             this.add({
                 type: "item",
                 title: "Zurück",
@@ -78,38 +84,11 @@ define([
                 id: "backItem"
             });
         },
-        /**
-        * Ließt aus der Config aus, welche Menüeinträge
-        * angezeigt werden sollen und erzeugt daraus die
-        * oberen statischen Menüelmente (alles außer den Baum)
-        */
-        parseMainMenue: function () {
-            _.each(Config.menuItems, function (value, key) {
-                if (key === "tree" || key === "tools") {
-                    this.add({
-                        type: "folder",
-                        title: value.title,
-                        glyphicon: value.glyphicon,
-                        isRoot: true,
-                        id: key
-                    });
-                }
-                else {
-                    this.add({
-                        type: "item",
-                        title: value.title,
-                        glyphicon: value.glyphicon,
-                        isRoot: true,
-                        id: key
-                    });
-                }
-            }, this);
-        },
 
         /**
          * Erstellt die 1. Themenbaum-Ebene bei custom und default (Hintergrundkarten, Fachdaten und Auswahlt der Karten).
          */
-        addTreeMenu: function () {
+        addTreeMenuItems: function () {
             this.add({
                 type: "folder",
                 title: "Hintergrundkarten",
@@ -137,14 +116,15 @@ define([
             });
         },
 
-        parseTools: function () {
-            var toolId = this.findWhere({isRoot: true, id: "tools"}).id;
-
-            if (_.isUndefined(toolId) === false) {
-                _.each(Config.tools, function (value) {
-                    this.add({type: "item", title: value.title, glyphicon: value.glyphicon, parentId: toolId});
-                }, this);
-            }
+        addToolItems: function () {
+            _.each(Config.tools, function (value) {
+                this.add({
+                    type: "item",
+                    title: value.title,
+                    glyphicon: value.glyphicon,
+                    parentId: "tools"
+                });
+            }, this);
         },
         /**
         * Ließt aus der Config die Layer aus und
@@ -152,13 +132,12 @@ define([
         * In dieser Ebene sind alle Layer
         */
         parseLightTree: function () {
-            var treeId = this.findWhere({isRoot: true, id: "tree"}).id,
-                layerList = Radio.request("LayerList", "getLayerList");
+            var layerList = Radio.request("LayerList", "getLayerList");
 
             _.each(layerList, function (element) {
                 this.add({
                     type: "layer",
-                    parentId: treeId,
+                    parentId: "tree",
                     layerId: element.get("id"),
                     title: element.get("name")
                 });
@@ -168,7 +147,7 @@ define([
         * Lädt eine Treeconfig und erzeugt daraus einen Baum
         * die Treeconfig wird in parse() geparst
         */
-        loadTreeConfig: function () {
+        fetchTreeConfig: function () {
             this.fetch({
                 remove: false,
                 async: false,
@@ -241,7 +220,7 @@ define([
         setModelsVisible: function (parentId) {
             var children = this.where({parentId: parentId}),
                 // Falls es ein LeafFolder ist --> "Alle auswählen" Template
-                selectedLeafFolder = this.where({isSelected: true, isLeafFolder: true}),
+                selectedLeafFolder = this.where({isExpanded: true, isLeafFolder: true}),
                 backItem = this.where({id: "backItem"});
 
             _.each(_.union(backItem, selectedLeafFolder, children), function (model) {
@@ -273,11 +252,11 @@ define([
             }
         },
 
-        unsetIsSelected: function (value) {
-            var item = this.findWhere({parentId: value, isSelected: true});
+        unsetIsExpanded: function (value) {
+            var item = this.findWhere({parentId: value, isExpanded: true});
 
             if (!_.isUndefined(item)) {
-                item.setIsSelected(false);
+                item.setIsExpanded(false);
             }
         },
 
@@ -289,29 +268,20 @@ define([
                 model.setIsVisible(true);
             });
         },
+
         /**
          * Alle Models von einem Leaffolder werden selektiert
          * @param {String} parentId Die ID des Objektes dessen Kinder alle auf "checked" gesetzt werden
          */
-        setModelsChecked: function (parentId) {
-            var children = this.where({parentId: parentId});
+         toggleIsChecked: function (model) {
+             if (model.getType() === "folder") {
+                 var children = this.where({parentId: model.getId()});
 
-            _.each(children, function (model) {
-                model.setIsChecked(true);
-            });
-        },
-
-        /**
-         * Alle Models von einem Leaffolder werden selektiert
-         * @param {String} parentId Die ID des Objektes dessen Kinder alle auf "unchecked" gesetzt werden
-         */
-        setModelsUnchecked: function (parentId) {
-            var children = this.where({parentId: parentId});
-
-            _.each(children, function (model) {
-                model.setIsChecked(false);
-            });
-        },
+                 _.each(children, function (child) {
+                     child.toggleIsChecked(model.getIsChecked());
+                 });
+             }
+         },
 
         /**
         * Setzt bei Änderung der Ebene, alle Model
