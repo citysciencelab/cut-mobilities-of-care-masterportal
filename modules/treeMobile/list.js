@@ -6,7 +6,9 @@ define([
     "modules/treeMobile/dummyModel",
     "modules/treeMobile/folderModel",
     "modules/treeMobile/itemModel",
-    "modules/treeMobile/layerModel"
+    "modules/treeMobile/layerModel",
+    "jqueryui/effect",
+    "jqueryui/effect-slide"
 ], function () {
 
      var Backbone = require("backbone"),
@@ -39,8 +41,9 @@ define([
         url: "tree-config.json",
 
         initialize: function () {
-             this.parseMainMenue();
-             this.parseTools();
+            this.parseMainMenue();
+            this.parseTools();
+            this.addItemBack();
 
             switch (Config.tree.type){
                 case "default": {
@@ -65,6 +68,15 @@ define([
                     }
                 }
             }
+        },
+
+        addItemBack: function () {
+            this.add({
+                type: "item",
+                title: "Zurück",
+                glyphicon: "glyphicon-arrow-left",
+                id: "backItem"
+            });
         },
         /**
         * Ließt aus der Config aus, welche Menüeinträge
@@ -98,15 +110,13 @@ define([
          * Erstellt die 1. Themenbaum-Ebene bei custom und default (Hintergrundkarten, Fachdaten und Auswahlt der Karten).
          */
         addTreeMenu: function () {
-            var treeId = this.findWhere({isRoot: true, id: "tree"}).id;
-
             this.add({
                 type: "folder",
                 title: "Hintergrundkarten",
                 glyphicon: "glyphicon-plus-sign",
                 isRoot: false,
                 id: "BaseLayer",
-                parentId: treeId
+                parentId: "tree"
             });
             this.add({
                 type: "folder",
@@ -114,7 +124,7 @@ define([
                 glyphicon: "glyphicon-plus-sign",
                 isRoot: false,
                 id: "OverLayer",
-                parentId: treeId
+                parentId: "tree"
             });
             this.add({
                 type: "folder",
@@ -122,7 +132,7 @@ define([
                 glyphicon: "glyphicon-plus-sign",
                 isRoot: false,
                 id: "SelectedLayer",
-                parentId: treeId,
+                parentId: "tree",
                 isLeafFolder: true
             });
         },
@@ -231,12 +241,14 @@ define([
         setModelsVisible: function (parentId) {
             var children = this.where({parentId: parentId}),
                 // Falls es ein LeafFolder ist --> "Alle auswählen" Template
-                selectedLeafFolder = this.where({isSelected: true, isLeafFolder: true});
+                selectedLeafFolder = this.where({isSelected: true, isLeafFolder: true}),
+                backItem = this.where({id: "backItem"});
 
-            _.each(_.union(selectedLeafFolder, children), function (model) {
+            _.each(_.union(backItem, selectedLeafFolder, children), function (model) {
                 model.setIsVisible(true);
             });
         },
+
         /**
          * Setzt alle Model unsichtbar
          */
@@ -246,6 +258,37 @@ define([
             });
         },
 
+        /**
+         * Setzt die ParentId für ItemBack (zurück Button)
+         * @param {[type]} value [description]
+         */
+        setParentIdForBackItem: function (value) {
+            var parent = this.get(value);
+
+            if (_.isUndefined(parent)) {
+                this.showRootModels();
+            }
+            else {
+                this.get("backItem").setParentId(parent.getParentId());
+            }
+        },
+
+        unsetIsSelected: function (value) {
+            var item = this.findWhere({parentId: value, isSelected: true});
+
+            if (!_.isUndefined(item)) {
+                item.setIsSelected(false);
+            }
+        },
+
+        // zeichnet die erste Ebene
+        showRootModels: function () {
+            var children = this.where({isRoot: true});
+
+            _.each(children, function (model) {
+                model.setIsVisible(true);
+            });
+        },
         /**
          * Alle Models von einem Leaffolder werden selektiert
          * @param {String} parentId Die ID des Objektes dessen Kinder alle auf "checked" gesetzt werden
