@@ -12,8 +12,7 @@ define([
             // true wenn die Node zur ersten Ebene gehört
             isRoot: false,
             // true wenn der Inhalt(Kinder) der Node angezeigt wird
-            // für die Steuerung der zwei Templates zuständig
-            isSelected: false,
+            isExpanded: false,
             // true wenn alle Kinder ausgewöhlt sind
             isChecked: false,
             // welcher Node-Type - folder/layer/item
@@ -29,31 +28,59 @@ define([
             // Folder Glyphicon
             glyphicon: "glyphicon-plus-sign"
         },
-        getIsLeafFolder: function () {
-            return this.get("isLeafFolder");
+
+        /**
+         * Setter für Attribut "isExpanded"
+         * @param {boolean} value - true | false
+         */
+        setIsExpanded: function (value) {
+            this.set("isExpanded", value);
         },
-        setIsSelected: function (value) {
-            this.set("isSelected", value);
+
+        /**
+         * Getter für Attribut "isExpanded"
+         * @return {boolean} true | false
+         */
+        getIsExpanded: function () {
+            return this.get("isExpanded");
         },
-        getIsSelected: function () {
-            return this.get("isSelected");
-        },
+
+        /**
+         * Setter für Attribut "isChecked"
+         * @param {boolean} value - true | false
+         */
         setIsChecked: function (value) {
             this.set("isChecked", value);
         },
+
+        /**
+         * Getter für Attribut "isChecked"
+         * @return {boolean} true | false
+         */
         getIsChecked: function () {
             return this.get("isChecked");
         },
+
+        /**
+         * "Toggled" das Attribut "isChecked"
+         */
         toggleIsChecked: function () {
             if (this.getIsChecked() === true) {
                 this.setIsChecked(false);
-                this.collection.setModelsUnchecked(this.getId());
             }
             else {
                 this.setIsChecked(true);
-                this.collection.setModelsChecked(this.getId());
             }
+        },
+
+        /**
+         * Getter für Attribut "isLeafFolder"
+         * @return {boolean} true | false
+         */
+        getIsLeafFolder: function () {
+            return this.get("isLeafFolder");
         }
+
     });
 
     return FolderModel;
