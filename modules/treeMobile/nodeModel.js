@@ -24,6 +24,12 @@ define([
         getParentId: function () {
             return this.get("parentId");
         },
+        setTitle: function (value) {
+            this.set("title", value);
+        },
+        getTitle: function () {
+            return this.get("title");
+        },
         getType: function () {
             return this.get("type");
         },
