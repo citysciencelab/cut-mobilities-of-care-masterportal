@@ -4,13 +4,11 @@ define([
     "modules/treeMobile/list",
     "modules/treeMobile/FolderView",
     "modules/treeMobile/LayerView",
-    "modules/treeMobile/ItemView",
-    "modules/treeMobile/dummyView"
+    "modules/treeMobile/ItemView"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        DummyView = require("modules/treeMobile/dummyView"),
         FolderView = require("modules/treeMobile/FolderView"),
         LayerView = require("modules/treeMobile/LayerView"),
         ItemView = require("modules/treeMobile/ItemView"),
@@ -20,17 +18,29 @@ define([
     ListView = Backbone.View.extend({
         collection: new TreeCollection(),
         tagName: "ul",
-        className: "tree-mobile list-group",
+        className: "list-group tree-mobile",
+        // der ausklappbare Teil der sich hinter dem "Burger-Button" befindet
         targetElement: "div.collapse.navbar-collapse",
+
+        /**
+         * Wird initial aufgerufen. Ruft weitere Funktionen auf und registriert Listener.
+         */
         initialize: function () {
             this.listenTo(Radio.channel("MenuBar"), {
+                // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
                 "switchedMenu": this.render
             });
 
             this.collection.forEach(this.addViews, this);
             this.render();
         },
+
+        /**
+         * In der mobilen Ansicht wird die ListView und die erste Ebene gezeichnet.
+         * In der desktop Ansicht wird die ListView und alle aktuell gezeichneten Elemente aus dem DOM entfernt.
+         */
         render: function () {
+            // true wenn sich das Menü in der mobilen Navigation befindet
             var isMobile = Radio.request("MenuBar", "isMobile");
 
             if (isMobile === true) {
@@ -39,23 +49,19 @@ define([
             }
             else {
                 this.collection.setAllModelsInvisible();
+                this.$el.remove();
             }
         },
+
         /**
-         * Ordnet den Models die richtigen Views zu
+         * Ordnet den Models die richtigen Views zu.
+         * @param {Backbone.Model} model - itemModel | layerModel | folderModel
          */
         addViews: function (model) {
             switch (model.getType()){
                 case "folder": {
-                    // gleiche View/model Komponente mit zwei Templates??
-                    if (model.getIsLeafFolder()) {
-                        // Model das alle Layer dieser Ebene auszuwählen kann
-                        new FolderView({model: model});
-                    }
-                    else {
-                        // Model das seine Kinder lädt
-                        new FolderView({model: model});
-                    }
+                    // Model für einen Ordner
+                    new FolderView({model: model});
                     break;
                 }
                 case "layer": {
@@ -64,14 +70,8 @@ define([
                     break;
                 }
                 case "item": {
-                    // Model für Tools/Links/ander Funktionen
+                    // Model für Tools/Links/andere Funktionen
                     new ItemView({model: model});
-                    break;
-                }
-                 case "dummy": {
-                    // Model für Testzwecke
-                    new DummyView({model: model});
-                    // this.$el.prepend(t.render().el);
                     break;
                 }
             }
