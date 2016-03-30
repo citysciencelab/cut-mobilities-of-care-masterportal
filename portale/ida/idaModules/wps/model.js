@@ -44,13 +44,17 @@ define([
                 success: function (response) {
                     var exeResp = $("wps\\:ExecuteResponse,ExecuteResponse", response),
                         data = $(exeResp).find("wps\\:ComplexData,ComplexData")[0],
+                        errorOccured = $(exeResp).find("wps\\:ErrorOccured,ErrorOccured")[0],
+                        fehlermeldung = $(exeResp).find("wps\\:Fehlermeldung,Fehlermeldung")[0],
                         statusInfo = $(data).find("statusInfo")[0],
                         status = $(statusInfo).find("status")[0],
                         message = $(statusInfo).find("message")[0];
 
                     if (status && status.textContent === "failure") {
-                        alert ("Fehler beim Abfragen eines Dienstes");
-                        console.log(message.textContent);
+                        alert ("Fehler beim Abfragen eines Dienstes. " + message.textContent);
+                    }
+                    else if (errorOccured && errorOccured.textContent === "Yes") {
+                        alert ("Fehler beim Abfragen eines Dienstes. " + fehlermeldung.textContent);
                     }
                     else {
                         EventBus.trigger("wps:response", {
