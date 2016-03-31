@@ -11,9 +11,6 @@ define([
         tagName: "li",
         className: "list-group-item",
         template: _.template(ItemTemplate),
-        events: {
-            "click": "changeMenuById"
-        },
         initialize: function () {
             this.listenTo(this.model, {
                  "change:isVisible": this.render
@@ -28,14 +25,6 @@ define([
             }
             else {
                 this.$el.remove();
-            }
-        },
-        changeMenuById: function () {
-            if (this.model.getId() === "backItem") {
-                this.model.changeMenuById(this.model.getParentId());
-            }
-            else {
-                this.model.changeMenuById(this.model.getId());
             }
         }
     });
