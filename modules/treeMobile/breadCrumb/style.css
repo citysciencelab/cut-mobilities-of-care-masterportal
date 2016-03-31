@@ -1,0 +1,15 @@
+.breadcrumb-mobile > .breadcrumb {
+    margin-bottom: 0;
+    background-color: rgb(8, 88, 158);
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+}
+
+.breadcrumb-mobile > .breadcrumb > li > span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.breadcrumb-mobile > .breadcrumb > li + li:before {
+    color: rgb(255, 255, 255);
+}
