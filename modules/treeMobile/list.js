@@ -206,91 +206,127 @@ define([
 
             return treeNodes;
         },
+        /**
+         * Erzeugt aus einem Übergebenen Array Layer Models
+         * und fügt sie der collection hinzu
+         * @param  {array} layers   ein array mit Modeln
+         * @param  {String} parentId die Id des Eltern Model
+         */
         createLayersModels: function (layers, parentId) {
             var nodes = [];
+
             _.each(layers, function (layer) {
                 nodes.push({
                     type: "layer",
                     parentId: parentId,
-                    layerId: layer.id
+                    layerId: layer.id,
+                    title: layer.attributes.name
                 });
             });
             this.add(nodes);
         },
+        /**
+         * Erzeugt aus einem Übergebenen Array Ordner Models
+         * und fügt sie der collection hinzu
+         * @param  {array} folder   ein array mit Modeln
+         * @param  {String}  parentId die Id des Eltern Model
+         */
         createFolderModels: function (folders, parentId) {
             var nodes = [];
+
             _.each(folders, function (folder) {
-                folder.id = folder.Titel;
                 nodes.push({
                     type: "folder",
                     parentId: parentId,
                     title: folder.Titel,
                     id: folder.id,
-                    isLeafFolder: (!_.has(folder, "Ordner")) ? true : false
+                    isLeafFolder: (_.has(folder, "folder")) ? false : true
                 });
             }, this);
             this.add(nodes);
-
-            console.log(parentId);
-            console.log(nodes);
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {
-            var layerList = Radio.request("LayerList", "getLayerList");
-            var typeGroup = _.groupBy(layerList, function (layer) {
+            var layerList = Radio.request("LayerList", "getLayerList"),
+                // Unterscheidung nach Overlay und Baselayer
+                typeGroup = _.groupBy(layerList, function (layer) {
                 return (layer.attributes.isbaselayer) ? "baselayer" : "overlay";
             });
-
-            this.parseBaseLayer(typeGroup.baselayer);
-
-            this.parseOverLayes(typeGroup.overlay);
+            // Models für die Baselayer erzeugen
+            this.createLayersModels(typeGroup.baselayer, "BaseLayer");
+            // Models für die Fachdaten erzeugen
+            this.groupDefaultTreeOverlays(typeGroup.overlay);
 
         },
-        parseBaseLayer: function (baselayer) {
-            this.createLayersModels(baselayer, "BaseLayer");
+        /**
+         * unterteilung der nach metaName groupierten Layer in Ordner und Layer
+         * wenn eine MetaNameGroup nur einen Eintrag hat soll sie
+         * als Layer und nicht als Ordner hinzugefügt werden
+        */
+        splitIntoFolderAndLayer: function (metaNameGroups, title) {
+            var folder = [],
+                layer = [],
+                categories = {};
+
+            _.each(metaNameGroups, function (group, groupTitle) {
+                // Wenn eine Gruppe mehr als einen Eintrag hat -> Ordner erstellen
+                if (Object.keys(group).length > 1) {
+                    folder.push({
+                        Titel: groupTitle,
+                        layer: group,
+                        id: _.uniqueId(groupTitle)
+                    });
+                }
+                else {
+                    layer.push(group[0]);
+                }
+                categories.folder = folder;
+                categories.layer = layer;
+                categories.id = _.uniqueId(title);
+                categories.Titel = title;
+            });
+            return categories;
         },
-        parseOverLayes: function (overlays) {
-            var tree = {};
-            var categoryGroups = _.groupBy(overlays, function (layer) {
+        /**
+         * Gruppiert die Layer nach Kategorie und MetaName
+         * @param  {Object} overlays die Fachdaten als Object
+         */
+        groupDefaultTreeOverlays: function (overlays) {
+            var tree = {},
+                // Gruppierung nach Opendatakategorie
+                categoryGroups = _.groupBy(overlays, function (layer) {
                 return layer.attributes.node;
             });
-
-            _.each(categoryGroups, function (group, value) {
-                var metaGroup = _.groupBy(group, function (layer) {
+           // Gruppierung nach MetaName
+            _.each(categoryGroups, function (group, title) {
+                var metaNameGroups = _.groupBy(group, function (layer) {
                     return layer.attributes.metaName;
-                }),
-                folder = [],
-                layer = [],
-                metaLevel = {};
-
-                _.each(metaGroup, function (subGroup, value) {
-                    if (Object.keys(subGroup).length > 1) {
-                        folder.push({
-                            Titel: value,
-                            layer: subGroup,
-                            id: value
-                        });
-                    }
-                    else {
-                        layer.push(subGroup[0]);
-                    }
-                    metaLevel.folder = folder;
-                    metaLevel.layer = layer;
                 });
-                tree[value] = _.extend(metaLevel, {"Titel": value});
-            });
+                // in Layer und Ordner unterteilen
+                tree[title] = this.splitIntoFolderAndLayer(metaNameGroups, title);
+            }, this);
 
-            this.parseGroups(tree);
-                            console.log(tree);
+            this.createModelsForDefaultTree(tree);
         },
-        parseGroups: function (tree) {
+        /**
+         * Erzeugt alle Models für den DefaultTree
+         * @param  {Object} tree aus den categorien und MetaNamen erzeugter Baum
+         */
+        createModelsForDefaultTree: function (tree) {
+            // Kategorien erzeugen
             this.createFolderModels(tree, "OverLayer");
+
             _.each(tree, function (category) {
-               this.createFolderModels(category.folder, category.Titel);
-               this.createLayersModels(category.layer, category.Titel);
+                // Unterordner erzeugen
+                this.createFolderModels(category.folder, category.id);
+                this.createLayersModels(category.layer, category.id);
+                _.each(category.folder, function (folder) {
+                    // Layer in der untertestenEbene erzeugen
+                    this.createLayersModels(folder.layer, folder.id);
+                }, this);
             }, this);
         },
         /**
