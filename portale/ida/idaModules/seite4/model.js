@@ -103,7 +103,7 @@ define([
             });
         },
         /*
-        * empfängt Teile des AktBRW
+        * empfängt Teile der umgerechneten BRW (sowohl AktBRW als auch NormBRW)
         */
         handleBRWResponse: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameBRW")) {
@@ -153,15 +153,25 @@ define([
             this.set("brwList", brwList);
         },
         /*
-        * Verarbeite den AktBRW und vermerke rsponseReceived
+        * Verarbeite den AktBRW und vermerke rsponseReceived. Der aktuelle BRW kann sich aus mehreren BRW zusammensetzen.
+        * bei ETW kommt MFH (mit 2 Anteilen) + WGH (mit 2 Anteilen)
+        * bei Produkt BRW kommt nur ein BRW mit Anteil = 1
+        * usw.
         */
         setAktBRW: function (brw, wert) {
-            var wertanteil = wert * brw.anteil,
-                aktBRW = this.get("aktBRW") === "" ? 0 : this.get("aktBRW"),
-                newAktBRW = 0,
-                brwList = this.get("brwList");
+            var newAktBRW = 0,
+                brwList = this.get("brwList"),
+                listAktBRW = _.filter(brwList, function (brw) {
+                    return brw.art = "Akt.BRW";
+                }),
+                groupAktBrw = _.groupBy(listAktBRW, function (brw) {
+                    return brw.bezeichnung;
+                }),
+                wertanteil = wert * brw.anteil,
+                aktBRW = this.get("aktBRW") === "" ? 0 : this.get("aktBRW");
 
-            newAktBRW = parseFloat(aktBRW) + parseFloat(wertanteil);
+            // addiere zu bisher ermittelten AktBRW noch den Quotienten des neuen Wertanteils
+            newAktBRW = parseFloat(aktBRW) + (parseFloat(wertanteil) / _.size(groupAktBrw));
             this.set("aktBRW", newAktBRW);
 
             _.each(brwList, function (b) {
