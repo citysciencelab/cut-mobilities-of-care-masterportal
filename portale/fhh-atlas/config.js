@@ -3,7 +3,7 @@ define(function () {
         title: "FHH - Atlas",
         logo: "../img/hh-logo.png",
         tree: {
-            type: "dummy",
+            type: "default",
             orderBy: "opendata",
             baseLayer: [
                 {id: "453", minScale: "500"},

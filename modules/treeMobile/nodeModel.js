@@ -1,8 +1,10 @@
 define([
-    "backbone"
+    "backbone",
+    "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
         Node;
 
     Node = Backbone.Model.extend({
@@ -36,15 +38,10 @@ define([
         getTargetElement: function () {
             return this.get("targetElement");
         },
-        changeMenuById: function (value) {
-            this.collection.setAllModelsInvisible();
-            this.collection.unsetIsExpanded(value);
-            this.collection.setParentIdForBackItem(value);
-            if (value !== "") {
-                this.collection.setModelsVisible(value);
-            }
-            else {
-                this.collection.showRootModels();
+        updateList: function (value) {
+            this.collection.updateList(value);
+            if (this.getType() === "folder") {
+                Radio.trigger("BreadCrumb", "addItem", this);
             }
         }
     });

@@ -15,7 +15,7 @@ define([
         template: _.template(FolderTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
-            "click .folder-item": "changeMenuById",
+            "click .folder-item": "updateList",
             "click .checked-all-item": "toggleIsChecked"
         },
         initialize: function () {
@@ -41,9 +41,11 @@ define([
                 this.$el.remove();
             }
         },
-        changeMenuById: function () {
-            this.model.setIsExpanded(true);
-            this.model.changeMenuById(this.model.getId());
+        updateList: function () {
+            if (this.model.getIsLeafFolder() === true) {
+                this.model.setIsExpanded(true);
+            }
+            this.model.updateList(this.model.getId());
         },
         toggleIsChecked: function () {
             this.model.toggleIsChecked();
