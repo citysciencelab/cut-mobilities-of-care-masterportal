@@ -44,6 +44,7 @@ define([
 
             switch (Config.tree.type){
                 case "default": {
+                    this.addTreeMenu();
                     this.parseLayerList();
                     break;
                 }
@@ -173,7 +174,6 @@ define([
          * @param  {Object} response - Die treeConfig JSON
          */
         parse: function (response) {
-
             // key = Hintergrundkarten || Fachdaten || Ordner
             // value = Array von Objekten (Layer || Ordner)
             _.each(response, function (value, key) {
@@ -218,11 +218,94 @@ define([
 
             return treeNodes;
         },
+        createLayersModels: function (layers, parentId) {
+            var nodes = [];
+            _.each(layers, function (layer) {
+                nodes.push({
+                    type: "layer",
+                    parentId: parentId,
+                    layerId: layer.id
+                });
+            });
+            this.add(nodes);
+        },
+        createFolderModels: function (folders, parentId) {
+            var nodes = [];
+            _.each(folders, function (folder) {
+                folder.id = folder.Titel;
+                nodes.push({
+                    type: "folder",
+                    parentId: parentId,
+                    title: folder.Titel,
+                    id: folder.id,
+                    isLeafFolder: (!_.has(folder, "Ordner")) ? true : false
+                });
+            }, this);
+            this.add(nodes);
+
+
+            console.log(parentId);
+            console.log(nodes);
+        },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
         * und erzeugt daraus einen Baum
         */
-        parseLayerList: function () {},
+        parseLayerList: function () {
+            var layerList = Radio.request("LayerList", "getLayerList");
+            var typeGroup = _.groupBy(layerList, function (layer) {
+                return (layer.attributes.isbaselayer) ? "baselayer" : "overlay";
+            });
+
+            this.parseBaseLayer(typeGroup.baselayer);
+
+            this.parseOverLayes(typeGroup.overlay);
+
+        },
+        parseBaseLayer: function (baselayer) {
+            this.createLayersModels(baselayer, "BaseLayer");
+        },
+        parseOverLayes: function (overlays) {
+            var tree = {};
+            var categoryGroups = _.groupBy(overlays, function (layer) {
+                return layer.attributes.node;
+            });
+
+            _.each(categoryGroups, function (group, value) {
+                var metaGroup = _.groupBy(group, function (layer) {
+                    return layer.attributes.metaName;
+                }),
+                folder = [],
+                layer = [],
+                metaLevel = {};
+
+                _.each(metaGroup, function (subGroup, value) {
+                    if (Object.keys(subGroup).length > 1) {
+                        folder.push({
+                            Titel: value,
+                            layer: subGroup,
+                            id: value
+                        });
+                    }
+                    else {
+                        layer.push(subGroup[0]);
+                    }
+                    metaLevel.folder = folder;
+                    metaLevel.layer = layer;
+                });
+                tree[value] = _.extend(metaLevel, {"Titel": value});
+            });
+
+            this.parseGroups(tree);
+                            console.log(tree);
+        },
+        parseGroups: function (tree) {
+            this.createFolderModels(tree, "OverLayer");
+            _.each(tree, function (category) {
+               this.createFolderModels(category.folder, category.Titel);
+               this.createLayersModels(category.layer, category.Titel);
+            }, this);
+        },
         /**
         * Setzt bei Änderung der Ebene, alle Model
         * auf der neuen Ebene auf sichtbar
