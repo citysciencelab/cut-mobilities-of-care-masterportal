@@ -24,6 +24,12 @@ define([
         getParentId: function () {
             return this.get("parentId");
         },
+        setTitle: function (value) {
+            this.set("title", value);
+        },
+        getTitle: function () {
+            return this.get("title");
+        },
         getType: function () {
             return this.get("type");
         },
@@ -32,7 +38,14 @@ define([
         },
         changeMenuById: function (value) {
             this.collection.setAllModelsInvisible();
-            this.collection.setModelsVisible(value);
+            this.collection.unsetIsExpanded(value);
+            this.collection.setParentIdForBackItem(value);
+            if (value !== "") {
+                this.collection.setModelsVisible(value);
+            }
+            else {
+                this.collection.showRootModels();
+            }
         }
     });
 

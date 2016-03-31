@@ -31,7 +31,12 @@ define([
             }
         },
         changeMenuById: function () {
-            this.model.changeMenuById(this.model.getId());
+            if (this.model.getId() === "backItem") {
+                this.model.changeMenuById(this.model.getParentId());
+            }
+            else {
+                this.model.changeMenuById(this.model.getId());
+            }
         }
     });
 

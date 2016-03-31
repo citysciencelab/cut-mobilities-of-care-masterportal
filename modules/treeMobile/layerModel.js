@@ -20,15 +20,23 @@ define([
             // parent-View (listView)
             targetElement: "ul.tree-mobile",
             // true wenn der Layer ausgewählt ist
-            isSelected: false,
+            isChecked: false,
             // Layer Titel
-            title: "dummy"
+            title: "dummydummydummydummy"
         },
-        setIsSelected: function (value) {
-            this.set("isSelected", value);
+        setIsChecked: function (value) {
+            this.set("isChecked", value);
         },
-        getIsSelected: function () {
-            return this.get("isSelected");
+        getIsChecked: function () {
+            return this.get("isChecked");
+        },
+        toggleIsChecked: function () {
+            if (this.getIsChecked() === true) {
+                this.setIsChecked(false);
+            }
+            else {
+                this.setIsChecked(true);
+            }
         }
     });
 
