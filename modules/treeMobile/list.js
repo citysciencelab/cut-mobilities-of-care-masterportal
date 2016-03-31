@@ -36,6 +36,13 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("TreeList");
+
+            channel.on({
+                "updateList": this.updateList,
+                "checkIsExpanded": this.checkIsExpanded
+            }, this);
+
             this.listenTo(this, {
                 "change:isChecked": this.toggleIsChecked
             });
@@ -73,16 +80,10 @@ define([
                     title: value.title,
                     glyphicon: value.glyphicon,
                     isRoot: true,
-                    id: key
+                    id: key,
+                    parentId: "main"
                 });
             }, this);
-            // Back-Item
-            this.add({
-                type: "item",
-                title: "Zurück",
-                glyphicon: "glyphicon-arrow-left",
-                id: "backItem"
-            });
         },
 
         /**
@@ -212,6 +213,28 @@ define([
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {},
+
+        /**
+         * [updateList description]
+         * @param  {[type]} value [description]
+         */
+        updateList: function (value) {
+            this.setAllModelsInvisible();
+            this.setModelsVisible(value);
+        },
+
+        /**
+         * [checkIsExpanded description]
+         * @return {[type]} [description]
+         */
+        checkIsExpanded: function () {
+            var folderModel = this.findWhere({isExpanded: true});
+
+            if (!_.isUndefined(folderModel)) {
+                folderModel.setIsExpanded(false);
+            }
+        },
+
         /**
         * Setzt bei Änderung der Ebene, alle Model
         * auf der neuen Ebene auf sichtbar
@@ -220,10 +243,9 @@ define([
         setModelsVisible: function (parentId) {
             var children = this.where({parentId: parentId}),
                 // Falls es ein LeafFolder ist --> "Alle auswählen" Template
-                selectedLeafFolder = this.where({isExpanded: true, isLeafFolder: true}),
-                backItem = this.where({id: "backItem"});
+                selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
 
-            _.each(_.union(backItem, selectedLeafFolder, children), function (model) {
+            _.each(_.union(selectedLeafFolder, children), function (model) {
                 model.setIsVisible(true);
             });
         },
@@ -234,38 +256,6 @@ define([
         setAllModelsInvisible: function () {
             this.forEach(function (model) {
                 model.setIsVisible(false);
-            });
-        },
-
-        /**
-         * Setzt die ParentId für ItemBack (zurück Button)
-         * @param {[type]} value [description]
-         */
-        setParentIdForBackItem: function (value) {
-            var parent = this.get(value);
-
-            if (_.isUndefined(parent)) {
-                this.showRootModels();
-            }
-            else {
-                this.get("backItem").setParentId(parent.getParentId());
-            }
-        },
-
-        unsetIsExpanded: function (value) {
-            var item = this.findWhere({parentId: value, isExpanded: true});
-
-            if (!_.isUndefined(item)) {
-                item.setIsExpanded(false);
-            }
-        },
-
-        // zeichnet die erste Ebene
-        showRootModels: function () {
-            var children = this.where({isRoot: true});
-
-            _.each(children, function (model) {
-                model.setIsVisible(true);
             });
         },
 
