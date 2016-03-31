@@ -4,7 +4,8 @@ define([
     "modules/treeMobile/list",
     "modules/treeMobile/FolderView",
     "modules/treeMobile/LayerView",
-    "modules/treeMobile/ItemView"
+    "modules/treeMobile/ItemView",
+    "modules/treeMobile/breadCrumb/listView"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -13,6 +14,7 @@ define([
         LayerView = require("modules/treeMobile/LayerView"),
         ItemView = require("modules/treeMobile/ItemView"),
         TreeCollection = require("modules/treeMobile/list"),
+        BreadCrumbListView = require("modules/treeMobile/breadCrumb/listView"),
         ListView;
 
     ListView = Backbone.View.extend({
@@ -44,8 +46,9 @@ define([
             var isMobile = Radio.request("MenuBar", "isMobile");
 
             if (isMobile === true) {
+                new BreadCrumbListView();
                 $(this.targetElement).append(this.$el);
-                this.collection.showRootModels();
+                this.collection.setModelsVisible("main");
             }
             else {
                 this.collection.setAllModelsInvisible();
