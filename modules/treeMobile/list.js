@@ -89,7 +89,7 @@ define([
         /**
          * Erstellt die 1. Themenbaum-Ebene bei custom und default (Hintergrundkarten, Fachdaten und Auswahlt der Karten).
          */
-        addTreeMenuItems: function () {console.log(24);
+        addTreeMenuItems: function () {
             this.add({
                 type: "folder",
                 title: "Hintergrundkarten",
@@ -209,11 +209,15 @@ define([
         },
         /**
          * Erzeugt aus einem Übergebenen Array Layer Models
-         * und fügt sie der collection hinzu
+         * und fügt sie alphabetisch sortiert der collection hinzu
          * @param  {array} layers   ein array mit Modeln
          * @param  {String} parentId die Id des Eltern Model
          */
         createLayersModels: function (layers, parentId) {
+
+            layers = _.sortBy(layers, function (layer) {
+                return layer.attributes.name.trim().toUpperCase();
+            });
             var nodes = [];
 
             _.each(layers, function (layer) {
@@ -228,11 +232,15 @@ define([
         },
         /**
          * Erzeugt aus einem Übergebenen Array Ordner Models
-         * und fügt sie der collection hinzu
+         * und fügt sie alphabetisch sortiert der collection hinzu
          * @param  {array} folder   ein array mit Modeln
          * @param  {String}  parentId die Id des Eltern Model
          */
         createFolderModels: function (folders, parentId) {
+            folders = _.sortBy(folders, function (folder) {
+                    return folder.title.trim().toUpperCase();
+                });
+
             var nodes = [];
 
             _.each(folders, function (folder) {
@@ -262,6 +270,7 @@ define([
             this.groupDefaultTreeOverlays(typeGroup.overlay);
 
         },
+
         /**
          * unterteilung der nach metaName groupierten Layer in Ordner und Layer
          * wenn eine MetaNameGroup nur einen Eintrag hat soll sie
@@ -309,7 +318,6 @@ define([
                 // in Layer und Ordner unterteilen
                 tree[title] = this.splitIntoFolderAndLayer(metaNameGroups, title);
             }, this);
-
             this.createModelsForDefaultTree(tree);
         },
         /**
@@ -317,8 +325,14 @@ define([
          * @param  {Object} tree aus den categorien und MetaNamen erzeugter Baum
          */
         createModelsForDefaultTree: function (tree) {
+            var sortedKeys = Object.keys(tree).sort(),
+                sortedCategories = [];
+
+            _.each(sortedKeys, function (key) {
+                sortedCategories.push(tree[key]);
+            });
             // Kategorien erzeugen
-            this.createFolderModels(tree, "OverLayer");
+            this.createFolderModels(sortedCategories, "OverLayer");
 
             _.each(tree, function (category) {
                 // Unterordner erzeugen
