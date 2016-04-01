@@ -36,6 +36,7 @@ define([
          * Zeichnet das Breadcrumb
          */
         render: function () {
+            this.delegateEvents(this.events);
             $(this.targetElement).prepend(this.$el.html(this.template()));
             this.collection.forEach(this.addViews, this);
         },

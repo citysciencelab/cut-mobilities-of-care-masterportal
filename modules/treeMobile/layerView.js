@@ -16,20 +16,14 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isVisible": this.render,
                  "change:isChecked": this.render
             });
         },
         render: function () {
-            if (this.model.getIsVisible() === true) {
-                var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
-                $(this.model.get("targetElement")).append(this.$el.html(this.template(attr)));
-                this.delegateEvents(this.events);
-            }
-            else {
-                this.$el.remove();
-            }
+            this.$el.html(this.template(attr));
+            return this;
         },
         toggleIsChecked: function () {
             this.model.toggleIsChecked();

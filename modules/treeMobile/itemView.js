@@ -11,21 +11,11 @@ define([
         tagName: "li",
         className: "list-group-item",
         template: _.template(ItemTemplate),
-        initialize: function () {
-            this.listenTo(this.model, {
-                 "change:isVisible": this.render
-            });
-        },
         render: function () {
-            if (this.model.getIsVisible() === true) {
-                var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
-                $(this.model.get("targetElement")).append(this.$el.html(this.template(attr)));
-                this.delegateEvents(this.events);
-            }
-            else {
-                this.$el.remove();
-            }
+            this.$el.html(this.template(attr));
+            return this;
         }
     });
 
