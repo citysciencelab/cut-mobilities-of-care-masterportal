@@ -17,8 +17,6 @@ define([
             parentId: "",
             // Id vom Layer Objekt
             layerId: "",
-            // parent-View (listView)
-            targetElement: "ul.tree-mobile",
             // true wenn der Layer ausgewählt ist
             isChecked: false,
             // Layer Titel

@@ -33,7 +33,11 @@ define([
                 "switchedMenu": this.render
             });
 
-            this.collection.forEach(this.addViews, this);
+            this.listenTo(this.collection, {
+                "sort": this.renderList
+            });
+
+            new BreadCrumbListView();
             this.render();
         },
 
@@ -46,14 +50,22 @@ define([
             var isMobile = Radio.request("MenuBar", "isMobile");
 
             if (isMobile === true) {
-                new BreadCrumbListView();
+                var rootModels = this.collection.where({isRoot: true});
+
+                this.$el.html("");
                 $(this.targetElement).append(this.$el);
-                this.collection.setModelsVisible("main");
+                _.each(rootModels, this.addViews, this);
             }
             else {
-                this.collection.setAllModelsInvisible();
                 this.$el.remove();
             }
+        },
+
+        renderList: function () {
+            var visibleModels = this.collection.where({isVisible: true});
+
+            this.$el.html("");
+            _.each(visibleModels, this.addViews, this);
         },
 
         /**
@@ -61,23 +73,26 @@ define([
          * @param {Backbone.Model} model - itemModel | layerModel | folderModel
          */
         addViews: function (model) {
+            var nodeView;
+
             switch (model.getType()){
                 case "folder": {
                     // Model für einen Ordner
-                    new FolderView({model: model});
+                    nodeView = new FolderView({model: model});
                     break;
                 }
                 case "layer": {
                     // Model für ein Layer
-                    new LayerView({model: model});
+                    nodeView = new LayerView({model: model});
                     break;
                 }
                 case "item": {
                     // Model für Tools/Links/andere Funktionen
-                    new ItemView({model: model});
+                    nodeView = new ItemView({model: model});
                     break;
                 }
             }
+            this.$el.append(nodeView.render().el);
         }
     });
 

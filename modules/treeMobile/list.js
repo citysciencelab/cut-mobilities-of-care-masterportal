@@ -23,6 +23,7 @@ define([
     TreeCollection = Backbone.Collection.extend({
         // Pfad zur custom-treeconfig
         url: "tree-config.json",
+        comparator: "type",
         model: function (attrs, options) {
             if (attrs.type === "folder") {
                 return new Folder(attrs, options);
@@ -352,6 +353,7 @@ define([
         updateList: function (value) {
             this.setAllModelsInvisible();
             this.setModelsVisible(value);
+            this.sort();
         },
 
         /**

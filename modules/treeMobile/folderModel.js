@@ -19,8 +19,6 @@ define([
             type: "",
             // die ID der Parent-Node
             parentId: "",
-            // parent-View (listView)
-            targetElement: "ul.tree-mobile",
             // true wenn der Ordner nur Leafs als Kinder hat
             isLeafFolder: false,
             // UniqueId

@@ -20,26 +20,19 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isVisible": this.render,
                  "change:isChecked": this.render
             });
         },
         render: function () {
-            if (this.model.getIsVisible() === true && this.model.getIsExpanded() === true) {
-                var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
-                $(this.model.get("targetElement")).append(this.$el.html(this.templateLeaf(attr)));
-                this.delegateEvents(this.events);
-            }
-            else if (this.model.getIsVisible() === true) {
-                var attr = this.model.toJSON();
-
-                $(this.model.get("targetElement")).append(this.$el.html(this.template(attr)));
-                this.delegateEvents(this.events);
+            if (this.model.getIsExpanded() === true) {
+                this.$el.html(this.templateLeaf(attr));
             }
             else {
-                this.$el.remove();
+                this.$el.html(this.template(attr));
             }
+            return this;
         },
         updateList: function () {
             if (this.model.getIsLeafFolder() === true) {

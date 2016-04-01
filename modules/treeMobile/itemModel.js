@@ -15,8 +15,6 @@ define([
             type: "",
             // die ID der Parent-Node
             parentId: "",
-            // parent-View (listView)
-            targetElement: "ul.tree-mobile",
             // Name der Funktion
             title: "",
             // Bootstrap Glyphicon Class
