@@ -13,3 +13,9 @@
 .breadcrumb-mobile > .breadcrumb > li + li:before {
     color: rgb(255, 255, 255);
 }
+
+.breadcrumb-mobile span.title {
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    padding-left: 6px;
+    font-size: 14px;
+}
