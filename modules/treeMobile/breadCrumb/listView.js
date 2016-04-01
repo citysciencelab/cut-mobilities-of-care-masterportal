@@ -1,11 +1,13 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/treeMobile/breadCrumb/list",
     "modules/treeMobile/breadCrumb/view",
     "text!modules/treeMobile/breadCrumb/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
         BreadCrumbList = require("modules/treeMobile/breadCrumb/list"),
         BreadCrumbView = require("modules/treeMobile/breadCrumb/view"),
         BreadCrumbTemplate = require("text!modules/treeMobile/breadCrumb/template.html"),
@@ -24,6 +26,11 @@ define([
          * Registriert die Listener und ruft die render-Funktion auf
          */
         initialize: function () {
+            this.listenTo(Radio.channel("MenuBar"), {
+                // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
+                "switchedMenu": this.render
+            });
+
             this.listenTo(this.collection, {
                 "add": this.render,
                 "remove": this.render
@@ -36,9 +43,16 @@ define([
          * Zeichnet das Breadcrumb
          */
         render: function () {
-            this.delegateEvents(this.events);
-            $(this.targetElement).prepend(this.$el.html(this.template()));
-            this.collection.forEach(this.addViews, this);
+            var isMobile = Radio.request("MenuBar", "isMobile");
+
+            if (isMobile === true) {
+                this.delegateEvents(this.events);
+                $(this.targetElement).prepend(this.$el.html(this.template()));
+                this.collection.forEach(this.addViews, this);
+            }
+            else {
+                this.collection.removeItems(this.collection.get("main"));
+            }
         },
 
         /**

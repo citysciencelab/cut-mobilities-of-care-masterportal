@@ -22,11 +22,6 @@ define([
                 "addItem": this.addItem
             }, this);
 
-            this.listenTo(Radio.channel("MenuBar"), {
-                // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
-                "switchedMenu": this.checkAppView
-            });
-
             this.listenTo(this, {
                 "remove": function () {
                     Radio.trigger("TreeList", "checkIsExpanded");
@@ -41,23 +36,6 @@ define([
             });
 
             this.addMainItem();
-        },
-
-        /**
-         * Prüft die aktuelle Ansicht (desktop/mobil).
-         * In der mobilen Ansicht wird das erste Breadcrumb-Item zugefügt.
-         * In der desktop Ansicht werden alle Models aus der Liste entfernt.
-         */
-        checkAppView: function () {
-            // true wenn sich das Menü in der mobilen Navigation befindet
-            var isMobile = Radio.request("MenuBar", "isMobile");
-
-            if (isMobile === true) {
-                this.addMainItem();
-            }
-            else {
-                this.reset(null);
-            }
         },
 
         /**
