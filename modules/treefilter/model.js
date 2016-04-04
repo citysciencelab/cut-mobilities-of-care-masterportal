@@ -209,7 +209,7 @@ define([
         },
         setSearchTypeString: function (value) {
             this.set("searchTypeString", value);
-            // $("#typeInput").val(this.get("searchTypeString"));
+            $("#typeInput").val(this.get("searchTypeString"));
         },
         setTypeArray: function () {
             var typeArray = [],
