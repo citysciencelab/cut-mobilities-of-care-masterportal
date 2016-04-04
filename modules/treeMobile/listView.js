@@ -5,7 +5,9 @@ define([
     "modules/treeMobile/FolderView",
     "modules/treeMobile/LayerView",
     "modules/treeMobile/ItemView",
-    "modules/treeMobile/breadCrumb/listView"
+    "modules/treeMobile/breadCrumb/listView",
+    "jqueryui/effect",
+    "jqueryui/effect-slide"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -61,11 +63,17 @@ define([
             }
         },
 
-        renderList: function () {
-            var visibleModels = this.collection.where({isVisible: true});
+        renderList: function (collection, options) {
+            var visibleModels = collection.where({isVisible: true}),
+                slideOut = (options.slideDirection === "slideBack") ? "right" : "left",
+                slideIn = (options.slideDirection === "slideForward") ? "right" : "left",
+                that = this;
 
-            this.$el.html("");
-            _.each(visibleModels, this.addViews, this);
+                this.$el.effect("slide", {direction: slideOut, durcation: 300, mode: "hide"}, function () {
+                    that.$el.html("");
+                    _.each(visibleModels, that.addViews, that);
+                });
+                this.$el.effect("slide", {direction: slideIn, durcation: 300, mode: "show"});
         },
 
         /**

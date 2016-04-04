@@ -39,7 +39,7 @@ define([
             return this.get("targetElement");
         },
         updateList: function (value) {
-            this.collection.updateList(value);
+            this.collection.updateList(value, "slideForward");
             if (this.getType() === "folder") {
                 Radio.trigger("BreadCrumb", "addItem", this);
             }

@@ -350,10 +350,10 @@ define([
          * [updateList description]
          * @param  {[type]} value [description]
          */
-        updateList: function (value) {
+        updateList: function (value, slideDirection) {
             this.setAllModelsInvisible();
             this.setModelsVisible(value);
-            this.sort();
+            this.sort({slideDirection: slideDirection});
         },
 
         /**

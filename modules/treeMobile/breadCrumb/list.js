@@ -30,7 +30,7 @@ define([
                     if (_.has(options, "index")) {
                         var lastModel = collection.at(collection.length - 1);
 
-                        Radio.trigger("TreeList", "updateList", lastModel.getId());
+                        Radio.trigger("TreeList", "updateList", lastModel.getId(), "slideBack");
                     }
                 }
             });
