@@ -463,6 +463,7 @@ define([
             request_str += "  </wps:Input>";
             request_str += "</wps:DataInputs>";
             request_str += "</wps:Execute>";
+            request_str = encodeURI(request_str);
             $.ajax({
                 url: this.get("wpsurl") + "?Request=Execute&Service=WPS&Version=1.0.0",
                 data: request_str,
@@ -491,7 +492,7 @@ define([
                     EventBus.trigger("collapseWindow", this);
                     this.showErrorMessage();
                 }
-            });
+            });           
             $("#loader").show();
         },
         showErrorMessage: function () {
