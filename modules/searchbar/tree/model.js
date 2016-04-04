@@ -25,6 +25,7 @@ define([
             }
             EventBus.on("searchbar:search", this.search, this);
             EventBus.on("sendNodeChild", this.getNodesForSearch, this);
+            EventBus.on("layerlist:sendOverlayerList", this.getLayerForSearch, this);
         },
         /**
         *

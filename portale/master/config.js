@@ -15,6 +15,7 @@ define(function () {
         * @type {Object}
         * @property {Object} tree - Das tree-Konfigurationsobject
         * @property {('light'|'custom'|'default')} tree.type - Art des trees. 'light' = einfache Auflistung, 'default' = FHH-Atlas, 'custom' = benutzerdefinierte Layerliste anhand json.
+        * @property {Boolean} tree.saveSelection - Aktviert die Funktion "Auswahl speichern" (nur bei tree.type = default oder custom).
         * @property {Object[]} [tree.layer] - Bei type: light. Array, bestehend aus Layer-Konfigurationsobjekten.
         * @property {String} tree.layer.id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
         * @property {Boolean} tree.layer.visible - Initiale Sichtbarkeit des Layers.
@@ -54,14 +55,15 @@ define(function () {
         */
         tree: {
             type: "light",
+            saveSelection: false,
             layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "1748", visible: false},
-                {id: "1562", visible: false},
-                {id: "1561", visible: false, featureCount: 10},
-                {id: "2003", visible: false, style: "2003"},
-                {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
+                {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "452", visibility: false},
+                {id: "1748", visibility: false},
+                {id: "1562", visibility: false},
+                {id: "1561", visibility: false, featureCount: 10},
+                {id: "2003", visibility: false, style: "2003"},
+                {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
                      {
@@ -76,9 +78,9 @@ define(function () {
                          id: "947"
                      }
                  ],
-                 name: "aktuelle Meldungen der TBZ", visible: false
+                 name: "aktuelle Meldungen der TBZ", visibility: false
                 },
-                {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  maxScale: 60000,
                  minScale: 10000,
@@ -98,7 +100,7 @@ define(function () {
                  ],
                  routable: true
                 },
-                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
                      {
                          fieldName: "Bezirk",
                          filterType: "combo",
@@ -108,6 +110,13 @@ define(function () {
                  ], styleLabelField: "", styleField: "", routable: false}
             ]
         },
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Erstellt einen SimpleMap-Link (Nur die Karte mit Layern ohne Menü).
+        * @example simpleMap: true
+        */
+        simpleMap: false,
         /**
         * @memberof config
         * @type {String}
@@ -394,8 +403,7 @@ define(function () {
             layer: {
                 minChar: 3
             },
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            geoLocateHit: true
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan"
         },
         /**
         * @memberof config

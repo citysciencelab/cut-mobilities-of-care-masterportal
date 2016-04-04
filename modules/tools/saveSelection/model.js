@@ -1,12 +1,14 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus"
+    "eventbus",
+    "config"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         EventBus = require("eventbus"),
+        Config = require("config"),
         SaveSelection;
 
     SaveSelection = Backbone.Model.extend({
@@ -15,7 +17,8 @@ define([
             centerCoords: [],
             layerIDList: [],
             layerVisibilityList: [],
-            url: ""
+            url: "",
+            simpleMap: false
         },
         initialize: function () {
             this.listenTo(Radio.channel("SelectedList"), {
@@ -34,11 +37,15 @@ define([
             this.listenTo(this, {
                 "change:layerVisibilityList": this.setUrl,
                 "change:zoomLevel": this.setUrl,
-                "change:centerCoords": this.setUrl
+                "change:centerCoords": this.setUrl,
+                "change:url": this.setSimpleMapUrl
             });
 
             this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
             this.setCenterCoords(Radio.request("MapView", "getCenter"));
+            if (_.has(Config, "simpleMap")) {
+                this.setSimpleMap(Config.simpleMap);
+            }
         },
         setStatus: function (args) {
             if (args[2] === "saveSelection") {
@@ -77,6 +84,9 @@ define([
         setUrl: function () {
             this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
         },
+        setSimpleMapUrl: function (model, value) {
+            this.set("simpleMapUrl", value + "&style=simple");
+        },
         setLayerOptions: function (layerList) {
             var layerVisibilities = [];
 
@@ -91,6 +101,12 @@ define([
                 layerVisibilities.push(model.get("visibility"));
             });
             this.setLayerVisibilityList(layerVisibilities);
+        },
+        setSimpleMap: function (value) {
+            return this.set("simpleMap", value);
+        },
+        getSimpleMap: function () {
+            return this.get("simpleMap");
         }
     });
 
