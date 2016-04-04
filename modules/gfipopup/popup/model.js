@@ -6,9 +6,10 @@ define([
     "config",
     "bootstrap/popover",
     "modules/core/requestor",
-    "moment"
+    "moment",
+    "modules/core/util"
 //    "modules/gfipopup/themes/mietenspiegel/view-formular" // muss hier definiert werden, weil in mietenspiegelform.js nicht in gebauter Version verfügbar
-], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment) {
+], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment, Util) {
     "use strict";
     var GFIPopup = Backbone.Model.extend({
         /**
@@ -112,6 +113,11 @@ define([
                             break;
                         }
                         default: {
+                            if(Util.isInternetExplorer()!==false){
+                                var keys=_.keys(content).reverse();
+                                var values=_.values(content).reverse();
+                                content=_.object(keys,values); 
+                            }
                             require(["modules/gfipopup/themes/default/view", "backbone.radio"], function (DefaultTheme, Radio) {
                                 templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
                                 Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
