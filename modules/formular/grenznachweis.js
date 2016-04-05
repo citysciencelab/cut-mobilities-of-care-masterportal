@@ -492,7 +492,7 @@ define([
                     EventBus.trigger("collapseWindow", this);
                     this.showErrorMessage();
                 }
-            });           
+            });
             $("#loader").show();
         },
         showErrorMessage: function () {
