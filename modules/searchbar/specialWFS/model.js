@@ -61,6 +61,7 @@ define([
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
+                searchString = searchString.replace(/[()]/g, '\\$&');
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 if (this.get("olympia").length > 0 && searchString.length >= this.get("minChars")) {
@@ -71,7 +72,7 @@ define([
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
-                }                
+                }
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
             }
@@ -223,7 +224,7 @@ define([
                }
             }, this);
         },
-            
+
         /**
          * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
          * @param  {xml} data - getFeature-Request
