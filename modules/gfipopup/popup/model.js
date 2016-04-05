@@ -90,6 +90,12 @@ define([
             _.each(features, function (layer) {
                 _.each(layer.content, function (content) {
                     content = this.getManipulateDate(content);
+                    if (Util.isInternetExplorer() !== false) {
+                        var keys = _.keys(content).reverse(),
+                        values = _.values(content).reverse();
+
+                        content = _.object(keys, values);
+                    }
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             require(["modules/gfipopup/themes/mietenspiegel/view", "backbone.radio"], function (MietenspiegelTheme, Radio) {
@@ -113,11 +119,6 @@ define([
                             break;
                         }
                         default: {
-                            if(Util.isInternetExplorer()!==false){
-                                var keys=_.keys(content).reverse();
-                                var values=_.values(content).reverse();
-                                content=_.object(keys,values); 
-                            }
                             require(["modules/gfipopup/themes/default/view", "backbone.radio"], function (DefaultTheme, Radio) {
                                 templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
                                 Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
