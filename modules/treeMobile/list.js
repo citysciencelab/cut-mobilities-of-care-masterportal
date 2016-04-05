@@ -3,9 +3,9 @@ define([
     "backbone.radio",
     "modules/core/util",
     "config",
-    "modules/treeMobile/folderModel",
-    "modules/treeMobile/itemModel",
-    "modules/treeMobile/layerModel",
+    "modules/treeMobile/folder/model",
+    "modules/treeMobile/item/model",
+    "modules/treeMobile/layer/model",
     "jqueryui/effect",
     "jqueryui/effect-slide"
 ], function () {
@@ -13,9 +13,9 @@ define([
      var Backbone = require("backbone"),
          Util = require("modules/core/util"),
          Radio = require("backbone.radio"),
-         Folder = require("modules/treeMobile/folderModel"),
-         Item = require("modules/treeMobile/itemModel"),
-         Layer = require("modules/treeMobile/layerModel"),
+         Folder = require("modules/treeMobile/folder/model"),
+         Item = require("modules/treeMobile/item/model"),
+         Layer = require("modules/treeMobile/layer/model"),
          Config = require("config"),
          treeNodes = [],
          TreeCollection;

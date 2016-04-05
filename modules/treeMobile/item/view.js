@@ -1,10 +1,10 @@
 define([
     "backbone",
-    "text!modules/treeMobile/templateItem.html"
+    "text!modules/treeMobile/item/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        ItemTemplate = require("text!modules/treeMobile/templateItem.html"),
+        ItemTemplate = require("text!modules/treeMobile/item/template.html"),
         ItemView;
 
     ItemView = Backbone.View.extend({

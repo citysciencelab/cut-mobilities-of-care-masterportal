@@ -2,9 +2,9 @@ define([
     "backbone",
     "backbone.radio",
     "modules/treeMobile/list",
-    "modules/treeMobile/FolderView",
-    "modules/treeMobile/LayerView",
-    "modules/treeMobile/ItemView",
+    "modules/treeMobile/folder/view",
+    "modules/treeMobile/layer/view",
+    "modules/treeMobile/item/view",
     "modules/treeMobile/breadCrumb/listView",
     "jqueryui/effect",
     "jqueryui/effect-slide"
@@ -12,9 +12,9 @@ define([
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        FolderView = require("modules/treeMobile/FolderView"),
-        LayerView = require("modules/treeMobile/LayerView"),
-        ItemView = require("modules/treeMobile/ItemView"),
+        FolderView = require("modules/treeMobile/folder/view"),
+        LayerView = require("modules/treeMobile/layer/view"),
+        ItemView = require("modules/treeMobile/item/view"),
         TreeCollection = require("modules/treeMobile/list"),
         BreadCrumbListView = require("modules/treeMobile/breadCrumb/listView"),
         ListView;

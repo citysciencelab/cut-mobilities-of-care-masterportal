@@ -1,10 +1,10 @@
 define([
     "backbone",
-    "text!modules/treeMobile/templateLayer.html"
+    "text!modules/treeMobile/layer/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/treeMobile/templateLayer.html"),
+        LayerTemplate = require("text!modules/treeMobile/layer/template.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
