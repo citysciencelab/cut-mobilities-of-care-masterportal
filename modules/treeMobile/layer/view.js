@@ -12,7 +12,8 @@ define([
         className: "list-group-item",
         template: _.template(LayerTemplate),
         events: {
-            "click .layer-item": "toggleIsChecked"
+            "click .layer-item": "toggleIsChecked",
+            "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -27,6 +28,10 @@ define([
         },
         toggleIsChecked: function () {
             this.model.toggleIsChecked();
+        },
+        showLayerInformation: function () {
+            // Radio.trigger
+            console.log("metainfo");
         }
     });
 
