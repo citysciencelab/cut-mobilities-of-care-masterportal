@@ -39,6 +39,9 @@ define([
                 "getLayerListWhere": function (properties) {
                     return this.where(properties);
                 },
+                "getLayerFindWhere": function (properties) {
+                    return this.findWhere(properties);
+                },
                 "getOverlayerList": function () {
                     return this.where({isbaselayer: false});
                 }
@@ -50,6 +53,11 @@ define([
                 },
                 "fetchLayer": function () {
                     this.fetchLayer();
+                },
+                "setAttributionsByID": function (id, attrs) {
+                    console.log(this.get(id));
+                    this.get(id).set(attrs);
+                    console.log(this.get(id));
                 }
             }, this);
 
