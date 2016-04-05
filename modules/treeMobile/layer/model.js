@@ -1,8 +1,10 @@
 define([
-    "modules/treeMobile/nodeModel"
+    "modules/treeMobile/nodeModel",
+    "backbone.radio"
 ], function () {
 
     var Node = require("modules/treeMobile/nodeModel"),
+        Radio = require("backbone.radio"),
         LayerModel;
 
     LayerModel = Node.extend({
@@ -28,6 +30,9 @@ define([
         getIsChecked: function () {
             return this.get("isChecked");
         },
+        getLayerID: function () {
+            return this.get("layerId");
+        },
         toggleIsChecked: function () {
             if (this.getIsChecked() === true) {
                 this.setIsChecked(false);
@@ -35,6 +40,7 @@ define([
             else {
                 this.setIsChecked(true);
             }
+            Radio.trigger("LayerList", "toggleLayerVisibleById", this.getLayerID());
         }
     });
 
