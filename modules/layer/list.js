@@ -58,6 +58,9 @@ define([
                     console.log(this.get(id));
                     this.get(id).set(attrs);
                     console.log(this.get(id));
+                },
+                "toggleLayerVisibleById": function (id) {
+                    this.get(id).toggleSelected();
                 }
             }, this);
 
