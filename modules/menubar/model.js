@@ -46,6 +46,9 @@ define([
 
             this.setIsMobile();
             this.setTreeType(Config.tree.type);
+            this.set("platform", navigator.platform);
+            this.set("cookieEnabled", navigator.cookieEnabled);
+            this.set("userAgent", navigator.userAgent);
         },
         setAttributes: function (value, key) {
             this.set(key, value);
