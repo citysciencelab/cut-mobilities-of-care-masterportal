@@ -22,6 +22,8 @@ define([
         },
         checkItem: function () {
             this.model.checkItem();
+            // Navigation wird geschlossen
+            $("div.collapse.navbar-collapse").removeClass("in");
         }
     });
 
