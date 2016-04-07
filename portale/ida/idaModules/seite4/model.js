@@ -77,7 +77,8 @@ define([
         */
         requestBRW: function (brw, STRL, BAUW, WGFZ, FLAE, id) {
             var stichtag = brw.stichtag.split("."),
-                dataInputs = "<wps:DataInputs>";
+                dataInputs = "<wps:DataInputs>",
+                nuta = brw.ergnuta && brw.ergnuta !== "" ? brw.ergnuta : brw.nuta;
 
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ExtID", brw.id, "string")); // Externer Identifikator des WPS-Prozesses, wird mit ausgegeben.
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BRW", brw.brw, "float"));
@@ -91,7 +92,7 @@ define([
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("FLAE", brw.flae, "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZENTW", brw.entw, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBEIT", brw.beit, "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", brw.ergnuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", nuta, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBAUW", BAUW, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZWGFZ", WGFZ, "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZFLAE", FLAE, "float"));
