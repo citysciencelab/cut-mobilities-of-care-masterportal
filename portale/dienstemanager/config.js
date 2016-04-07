@@ -25,6 +25,7 @@ define(function () {
             viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
+            addWMS: true,
             helpButton: false,
             contactButton: true,
             tools: true,
