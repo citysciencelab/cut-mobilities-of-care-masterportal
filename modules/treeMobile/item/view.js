@@ -11,11 +11,17 @@ define([
         tagName: "li",
         className: "list-group-item",
         template: _.template(ItemTemplate),
+        events: {
+            "click": "checkItem"
+        },
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
             return this;
+        },
+        checkItem: function () {
+            this.model.checkItem();
         }
     });
 

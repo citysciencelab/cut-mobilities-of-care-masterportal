@@ -16,7 +16,6 @@ define([
             });
             if (this.model.get("isActive") === true) {
                 this.toggleStyle();
-                EventBus.trigger("activateClick", this.model.get("name"));
             }
             this.render();
             EventBus.trigger("registerToolsClickInClickCounter", this.$el);
@@ -35,5 +34,5 @@ define([
         }
     });
 
-        return ToolsView;
-    });
+    return ToolsView;
+});
