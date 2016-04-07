@@ -187,7 +187,8 @@ define([
                             treeNodes.push({
                                 type: "layer",
                                 parentId: parentId,
-                                layerId: layer.id
+                                layerId: layer.id,
+                                title: (_.has(layer, "name")) ? layer.name : ""
                             });
                         });
                     }

@@ -31,6 +31,10 @@ define([
             if (model.getVisibility() === true) {
                 this.setIsChecked(true);
             }
+            // wenn initial noch kein title vorhanden ist (evt. bei Custom-Tree)
+            if (this.getTitle() === "") {
+                this.setTitle(model.get("name"));
+            }
         },
         setIsChecked: function (value) {
             this.set("isChecked", value);
