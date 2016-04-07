@@ -287,6 +287,9 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        getVisibility: function () {
+            return this.get("visibility");
         }
     });
 
