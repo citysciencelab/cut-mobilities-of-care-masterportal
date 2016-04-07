@@ -22,7 +22,15 @@ define([
             // true wenn der Layer ausgewählt ist
             isChecked: false,
             // Layer Titel
-            title: "dummydummydummydummy"
+            title: ""
+        },
+        initialize: function () {
+            var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
+
+            // initial sichtbare layer werden "gechecked"
+            if (model.getVisibility() === true) {
+                this.setIsChecked(true);
+            }
         },
         setIsChecked: function (value) {
             this.set("isChecked", value);
