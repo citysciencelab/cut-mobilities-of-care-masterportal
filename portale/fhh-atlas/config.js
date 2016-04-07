@@ -114,7 +114,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
@@ -136,7 +136,8 @@ define(function () {
             },
             contact: {
                 title: "Kontakt",
-                glyphicon: "glyphicon-envelope"
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
         startUpModul: "",

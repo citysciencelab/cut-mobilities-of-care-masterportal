@@ -82,7 +82,8 @@ define([
                     glyphicon: value.glyphicon,
                     isRoot: true,
                     id: key,
-                    parentId: "main"
+                    parentId: "main",
+                    email: (key === "contact") ? value.email : undefined
                 });
             }, this);
         },
@@ -119,12 +120,13 @@ define([
         },
 
         addToolItems: function () {
-            _.each(Config.tools, function (value) {
+            _.each(Config.tools, function (value, key) {
                 this.add({
                     type: "item",
                     title: value.title,
                     glyphicon: value.glyphicon,
-                    parentId: "tools"
+                    parentId: "tools",
+                    name: key
                 });
             }, this);
         },

@@ -1,10 +1,12 @@
 define([
     "modules/treeMobile/nodeModel",
+    "backbone.radio",
     "eventbus"
 ], function () {
 
     var Node = require("modules/treeMobile/nodeModel"),
         EventBus = require("eventbus"),
+        Radio = require("backbone.radio"),
         ItemModel;
 
     ItemModel = Node.extend({
@@ -17,12 +19,14 @@ define([
             type: "",
             // die ID der Parent-Node
             parentId: "",
-            // Name der Funktion
+            // Titel (Überschrift) der Funktion
             title: "",
             // Bootstrap Glyphicon Class
             glyphicon: "",
             // Email Adresse
-            email: undefined
+            email: undefined,
+            // Name der Funktion
+            name: ""
         },
         checkItem: function () {
             switch (this.getTitle()) {
@@ -39,15 +43,16 @@ define([
                 }
                 // Tools
                 default: {
-                    // alles quatsch backbone radio an Tools --> setActiveToTrue
-                    //
-                    //
-                    console.log(this.getTitle());
+                    Radio.trigger("ToolList", "setActiveByName", this.getName());
+                    break;
                 }
             }
         },
         getEmail: function () {
             return this.get("email");
+        },
+        getName: function () {
+            return this.get("name");
         }
     });
 
