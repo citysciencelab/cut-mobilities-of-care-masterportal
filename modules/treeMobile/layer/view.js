@@ -30,8 +30,9 @@ define([
             this.model.toggleIsChecked();
         },
         showLayerInformation: function () {
-            // Radio.trigger
-            console.log("metainfo");
+            this.model.showLayerInformation();
+            // Navigation wird geschlossen
+            $("div.collapse.navbar-collapse").removeClass("in");
         }
     });
 

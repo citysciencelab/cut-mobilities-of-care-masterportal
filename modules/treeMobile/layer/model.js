@@ -49,6 +49,9 @@ define([
                 this.setIsChecked(true);
             }
             Radio.trigger("LayerList", "toggleLayerVisibleById", this.getLayerID());
+        },
+        showLayerInformation: function () {
+            Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
         }
     });
 

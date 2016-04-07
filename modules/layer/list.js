@@ -61,6 +61,9 @@ define([
                 },
                 "toggleLayerVisibleById": function (id) {
                     this.get(id).toggleSelected();
+                },
+                "showLayerInformationById": function (id) {
+                    this.get(id).openMetadata();
                 }
             }, this);
 
