@@ -55,13 +55,11 @@ define([
                     this.fetchLayer();
                 },
                 "setAttributionsByID": function (id, attrs) {
-                    console.log(this.get(id));
                     this.get(id).set(attrs);
-                    console.log(this.get(id));
                 },
-                "toggleLayerVisibleById": function (id) {
-                    this.get(id).toggleSelected();
-                },
+                // "toggleLayerVisibleById": function (id) {
+                //     this.get(id).toggleSelected();
+                // },
                 "showLayerInformationById": function (id) {
                     this.get(id).openMetadata();
                 }

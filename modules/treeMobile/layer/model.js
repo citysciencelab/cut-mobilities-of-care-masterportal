@@ -48,7 +48,7 @@ define([
             else {
                 this.setIsChecked(true);
             }
-            Radio.trigger("LayerList", "toggleLayerVisibleById", this.getLayerID());
+            Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"selected": this.getIsChecked()});
         },
         showLayerInformation: function () {
             Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
