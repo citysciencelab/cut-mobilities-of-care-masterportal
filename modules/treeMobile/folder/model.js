@@ -69,6 +69,7 @@ define([
             else {
                 this.setIsChecked(true);
             }
+            this.collection.toggleIsCheckedLayers(this);
         },
 
         /**

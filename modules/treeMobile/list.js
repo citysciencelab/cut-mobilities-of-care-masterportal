@@ -44,10 +44,6 @@ define([
                 "checkIsExpanded": this.checkIsExpanded
             }, this);
 
-            this.listenTo(this, {
-                "change:isChecked": this.toggleIsChecked
-            });
-
             this.addMenuItems();
             this.addToolItems();
 
@@ -396,16 +392,34 @@ define([
         },
 
         /**
-         * Alle Models von einem Leaffolder werden selektiert
-         * @param {String} parentId Die ID des Objektes dessen Kinder alle auf "checked" gesetzt werden
+         * Alle Layermodels von einem Leaffolder werden "gechecked" oder "unchecked"
+         * @param {Backbone.Model} model - folderModel
          */
-         toggleIsChecked: function (model) {
-             if (model.getType() === "folder") {
-                 var children = this.where({parentId: model.getId()});
+         toggleIsCheckedLayers: function (model) {
+             var layers = this.where({parentId: model.getId()});
 
-                 _.each(children, function (child) {
-                     child.toggleIsChecked(model.getIsChecked());
-                 });
+             _.each(layers, function (layer) {
+                 layer.setIsChecked(model.getIsChecked());
+             });
+         },
+
+         /**
+          * Prüft ob alle Layer im Leaffolder isChecked = true sind
+          * Falls ja, wird der Leaffolder auch auf isChecked = true gesetzt
+          * @param {Backbone.Model} model - layerModel
+          */
+         everyLayerIsChecked: function (model) {
+             var layers = this.where({parentId: model.getParentId()}),
+                folderModel = this.findWhere({id: model.getParentId()}),
+                allLayersChecked = _.every(layers, function (layer) {
+                     return layer.getIsChecked() === true;
+                });
+
+             if (allLayersChecked === true) {
+                 folderModel.setIsChecked(true);
+             }
+             else {
+                 folderModel.setIsChecked(false);
              }
          },
 

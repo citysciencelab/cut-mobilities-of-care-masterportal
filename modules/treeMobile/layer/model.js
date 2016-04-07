@@ -27,6 +27,12 @@ define([
         initialize: function () {
             var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
 
+            this.listenTo(this, {
+                "change:isChecked": function () {
+                    Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"selected": this.getIsChecked()});
+                }
+            });
+
             // initial sichtbare layer werden "gechecked"
             if (model.getVisibility() === true) {
                 this.setIsChecked(true);
@@ -52,7 +58,7 @@ define([
             else {
                 this.setIsChecked(true);
             }
-            Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"selected": this.getIsChecked()});
+            this.collection.everyLayerIsChecked(this);
         },
         showLayerInformation: function () {
             Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
