@@ -134,7 +134,7 @@ define([
         parseLightTree: function () {
             var layerList = Radio.request("LayerList", "getLayerList");
 
-            _.each(layerList, function (element) {
+            _.each(layerList.reverse(), function (element) {
                 this.add({
                     type: "layer",
                     parentId: "tree",
