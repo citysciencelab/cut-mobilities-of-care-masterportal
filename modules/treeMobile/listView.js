@@ -69,11 +69,11 @@ define([
                 slideIn = (options.slideDirection === "slideForward") ? "right" : "left",
                 that = this;
 
-                this.$el.effect("slide", {direction: slideOut, duration: 300, mode: "hide"}, function () {
+                this.$el.effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
                     that.$el.html("");
                     _.each(visibleModels, that.addViews, that);
                 });
-                this.$el.effect("slide", {direction: slideIn, duration: 300, mode: "show"});
+                this.$el.effect("slide", {direction: slideIn, duration: 200, mode: "show"});
         },
 
         /**
