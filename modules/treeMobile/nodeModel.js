@@ -35,9 +35,6 @@ define([
         getType: function () {
             return this.get("type");
         },
-        getTargetElement: function () {
-            return this.get("targetElement");
-        },
         updateList: function (value) {
             this.collection.updateList(value, "slideForward");
             if (this.getType() === "folder") {
