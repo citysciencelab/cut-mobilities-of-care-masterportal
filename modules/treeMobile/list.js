@@ -347,11 +347,21 @@ define([
 
         /**
          * [updateList description]
-         * @param  {[type]} value [description]
+         * @param  {String} value - parentId
          */
         updateList: function (value, slideDirection) {
+            var checkedLayer = this.where({isChecked: true, type: "layer"}),
+                // befinden wir uns in "Auswahl der Karten"
+                isSelection = (value === "SelectedLayer") ? true : false;
+
+            // Alle Models werden unsichtbar geschaltet
             this.setAllModelsInvisible();
-            this.setModelsVisible(value);
+            _.each(checkedLayer, function (layer) {
+                layer.setIsInSelection(isSelection);
+            });
+            if (isSelection === false) {
+                this.setModelsVisible(value);
+            }
             this.sort({slideDirection: slideDirection});
         },
 
