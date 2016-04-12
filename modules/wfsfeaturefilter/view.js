@@ -135,7 +135,7 @@ define([
         },
         render: function () {
             var attr,
-                layerfilters;
+                layerfilters=this.model.get("layerfilters");
 
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.model.getLayers();
@@ -144,9 +144,15 @@ define([
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.setMaxHeight();
                 this.delegateEvents();
+                if (layerfilters) {
+                    _.each(layerfilters, function (layerfilter) {
+                        _.each(layerfilter.filter, function (filter) {
+                            $(filter.id).val(filter.fieldValue);
+                        });
+                    });
+                }
             }
             else if (this.model.get("isCurrentWin") === false) {
-                layerfilters = this.model.get("layerfilters");
                 if (layerfilters) {
                     _.each(layerfilters, function (layerfilter) {
                         _.each(layerfilter.filter, function (filter) {
