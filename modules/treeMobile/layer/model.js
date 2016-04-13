@@ -9,7 +9,7 @@ define([
 
     LayerModel = Node.extend({
         defaults: {
-            // true wenn die Node sichtbar
+            // true wenn die Node sichtbar ist
             isVisible: false,
             // true wenn die Node zur ersten Ebene gehört
             isRoot: false,
@@ -19,14 +19,18 @@ define([
             parentId: "",
             // Id vom Layer Objekt
             layerId: "",
-            // true wenn der Layer ausgewählt ist
+            // true wenn die Node ausgewählt ist
             isChecked: false,
             // Layer Titel
             title: "",
             // true wenn das Model in "Auswahl der Karten" gezeichnet ist
             isInSelection: false,
             // true wenn der Layer sichtbar ist
-            isLayerVisible: false
+            isLayerVisible: false,
+            // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
+            isSettingVisible: false,
+            // die Transparenz des Layers
+            transparence: ""
         },
         initialize: function () {
             var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
@@ -47,10 +51,19 @@ define([
                     this.setIsLayerVisible(this.getIsChecked());
                 },
                 "change:isInSelection": function () {
+                    // transparenz holen ???
                     this.setIsVisible(this.getIsInSelection());
                 },
                 "change:isLayerVisible": function () {
                     Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"visibility": this.getIsLayerVisible()});
+                },
+                "change:transparence": function () {
+                    Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"transparence": this.getTransparence()});
+                },
+                "change:isSettingVisible": function () {
+                    var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
+
+                    this.setTransparence(model.getTransparence());
                 }
             });
         },
@@ -83,6 +96,21 @@ define([
                 this.setIsLayerVisible(true);
             }
         },
+        setIsSettingVisible: function (value) {
+            this.set("isSettingVisible", value);
+        },
+        getIsSettingVisible: function () {
+            return this.get("isSettingVisible");
+        },
+        toggleIsSettingVisible: function () {
+            if (this.getIsSettingVisible() === true) {
+                this.setIsSettingVisible(false);
+            }
+            else {
+                this.collection.setIsSettingVisible(false);
+                this.setIsSettingVisible(true);
+            }
+        },
         setIsInSelection: function (value) {
             this.set("isInSelection", value);
         },
@@ -94,6 +122,12 @@ define([
         },
         showLayerInformation: function () {
             Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
+        },
+        setTransparence: function (value) {
+            this.set("transparence", value);
+        },
+        getTransparence: function () {
+            return this.get("transparence");
         }
     });
 
