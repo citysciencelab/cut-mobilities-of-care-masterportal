@@ -290,6 +290,9 @@ define([
         },
         getVisibility: function () {
             return this.get("visibility");
+        },
+        getTransparence: function () {
+            return this.get("transparence");
         }
     });
 
