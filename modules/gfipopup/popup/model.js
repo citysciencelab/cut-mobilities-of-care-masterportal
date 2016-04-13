@@ -90,12 +90,6 @@ define([
             _.each(features, function (layer) {
                 _.each(layer.content, function (content) {
                     content = this.getManipulateDate(content);
-                    if (Util.isInternetExplorer() !== false) {
-                        var keys = _.keys(content).reverse(),
-                        values = _.values(content).reverse();
-
-                        content = _.object(keys, values);
-                    }
                     switch (layer.ol_layer.get("gfiTheme")) {
                         case "mietenspiegel": {
                             require(["modules/gfipopup/themes/mietenspiegel/view", "backbone.radio"], function (MietenspiegelTheme, Radio) {
