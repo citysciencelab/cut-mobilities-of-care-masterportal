@@ -42,9 +42,18 @@ define([
 
             this.listenTo(this, {
                 "change:viewResolution": this.setIsResolutionInRange,
-                "change:visibility": this.setVisibility,
-                "change:transparence": this.updateOpacity,
-                "change:selected": this.toggleToSelectionLayerList,
+                "change:visibility": function () {
+                    this.setVisibility();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {isLayerVisible: this.getVisibility()});
+                },
+                "change:transparence": function () {
+                    this.updateOpacity();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {transparence: this.getTransparence()});
+                },
+                "change:selected": function () {
+                    this.toggleToSelectionLayerList();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {isChecked: this.getSelected()});
+                },
                 "change:SLDBody": this.updateSourceSLDBody
             });
             this.set("settings", false);
@@ -52,8 +61,6 @@ define([
             this.set("gfiTheme", this.get("gfiTheme") || "default");
             // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
             this.set("routable", this.get("routable") || false);
-            // Tranparenz
-            this.listenTo(this, "change:transparence", this.updateOpacity);
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
@@ -291,8 +298,14 @@ define([
         getVisibility: function () {
             return this.get("visibility");
         },
+        getSelected: function () {
+            return this.get("selected");
+        },
         getTransparence: function () {
             return this.get("transparence");
+        },
+        getId: function () {
+            return this.get("id");
         }
     });
 
