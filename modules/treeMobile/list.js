@@ -40,6 +40,11 @@ define([
             var channel = Radio.channel("TreeList");
 
             channel.on({
+                "setLayerAttributions": function (layerId, attrs) {
+                    var model = this.findWhere({type: "layer", layerId: layerId});
+
+                    model.set(attrs);
+                },
                 "updateList": this.updateList,
                 "checkIsExpanded": this.checkIsExpanded
             }, this);
@@ -356,12 +361,13 @@ define([
 
             // Alle Models werden unsichtbar geschaltet
             this.setAllModelsInvisible();
+            if (isSelection === false) {
+                this.setModelsVisible(value);
+                this.setIsSettingVisible(isSelection);
+            }
             _.each(checkedLayer, function (layer) {
                 layer.setIsInSelection(isSelection);
             });
-            if (isSelection === false) {
-                this.setModelsVisible(value);
-            }
             this.sort({slideDirection: slideDirection});
         },
 
@@ -432,6 +438,14 @@ define([
                  folderModel.setIsChecked(false);
              }
          },
+
+        setIsSettingVisible: function (value) {
+            var children = this.where({isInSelection: true});
+
+            _.each(children, function (child) {
+                child.setIsSettingVisible(value);
+            });
+        },
 
         /**
         * Setzt bei Änderung der Ebene, alle Model

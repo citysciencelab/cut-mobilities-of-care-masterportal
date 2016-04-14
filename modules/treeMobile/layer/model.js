@@ -9,22 +9,22 @@ define([
 
     LayerModel = Node.extend({
         defaults: {
+            // welcher Node-Type - folder/layer/item
+            type: "",
             // true wenn die Node sichtbar ist
             isVisible: false,
             // true wenn die Node zur ersten Ebene gehört
             isRoot: false,
-            // welcher Node-Type - folder/layer/item
-            type: "",
+            // true wenn die Node "gechecked" ist
+            isChecked: false,
+            // true wenn die Node in "Auswahl der Karten" gezeichnet ist
+            isInSelection: false,
             // die ID der Parent-Node
             parentId: "",
             // Id vom Layer Objekt
             layerId: "",
-            // true wenn die Node ausgewählt ist
-            isChecked: false,
             // Layer Titel
             title: "",
-            // true wenn das Model in "Auswahl der Karten" gezeichnet ist
-            isInSelection: false,
             // true wenn der Layer sichtbar ist
             isLayerVisible: false,
             // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
@@ -51,7 +51,6 @@ define([
                     this.setIsLayerVisible(this.getIsChecked());
                 },
                 "change:isInSelection": function () {
-                    // transparenz holen ???
                     this.setIsVisible(this.getIsInSelection());
                 },
                 "change:isLayerVisible": function () {
@@ -59,11 +58,6 @@ define([
                 },
                 "change:transparence": function () {
                     Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"transparence": this.getTransparence()});
-                },
-                "change:isSettingVisible": function () {
-                    var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
-
-                    this.setTransparence(model.getTransparence());
                 }
             });
         },
@@ -120,14 +114,14 @@ define([
         getLayerID: function () {
             return this.get("layerId");
         },
-        showLayerInformation: function () {
-            Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
-        },
         setTransparence: function (value) {
             this.set("transparence", value);
         },
         getTransparence: function () {
             return this.get("transparence");
+        },
+        showLayerInformation: function () {
+            Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
         }
     });
 
