@@ -220,7 +220,6 @@ define([
         hitSelected: function (evt) {
             var hit,
                 hitID;
-
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
@@ -250,7 +249,9 @@ define([
             // 4. Triggere Treffer über Eventbus
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
-            evt.stopPropagation();
+            if (evt)  {
+                evt.stopPropagation();
+            }
         },
         navigateList: function () {
             var selected = {},
