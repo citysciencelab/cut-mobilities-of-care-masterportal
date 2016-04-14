@@ -168,7 +168,12 @@ define([
         },
 
         setResolutions: function () {
-            this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+            if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
+                this.set("resolutions", Config.view.resolutions);
+            }
+            else {
+                this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+            }
         },
 
         setZoomLevels: function () {

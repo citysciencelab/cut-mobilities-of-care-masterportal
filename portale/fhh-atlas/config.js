@@ -5,6 +5,7 @@ define(function () {
         tree: {
             type: "default",
             orderBy: "opendata",
+            saveSelection: true,
             baseLayer: [
                 {id: "453", minScale: "500"},
                 {id: "8"},
@@ -64,7 +65,8 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            mousePosition: true
+            mousePosition: true,
+            fullScreen: true
         },
         csw: {
             id: "1"

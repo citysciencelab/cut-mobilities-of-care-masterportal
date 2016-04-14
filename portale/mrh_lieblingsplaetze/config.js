@@ -1,116 +1,26 @@
 define(function () {
     var config = {
-        title: "Geoportal MRH",
+        title: "Lieblingsplätze",
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
         tree: {
-            type: "custom",
-            customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
-            baseLayer: [
-                {id: "51", visibility: true}, // WebAtlas
+            type: "light",
+            layer: [
+                {id: "51", visibility: false}, // WebAtlas
                 {id: "53", visibility: false}, // WebAtlas_grau
                 {id: "55", visibility: false}, // Luftbilder
-                {id: "57", visibility: false} // 1:5000
-            ],
-            layerIDsToStyle: [
-                {
-                    "id": "223",
-                    "styles": "geofox_stations",
-                    "name": "HVV-Haltestellen",
-                    "legendURL": "http://87.106.16.168/legende_mrh/hvv-bus.png"
-                },
-                {
-                    "id": "221",
-                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"],
-                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
-                }
+                {id: "57", visibility: false}, // 1:5000
+                {id: "99999", style: "99999", visibility: true, styleField: "kategorie", mouseHoverField: "bezeichnung"}, // Lieblingsplaetze Poi
+                {id: "99997", visibility: true}
             ]
         },
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true
+            orientation: "once",
+            poi: true
         },
-        feature_count: [
-            {
-                id: 73,
-                count: 10
-            },
-			{
-                id: 77,
-                count: 10
-            },
-			{
-                id: 79,
-                count: 10
-            },
-			{
-                id: 81,
-                count: 10
-            },
-			{
-                id: 83,
-                count: 10
-            },
-			{
-                id: 85,
-                count: 10
-            },
-			{
-                id: 87,
-                count: 10
-            },
-			{
-                id: 89,
-                count: 10
-            },
-			{
-                id: 91,
-                count: 10
-            },
-			{
-                id: 93,
-                count: 10
-            },
-			{
-                id: 95,
-                count: 10
-            },
-			{
-                id: 97,
-                count: 10
-            },
-			{
-                id: 99,
-                count: 100
-            },
-			{
-                id: 101,
-                count: 10
-            },
-			{
-                id: 103,
-                count: 10
-            },
-			{
-                id: 105,
-                count: 10
-            },
-            {
-                id: 303,
-                count: 10
-            },
-            {
-                id: 301,
-                count: 10
-            },
-            {
-                id: 293,
-                count: 10
-            }
-        ],
         attributions: true,
         footer: {
             visibility: true,
@@ -132,21 +42,16 @@ define(function () {
                         "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/fusszeile/links.htm",
                         "alias": "Linkliste",
                         "alias_mobil": "Linkliste"
-                    },
-                    {
-                        "bezeichnung": "",
-                        "url": "http://geoportal.metropolregion.hamburg.de/mrhportal_alt/index.html",
-                        "alias": "zum alten Portal",
-                        "alias_mobil": "zum alten Portal"
                     }
             ]
         },
         quickHelp: false,
+        mouseHover: true,
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
-            resolution: 152.87436231907702,
+            resolution: 76.43718115953851,
             options: [
                 {
                     resolution: 611.4974492763076,
@@ -228,13 +133,9 @@ define(function () {
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
             bkg: {
-                minChars: 3,
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
+                suggestCount: 100
             },
             tree: {
                 minChars: 3
@@ -275,7 +176,8 @@ define(function () {
             gfi: false,
             configYAML: "gdimrh"
         },
-        proxyURL: "/cgi-bin/proxy.cgi"
+        proxyURL: "/cgi-bin/proxy.cgi",
+        wfsImgPath: "../components/lgv-config/img/"
     };
 
     return config;

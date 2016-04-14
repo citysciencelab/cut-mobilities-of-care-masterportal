@@ -13,7 +13,7 @@ define([
     DrawTool = Backbone.Model.extend({
         defaults: {
             selectClick: new ol.interaction.Select(),
-            source: new ol.source.Vector(),
+            source: new ol.source.Vector({useSpatialIndex:false}),
             interactions: [
                 { text: "Punkt zeichnen", type: "Point", name: "drawPoint" },
                 { text: "Linie zeichnen", type: "LineString", name: "drawLine" },
@@ -136,6 +136,14 @@ define([
 
         createInteraction: function () {
             EventBus.trigger("removeInteraction", this.get("draw"));
+   
+            EventBus.trigger("removeInteraction", this.get("modify"));
+            this.set("modify", new ol.interaction.Modify({
+                features: this.get("source").getFeaturesCollection(),
+                style: this.get("style")
+            }));
+            EventBus.trigger("addInteraction", this.get("modify"));
+            
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("selectedType"),
@@ -314,10 +322,12 @@ define([
             if (this.get("selectClick").getActive() === true) {
                 this.get("selectClick").setActive(false);
                 this.get("draw").setActive(true);
+                this.get("modify").setActive(true);
             }
             else {
                 this.get("selectClick").setActive(true);
                 this.get("draw").setActive(false);
+                this.get("modify").setActive(false);
             }
         },
 
