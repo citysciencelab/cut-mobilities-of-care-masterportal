@@ -14,7 +14,6 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         requestFeatures: function (params) {
-            Util.showLoader();
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], "name"),
                 gfiContent,
@@ -91,7 +90,7 @@ define([
             else {
                 url = params.url;
             }
-
+            Util.showLoader();
             ++this.requestCount;
             $.ajax({
                 url: url,
@@ -205,15 +204,16 @@ define([
                         gfi[key] = value;
                     }, this);
                     if (Util.isInternetExplorer() !== false) {
-                        var keys=[],
-                            values=[];
-                        _.each (gfi,function(value,key){
+                        var keys = [],
+                            values = [];
+
+                        _.each (gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
-                        },this);
+                        }, this);
                         keys.reverse();
                         values.reverse();
-                        gfi= _.object(keys, values);
+                        gfi = _.object(keys, values);
                      }
                 }
                 else {
