@@ -5,9 +5,9 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "682", visible: true},
-                {id: "683", visible: false}
-                //{id: "753", visible: true}
+               // {id: "682", visible: true},
+               // {id: "683", visible: false}
+                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [], styleLabelField: "", styleField: "", routable: false}
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
@@ -38,8 +38,8 @@ define(function () {
         footer: false,
         quickHelp: true,
 
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -119,7 +119,7 @@ define(function () {
             gfi: false
         },
                   
-         tools: {
+        tools: {
             gfi: {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
