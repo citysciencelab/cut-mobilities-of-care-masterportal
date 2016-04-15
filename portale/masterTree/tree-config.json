@@ -8,7 +8,9 @@
         },
         {
           "id": "452",
-          "visibility": false
+          "visibility": false,
+          "test": "test",
+          "hier": "dore"
         }
       ]
     }
@@ -57,6 +59,10 @@
             {
               "id": "1923",
               "visibility": false
+            },
+            {
+              "id": "685",
+              "visibility": true
             }
           ]
         },
@@ -139,14 +145,6 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "Layer": [
-        {
-          "id": "685",
-          "visibility": true
         }
       ]
     }
