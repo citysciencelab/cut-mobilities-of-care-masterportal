@@ -35,7 +35,6 @@ define([
                 return new Item(attrs, options);
             }
         },
-
         initialize: function () {
             var channel = Radio.channel("TreeList");
 
@@ -119,7 +118,9 @@ define([
                 isLeafFolder: true
             });
         },
-
+        /**
+         * erzeugt die Werkzeugliste im Baum
+         */
         addToolItems: function () {
             _.each(Config.tools, function (value, key) {
                 this.add({
@@ -352,23 +353,40 @@ define([
 
         /**
          * [updateList description]
-         * @param  {String} value - parentId
+         * @param  {String} parentId
          */
-        updateList: function (value, slideDirection) {
+        updateList: function (parentId, slideDirection) {
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
-                isSelection = (value === "SelectedLayer") ? true : false;
+                isSelection = (parentId === "SelectedLayer") ? true : false;
 
             // Alle Models werden unsichtbar geschaltet
             this.setAllModelsInvisible();
             if (isSelection === false) {
-                this.setModelsVisible(value);
+                this.setModelsVisible(parentId);
+                // Wenn Layer in der Auswahl ist, dann Zahnrad anzeigen
                 this.setIsSettingVisible(isSelection);
             }
+            else {
+                // Wenn die Auswahl angezeigt wird, dann Layer für die Auswahl Sortieren
+                // der SelectionIDX wird aus dem Desktop-Baum genommen
+                this.comparator = function (model) {
+                    if (model.getType() === "layer" && model.getIsInSelection()) {
+                        return -model.getSelectionIDX();
+                    }
+                    else {
+                        return -1;
+                    }
+                };
+            }
+            // Ausgewählte Layer der Selection hinzufügen
             _.each(checkedLayer, function (layer) {
                 layer.setIsInSelection(isSelection);
             });
+
             this.sort({slideDirection: slideDirection});
+            // comparator zurücksetzen, damit wieder nach Layer/Ordner sortiert wird
+            this.comparator = "type";
         },
 
         /**
@@ -438,23 +456,18 @@ define([
                  folderModel.setIsChecked(false);
              }
          },
-
+        /**
+         * Steuert, ob an den Models in der Auswahl das Zahnrad angezeigt werden soll
+         * dies soll nur geschehen, wenn die Auswahl gerade angezeigt wird.
+         * @param {[type]} value [description]
+         */
         setIsSettingVisible: function (value) {
             var children = this.where({isInSelection: true});
 
             _.each(children, function (child) {
                 child.setIsSettingVisible(value);
             });
-        },
-
-        /**
-        * Setzt bei Änderung der Ebene, alle Model
-        * auf der alten Ebene auf unsichtbar
-        * darf erst aufgerufen werden, nachdem
-        * die Animation der ebenänderung fertig ist
-        * @param {int} parentId Die ID des Objektes dessen Kinder nicht mehr angezeigt werden sollen
-        */
-        setModelsInvisible: function (parentId) {}
+        }
     });
 
     return TreeCollection;

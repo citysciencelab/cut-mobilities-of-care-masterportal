@@ -30,7 +30,9 @@ define([
             // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
             isSettingVisible: false,
             // die Transparenz des Layers
-            transparence: ""
+            transparence: "",
+            // der Index der die Reihenfolge beim Zeichnen der ausgewählten Layer bestimmt
+            selectionIDX: 0
         },
         initialize: function () {
             var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
@@ -51,6 +53,10 @@ define([
                     this.setIsLayerVisible(this.getIsChecked());
                 },
                 "change:isInSelection": function () {
+                    // für die aktuelle Layer den Index in der Selektion abfragen
+                    var idx = Radio.request("SelectedList", "getSelectionIDXByID", this.getLayerID());
+
+                    this.setSelectionIDX(idx);
                     this.setIsVisible(this.getIsInSelection());
                 },
                 "change:isLayerVisible": function () {
@@ -122,6 +128,18 @@ define([
         },
         showLayerInformation: function () {
             Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
+        },
+        getparentId: function () {
+            this.get("parentId");
+        },
+        setSelectionIDX: function (idx) {
+            this.set("selectionIDX", idx);
+        },
+        getSelectionIDX: function () {
+           return this.get("selectionIDX");
+        },
+        getTitle: function () {
+            return this.get("title");
         }
     });
 
