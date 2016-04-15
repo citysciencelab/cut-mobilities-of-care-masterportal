@@ -14,6 +14,7 @@ define([
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
         requestFeatures: function (params) {
+            Util.showLoader();
             // Anzeige der GFI und GF in alphabetischer Reihenfolge der Layernamen
             var sortedParams = _.sortBy(params[0], "name"),
                 gfiContent,
@@ -54,7 +55,6 @@ define([
                 this.buildTemplate(positionGFI);
             }
 
-            Util.hideLoader();
             return [this.pContent, positionGFI];
         },
 
@@ -91,6 +91,7 @@ define([
             else {
                 url = params.url;
             }
+
             ++this.requestCount;
             $.ajax({
                 url: url,
@@ -155,6 +156,7 @@ define([
 
                     if (this.requestCount === 0) {
                         this.buildTemplate(positionGFI);
+                        Util.hideLoader();
                     }
                 }
             });
