@@ -35,18 +35,6 @@ define(function () {
        mouseHover: true,
        scaleLine: true,
        isMenubarVisible: true,
-       menu: {
-           viewerName: "GeoViewer",
-           searchBar: true,
-           layerTree: true,
-           helpButton: false,
-           contactButton: true,
-           tools: true,
-           treeFilter: false,
-           wfsFeatureFilter: false,
-           legend: true,
-           routing: false
-       },
        menuItems: {
            tree: {
                title: "Themen",

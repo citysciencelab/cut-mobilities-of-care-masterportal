@@ -61,6 +61,30 @@ define(function () {
             legend: false,
             routing: false
         },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            featureLister: {
+                title: "Liste",
+                glyphicon: "glyphicon-plus",
+                lister: 20
+            },
+            wfsFeatureFilter: {
+                title: "Filter öffnen",
+                glyphicon: "glyphicon-filter"
+            }
+        },
         startUpModul: "",
         searchBar: {
             placeholder: "Suche nach Straße oder Krankenhausname",

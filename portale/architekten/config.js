@@ -81,6 +81,21 @@ define(function () {
             legend: false,
             routing: false
         },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
+        },
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",

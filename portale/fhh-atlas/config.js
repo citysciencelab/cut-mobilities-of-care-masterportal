@@ -110,8 +110,8 @@ define(function () {
         scaleLine: true,
         isMenubarVisible: true,
         menu: {
-            viewerName: "FHH - Atlas",
-            searchBar: true,
+            // viewerName: "FHH - Atlas",
+            // searchBar: true,
             layerTree: true,
             helpButton: false,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
