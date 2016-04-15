@@ -15,6 +15,7 @@ define([
          * @return {[type]} [description]
          */
         initialize: function () {
+            console.log(this);
             if (this.has("childnodes")) {
                 this.setNodeChildLayer();
             }
@@ -28,6 +29,8 @@ define([
          */
         setNodeLayer: function () {
             _.each(this.get("layerIDs"), function (element) {
+                console.log(element);
+                console.log(this.get("node"));
                 this.push("layers", _.extend({node: this.get("node")}, element));
             }, this);
         },

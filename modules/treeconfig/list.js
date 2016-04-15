@@ -6,9 +6,12 @@ define([
     "modules/core/util"
 ], function (Backbone, Model, Config, EventBus, Util) {
 
+    var treeNodes = [];
+
     var list = Backbone.Collection.extend({
-        url: Util.getPath(Config.tree.customConfig),
-        model: Model,
+        // url: Util.getPath(Config.tree.customConfig),
+        url: "tree-config.json",
+        // model: Model,
 
         /**
          * Registriert die Events "getCustomNodes" und "fetchTreeConfig".
@@ -48,11 +51,72 @@ define([
                             return _.extend(la, layer);
                         });
                     }
-                    Config.tree.layer = layerList;
+                    console.log(collection.toJSON());
+                    Config.tree.layer = collection.toJSON();
                 }
             });
         },
+        parse: function (response) {
+            // key = Hintergrundkarten || Fachdaten || Ordner
+            // value = Array von Objekten (Layer || Ordner)
+            _.each(response, function (value, key) {
+                var isbaselayer = "";
 
+                if (key === "Hintergrundkarten") {
+                    isbaselayer = true;
+                }
+                else {
+                    isbaselayer = false;
+                }
+
+                _.each(value, function (element) {
+                                                // console.log(element);
+                    if (_.has(element, "Layer")) {
+                        _.each(element.Layer, function (layer) {
+                            if (_.isUndefined(element.node)) {
+                                treeNodes.push({
+                                    // type: "layers",
+                                    visibility: layer.visibility,
+                                    node: element.Titel,
+                                    id: layer.id,
+                                    isbaselayer: isbaselayer
+                                });
+                            }
+                            else {
+                                treeNodes.push({
+                                    // type: "layers",
+                                    visibility: layer.visibility,
+                                    subfolder: element.Titel,
+                                    id: layer.id,
+                                    node: element.node,
+                                    isbaselayer: isbaselayer
+                                });
+                            }
+
+                        });
+                    }
+                    if (_.has(element, "Ordner")) {
+                        // console.log(element);
+                        _.each(element.Ordner, function (folder) {
+                            console.log(folder);
+                            folder.node = element.Titel;
+                            // console.log(folder);
+                            // // folder.id = _.uniqueId(folder.Titel);
+                            // treeNodes.push({
+                            //     type: "layers",
+                            //     node: element.Titel,
+                            //     subfolder: folder.Titel,
+                            //     id: folder.id
+                            // });
+                            // rekursiver Aufruf
+                            this.parse({Ordner: [folder]});
+                        }, this);
+                    }
+                }, this);
+            }, this);
+// console.log(treeNodes);
+            return treeNodes;
+        },
         /**
          * Feuert das Event "sendCustomFolderNames" ab.
          * Übergibt aus allen Models die Werte aus dem Attribute "node" als Array.
