@@ -203,7 +203,7 @@ define([
                             EventBus.trigger("alert", "Der Layer mit der ID '" + element.id + "' ist nicht vorhanden");
                         }
                         else {
-                            element.isbaselayer = false;
+                            // element.isbaselayer = false;
                             // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                             if (layers.length === 1) {
                                 modelsArray.push(_.extend(layerinfos, element));
@@ -232,7 +232,7 @@ define([
                             layerdefinitions: []
                         };
 
-                        element.isbaselayer = false;
+                        // element.isbaselayer = false;
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
@@ -249,7 +249,6 @@ define([
                         });
                     }
                 });
-                this.setBaseLayer(modelsArray);
                 this.setLayerStyle(modelsArray);
                 this.reset(modelsArray);
             }
