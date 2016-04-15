@@ -7,7 +7,6 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
     Util.showLoader();
     new RawLayerList();
 
-
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
         require(["modules/parametricURL/model"], function (ParametricURL) {
             new ParametricURL();
@@ -148,12 +147,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         });
                     }
                 }
-                if (Config.menu.treeFilter === true) {
+                if (_.has(Config.menuItems, "treeFilter") === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
                     });
                 }
-                if (Config.menu.searchBar === true && Config.searchBar) {
+                if (_.has(Config, "searchBar") === true) {
                     require(["modules/searchbar/view"], function (SearchbarView) {
                         if (_.has(Config.searchBar, "geoLocateHit") === true && Config.searchBar.geoLocateHit === true) {
                             require(["modules/mapMarker/view"], function (MapHandler) {
@@ -166,12 +165,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         }
                     });
                 }
-                if (Config.menu.wfsFeatureFilter === true) {
+                if (_.has(Config.menuItems, "wfsFeatureFilter") === true) {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
                     });
                 }
-                if (Config.menu.legend === true) {
+                if (_.has(Config.menuItems, "legend") === true) {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {
                             new MobileLegendView();
@@ -181,24 +180,24 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         }
                     });
                 }
-                if (Config.menu.routing === true) {
+                if (_.has(Config.menuItems, "routing") === true) {
                     require(["modules/routing/view"], function (RoutingView) {
                         new RoutingView();
                     });
                 }
-                if (Config.menu.addWMS === true) {
+                if (_.has(Config.menuItems , "addWMS") === true) {
                     require(["modules/addwms/view"
                         ], function (AddWMSView) {
                         new AddWMSView();
                     });
                 }
-                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0 && !Util.isAny()) {
+                if (_.has(Config.menuItems, "featureLister") === true && Config.menuItems.featureLister.lister > 0 && !Util.isAny()) {
                     require(["modules/featurelister/view"], function (FeatureLister) {
                         new FeatureLister();
                     });
                 }
-                if ($.isArray(Config.menu.formular)) {
-                    $.each(Config.menu.formular, function (name, obj) {
+                if ($.isArray(Config.menuItems.formular)) {
+                    $.each(Config.menuItems.formular, function (name, obj) {
                         if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
                             require(["modules/formular/view"], function (FormularView) {
                                 new FormularView(obj.modelname, obj.title, obj.symbol);

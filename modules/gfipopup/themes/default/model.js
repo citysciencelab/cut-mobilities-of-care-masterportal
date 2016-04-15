@@ -29,7 +29,7 @@ define([
         /**
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
          */
-        returnPrintContent: function() {
+        returnPrintContent: function () {
             return [this.get("gfiContent"),
                     this.get("gfiTitel")];
         },
@@ -37,7 +37,7 @@ define([
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
         checkRoutable: function () {
-            if (Config.menu.routing && Config.menu.routing === true) {
+            if (Config.menuItems.routing && Config.menuItems.routing === true) {
                 if (this.get("layer").get("routable") === true) {
                     this.set("routable", new RoutableView(this.get("position")));
                 }
@@ -51,12 +51,12 @@ define([
          */
         replaceValuesWithChildObjects: function () {
             var element = this.get("gfiContent"),
-                children = [],
-                lastroutenval,
-                lastroutenkey;
+                children = [];
+
             _.each(element, function (val, key) {
                 if (key === "Bild") {
                     var imgView = new ImgView(val);
+
                     element[key] = "#";
                     children.push({
                         key: imgView.model.get("id"),
@@ -65,6 +65,7 @@ define([
                 }
                 else if (key === "video") {
                     var videoView = new VideoView(val);
+
                     element[key] = "#";
                     children.push({
                         key: videoView.model.get("id"),
@@ -88,6 +89,7 @@ define([
             _.each(this.get("gfiContent"), function (element) {
                 if (_.has(element, "children")) {
                     var children = _.values(_.pick(element, "children"))[0];
+
                     _.each(children, function (child) {
                         child.val.remove();
                     }, this);

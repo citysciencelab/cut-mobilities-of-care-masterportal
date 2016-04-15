@@ -35,7 +35,7 @@ define([
 
             $(window).on("resize", _.bind(this.setIsMobile, this));
 
-            _.each(Config.menu, this.setAttributes, this);
+            _.each(Config.menuItems, this.setAttributes, this);
             // Wenn nur ein Tool aktiviert ist, wird der Menüeintrag Werkzeuge nicht erzeugt. --> Abfrage im template
             if (_.toArray(Config.tools).length === 1) {
                 this.set("oneTool", true);

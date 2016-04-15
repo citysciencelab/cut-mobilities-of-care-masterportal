@@ -11,81 +11,73 @@
         <!-- Alle Navigationslinks, Formulare und anderer Inhalt werden hier zusammengefasst und können dann ein- und ausgeblendet werden -->
         <div class="collapse navbar-collapse">
             <ul class="menubarlgv nav navbar-nav">
-            <% if (layerTree === true) { %>
+            <% if (typeof tree !== "undefined") { %>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Themenbaum öffnen">
-                        <span class="glyphicon glyphicon-list hidden-sm"></span>
-                        <span class="menuitem">Themen</span>
+                        <span class="glyphicon <%= tree.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= tree.title %></span>
                     </a>
                         <div class="dropdown-menu dropdown-tree">
                         </div>
                 </li>
             <% } %>
-            <% if (tools === true && oneTool === false) { %>
+            <% if (typeof tools !== "undefined") { %>
                 <li class="dropdown dropdown-tools">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Werkzeug auswählen">
-                        <span class="glyphicon glyphicon-wrench hidden-sm"></span>
-                        <span class="menuitem">Werkzeuge</span>
+                        <span class="glyphicon <%= tools.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= tools.title %></span>
                     </a>
                 </li>
             <% } %>
-            <% if (typeof routing !== "undefined" && routing === true) { %>
+            <% if (typeof routing !== "undefined") { %>
                 <li>
                     <a href="#" class="menuitem routingModul" title="Routenplaner öffnen">
-                        <span class="glyphicon glyphicon-road hidden-sm"></span>
-                        <span class="menuitem">Routenplaner</span>
+                        <span class="glyphicon <%= routing.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= routing.title %></span>
                     </a>
                 </li>
             <% } %>
-            <% if (typeof addWMS !== "undefined" && addWMS === true) { %>
+            <% if (typeof addWMS !== "undefined") { %>
                 <li>
                     <a href="#" title="WMS Hinzufügen" class="menuitem addWMS" title="WMS hinzufügen">
-                        <span class="glyphicon glyphicon-plus hidden-sm"></span>
-                        <span class="menuitem">WMS</span>
+                        <span class="glyphicon <%= addWMS.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= addWMS.title %></span>
                     </a>
                 </li>
             <% } %>
-            <% if (wfsFeatureFilter === true) { %>
+            <% if (typeof wfsFeatureFilter !== "undefined") { %>
                 <li>
                     <a href="#" class="menuitem wfsFeatureFilter" title="Filter öffnen">
-                        <span class="glyphicon glyphicon-filter hidden-sm"></span>
-                        <span class="menuitem">Filter</span>
+                        <span class="glyphicon <%= wfsFeatureFilter.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= wfsFeatureFilter.title %></span>
                     </a>
                 </li>
             <% } %>
-            <% if (treeFilter === true) { %>
+            <% if (typeof treeFilter !== "undefined") { %>
                 <li>
                     <a href="#" class="filterTree" title="Baumfilter öffnen">
-                        <span class="glyphicon glyphicon-leaf hidden-sm"></span>
-                        <span class="menuitem">Filter</span>
+                        <span class="glyphicon <%= treeFilter.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= treeFilter.title %></span>
                     </a>
                 </li>
             <% } %>
-            <% if (legend === true) { %>
+            <% if (typeof legend !== "undefined") { %>
                 <li>
                     <a href="#" class="legend" title="Legende anzeigen">
-                        <span class="glyphicon glyphicon-book hidden-sm"></span>
-                        <span class="menuitem">Legende</span>
-                    </a>
-                </li>
-            <% } %>
-            <% if (helpButton === true) { %>
-                <li>
-                    <a href="#" title="Hilfe">
-                        <span class="glyphicon glyphicon-question-sign hidden-sm">
-                        <span class="menuitem">Hilfe</span>
+                        <span class="glyphicon <%= legend.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= legend.title %></span>
                     </a>
                 </li>
             <% } %>
             <% // two possible configs
-              if (contactButton.on === true || contactButton === true) {
-                  var email = contactButton.email || "LGVGeoPortal-Hilfe@gv.hamburg.de";
+              if (typeof contact !== "undefined") {
+                  var email = contact.email || "LGVGeoPortal-Hilfe@gv.hamburg.de";
                   var mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t\n\n Systeminformationen: \n Platform: " + platform + "\n CookiesEnabled: " + cookieEnabled + "\n UserAgent: " + userAgent);
               %>
                 <li>
                     <a href="<%= mailto %>" title="E-Mail Kontakt">
-                        <span class="glyphicon glyphicon-envelope hidden-sm"></span>
-                        <span class="menuitem">Kontakt</span>
+                        <span class="glyphicon <%= contact.glyphicon %> hidden-sm"></span>
+                        <span class="menuitem"><%= contact.title %></span>
                     </a>
                 </li>
             <% } %>
