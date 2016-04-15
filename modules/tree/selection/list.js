@@ -31,8 +31,24 @@ define([
                 }
             });
 
+            channel.reply({
+                "getSelectionIDXByID": this.getSelectionIDXByID
+            }, this);
+
             // Selektierte Layer werden in die Auswahl übernommen
             this.loadSelection();
+        },
+        /**
+         * Gibt für ein Model dessen Position in der Selektion zurück
+         * @param  {int} id Das Model dessen Position abgefragt wird
+         * @return {int} die Position des models in der Auswahlliste
+         */
+        getSelectionIDXByID: function (id) {
+            var model = this.findWhere(function (model) {
+                return model.id === id;
+            });
+
+            return this.indexOf(model);
         },
 
         loadSelection: function () {
