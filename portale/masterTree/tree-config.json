@@ -1,23 +1,16 @@
 {
   "Hintergrundkarten": [
     {
-      "Ordner": [
-        {
-          "Titel": "Orthophotos",
-          "Layer": [
-            {
-              "id": "452",
-              "visibility": false
-            }
-          ]
-        }
-      ]
-    },
-    {
       "Layer": [
         {
           "id": "453",
           "visibility": true
+        },
+        {
+          "id": "452",
+          "visibility": false,
+          "test": "test",
+          "hier": "dore"
         }
       ]
     }
@@ -27,6 +20,21 @@
       "Ordner": [
         {
           "Titel": "Wasserwirtschaft",
+          "Ordner": [
+            {
+              "Titel": "Überschwemmungsgebiete",
+              "Layer": [
+                {
+                  "id": "1103",
+                  "visibility": false
+                },
+                {
+                  "id": "1104",
+                  "visibility": false
+                }
+              ]
+            }
+          ],
           "Layer": [
             {
               "id": "1918",
@@ -51,19 +59,10 @@
             {
               "id": "1923",
               "visibility": false
-            }
-          ]
-        },
-        {
-          "Titel": "Überschwemmungsgebiete",
-          "Layer": [
-            {
-              "id": "1103",
-              "visibility": false
             },
             {
-              "id": "1104",
-              "visibility": false
+              "id": "685",
+              "visibility": true
             }
           ]
         },
@@ -146,14 +145,6 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "Layer": [
-        {
-          "id": "685",
-          "visibility": true
         }
       ]
     }

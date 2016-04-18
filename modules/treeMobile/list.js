@@ -186,12 +186,15 @@ define([
                 _.each(value, function (element) {
                     if (_.has(element, "Layer")) {
                         _.each(element.Layer, function (layer) {
-                            treeNodes.push({
-                                type: "layer",
-                                parentId: parentId,
-                                layerId: layer.id,
-                                title: (_.has(layer, "name")) ? layer.name : ""
-                            });
+                            // HVV :(
+                            if (_.has(layer, "styles") && layer.styles.length > 1) {
+                                _.each(layer.styles, function (style) {
+                                    treeNodes.push(_.extend({type: "layer", parentId: parentId, layerId: layer.id + style.toLowerCase()}, _.omit(layer, "id")));
+                                });
+                            }
+                            else {
+                                treeNodes.push(_.extend({type: "layer", parentId: parentId, layerId: layer.id}, _.omit(layer, "id")));
+                            }
                         });
                     }
                     if (_.has(element, "Ordner")) {
