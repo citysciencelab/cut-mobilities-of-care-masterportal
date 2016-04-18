@@ -9,17 +9,28 @@ define(function() {
         },
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        menu: {
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: true
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
+            }
         },
         menubar: true,
         print: {
@@ -78,22 +89,7 @@ define(function() {
         },
         tree: {
             type: "custom",
-            filter: false,
-            customConfig: "../components/lgv-config/tree-config/simpleTree.json",
-            baseLayer: [
-                {
-                    id: "39",
-                    visibility: true
-                },
-                {
-                    id: "487",
-                    visibility: false
-                },
-                {
-                    id: "2625",
-                    visibility: false
-                }
-            ]
+            filter: false
         },
         view: {
             center: [565874, 5934140],
