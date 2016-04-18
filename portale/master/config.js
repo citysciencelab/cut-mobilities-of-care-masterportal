@@ -350,11 +350,6 @@ define(function () {
             addWMS: {
                 title: "WMS hinzufügen",
                 glyphicon: "glyphicon-plus"
-            },
-            featureLister: {
-                title: "test",
-                glyphicon: "glyphicon-plus",
-                lister: 10
             }
         },
         /**
