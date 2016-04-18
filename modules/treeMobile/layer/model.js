@@ -64,6 +64,9 @@ define([
                 },
                 "change:transparence": function () {
                     Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"transparence": this.getTransparence()});
+                },
+                "change:selectionIDX": function () {
+                    console.log("change");
                 }
             });
         },

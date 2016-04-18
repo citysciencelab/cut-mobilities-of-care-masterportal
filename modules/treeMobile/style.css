@@ -38,7 +38,7 @@
     display: inline-block;
 }
 
-.item-settings > .layer-info-item > .glyphicon-info-sign {
+.item-settings > .layer-info-item > .glyphicon {
     padding: 5px;
 }
 
@@ -50,4 +50,12 @@
 .list-group-item > .layer-info-item > .rotate-back {
     transform: rotate(0deg);
     transition: .5s;
+}
+
+.item-settings > .layer-sort-item > .glyphicon {
+    padding: 5px;
+}
+
+.item-settings > .layer-sort-item {
+    margin-right: 40px;
 }
