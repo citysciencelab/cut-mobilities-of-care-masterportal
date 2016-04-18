@@ -3,6 +3,7 @@
     background-color: rgb(8, 88, 158);
     color: rgb(255, 255, 255);
     font-size: 14px;
+    padding: 14px 15px;
 }
 
 .breadcrumb-mobile > .breadcrumb > li > span:hover {
@@ -18,4 +19,8 @@
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     padding-left: 6px;
     font-size: 14px;
+}
+
+.breadcrumb-mobile span.glyphicon {
+    padding: 5px;
 }

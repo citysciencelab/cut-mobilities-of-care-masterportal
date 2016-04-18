@@ -1,3 +1,8 @@
+.tree-mobile {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
 .tree-mobile span.title {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     font-size: 14px;
@@ -7,14 +12,11 @@
 
 .tree-mobile span.glyphicon {
     font-size: 18px;
+    padding: 5px;
 }
 
 .tree-mobile > .list-group-item {
-    overflow-y: auto;
-}
-
-.list-group-item > .selected-layer-item span, .list-group-item > .layer-info-item span {
-    padding: 5px;
+    padding: 12px 15px;
 }
 
 .selected-layer-item span.title {
