@@ -301,7 +301,7 @@ define([
             if (isFeatureAtPixel === true) {
                 var layerByFeature,
                     visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
-                
+
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
                     // cluster-source
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
