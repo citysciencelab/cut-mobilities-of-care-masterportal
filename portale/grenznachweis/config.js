@@ -144,8 +144,7 @@ define(function () {
             legend: false,
             routing: false,
             formular: [{
-                title: "Bestellung Grenznachweis",
-                symbol: "glyphicon glyphicon-shopping-cart",
+                title: "Bestellformular",
                 modelname: "grenznachweis"
             }]
         },

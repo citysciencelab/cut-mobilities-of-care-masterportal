@@ -40,10 +40,11 @@ define(function () {
             zoom: true,
             toggleMenu: true,
             orientation: "once",
-            poi: true
+            poi: false
         },
         attributions: false,
         allowParametricURL: true,
+        quickHelp: false,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
@@ -53,7 +54,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            featureLister: 20,
+            featureLister: 0,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,

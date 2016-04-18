@@ -13,7 +13,7 @@ define([
         initialize: function () {
             // this.render();
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.model.on("change:filterHits invalid change:treeType change:errors", this.render, this);
+            this.model.on("change:filterHits invalid change:errors", this.render, this);
             this.model.on("change:categoryArray", this.render, this);
             this.model.on("change:typeArray", this.render, this);
             EventBus.on("toggleFilterTreeWin", this.toggleFilterTreeWin, this);
@@ -22,7 +22,7 @@ define([
             $(document.body).on("click", ".categoryPick", this, function (evt) {
                 if (evt.target.textContent !== "Keine Treffer") {
                     $("#categoryInput").val(evt.target.textContent);
-                    evt.data.model.setCategory();
+                    evt.data.model.setCategory(evt.target.textContent);
                     $("#typeInput").prop("disabled", false);
                      $(".dropdown-toggle-type").prop("disabled", false);
                     $("#typeInput").val("");
@@ -32,14 +32,14 @@ define([
             $(document.body).on("click", ".typePick", this, function (evt) {
                 // evt.data = this (die View)
                 $("#typeInput").val(evt.target.textContent);
-                evt.data.model.setType();
+                evt.data.model.setType(evt.target.textContent);
                 evt.data.focusOnEnd($("#yearMin > input"));
             });
             // http://holdirbootstrap.de/javascript/#dropdowns
             $(document.body).on("hidden.bs.dropdown", "#categoryToggle", this, function (evt) {
                 if (_.contains(evt.data.model.get("categoryArray"), $("#categoryInput").val()) === false && evt.data.model.get("categoryArray").length !== 73) {
-                    $(".dropdown-toggle-category").dropdown("toggle");
-                    evt.data.focusOnEnd($("#categoryInput"));
+                    // $(".dropdown-toggle-category").dropdown("toggle");
+                    // evt.data.focusOnEnd($("#categoryInput"));
                 }
                 else if ($("#categoryInput").val() === "") {
                     evt.data.model.setCategory();
@@ -47,8 +47,11 @@ define([
             });
             $(document.body).on("hidden.bs.dropdown", "#typeToggle", this, function (evt) {
                 if (_.contains(evt.data.model.get("typeArray"), $("#typeInput").val()) === false && $("#typeInput").val() !== "") {
-                    $(".dropdown-toggle-type").dropdown("toggle");
-                    evt.data.focusOnEnd($("#typeInput"));
+                    // $(".dropdown-toggle-type").dropdown("toggle");
+                    // evt.data.focusOnEnd($("#typeInput"));
+                }
+                else if ($("#typeInput").val() === "") {
+                    evt.data.model.setType();
                 }
             });
         },
@@ -58,7 +61,15 @@ define([
             "click #filterbutton": "setFilterParams",
             "click #filterRemoveButton": "removeFilter",
             "keyup #categoryInput": "setSearchCategoryString",
-            "keyup #typeInput": "setSearchTypeString"
+            "keyup #typeInput": "setSearchTypeString",
+            "focusout #yearMin > input": "setYearMin",
+            "focusout #yearMax > input": "setYearMax",
+            "focusout #diameterMin > input": "setDiameterMin",
+            "focusout #diameterMax > input": "setDiamterMax",
+            "focusout #perimeterMin > input": "setPerimeterMin",
+            "focusout #perimeterMax > input": "setPerimeterMax",
+            "focusout #categoryInput": "setCategory",
+            "focusout #typeInput": "setType"
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
@@ -116,6 +127,30 @@ define([
         },
         setFilterParams: function () {
              this.model.setFilterParams();
+        },
+        setYearMin: function (evt) {
+            this.model.setYearMin(evt.target.value);
+        },
+        setYearMax: function (evt) {
+            this.model.setYearMax(evt.target.value);
+        },
+        setDiameterMin: function (evt) {
+            this.model.setDiameterMin(evt.target.value);
+        },
+        setDiamterMax: function (evt) {
+            this.model.setDiamterMax(evt.target.value);
+        },
+        setPerimeterMin: function (evt) {
+            this.model.setPerimeterMin(evt.target.value);
+        },
+        setPerimeterMax: function (evt) {
+            this.model.setPerimeterMax(evt.target.value);
+        },
+        setCategory: function (evt) {
+            this.model.setCategory(evt.target.value);
+        },
+        setType: function (evt) {
+            this.model.setType(evt.target.value);
         }
     });
 

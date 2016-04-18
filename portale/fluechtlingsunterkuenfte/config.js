@@ -20,7 +20,9 @@ define(function () {
             type: "custom",
             baseLayer: [
                 {id: "8", visibility: false},
-                {id: "453", visibility: true}
+                {id: "453", visibility: true},
+                {id: "2425", visibility: true},
+                {id: "2426", visibility: true}
             ],
             customConfig: "../components/lgv-config/tree-config/fluechtlinge.json"
         },
@@ -72,7 +74,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur DienstAPI.
         */
-        layerConf: "../components/lgv-config/services-fhhnet-fluechtlinge.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}
@@ -103,7 +105,7 @@ define(function () {
         * @type {Boolean}
         * @desc Wenn TRUE, wird in main.js views/AttributionView.js geladen. Dieses Modul regelt die Darstellung der Layerattributierung aus layerConf oder layerIDs{attribution}.
         */
-        attributions: false,
+        attributions: true,
         /**
         * @memberof config
         * @type {Boolean}

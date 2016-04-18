@@ -322,16 +322,20 @@ define([
                     }
                     // vector-source
                     else {
-                        layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                            return layer.get("source").getFeatureById(featureAtPixel.getId());
-                        });
-                        gfiParams.push({
-                            typ: "WFS",
-                            feature: featureAtPixel,
-                            attributes: layerByFeature.get("gfiAttributes"),
-                            name: layerByFeature.get("name"),
-                            ol_layer: layerByFeature.get("layer")
-                        });
+                        if (featureAtPixel.getId() !== undefined && visibleWFSLayerList.length > 0) {
+                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
+                                return layer.get("source").getFeatureById(featureAtPixel.getId());
+                            });
+                            gfiParams.push({
+                                typ: "WFS",
+                                feature: featureAtPixel,
+                                attributes: layerByFeature.get("gfiAttributes"),
+                                name: layerByFeature.get("name"),
+                                ol_layer: layerByFeature.get("layer")
+                            });
+                        }
+                        else{
+                        }
                     }
                 });
             }

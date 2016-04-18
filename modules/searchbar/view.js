@@ -31,22 +31,22 @@ define([
         */
         initialize: function (config, querySearchString) {
             // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
-            var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
-                mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
-                mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
-                that = this;
-
-            // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
-            mediaQueryOrientation.addListener(function () {
-                that.render();
-            });
-            // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
-            mediaQueryMinWidth.addListener(function () {
-                that.render();
-            });
-            mediaQueryMaxWidth.addListener(function () {
-                that.render();
-            });
+            // var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
+            //     mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
+            //     mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
+            //     that = this;
+            //
+            // // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
+            // mediaQueryOrientation.addListener(function () {
+            //     that.render();
+            // });
+            // // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
+            // mediaQueryMinWidth.addListener(function () {
+            //     that.render();
+            // });
+            // mediaQueryMaxWidth.addListener(function () {
+            //     that.render();
+            // });
 
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
@@ -225,7 +225,6 @@ define([
         hitSelected: function (evt) {
             var hit,
                 hitID;
-
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
@@ -255,7 +254,9 @@ define([
             // 4. Triggere Treffer über Eventbus
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
-            evt.stopPropagation();
+            if (evt)  {
+                evt.stopPropagation();
+            }
         },
         navigateList: function () {
             var selected = {},

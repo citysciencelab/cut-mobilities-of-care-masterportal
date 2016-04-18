@@ -15,6 +15,9 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
+            this.listenTo(EventBus, {
+                "layerlist:sendVisibleWFSlayerList":this.checkWFS
+            });
             this.model.set("zoomMode", Config.controls.orientation);
 
             if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
@@ -44,6 +47,17 @@ define([
             var attr = Config;
 
             $(".controls-view").append(this.$el.html(this.template(attr)));
+        },
+        /*
+        * schaltet POI-Control un-/sichtbar
+        */
+        checkWFS: function (visibleWFSLayers) {
+            if (visibleWFSLayers.length === 0) {
+                $("#geolocatePOI").hide();
+            }
+            else {
+                $("#geolocatePOI").show();
+            }
         },
         /*
         * ButtonCall

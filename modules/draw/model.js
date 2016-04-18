@@ -11,17 +11,18 @@ define([
         DrawTool;
 
     DrawTool = Backbone.Model.extend({
-
         defaults: {
-            source: new ol.source.Vector(),
+            selectClick: new ol.interaction.Select(),
+            source: new ol.source.Vector({useSpatialIndex:false}),
             interactions: [
                 { text: "Punkt zeichnen", type: "Point", name: "drawPoint" },
                 { text: "Linie zeichnen", type: "LineString", name: "drawLine" },
                 { text: "Polygon zeichnen", type: "Polygon", name: "drawArea" },
                 { text: "Text schreiben", type: "Point", name: "writeText" }
+                // ,
+                // { text: "Kreis zeichnen", type: "Circle", name: "drawCircle" }
             ],
             selectedInteraction: "drawPoint",
-            types: ["Point", "LineString", "Polygon"],
             selectedType: "Point",
             fonts: ["Arial", "Times New Roman", "Calibri"],
             selectedFont: "Arial",
@@ -49,7 +50,7 @@ define([
                 { name: "Schwarz", value: "rgba(0, 0, 0, 0.5)" },
                 { name: "Weiß", value: "rgba(255, 255, 255, 0.5)" }
             ],
-            selectedColor: "rgba(255, 127, 0, 0.5)",
+            selectedColor: { name: "Blau", value: "rgba(55, 126, 184, 0.5)" },
             pointRadiuses: [
                 { name: "6 px", value: 6 },
                 { name: "8 px", value: 8 },
@@ -80,7 +81,8 @@ define([
                 {name: "80 %", value: "0.2"},
                 {name: "90 %", value: "0.1"}
             ],
-            selectedOpacity: "0.5"
+            selectedOpacity: "0.5",
+            circleTooltips: []
         },
 
         initialize: function () {
@@ -94,7 +96,7 @@ define([
                 "change:text": this.setStyle,
                 "change:selectedFont": this.setStyle,
                 "change:selectedFontSize": this.setStyle,
-                "change:selectedColor change:radius change:selectedStrokeWidth": this.setStyle,
+                "change:selectedColor change:radius change:selectedStrokeWidth change:selectedOpacity": this.setStyle,
                 "change:drawendCoords": this.triggerDrawendCoords
             });
 
@@ -102,6 +104,21 @@ define([
                 source: this.get("source")
             }));
             EventBus.trigger("addLayer", this.get("layer"));
+
+            this.get("selectClick").on("select", function (evt) {
+                var feature = evt.target.getFeatures().getArray()[0];
+
+                if (_.isUndefined(feature) === false) {
+                    // Feature aus der Source entfernen
+                    this.get("source").removeFeature(feature);
+                    // Selektierte Features werden in einem internen Layer gespeichert und auf der Karte dargestellt
+                    // Selektierte Features wieder löschen
+                    evt.target.getFeatures().clear();
+                }
+            }, this);
+
+            this.get("selectClick").setActive(false);
+            EventBus.trigger("addInteraction", this.get("selectClick"));
         },
 
         setStatus: function (args) {
@@ -113,19 +130,41 @@ define([
             else {
                 this.set("isCurrentWin", false);
                 EventBus.trigger("removeInteraction", this.get("draw"));
+                this.get("selectClick").setActive(false);
             }
         },
 
         createInteraction: function () {
             EventBus.trigger("removeInteraction", this.get("draw"));
+   
+            EventBus.trigger("removeInteraction", this.get("modify"));
+            this.set("modify", new ol.interaction.Modify({
+                features: this.get("source").getFeaturesCollection(),
+                style: this.get("style")
+            }));
+            EventBus.trigger("addInteraction", this.get("modify"));
+            
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("selectedType"),
                 style: this.get("style")
             }));
+            if (this.get("selectedType") === "Circle") {
+                this.get("draw").on("drawstart", function (evt) {
+                    this.listenTo(EventBus, {
+                        "pointerMoveOnMap": this.placecircleTooltip
+                    });
+                    this.set("sketch", evt.feature);
+                    this.createcircleTooltip();
+                }, this);
+            }
             this.get("draw").on("drawend", function (evt) {
                 this.setDrawendCoords(evt.feature.getGeometry());
                 evt.feature.setStyle(this.get("style"));
+                _.each(this.get("circleTooltips"), function (tooltip) {
+                    EventBus.trigger("removeOverlay", tooltip, "circle");
+                });
+                this.stopListening(EventBus, "pointerMoveOnMap");
             }, this);
             EventBus.trigger("addInteraction", this.get("draw"));
         },
@@ -169,12 +208,12 @@ define([
 
         /**
          * Setzt die Farbe für Schrift und Geometrie.
-         * @param {string} value - rgba-Wert
+         * @param {string} value - Farbe
          */
         setColor: function (value) {
-            var color = value.substr(0, value.length - 4) + this.get("selectedOpacity");
+            var color = _.findWhere(this.get("colors"), {name: value});
 
-            this.set("selectedColor", color + ")");
+            this.set("selectedColor", color);
         },
 
         /**
@@ -183,7 +222,6 @@ define([
          */
         setOpacity: function (value) {
             this.set("selectedOpacity", parseFloat(value, 10).toFixed(1));
-            this.setColor(this.get("selectedColor"));
         },
 
         /**
@@ -228,18 +266,24 @@ define([
          * @return {ol.style.Style}
          */
         getDrawStyle: function () {
+            var rgbColor = this.get("selectedColor").value,
+                opacity = this.get("selectedOpacity"),
+                color;
+
+            color = rgbColor.substr(0, rgbColor.length - 4) + opacity + ")";
+
             return new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: this.get("selectedColor")
+                    color: color
                 }),
                 stroke: new ol.style.Stroke({
-                    color: this.get("selectedColor").substr(0, this.get("selectedColor").length - 6) + ", 1)",
+                    color: color.substr(0, color.length - 6) + ", 1)",
                     width: this.get("selectedStrokeWidth")
                 }),
                 image: new ol.style.Circle({
                     radius: this.get("radius"),
                     fill: new ol.style.Fill({
-                        color: this.get("selectedColor")
+                        color: color
                     })
                 })
             });
@@ -250,12 +294,14 @@ define([
          * @return {ol.style.Style}
          */
         getTextStyle: function () {
+            var rgbColor = this.get("selectedColor").value;
+
             return new ol.style.Style({
                 text: new ol.style.Text({
                     text: this.get("text"),
                     font: this.get("selectedFontSize") + "px " + this.get("selectedFont"),
                     fill: new ol.style.Fill({
-                        color: this.get("selectedColor").substr(0, this.get("selectedColor").length - 6) + ", 1)"
+                        color: rgbColor.substr(0, rgbColor.length - 6) + ", 1)"
                     })
                 })
             });
@@ -264,6 +310,25 @@ define([
         // Löscht alle Geometrien
         deleteFeatures: function () {
             this.get("source").clear();
+            // lösche alle Overlays (Tooltips)
+            _.each(this.get("circleTooltips"), function (tooltip) {
+                EventBus.trigger("removeOverlay", tooltip, "circle");
+            });
+            this.set("circleTooltips", []);
+        },
+
+        // Aktiviert/Deaktiviert ol.interaction.select. Auf Click wird das Feature gelöscht.
+        toggleInteractions: function () {
+            if (this.get("selectClick").getActive() === true) {
+                this.get("selectClick").setActive(false);
+                this.get("draw").setActive(true);
+                this.get("modify").setActive(true);
+            }
+            else {
+                this.get("selectClick").setActive(true);
+                this.get("draw").setActive(false);
+                this.get("modify").setActive(false);
+            }
         },
 
         getLayer: function () {
@@ -291,6 +356,42 @@ define([
 
         triggerDrawendCoords: function () {
             EventBus.trigger("getDrawendCoords", this.get("drawendCoords"));
+        },
+
+        createcircleTooltip: function () {
+            var circleTooltipElement,
+                circleTooltip;
+
+            if (circleTooltipElement) {
+                circleTooltipElement.parentNode.removeChild(circleTooltipElement);
+            }
+            circleTooltipElement = document.createElement("div");
+            circleTooltipElement.className = "tooltip-default-circle";
+            circleTooltip = new ol.Overlay({
+                element: circleTooltipElement,
+                offset: [0, -15],
+                positioning: "bottom-center"
+            });
+            this.set("circleTooltipElement", circleTooltipElement);
+            this.set("circleTooltip", circleTooltip);
+            EventBus.trigger("addOverlay", circleTooltip, "circle");
+            this.get("circleTooltips").push(circleTooltip);
+        },
+        placecircleTooltip: function (evt) {
+            if (evt.dragging) {
+                return;
+            }
+            if (this.get("circleTooltips").length > 0) {
+                var tooltipCoord = evt.coordinate;
+
+                if (this.get("sketch")) {
+                    var geom = this.get("sketch").getGeometry();
+
+                    tooltipCoord = geom.getLastCoordinate();
+                    this.get("circleTooltipElement").innerHTML = "Radius: " + Math.round(geom.getRadius()) + "m";
+                    this.get("circleTooltip").setPosition(tooltipCoord);
+                }
+            }
         }
     });
 

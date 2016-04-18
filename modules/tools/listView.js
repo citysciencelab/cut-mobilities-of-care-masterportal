@@ -2,8 +2,9 @@ define([
     "backbone",
     "backbone.radio",
     "modules/tools/list",
-    "modules/tools/view"
-], function (Backbone, Radio, TreeList, ToolView) {
+    "modules/tools/view",
+    "modules/core/util"
+], function (Backbone, Radio, TreeList, ToolView, Util) {
 
     var ToolListView = Backbone.View.extend({
         collection: new TreeList(),
@@ -27,10 +28,12 @@ define([
             }
         },
         addTool: function (tool) {
-            var toolView = new ToolView({model: tool});
+            if (!((tool.attributes.name === "draw" || tool.attributes.name === "measure") && Util.isAny())) {
+                var toolView = new ToolView({model: tool});
 
-            this.$el.append(toolView.render().el);
-            this.$el.append("<li class='divider'></li>");
+                this.$el.append(toolView.render().el);
+                this.$el.append("<li class='divider'></li>");
+            }
         }
     });
 
