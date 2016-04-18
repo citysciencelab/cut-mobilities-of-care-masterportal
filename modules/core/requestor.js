@@ -54,7 +54,6 @@ define([
                 this.buildTemplate(positionGFI);
             }
 
-            Util.hideLoader();
             return [this.pContent, positionGFI];
         },
 
@@ -91,6 +90,7 @@ define([
             else {
                 url = params.url;
             }
+            Util.showLoader();
             ++this.requestCount;
             $.ajax({
                 url: url,
@@ -155,6 +155,7 @@ define([
 
                     if (this.requestCount === 0) {
                         this.buildTemplate(positionGFI);
+                        Util.hideLoader();
                     }
                 }
             });
@@ -203,15 +204,16 @@ define([
                         gfi[key] = value;
                     }, this);
                     if (Util.isInternetExplorer() !== false) {
-                        var keys=[],
-                            values=[];
-                        _.each (gfi,function(value,key){
+                        var keys = [],
+                            values = [];
+
+                        _.each (gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
-                        },this);
+                        }, this);
                         keys.reverse();
                         values.reverse();
-                        gfi= _.object(keys, values);
+                        gfi = _.object(keys, values);
                      }
                 }
                 else {
