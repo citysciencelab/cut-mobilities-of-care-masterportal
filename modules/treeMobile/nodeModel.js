@@ -35,6 +35,9 @@ define([
         getType: function () {
             return this.get("type");
         },
+        getGlyphicon: function () {
+            return this.get("glyphicon");
+        },
         updateList: function (value) {
             this.collection.updateList(value, "slideForward");
             if (this.getType() === "folder") {

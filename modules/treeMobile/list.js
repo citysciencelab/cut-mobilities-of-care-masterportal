@@ -82,6 +82,7 @@ define([
                     glyphicon: value.glyphicon,
                     isRoot: true,
                     id: key,
+                    name: key,
                     parentId: "main",
                     email: (key === "contact") ? value.email : undefined
                 });
