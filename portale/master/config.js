@@ -207,7 +207,7 @@ define(function () {
                     "bezeichnung": "",
                     "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
                     "alias": "SDP Download",
-                    "alias_mobil": "ttt"
+                    "alias_mobil": "SDP"
                 },
                 {
                     "bezeichnung": "",
