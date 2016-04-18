@@ -4,17 +4,17 @@
       "Layer": [
         {
           "id": "452",
-          "visible": false
+          "visibility": false
         },
         {
           "id": "713",
-          "visible": false,
+          "visibility": false,
           "name" : "Stadtplan (Schwarz/Weiß)",
           "metaName": "Stadtplan (Schwarz/Weiß)"
         },
         {
           "id": "453",
-          "visible": true,
+          "visibility": true,
           "name" : "Stadtplan (farbig)",
           "metaName": "Stadtplan (farbig)"
         }
@@ -29,58 +29,58 @@
           "Layer": [
             {
               "id": "2427",
-              "visible": false,
+              "visibility": false,
               "name" : "Hamburg-Grenzen",
               "metaName": "Hamburg-Grenzen"
             },
             {
               "id": "2426",
-              "visible": false,
+              "visibility": false,
               "name" : "Bezirksgrenzen",
               "metaName": "Bezirksgrenzen"
             },
             {
               "id": "2425",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2424",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "1037",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2935",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2422",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "367",
-              "visible": false,
+              "visibility": false,
               "name" : "Polizeikommissariate",
               "metaName": "Polizeikommissariate"
 
             },
             {
               "id": "2071",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2874",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2876",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2073",
-              "visible": false
+              "visibility": false
             }
           ]
         },
@@ -89,7 +89,7 @@
           "Layer": [
             {
               "id": "2797",
-              "visible": false
+              "visibility": false
             }
           ]
         },
@@ -98,41 +98,41 @@
           "Layer": [
             {
               "id": "1561",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2834",
-              "visible": false,
+              "visibility": false,
               "maxScale": "40000",
               "name" : "Hamburger Wohnlagenverzeichnis",
               "metaName": "Hamburger Wohnlagenverzeichnis"
             },
             {
               "id": "2759,2760,2761",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "1747",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2042",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2429,2430,2431,2432,2433,2434,2435,2436,2437,2438,2459",
-              "visible": false
+              "visibility": false
             },
             {
               "id": "2444",
-              "visible": false,
+              "visibility": false,
               "maxScale": "2500",
               "name" : "ALKIS - Gebäudeflächen",
               "metaName": "ALKIS - Gebäudeflächen"
             },
             {
               "id": "2439,2440,2441,2442",
-              "visible": false,
+              "visibility": false,
               "maxScale": "10000"
             },
             {
@@ -166,7 +166,7 @@
           "Layer": [
             {
               "id": "682,683",
-              "visible": false
+              "visibility": false
             }
           ]
         },
@@ -175,7 +175,7 @@
           "Layer": [
             {
               "id": "1585",
-              "visible": false
+              "visibility": false
             }
           ]
         },
@@ -436,19 +436,19 @@
               "Layer": [
                 {
                   "id": "2688",
-                  "visible": false
+                  "visibility": false
                 },
                 {
                   "id": "2690",
-                  "visible": false
+                  "visibility": false
                 },
                 {
                   "id": "2691",
-                  "visible": false
+                  "visibility": false
                 },
                 {
                   "id": "2692",
-                  "visible": false
+                  "visibility": false
                 }
               ]
             }
