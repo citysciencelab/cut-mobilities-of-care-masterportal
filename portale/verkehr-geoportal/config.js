@@ -26,29 +26,7 @@ define(function () {
                         "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png",
                         "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
-            ],
-            baseLayer: [
-            {id: "452", visibility: false}, // luftbilder u
-            {id: "713", visibility: false}, // stadtplan s-w
-            {id: "453", visibility: false}, // stadtplan farbig
-            {id:
-             [
-                 {
-                     id: "946",
-                     attribution:
-                     {
-                         eventname: "aktualisiereverkehrsnetz",
-                         timeout: (10 * 60000)
-                     }
-                 },
-                 {
-                     id: "947"
-                 }
-             ],
-             name: "Verkehrslage auf Autobahnen", visibility: false
-            }
-          ],
-            customConfig: "../components/lgv-config/tree-config/verkehr_geoportal.json"
+            ]
         },
         controls: {
             zoom: true,
@@ -81,17 +59,28 @@ define(function () {
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: true
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            }
         },
         startUpModul: "",
         searchBar: {
