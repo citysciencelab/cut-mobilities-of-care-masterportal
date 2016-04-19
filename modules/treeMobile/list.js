@@ -23,15 +23,22 @@ define([
     TreeCollection = Backbone.Collection.extend({
         // Pfad zur custom-treeconfig
         url: "tree-config.json",
-        // wenn alles models = layer dann index
+        // Sortiert die Liste nach einem Model-Attribut
         comparator: function (model) {
-            console.log(model);
-            // console.log(t);
-            // return "type";
-            if (model.has("selectionIDX")) {
-                return [model.getType(), -model.getSelectionIDX()];
+            // Models die sich in "Auswahl der Karten befinden"
+            var modelsInSelection = this.where({isInSelection: true});
+
+            if (modelsInSelection.length) {
+                if (model.getType() === "layer" && model.getIsInSelection()) {
+                    // inverse Sortierung über "selectionIDX"
+                    return -model.getSelectionIDX();
+                }
+                else {
+                    return -1;
+                }
             }
             else {
+                // Sortierung über "type"
                 return model.getType();
             }
         },
@@ -61,18 +68,7 @@ define([
 
             this.listenTo(this, {
                 "change:selectionIDX": function () {
-                    // der SelectionIDX wird aus dem Desktop-Baum genommen
-                    // this.comparator = function (model) {
-                    //     if (model.getType() === "layer" && model.getIsInSelection()) {
-                    //         return -model.getSelectionIDX();
-                    //     }
-                    //     else {
-                    //         return -1;
-                    //     }
-                    // };
-                    this.sort({slideDirection: "without"});
-                    // comparator zurücksetzen, damit wieder nach Layer/Ordner sortiert wird
-                    // this.comparator = "type";
+                    this.sort({animation: "without"});
                 }
             });
 
@@ -387,7 +383,7 @@ define([
          * [updateList description]
          * @param  {String} parentId
          */
-        updateList: function (parentId, slideDirection) {
+        updateList: function (parentId, animation) {
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
                 isSelection = (parentId === "SelectedLayer") ? true : false;
@@ -399,26 +395,12 @@ define([
                 // Wenn Layer in der Auswahl ist, dann Zahnrad anzeigen
                 this.setIsSettingVisible(isSelection);
             }
-            else {
-                // Wenn die Auswahl angezeigt wird, dann Layer für die Auswahl Sortieren
-                // der SelectionIDX wird aus dem Desktop-Baum genommen
-                // this.comparator = function (model) {
-                //     if (model.getType() === "layer" && model.getIsInSelection()) {
-                //         return -model.getSelectionIDX();
-                //     }
-                //     else {
-                //         return -1;
-                //     }
-                // };
-            }
             // Ausgewählte Layer der Selection hinzufügen
             _.each(checkedLayer, function (layer) {
                 layer.setIsInSelection(isSelection);
             });
 
-            this.sort({slideDirection: slideDirection});
-            // comparator zurücksetzen, damit wieder nach Layer/Ordner sortiert wird
-            // this.comparator = "type";
+            this.sort({animation: animation});
         },
 
         /**

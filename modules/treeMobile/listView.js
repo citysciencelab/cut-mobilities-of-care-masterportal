@@ -37,7 +37,7 @@ define([
 
             this.listenTo(this.collection, {
                 "sort": function (collection, options) {
-                    if (options.slideDirection === "without") {
+                    if (options.animation === "without") {
                         this.renderListWithoutAnimation();
                     }
                     else {
@@ -79,8 +79,8 @@ define([
 
         renderListWithAnimation: function (options) {
             var visibleModels = this.collection.where({isVisible: true}),
-                slideOut = (options.slideDirection === "slideBack") ? "right" : "left",
-                slideIn = (options.slideDirection === "slideForward") ? "right" : "left",
+                slideOut = (options.animation === "slideBack") ? "right" : "left",
+                slideIn = (options.animation === "slideForward") ? "right" : "left",
                 that = this;
 
                 this.$el.effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
