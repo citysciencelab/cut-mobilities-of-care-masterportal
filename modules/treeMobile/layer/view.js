@@ -45,6 +45,9 @@ define([
             }
             else {
                 this.$el.html(this.template(attr));
+                if (this.model.has("treeType")) {
+                    this.renderSetting();
+                }
             }
 
             return this;
