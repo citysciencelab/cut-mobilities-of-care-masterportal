@@ -28,7 +28,7 @@ define([
             // Name der Funktion
             name: ""
         },
-        checkItem: function () {console.log(this.getName());
+        checkItem: function () {
             switch (this.getName()) {
                 case "legend": {
                     EventBus.trigger("toggleLegendWin");
