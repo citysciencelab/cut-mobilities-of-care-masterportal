@@ -23,8 +23,8 @@ define([
             "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
             "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
-            "click .layer-sort-item > .glyphicon-triangle-top": "setSelectionIndexUp",
-            "click .layer-sort-item > .glyphicon-triangle-bottom": "setSelectionIndexDown",
+            "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
+            "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
             "change select": "setTransparence"
         },
         initialize: function () {
@@ -39,6 +39,9 @@ define([
 
             if (this.model.getIsInSelection() === true) {
                 this.$el.html(this.templateSelected(attr));
+                if (this.model.getIsSettingVisible() === true) {
+                    this.renderSetting();
+                }
             }
             else {
                 this.$el.html(this.template(attr));
@@ -97,19 +100,12 @@ define([
             this.model.setTransparence(parseInt(evt.target.value, 10));
         },
 
-        setSelectionIndexUp: function () {
-            var visibleModels = this.model.collection.where({isVisible: true});
-
-            if (this.model.getSelectionIDX() <= visibleModels.length) {
-                console.log(visibleModels.length);
-                console.log(this.model.collection.length);
-            }
+        moveModelDown: function () {
+            this.model.moveDown();
         },
 
-        setSelectionIndexDown: function () {
-            if (this.model.getSelectionIDX() > 0) {
-                this.model.setSelectionIDX(this.model.getSelectionIDX() - 1);
-            }
+        moveModelUp: function () {
+            this.model.moveUp();
         }
     });
 

@@ -36,7 +36,14 @@ define([
             });
 
             this.listenTo(this.collection, {
-                "sort": this.renderList
+                "sort": function (collection, options) {
+                    if (options.slideDirection === "without") {
+                        this.renderListWithoutAnimation();
+                    }
+                    else {
+                        this.renderListWithAnimation(options);
+                    }
+                }
             });
 
             new BreadCrumbListView();
@@ -63,8 +70,15 @@ define([
             }
         },
 
-        renderList: function (collection, options) {
-            var visibleModels = collection.where({isVisible: true}),
+        renderListWithoutAnimation: function () {
+            var visibleModels = this.collection.where({isVisible: true});
+
+            this.$el.html("");
+            _.each(visibleModels, this.addViews, this);
+        },
+
+        renderListWithAnimation: function (options) {
+            var visibleModels = this.collection.where({isVisible: true}),
                 slideOut = (options.slideDirection === "slideBack") ? "right" : "left",
                 slideIn = (options.slideDirection === "slideForward") ? "right" : "left",
                 that = this;

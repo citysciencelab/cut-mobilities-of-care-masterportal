@@ -23,7 +23,18 @@ define([
     TreeCollection = Backbone.Collection.extend({
         // Pfad zur custom-treeconfig
         url: "tree-config.json",
-        comparator: "type",
+        // wenn alles models = layer dann index
+        comparator: function (model) {
+            console.log(model);
+            // console.log(t);
+            // return "type";
+            if (model.has("selectionIDX")) {
+                return [model.getType(), -model.getSelectionIDX()];
+            }
+            else {
+                return model.getType();
+            }
+        },
         model: function (attrs, options) {
             if (attrs.type === "folder") {
                 return new Folder(attrs, options);
@@ -47,6 +58,23 @@ define([
                 "updateList": this.updateList,
                 "checkIsExpanded": this.checkIsExpanded
             }, this);
+
+            this.listenTo(this, {
+                "change:selectionIDX": function () {
+                    // der SelectionIDX wird aus dem Desktop-Baum genommen
+                    // this.comparator = function (model) {
+                    //     if (model.getType() === "layer" && model.getIsInSelection()) {
+                    //         return -model.getSelectionIDX();
+                    //     }
+                    //     else {
+                    //         return -1;
+                    //     }
+                    // };
+                    this.sort({slideDirection: "without"});
+                    // comparator zurücksetzen, damit wieder nach Layer/Ordner sortiert wird
+                    // this.comparator = "type";
+                }
+            });
 
             this.addMenuItems();
             this.addToolItems();
@@ -374,14 +402,14 @@ define([
             else {
                 // Wenn die Auswahl angezeigt wird, dann Layer für die Auswahl Sortieren
                 // der SelectionIDX wird aus dem Desktop-Baum genommen
-                this.comparator = function (model) {
-                    if (model.getType() === "layer" && model.getIsInSelection()) {
-                        return -model.getSelectionIDX();
-                    }
-                    else {
-                        return -1;
-                    }
-                };
+                // this.comparator = function (model) {
+                //     if (model.getType() === "layer" && model.getIsInSelection()) {
+                //         return -model.getSelectionIDX();
+                //     }
+                //     else {
+                //         return -1;
+                //     }
+                // };
             }
             // Ausgewählte Layer der Selection hinzufügen
             _.each(checkedLayer, function (layer) {
@@ -390,7 +418,7 @@ define([
 
             this.sort({slideDirection: slideDirection});
             // comparator zurücksetzen, damit wieder nach Layer/Ordner sortiert wird
-            this.comparator = "type";
+            // this.comparator = "type";
         },
 
         /**

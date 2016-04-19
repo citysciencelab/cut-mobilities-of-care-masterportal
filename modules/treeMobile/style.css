@@ -17,6 +17,7 @@
 
 .tree-mobile > .list-group-item {
     padding: 12px 15px;
+    overflow-y: auto;
 }
 
 .selected-layer-item span.title {

@@ -64,9 +64,6 @@ define([
                 },
                 "change:transparence": function () {
                     Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"transparence": this.getTransparence()});
-                },
-                "change:selectionIDX": function () {
-                    console.log("change");
                 }
             });
         },
@@ -137,7 +134,13 @@ define([
         },
         getSelectionIDX: function () {
            return this.get("selectionIDX");
-        }
+       },
+       moveDown: function () {
+           Radio.trigger("SelectedList", "moveModelDownById", this.getLayerID());
+       },
+       moveUp: function () {
+           Radio.trigger("SelectedList", "modeModelUpById", this.getLayerID());
+       }
     });
 
     return LayerModel;

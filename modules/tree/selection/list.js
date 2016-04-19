@@ -10,6 +10,23 @@ define([
         initialize: function () {
             var channel = Radio.channel("SelectedList");
 
+            channel.reply({
+                "getSelectionIDXByID": this.getSelectionIDXByID
+            }, this);
+
+            this.listenTo(channel, {
+                "moveModelDownById": function (id) {
+                    var model = this.get(id);
+
+                    this.moveModelDown(model);
+                },
+                "modeModelUpById": function (id) {
+                    var model = this.get(id);
+
+                    this.moveModelUp(model);
+                }
+            });
+
             // EventBus Listener
             this.listenTo(EventBus, {
                 "layerlist:sendSelectedLayerList": this.addModelsToList,
@@ -21,19 +38,18 @@ define([
 
             // Eigene Listener
             this.listenTo(this, {
-                "update": function () {
-                    channel.trigger("changedList", this.models);
+                "update": function (collection, options) {
+                    if (options.add === true) {
+                        collection.forEach(function (model) {
+                            Radio.trigger("TreeList", "setLayerAttributions", model.get("id"), {selectionIDX: collection.indexOf(model)});
+                        });
+                    }
                 },
-                "add": this.addLayerToMap,
-                "remove": this.removeLayerFromMap,
-                "change:visibility": function () {
-                    channel.trigger("changedList", this.models);
-                }
+                "add": function (model) {
+                    this.addLayerToMap(model);
+                },
+                "remove": this.removeLayerFromMap
             });
-
-            channel.reply({
-                "getSelectionIDXByID": this.getSelectionIDXByID
-            }, this);
 
             // Selektierte Layer werden in die Auswahl übernommen
             this.loadSelection();
