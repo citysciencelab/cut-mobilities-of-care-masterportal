@@ -7,6 +7,7 @@ define(function () {
         tree: {
             type: "custom",
             customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
+            saveSelection: true,
             baseLayer: [
                 {id: "51", visibility: true}, // WebAtlas
                 {id: "53", visibility: false}, // WebAtlas_grau
@@ -31,8 +32,10 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
+            mousePosition: true,
             orientation: true
         },
+        simpleMap: true,
         feature_count: [
             {
                 id: 73,
