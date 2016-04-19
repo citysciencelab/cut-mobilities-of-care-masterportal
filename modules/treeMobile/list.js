@@ -170,7 +170,8 @@ define([
                     type: "layer",
                     parentId: "tree",
                     layerId: element.get("id"),
-                    title: element.get("name")
+                    title: element.get("name"),
+                    treeType: "light"
                 });
             }, this);
         },
@@ -476,10 +477,10 @@ define([
          * @param {[type]} value [description]
          */
         setIsSettingVisible: function (value) {
-            var children = this.where({isInSelection: true});
+            var models = this.where({type: "layer"});
 
-            _.each(children, function (child) {
-                child.setIsSettingVisible(value);
+            _.each(models, function (model) {
+                model.setIsSettingVisible(value);
             });
         }
     });

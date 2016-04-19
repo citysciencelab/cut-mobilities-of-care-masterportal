@@ -25,7 +25,8 @@
 }
 
 .item-settings {
-    margin-top: 8px;
+    clear: both;
+    margin-top: 34px;
     border-top: 1px solid #ddd;
     padding-top: 8px;
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
