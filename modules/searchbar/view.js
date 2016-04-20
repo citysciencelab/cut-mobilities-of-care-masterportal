@@ -127,7 +127,10 @@ define([
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": function () {
+            "click .list-group-item.type": function (e) {
+                // fix für Firefox
+                var event = e || window.event;
+
                 this.collapseHits($(event.target));
             },
             "click .btn-search-question": function () {
@@ -252,9 +255,11 @@ define([
             // 5. Beende Event
             evt.stopPropagation();
         },
-        navigateList: function () {
+        navigateList: function (e) {
             var selected = {},
-            firstListElement = {};
+            firstListElement = {},
+            // fix für Firefox
+            event = e || window.event;
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
                 var selected = this.getSelectedElement(),
