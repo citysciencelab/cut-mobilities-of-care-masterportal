@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<select class="form-control input-sm interaction">
+    <% _.each(interactions, function (interaction) { %>
+        <option value="<%= interaction.name %>" <% if (selectedInteraction === interaction.name) { print ("SELECTED")} %>><%= interaction.text %></option>
+    <% }); %>
+</select>
+<hr>
+<form class="form-horizontal style" role="form"></form>
+<hr>
+<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 modify">
+            <span class="glyphicon glyphicon-wrench"></span>
+            Geometrie bearbeiten
+            </button>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 download">
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                Herunterladen
+            </button>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 trash">
+            <span class="glyphicon glyphicon-trash"></span>
+            Geometrie / Text löschen
+            </button>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 delete">
+            <span class="glyphicon glyphicon-trash"></span>
+            Alles löschen
+            </button>
+        </div>
+    </div>
+</div>
