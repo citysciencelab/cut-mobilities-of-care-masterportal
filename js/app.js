@@ -121,7 +121,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         });
                     }
                     if (_.has(Config.tools, "draw") === true && !Util.isAny()) {
-                        require(["modules/draw/view"], function (DrawView) {
+                        require(["modules/tools/draw/view"], function (DrawView) {
                             new DrawView();
                         });
                     }
@@ -131,7 +131,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         });
                     }
                     if (_.has(Config.tools, "print") === true) {
-                        require(["modules/print/view"], function (PrintView) {
+                        require(["modules/tools/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
