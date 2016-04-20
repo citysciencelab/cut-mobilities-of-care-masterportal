@@ -39,8 +39,9 @@ define([
             // Wird ausgewertet wenn das Portal parametrisiert aufgerufen wird
             if (_.has(Config.tree, "layerIDsToSelect") === true) {
                 _.each(Config.tree.layerIDsToSelect, function (obj) {
+                    // Muss extra aufgerufen werden, da sonst visibility = false nicht funktioniert --> keine Ahnung warum SD
                     EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"selected": true});
-                    EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"visibility": obj.visibility});
+                    EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"visibility": obj.visibility, "transparence": parseInt(obj.transparence, 10)});
                 }, this);
             }
             // Über die Konfiguration sichtbar geschaltete Hintergrundkarten
