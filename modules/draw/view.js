@@ -40,7 +40,6 @@ define([
                 "change:isCollapsed change:isCurrentWin": this.render,
                 "change:selectedInteraction": this.renderForm
             });
-            this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
         },
 
         render: function () {
@@ -50,9 +49,11 @@ define([
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
+                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
             }
             else {
                 this.undelegateEvents();
+                $("#cursorGlyph").remove();
             }
             this.renderForm();
         },
