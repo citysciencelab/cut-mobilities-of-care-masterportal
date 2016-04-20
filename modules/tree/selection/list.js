@@ -26,7 +26,7 @@ define([
                 },
                 "add": this.addLayerToMap,
                 "remove": this.removeLayerFromMap,
-                "change:visibility": function () {
+                "change:visibility change:transparence": function () {
                     channel.trigger("changedList", this.models);
                 }
             });

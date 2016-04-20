@@ -179,6 +179,9 @@ define([
                 this.set("transparence", this.get("transparence") - value);
             }
         },
+        getTransparence: function () {
+            return this.get("transparence");
+        },
         /**
          *
          */
