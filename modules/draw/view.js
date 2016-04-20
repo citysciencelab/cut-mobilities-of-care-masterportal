@@ -49,6 +49,7 @@ define([
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
+                $("#cursorGlyph").remove();
                 this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
             }
             else {
