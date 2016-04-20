@@ -301,7 +301,7 @@ define([
             if (isFeatureAtPixel === true) {
                 var layerByFeature,
                     visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
-
+                
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
                     // cluster-source
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
@@ -322,10 +322,11 @@ define([
                     }
                     // vector-source
                     else {
-                        if (featureAtPixel.getId() !== undefined && visibleWFSLayerList.length > 0) {
+                        if (featureAtPixel.getId() !== undefined) {
                             layerByFeature = _.find(visibleWFSLayerList, function (layer) {
                                 return layer.get("source").getFeatureById(featureAtPixel.getId());
                             });
+
                             gfiParams.push({
                                 typ: "WFS",
                                 feature: featureAtPixel,

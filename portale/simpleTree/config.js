@@ -1,11 +1,14 @@
 define(function() {
 
     var config = {
+        allowParametricURL: true,
+        attributions: true,
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
-            poi: false
+            orientation: "allways",
+            poi: true,
+            mousePosition: true
         },
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
@@ -13,15 +16,15 @@ define(function() {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "mail@domain.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: false,
-            addWMS: true
+            routing: false
         },
         menubar: true,
+        mouseHover: true,
         print: {
             printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
@@ -30,6 +33,7 @@ define(function() {
             configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi",
+        quickHelp: true,
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         scaleLine: true,
         searchBar: {
@@ -42,43 +46,44 @@ define(function() {
                 filter: "filter=(typ:*)",
                 score: 0.6
             },
-            tree: {
+            visibleWFS: {
                 minChars: 3
             },
-            placeholder: "Suche nach Ort/Thema",
+            placeholder: "Suche nach Adresse, Ort",
             geoLocateHit: true
         },
         styleConf: "../components/lgv-config/style.json",
         tools: {
             gfi: {
-              title: "Informationen abfragen",
-               glyphicon: "glyphicon-info-sign",
-               isActive: true
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
             },
             print: {
                 title: "Karte drucken",
                 glyphicon: "glyphicon-print"
             },
             coord: {
-               title: "Koordinate abfragen",
-               glyphicon: "glyphicon-screenshot"
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
             },
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
             },
             draw: {
-                title: "Zeichnen",
+                title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
             },
             searchByCoord: {
-               title: "Koordinatensuche",
-               glyphicon: "glyphicon-search"
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
             }
         },
         tree: {
             type: "custom",
             filter: false,
+            saveSelection: true,
             customConfig: "../components/lgv-config/tree-config/simpleTree.json",
             baseLayer: [
                 {

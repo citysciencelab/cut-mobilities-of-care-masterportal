@@ -27,11 +27,6 @@ define([
                     new MousePositionView();
                 });
             }
-            if (_.has(Config.controls, "fullScreen") === true && Config.controls.fullScreen === true) {
-                require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                    new FullScreenView();
-                });
-            }
             this.$el.on({
                 click: function (e) {
                     e.stopPropagation();

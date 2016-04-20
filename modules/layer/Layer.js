@@ -231,7 +231,6 @@ define([
                 }
             }
         },
-        // deprecated ???
         toggleLayerInformation: function () {
             if (this.get("layerAttribution") !== "nicht vorhanden") {
                 if (this.get("visibility") === true) {

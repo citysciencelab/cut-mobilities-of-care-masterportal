@@ -71,7 +71,6 @@ define([
             this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
-                    searchString = searchString.replace(/[()]/g, '\\$&');
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);

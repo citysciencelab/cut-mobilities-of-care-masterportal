@@ -1,23 +1,16 @@
 define(function () {
 
     var config = {
+        allowParametricURL: true,
+        attributions: true,
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
-            poi: false
+            orientation: "allways",
+            poi: true
         },
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        tree: {
-            type: "light",
-            layer: [
-                {id: "39", visible: true},
-                {id: "2625", visible: false},
-                {id: "1711", visible: false, style: "1711", name: "Krankenhäuser WFS", searchField: "name"},
-                {id: "1561", visible: true}
-            ]
-        },
         menu: {
             searchBar: true,
             layerTree: true,
@@ -27,9 +20,11 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: false
+            routing: false,
+            featureLister: 20
         },
         menubar: true,
+        mouseHover: true,
         print: {
             printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
@@ -38,6 +33,7 @@ define(function () {
             configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi",
+        quickHelp: true,
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         scaleLine: true,
         searchBar: {
@@ -59,30 +55,35 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         tools: {
             gfi: {
-              title: "Informationen abfragen",
-               glyphicon: "glyphicon-info-sign",
-               isActive: true
-            },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
             },
             coord: {
-               title: "Koordinate abfragen",
-               glyphicon: "glyphicon-screenshot"
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
             },
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
             },
             draw: {
-                title: "Zeichnen",
+                title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
             },
             searchByCoord: {
-               title: "Koordinatensuche",
-               glyphicon: "glyphicon-search"
+                title: "Koordinatensuche",
+                glyphicon: "glyphicon-search"
             }
+        },
+        tree: {
+            type: "light",
+            layer: [
+                {id: "39", visible: false},
+                {id: "2625", visible: false},
+                {id: "1711", visible: false, style: "1711", name: "Krankenhäuser WFS", searchField: "name"},
+                {id: "1561", visible: true}
+            ]
         },
         view: {
             center: [565874, 5934140],

@@ -127,7 +127,10 @@ define([
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": function () {
+            "click .list-group-item.type": function (e) {
+                // fix für Firefox
+                var event = e || window.event;
+
                 this.collapseHits($(event.target));
             },
             "click .btn-search-question": function () {
@@ -220,6 +223,7 @@ define([
         hitSelected: function (evt) {
             var hit,
                 hitID;
+
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
@@ -249,13 +253,13 @@ define([
             // 4. Triggere Treffer über Eventbus
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
-            if (evt)  {
-                evt.stopPropagation();
-            }
+            evt.stopPropagation();
         },
-        navigateList: function () {
+        navigateList: function (e) {
             var selected = {},
-            firstListElement = {};
+            firstListElement = {},
+            // fix für Firefox
+            event = e || window.event;
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
                 var selected = this.getSelectedElement(),
