@@ -3,12 +3,12 @@ define(function () {
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         view: {
-            center: [565874, 5934140], // Rathausmarkt
-            resolution: 66.145965625264583 // 1:250.000
+            center: [565874, 5934140],
+            resolution: 66.14579761460263,
+            extent: [442800, 5809000, 738000, 6102200]
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         print: {
             printID: "99997",
@@ -16,27 +16,37 @@ define(function () {
             gfi: false
         },
         proxyURL: "/cgi-bin/proxy.cgi",
-        layerIDs:
-        [
-        {id: "453", visible: true},
-        {id: "94", visible: false, name: "Luftbilder"},
-        {id:
-         [
-            {
-                id: "1935",
-                name: "Bus1"
-            },
-            {
-                id: "1935",
-                name: "Bus2"
-            }
-         ],
-         visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+        tree: {
+            type: "light",
+            layer: [
+                {id: "453", visible: true},
+                {id: "94", visible: false, name: "Luftbilder"},
+                {id:
+                    [
+                        {
+                            id: "1935",
+                            name: "Bus1"
+                        },
+                        {
+                            id: "1935",
+                            name: "Bus2"
+                        }
+                    ],
+                    visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+                },
+                {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
+                {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
+                {
+                    id: "1728",
+                    visible: true,
+                    style: "1728", distance: "", clusterDistance: 0, searchField: "", mouseHoverField: "name", styleLabelField: "", styleField: "eg_einstufung", name: "Badegewässer"
+                }
+            ]
         },
-        {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
-        {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-        {id: "1728", visible: true, style: "1728", distance: "", clusterDistance: 0, searchField: "", mouseHoverField: "name", styleLabelField: "", styleField: "eg_einstufung", name: "Badegewässer"}
-        ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         menubar: true,
         mouseHover: true,
         scaleLine: true,
@@ -56,20 +66,29 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true
             }
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: false,
-            coord: true,
-            draw: false,
-            active: "gfi"
-        },
-        orientation: true,
-        poi: false
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            }
+        }
     };
 
     return config;
