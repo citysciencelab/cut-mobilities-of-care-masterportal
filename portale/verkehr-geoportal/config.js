@@ -22,7 +22,7 @@ define(function () {
                 {
                     "id": "1933",
                     "styles": "geofox_stations",
-                    "name": "USAR-Stationen, Bus-Haltestellen, Fähr-Stationen",
+                    "name": "USAR-Stationen (ab 1:40.000), Bus-Haltestellen, Fähr-Stationen (ab 1:20.000)",
                     "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-faehre.png"]
                 }
             ],
