@@ -32,7 +32,7 @@ define([
                 });
                 //Für lokale Entwicklungsumgebung notwendig, da keine Events zu dem Zeitpunkt vorhanden sind
                 //Config.view.center= values;
-                Radio.trigger("MapView", "setCenter", values, 7);
+                Radio.trigger("MapView", "setCenter", values, 8);
             }
 
             if (_.has(result, "LGV_BEZIRK")) {
@@ -50,12 +50,12 @@ define([
                     if (bezirk.length === 1) {
                         //Für lokale Entwicklungsumgebung notwendig, da keine Events zu dem Zeitpunkt vorhanden sind
                         //Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
-                        Radio.trigger("MapView", "setCenter", _.findWhere(bezirke, {number: bezirk}).position, 7);
+                        Radio.trigger("MapView", "setCenter", _.findWhere(bezirke, {number: bezirk}).position, 8);
                     }
                     else {
                         //Für lokale Entwicklungsumgebung notwendig, da keine Events zu dem Zeitpunkt vorhanden sind
                         //Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
-						Radio.trigger("MapView", "setCenter", _.findWhere(bezirke, {name: bezirk}).position, 7);
+						Radio.trigger("MapView", "setCenter", _.findWhere(bezirke, {name: bezirk}).position, 8);
                     }
             }
 
