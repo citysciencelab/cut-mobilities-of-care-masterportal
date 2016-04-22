@@ -9,9 +9,9 @@
             </div>
             <% _.each(brwsZuStichtag, function(brw) { %>
                 <div class="panel-body">
-                    <div class="input-group" id="<%= brw.bezeichnung %>_<%= brw.stichtag %>">
-                        <span class="input-group-addon" id="<%= brw.bezeichnung %>_<%= brw.stichtag %>" title="<%= brw.art%>">Nutzung: <%= brw.bezeichnung%></span>
-                        <input id="<%= brw.bezeichnung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.bezeichnung %>_<%= brw.stichtag %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
+                    <div class="input-group" id="<%= brw.nutzung %>_<%= brw.stichtag %>">
+                        <span class="input-group-addon" id="<%= brw.nutzung %>_<%= brw.stichtag %>" title="<%= brw.art + ' für ' + brw.nutzung%>">Nutzung: <%= brw.bezeichnung%></span>
+                        <input id="<%= brw.nutzung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.nutzung %>_<%= brw.stichtag %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
                         <span class="input-group-addon" title="<%
                         var pre = 'Bitte wählen Sie in der interaktiven Bodenrichtwertkarte (Boris-HH) den passenden ',
                             post = ' aus und geben die Bodenrichtwert-Nummer hier ein.',

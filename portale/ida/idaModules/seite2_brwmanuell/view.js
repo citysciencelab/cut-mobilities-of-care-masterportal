@@ -30,7 +30,7 @@ define([
                         nutzung = evt.currentTarget.id.split("#")[0],
                         jahr = evt.currentTarget.id.split("#")[1];
 
-                    this.model.requestBRWDetails(wnum, jahr);
+                    this.model.requestBRWDetails(wnum, jahr, nutzung);
                 }
             }
         }

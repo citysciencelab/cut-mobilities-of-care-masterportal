@@ -18,9 +18,15 @@ define([
             this.unset("brwList", {silent: true});
             this.set("brwList", val);
         },
-        requestBRWDetails: function (wnum, stichtag) {
+        requestBRWDetails: function (wnum, stichtag, nutzung) {
             var dataInputs = "<wps:DataInputs>";
 
+            dataInputs += "<wps:Input>";
+            dataInputs += "<ows:Identifier>idaIdent</ows:Identifier>";
+            dataInputs += "<wps:Data>";
+            dataInputs += "<wps:LiteralData dataType='string'>" + nutzung + "</wps:LiteralData>";
+            dataInputs += "</wps:Data>";
+            dataInputs += "</wps:Input>";
             dataInputs += "<wps:Input>";
             dataInputs += "<ows:Identifier>wnum</ows:Identifier>";
             dataInputs += "<wps:Data>";
@@ -46,6 +52,7 @@ define([
                 if ($(ergebnis[0]).children().length > 0) {
                     var parameter = $(obj.data).find("wps\\:parameter,parameter"),
                         stichtag = $(parameter).attr("stichtag"),
+                        idaIdent = $(parameter).attr("idaIdent"),
                         strassenname = $(ergebnis).find("wps\\:strassenname,strassenname")[0].textContent,
                         hausnummer = $(ergebnis).find("wps\\:hausnummer,hausnummer")[0].textContent,
                         zusatz = $(ergebnis).find("wps\\:zusatz,zusatz")[0].textContent,
@@ -77,8 +84,7 @@ define([
                         ogw = frei[23] && frei[23].trim() != "" ? parseFloat(frei[23].replace(/,/, ".").trim()) : "";
 
                     _.each(this.get("brwList"), function (obj) {
-                        // obj.bezeichnung z.B. "MFH oder WGH (mit MFH-Anteil)"
-                        if ((obj.bezeichnung.indexOf(nuta) !== -1 || obj.bezeichnung.indexOf(ergnuta) !== -1) && obj.stichtag === stichtag) {
+                        if (obj.nutzung === idaIdent && obj.stichtag === stichtag) {
                             obj = _.extend(obj, {
                                 brw: brw,
                                 wnum: wnum,
