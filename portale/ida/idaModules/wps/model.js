@@ -46,6 +46,7 @@ define([
                         data = $(exeResp).find("wps\\:ComplexData,ComplexData")[0],
                         errorOccured = $(exeResp).find("wps\\:ErrorOccured,ErrorOccured")[0],
                         fehlermeldung = $(exeResp).find("wps\\:Fehlermeldung,Fehlermeldung")[0],
+                        exceptionText = $(exeResp).find("ows\\:ExceptionText,ExceptionText")[0],
                         statusInfo = $(data).find("statusInfo")[0],
                         status = $(statusInfo).find("status")[0],
                         message = $(statusInfo).find("message")[0];
@@ -55,6 +56,9 @@ define([
                     }
                     else if (errorOccured && errorOccured.textContent === "Yes") {
                         alert ("Fehler beim Abfragen eines Dienstes. " + fehlermeldung.textContent);
+                    }
+                    else if (exceptionText) {
+                        alert ("Fehler beim Abfragen eines Dienstes. " + exceptionText.textContent);
                     }
                     else {
                         EventBus.trigger("wps:response", {
