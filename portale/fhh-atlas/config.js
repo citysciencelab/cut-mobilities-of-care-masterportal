@@ -65,7 +65,8 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            mousePosition: true
+            mousePosition: true,
+            fullScreen: true
         },
         csw: {
             id: "1"

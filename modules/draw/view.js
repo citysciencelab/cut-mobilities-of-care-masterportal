@@ -27,6 +27,7 @@ define([
             "change .drawStrokeWidth": "setStrokeWidth",
             "change .drawOpacity": "setOpacity",
             "click .delete": "deleteFeatures",
+            "click .modify": "modifyFeatures",
             "click .trash": "toggleInteractions",
             "click .download": "downloadFeatures",
             "keyup .drawText": "setText"
@@ -48,9 +49,12 @@ define([
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
+                $("#cursorGlyph").remove();
+                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
             }
             else {
                 this.undelegateEvents();
+                $("#cursorGlyph").remove();
             }
             this.renderForm();
         },
@@ -123,16 +127,42 @@ define([
             this.model.deleteFeatures();
         },
 
+        modifyFeatures: function () {
+            $(".modify").toggleClass("btn-primary");
+
+            if ($(".modify").hasClass("btn-primary") === true) {
+                $(".win-body select").prop("disabled", true);
+                $(".win-body input").prop("disabled", true);
+                $(".download").prop("disabled", true);
+                $(".trash").prop("disabled", true);
+                $(".delete").prop("disabled", true);
+            }
+            else {
+                $(".win-body select").prop("disabled", false);
+                $(".win-body input").prop("disabled", false);
+                $(".download").prop("disabled", false);
+                $(".trash").prop("disabled", false);
+                $(".delete").prop("disabled", false);
+            }
+            this.model.modifyFeatures();
+        },
+
         toggleInteractions: function () {
             $(".trash").toggleClass("btn-primary");
 
             if ($(".trash").hasClass("btn-primary") === true) {
                 $(".win-body select").prop("disabled", true);
                 $(".win-body input").prop("disabled", true);
+                $(".download").prop("disabled", true);
+                $(".modify").prop("disabled", true);
+                $(".delete").prop("disabled", true);
             }
             else {
                 $(".win-body select").prop("disabled", false);
                 $(".win-body input").prop("disabled", false);
+                $(".download").prop("disabled", false);
+                $(".modify").prop("disabled", false);
+                $(".delete").prop("disabled", false);
             }
 
             this.model.toggleInteractions();
