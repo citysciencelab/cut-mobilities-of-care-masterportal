@@ -55,18 +55,18 @@ define([
                 params = this.get("params"),
                 STRL = _.has(params, "STRL") === true ? params.STRL : "",
                 BAUW = _.has(params, "BAUW") === true ? params.BAUW : "",
-                WGFZ = _.has(params, "WGFZ") === true ? params.WGFZ : "",
-                FLAE = _.has(params, "FLAE") === true ? params.FLAE : "";
+                ZWGFZ = _.has(params, "WGFZ") === true ? parseFloat(params.WGFZ.replace(/,/, ".").trim()) : "",
+                ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : "";
 
             this.set("brwList", brwList);
             _.each(brwList, function (brw) {
                 switch (brw.art) {
                     case "Akt.BRW": {
-                        this.requestBRW(brw, STRL, BAUW, WGFZ, FLAE);
+                        this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE);
                         break;
                     }
                     case "Norm.BRW": {
-                        this.requestBRW(brw, "F", "eh", "1", "1000"); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
+                        this.requestBRW(brw, "F", "eh", 1, 1000); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
                         break;
                     }
                 }
@@ -75,10 +75,11 @@ define([
         /*
         * stellt Requests zur Abfrage der einzelnen BRW zusammen
         */
-        requestBRW: function (brw, STRL, BAUW, WGFZ, FLAE, id) {
+        requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE, id) {
+            console.log(brw);
             var stichtag = brw.stichtag.split("."),
                 dataInputs = "<wps:DataInputs>",
-                nuta = brw.ergnuta && brw.ergnuta !== "" ? brw.ergnuta : brw.nuta;
+                znuta = brw.ergnuta && brw.ergnuta !== "" ? brw.ergnuta : brw.nuta;
 
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ExtID", brw.id, "string")); // Externer Identifikator des WPS-Prozesses, wird mit ausgegeben.
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BRW", brw.brw, "float"));
@@ -88,15 +89,68 @@ define([
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("NUTA", brw.nuta, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ERGNUTA", brw.ergnuta, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BAUW", brw.bauw, "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("WGFZ", brw.wgfz, "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("FLAE", brw.flae, "float"));
+            if (brw.wgfz !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("WGFZ", brw.wgfz, "float"));
+            }
+            if (brw.flae !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("FLAE", brw.flae, "float"));
+            }
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZENTW", brw.entw, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBEIT", brw.beit, "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", nuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", znuta, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBAUW", BAUW, "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZWGFZ", WGFZ, "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZFLAE", FLAE, "float"));
+            if (ZWGFZ !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZWGFZ", ZWGFZ, "float"));
+            }
+            if (ZFLAE !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZFLAE", ZFLAE, "float"));
+            }
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZStrLage", STRL, "string"));
+            if (brw.nWohnW !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("NWohnW", brw.nWohnW, "float"));
+            }
+            if (brw.nBueroW !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("NBueroW", brw.nBueroW, "float"));
+            }
+            if (brw.nLadenW !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("NLadenW", brw.nLadenW, "float"));
+            }
+            if (brw.egnutzung !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("EGNutzung", brw.egnutzung, "string"));
+            }
+            if (brw.eggfzAnt !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("EGGFZAnt", brw.eggfzAnt, "float"));
+            }
+            if (brw.egw !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("EGW", brw.egw, "float"));
+            }
+            if (brw.ignutzung !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("IGNutzung", brw.ignutzung, "string"));
+            }
+            if (brw.iggfzAnt !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("IGGFZAnt", brw.iggfzAnt, "float"));
+            }
+            if (brw.igw !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("IGW", brw.igw, "float"));
+            }
+            if (brw.zgnutzung !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZGNutzung", brw.zgnutzung, "string"));
+            }
+            if (brw.zggfzAnt !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZGGFZAnt", brw.zggfzAnt, "float"));
+            }
+            if (brw.zgw !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZGW", brw.zgw, "float"));
+            }
+            if (brw.ognutzung !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("OGNutzung", brw.ognutzung, "string"));
+            }
+            if (brw.oggfzAnt !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("OGGFZAnt", brw.oggfzAnt, "float"));
+            }
+            if (brw.ogw !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("OGW", brw.ogw, "float"));
+            }
             dataInputs += "</wps:DataInputs>";
             EventBus.trigger("wps:request", {
                 workbenchname: this.get("wpsWorkbenchnameBRW"),
