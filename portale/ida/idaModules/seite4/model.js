@@ -76,7 +76,6 @@ define([
         * stellt Requests zur Abfrage der einzelnen BRW zusammen
         */
         requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE, id) {
-            console.log(brw);
             var stichtag = brw.stichtag.split("."),
                 dataInputs = "<wps:DataInputs>",
                 znuta = brw.ergnuta && brw.ergnuta !== "" ? brw.ergnuta : brw.nuta;
