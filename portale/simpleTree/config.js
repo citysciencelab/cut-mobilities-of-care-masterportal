@@ -21,7 +21,8 @@ define(function() {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: false
+            routing: false,
+            addWMS: true
         },
         menubar: true,
         mouseHover: true,
@@ -49,9 +50,13 @@ define(function() {
             visibleWFS: {
                 minChars: 3
             },
+            tree: {
+              minChars: 3
+            },
             placeholder: "Suche nach Adresse, Ort",
             geoLocateHit: true
         },
+        simpleMap: true,
         styleConf: "../components/lgv-config/style.json",
         tools: {
             gfi: {
