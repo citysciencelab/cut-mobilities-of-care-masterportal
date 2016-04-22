@@ -33,7 +33,7 @@ define(function () {
             zoom: true,
             toggleMenu: true,
             mousePosition: true,
-            orientation: true
+            orientation: "allways"
         },
         simpleMap: true,
         feature_count: [
