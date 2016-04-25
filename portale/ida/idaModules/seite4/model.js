@@ -44,6 +44,7 @@ define([
 
                 o = _.extend(o, {id: uniqueID});
                 o = _.extend(o, {responseReceived: false});
+                o = _.extend(o, {umgerechneterbrw: ""});
             });
             return obj;
         },
@@ -176,73 +177,23 @@ define([
                         return brw.id === id;
                     });
                     if (brw) {
-                        switch (brw.art) {
-                            case "Akt.BRW": {
-                                this.setAktBRW(brw, umgerechneterbrw);
-                                break;
-                            }
-                            case "Norm.BRW": {
-                                this.setNormBRW(brw.id, umgerechneterbrw);
-                                break;
-                            }
-                        }
+                        brw.umgerechneterbrw = umgerechneterbrw;
+                        brw.responseReceived = true;
+                        this.unset("brwList", {silent: true});
+                        this.set("brwList", brwList);
                     }
                 }
             }
-        },
-        /*
-        * Verarbeite den NormBRW und vermerke rsponseReceived
-        */
-        setNormBRW: function (brwid, wert) {
-            var brwList = this.get("brwList");
-
-            this.set("normBRW", wert);
-
-            _.each(brwList, function (brw) {
-                if (brw.id === brwid) {
-                    brw.responseReceived = true;
-                }
-            });
-            this.unset("brwList", {silent: true});
-            this.set("brwList", brwList);
-        },
-        /*
-        * Verarbeite den AktBRW und vermerke rsponseReceived. Der aktuelle BRW kann sich aus mehreren BRW zusammensetzen.
-        * bei ETW kommt MFH (mit 2 Anteilen) + WGH (mit 2 Anteilen)
-        * bei Produkt BRW kommt nur ein BRW mit Anteil = 1
-        * usw.
-        */
-        setAktBRW: function (brw, wert) {
-            var newAktBRW = 0,
-                brwList = this.get("brwList"),
-                listAktBRW = _.filter(brwList, function (brw) {
-                    return brw.art = "Akt.BRW";
-                }),
-                groupAktBrw = _.groupBy(listAktBRW, function (brw) {
-                    return brw.bezeichnung;
-                }),
-                wertanteil = wert * brw.anteil,
-                aktBRW = this.get("aktBRW") === "" ? 0 : this.get("aktBRW");
-
-            // addiere zu bisher ermittelten AktBRW noch den Quotienten des neuen Wertanteils
-            newAktBRW = parseFloat(aktBRW) + (parseFloat(wertanteil) / _.size(groupAktBrw));
-            this.set("aktBRW", newAktBRW);
-
-            _.each(brwList, function (b) {
-                if (b.id === brw.id) {
-                    b.responseReceived = true;
-                }
-            });
-            this.unset("brwList", {silent: true});
-            this.set("brwList", brwList);
         },
         /*
         * stellt Request zur Abfrage von IDA-Werten zusammen
         */
         requestIDA: function () {
             var params = this.get("params"),
-                dataInputs = "<wps:DataInputs>";
+                dataInputs = "<wps:DataInputs>",
+                BRWJSON = JSON.stringify(this.get("brwList"));
 
+            this.set("BRWJSON", BRWJSON);
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("nutzung", "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("produkt", "string"));
             dataInputs += "<wps:Input>";
@@ -252,8 +203,6 @@ define([
             dataInputs += "</wps:Data>";
             dataInputs += "</wps:Input>";
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("StadtteilName", "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("normBRW", "float"));
-            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("aktBRW", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("WGFZ", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FLAE", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("BAUW", "string"));
@@ -278,6 +227,7 @@ define([
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("STST", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FKWERT", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("SACH", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("BRWJSON", "string"));
             dataInputs += "</wps:DataInputs>";
             EventBus.trigger("wps:request", {
                 workbenchname: this.get("wpsWorkbenchnameIDAUmrechnung"),
