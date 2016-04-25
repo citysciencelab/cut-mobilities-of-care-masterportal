@@ -116,8 +116,9 @@ define([
                     if (brw.getAttribute("bezeichnung")) {
                         brwList.push({
                             art: brw.getAttribute("art"),
+                            nutzung: brw.getAttribute("nutzung"),
                             bezeichnung: brw.getAttribute("bezeichnung"),
-                            anteil: brw.getAttribute("anteil"),
+                            anteil: parseFloat(brw.getAttribute("anteil").replace(/,/, ".").trim()),
                             stichtag: brw.getAttribute("stichtag")
                         });
                     }
@@ -166,7 +167,7 @@ define([
                     dataInputs += "<wps:Input>";
                     dataInputs += "<ows:Identifier>nutzung</ows:Identifier>";
                     dataInputs += "<wps:Data>";
-                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.bezeichnung + "</wps:LiteralData>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.nutzung + "</wps:LiteralData>";
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "<wps:Input>";
@@ -216,7 +217,7 @@ define([
                     dataInputs += "<wps:Input>";
                     dataInputs += "<ows:Identifier>nutzung</ows:Identifier>";
                     dataInputs += "<wps:Data>";
-                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.bezeichnung + "</wps:LiteralData>";
+                    dataInputs += "<wps:LiteralData dataType='string'>" + brw.nutzung + "</wps:LiteralData>";
                     dataInputs += "</wps:Data>";
                     dataInputs += "</wps:Input>";
                     dataInputs += "<wps:Input>";
