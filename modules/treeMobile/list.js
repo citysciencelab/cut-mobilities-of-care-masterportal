@@ -135,7 +135,7 @@ define([
             });
             this.add({
                 type: "folder",
-                title: "Auswahl der Karten",
+                title: "Auswahl der Themen",
                 glyphicon: "glyphicon-plus-sign",
                 isRoot: false,
                 id: "SelectedLayer",
