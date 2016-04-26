@@ -5,9 +5,11 @@ define(function () {
         allowParametricURL: true,
         tree: {
             type: "custom",
+            saveSelection: true,
             layerIDsToMerge: [
                ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
                 ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
+                ["713", "714", "715", "716"],
                 ["717", "718", "719", "720"],
                 ["1043", "1044", "1045", "1046"]
               ],
@@ -27,9 +29,13 @@ define(function () {
                 }
             ],
             baseLayer: [
-                {id: "452", visibility: false}, // luftbilder 
-                {id: "453", visibility: false}, // stadtplan farbig
-                {id: "713", visibility: false}
+                {id: "452",visibility: false}, // luftbilder 
+                {id: "453",visibility: true}, // stadtplan farbig
+                {id: "713",visibility: false}, // stadtplan sw
+                {id: "717",visibility: false}, // geobasiskarten farbig
+                {id: "1043",visibility: false}, // geobasiskarten grau-blau
+                {id: "368",visibility: false}, // aLKIS farbig
+                {id: "149",visibility: false} // aLKIS grau-blau
                
             ],
             customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
@@ -80,7 +86,8 @@ define(function () {
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
-            routing: true
+            routing: true,
+            addWMS: true
         },
         startUpModul: "",
         searchBar: {
