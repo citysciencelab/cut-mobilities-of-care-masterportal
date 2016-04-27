@@ -29,7 +29,6 @@ define(function () {
                 }
             ],
             baseLayer: [
-<<<<<<< HEAD
                 {id: "452", visibility: false}, // luftbilder
                 {id: "453", visibility: false}, // stadtplan farbig
                 {id: "713", visibility: false}, // stadtplan s-w
@@ -48,17 +47,11 @@ define(function () {
                         }
                     ],
                     name: "Verkehrslage auf Autobahnen", visibility: false
-                        }
-=======
-                {id: "452",visibility: false}, // luftbilder
-                {id: "453",visibility: true}, // stadtplan farbig
-                {id: "713",visibility: false}, // stadtplan sw
-                {id: "717",visibility: false}, // geobasiskarten farbig
-                {id: "1043",visibility: false}, // geobasiskarten grau-blau
-                {id: "368",visibility: false}, // aLKIS farbig
-                {id: "149",visibility: false} // aLKIS grau-blau
-
->>>>>>> dev
+                },
+                {id: "717", visibility: false}, // geobasiskarten farbig
+                {id: "1043", visibility: false}, // geobasiskarten grau-blau
+                {id: "368", visibility: false}, // aLKIS farbig
+                {id: "149", visibility: false} // aLKIS grau-blau
             ],
             customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
             },
@@ -70,14 +63,14 @@ define(function () {
         },
         feature_count: [
             {
-                id: 1561,   //festgestelte B-Pläne
+                id: 1561, // festgestelte B-Pläne
                 count: 5
             }
         ],
         view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
-            //resolution: 26.458319045841044,
+            // resolution: 26.458319045841044,
             epsg: "EPSG:25832"
         },
         customModules: ["../portale/verkehr-geoportal/verkehrsfunctions"],
