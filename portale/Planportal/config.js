@@ -23,7 +23,7 @@ define(function () {
                 // {id: "1748", visibility: false}, ehemals APRO Cache
                 {id: "1409,1410,1411,1412,1413,1414,1415", visibility: false},
                 {id: "1416", visibility: false, name: "Änderungsübersicht zum Arten- und Biotopschutz"},
-                {id: "4445,4446", visibility: false, name: "Soziale Erhaltungsverordnungen"},
+                {id: "433,434", visibility: false, name: "Soziale Erhaltungsverordnungen"},
                 {id: "1205", visibility: false},
                 {id: "1562", visibility: true},
                 {id: "1561", visibility: true}

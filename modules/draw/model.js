@@ -13,7 +13,7 @@ define([
     DrawTool = Backbone.Model.extend({
         defaults: {
             selectClick: new ol.interaction.Select(),
-            source: new ol.source.Vector({useSpatialIndex:false}),
+            source: new ol.source.Vector({useSpatialIndex: false}),
             interactions: [
                 { text: "Punkt zeichnen", type: "Point", name: "drawPoint" },
                 { text: "Linie zeichnen", type: "LineString", name: "drawLine" },
@@ -136,14 +136,6 @@ define([
 
         createInteraction: function () {
             EventBus.trigger("removeInteraction", this.get("draw"));
-   
-            EventBus.trigger("removeInteraction", this.get("modify"));
-            this.set("modify", new ol.interaction.Modify({
-                features: this.get("source").getFeaturesCollection(),
-                style: this.get("style")
-            }));
-            EventBus.trigger("addInteraction", this.get("modify"));
-            
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("selectedType"),
@@ -317,17 +309,65 @@ define([
             this.set("circleTooltips", []);
         },
 
+        // Aktiviert/Deaktiviert das Modifizieren von Features
+        modifyFeatures: function () {
+            if (this.get("modify") && this.get("modify").getActive() === true) {
+                this.get("modify").setActive(false);
+                this.get("draw").setActive(true);
+                this.get("selectClick").setActive(false);
+
+                $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
+                this.setGlyphToCursor("glyphicon glyphicon-pencil");
+
+                EventBus.trigger("removeInteraction", this.get("modify"));
+            }
+            else {
+                EventBus.trigger("removeInteraction", this.get("modify"));
+                this.set("modify", new ol.interaction.Modify({
+                    features: this.get("source").getFeaturesCollection(),
+                    style: this.get("style")
+                    }));
+                this.get("modify").setActive(true);
+                this.get("draw").setActive(false);
+                this.get("selectClick").setActive(true);
+
+                $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
+                this.setGlyphToCursor("glyphicon glyphicon-wrench");
+
+                EventBus.trigger("addInteraction", this.get("modify"));
+            }
+        },
+        // Erstellt ein HTML-Element, legt dort das Glyphicon rein und klebt es an den Cursor
+        setGlyphToCursor: function (glyphicon) {
+            $("#map").after("<span id='cursorGlyph'></span>");
+            $("#map").mousemove(function (e) {
+                    var modifyCursor = $("#cursorGlyph");
+
+                    $("#cursorGlyph").addClass(glyphicon);
+                    modifyCursor.css("left", e.offsetX + 10);
+                    modifyCursor.css("top", e.offsetY + 15);
+            });
+        },
+
         // Aktiviert/Deaktiviert ol.interaction.select. Auf Click wird das Feature gelöscht.
         toggleInteractions: function () {
             if (this.get("selectClick").getActive() === true) {
                 this.get("selectClick").setActive(false);
                 this.get("draw").setActive(true);
-                this.get("modify").setActive(true);
+
+                $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
+                this.setGlyphToCursor("glyphicon glyphicon-pencil");
             }
             else {
                 this.get("selectClick").setActive(true);
                 this.get("draw").setActive(false);
-                this.get("modify").setActive(false);
+
+                $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
+                this.setGlyphToCursor("glyphicon glyphicon-trash");
             }
         },
 

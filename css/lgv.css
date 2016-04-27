@@ -15,6 +15,11 @@ label {
     width: 100%;
     background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
+#cursorGlyph {
+    position: absolute;
+    z-index: 1000;
+    cursor: none;
+}
 
 .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open {
     cursor: pointer;
