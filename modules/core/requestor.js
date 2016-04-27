@@ -202,6 +202,17 @@ define([
                         key = this.beautifyString(key);
                         gfi[key] = value;
                     }, this);
+                 if (Util.isInternetExplorer() !== false) {
+                        var keys=[],
+                            values=[];
+                        _.each (gfi,function(value,key){
+                            keys.push(key);
+                            values.push(value);
+                        },this);
+                        keys.reverse();
+                        values.reverse();
+                        gfi= _.object(keys, values);
+                     }
                 }
                 else {
                     // map object keys to gfiAttributes from layer model
