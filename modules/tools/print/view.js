@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "text!modules/print/template.html",
-    "modules/print/model"
+    "text!modules/tools/print/template.html",
+    "modules/tools/print/model"
 ], function (Backbone, PrintWinTemplate, Print) {
 
     var view = Backbone.View.extend({

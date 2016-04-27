@@ -77,7 +77,7 @@ define([
             $(function () {
                 $("#loader").show();
             });
-            this.model.trackPOI(500);
+            this.model.trackPOI();
         }
     });
 
