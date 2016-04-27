@@ -1,6 +1,8 @@
 define(function () {
 
     var config = {
+         title: "Geoportal Verkehr",
+        logo: "../img/hh-logo.png",
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         tree: {
@@ -48,7 +50,7 @@ define(function () {
                     ],
                     name: "Verkehrslage auf Autobahnen", visibility: false
                 },
-                {id: "717", visibility: false}, // geobasiskarten farbig
+                {id: "717", visibility: true}, // geobasiskarten farbig
                 {id: "1043", visibility: false}, // geobasiskarten grau-blau
                 {id: "368", visibility: false}, // aLKIS farbig
                 {id: "149", visibility: false} // aLKIS grau-blau
