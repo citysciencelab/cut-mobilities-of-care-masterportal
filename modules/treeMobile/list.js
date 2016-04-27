@@ -253,17 +253,15 @@ define([
             layers = _.sortBy(layers, function (layer) {
                 return layer.attributes.name.trim().toUpperCase();
             });
-            var nodes = [];
 
             _.each(layers, function (layer) {
-                nodes.push({
+                treeNodes.push({
                     type: "layer",
                     parentId: parentId,
                     layerId: layer.id,
                     title: layer.attributes.name
                 });
             });
-            this.add(nodes);
         },
         /**
          * Erzeugt aus einem Übergebenen Array Ordner Models
@@ -276,10 +274,8 @@ define([
                     return folder.title.trim().toUpperCase();
                 });
 
-            var nodes = [];
-
             _.each(folders, function (folder) {
-                nodes.push({
+                treeNodes.push({
                     type: "folder",
                     parentId: parentId,
                     title: folder.title,
@@ -287,7 +283,6 @@ define([
                     isLeafFolder: (_.has(folder, "folder")) ? false : true
                 });
             }, this);
-            this.add(nodes);
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
@@ -303,7 +298,6 @@ define([
             this.createLayersModels(typeGroup.baselayer, "BaseLayer");
             // Models für die Fachdaten erzeugen
             this.groupDefaultTreeOverlays(typeGroup.overlay);
-
         },
 
         /**
@@ -378,6 +372,7 @@ define([
                     this.createLayersModels(folder.layer, folder.id);
                 }, this);
             }, this);
+            this.add(treeNodes, {sort: false});
         },
 
         /**
@@ -400,7 +395,6 @@ define([
             _.each(checkedLayer, function (layer) {
                 layer.setIsInSelection(isSelection);
             });
-
             this.sort({animation: animation});
         },
 
