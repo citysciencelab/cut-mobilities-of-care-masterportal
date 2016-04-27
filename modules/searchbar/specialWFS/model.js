@@ -71,7 +71,7 @@ define([
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
-                }                
+                }
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
             }
@@ -223,7 +223,7 @@ define([
                }
             }, this);
         },
-            
+
         /**
          * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
          * @param  {xml} data - getFeature-Request

@@ -294,9 +294,6 @@ define(function () {
         * @property {boolean} helpButton - auf false setzen
         * @property {Boolean} [menu.searchBar=false] - Legt fest, ob die Suchfunktion geladen werden soll.
         * @property {Boolean}  menu.layerTree - Legt fest, ob der Themenbaum geladen werden soll.
-        * @property {Object}  menu.contactButton - Konfigurationsobjekt des Kontakt-Buttons.
-        * @property {boolean} [menu.contactButton.on=false] Kontakt-Button anzeigen.
-        * @property {string} menu.contactButton.email Emailadresse Empfänger.
         * @property {Boolean}  menu.tools - Legt fest, ob der Werkzeuge-Button angezeigt werden soll.
         * @property {Boolean}  menu.treeFilter - Legt fest, ob der Filter für die Straßenbäume angezeigt werden soll.
         * @property {Boolean}  menu.wfsFeatureFilter - Legt fest, ob der WFS-Filter geladen werden soll. Siehe {@link config.tree}.
@@ -307,15 +304,32 @@ define(function () {
         * @property {string}  menu.formular.symbol - Symbolname
         * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
         * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
-        * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
+        * @property {Object}  [menu.contact] - Konfigurationsobjekt des Kontaktformulars. In diesem wird es dem Anwender ermöglicht, seinen Namen, Emailadresse und Tel. einzugeben und mit einem Freitext per Email zu verschicken. Der Betreffzeile wird eine TicketNo vorangestellt.
+        * @property {string}  menu.contact.serviceID - ID aus restConf mit Emaildefinition. Siehe {@link config.restConf}.
+        * @property {Object[]}  menu.contact.from - Array der Absender. Der erste Absender wird im From eingetragen. Alle anderen im Reply.
+        * @property {string}  menu.contact.from.email - Emailadresse
+        * @property {string}  menu.contact.from.name - Anzeigename
+        * @property {Object[]}  menu.contact.to - Array der Empfänger.
+        * @property {string}  menu.contact.to.email - Emailadresse
+        * @property {string}  menu.contact.to.name - Anzeigename
+        * @property {Object[]}  [menu.contact.cc] - Array der cc-Empfänger.
+        * @property {string}  menu.contact.cc.email - Emailadresse
+        * @property {string}  menu.contact.cc.name - Anzeigename
+        * @property {Object[]}  [menu.contact.bcc] - Array der bcc-Empfänger.
+        * @property {string}  menu.contact.bcc.email - Emailadresse
+        * @property {string}  menu.contact.bcc.name - Anzeigename
+        * @property {boolean}  [menu.contact.ccToUser=false] - Gibt an, ob die im Formular genannte Emailadresse des Users in den cc des Headers aufgenommen wird.
+        * @property {string}  [menu.contact.subject=Supportanfrage zum Portal document.title] - Text der Betreffzeile der versandten Email.
+        * @property {string}  [menu.contact.textPlaceholder=Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;] - Placeholder des Textfeldes.
+        * @property {boolean}  [menu.contact.includeSystemInfo=false] - Gibt an, ob navigator-Informationen in den Rumpf der Email aufgenommen werden sollen.
         * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
+        * @example contact: {serviceID: "80001", from: [{email: "lgvgeoportal-hilfe@gv.hamburg.de", name: "LGVGeoportalHilfe"}], to: [{email: "lgvgeoportal-hilfe@gv.hamburg.de",name: "LGVGeoportalHilfe"}], ccToUser: true}
         * @todo helpButton
         */
         menu: {
             helpButton: false,
             searchBar: true,
             layerTree: true,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             featureLister: 10,
             treeFilter: false,
@@ -323,7 +337,24 @@ define(function () {
             legend: true,
             routing: true,
             addWMS: true,
-            formular: {}
+            formular: {},
+            contact: {
+                serviceID: "80001",
+                from: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                to: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                ccToUser: true,
+                cc: [],
+                bcc: [],
+                subject: "",
+                textPlaceholder: "",
+                includeSystemInfo: true
+            }
         },
         /**
         * @memberof config

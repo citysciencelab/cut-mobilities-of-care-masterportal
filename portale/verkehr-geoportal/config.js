@@ -13,7 +13,7 @@ define(function () {
                 ["717", "718", "719", "720"],
                 ["1043", "1044", "1045", "1046"]
               ],
-            layerIDsToStyle: [                
+            layerIDsToStyle: [
                 {
                     "id": "1935",
                     "styles": ["geofox-bahn", "geofox-bus", "geofox_BusName", "geofox_Faehre"],
@@ -29,14 +29,36 @@ define(function () {
                 }
             ],
             baseLayer: [
-                {id: "452",visibility: false}, // luftbilder 
+<<<<<<< HEAD
+                {id: "452", visibility: false}, // luftbilder
+                {id: "453", visibility: false}, // stadtplan farbig
+                {id: "713", visibility: false}, // stadtplan s-w
+                {id:
+                    [
+                        {
+                            id: "946",
+                            attribution:
+                                {
+                                    eventname: "aktualisiereverkehrsnetz",
+                                    timeout: (10 * 60000)
+                                }
+                        },
+                        {
+                            id: "947"
+                        }
+                    ],
+                    name: "Verkehrslage auf Autobahnen", visibility: false
+                        }
+=======
+                {id: "452",visibility: false}, // luftbilder
                 {id: "453",visibility: true}, // stadtplan farbig
                 {id: "713",visibility: false}, // stadtplan sw
                 {id: "717",visibility: false}, // geobasiskarten farbig
                 {id: "1043",visibility: false}, // geobasiskarten grau-blau
                 {id: "368",visibility: false}, // aLKIS farbig
                 {id: "149",visibility: false} // aLKIS grau-blau
-               
+
+>>>>>>> dev
             ],
             customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
             },
