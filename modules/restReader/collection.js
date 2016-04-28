@@ -1,13 +1,21 @@
 define([
     "backbone",
+    "backbone.radio",
     "config",
     "eventbus",
     "modules/core/util"
-    ], function (Backbone, Config, EventBus, Util) {
+], function (Backbone, Radio, Config, EventBus, Util) {
     "use strict";
     var RestList = Backbone.Collection.extend({
         url: Util.getPath(Config.restConf),
         initialize: function () {
+            var channel = Radio.channel("RestReader");
+
+            channel.reply({
+                "getAllServices": this.getAllServices,
+                "getServiceById": this.getServiceById
+            }, this);
+
             this.fetch({
                 cache: false,
                 error: function () {
@@ -18,7 +26,7 @@ define([
                 }
             });
         },
-        getAllServices: function () {console.log(this.models);
+        getAllServices: function () {
             return this.models;
         },
         getServiceById: function (id) {
@@ -26,5 +34,5 @@ define([
         }
     });
 
-    return new RestList();
+    return RestList;
 });
