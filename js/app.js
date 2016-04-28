@@ -43,9 +43,8 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
 
     require([
         "modules/core/map",
-        "config",
-        "jquery"
-    ], function (Map, Config, $) {
+        "config"
+    ], function (Map, Config) {
         new Map();
 
         if (Util.isAny()) {
