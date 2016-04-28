@@ -58,6 +58,7 @@ define([
 
             channel.on({
                 "setLayerAttributions": function (layerId, attrs) {
+                    debugger;
                     var model = this.findWhere({type: "layer", layerId: layerId});
 
                     model.set(attrs);
@@ -249,9 +250,8 @@ define([
          * @param  {String} parentId die Id des Eltern Model
          */
         createLayersModels: function (layers, parentId) {
-
             layers = _.sortBy(layers, function (layer) {
-                return layer.attributes.name.trim().toUpperCase();
+                return layer.name[0].trim().toUpperCase();
             });
 
             _.each(layers, function (layer) {
@@ -259,7 +259,7 @@ define([
                     type: "layer",
                     parentId: parentId,
                     layerId: layer.id,
-                    title: layer.attributes.name,
+                    title: layer.name,
                     id: layer.id
                 });
             });
@@ -283,17 +283,18 @@ define([
                     id: folder.id,
                     isLeafFolder: (_.has(folder, "folder")) ? false : true
                 });
-            }, this);
+            });
+
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {
-            var layerList = Radio.request("LayerList", "getLayerList"),
+            var layerList = Radio.request("LayerList", "getResponse"),//Radio.request("LayerList", "getLayerList"),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
-                return (layer.attributes.isbaselayer) ? "baselayer" : "overlay";
+                return (layer.isbaselayer) ? "baselayer" : "overlay";
             });
             // Models für die Baselayer erzeugen
             this.createLayersModels(typeGroup.baselayer, "BaseLayer");
@@ -338,12 +339,12 @@ define([
             var tree = {},
                 // Gruppierung nach Opendatakategorie
                 categoryGroups = _.groupBy(overlays, function (layer) {
-                return layer.attributes.node;
+                return layer.datasets[0].kategorie_opendata[0];
             });
            // Gruppierung nach MetaName
             _.each(categoryGroups, function (group, title) {
                 var metaNameGroups = _.groupBy(group, function (layer) {
-                    return layer.attributes.metaName;
+                    return layer.datasets[0].md_name;
                 });
                 // in Layer und Ordner unterteilen
                 tree[title] = this.splitIntoFolderAndLayer(metaNameGroups, title);
@@ -374,7 +375,7 @@ define([
                 }, this);
             }, this);
             // console.log(treeNodes[125]);
-            this.add(treeNodes, {sort: false});
+           // this.add(treeNodes, {sort: false});
         },
 
         /**
@@ -382,8 +383,22 @@ define([
          * @param  {String} parentId
          */
         updateList: function (parentId, animation) {
+                        console.log(treeNodes);
+            var t = new Date().getTime();
+            var response = Radio.request("LayerList", "getResponse");
+            var currentLevel = _.where(treeNodes, {parentId: parentId}, {sort: false});
+            _.each(currentLevel, function (item) {
+                if (item.type === "layer") {
+                    Radio.trigger("LayerList", "addModel", _.find(response, function (layer) {
+                        return layer.id === item.layerId;
+                    }));
+                }
+            });
 
-            this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
+            //this.add(Radio.request("LayerList", "getLayerList"));
+
+           this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
+            console.log(new Date().getTime()-t);
             // console.log(this.models);
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"

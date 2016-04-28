@@ -30,7 +30,7 @@ define([
             // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
             isSettingVisible: false,
             // die Transparenz des Layers
-            transparence: "",
+            transparence: 0,
             // der Index der die Reihenfolge beim Zeichnen der ausgewählten Layer bestimmt
             selectionIDX: 0
         },
