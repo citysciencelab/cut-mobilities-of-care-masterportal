@@ -1,10 +1,11 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList"], function ($, Config, Util, RawLayerList) {
+define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList", "modules/restReader/collection"], function ($, Config, Util, RawLayerList, RestReaderList) {
     "use strict";
     require(["modules/alerting/view"]);
     Util.showLoader();
+    new RestReaderList();
     new RawLayerList();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {

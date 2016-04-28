@@ -1,11 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/core/util",
     "eventbus",
     "config",
-    "modules/restReader/collection",
     "openlayers"
-], function (Backbone, Util, EventBus, Config, RestReader, ol) {
+], function (Backbone, Radio, Util, EventBus, Config, ol) {
     "use strict";
     var model = Backbone.Model.extend({
 
@@ -23,7 +23,7 @@ define([
         url: function () {
             var resp;
 
-            resp = RestReader.getServiceById(Config.print.printID);
+            resp = Radio.request("RestReader", "getServiceById", Config.print.printID);
             if (resp[0] && resp[0].get("url")) {
                 this.set("printurl", resp[0].get("url"));
             }

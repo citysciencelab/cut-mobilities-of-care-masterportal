@@ -1,12 +1,12 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "openlayers",
     "modules/cookie/view",
-    "modules/restReader/collection",
     "modules/core/util"
-], function (Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
+], function (Backbone, Radio, EventBus, Config, ol, cookie, Util) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -42,7 +42,7 @@ define([
             // lese WPS-Url aus JSON ein
             var resp, newURL;
 
-            resp = RestReader.getServiceById(Config.wpsID);
+            resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
             newURL = Util.getProxyURL(resp[0].get("url"));
             this.set("wpsurl", newURL);
             // Fenstermanagement
