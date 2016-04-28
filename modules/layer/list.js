@@ -186,7 +186,7 @@ define([
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
                 if ($(window).width() >= 768) {
-                   this.set("isMobile", false);
+                //    this.set("isMobile", false);
                     this.reset(response);
                 }
                 this.response = response;
