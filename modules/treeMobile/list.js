@@ -400,7 +400,7 @@ define([
             _.each(checkedLayer, function (layer) {
                 layer.setIsInSelection(isSelection);
             });
-            this.sort({animation: animation});
+            this.trigger("updateList", {animation: animation});
         },
 
         /**

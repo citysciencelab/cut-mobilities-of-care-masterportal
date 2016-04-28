@@ -36,7 +36,7 @@ define([
             });
 
             this.listenTo(this.collection, {
-                "sort": function (collection, options) {
+                "updateList": function (options) {
                     if (options.animation === "without") {
                         this.renderListWithoutAnimation();
                     }
