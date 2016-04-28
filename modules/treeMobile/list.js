@@ -259,7 +259,8 @@ define([
                     type: "layer",
                     parentId: parentId,
                     layerId: layer.id,
-                    title: layer.attributes.name
+                    title: layer.attributes.name,
+                    id: layer.id
                 });
             });
         },
@@ -372,6 +373,7 @@ define([
                     this.createLayersModels(folder.layer, folder.id);
                 }, this);
             }, this);
+            // console.log(treeNodes[125]);
             this.add(treeNodes, {sort: false});
         },
 
@@ -380,6 +382,9 @@ define([
          * @param  {String} parentId
          */
         updateList: function (parentId, animation) {
+
+            this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
+            // console.log(this.models);
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
                 isSelection = (parentId === "SelectedLayer") ? true : false;
