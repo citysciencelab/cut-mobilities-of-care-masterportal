@@ -25,6 +25,7 @@ define([
                 return new GeoJSONLayer(attrs, options);
             }
         },
+        response: {},
 
         initialize: function () {
             var channel = Radio.channel("LayerList");
@@ -44,6 +45,9 @@ define([
                 },
                 "getOverlayerList": function () {
                     return this.where({isbaselayer: false});
+                },
+                "getResponse": function () {
+                    return this.response;
                 }
             }, this);
 
@@ -181,8 +185,11 @@ define([
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
-
-                this.reset(response);
+                if ($(window).width() >= 768) {
+                   this.set("isMobile", false);
+                    this.reset(response);
+                }
+                this.response = response;
                 this.resetModels();
                 this.sendNodeNames();
             }

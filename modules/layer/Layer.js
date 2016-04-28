@@ -16,7 +16,8 @@ define([
             visibility: false,
             treeType: Config.tree.type,
             featureCount: 1,
-            metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
+            metaName: null, // --> für Olympia-Portal, rendern sonst nicht möglich
+            transparence: 0
         },
         initialize: function () {
             this.listenToOnce(EventBus, {
@@ -80,9 +81,6 @@ define([
             this.setAttributionLayer();
             if (this.get("transparence")) {
                 this.set("transparence", parseInt(this.get("transparence"), 10));
-            }
-            else {
-                this.set("transparence", 0);
             }
             // this.updateOpacity();
 
