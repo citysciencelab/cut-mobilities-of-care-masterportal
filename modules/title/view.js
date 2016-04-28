@@ -20,7 +20,7 @@ define([
                 logoLink: Config.logoLink || "http://geoinfo.hamburg.de",
                 logoTooltip: Config.logoTooltip || "Landesbetrieb Geoinformation und Vermessung"
             } ));
-            $(".nav").append(this.$el);
+            $(".navbar-collapse").append(this.$el);
         }
     });
     return TitleView;
