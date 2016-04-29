@@ -185,12 +185,15 @@ define([
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
+                                console.log(response.length);
+                response = this.cloneObjects(response);
+                console.log(response.length);
                 if ($(window).width() >= 768) {
                 //    this.set("isMobile", false);
                     this.reset(response);
+                    this.resetModels();
                 }
                 this.response = response;
-                this.resetModels();
                 this.sendNodeNames();
             }
             // Ansonsten Layer über ID
@@ -466,6 +469,46 @@ define([
                 // Das ursprüngliche Model wird gelöscht
                 this.remove(element);
             }, this);
+        },
+        getCategoriesByLayer: function (element) {
+            if (Config.tree.orderBy === "opendata") {
+                    return element.datasets[0].kategorie_opendata;
+                }
+            else {
+                    return element.datasets[0].kategorie_inspire;
+            }
+        },
+
+        cloneObjects: function (response) {
+            // Name für das Model-Attribut für die entsprechende Kategorie
+            // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
+            var baseLayerIDs = _.pluck(Config.tree.baseLayer, "id"),
+                objectsByCategory = _.filter(response, function (element) {
+                    return this.getCategoriesByLayer(element).length > 1 && !_.contains(baseLayerIDs, element.id);
+            }, this);
+
+            // Iteriert über die Models
+            _.each(objectsByCategory, function (element) {
+                var categories = this.getCategoriesByLayer(element);
+
+                // Iteriert über die Kategorien
+                _.each(categories, function (category, index) {
+                    console.log(categories);
+                    // Model wird kopiert
+                    var cloneModel = _.clone(element);
+                     console.log(cloneModel);
+                    // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt
+                    cloneModel.node = category;
+                    // cloneModel.datasets[0].kategorie_inspire = categories[index];
+                    cloneModel.id = element.id + category.replace(/ /g, "").replace(/,/g, "_").toUpperCase();
+                    // Model wird der Collection hinzugefügt
+                    response.push(cloneModel);
+
+                   }, this);
+                // Das ursprüngliche Model wird gelöscht
+                response = _.without(response, element);
+            }, this);
+            return response;
         },
 
         // Schiebt das Model in der Collection eine Position nach oben.

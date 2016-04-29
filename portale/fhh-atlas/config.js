@@ -4,7 +4,7 @@ define(function () {
         logo: "../img/hh-logo.png",
         tree: {
             type: "default",
-            orderBy: "opendata",
+            orderBy: "inspire",
             saveSelection: true,
             baseLayer: [
                 {id: "453", minScale: "500"},
