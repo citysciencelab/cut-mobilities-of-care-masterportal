@@ -326,16 +326,15 @@ define([
                             layerByFeature = _.find(visibleWFSLayerList, function (layer) {
                                 return layer.get("source").getFeatureById(featureAtPixel.getId());
                             });
-
-                            gfiParams.push({
-                                typ: "WFS",
-                                feature: featureAtPixel,
-                                attributes: layerByFeature.get("gfiAttributes"),
-                                name: layerByFeature.get("name"),
-                                ol_layer: layerByFeature.get("layer")
-                            });
-                        }
-                        else{
+                            if (!_.isUndefined(layerByFeature)) {
+                                gfiParams.push({
+                                    typ: "WFS",
+                                    feature: featureAtPixel,
+                                    attributes: layerByFeature.get("gfiAttributes"),
+                                    name: layerByFeature.get("name"),
+                                    ol_layer: layerByFeature.get("layer")
+                                });
+                            }
                         }
                     }
                 });
