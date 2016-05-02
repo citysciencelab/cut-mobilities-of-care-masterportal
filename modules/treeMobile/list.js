@@ -58,10 +58,11 @@ define([
 
             channel.on({
                 "setLayerAttributions": function (layerId, attrs) {
-                    debugger;
                     var model = this.findWhere({type: "layer", layerId: layerId});
 
-                    model.set(attrs);
+                    if (!_.isUndefined(model)) {
+                        model.set(attrs);
+                    }
                 },
                 "updateList": this.updateList,
                 "checkIsExpanded": this.checkIsExpanded
@@ -291,11 +292,17 @@ define([
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {
-            var layerList = Radio.request("LayerList", "getResponse"),//Radio.request("LayerList", "getLayerList"),
+            var layerList = Radio.request("LayerList", "getResponse"), //Radio.request("LayerList", "getLayerList"),
+                visibleBaseLayerIds = _.pluck(_.where(Config.tree.baseLayer, {visibility: true}), "id"),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
-                return (layer.isbaselayer) ? "baselayer" : "overlay";
+                    return (layer.isbaselayer) ? "baselayer" : "overlay";
+                });
+
+            var visibleModels = _.filter(layerList, function (layer) {
+                return _.contains(visibleBaseLayerIds, layer.id);
             });
+            Radio.trigger("LayerList", "addModel", visibleModels);
             // Models für die Baselayer erzeugen
             this.createLayersModels(typeGroup.baselayer, "BaseLayer");
             // Models für die Fachdaten erzeugen
@@ -383,21 +390,24 @@ define([
          * @param  {String} parentId
          */
         updateList: function (parentId, animation) {
-                        console.log(treeNodes);
             var t = new Date().getTime();
-            var response = Radio.request("LayerList", "getResponse");
-            var currentLevel = _.where(treeNodes, {parentId: parentId}, {sort: false});
-            _.each(currentLevel, function (item) {
-                if (item.type === "layer") {
-                    Radio.trigger("LayerList", "addModel", _.find(response, function (layer) {
-                        return layer.id === item.layerId;
-                    }));
-                }
-            });
+            // nur bei tree default
+            if (Config.tree.type === "default") {
+                var response = Radio.request("LayerList", "getResponse"),
+                currentLevel = _.where(treeNodes, {parentId: parentId});
 
+                _.each(currentLevel, function (item) {
+                    if (item.type === "layer") {
+                        Radio.trigger("LayerList", "addModel", _.find(response, function (layer) {
+                            return layer.id === item.layerId;
+                        }));
+                    }
+                });
+            }
             //this.add(Radio.request("LayerList", "getLayerList"));
 
            this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
+        //    console.log(this.models);
             console.log(new Date().getTime()-t);
             // console.log(this.models);
             var checkedLayer = this.where({isChecked: true, type: "layer"}),

@@ -38,6 +38,7 @@ define([
                     return this.toJSON();
                 },
                 "getLayerListWhere": function (properties) {
+                    console.log(this.where(properties));
                     return this.where(properties);
                 },
                 "getLayerFindWhere": function (properties) {
@@ -68,6 +69,19 @@ define([
                     this.get(id).openMetadata();
                 }
             }, this);
+
+            this.listenToOnce(Radio.channel("MenuBar"), {
+                // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
+                "switchedMenu": function () {
+                    var isMobile = Radio.request("MenuBar", "isMobile");
+
+                    if (isMobile === false && Config.tree.type === "default") {
+                        EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true}));
+                        this.reset(this.response);
+                        this.sendNodeNames();
+                    }
+                }
+            });
 
             this.listenTo(EventBus, {
                 "layerlist:getOverlayerList": function () {
@@ -122,7 +136,8 @@ define([
 
             this.listenTo(this, {
                 "add": function (model) {
-                    EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                    // console.log(model);
+                    // EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
                 },
                 "remove": function (model) {
                     EventBus.trigger("removeLayer", model.get("layer"));
@@ -185,16 +200,14 @@ define([
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
-                                console.log(response.length);
                 response = this.cloneObjects(response);
-                console.log(response.length);
                 if ($(window).width() >= 768) {
                 //    this.set("isMobile", false);
                     this.reset(response);
-                    this.resetModels();
+                    this.sendNodeNames();
+                    // this.resetModels();
                 }
                 this.response = response;
-                this.sendNodeNames();
             }
             // Ansonsten Layer über ID
             else if (_.has(Config.tree, "type") && Config.tree.type === "light" || Config.tree.type === "custom") {
@@ -485,25 +498,22 @@ define([
             var baseLayerIDs = _.pluck(Config.tree.baseLayer, "id"),
                 objectsByCategory = _.filter(response, function (element) {
                     return this.getCategoriesByLayer(element).length > 1 && !_.contains(baseLayerIDs, element.id);
-            }, this);
+                }, this);
 
             // Iteriert über die Models
             _.each(objectsByCategory, function (element) {
                 var categories = this.getCategoriesByLayer(element);
 
                 // Iteriert über die Kategorien
-                _.each(categories, function (category, index) {
-                    console.log(categories);
+                _.each(categories, function (category) {
                     // Model wird kopiert
                     var cloneModel = _.clone(element);
-                     console.log(cloneModel);
                     // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt
                     cloneModel.node = category;
                     // cloneModel.datasets[0].kategorie_inspire = categories[index];
                     cloneModel.id = element.id + category.replace(/ /g, "").replace(/,/g, "_").toUpperCase();
                     // Model wird der Collection hinzugefügt
                     response.push(cloneModel);
-
                    }, this);
                 // Das ursprüngliche Model wird gelöscht
                 response = _.without(response, element);

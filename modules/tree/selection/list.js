@@ -29,7 +29,7 @@ define([
 
             // EventBus Listener
             this.listenTo(EventBus, {
-                "layerlist:sendSelectedLayerList": this.addModelsToList,
+                // "layerlist:sendSelectedLayerList": this.addModelsToList,
                 "addModelToSelectionList": this.addModelToList,
                 "removeModelFromSelectionList": this.remove,
                 "getSelectedVisibleWMSLayer": this.sendVisibleWMSLayer,
@@ -53,6 +53,10 @@ define([
 
             // Selektierte Layer werden in die Auswahl übernommen
             this.loadSelection();
+
+            _.each(Radio.request("LayerList", "getLayerListWhere", {selected: true}), function (model) {
+                this.addModelToList(model);
+            }, this);
         },
         /**
          * Gibt für ein Model dessen Position in der Selektion zurück

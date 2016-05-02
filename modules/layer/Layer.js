@@ -92,6 +92,9 @@ define([
             }
             this.get("layer").setVisible(this.get("visibility"));
             this.setVisibility();
+            if (this.getVisibility() === true) {
+                this.set("selected", true);
+            }
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -117,7 +120,7 @@ define([
                             this.set("metaName", dataset.md_name);
                         }
                     }
-                    if (Config.tree.orderBy === "opendata") {
+                    if (Config.tree.orderBy === "opendata" && !this.has("node")) {
                         if (dataset.kategorie_opendata.length > 1) {
                             this.set("node", dataset.kategorie_opendata);
                         }
@@ -125,7 +128,7 @@ define([
                             this.set("node", dataset.kategorie_opendata[0]);
                         }
                     }
-                    else if (Config.tree.orderBy === "inspire") {
+                    else if (Config.tree.orderBy === "inspire" && !this.has("node")) {
                         if (dataset.kategorie_inspire.length > 1) {
                             this.set("node", dataset.kategorie_inspire);
                         }
