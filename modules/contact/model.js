@@ -1,10 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
-    "modules/restReader/collection",
     "modules/core/util"
-], function (Backbone, EventBus, Config, RestReader, Util) {
+], function (Backbone, Radio, EventBus, Config, Util) {
     "use strict";
     var ContactModel = Backbone.Model.extend({
         defaults: {
@@ -29,7 +29,7 @@ define([
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
-                resp = RestReader.getServiceById(Config.menu.contact.serviceID);
+                resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
 
             if (resp && resp.length === 1) {
                 this.set("url", _.first(resp).get("url"));
