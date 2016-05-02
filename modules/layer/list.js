@@ -38,7 +38,6 @@ define([
                     return this.toJSON();
                 },
                 "getLayerListWhere": function (properties) {
-                    console.log(this.where(properties));
                     return this.where(properties);
                 },
                 "getLayerFindWhere": function (properties) {
