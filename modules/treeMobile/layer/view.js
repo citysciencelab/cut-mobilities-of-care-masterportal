@@ -81,6 +81,7 @@ define([
 
         removeFromSelection: function () {
             this.model.setIsInSelection(false);
+            this.model.setIsSettingVisible(false);
             this.model.setIsChecked(false);
             this.$el.remove();
         },

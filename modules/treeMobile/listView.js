@@ -43,14 +43,6 @@ define([
                     else {
                         this.renderListWithAnimation(options);
                     }
-                },
-                "updateList": function (options) {
-                    if (options.animation === "without") {
-                        this.renderListWithoutAnimation();
-                    }
-                    else {
-                        this.renderListWithAnimation(options);
-                    }
                 }
             });
 
@@ -79,21 +71,39 @@ define([
         },
 
         renderListWithoutAnimation: function () {
-            var visibleModels = this.collection.where({isVisible: true});
+            var visibleModels = this.collection.where({isVisible: true}),
+                modelsInSelection = this.collection.where({isInSelection: true});
 
             this.$el.html("");
-            _.each(visibleModels, this.addViews, this);
+            if (modelsInSelection.length) {
+                visibleModels = _.sortBy(visibleModels, function (layer) {
+                    return layer.getSelectionIDX();
+                });
+                _.each(visibleModels.reverse(), this.addViews, this);
+            }
+            else {
+                _.each(visibleModels, this.addViews, this);
+            }
         },
 
         renderListWithAnimation: function (options) {
             var visibleModels = this.collection.where({isVisible: true}),
+                modelsInSelection = this.collection.where({isInSelection: true}),
                 slideOut = (options.animation === "slideBack") ? "right" : "left",
                 slideIn = (options.animation === "slideForward") ? "right" : "left",
                 that = this;
 
                 this.$el.effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
                     that.$el.html("");
-                    _.each(visibleModels, that.addViews, that);
+                    if (modelsInSelection.length) {
+                        visibleModels = _.sortBy(visibleModels, function (layer) {
+                            return layer.getSelectionIDX();
+                        });
+                        _.each(visibleModels.reverse(), that.addViews, that);
+                    }
+                    else {
+                        _.each(visibleModels, that.addViews, that);
+                    }
                 });
                 this.$el.effect("slide", {direction: slideIn, duration: 200, mode: "show"});
         },

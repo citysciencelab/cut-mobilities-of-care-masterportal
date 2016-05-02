@@ -24,24 +24,7 @@ define([
         // Pfad zur custom-treeconfig
         url: "tree-config.json",
         // Sortiert die Liste nach einem Model-Attribut
-        comparator: function (model) {
-            // Models die sich in "Auswahl der Karten befinden"
-            var modelsInSelection = this.where({isInSelection: true});
-
-            if (modelsInSelection.length) {
-                if (model.getType() === "layer" && model.getIsInSelection()) {
-                    // inverse Sortierung über "selectionIDX"
-                    return -model.getSelectionIDX();
-                }
-                else {
-                    return -1;
-                }
-            }
-            else {
-                // Sortierung über "type"
-                return model.getType();
-            }
-        },
+        comparator: "type",
         model: function (attrs, options) {
             if (attrs.type === "folder") {
                 return new Folder(attrs, options);
@@ -70,7 +53,7 @@ define([
 
             this.listenTo(this, {
                 "change:selectionIDX": function () {
-                    this.sort({animation: "without"});
+                    this.trigger("updateList", {animation: "without"});
                 }
             });
 
@@ -217,11 +200,11 @@ define([
                             // HVV :(
                             if (_.has(layer, "styles") && layer.styles.length > 1) {
                                 _.each(layer.styles, function (style) {
-                                    treeNodes.push(_.extend({type: "layer", parentId: parentId, layerId: layer.id + style.toLowerCase()}, _.omit(layer, "id")));
+                                    treeNodes.push(_.extend({type: "layer", parentId: parentId, id: layer.id, layerId: layer.id + style.toLowerCase()}, _.omit(layer, "id")));
                                 });
                             }
                             else {
-                                treeNodes.push(_.extend({type: "layer", parentId: parentId, layerId: layer.id}, _.omit(layer, "id")));
+                                treeNodes.push(_.extend({type: "layer", parentId: parentId, id: layer.id, layerId: layer.id}, _.omit(layer, "id")));
                             }
                         });
                     }
@@ -293,14 +276,14 @@ define([
         */
         parseLayerList: function () {
             var layerList = Radio.request("LayerList", "getResponse"),
-                visibleBaseLayerIds = _.pluck(_.where(Config.tree.baseLayer, {visibility: true}), "id"),
+                baseLayerIds = _.pluck(Config.tree.baseLayer, "id"),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return (layer.isbaselayer) ? "baselayer" : "overlay";
                 });
 
             Radio.trigger("LayerList", "addModel", _.filter(layerList, function (layer) {
-                return _.contains(visibleBaseLayerIds, layer.id);
+                return _.contains(baseLayerIds, layer.id);
             }));
 
             // Models für die Baselayer erzeugen
@@ -309,11 +292,7 @@ define([
             this.groupDefaultTreeOverlays(typeGroup.overlay);
 
             // Initial sichtbare Hintergrundkarten werden hinzugefügt
-            _.each(treeNodes, function (layer) {
-                 if (_.contains(visibleBaseLayerIds, layer.id)) {
-                     this.add(layer);
-                 }
-            }, this);
+            this.add(_.where(treeNodes, {parentId: "BaseLayer"}));
         },
 
         /**
@@ -397,7 +376,6 @@ define([
          * @param  {String} parentId
          */
         updateList: function (parentId, animation) {
-            var t = new Date().getTime();
             // nur bei tree default
             if (Config.tree.type === "default") {
                 var response = Radio.request("LayerList", "getResponse"),
@@ -409,7 +387,7 @@ define([
                 }));
             }
 
-            this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
+            this.add(_.where(treeNodes, {parentId: parentId}), {"sort": false});
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
                 isSelection = (parentId === "SelectedLayer") ? true : false;
@@ -420,20 +398,19 @@ define([
                 this.setModelsVisible(parentId);
                 // Wenn Layer in der Auswahl ist, dann Zahnrad anzeigen
                 this.setIsSettingVisible(isSelection);
-                this.trigger("updateList", {animation: animation});
                 // Ausgewählte Layer werden aus der Selection genommen -> damit außerhalb von "Auswahl der Karten" die richtige View genutzt wird.
                 _.each(checkedLayer, function (layer) {
                     layer.setIsInSelection(isSelection);
                 });
+                this.trigger("updateList", {animation: animation});
             }
             else {
                 // Ausgewählte Layer der Selection hinzufügen
                 _.each(checkedLayer, function (layer) {
                     layer.setIsInSelection(isSelection);
                 });
-                this.sort({animation: animation});
+                this.trigger("updateList", {animation: animation});
             }
-            console.log(new Date().getTime()-t);
         },
 
         /**
