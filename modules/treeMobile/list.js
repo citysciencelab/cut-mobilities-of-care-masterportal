@@ -292,21 +292,28 @@ define([
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {
-            var layerList = Radio.request("LayerList", "getResponse"), //Radio.request("LayerList", "getLayerList"),
+            var layerList = Radio.request("LayerList", "getResponse"),
                 visibleBaseLayerIds = _.pluck(_.where(Config.tree.baseLayer, {visibility: true}), "id"),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return (layer.isbaselayer) ? "baselayer" : "overlay";
                 });
 
-            var visibleModels = _.filter(layerList, function (layer) {
+            Radio.trigger("LayerList", "addModel", _.filter(layerList, function (layer) {
                 return _.contains(visibleBaseLayerIds, layer.id);
-            });
-            Radio.trigger("LayerList", "addModel", visibleModels);
+            }));
+
             // Models für die Baselayer erzeugen
             this.createLayersModels(typeGroup.baselayer, "BaseLayer");
             // Models für die Fachdaten erzeugen
             this.groupDefaultTreeOverlays(typeGroup.overlay);
+
+            // Initial sichtbare Hintergrundkarten werden hinzugefügt
+            _.each(treeNodes, function (layer) {
+                 if (_.contains(visibleBaseLayerIds, layer.id)) {
+                     this.add(layer);
+                 }
+            }, this);
         },
 
         /**
@@ -382,7 +389,7 @@ define([
                 }, this);
             }, this);
             // console.log(treeNodes[125]);
-           // this.add(treeNodes, {sort: false});
+        //    this.add(treeNodes, {sort: false});
         },
 
         /**
@@ -394,22 +401,15 @@ define([
             // nur bei tree default
             if (Config.tree.type === "default") {
                 var response = Radio.request("LayerList", "getResponse"),
-                currentLevel = _.where(treeNodes, {parentId: parentId});
+                    currentLevel = _.where(treeNodes, {parentId: parentId, type: "layer"}),
+                    currentLevelIds = _.pluck(currentLevel, "id");
 
-                _.each(currentLevel, function (item) {
-                    if (item.type === "layer") {
-                        Radio.trigger("LayerList", "addModel", _.find(response, function (layer) {
-                            return layer.id === item.layerId;
-                        }));
-                    }
-                });
+                Radio.trigger("LayerList", "addModel", _.filter(response, function (layer) {
+                    return _.contains(currentLevelIds, layer.id);
+                }));
             }
-            //this.add(Radio.request("LayerList", "getLayerList"));
 
-           this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
-        //    console.log(this.models);
-            console.log(new Date().getTime()-t);
-            // console.log(this.models);
+            this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
                 isSelection = (parentId === "SelectedLayer") ? true : false;
@@ -420,12 +420,20 @@ define([
                 this.setModelsVisible(parentId);
                 // Wenn Layer in der Auswahl ist, dann Zahnrad anzeigen
                 this.setIsSettingVisible(isSelection);
+                this.trigger("updateList", {animation: animation});
+                // Ausgewählte Layer werden aus der Selection genommen -> damit außerhalb von "Auswahl der Karten" die richtige View genutzt wird.
+                _.each(checkedLayer, function (layer) {
+                    layer.setIsInSelection(isSelection);
+                });
             }
-            // Ausgewählte Layer der Selection hinzufügen
-            _.each(checkedLayer, function (layer) {
-                layer.setIsInSelection(isSelection);
-            });
-            this.sort({animation: animation});
+            else {
+                // Ausgewählte Layer der Selection hinzufügen
+                _.each(checkedLayer, function (layer) {
+                    layer.setIsInSelection(isSelection);
+                });
+                this.sort({animation: animation});
+            }
+            console.log(new Date().getTime()-t);
         },
 
         /**
