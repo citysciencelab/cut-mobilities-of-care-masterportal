@@ -134,7 +134,7 @@ define([
                             });
                         }
                     });
-                    this.setBRWList(this.get("brwList"));
+                    EventBus.trigger("seite2:setBRWList", this.get("brwList"));
                 }
                 else {
                     EventBus.trigger("alert", "Die eingegebene BRW-Nummer existiert nicht zum Stichtag.");
