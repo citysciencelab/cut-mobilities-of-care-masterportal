@@ -25,6 +25,7 @@ define([
                 return new GeoJSONLayer(attrs, options);
             }
         },
+        response: {},
 
         initialize: function () {
             var channel = Radio.channel("LayerList");
@@ -39,8 +40,14 @@ define([
                 "getLayerListWhere": function (properties) {
                     return this.where(properties);
                 },
+                "getLayerFindWhere": function (properties) {
+                    return this.findWhere(properties);
+                },
                 "getOverlayerList": function () {
                     return this.where({isbaselayer: false});
+                },
+                "getResponse": function () {
+                    return this.response;
                 }
             }, this);
 
@@ -50,8 +57,30 @@ define([
                 },
                 "fetchLayer": function () {
                     this.fetchLayer();
+                },
+                "setAttributionsByID": function (id, attrs) {
+                    this.get(id).set(attrs);
+                },
+                // "toggleLayerVisibleById": function (id) {
+                //     this.get(id).toggleSelected();
+                // },
+                "showLayerInformationById": function (id) {
+                    this.get(id).openMetadata();
                 }
             }, this);
+
+            this.listenToOnce(Radio.channel("MenuBar"), {
+                // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
+                "switchedMenu": function () {
+                    var isMobile = Radio.request("MenuBar", "isMobile");
+
+                    if (isMobile === false && Config.tree.type === "default") {
+                        EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true}));
+                        this.reset(this.response);
+                        this.sendNodeNames();
+                    }
+                }
+            });
 
             this.listenTo(EventBus, {
                 "layerlist:getOverlayerList": function () {
@@ -106,7 +135,8 @@ define([
 
             this.listenTo(this, {
                 "add": function (model) {
-                    EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                    // console.log(model);
+                    // EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
                 },
                 "remove": function (model) {
                     EventBus.trigger("removeLayer", model.get("layer"));
@@ -169,10 +199,14 @@ define([
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
-
-                this.reset(response);
-                this.resetModels();
-                this.sendNodeNames();
+                response = this.cloneObjects(response);
+                if ($(window).width() >= 768) {
+                //    this.set("isMobile", false);
+                    this.reset(response);
+                    this.sendNodeNames();
+                    // this.resetModels();
+                }
+                this.response = response;
             }
             // Ansonsten Layer über ID
             else if (_.has(Config.tree, "type") && Config.tree.type === "light" || Config.tree.type === "custom") {
@@ -191,7 +225,7 @@ define([
                             EventBus.trigger("alert", "Der Layer mit der ID '" + element.id + "' ist nicht vorhanden");
                         }
                         else {
-                            element.isbaselayer = false;
+                            // element.isbaselayer = false;
                             // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
                             if (layers.length === 1) {
                                 modelsArray.push(_.extend(layerinfos, element));
@@ -220,7 +254,7 @@ define([
                             layerdefinitions: []
                         };
 
-                        element.isbaselayer = false;
+                        // element.isbaselayer = false;
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
@@ -237,7 +271,6 @@ define([
                         });
                     }
                 });
-                this.setBaseLayer(modelsArray);
                 this.setLayerStyle(modelsArray);
                 this.reset(modelsArray);
             }
@@ -448,6 +481,43 @@ define([
                 // Das ursprüngliche Model wird gelöscht
                 this.remove(element);
             }, this);
+        },
+        getCategoriesByLayer: function (element) {
+            if (Config.tree.orderBy === "opendata") {
+                    return element.datasets[0].kategorie_opendata;
+                }
+            else {
+                    return element.datasets[0].kategorie_inspire;
+            }
+        },
+
+        cloneObjects: function (response) {
+            // Name für das Model-Attribut für die entsprechende Kategorie
+            // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
+            var baseLayerIDs = _.pluck(Config.tree.baseLayer, "id"),
+                objectsByCategory = _.filter(response, function (element) {
+                    return this.getCategoriesByLayer(element).length > 1 && !_.contains(baseLayerIDs, element.id);
+                }, this);
+
+            // Iteriert über die Models
+            _.each(objectsByCategory, function (element) {
+                var categories = this.getCategoriesByLayer(element);
+
+                // Iteriert über die Kategorien
+                _.each(categories, function (category) {
+                    // Model wird kopiert
+                    var cloneModel = _.clone(element);
+                    // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt
+                    cloneModel.node = category;
+                    // cloneModel.datasets[0].kategorie_inspire = categories[index];
+                    cloneModel.id = element.id + category.replace(/ /g, "").replace(/,/g, "_").toUpperCase();
+                    // Model wird der Collection hinzugefügt
+                    response.push(cloneModel);
+                   }, this);
+                // Das ursprüngliche Model wird gelöscht
+                response = _.without(response, element);
+            }, this);
+            return response;
         },
 
         // Schiebt das Model in der Collection eine Position nach oben.

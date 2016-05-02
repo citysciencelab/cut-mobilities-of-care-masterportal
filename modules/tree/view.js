@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/tree/model",
     "text!modules/tree/template.html",
-    "config",
-    "eventbus"
-], function (Backbone, LayerTree, LayerTreeTemplate, Config, EventBus) {
+    "eventbus",
+    "modules/layer/list"
+], function (Backbone, Radio, LayerTree, LayerTreeTemplate, EventBus) {
 
         var TreeView = Backbone.View.extend({
             model: new LayerTree(),
@@ -34,6 +35,10 @@ define([
                 "click .layer-catalog-extern > .header > span": "toggleExternLayer"
             },
             initialize: function () {
+                this.listenTo(Radio.channel("MenuBar"), {
+                    "switchedMenu": this.render
+                });
+
                 require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
                     new LayerSelectionListView();
                     new LayerTreeView();
@@ -53,9 +58,15 @@ define([
                 this.render();
             },
             render: function () {
-                var attr = this.model.toJSON();
+                var isMobile = Radio.request("MenuBar", "isMobile");
 
-                $(".dropdown-tree").append(this.$el.html(this.template(attr)));
+                if (isMobile === false) {
+                    var attr = this.model.toJSON();
+
+                    this.stopEventPropagation();
+                    this.setElement($(".dropdown-tree"));
+                    this.$el.html(this.template(attr));
+                }
             },
             setSelection: function (evt) {
                 this.model.setSelection(evt.target.value);
@@ -112,6 +123,16 @@ define([
             },
             helpForFixing: function (evt) {
                 evt.stopPropagation();
+            },
+            // stopPropagation verhindert, dass ein Event im DOM-Baum nach oben reist
+            // und dabei Aktionen auf anderen Elementen triggert.
+            // In diesem Fall wird der Baum nicht geschlossen wenn z.B. auf eine Layer-View geklickt wird.
+            stopEventPropagation: function () {
+                $(".dropdown-tree").on({
+                    click: function (e) {
+                        e.stopPropagation();
+                    }
+                });
             }
         });
 

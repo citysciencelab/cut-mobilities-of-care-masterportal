@@ -1,10 +1,8 @@
 define([
     "backbone",
-    "underscore",
-    "openlayers",
     "eventbus",
     "config"
-], function (Backbone, _, ol, Eventbus, Config) {
+], function (Backbone, Eventbus, Config) {
     var FooterModel = Backbone.Model.extend({
         defaults: {
             urls: [

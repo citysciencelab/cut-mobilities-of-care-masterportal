@@ -12,6 +12,29 @@ define(function() {
         },
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
+            }
+        },
         menu: {
             searchBar: true,
             layerTree: true,

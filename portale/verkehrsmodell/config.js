@@ -7,10 +7,6 @@ define(function () {
             type: "custom",
             orderBy: "olympia",
             customConfig: "../components/lgv-config/tree-config/verkehrsmodell.json",
-            baseLayer: [
-                {id: "453", visibility: true},
-                {id: "452", visibility: false}
-            ],
             layerIDsToStyle: [
                 {
                     "id": "1933",
@@ -50,17 +46,19 @@ define(function () {
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: false,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            }
         },
         startUpModul: "",
         searchBar: {
@@ -101,7 +99,7 @@ define(function () {
                 glyphicon: "glyphicon-pencil"
             }
         },
-       
+
     };
 
     return config;

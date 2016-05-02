@@ -56,7 +56,7 @@ define(function () {
                 {id: "149", visibility: false} // aLKIS grau-blau
             ],
             customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
-            },
+        },
         controls: {
             zoom: true,
             toggleMenu: true,
@@ -93,6 +93,29 @@ define(function () {
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            }
+        },
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,

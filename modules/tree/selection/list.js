@@ -10,9 +10,26 @@ define([
         initialize: function () {
             var channel = Radio.channel("SelectedList");
 
+            channel.reply({
+                "getSelectionIDXByID": this.getSelectionIDXByID
+            }, this);
+
+            this.listenTo(channel, {
+                "moveModelDownById": function (id) {
+                    var model = this.get(id);
+
+                    this.moveModelDown(model);
+                },
+                "modeModelUpById": function (id) {
+                    var model = this.get(id);
+
+                    this.moveModelUp(model);
+                }
+            });
+
             // EventBus Listener
             this.listenTo(EventBus, {
-                "layerlist:sendSelectedLayerList": this.addModelsToList,
+                // "layerlist:sendSelectedLayerList": this.addModelsToList,
                 "addModelToSelectionList": this.addModelToList,
                 "removeModelFromSelectionList": this.remove,
                 "getSelectedVisibleWMSLayer": this.sendVisibleWMSLayer,
@@ -21,8 +38,12 @@ define([
 
             // Eigene Listener
             this.listenTo(this, {
-                "update": function () {
-                    channel.trigger("changedList", this.models);
+                "update": function (collection, options) {
+                    if (options.add === true) {
+                        collection.forEach(function (model) {
+                            Radio.trigger("TreeList", "setLayerAttributions", model.get("id"), {selectionIDX: collection.indexOf(model)});
+                        });
+                    }
                 },
                 "add": this.addLayerToMap,
                 "remove": this.removeLayerFromMap,
@@ -33,6 +54,22 @@ define([
 
             // Selektierte Layer werden in die Auswahl übernommen
             this.loadSelection();
+
+            _.each(Radio.request("LayerList", "getLayerListWhere", {selected: true}), function (model) {
+                this.addModelToList(model);
+            }, this);
+        },
+        /**
+         * Gibt für ein Model dessen Position in der Selektion zurück
+         * @param  {int} id Das Model dessen Position abgefragt wird
+         * @return {int} die Position des models in der Auswahlliste
+         */
+        getSelectionIDXByID: function (id) {
+            var model = this.findWhere(function (model) {
+                return model.id === id;
+            });
+
+            return this.indexOf(model);
         },
 
         loadSelection: function () {

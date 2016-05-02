@@ -1,11 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
-    "modules/restReader/collection",
     "moment",
     "modules/core/util"
-], function (Backbone, EventBus, Config, RestReader, moment, Util) {
+], function (Backbone, Radio, EventBus, Config, moment, Util) {
 
     var LayerInformation = Backbone.Model.extend({
         defaults: {
@@ -16,10 +16,10 @@ define([
             var resp;
 
             if (_.has(Config, "csw")) {
-                resp = RestReader.getServiceById(Config.csw.id);
+                resp = Radio.request("RestReader", "getServiceById", Config.csw.id);
             }
             else {
-                resp = RestReader.getServiceById(this.get("cswID"));
+                resp = Radio.request("RestReader", "getServiceById", this.get("cswID"));
             }
 
             if (resp[0] && resp[0].get("url")) {

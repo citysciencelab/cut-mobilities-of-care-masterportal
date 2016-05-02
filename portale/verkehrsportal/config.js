@@ -140,6 +140,34 @@ define(function () {
             addWMS: false,
             featureLister: 20
         },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            },
+            featureLister: {
+                title: "test",
+                glyphicon: "glyphicon-plus",
+                lister: 10
+            }
+        },
         startUpModul: "",
         clickCounter: {
             version: "",

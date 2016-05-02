@@ -1,11 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/core/util",
     "eventbus",
     "config",
-    "modules/restReader/collection",
     "openlayers"
-], function (Backbone, Util, EventBus, Config, RestReader, ol) {
+], function (Backbone, Radio, Util, EventBus, Config, ol) {
     "use strict";
     var model = Backbone.Model.extend({
 
@@ -23,13 +23,13 @@ define([
         url: function () {
             var resp;
 
-            resp = RestReader.getServiceById(Config.print.printID);
+            resp = Radio.request("RestReader", "getServiceById", Config.print.printID);
             if (resp[0] && resp[0].get("url")) {
                 this.set("printurl", resp[0].get("url"));
             }
 
             if (_.has(Config.print, "configYAML") === true) {
-                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json"
+                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json";
             }
             else {
                 return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
@@ -116,7 +116,7 @@ define([
             this.set("isActive", this.get("isCurrentWin"));
         },
         updatePrintPage: function () {
-            if (this.get("scale").value) {
+            if (this.has("scale")) {
                 EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
             }
         },

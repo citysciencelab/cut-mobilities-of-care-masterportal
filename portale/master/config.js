@@ -207,7 +207,7 @@ define(function () {
                     "bezeichnung": "",
                     "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
                     "alias": "SDP Download",
-                    "alias_mobil": "ttt"
+                    "alias_mobil": "SDP"
                 },
                 {
                     "bezeichnung": "",
@@ -290,6 +290,73 @@ define(function () {
         * @memberof config
         * @type {Object}
         * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste konfigurieren.
+        * @property {Object} [menu] - Das menu-Konfigurationsobjekt für die Menüeinträge
+        * @property {Object} [menu.tree] - Themenbaum
+        * @property {string} [menu.tree.title] - Der Title für den Menüeintrag Themenbaum.
+        * @property {string} [menu.tree.glyphicon] - Das glyphicon für den Menüeintrag Themenbaum (Bootstrap Class).
+        * @property {Object} [menu.tools] - Werkzeuge
+        * @property {string} [menu.tools.title] - Der Title für den Menüeintrag Werkzeuge.
+        * @property {string} [menu.tools.glyphicon] - Das glyphicon für den Menüeintrag Werkzeuge.
+        * @property {Object} [menu.legend] - Legende
+        * @property {string} [menu.legend.title] - Der Title für den Menüeintrag Legende.
+        * @property {string} [menu.legend.glyphicon] - Das glyphicon für den Menüeintrag Legende.
+        * @property {Object} [menu.contact] - Kontakbutton
+        * @property {string} [menu.contact.title] - Der Title für den Menüeintrag Kontakbutton.
+        * @property {string} [menu.contact.glyphicon] - Das glyphicon für den Menüeintrag Kontakbutton.
+        * @property {string} [menu.contact.email] - Emailadresse Empfänger.
+        * @property {Object} [menu.routing] - Routenplaner
+        * @property {string} [menu.routing.title] - Der Title für den Menüeintrag Routenplaner.
+        * @property {string} [menu.routing.glyphicon] - Das glyphicon für den Menüeintrag Routenplaner.
+        * @property {Object} [menu.wfsFeatureFilter] - WFSFeatureFilter
+        * @property {string} [menu.wfsFeatureFilter.title] - Der Title für den Menüeintrag WFSFeatureFilter.
+        * @property {string} [menu.wfsFeatureFilter.glyphicon] - Das glyphicon für den Menüeintrag WFSFeatureFilter.
+        * @property {Object} [menu.treeFilter] - Baumfilter
+        * @property {string} [menu.treeFilter.title] - Der Title für den Menüeintrag Baumfilter.
+        * @property {string} [menu.treeFilter.glyphicon] - Das glyphicon für den Menüeintrag Baumfilter.
+        * @property {Object} [menu.formular] - Konfigurationsobjekt eines Formulars
+        * @property {string} [menu.formular.title] -  Bezeichnung des Formulars
+        * @property {string} [menu.formular.symbol] - Symbolname
+        * @property {string} [menu.formular.modelname] - Modelname, wie in view definiert.
+        * @property {Object} [menu.featureLister] - FeatureLister
+        * @property {string} [menu.featureLister.title] - Der Title für den Menüeintrag FeatureLister.
+        * @property {string} [menu.featureLister.glyphicon] - Das glyphicon für den Menüeintrag FeatureLister.
+        * @property {string} [menu.featureLister.lister] - Wenn 0, dann ist es deaktiviert.
+        * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
+        * @example tree: {title: "Themen", glyphicon: "glyphicon-list"}
+        * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
+        */
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            },
+            wfsFeatureFilter: {
+                title: "Filter öffnen",
+                glyphicon: "glyphicon-filter"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
+            }
+        },
+        /*
         * @property {Object} menu - Das menu-Konfigurationsobject
         * @property {boolean} helpButton - auf false setzen
         * @property {Boolean} [menu.searchBar=false] - Legt fest, ob die Suchfunktion geladen werden soll.

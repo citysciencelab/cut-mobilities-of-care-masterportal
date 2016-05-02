@@ -1,10 +1,11 @@
 // if (window.location.href.charAt(window.location.href.length-1) === "#") {
 //     window.location.href = window.location.href.substr(0, window.location.href.length-2);
 // }
-define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList"], function ($, Config, Util, RawLayerList) {
+define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList", "modules/restReader/collection"], function ($, Config, Util, RawLayerList, RestReaderList) {
     "use strict";
     require(["modules/alerting/view"]);
     Util.showLoader();
+    new RestReaderList();
     new RawLayerList();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
@@ -28,11 +29,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
          });
     }
 
-    if (Config.attributions && Config.attributions === true) {
-        require(["modules/attribution/view"], function (AttView) {
-            new AttView();
-        });
-    }
+    // Macht noch Probleme
+    // if (Config.attributions && Config.attributions === true) {
+    //     require(["modules/attribution/view"], function (AttView) {
+    //         new AttView();
+    //     });
+    // }
 
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {
@@ -41,9 +43,8 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
 
     require([
         "modules/core/map",
-        "config",
-        "jquery"
-    ], function (Map, Config, $) {
+        "config"
+    ], function (Map, Config) {
         new Map();
 
         if (Util.isAny()) {
@@ -146,23 +147,23 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         });
                     }
                 }
-                if (Config.menu.treeFilter === true) {
+                if (_.has(Config.menuItems, "treeFilter") === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
                     });
                 }
-                if (Config.menu.searchBar === true && Config.searchBar) {
+                if (_.has(Config, "searchBar") === true) {
                     require(["modules/searchbar/view", "modules/mapMarker/view"], function (SearchbarView, MapMarkerView) {
                         new MapMarkerView();
                         new SearchbarView(Config.searchBar, Config.searchBar.initString);
                     });
                 }
-                if (Config.menu.wfsFeatureFilter === true) {
+                if (_.has(Config.menuItems, "wfsFeatureFilter") === true) {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
                     });
                 }
-                if (Config.menu.legend === true) {
+                if (_.has(Config.menuItems, "legend") === true) {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {
                             new MobileLegendView();
@@ -172,24 +173,24 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         }
                     });
                 }
-                if (Config.menu.routing === true) {
+                if (_.has(Config.menuItems, "routing") === true) {
                     require(["modules/routing/view"], function (RoutingView) {
                         new RoutingView();
                     });
                 }
-                if (Config.menu.addWMS === true) {
+                if (_.has(Config.menuItems , "addWMS") === true) {
                     require(["modules/addwms/view"
                         ], function (AddWMSView) {
                         new AddWMSView();
                     });
                 }
-                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0 && !Util.isAny()) {
+                if (_.has(Config.menuItems, "featureLister") === true && Config.menuItems.featureLister.lister > 0 && !Util.isAny()) {
                     require(["modules/featurelister/view"], function (FeatureLister) {
                         new FeatureLister();
                     });
                 }
-                if ($.isArray(Config.menu.formular)) {
-                    $.each(Config.menu.formular, function (name, obj) {
+                if ($.isArray(Config.menuItems.formular)) {
+                    $.each(Config.menuItems.formular, function (name, obj) {
                         if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
                             require(["modules/formular/view"], function (FormularView) {
                                 new FormularView(obj.modelname, obj.title, obj.symbol);
