@@ -252,6 +252,8 @@ define([
                         wgfz = brwValues.find("wps\\:wgfz,wgfz")[0].textContent ? parseFloat(brwValues.find("wps\\:wgfz,wgfz")[0].textContent.replace(/,/, ".")) : "",
                         bauw = brwValues.find("wps\\:bauw,bauw")[0].textContent,
                         flae = brwValues.find("wps\\:flae,flae")[0].textContent ? parseFloat(brwValues.find("wps\\:flae,flae")[0].textContent.replace(/,/, ".")) : "",
+                        acza = brwValues.find("wps\\:acza,acza")[0].textContent ? parseFloat(brwValues.find("wps\\:acza,acza")[0].textContent.replace(/,/, ".")) : "",
+                        grza = brwValues.find("wps\\:grza,grza")[0].textContent ? parseFloat(brwValues.find("wps\\:grza,grza")[0].textContent.replace(/,/, ".")) : "",
                         frei = brwValues.find("wps\\:frei,frei")[0].textContent ? brwValues.find("wps\\:frei,frei")[0].textContent.split(";") : [],
                         nWohnW = frei[6] && frei[6].trim() != "" ? parseFloat(frei[6].replace(/,/, ".").trim()) : "",
                         nBueroW = frei[7] && frei[7].trim() != "" ? parseFloat(frei[7].replace(/,/, ".").trim()) : "",
@@ -281,6 +283,8 @@ define([
                         if (obj.bezeichnung === nutzung && obj.stichtag === stichtag) {
                             obj = _.extend(obj, {
                                 brwValues: {
+                                    acza: acza,
+                                    grza: grza,
                                     brw: brw,
                                     wnum: wnum,
                                     entw: entw,
