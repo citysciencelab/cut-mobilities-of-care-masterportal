@@ -2,12 +2,14 @@ define([
     "backbone",
     "config",
     "backbone.radio",
-    "modules/core/util"
+    "modules/core/util",
+    "eventbus"
 ], function () {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
-        Util = require("modules/core/util");
+        Util = require("modules/core/util"),
+        EventBus = require("eventbus");
 
     var ZoomToFeature = Backbone.Model.extend({
         defaults:{
@@ -97,9 +99,14 @@ define([
             version = prefs.version,
             typename = prefs.typename,
             literalprefix = prefs.literalprefix;
-
-            data ="service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename + "&Filter=<Filter><PropertyIsEqualTo><ValueReference>@gml:id</ValueReference><Literal>" + literalprefix + id + "</Literal></PropertyIsEqualTo></Filter>";
-            this.sendRequest(url, data);
+            var ids = id.split(",");
+            _.each(ids,function (id){
+                data ="service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename + "&Filter=<Filter><PropertyIsEqualTo><ValueReference>@gml:id</ValueReference><Literal>" + literalprefix + id + "</Literal></PropertyIsEqualTo></Filter>";
+                
+                this.sendRequest(url, data);
+            },this);
+            this.sendToMap();
+            
         },
         sendRequest: function (url, data) {
             $.ajax({
@@ -173,16 +180,31 @@ define([
                Ymin = parseFloat(coordsY[0]);
                Ymax = parseFloat(coordsY[coordsY.length - 1]);
 
+               center = [];
                center.push(Xmin + (Xmax - Xmin) / 2);
                center.push(Ymin + (Ymax - Ymin) / 2);
-
+                
+                console.log(center);
+                
+            EventBus.trigger("mapHandler:showMarker", center);
+            
+               bbox = [];
                bbox.push(Xmin);
                bbox.push(Ymin);
                bbox.push(Xmax);
                bbox.push(Ymax);
+            
+            this.setCenter(center);
+            this.setBbox(bbox);
 
-                Radio.trigger("MapView", "setCenter", center);
-                Radio.trigger("map", "setBBox", bbox);
+                
+        },
+        sendToMap: function () {
+            var center = this.getCenter(),
+                bbox = this.getBbox();
+            
+            Radio.trigger("MapView", "setCenter", center);
+            Radio.trigger("map", "setBBox", bbox);
         }
 
     });
