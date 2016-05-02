@@ -18,7 +18,7 @@ define([
             "click #500m": "onClick500m",
             "click #1000m": "onClick1000m",
             "click #2000m": "onClick2000m",
-            "click #poiList": "destroy"
+            "click #tablePOI": "destroy"
         },
         initialize: function () {
             EventBus.on("showPOIModal", this.show, this);

@@ -30,40 +30,17 @@
                         <% }
                     }
                     else { %>
-                        <% if (legendURL.length > 1) { %>
-                            <table>
-                            <% _.each(legendURL, function (legend) {
-                                if (typeof legend === "object") { %>
-                                    <tr>
-                                       <td class="tdLegend">
-                                           <img src="<%= legend.icon %>">
-                                       </td>
-                                       <td class="tdLegend">
-                                           <span><%= legend.label %></span>
-                                       </td>
-                                   </tr>
-                                <% }
-                                else { %>
-                                    <tr>
-                                       <td class="tdLegend">
-                                           <img src="<%= legend %>">
-                                       </td>
-                                   </tr>
-                                <% }
-                            }); %>
-                            </table>
-                        <% }
-                        else {
-                            if (typeof legendURL[0] === "object") { %>
-                            <p>
-                                <img width="50" src=<%= legendURL[0].icon %>><span style="margin-left: 4px;"><%= name %></span>
-                            </p>
-                            <% }
-                            else {%>
+                        <% if (legendURL.length > 1) {
+                            _.each(legendURL, function (legend) { %>
                                 <p>
-                                    <img src=<%= legendURL[0] %>>
+                                    <img src=<%= legend %>>
                                 </p>
-                            <% } %>
+                        <%    });
+                        }
+                        else { %>
+                            <p>
+                                <img src=<%= legendURL[0] %>>
+                            </p>
                         <% }
                     } %>
                 </p>

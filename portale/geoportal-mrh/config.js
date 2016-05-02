@@ -6,6 +6,14 @@ define(function () {
         logoTooltip: "Metropolregion Hamburg",
         tree: {
             type: "custom",
+            customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
+            saveSelection: true,
+            baseLayer: [
+                {id: "51", visibility: true}, // WebAtlas
+                {id: "53", visibility: false}, // WebAtlas_grau
+                {id: "55", visibility: false}, // Luftbilder
+                {id: "57", visibility: false} // 1:5000
+            ],
             layerIDsToStyle: [
                 {
                     "id": "223",
@@ -24,8 +32,10 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true
+            mousePosition: true,
+            orientation: "allways"
         },
+        simpleMap: true,
         feature_count: [
             {
                 id: 73,

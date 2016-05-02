@@ -39,6 +39,7 @@ define(function () {
                 count: 5
             }
         ],
+        customModules: ["../portale/bauinfo/bacomParam"],
         view: {
             center: [566770, 5935620], // Alster
             extent: [454591, 5809000, 700000, 6075769],

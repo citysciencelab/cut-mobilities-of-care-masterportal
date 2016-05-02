@@ -186,6 +186,9 @@ define([
                 this.set("transparence", this.get("transparence") - value);
             }
         },
+        getTransparence: function () {
+            return this.get("transparence");
+        },
         /**
          *
          */
@@ -235,7 +238,6 @@ define([
                 }
             }
         },
-        // deprecated ???
         toggleLayerInformation: function () {
             if (this.get("layerAttribution") !== "nicht vorhanden") {
                 if (this.get("visibility") === true) {

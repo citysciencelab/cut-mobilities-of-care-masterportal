@@ -122,7 +122,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         });
                     }
                     if (_.has(Config.tools, "draw") === true && !Util.isAny()) {
-                        require(["modules/draw/view"], function (DrawView) {
+                        require(["modules/tools/draw/view"], function (DrawView) {
                             new DrawView();
                         });
                     }
@@ -132,7 +132,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         });
                     }
                     if (_.has(Config.tools, "print") === true) {
-                        require(["modules/print/view"], function (PrintView) {
+                        require(["modules/tools/print/view"], function (PrintView) {
                             new PrintView();
                         });
                     }
@@ -196,6 +196,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                                 new FormularView(obj.modelname, obj.title, obj.symbol);
                             });
                         }
+                    });
+                }
+                if (_.has(Config.menu, "contact") === true && _.isObject(Config.menu.contact) === true) {
+                    require(["modules/contact/view"], function (Contact) {
+                        new Contact();
                     });
                 }
             });

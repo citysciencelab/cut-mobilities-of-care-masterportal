@@ -1833,137 +1833,6 @@
 	
         <tr>
             
-                <td class="name"><code>menu.contactButton</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Konfigurationsobjekt des Kontakt-Buttons.</p>
-                <h6>Properties</h6>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>on</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-            
-            <td class="description last"><p>Kontakt-Button anzeigen.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Emailadresse Empfänger.</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-            </td>
-        </tr>
-	
-	
-	
-        <tr>
-            
                 <td class="name"><code>menu.tools</code></td>
             
             
@@ -1992,7 +1861,7 @@
             
             <td class="description last"><p>Legt fest, ob der Werkzeuge-Button angezeigt werden soll.</p></td>
         </tr>
-	
+
 	
 	
         <tr>
@@ -2011,7 +1880,7 @@
             
             
                 <td class="attributes">
-                
+
                     
                 
                 </td>
@@ -2019,7 +1888,7 @@
             
             
                 <td class="default">
-                
+
                 </td>
             
             
@@ -2145,7 +2014,7 @@
                 <td class="attributes">
                 
                     &lt;optional><br>
-                
+
                     
                 
                 </td>
@@ -2163,16 +2032,16 @@
 <table class="props">
     <thead>
 	<tr>
-		
+
 		<th>Name</th>
-		
-		
+
+
 		<th>Type</th>
-		
-		
-		
-		
-		
+
+
+
+
+
 		<th class="last">Description</th>
 	</tr>
 	</thead>
@@ -2195,21 +2064,21 @@
             </td>
             
             
-            
-            
-            
+
+
+
             <td class="description last"><p>Bezeichnung des Formulars</p></td>
         </tr>
-	
-	
-	
+
+
+
         <tr>
-            
+
                 <td class="name"><code>symbol</code></td>
-            
-            
+
+
             <td class="type">
-            
+
                 
 <span class="param-type">string</span>
 
@@ -2218,52 +2087,278 @@
             </td>
             
             
-            
-            
-            
+
+
+
             <td class="description last"><p>Symbolname</p></td>
         </tr>
-	
-	
-	
+
+
+
         <tr>
-            
+
                 <td class="name"><code>modelname</code></td>
-            
-            
+
+
             <td class="type">
-            
+
                 
 <span class="param-type">string</span>
 
 
-            
+
             </td>
             
             
-            
-            
-            
+
+
+
             <td class="description last"><p>Modelname, wie in view definiert.</p></td>
         </tr>
-	
-	
+
+
 	</tbody>
 </table>
             </td>
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>menu.featureLister</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>menu.contact</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>Konfigurationsobjekt des Kontaktformulars. In diesem wird es dem Anwender ermöglicht, seinen Namen, Emailadresse und Tel. einzugeben und mit einem Freitext per Email zu verschicken. Der Betreffzeile wird eine TicketNo vorangestellt.</p>
+                <h6>Properties</h6>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+
+
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceID</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+
+
+
+                </td>
+            
+            
+            
+                <td class="default">
+
+                </td>
+
+
+            <td class="description last"><p>ID aus restConf mit Emaildefinition. Siehe <a href="config.html#.restConf"><code>config.restConf</code></a>.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+
+
+
+                </td>
+            
+            
+            
+                <td class="default">
+
+                </td>
+
+
+            <td class="description last"><p>Array der Absender. Der erste Absender wird im From eingetragen. Alle anderen im Reply.</p>
+                <h6>Properties</h6>
+
+<table class="props">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
 
         <tr>
 
-                <td class="name"><code>menu.featureLister</code></td>
+                <td class="name"><code>email</code></td>
 
 
             <td class="type">
 
 
-<span class="param-type">integer</span>
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Emailadresse</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+
+
+
+            <td class="description last"><p>Anzeigename</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>to</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Array.&lt;Object></span>
 
 
 
@@ -2271,6 +2366,111 @@
 
 
                 <td class="attributes">
+
+
+
+                </td>
+            
+            
+            
+                <td class="default">
+
+                </td>
+
+
+            <td class="description last"><p>Array der Empfänger.</p>
+                <h6>Properties</h6>
+
+<table class="props">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>email</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Emailadresse</p></td>
+        </tr>
+	
+	
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Anzeigename</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>cc</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Array.&lt;Object></span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
 
 
 
@@ -2283,7 +2483,336 @@
                 </td>
 
 
-            <td class="description last"><p>Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.</p></td>
+            <td class="description last"><p>Array der cc-Empfänger.</p>
+                <h6>Properties</h6>
+
+<table class="props">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>email</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Emailadresse</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Anzeigename</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>bcc</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Array.&lt;Object></span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                </td>
+
+
+            <td class="description last"><p>Array der bcc-Empfänger.</p>
+                <h6>Properties</h6>
+
+<table class="props">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>email</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Emailadresse</p></td>
+        </tr>
+	
+	
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Anzeigename</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>ccToUser</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    false
+
+                </td>
+
+
+            <td class="description last"><p>Gibt an, ob die im Formular genannte Emailadresse des Users in den cc des Headers aufgenommen wird.</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>subject</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    Supportanfrage zum Portal document.title
+
+                </td>
+
+
+            <td class="description last"><p>Text der Betreffzeile der versandten Email.</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>textPlaceholder</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &amp;quot;Abschicken&amp;quot;
+
+                </td>
+
+
+            <td class="description last"><p>Placeholder des Textfeldes.</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>includeSystemInfo</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    false
+
+                </td>
+
+
+            <td class="description last"><p>Gibt an, ob navigator-Informationen in den Rumpf der Email aufgenommen werden sollen.</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+            </td>
         </tr>
 
 
@@ -2326,12 +2855,12 @@
         
 
     
-    <pre class="prettyprint"><code><p>contactButton: {on: true, email: &quot;LGVGeoPortal-Hilfe@gv.hamburg.de&quot;}</p></code></pre>
-    
-
-
-    
     <pre class="prettyprint"><code><p>formular: [{title: &quot;Bestellung Grenznachweis&quot;, symbol: &quot;glyphicon glyphicon-shopping-cart&quot;, modelname: &quot;grenznachweis&quot;}]</p></code></pre>
+    
+
+
+    
+    <pre class="prettyprint"><code><p>contact: {serviceID: &quot;80001&quot;, from: [{email: &quot;lgvgeoportal-hilfe@gv.hamburg.de&quot;, name: &quot;LGVGeoportalHilfe&quot;}], to: [{email: &quot;lgvgeoportal-hilfe@gv.hamburg.de&quot;,name: &quot;LGVGeoportalHilfe&quot;}], ccToUser: true}</p></code></pre>
     
 
     
@@ -7000,7 +7529,7 @@
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Feb 15 2016 15:57:34 GMT+0100 (Mitteleuropäische Zeit)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Feb 26 2016 12:59:17 GMT+0100 (Mitteleuropäische Zeit)
         </footer>
     </div>
 </div>

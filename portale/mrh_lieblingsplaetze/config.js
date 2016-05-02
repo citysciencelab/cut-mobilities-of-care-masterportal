@@ -11,7 +11,7 @@ define(function () {
                 {id: "53", visibility: false}, // WebAtlas_grau
                 {id: "55", visibility: false}, // Luftbilder
                 {id: "57", visibility: false}, // 1:5000
-                {id: "99999", style: "99999", visibility: true, styleField: "kategorie", mouseHoverField: "bezeichnung"}, // Lieblingsplaetze Poi
+                {id: "99999", style: "99999", visibility: false, styleField: "kategorie", mouseHoverField: "bezeichnung"}, // Lieblingsplaetze Poi
                 {id: "99997", visibility: true}
             ]
         },

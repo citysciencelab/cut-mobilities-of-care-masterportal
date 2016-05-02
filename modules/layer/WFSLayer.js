@@ -321,22 +321,12 @@ define([
         },
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         setLegendURL: function () {
-            var styleArray = [],
-                styles;
+            if (!this.get("legendURL").length) {
+                if (!_.isUndefined(this.get("styleId"))) {
+                    var style = StyleList.returnModelById(this.get("styleId"));
 
-            if (!_.isUndefined(this.get("styleId"))) {
-                styles = StyleList.returnAllModelsById(this.get("styleId"));
-
-                _.each(styles, function (style) {
-                    if (style.has("legendValue")) {
-                        styleArray.push({icon: style.get("imagepath") + style.get("imagename"), label: style.get("legendValue")});
-                    }
-                    else {
-                        styleArray.push({icon: style.get("imagepath") + style.get("imagename"), label: style.get("styleFieldValue")});
-                    }
-                });
-
-                this.set("legendURL", styleArray);
+                    this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+                }
             }
         }
     });

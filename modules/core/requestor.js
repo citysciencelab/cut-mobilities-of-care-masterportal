@@ -202,7 +202,7 @@ define([
                         key = this.beautifyString(key);
                         gfi[key] = value;
                     }, this);
-                    if (Util.isInternetExplorer() !== false) {
+                 if (Util.isInternetExplorer() !== false) {
                         var keys=[],
                             values=[];
                         _.each (gfi,function(value,key){

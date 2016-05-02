@@ -57,8 +57,10 @@ define([
             if (_.has(result, "LAYERIDS")) {
                 var valuesString = _.values(_.pick(result, "LAYERIDS"))[0],
                     visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
+                    transparenceListString = _.values(_.pick(result, "TRANSPARENCE"))[0],
                     values = [],
-                    visibilityList = [];
+                    visibilityList = [],
+                    transparenceList = [];
 
                 if (valuesString.indexOf(",") !== -1) {
                     values = valuesString.split(",");
@@ -72,6 +74,14 @@ define([
                     }
                     else {
                         visibilityList.push(visibilityListString);
+                    }
+                }
+                if (_.has(result, "TRANSPARENCE")) {
+                    if (transparenceListString && transparenceListString.indexOf(",") !== -1) {
+                        transparenceList = transparenceListString.split(",");
+                    }
+                    else {
+                        transparenceList.push(transparenceListString);
                     }
                 }
                 if (Config.tree.type === "light" || Config.tree.type === "custom") {
@@ -90,7 +100,8 @@ define([
 
                             params.push({
                                 id: values[i],
-                                visibility: visibleParam
+                                visibility: visibleParam,
+                                transparence: transparenceList[i]
                             });
                         }
                         // wenn nicht, alle defaultmäßig "true"setzen
@@ -125,7 +136,8 @@ define([
                         if (!layer) {
                             Config.tree.layer.push({
                                 id: param.id,
-                                visibility: false
+                                visibility: false,
+                                transparence: param.transparence
                             });
                         }
                     });
@@ -160,10 +172,10 @@ define([
                     Config.tree.layerIDsToSelect = [];
                     _.each(values, function (value, index) {
                         if (visibilityList[index] === "TRUE") {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: true});
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: true, transparence: transparenceList[index]});
                         }
                         else {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: false});
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: false, transparence: transparenceList[index]});
                         }
                     });
                 }
@@ -232,7 +244,8 @@ define([
             */
             if (_.has(result, "STYLE")) {
                 var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
-                if (value === "SIMPLE"){
+
+                if (value === "SIMPLE") {
                     Config.isMenubarVisible = false;
                     Config.controls = {};
                     Config.footer = {};
