@@ -62,7 +62,7 @@ define([
 
             this.$el.html(this.template(attr));
             if (this.model.get("brwList") .length > 0) {
-                $("#StadtteilName").val(this.model.get("brwList")[0].ortsteil);
+                $("#StadtteilName").val(this.model.get("brwList")[0].brwLage.stadtteil);
                 $("#StadtteilNameDiv").hide();
             }
         }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<% var filter = _.filter(brwList, function(brw) {return !brw.wnum || brw.wnum === ''});
+<% var filter = _.filter(brwList, function(brw) {return !brw.brwValues || (brw.brwValues.wnum && brw.brwValues.wnum === '')});
    var group = _.groupBy(filter, function(brw) {return brw.stichtag;});
    _.each(group, function (brwsZuStichtag, stichtag) { %>
         <div class="panel panel-default">
@@ -11,7 +11,7 @@
                 <div class="panel-body">
                     <div class="input-group" id="<%= brw.nutzung %>_<%= brw.stichtag %>">
                         <span class="input-group-addon" id="<%= brw.nutzung %>_<%= brw.stichtag %>" title="<%= brw.art + ' für ' + brw.nutzung%>">Nutzung: <%= brw.bezeichnung%></span>
-                        <input id="<%= brw.nutzung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.nutzung %>_<%= brw.stichtag %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben." value="<%= brw.wnum %>"/>
+                        <input id="<%= brw.nutzung %>#<%= brw.stichtag %>" class="form-control" aria-describedby="<%= brw.nutzung %>_<%= brw.stichtag %>" type="text" placeholder="Bodenrichtwertnummer" title="Bitte Bodenrichtwertnummer zur gesuchten Nutzung, dem gesuchten Stichtag und mit Lagebezug zur gesuchten Örtlichkeit eingeben."/>
                         <span class="input-group-addon" title="<%
                         var pre = 'Bitte wählen Sie in der interaktiven Bodenrichtwertkarte (Boris-HH) den passenden ',
                             post = ' aus und geben die Bodenrichtwert-Nummer hier ein.',
