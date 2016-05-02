@@ -3,7 +3,8 @@ define([
     "backbone.radio",
     "modules/tree/model",
     "text!modules/tree/template.html",
-    "eventbus"
+    "eventbus",
+    "modules/layer/list"
 ], function (Backbone, Radio, LayerTree, LayerTreeTemplate, EventBus) {
 
         var TreeView = Backbone.View.extend({

@@ -5,8 +5,6 @@ define([
     "text!modules/menubar/templateMobile.html",
     "text!modules/menubar/templateDesktop.html",
     "modules/menubar/model",
-    "modules/tree/view",
-    "modules/treeLight/listView",
     "eventbus"
 ], function () {
 

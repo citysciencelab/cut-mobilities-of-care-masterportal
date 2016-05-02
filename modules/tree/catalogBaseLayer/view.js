@@ -40,7 +40,7 @@ define([
                 }
                 if (this.model.get("selected") === true) {
                     this.$el.css("color", "rgb(255, 127, 0)");
-                    EventBus.trigger("addModelToSelectionList", this.model);
+                    // EventBus.trigger("addModelToSelectionList", this.model);
                 }
                 else {
                     this.$el.css("color", "rgb(85, 85, 85)");

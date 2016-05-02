@@ -43,6 +43,14 @@ define([
                     else {
                         this.renderListWithAnimation(options);
                     }
+                },
+                "updateList": function (options) {
+                    if (options.animation === "without") {
+                        this.renderListWithoutAnimation();
+                    }
+                    else {
+                        this.renderListWithAnimation(options);
+                    }
                 }
             });
 

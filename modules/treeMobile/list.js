@@ -60,7 +60,9 @@ define([
                 "setLayerAttributions": function (layerId, attrs) {
                     var model = this.findWhere({type: "layer", layerId: layerId});
 
-                    model.set(attrs);
+                    if (!_.isUndefined(model)) {
+                        model.set(attrs);
+                    }
                 },
                 "updateList": this.updateList,
                 "checkIsExpanded": this.checkIsExpanded
@@ -249,9 +251,8 @@ define([
          * @param  {String} parentId die Id des Eltern Model
          */
         createLayersModels: function (layers, parentId) {
-
             layers = _.sortBy(layers, function (layer) {
-                return layer.attributes.name.trim().toUpperCase();
+                return layer.name[0].trim().toUpperCase();
             });
 
             _.each(layers, function (layer) {
@@ -259,7 +260,7 @@ define([
                     type: "layer",
                     parentId: parentId,
                     layerId: layer.id,
-                    title: layer.attributes.name,
+                    title: layer.name,
                     id: layer.id
                 });
             });
@@ -283,22 +284,36 @@ define([
                     id: folder.id,
                     isLeafFolder: (_.has(folder, "folder")) ? false : true
                 });
-            }, this);
+            });
+
         },
         /**
         * Holt sich die Liste detr Layer aus dem Layermodul
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {
-            var layerList = Radio.request("LayerList", "getLayerList"),
+            var layerList = Radio.request("LayerList", "getResponse"),
+                visibleBaseLayerIds = _.pluck(_.where(Config.tree.baseLayer, {visibility: true}), "id"),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
-                return (layer.attributes.isbaselayer) ? "baselayer" : "overlay";
-            });
+                    return (layer.isbaselayer) ? "baselayer" : "overlay";
+                });
+
+            Radio.trigger("LayerList", "addModel", _.filter(layerList, function (layer) {
+                return _.contains(visibleBaseLayerIds, layer.id);
+            }));
+
             // Models für die Baselayer erzeugen
             this.createLayersModels(typeGroup.baselayer, "BaseLayer");
             // Models für die Fachdaten erzeugen
             this.groupDefaultTreeOverlays(typeGroup.overlay);
+
+            // Initial sichtbare Hintergrundkarten werden hinzugefügt
+            _.each(treeNodes, function (layer) {
+                 if (_.contains(visibleBaseLayerIds, layer.id)) {
+                     this.add(layer);
+                 }
+            }, this);
         },
 
         /**
@@ -338,12 +353,12 @@ define([
             var tree = {},
                 // Gruppierung nach Opendatakategorie
                 categoryGroups = _.groupBy(overlays, function (layer) {
-                return layer.attributes.node;
+                return layer.datasets[0].kategorie_opendata[0];
             });
            // Gruppierung nach MetaName
             _.each(categoryGroups, function (group, title) {
                 var metaNameGroups = _.groupBy(group, function (layer) {
-                    return layer.attributes.metaName;
+                    return layer.datasets[0].md_name;
                 });
                 // in Layer und Ordner unterteilen
                 tree[title] = this.splitIntoFolderAndLayer(metaNameGroups, title);
@@ -374,7 +389,7 @@ define([
                 }, this);
             }, this);
             // console.log(treeNodes[125]);
-            this.add(treeNodes, {sort: false});
+        //    this.add(treeNodes, {sort: false});
         },
 
         /**
@@ -382,9 +397,19 @@ define([
          * @param  {String} parentId
          */
         updateList: function (parentId, animation) {
+            var t = new Date().getTime();
+            // nur bei tree default
+            if (Config.tree.type === "default") {
+                var response = Radio.request("LayerList", "getResponse"),
+                    currentLevel = _.where(treeNodes, {parentId: parentId, type: "layer"}),
+                    currentLevelIds = _.pluck(currentLevel, "id");
+
+                Radio.trigger("LayerList", "addModel", _.filter(response, function (layer) {
+                    return _.contains(currentLevelIds, layer.id);
+                }));
+            }
 
             this.add(_.where(treeNodes, {parentId: parentId}), {sort: false});
-            // console.log(this.models);
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
                 isSelection = (parentId === "SelectedLayer") ? true : false;
@@ -395,12 +420,20 @@ define([
                 this.setModelsVisible(parentId);
                 // Wenn Layer in der Auswahl ist, dann Zahnrad anzeigen
                 this.setIsSettingVisible(isSelection);
+                this.trigger("updateList", {animation: animation});
+                // Ausgewählte Layer werden aus der Selection genommen -> damit außerhalb von "Auswahl der Karten" die richtige View genutzt wird.
+                _.each(checkedLayer, function (layer) {
+                    layer.setIsInSelection(isSelection);
+                });
             }
-            // Ausgewählte Layer der Selection hinzufügen
-            _.each(checkedLayer, function (layer) {
-                layer.setIsInSelection(isSelection);
-            });
-            this.trigger("updateList", {animation: animation});
+            else {
+                // Ausgewählte Layer der Selection hinzufügen
+                _.each(checkedLayer, function (layer) {
+                    layer.setIsInSelection(isSelection);
+                });
+                this.sort({animation: animation});
+            }
+            console.log(new Date().getTime()-t);
         },
 
         /**

@@ -16,7 +16,8 @@ define([
             visibility: false,
             treeType: Config.tree.type,
             featureCount: 1,
-            metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
+            metaName: null, // --> für Olympia-Portal, rendern sonst nicht möglich
+            transparence: 0
         },
         initialize: function () {
             this.listenToOnce(EventBus, {
@@ -81,9 +82,6 @@ define([
             if (this.get("transparence")) {
                 this.set("transparence", parseInt(this.get("transparence"), 10));
             }
-            else {
-                this.set("transparence", 0);
-            }
             // this.updateOpacity();
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
@@ -94,6 +92,9 @@ define([
             }
             this.get("layer").setVisible(this.get("visibility"));
             this.setVisibility();
+            if (this.getVisibility() === true) {
+                this.set("selected", true);
+            }
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -119,7 +120,7 @@ define([
                             this.set("metaName", dataset.md_name);
                         }
                     }
-                    if (Config.tree.orderBy === "opendata") {
+                    if (Config.tree.orderBy === "opendata" && !this.has("node")) {
                         if (dataset.kategorie_opendata.length > 1) {
                             this.set("node", dataset.kategorie_opendata);
                         }
@@ -127,7 +128,7 @@ define([
                             this.set("node", dataset.kategorie_opendata[0]);
                         }
                     }
-                    else if (Config.tree.orderBy === "inspire") {
+                    else if (Config.tree.orderBy === "inspire" && !this.has("node")) {
                         if (dataset.kategorie_inspire.length > 1) {
                             this.set("node", dataset.kategorie_inspire);
                         }

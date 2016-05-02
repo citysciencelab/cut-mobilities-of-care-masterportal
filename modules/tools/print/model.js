@@ -29,7 +29,7 @@ define([
             }
 
             if (_.has(Config.print, "configYAML") === true) {
-                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json"
+                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json";
             }
             else {
                 return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
@@ -116,7 +116,7 @@ define([
             this.set("isActive", this.get("isCurrentWin"));
         },
         updatePrintPage: function () {
-            if (this.get("scale").value) {
+            if (this.has("scale")) {
                 EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
             }
         },
