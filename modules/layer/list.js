@@ -160,8 +160,6 @@ define([
                         }, this);
                     }
 
-                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
-                    this.cloneByStyle();
                     EventBus.trigger("mapView:getOptions");
                     EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
                     if (Config.tree.type === "light") {
@@ -200,6 +198,7 @@ define([
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
                 response = this.cloneObjects(response);
+                response = this.cloneByStyle(response);
                 if ($(window).width() >= 768) {
                 //    this.set("isMobile", false);
                     this.reset(response);
@@ -272,6 +271,7 @@ define([
                     }
                 });
                 this.setLayerStyle(modelsArray);
+                modelsArray = this.cloneByStyle(modelsArray);
                 this.reset(modelsArray);
             }
         },
@@ -407,48 +407,46 @@ define([
             });
         },
 
+        // Special-Ding für HVV --> Layer werden über Styles gesteuert
         // Hier werden Layer verarbeitet für die es nur eine ID gibt, aber mehrere Styles. Zum Beipsiel der HVV-Dienst.
         // Wenn ein Model mehr als einen Style hat, wird pro Style ein neues Model erzeugt. Die ID setzt sich aus dem Style und der ID des "alten" Models zusammen.
         // Das "alte" Model wird danach, wenn es sich dabei um ein "Singel-Model" handelt, gelöscht. "Gruppen-Models" werden lediglich aktualisiert.
-        cloneByStyle: function () {
-            // "Single" - Layer die mehrere Styles haben
-            var modelsByStyle = this.filter(function (model) {
-                return typeof model.get("styles") === "object" && model.get("typ") === "WMS";
+        cloneByStyle: function (response) {
+            // Layer die mehrere Styles haben
+            var objectsByStyle = _.filter(response, function (model) {
+                return typeof model.styles === "object" && model.typ === "WMS";
             });
 
-            // Iteriert über die Models
-            _.each(modelsByStyle, function (model) {
+            // Iteriert über die Objekte
+            _.each(objectsByStyle, function (obj) {
                 // Iteriert über die Styles
-                _.each(model.get("styles"), function (style, index) {
-                    // Model wird kopiert
-                    var cloneModel = model.clone();
-                    // Die Attribute name und die ID werden für das kopierte Model gesetzt
-                    cloneModel.set("style", style);
-                    cloneModel.set("legendURL", model.get("legendURL")[index]);
-                    cloneModel.set("name", model.get("name")[index]);
-                    cloneModel.set("id", model.get("id") + model.get("styles")[index].toLowerCase());
-                    // Die Source vom Model/Layer bekommt ein Update(neuen Style)
-                    cloneModel.get("source").updateParams({STYLES: model.get("styles")[index]});
-                    // Model wird der Collection hinzugefügt
-                    this.add(cloneModel, {merge: true, at: this.indexOf(model)});
+                _.each(obj.styles, function (style, index) {
+                    // Objekt wird kopiert
+                    var cloneObj = _.clone(obj);
+                    // Die Attribute name und die ID werden für das kopierte Objekt gesetzt
+                    cloneObj.style = style;
+                    cloneObj.legendURL = obj.legendURL[index];
+                    cloneObj.name = obj.name[index];
+                    cloneObj.id = obj.id + obj.styles[index].toLowerCase();
+                    cloneObj.styles = obj.styles[index];
+                    // Objekt wird der Response hinzugefügt
+                    response.splice(_.indexOf(response, obj), 0, cloneObj);
                 }, this);
+                // Das ursprüngliche Objekt wird gelöscht
+                response = _.without(response, obj);
             }, this);
-            // Die ursprüngliche Models werden gelöscht
-            this.remove(modelsByStyle);
 
             // Groupen-Layer deren Childlayer sich nur im Style unterscheiden
-            var modelsByStyle = this.filter(function (model) {
-                return typeof model.get("styles") === "object" && model.get("typ") === "GROUP";
+            var modelsByStyle = _.filter(response, function (model) {
+                return typeof model.styles === "object" && model.typ === "GROUP";
             });
 
             // Iteriert über die Models
-            _.each(modelsByStyle, function (model) {
-                // Iteriert über die Childlayer
-                model.get("layer").getLayers().forEach(function (layer, index) {
-                    // Das STYLES-Attribut der Source wird überschrieben
-                    layer.getSource().updateParams({STYLES: model.get("styles")[index]});
-                });
+            _.each(modelsByStyle, function (model, index) {
+                model.layerdefinitions[index].styles = model.styles[index];
             });
+
+            return response;
         },
 
         /**
