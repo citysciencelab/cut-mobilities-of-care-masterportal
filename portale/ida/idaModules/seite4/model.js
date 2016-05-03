@@ -115,6 +115,15 @@ define([
             if (brw.nLadenW !== "") {
                 dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("NLadenW", brw.brwValues.nLadenW, "float"));
             }
+            if (brw.ugnutzung !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("UGNutzung", brw.brwValues.ugnutzung, "string"));
+            }
+            if (brw.uggfzAnt !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("UGGFZAnt", brw.brwValues.uggfzAnt, "float"));
+            }
+            if (brw.ugw !== "") {
+                dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("UGW", brw.brwValues.ugw, "float"));
+            }
             if (brw.egnutzung !== "") {
                 dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("EGNutzung", brw.brwValues.egnutzung, "string"));
             }
