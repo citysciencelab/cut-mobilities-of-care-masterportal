@@ -81,6 +81,17 @@ define([
                     EventBus.trigger("layerlist:setAttributionsByID", obj.id, {"visibility": obj.visibility, "transparence": parseInt(obj.transparence, 10)});
                 }, this);
             }
+            //
+            if (_.has(Config.tree, "metaIdsToSelected") === true) {
+                _.each(Config.tree.metaIdsToSelected, function (metaId) {
+                    var layers = Radio.request("LayerList", "getResponseByMetaId", metaId);
+
+                    _.each(layers, function (layer) {
+                        Radio.trigger("LayerList", "addModel", layer);
+                        Radio.trigger("LayerList", "setAttributionsByID", layer.id, {"selected": true});
+                    })
+                });
+            }
             // Über die Konfiguration sichtbar geschaltete Hintergrundkarten
             if (_.has(Config.tree, "baseLayer") === true) {
                 _.each(_.where(Config.tree.baseLayer, {visibility: true}), function (obj) {
