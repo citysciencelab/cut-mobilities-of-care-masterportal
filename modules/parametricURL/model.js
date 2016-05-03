@@ -16,6 +16,19 @@ define([
 
                 result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
             });
+
+            /**
+             * Über diesen Parameter wird GeoOnline aus dem Transparenzporal aufgerufen
+             * Der entsprechende Datensatz soll angezeigt werden
+             * Hinter dem Parameter Id steckt die MetadatenId des Metadatensatzes
+             * Die Metadatensatz-Id wird in die config geschrieben
+             */
+            if (_.has(result, "ID")) {
+                var values = _.values(_.pick(result, "ID"))[0].split(",");
+
+                Config.tree.metaIdsToSelected = values;
+            }
+
             /**
              * Gibt die initiale Zentrumskoordinate zurück.
              * Ist der Parameter "center" vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
