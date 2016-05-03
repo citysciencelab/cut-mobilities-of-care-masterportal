@@ -103,6 +103,7 @@ define([
         // holt sich aus der AJAX response die Daten, prüft auf Geometrietyp (MultiPolygon oder Polygon)
         getFeatures: function (data) {
             var geometry = $("app\\:the_geom,the_geom", data);
+            
                 // wenn MultiPolygon
                 if ($(geometry).find("gml\\:MultiSurface,MultiSurface")[0] !== undefined) {
                     var allCoords = $(geometry).find("gml\\:posList,posList"),
@@ -128,6 +129,7 @@ define([
                 }
                 // wenn einzelnes Polygon
                else {
+                   
                    try {
                        var coords = $(geometry).find("gml\\:posList,posList")[0].textContent.split(" "),
                         coordsList = this.storeCoords(coords);
@@ -243,9 +245,9 @@ define([
             finalbbox.push(Xmaxs[Xmaxs.length - 1]);
             finalbbox.push(Ymaxs[Ymaxs.length - 1]);
             
-        
-//            Radio.trigger("MapView", "setCenter", center);
-            Radio.trigger("map", "setBBox", finalbbox);
+            if (finalbbox[0] !== undefined && finalbbox[1] !== undefined && finalbbox[2] !== undefined && finalbbox[3] !== undefined) {
+               Radio.trigger("map", "setBBox", finalbbox);
+            }
         }
     });
 

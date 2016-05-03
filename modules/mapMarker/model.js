@@ -2,8 +2,10 @@ define([
     "backbone",
     "openlayers",
     "eventbus",
-    "backbone.radio"
-    ], function (Backbone, ol, EventBus, Radio) {
+    "backbone.radio",
+    "config",
+    "modules/core/util"
+    ], function (Backbone, ol, EventBus, Radio, Config, Util) {
     "use strict";
     var MapHandlerModel = Backbone.Model.extend({
         defaults: {
@@ -94,11 +96,14 @@ define([
         
         // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der BBOX pro Feature
         askForMarkers: function () {
-            var centers = Radio.request("zoomtofeature", "getCenterList");
+            var centers = Radio.request("zoomtofeature", "getCenterList"),
+                imglink = Config.zoomtofeature.imglink;
+            
             _.each(centers, function (center, i){
                 var id = "featureMarker" +i;
                 
-                $("#map").append("<div id=" + id + " class='featureMarker'><img src='../../img/location_eventlotse.svg'></div>");
+                // lokaler Pfad zum IMG-Ordner ist anders
+                $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Util.getPath(imglink) + "'></div>");
                 
                 var marker = new ol.Overlay({
                     id: id,

@@ -42,7 +42,8 @@ define(function () {
             url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
             version:"2.0.0",
             typename: "app:hamburgconvention",
-            literalprefix: "APP_HAMBURGCONVENTION_"
+            literalprefix: "APP_HAMBURGCONVENTION_",
+            imglink: "../img/location_eventlotse.svg"
         },
 
         view: {
