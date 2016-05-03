@@ -100,16 +100,13 @@ define([
                 
                 $("#map").append("<div id=" + id + " class='featureMarker'><img src='../../img/location_eventlotse.svg'></div>");
                 
-                
-                    var marker = new ol.Overlay({
-                        id: id,
-                        positioning: "bottom-center",
-                        element: document.getElementById(id),
-                        stopEvent: false
-                    });
-                
+                var marker = new ol.Overlay({
+                    id: id,
+                    positioning: "bottom-center",
+                    element: document.getElementById(id),
+                    stopEvent: false
+                });
                
-                
                 marker.setPosition(center);
                 EventBus.trigger("addOverlay", marker);
                 

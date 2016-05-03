@@ -12,12 +12,7 @@ define([
     var ZoomToFeature = Backbone.Model.extend({
         defaults:{
             prefs:{},
-//            Xmin: 0,
-//            Xmax: 0,
-//            Ymin: 0,
-//            Ymax: 0,
             centerlist:[],
-//            center: [],
             bboxes: []
         },
         initialize: function () {
@@ -47,36 +42,6 @@ define([
         getCoordsY: function (){
             return this.get("coordsY");
         },
-//        setXmin: function (value){
-//            this.set("Xmin", value);
-//        },
-//        getXmin: function (){
-//            return this.get("Xmin");
-//        },
-//        setXmax: function (value){
-//            this.set("Xmax", value);
-//        },
-//        getXmax: function (){
-//            return this.get("Xmax");
-//        },
-//        setYmin: function (value){
-//            this.set("Ymin", value);
-//        },
-//        getYmin: function (){
-//            return this.get("Ymin");
-//        },
-//        setYmax: function (value){
-//            this.set("Ymax", value);
-//        },
-//        getYmax: function (){
-//            return this.get("Ymax");
-//        },
-//        setCenter: function (value){
-//            this.set("center", value);
-//        },
-//        getCenter: function (){
-//            return this.get("center");
-//        },
         setBboxes: function (value){
             this.set("bboxes", value);
         },
@@ -157,7 +122,7 @@ define([
                         
                     }, this);
                     
-                    allCoords=[coordsListMultiX, coordsListMultiY];
+                    allCoords = [coordsListMultiX, coordsListMultiY];
                     this.calculateCenter(allCoords);
                     this.calculateBBOX(allCoords);
                 }
@@ -166,12 +131,10 @@ define([
                    try {
                        var coords = $(geometry).find("gml\\:posList,posList")[0].textContent.split(" "),
                         coordsList = this.storeCoords(coords);
-                       
+
                        this.calculateCenter(coordsList);
                        this.calculateBBOX(coordsList);
-                   } catch (e) {
-                       
-                   }
+                   }catch (e) {}
                }
         },
         
