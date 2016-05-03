@@ -52,6 +52,14 @@ define([
         showLayerInTree: function (model) {
             var layerModel = Radio.request("LayerList", "getLayerFindWhere", {id: model.id});
 
+            if (_.isUndefined(Radio.request("LayerList", "getLayerFindWhere", {id: model.id}))) {console.log("un");
+                Radio.trigger("LayerList", "addModel", model);
+                layerModel = Radio.request("LayerList", "getLayerFindWhere", {id: model.id});
+                if (_.isUndefined(layerModel) === false) {
+                    layerModel.set("selected", true);
+                }
+            }
+
             // öffnet den Tree
             $(".nav li:first-child").addClass("open");
             // öffnet die Geofachdaten

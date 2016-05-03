@@ -104,9 +104,8 @@ define([
          *
          */
         getLayerForSearch: function () {
-            // var layerModels = Radio.request("LayerList", "getOverlayerList");
-
             var layerModels = Radio.request("LayerList", "getResponse");
+
             this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
