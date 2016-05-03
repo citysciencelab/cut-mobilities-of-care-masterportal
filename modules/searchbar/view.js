@@ -245,7 +245,7 @@ define([
                 Radio.trigger("RawLayerList", "addModelToLayerListById", hitID);
             }
             // 1. Schreibe Text in Searchbar
-            if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
+            if (_.has(hit, "model") && hit.model.type === "nodeLayer") {
                 this.setSearchbarString(hit.metaName);
             }
             else {

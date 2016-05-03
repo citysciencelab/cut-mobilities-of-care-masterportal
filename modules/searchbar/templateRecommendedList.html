@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <% _.each(recommendedList, function (hit, index) { %>
-    <% if (hit.model !== undefined && hit.model.get("type") === "nodeLayer" && hit.metaName !== null) { %>
+    <% if (hit.model !== undefined && hit.type === "nodeLayer" && hit.metaName !== null) { %>
         <% if (hit.glyphicon !== undefined) { %>
             <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><p id="searchInputLi"><span class="glyphicon <%= hit.glyphicon %>"></span><%= hit.metaName %><small><%= hit.type %></small></p></li>
         <% } else { %>
