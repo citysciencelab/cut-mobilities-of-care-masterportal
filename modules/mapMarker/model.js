@@ -1,8 +1,9 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus"
-    ], function (Backbone, ol, EventBus) {
+    "eventbus",
+    "backbone.radio"
+    ], function (Backbone, ol, EventBus, Radio) {
     "use strict";
     var MapHandlerModel = Backbone.Model.extend({
         defaults: {
@@ -14,11 +15,12 @@ define([
             source: new ol.source.Vector()
         },
         initialize: function () {
-            this.set("layer", new ol.layer.Vector({
-                source: this.get("source")
-            }));
-            EventBus.trigger("addLayer", this.get("layer"));
+//            this.set("layer", new ol.layer.Vector({
+//                source: this.get("source")
+//            }));
+//            EventBus.trigger("addLayer", this.get("layer"));
             EventBus.trigger("addOverlay", this.get("marker"));
+
         },
 
         getExtentFromString: function () {
@@ -88,6 +90,31 @@ define([
             this.set("wkt", wkt);
 
             return wkt;
+        },
+        
+        // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der BBOX pro Feature
+        askForMarkers: function () {
+            var centers = Radio.request("zoomtofeature", "getCenterList");
+            _.each(centers, function (center, i){
+                var id = "featureMarker" +i;
+                
+                $("#map").append("<div id=" + id + " class='featureMarker'><img src='../../img/location_eventlotse.svg'></div>");
+                
+                
+                    var marker = new ol.Overlay({
+                        id: id,
+                        positioning: "bottom-center",
+                        element: document.getElementById(id),
+                        stopEvent: false
+                    });
+                
+               
+                
+                marker.setPosition(center);
+                EventBus.trigger("addOverlay", marker);
+                
+            },this);
+            
         }
     });
 
