@@ -127,6 +127,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
+        * @property {string} [FEATUREID] - id (oder ids, komma-separiert) der WFS-Features auf dessen/deren BBoxes der initiale Kartenextent gestellt wird..
         * @property {string} [CENTER] - Zentrumskoordinate. Rechtswert, Hochwert. EPSG:25832. Siehe {@link config.view}.
         * @property {string} [LAYERIDS] - Kommagetrennte Aulistung der initial sichtbaren LayerIDs. Siehe {@link config.tree}.
         * @property {string} [VISIBILITY] - Kommagetrennte Aulistung der Sichtbarkeit, der unter LAYERIDS genannten Layer. Nur bei tree.type: custom interessant.
@@ -139,6 +140,24 @@ define(function () {
         * @default [false]
         */
         allowParametricURL: true,
+        
+        /**
+        * @memberof config
+        * @type {Object}
+        * @desc Optionale Konfigurations-Einstellungen für den URL parameter "featureid"
+        * @property {string} [url] - URL zum WFS.
+        * @property {string} [version] - Die Version des WFS.
+        * @property {string} [typename] - typename des WFS.
+        * @property {string} [literalprefix] - prefix an das die ID drangehängt wird. da wird. Kommt beim request in den Filter.
+        * @property {string} [imglink] - Link für den Marker.
+        */
+        zoomtofeature: {
+            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            version:"2.0.0",
+            typename: "app:hamburgconvention",
+            literalprefix: "APP_HAMBURGCONVENTION_",
+            imglink: "../img/location_eventlotse.svg"
+        },
         /**
         * @memberof config
         * @type {Object}
