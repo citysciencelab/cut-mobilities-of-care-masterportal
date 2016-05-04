@@ -52,7 +52,7 @@ define([
         showLayerInTree: function (model) {
             var layerModel = Radio.request("LayerList", "getLayerFindWhere", {id: model.id});
 
-            if (_.isUndefined(Radio.request("LayerList", "getLayerFindWhere", {id: model.id}))) {console.log("un");
+            if (_.isUndefined(Radio.request("LayerList", "getLayerFindWhere", {id: model.id}))) {
                 Radio.trigger("LayerList", "addModel", model);
                 layerModel = Radio.request("LayerList", "getLayerFindWhere", {id: model.id});
                 if (_.isUndefined(layerModel) === false) {
