@@ -139,9 +139,9 @@ define([
             });
 
             this.listenTo(this, {
-                "add": function (model) {
-                    model.setSelected(true);
-                    EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                "add": function () {
+                    // model.setSelected(true);
+                    // EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
                 },
                 "remove": function (model) {
                     EventBus.trigger("removeLayer", model.get("layer"));

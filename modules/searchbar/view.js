@@ -242,7 +242,8 @@ define([
             }
             // 0. Füge Layer ggf. zum Themenbaum hinzu
             if (_.isUndefined(hitID) === false && Config.tree && Config.tree.type === "light" && hit.type === "Thema") {
-                Radio.trigger("LayerList", "addModelById", hitID);
+                // noch fehlerhaft
+                //Radio.trigger("LayerList", "addModelById", hitID);
             }
             // 1. Schreibe Text in Searchbar
             if (_.has(hit, "model") && hit.model.type === "nodeLayer") {
