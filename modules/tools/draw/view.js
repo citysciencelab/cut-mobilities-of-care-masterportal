@@ -48,13 +48,24 @@ define([
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
                 $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
                 this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                this.delegateEvents();
             }
             else {
-                this.undelegateEvents();
                 $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
+                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                this.undelegateEvents();
+                try {
+                    this.model.get("modify").setActive(false);      
+                    this.model.get("selectClick").setActive(false);
+                    this.model.get("draw").setActive(false);
+                }
+                catch (e) {
+                }
+                
             }
             this.renderForm();
         },
