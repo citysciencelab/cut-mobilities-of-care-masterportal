@@ -55,6 +55,11 @@ define([
                 "addModel": function (model) {
                     this.add(model);
                 },
+                "addModelById": function (id) {
+                    var model = Radio.request("RawLayerList", "getLayerWhere", {id: id});
+
+                    this.add(model.toJSON());
+                },
                 "fetchLayer": function () {
                     this.fetchLayer();
                 },
@@ -135,8 +140,8 @@ define([
 
             this.listenTo(this, {
                 "add": function (model) {
-                    // console.log(model);
-                    // EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                    model.setSelected(true);
+                    EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
                 },
                 "remove": function (model) {
                     EventBus.trigger("removeLayer", model.get("layer"));
@@ -174,7 +179,7 @@ define([
         },
 
         fetchLayer: function () {
-            var response = Radio.request("RawLayerList", "getLayerList");
+            var response = Radio.request("RawLayerList", "getLayerAttributesList");
 
             if (this.length) {
                 EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true}));
@@ -182,18 +187,10 @@ define([
 
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config.tree, "type") && Config.tree.type === "default") {
-                // nur vom Typ WMS
-                response = _.where(response, {typ: "WMS"});
-                // nur Layer die min. einen Datensatz zugeordnet sind und solche mit korrekter URL
-                response = _.filter(response, function (element) {
+                _.each(response, function (element) {
                     element.isbaselayer = false;
-                    return (element.datasets.length > 0 && element.url !== "nicht vorhanden") ;
                 });
-                response = this.deleteLayerByID(response);
-                response = this.deleteLayersByMetaID(response);
                 response = this.deleteLayersIncludeCache(response);
-                response = this.mergeLayersByIDs(response);
-                response = this.mergeLayersByMetaID(response);
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
@@ -210,10 +207,6 @@ define([
             // Ansonsten Layer über ID
             else if (_.has(Config.tree, "type") && Config.tree.type === "light" || Config.tree.type === "custom") {
                 var modelsArray = [];
-
-                if (_.has(Config.tree, "layerIDsToMerge") === true) {
-                    response = this.mergeLayersByIDs(response);
-                }
 
                 _.each(Config.tree.layer, function (element) {
                     if (_.has(element, "id") && _.isString(element.id)) {
@@ -276,20 +269,6 @@ define([
             }
         },
 
-        // Entfernt Layer über die ID. Wird über Config.tree.layerIDsToIgnore gesteuert.
-        deleteLayerByID: function (response) {
-            return _.reject(response, function (element) {
-                return _.contains(Config.tree.layerIDsToIgnore, element.id);
-            });
-        },
-
-        // Entfernt Layer über ihre MetadatenID. Wird über Config.tree.metaIDsToIgnore gesteuert.
-        deleteLayersByMetaID: function (response) {
-            return _.reject(response, function (element) {
-                return _.contains(Config.tree.metaIDsToIgnore, element.datasets[0].md_id);
-            });
-        },
-
         // Entfernt alle Layer, die bereits im Cache dargestellt werden.
         deleteLayersIncludeCache: function (response) {
             var cacheLayerMetaIDs = [],
@@ -322,57 +301,6 @@ define([
             return _.filter(response, function (element) {
                 return element.datasets.length === 1;
             });
-        },
-
-        // Layer mit gleicher Metadaten-ID werden zu einem neuem Layer zusammengefasst.
-        // Layer die gruppiert werden sollen, werden über Config.tree.metaIDsToMerge gesteuert.
-        // Die zusammenfassenden alten Layer werden rausgefiltert.
-        mergeLayersByMetaID: function (response) {
-            var newLayer;
-
-            _.each(Config.tree.metaIDsToMerge, function (metaID) {
-                var layersByID = _.filter(response, function (layer) {
-                    return layer.datasets[0].md_id === metaID;
-                });
-
-                newLayer = _.clone(layersByID[0]);
-                newLayer.name = layersByID[0].datasets[0].md_name;
-                newLayer.layers = _.pluck(layersByID, "layers").toString();
-                newLayer.maxScale = _.max(_.pluck(layersByID, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                newLayer.minScale = _.min(_.pluck(layersByID, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                response = _.difference(response, layersByID);
-                response.push(newLayer);
-            });
-            return response;
-        },
-
-        // Mehrere Layer werden zu einem neuem Layer über ihre ID zusammengefasst.
-        // Layer die gruppiert werden sollen, werden über Config.tree.layerIDsToMerge gesteuert.
-        // Die zusammenfassenden alten Layer werden entfernt.
-        mergeLayersByIDs: function (response) {
-            _.each(Config.tree.layerIDsToMerge, function (layerIDs) {
-                var layersByID,
-                    newLayer;
-
-                layersByID = _.filter(response, function (layer) {
-                    return _.contains(layerIDs, layer.id);
-                });
-                newLayer = _.clone(layersByID[0]);
-                newLayer.layers = _.pluck(layersByID, "layers").toString();
-                newLayer.maxScale = _.max(_.pluck(layersByID, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                newLayer.minScale = _.min(_.pluck(layersByID, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                response = _.difference(response, layersByID);
-                response.push(newLayer);
-            });
-            return response;
         },
 
         // Hier wird den HVV-Layern ihr jeweiliger Style zugeordnet.
