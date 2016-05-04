@@ -186,6 +186,10 @@ define(function () {
             draw: {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
+            },
+            kmlimport:{
+                title: "KML Import",
+                glyphicon: "glyphicon-pencil"
             }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",
