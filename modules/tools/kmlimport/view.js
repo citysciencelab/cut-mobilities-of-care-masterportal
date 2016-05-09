@@ -10,8 +10,7 @@ define([
         template: _.template(ImportTemplate),
         events: {
             "click .import": "importKML",
-            "click .filesearch": "searchFile",
-            "keyup .filetext": "setText"
+            "change .file": "setText"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -38,7 +37,20 @@ define([
         },
         
         setText: function (evt) {
-            this.model.setText(evt.target.value);
+            var reader = null;
+            var file = evt.target.files[0];
+            var reader = new FileReader();
+            
+            reader.onload = (function () {
+                var fakeBtnTxt = $("#kmlinput").val(),
+                test = fakeBtnTxt.slice(12);
+                
+                this.model.setText(reader.result);
+                $("#fakebutton").html("Datei: " + 
+                test);
+                $("#fakebutton").toggleClass("btn-primary");
+            }).bind(this);
+            reader.readAsText(file);
         },
         searchFile: function () {
             console.log("searchFile");

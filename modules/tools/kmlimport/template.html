@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <div class="form-horizontal" role="form">
     <div class="form-group form-group-sm">
-        <div class="col-md-9 col-sm-9 col-xs-9">
-            <input type="text" class="form-control filetext" placeholder="Dateipfad">  
+        <div class="col-md-12 col-sm-12 col-xs-12 fileinputs">
+<!--            <input id="filechoser" type="file" class="form-control file" placeholder="Dateipfad">-->
+            
+            
+                <input id="kmlinput" type="file" class="file btn btn-panel-submit btn-sm col-md-12 col-sm-12">
+                <div class="col-md-12 col-sm-12 col-xs-12 fakefile">
+                    <button id="fakebutton" class="btn btn-panel-submit btn-sm col-md-12 col-sm-12">
+                        Datei auswählen (keine ausgewählt)
+                    </button>
+                </div>
+           
+            
         </div>
-        <button class="btn btn-panel-submit btn-sm col-md-2 col-sm-2 filesearch">
-            ...
-            </button>
     </div>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 import">
-            <span class="glyphicon glyphicon-wrench"></span>
+            <span class="glyphicon glyphicon-import"></span>
             IMPORT
             </button>
         </div>

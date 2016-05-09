@@ -189,7 +189,7 @@ define(function () {
             },
             kmlimport:{
                 title: "KML Import",
-                glyphicon: "glyphicon-pencil"
+                glyphicon: "glyphicon-import"
             }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",
