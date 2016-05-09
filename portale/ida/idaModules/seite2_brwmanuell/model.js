@@ -91,7 +91,9 @@ define([
                         stadtteil = brwLage.find("wps\\:stadtteil,stadtteil")[0].textContent,
                         statistikGebiet = brwLage.find("wps\\:statistikgebiet,adstatistikgebietresse")[0].textContent,
                         baublock = brwLage.find("wps\\:baublock,baublock")[0].textContent,
-                        weitereLage = brwLage.find("wps\\:weiterelage,weiterelage")[0].textContent;
+                        weitereLage = brwLage.find("wps\\:weiterelage,weiterelage")[0].textContent,
+                        x = brwLage.find("wps\\:x,x")[0].textContent,
+                        y = brwLage.find("wps\\:y,y")[0].textContent;
 
                     _.each(this.get("brwList"), function (obj) {
                         if (obj.nutzung === idaIdent && obj.stichtag === stichtag) {
@@ -134,7 +136,9 @@ define([
                                     stadtteil: stadtteil,
                                     statistikGebiet: statistikGebiet,
                                     baublock: baublock,
-                                    weitereLage: weitereLage
+                                    weitereLage: weitereLage,
+                                    x: x,
+                                    y: y
                                 },
                                 ermittlungsart: "WNUM"
                             });
