@@ -37,18 +37,24 @@ define(function () {
         menubar: true,
         scaleLine: true,
         isMenubarVisible: false,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: false,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         tools: {
