@@ -32,6 +32,9 @@ define([
                     return this.get("map");
                 }
             }, this);
+            channel.on({
+                "setBBox": this.setBBox
+            }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
@@ -89,6 +92,17 @@ define([
             //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
             //     }.bind(this), false);
             // }
+        Radio.trigger("zoomtofeature","zoomtoid");
+        },
+
+        setBBox: function(bbox) {
+            this.set("bbox", bbox);
+            this.BBoxToMap(this.get("bbox"));
+        },
+        BBoxToMap: function(bbox) {
+            if (bbox) {
+                this.get("view").fit(bbox,this.get("map").getSize());
+            }
         },
 
         GFIPopupVisibility: function (value) {

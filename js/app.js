@@ -14,6 +14,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
         });
     }
 
+    if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature ) {
+        require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
+            new ZoomToFeature();
+        });
+    }
+
     if (Config.tree.type === "custom") {
         require(["modules/treeconfig/list"], function (TreeConfig) {
             new TreeConfig();
