@@ -406,7 +406,6 @@ define([
         downloadFeatures: function () {
             var features = this.get("layer").getSource().getFeatures();
 
-            console.log(features);
             Radio.trigger("download", "start", {
                 data: features,
                 formats: ["kml"],
