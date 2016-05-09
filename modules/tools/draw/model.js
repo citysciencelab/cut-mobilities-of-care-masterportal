@@ -325,17 +325,15 @@ define([
             else {
                 EventBus.trigger("removeInteraction", this.get("modify"));
                 this.set("modify", new ol.interaction.Modify({
-                    features: this.get("source").getFeaturesCollection(),
-                    style: this.get("style")
-                    }));
+                    features: this.get("source").getFeaturesCollection()
+                }));
                 this.get("modify").setActive(true);
                 this.get("draw").setActive(false);
-                this.get("selectClick").setActive(true);
+                this.get("selectClick").setActive(false);
 
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
                 this.setGlyphToCursor("glyphicon glyphicon-wrench");
-
                 EventBus.trigger("addInteraction", this.get("modify"));
             }
         },
@@ -343,11 +341,11 @@ define([
         setGlyphToCursor: function (glyphicon) {
             $("#map").after("<span id='cursorGlyph'></span>");
             $("#map").mousemove(function (e) {
-                    var modifyCursor = $("#cursorGlyph");
+                    var cursorGlyph = $("#cursorGlyph");
 
                     $("#cursorGlyph").addClass(glyphicon);
-                    modifyCursor.css("left", e.offsetX + 10);
-                    modifyCursor.css("top", e.offsetY + 15);
+                    cursorGlyph.css("left", e.offsetX + 10);
+                    cursorGlyph.css("top", e.offsetY + 15);
             });
         },
 
