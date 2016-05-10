@@ -37,20 +37,9 @@ define([
         initialize: function () {
             var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
 
-            // initial sichtbare layer werden "gechecked"
-            if (model.getVisibility() === true) {
-                this.setIsChecked(true);
-                this.setIsLayerVisible(true);
-            }
-            // wenn initial noch kein title vorhanden ist (evt. bei Custom-Tree)
-            if (this.getTitle() === "") {
-                this.setTitle(model.get("name"));
-            }
-
             this.listenTo(this, {
                 "change:isChecked": function () {
                     Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"selected": this.getIsChecked()});
-                    this.setIsLayerVisible(this.getIsChecked());
                 },
                 "change:isInSelection": function () {
                     // für die aktuelle Layer den Index in der Selektion abfragen
@@ -66,6 +55,16 @@ define([
                     Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"transparence": this.getTransparence()});
                 }
             });
+
+            // initial sichtbare layer werden "gechecked"
+            if (model.getVisibility() === true) {
+                this.setIsChecked(true);
+                this.setIsLayerVisible(true);
+            }
+            // wenn initial noch kein title vorhanden ist (evt. bei Custom-Tree)
+            if (this.getTitle() === "") {
+                this.setTitle(model.get("name"));
+            }
         },
         setIsChecked: function (value) {
             this.set("isChecked", value);

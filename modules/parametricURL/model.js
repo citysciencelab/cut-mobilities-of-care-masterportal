@@ -180,6 +180,11 @@ define([
                     });
                 }
             }
+            if (_.has(result, "FEATUREID")) {
+                var id = _.values(_.pick(result, "FEATUREID"))[0];
+
+                Config.zoomtofeature.id = id;
+            }
 
             /**
              * Gibt die initiale Resolution (Zoomlevel) zurück.

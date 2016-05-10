@@ -9,9 +9,7 @@ define(function () {
                 {id: "452", visibility: false},
                 {id: "627", visibility: true},  //icons
                 {id: "628", visibility: true},  //strecke
-                {id: "629", visibility: false},  //umring
-               //{id: "1132", visible: true, style: "1711", clusterDistance: 0, searchField: "", mouseHoverField: "name"}
-               
+                {id: "629", visibility: false}  //umring
             ]
         },
         simpleMap: false,
@@ -30,30 +28,48 @@ define(function () {
             poi: true,
             fullScreen: true
         },
+        customModules: [],
         footer: false,
         quickHelp: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
+        
         attributions: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
+         menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+             contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },            
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            }
+        },
+        
         menu: {
             helpButton: false,
             searchBar: true,
             layerTree: true,
-            tools: true,
-            featureLister: false,
-            treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: true,
-            routing: true,
-            addWMS: false,
-            formular: {},
-            contact: {
+             contact: {
                 serviceID: "80001",
                 from: [{
                     email: "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -69,7 +85,13 @@ define(function () {
                 subject: "",
                 textPlaceholder: "",
                 includeSystemInfo: true
-            }
+            },
+            tools: true,
+            featureLister: false,
+            treeFilter: false,
+            wfsFeatureFilter: true,
+            
+            
         },
         startUpModul: "",
         searchBar: {

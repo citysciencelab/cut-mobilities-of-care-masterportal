@@ -24,8 +24,9 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
-            poi: true
+            orientation: "once",
+            poi: true,
+            fullScreen: true
         },
         footer: false,
         quickHelp: true,
@@ -39,6 +40,29 @@ define(function () {
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+             contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },            
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            }
+        },
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,

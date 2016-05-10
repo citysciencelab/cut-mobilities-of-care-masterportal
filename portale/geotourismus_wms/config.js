@@ -14,7 +14,7 @@ define(function () {
         },
         footer: true,
         quickHelp: true,
-        layerConf: "../components/lgv-config/diensteapiINTERNET.json",
+        layerConf: "../services-geotourismus.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
@@ -36,28 +36,28 @@ define(function () {
         menubar: true,
         scaleLine: true,
         isMenubarVisible: false,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: false,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         tools: {
-            gfi: false,
-            measure: false,
-            print: false,
-            coord: false,
-            draw: false,
-            record: false,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: false
+            }
         }
     };
 

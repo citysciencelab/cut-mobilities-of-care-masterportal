@@ -114,6 +114,10 @@ define(function () {
             routing: {
                 title: "Routenplaner",
                 glyphicon: "glyphicon-road"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
             }
         },
         menu: {

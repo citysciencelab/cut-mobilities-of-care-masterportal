@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/tree/catalogLayer/node",
     "config",
     "eventbus",
     "modules/searchbar/model" // nicht schön --> Konzept von layercatalog überarbeiten SD 02.09
-    ], function (Backbone, Node, Config, EventBus) {
+], function (Backbone, Radio, Node, Config, EventBus) {
 
     var TreeList = Backbone.Collection.extend({
 
@@ -49,6 +50,16 @@ define([
 
         //
         showLayerInTree: function (model) {
+            var layerModel = Radio.request("LayerList", "getLayerFindWhere", {id: model.id});
+
+            if (_.isUndefined(Radio.request("LayerList", "getLayerFindWhere", {id: model.id}))) {
+                Radio.trigger("LayerList", "addModel", model);
+                layerModel = Radio.request("LayerList", "getLayerFindWhere", {id: model.id});
+                if (_.isUndefined(layerModel) === false) {
+                    layerModel.set("selected", true);
+                }
+            }
+
             // öffnet den Tree
             $(".nav li:first-child").addClass("open");
             // öffnet die Geofachdaten
@@ -61,7 +72,7 @@ define([
             $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").addClass("glyphicon-plus-sign");
 
             this.forEach(function (element) {
-                if (model.get("type") !== undefined && model.get("type") === "nodeChild") {
+                if (layerModel === undefined && model.get("type") === "nodeChild") {
                     if (model.get("children")[0].get("node") === element.get("name")) {
                         element.set("isExpanded", true);
                         model.set("isExpanded", true);
@@ -73,16 +84,16 @@ define([
                     }
                 }
                 else {
-                    if (model.get("node") === element.get("name")) {
+                    if (layerModel.get("node") === element.get("name")) {
                         element.set("isExpanded", true);
                         _.each(element.get("childViews"), function (view) {
-                            if (view.model.get("name") === model.get("metaName") || view.model.get("name") === model.get("subfolder")) {
+                            if (view.model.get("name") === layerModel.get("metaName") || view.model.get("name") === layerModel.get("subfolder")) {
                                 view.model.set("isExpanded", true);
-                                if (model.get("type") === "nodeLayer") {
+                                if (layerModel.get("type") === "nodeLayer") {
                                     $(".layer-catalog-list").scrollTop(view.$el[0].offsetTop - 350);
                                 }
                                 else {
-                                    var modelID = _.where(view.model.get("children"), {cid: model.cid}),
+                                    var modelID = _.where(view.model.get("children"), {cid: layerModel.cid}),
                                         viewChildLayer = _.find(view.model.get("childViews"), function (view) {
                                             return view.model.cid === modelID[0].cid;
                                         });
@@ -90,17 +101,16 @@ define([
                                     $(".layer-catalog-list").scrollTop(viewChildLayer.$el[0].offsetTop - 350);
                                 }
                             }
-                            else if (view.model.get("name") === model.get("name")) {
+                            else if (view.model.get("name") === layerModel.get("name")) {
                                 $(".layer-catalog-list").scrollTop(view.$el[0].offsetTop - 350);
                             }
                         });
-                        model.set("selected", true);
+                        layerModel.set("selected", true);
                     }
                     else {
-                            element.set("isExpanded", false);
+                        element.set("isExpanded", false);
                     }
                 }
-
             });
         }
     });

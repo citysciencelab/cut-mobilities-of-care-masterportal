@@ -187,9 +187,7 @@ define([
                 this.set("transparence", this.get("transparence") - value);
             }
         },
-        getTransparence: function () {
-            return this.get("transparence");
-        },
+
         /**
          *
          */
@@ -298,6 +296,9 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        setSelected: function (value) {
+            this.set("selected", value);
         },
         getVisibility: function () {
             return this.get("visibility");
