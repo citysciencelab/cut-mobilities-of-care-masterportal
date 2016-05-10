@@ -10,10 +10,30 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "once",
             poi: true
         },
-        footer: true,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV Hamburg"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
@@ -22,6 +42,7 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
         tree: {
             type: "light",
+            saveSelection: false,
             layer: [
                 {id: "453", visible: true},
                 {id: "2056", visible: true, style: "2056", clusterDistance: 30, styleField: "kategorie"},
@@ -36,15 +57,11 @@ define(function () {
         },
         menubar: true,
         scaleLine: true,
-        isMenubarVisible: false,
+        isMenubarVisible: true,
         menuItems: {
             tree: {
                 title: "Themen",
                 glyphicon: "glyphicon-list"
-            },
-            tools: {
-                title: "Werkzeuge",
-                glyphicon: "glyphicon-wrench"
             },
             legend: {
                 title: "Legende",
@@ -57,6 +74,7 @@ define(function () {
             }
         },
         startUpModul: "",
+        attributions: true,
         tools: {
             gfi: {
                 title: "Informationen abfragen",

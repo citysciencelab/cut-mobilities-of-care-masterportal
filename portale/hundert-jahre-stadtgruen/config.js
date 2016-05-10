@@ -9,9 +9,7 @@ define(function () {
                 {id: "452", visibility: false},
                 {id: "627", visibility: true},  //icons
                 {id: "628", visibility: true},  //strecke
-                {id: "629", visibility: false},  //umring
-               //{id: "1132", visible: true, style: "1711", clusterDistance: 0, searchField: "", mouseHoverField: "name"}
-               
+                {id: "629", visibility: false}  //umring
             ]
         },
         simpleMap: false,

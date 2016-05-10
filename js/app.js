@@ -158,9 +158,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         new TreeFilterView();
                     });
                 }
+                require(["modules/mapMarker/view"], function (MapMarkerView) {
+                    new MapMarkerView();
+                });
                 if (_.has(Config, "searchBar") === true) {
-                    require(["modules/searchbar/view", "modules/mapMarker/view"], function (SearchbarView, MapMarkerView) {
-                        new MapMarkerView();
+                    require(["modules/searchbar/view"], function (SearchbarView) {
                         new SearchbarView(Config.searchBar, Config.searchBar.initString);
                     });
                 }
