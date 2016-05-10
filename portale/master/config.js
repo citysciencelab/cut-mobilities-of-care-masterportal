@@ -150,6 +150,7 @@ define(function () {
         * @property {string} [typename] - typename des WFS.
         * @property {string} [literalprefix] - prefix an das die ID drangehängt wird. da wird. Kommt beim request in den Filter.
         * @property {string} [imglink] - Link für den Marker.
+        * @property {string} [layerid] - ID des layers an den die Marker gekoppelt werden.
         */
         zoomtofeature: {
             url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",

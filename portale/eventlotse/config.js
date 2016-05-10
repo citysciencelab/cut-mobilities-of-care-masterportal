@@ -1,8 +1,8 @@
 define(function () {
 
     var config = {
-        title: "Eventlotse",
-        logo: "../img/hh-logo.png",
+//        title: "Eventlotse",
+//        logo: "../img/hh-logo.png",
         tree: {
             type: "light",
             layer: [
@@ -32,8 +32,8 @@ define(function () {
                 {id: "1933", visibility: false, styles: "geofox_stations", name: "HVV Haltestellen"},// HVV Haltestellen
                 {id: "945", visibility: false}, // Parkhäuser
                 {id: "942", visibility: false}, // ParkAndRide
-                {id: "4425", visibility: true, name: "Eventlotse-Flächen", style: "4425"} // WFS Eventlotse (4425)
-//                {id: "4426", visibility: false, name:"Eventlotse-Flächen WMS"} // WMS Eventlotse (4426)
+//                {id: "4425", visibility: true, name: "Eventlotse-Flächen", style: "4425"} // WFS Eventlotse (4425)
+                {id: "4426", visibility: true, name:"Eventlotse-Flächen WMS"} // WMS Eventlotse (4426)
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
@@ -44,7 +44,7 @@ define(function () {
             typename: "app:hamburgconvention",
             literalprefix: "APP_HAMBURGCONVENTION_",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4425"
+            layerid: "4426"
         },
 
         view: {
@@ -151,8 +151,17 @@ define(function () {
             coord: {
                 title: "Koordinate abfragen",
                 glyphicon: "glyphicon-screenshot"
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
             }
-        }
+        },
+        print: {
+            printID: "99999",
+            title: "Eventlotse",
+            gfi: true
+        },
     };
 
     return config;
