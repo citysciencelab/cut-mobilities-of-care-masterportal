@@ -24,12 +24,13 @@ define([
         initialize: function () {
             var channel = Radio.channel("kmlimport");
 
+            // Source von draw-modul holen
             channel.on({
                 "setSource": function (source) {
                     this.setSource(source);
                 },
-                "getSource":function () {
-                    Radio.trigger("draw", "setSource",this.getSource());
+                "getSource": function () {
+                    Radio.trigger("draw", "setSource", this.getSource());
                 }
             }, this);
 
@@ -89,47 +90,53 @@ define([
             this.emptyInput();
 
         },
-
-
+        // nach import:kml input leeren und button-style zurücksetzen
         emptyInput: function () {
             $("#fakebutton").html("Datei auswählen (keine ausgewählt)");
-            if(this.getText() !== "") {
+            if (this.getText() !== "") {
                 this.setText("");
                 $("#fakebutton").toggleClass("btn-primary");
-                this.setFormat(new ol.format.KML());
-                this.setSource(new ol.source.Vector({useSpatialIndex: false}));
-                this.setLayer(new ol.layer.Vector());
+//                this.setFormat(new ol.format.KML());
+//                this.setSource(new ol.source.Vector({useSpatialIndex: false}));
+//                this.setLayer(new ol.layer.Vector());
+            }
+        },
+        // features von KML (in "text" gespeichert) einlesen
+        getFeaturesFromKML: function () {
+            if (this.getText() !== "") {
+                var data = this.getText(),
+                    format = this.getFormat(),
+                    features = format.readFeatures(data);
+
+                this.setFormat(format);
+                this.setFeatures(features);
+            }
+            else {
+                EventBus.trigger("alert", "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus");
             }
         },
 
-        getFeaturesFromKML: function () {
-            var data = this.getText(),
-                format= this.getFormat(),
-                features = format.readFeatures(data
-//                    ,{
-//                    dataProjection: 'EPSG:4326',
-//                    featureProjection: 'EPSG:25832'
-//                    }
-            );
-            this.setFormat(format);
-            this.setFeatures(features);
-        },
+        // Workaround der Styles für Punkte und Text
         setStyle: function () {
             var features = this.getFeatures();
-             _.each(features, function(feature){
+
+             _.each(features, function (feature) {
                  var type = feature.getGeometry().getType();
+
+                 // wenn Punkt-Geometrie
                  if (type === "Point") {
+                     // wenn Text
                      if (feature.get("name") !== undefined) {
-                        feature.setStyle(this.getTextStyle(feature.get("name")));
+                         feature.setStyle(this.getTextStyle(feature.get("name")));
                      }
                      else {
                         feature.setStyle(null);
                      }
                  }
-            },this);
+            }, this);
         },
 
-         getTextStyle: function (name) {
+        getTextStyle: function (name) {
 
             return new ol.style.Style({
                 text: new ol.style.Text({
@@ -141,29 +148,19 @@ define([
             });
         },
 
+        // Koordinatentransformation
         transformFeatures: function () {
             var features = this.getFeatures();
 
             _.each(features, function (feature) {
-                var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832", "32"));
+                var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832"));
+
                 feature.getGeometry().setCoordinates(transCoord, "XY");
-            },this);
+            }, this);
             this.setFeatures(features);
         },
 
-        featuresToMap: function () {
-            var features = this.getFeatures(),
-                source = this.getSource(),
-                layer = this.getLayer(),
-                format = this.getFormat();
-
-            source.addFeatures(features);
-            layer.setSource(source);
-            EventBus.trigger("addLayer", layer);
-
-        },
-
-        getProjections: function (sourceProj, destProj, zone) {
+        getProjections: function (sourceProj, destProj) {
 //            proj4.defs(sourceProj, "+proj=utm +zone=" + zone + "ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
 
             return {
@@ -173,6 +170,7 @@ define([
         },
         transformCoords: function (geometry, projections) {
             var transCoord = [];
+
             switch (geometry.getType()) {
                 case "Polygon": {
                     transCoord = this.transformPolygon(geometry.getCoordinates(), projections, this);
@@ -214,7 +212,19 @@ define([
         },
         transformPoint: function (point, projections) {
             return proj4(projections.sourceProj, projections.destProj, point);
+        },
+        // Features in die Karte laden
+        featuresToMap: function () {
+            var features = this.getFeatures(),
+                source = this.getSource(),
+                layer = this.getLayer();
+
+            source.addFeatures(features);
+            layer.setSource(source);
+            EventBus.trigger("addLayer", layer);
+
         }
+
     });
 
     return ImportTool;

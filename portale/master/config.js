@@ -477,7 +477,7 @@ define(function () {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
                 extent: [454591, 5809000, 700000, 6075769],
-                suggestCount:10,
+                suggestCount: 10,
                 epsg: "EPSG:25832",
                 filter: "filter=(typ:*)",
                 score: 0.6
@@ -577,6 +577,10 @@ define(function () {
             draw: {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
+            },
+            kmlimport: {
+                title: "KML Import",
+                glyphicon: "glyphicon-import"
             },
             searchByCoord: {
                 title: "Koordinatensuche",

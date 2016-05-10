@@ -187,7 +187,7 @@ define(function () {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
             },
-            kmlimport:{
+            kmlimport: {
                 title: "KML Import",
                 glyphicon: "glyphicon-import"
             }
