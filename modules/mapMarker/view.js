@@ -64,6 +64,7 @@ define([
                     }
                 }
             }, this);
+            
             this.listenTo(EventBus, {
                 "mapHandler:clearMarker": this.clearMarker,
                 "mapHandler:zoomTo": this.zoomTo,
@@ -74,6 +75,7 @@ define([
             }, this);
 
             this.render();
+            this.model.askForMarkers();
         },
         render: function () {
             this.$el.html(this.template());

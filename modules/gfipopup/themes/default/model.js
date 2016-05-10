@@ -3,8 +3,9 @@ define([
     "config",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routable/view"
-], function (Backbone, Config, ImgView, VideoView, RoutableView) {
+    "modules/gfipopup/gfiObjects/routable/view",
+    "modules/core/util"
+], function (Backbone, Config, ImgView, VideoView, RoutableView, Util) {
     "use strict";
     var GFIContentDefaultModel = Backbone.Model.extend({
         /**
@@ -63,7 +64,7 @@ define([
                         val: imgView
                     });
                 }
-                else if (key === "video") {
+                else if (key === "video" && Util.isAny() === null) {
                     var videoView = new VideoView(val);
 
                     element[key] = "#";
@@ -71,6 +72,21 @@ define([
                         key: videoView.model.get("id"),
                         val: videoView
                     });
+                    if (_.has(element, "mobil_video")) {
+                        element.mobil_video = "#";
+                    }
+                }
+                else if (key === "mobil_video" && Util.isAny()) {
+                    var videoView = new VideoView(val);
+
+                    element[key] = "#";
+                    children.push({
+                        key: videoView.model.get("id"),
+                        val: videoView
+                    });
+                    if (_.has(element, "video")) {
+                        element.video = "#";
+                    }
                 }
                 // lösche leere Dummy-Einträge wieder raus.
                 element = _.omit(element, function (value) {
