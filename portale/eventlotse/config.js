@@ -32,7 +32,7 @@ define(function () {
                 {id: "1933", visibility: false, styles: "geofox_stations", name: "HVV Haltestellen"},// HVV Haltestellen
                 {id: "945", visibility: false}, // Parkhäuser
                 {id: "942", visibility: false}, // ParkAndRide
-                {id: "4425", visibility: true, name:"Eventlotse-Flächen", style:"4425"} // WFS Eventlotse (4425)
+                {id: "4425", visibility: true, name: "Eventlotse-Flächen", style: "4425"} // WFS Eventlotse (4425)
 //                {id: "4426", visibility: false, name:"Eventlotse-Flächen WMS"} // WMS Eventlotse (4426)
             ]
         },
@@ -40,10 +40,11 @@ define(function () {
         allowParametricURL: true,
         zoomtofeature: {
             url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version:"2.0.0",
+            version: "2.0.0",
             typename: "app:hamburgconvention",
             literalprefix: "APP_HAMBURGCONVENTION_",
-            imglink: "../img/location_eventlotse.svg"
+            imglink: "../img/location_eventlotse.svg",
+            layerid: "4425"
         },
 
         view: {

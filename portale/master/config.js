@@ -156,7 +156,8 @@ define(function () {
             version:"2.0.0",
             typename: "app:hamburgconvention",
             literalprefix: "APP_HAMBURGCONVENTION_",
-            imglink: "../img/location_eventlotse.svg"
+            imglink: "../img/location_eventlotse.svg",
+            layerid: "4425"
         },
         /**
         * @memberof config
