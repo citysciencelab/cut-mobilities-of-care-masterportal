@@ -132,6 +132,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                             new DrawView();
                         });
                     }
+                    if (_.has(Config.tools, "kmlimport") === true && !Util.isAny()) {
+                        require(["modules/tools/kmlimport/view"], function (ImportView) {
+                            new ImportView();
+                        });
+                    }
                     if (Config.tools.record === true) {
                         require(["modules/wfs_t/view"], function (WFS_TView) {
                             new WFS_TView();

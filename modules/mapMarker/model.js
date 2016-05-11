@@ -99,7 +99,7 @@ define([
 
         // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der BBOX pro Feature
         askForMarkers: function () {
-            if (Config.zoomtofeature) {
+            if (_.has(Config, "zoomtofeature")) {
                 var centers = Radio.request("zoomtofeature", "getCenterList"),
                     imglink = Config.zoomtofeature.imglink;
 
@@ -139,7 +139,7 @@ define([
                     }
                     else {
                         EventBus.trigger("addOverlay", marker);
-                    } 
+                    }
                 });
             }
         }

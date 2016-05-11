@@ -181,7 +181,6 @@ define([
              */
             prepareDownloadButtonNonIE: function () {
                 var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.getData());
-
                 $(this.getDlBtnSel()).attr("href", url);
 
                 var that = this;
@@ -351,7 +350,12 @@ define([
                 var format = new ol.format.KML();
 
                 _.each(features, function (feature) {
-                    var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25833", "EPSG:4326", "32"));
+                    var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
+
+                    //für den Download nach einem Import! Z-Koordinate absägen
+                    if (transCoord.length === 3) {
+                        transCoord.pop();
+                    }
 
                     feature.getGeometry().setCoordinates(transCoord, "XY");
 
