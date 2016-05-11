@@ -14,6 +14,7 @@ define([
                 stopEvent: false
             }),
             wkt: "",
+            markers:[],
             source: new ol.source.Vector()
         },
         initialize: function () {
@@ -22,7 +23,9 @@ define([
 //            }));
 //            EventBus.trigger("addLayer", this.get("layer"));
             EventBus.trigger("addOverlay", this.get("marker"));
-
+            this.listenTo(EventBus, {
+                "layerlist:sendVisiblelayerList": this.checkLayer
+            });
         },
 
         getExtentFromString: function () {
@@ -93,30 +96,52 @@ define([
 
             return wkt;
         },
-        
+
         // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der BBOX pro Feature
         askForMarkers: function () {
-            var centers = Radio.request("zoomtofeature", "getCenterList"),
-                imglink = Config.zoomtofeature.imglink;
-            
-            _.each(centers, function (center, i){
-                var id = "featureMarker" +i;
-                
-                // lokaler Pfad zum IMG-Ordner ist anders
-                $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Util.getPath(imglink) + "'></div>");
-                
-                var marker = new ol.Overlay({
-                    id: id,
-                    positioning: "bottom-center",
-                    element: document.getElementById(id),
-                    stopEvent: false
+            if (Config.zoomtofeature) {
+                var centers = Radio.request("zoomtofeature", "getCenterList"),
+                    imglink = Config.zoomtofeature.imglink;
+
+                _.each(centers, function (center, i){
+                    var id = "featureMarker" +i;
+
+                    // lokaler Pfad zum IMG-Ordner ist anders
+                    $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Util.getPath(imglink) + "'></div>");
+
+                    var marker = new ol.Overlay({
+                        id: id,
+                        positioning: "bottom-center",
+                        element: document.getElementById(id),
+                        stopEvent: false
+                    });
+
+                    marker.setPosition(center);
+                    var markers = this.get("markers");
+                    markers.push(marker);
+                    this.set("markers", markers);
+                    EventBus.trigger("addOverlay", marker);
+
+                },this);
+                EventBus.trigger("layerlist:getVisiblelayerList");
+            }
+        },
+        checkLayer: function (layerlist) {
+            if (Config.zoomtofeature) {
+                var layer = _.find(layerlist,{id:Config.zoomtofeature.layerid});
+
+                EventBus.trigger("mapMarker:getMarkers");
+                var markers = this.get("markers");
+
+                _.each(markers, function (marker) {
+                    if (layer === undefined) {
+                        EventBus.trigger("removeOverlay", marker);
+                    }
+                    else {
+                        EventBus.trigger("addOverlay", marker);
+                    } 
                 });
-               
-                marker.setPosition(center);
-                EventBus.trigger("addOverlay", marker);
-                
-            },this);
-            
+            }
         }
     });
 
