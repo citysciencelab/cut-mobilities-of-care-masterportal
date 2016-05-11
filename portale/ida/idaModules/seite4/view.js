@@ -14,8 +14,7 @@ define([
         },
         initialize: function (params, brwList, nutzung, produkt, jahr) {
             this.listenTo(this.model, "change:result", this.refreshResult),
-            this.listenTo(this.model, "change:error", this.refreshError),
-            this.listenTo(this.model, "change:parameter", this.refreshParameter);
+            this.listenTo(this.model, "change:error", this.refreshError);
 
             this.model.set("params", params),
             this.model.set("nutzung", nutzung),
@@ -35,19 +34,16 @@ define([
             $("#seite_vier").show();
         },
         refreshResult: function () {
-            var page = this.model.get("result");
+            var page = this.model.get("result"),
+                filepath = this.model.get("filepath");
 
+            $("#ok_p").append("/Data/IDABerechnungen/" + filepath + "</br>");
             $("#ok_p").append(page);
         },
         refreshError: function () {
             var page = this.model.get("error");
 
             $("#fehler_p").append(page);
-        },
-        refreshParameter: function () {
-            var page = this.model.get("parameter");
-
-            $("#ok_p").append(page);
         }
     });
 

@@ -274,106 +274,17 @@ define([
         handleIDAResponse: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameIDAUmrechnung")) {
                 var result = $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent,
-                    error = $(obj.data).find("wps\\:error,error")[0].textContent,
+                    filepath = $(obj.data).find("wps\\:filepath,filepath"),
                     params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0],
                     html = "";
 
-                this.set("result", result);
-                this.set("error", error.replace(/\n/g, "<br>"));
-                if (params.hasAttribute("NUTZUNG")) {
-                    html += "</br>NUTZUNG " + params.getAttribute("NUTZUNG");
+                if (filepath) {
+                    this.set("filepath", filepath[0].textContent);
+                    this.set("result", result);
                 }
-                if (params.hasAttribute("PRODUKT")) {
-                    html += "</br>PRODUKT " + params.getAttribute("PRODUKT");
+                else {
+                    this.set("error", result);
                 }
-                if (params.hasAttribute("DATU")) {
-                    html += "</br>DATU " + params.getAttribute("DATU");
-                }
-                if (params.hasAttribute("STADTTEILNAME")) {
-                    html += "</br>STADTTEILNAME " + params.getAttribute("STADTTEILNAME");
-                }
-                if (params.hasAttribute("NORMBRW")) {
-                    html += "</br>NORMBRW " + params.getAttribute("NORMBRW");
-                }
-                if (params.hasAttribute("AKTBRW")) {
-                    html += "</br>AKTBRW " + params.getAttribute("AKTBRW");
-                }
-                if (params.hasAttribute("WGFZ")) {
-                    html += "</br>WGFZ " + params.getAttribute("WGFZ");
-                }
-                if (params.hasAttribute("FLAE")) {
-                    html += "</br>FLAE " + params.getAttribute("FLAE");
-                }
-                if (params.hasAttribute("BAUW")) {
-                    html += "</br>BAUW " + params.getAttribute("BAUW");
-                }
-                if (params.hasAttribute("STRL")) {
-                    html += "</br>STRL " + params.getAttribute("STRL");
-                }
-                if (params.hasAttribute("GESL")) {
-                    html += "</br>GESL " + params.getAttribute("GESL");
-                }
-                if (params.hasAttribute("BAUJ")) {
-                    html += "</br>BAUJ " + params.getAttribute("BAUJ");
-                }
-                if (params.hasAttribute("MODG")) {
-                    html += "</br>MODG " + params.getAttribute("MODG");
-                }
-                if (params.hasAttribute("WOFL")) {
-                    html += "</br>WOFL " + params.getAttribute("WOFL");
-                }
-                if (params.hasAttribute("ZAWO")) {
-                    html += "</br>ZAWO " + params.getAttribute("ZAWO");
-                }
-                if (params.hasAttribute("GARI")) {
-                    html += "</br>GARI " + params.getAttribute("GARI");
-                }
-                if (params.hasAttribute("GARA")) {
-                    html += "</br>GARA " + params.getAttribute("GARA");
-                }
-                if (params.hasAttribute("STEA")) {
-                    html += "</br>STEA " + params.getAttribute("STEA");
-                }
-                if (params.hasAttribute("EGFL")) {
-                    html += "</br>EGFL " + params.getAttribute("EGFL");
-                }
-                if (params.hasAttribute("OGFL")) {
-                    html += "</br>OGFL " + params.getAttribute("OGFL");
-                }
-                if (params.hasAttribute("WONKM")) {
-                    html += "</br>WONKM " + params.getAttribute("WONKM");
-                }
-                if (params.hasAttribute("SONKM")) {
-                    html += "</br>SONKM " + params.getAttribute("SONKM");
-                }
-                if (params.hasAttribute("RLZ")) {
-                    html += "</br>RLZ " + params.getAttribute("RLZ");
-                }
-                if (params.hasAttribute("JEZ")) {
-                    html += "</br>JEZ " + params.getAttribute("JEZ");
-                }
-                if (params.hasAttribute("STST")) {
-                    html += "</br>STST " + params.getAttribute("STST");
-                }
-                if (params.hasAttribute("FKWERT")) {
-                    html += "</br>FKWERT " + params.getAttribute("FKWERT");
-                }
-                if (params.hasAttribute("SACH")) {
-                    html += "</br>SACH " + params.getAttribute("SACH");
-                }
-                if (params.hasAttribute("ENER")) {
-                    html += "</br>ENER " + params.getAttribute("ENER");
-                }
-                if (params.hasAttribute("KELL")) {
-                    html += "</br>KELL " + params.getAttribute("KELL");
-                }
-                if (params.hasAttribute("LIFT")) {
-                    html += "</br>LIFT " + params.getAttribute("LIFT");
-                }
-                if (params.hasAttribute("EBK")) {
-                    html += "</br>EBK " + params.getAttribute("EBK");
-                }
-                this.set("parameter", html);
             }
         }
     });
