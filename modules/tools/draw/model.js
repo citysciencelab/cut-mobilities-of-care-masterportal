@@ -86,6 +86,22 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("draw");
+
+            channel.on({
+                "setSource": function (source) {
+                    EventBus.trigger("removeLayer", this.get("layer"));
+                    this.setSource(source);
+                    this.set("layer", new ol.layer.Vector({
+                        source: this.get("source")
+                    }));
+                    EventBus.trigger("addLayer", this.get("layer"));
+                },
+                "getSource": function () {
+                    Radio.trigger("kmlimport", "setSource",this.getSource());
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "winParams": this.setStatus,
                 "getDrawlayer": this.getLayer
@@ -119,8 +135,18 @@ define([
 
             this.get("selectClick").setActive(false);
             EventBus.trigger("addInteraction", this.get("selectClick"));
+            Radio.trigger("kmlimport", "getSource");
         },
 
+        setSource: function (value) {
+            this.set("source", value);
+            var layer = this.get("layer");
+            layer.setSource(value);
+            this.set("layer", layer);
+        },
+        getSource: function () {
+            return this.get("source");
+        },
         setStatus: function (args) {
             if (args[2] === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
