@@ -48,6 +48,13 @@ define([
                 },
                 "getResponse": function () {
                     return this.response;
+                },
+                "getResponseByMetaId": function (metaId) {
+                    var layersByMetaId = _.filter(this.response, function (layer) {
+                        return layer.datasets[0].md_id === metaId;
+                    }, this);
+
+                    return layersByMetaId;
                 }
             }, this);
 
