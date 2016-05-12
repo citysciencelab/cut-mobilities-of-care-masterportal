@@ -114,6 +114,7 @@ define([
                 searchString = searchString.replace(/ö/g, 'oe');
                 searchString = searchString.replace(/ä/g, 'ae');
                 searchString = searchString.replace(/ü/g, 'ue');
+                searchString = searchString.replace(/ß/g, 'ss');
                 var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
                  if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
