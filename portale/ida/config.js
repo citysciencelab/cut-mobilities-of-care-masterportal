@@ -6,7 +6,7 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
         wpsID: "1001",
         minJahr: 1973,
-        maxJahr: 2013,
+        maxJahr: 2014,
         searchbar: {
             gazetteer: {
                 minChars: 3,
