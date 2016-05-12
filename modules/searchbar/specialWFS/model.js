@@ -61,13 +61,14 @@ define([
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
+                searchString = searchString.replace(/[()]/g, '\\$&');
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 if (this.get("olympia").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInOlympiaFeatures(searchStringRegExp);
                 }
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInBPlans(searchStringRegExp);
+                    this.searchInBPlans(searchString);
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
@@ -108,10 +109,14 @@ define([
         /**
         *
         */
-        searchInBPlans: function (searchStringRegExp) {
+        searchInBPlans: function (searchString) {
             _.each(this.get("bPlans"), function (bPlan) {
+                searchString = searchString.replace(/ö/g, 'oe');
+                searchString = searchString.replace(/ä/g, 'ae');
+                searchString = searchString.replace(/ü/g, 'ue');
+                var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (bPlan.name.search(searchStringRegExp) !== -1) {
+                 if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
                     EventBus.trigger("searchbar:pushHits", "hitList", bPlan);
                 }
             }, this);
