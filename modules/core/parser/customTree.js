@@ -7,45 +7,39 @@ define([
 
     CustomTreeParser = Parser.extend({
         initialize: function () {
-            console.log(this);
-            console.log("custom");
-            this.parseTree(this.get("Hintergrundkarten"), "BaseLayer");
-            this.parseTree(this.get("Fachdaten"), "OverLayer");
+            this.parseTree(this.getBaselayer(), "Baselayer");
+            this.parseTree(this.getOverlayer(), "Overlayer");
         },
 
         /**
-         *
+         * parsed response.Themenconfig
+         * @param  {Object} object - Baselayer | Overlayer | Folder
+         * @param  {string} parentId
          */
-        parseTree: function (value, parentId) {
-            _.each(value, function (element) {
-                if (_.has(element, "Layer")) {
-                    _.each(element.Layer, function (layer) {
-                        // HVV :(
-                        if (_.has(layer, "styles") && layer.styles.length > 1) {
-                            _.each(layer.styles, function (style) {console.log(this);
-                                this.getItemList().push(_.extend({type: "layer", parentId: parentId, id: layer.id, layerId: layer.id + style.toLowerCase()}, _.omit(layer, "id")));
-                            }, this);
-                        }
-                        else {
-                            this.getItemList().push(_.extend({type: "layer", parentId: parentId, id: layer.id, layerId: layer.id}, _.omit(layer, "id")));
-                        }
-                    }, this);
-                }
-                if (_.has(element, "Ordner")) {
-                    _.each(element.Ordner, function (folder) {
-                        folder.id = _.uniqueId(folder.Titel);
-                        this.getItemList().push({
-                            type: "folder",
-                            parentId: parentId,
-                            title: folder.Titel,
-                            id: folder.id,
-                            isLeafFolder: (!_.has(folder, "Ordner")) ? true : false
-                        });
-                        // rekursiver Aufruf
-                        this.parseTree([folder], folder.id);
-                    }, this);
-                }
-            }, this);
+        parseTree: function (object, parentId) {
+            if (_.has(object, "Layer")) {
+                _.each(object.Layer, function (layer, index) {
+                    // HVV :(
+                    if (_.has(layer, "styles") && layer.styles.length > 1) {
+                        _.each(layer.styles, function (style) {
+                            this.addItem(_.extend({type: "layer", parentId: parentId, layerId: layer.id + style.toLowerCase(), level: index}, layer));
+                        }, this);
+                    }
+                    else {
+                        this.addItem(_.extend({type: "layer", parentId: parentId, layerId: layer.id, level: index}, layer));
+                    }
+                }, this);
+            }
+            if (_.has(object, "Ordner")) {
+                _.each(object.Ordner, function (folder, index) {
+                    var isLeafFolder = (!_.has(folder, "Ordner")) ? true : false;
+
+                    folder.id = _.uniqueId(folder.Titel);
+                    this.addItem({type: "folder", parentId: parentId, title: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: index});
+                    // rekursiver Aufruf
+                    this.parseTree(folder, folder.id);
+                }, this);
+            }
         }
     });
 

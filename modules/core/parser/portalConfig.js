@@ -21,25 +21,13 @@ define([
         initialize: function () {
             var channel = Radio.channel("Parser");
 
-            channel.listenTo(this, {
-                "fetchSuccess": function () {console.log("fertig");
-                    channel.trigger("ich_bin_fertig");
+            channel.reply({
+                "getItemList": function () {
+                    return this.getItemList()
                 }
-            });
+            }, this);
 
-            this.fetchConfig();
-        },
-
-        /**
-         *
-         */
-        fetchConfig: function () {
-            this.fetch({
-                context: this,
-                success: function () {
-                    this.trigger("fetchSuccess");
-                }
-            });
+            this.fetch();
         },
 
         /**
@@ -59,16 +47,35 @@ define([
         },
 
         /**
-         *
+         * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) hinzu
+         * @param {Object} obj - Item
          */
-        createItem: function () {
+        addItem: function (obj) {
+            this.getItemList().push(obj);
         },
 
         /**
-         *
+         * Getter für das Attribut "itemList"
+         * @return {Array}
          */
         getItemList: function () {
             return this.get("itemList");
+        },
+
+        /**
+         * Getter für Attribut "Hintergrundkarten"
+         * @return {Object}
+         */
+        getBaselayer: function () {
+            return this.get("Hintergrundkarten");
+        },
+
+         /**
+          * Getter für Attribut "Fachdaten"
+          * @return {Object}
+          */
+        getOverlayer: function () {
+            return this.get("Fachdaten");
         }
     });
 
