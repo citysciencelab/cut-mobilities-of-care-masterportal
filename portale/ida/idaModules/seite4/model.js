@@ -205,6 +205,7 @@ define([
                 LAGE = JSON.stringify(this.get("lage"));
 
             this.set("BRWJSON", BRWJSON);
+            this.set("LAGE", LAGE);
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("nutzung", "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("produkt", "string"));
             dataInputs += "<wps:Input>";
