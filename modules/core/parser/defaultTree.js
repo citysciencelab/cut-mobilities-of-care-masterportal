@@ -40,7 +40,7 @@ define([
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function (layerList) {
-            var baseLayerIds = _.pluck(this.getHintergrundkarten().Layer, "id"),
+            var baseLayerIds = _.pluck(this.getBaselayer().Layer, "id"),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return (_.contains(baseLayerIds, layer.id)) ? "baselayers" : "overlays";
@@ -120,10 +120,10 @@ define([
             _.each(tree, function (category) {
                 // Unterordner erzeugen
                 this.addItems(category.folder, {parentId: category.id, isLeaffolder: true, level: 1});
-            debugger;
+                // Layer in Unterordner
                 this.addItems(category.layer, {parentId: category.id, level: 1});
                 _.each(category.folder, function (folder) {
-                    // Layer in der untertestenEbene erzeugen
+                    // Layer in der untertesten Ebene erzeugen
                     this.addItems(folder.layer, {parentId: folder.id, level: 2});
                 }, this);
             }, this);
