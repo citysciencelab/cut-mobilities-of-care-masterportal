@@ -47,7 +47,7 @@ define([
             this.model.paramChanged(evt.target);
         },
         weiter: function () {
-            new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"));
+            new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"), this.model.get("lage"));
         },
         show: function () {
             this.model.calcDefaultsForTemplate();

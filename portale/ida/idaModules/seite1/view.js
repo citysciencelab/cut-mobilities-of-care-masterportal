@@ -19,7 +19,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, "change:jahr", this.checkParameter),
             this.listenTo(this.model, "change:nutzung", this.checkParameter),
-            this.listenTo(this.model, "change:produkt", this.checkParameter)
+            this.listenTo(this.model, "change:produkt", this.checkParameter),
             this.listenTo(this.model, "change:lage", this.checkParameter);
 
             this.model.reset();

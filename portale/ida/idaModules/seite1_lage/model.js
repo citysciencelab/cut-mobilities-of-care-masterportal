@@ -22,7 +22,7 @@ define([
             this.listenTo(this, "change:flurStrasse", this.flurstueckInput);
         },
         flurstueckInput: function () {
-            if (this.get("flurFlurstueck") !== "" && this.get("flurGemarkung") !== "" && this.get("flurStrasse") !== "" ) {
+            if (this.get("flurFlurstueck") !== "" && this.get("flurGemarkung") !== "" && this.get("flurStrasse") !== "") {
                 EventBus.trigger("seite1_lage:newLage", {
                     type: "Flurstück",
                     gemarkung: this.get("flurGemarkung"),

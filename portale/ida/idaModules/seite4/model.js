@@ -12,6 +12,7 @@ define([
             nutzung: "",
             produkt: "",
             jahr: "",
+            lage: "",
             page: "",
             wpsWorkbenchnameBRW: "BRWUmrechnungHH",
             wpsWorkbenchnameIDAUmrechnung: "IDABerechnungHH"
@@ -200,7 +201,8 @@ define([
         requestIDA: function () {
             var params = this.get("params"),
                 dataInputs = "<wps:DataInputs>",
-                BRWJSON = JSON.stringify(this.get("brwList"));
+                BRWJSON = JSON.stringify(this.get("brwList")),
+                LAGE = JSON.stringify(this.get("lage"));
 
             this.set("BRWJSON", BRWJSON);
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("nutzung", "string"));
@@ -237,6 +239,7 @@ define([
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FKWERT", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("SACH", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("BRWJSON", "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("LAGE", "string"));
             dataInputs += "</wps:DataInputs>";
             EventBus.trigger("wps:request", {
                 workbenchname: this.get("wpsWorkbenchnameIDAUmrechnung"),

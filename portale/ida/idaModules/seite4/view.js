@@ -12,7 +12,7 @@ define([
             "click #seite3_weiter": "weiter",
             "change #requestedParamsListe": "paramChanged"
         },
-        initialize: function (params, brwList, nutzung, produkt, jahr) {
+        initialize: function (params, brwList, nutzung, produkt, jahr, lage) {
             this.listenTo(this.model, "change:result", this.refreshResult),
             this.listenTo(this.model, "change:error", this.refreshError);
 
@@ -21,6 +21,7 @@ define([
             this.model.set("produkt", produkt),
             this.model.set("jahr", jahr),
             this.model.set("brwList", brwList);
+            this.model.set("lage", lage);
 
             this.model.startCalculation();
             this.show();
