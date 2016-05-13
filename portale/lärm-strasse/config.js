@@ -15,7 +15,34 @@ define(function () {
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
-        footer: true,
+         controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: "once",
+            poi: false
+         },
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "ttt"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
@@ -62,11 +89,7 @@ define(function () {
             gfi: false
         },
         tools: {
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
+            
             print: {
                 title: "Karte drucken",
                 glyphicon: "glyphicon-print"
