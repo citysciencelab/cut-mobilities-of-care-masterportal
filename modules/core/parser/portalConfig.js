@@ -31,8 +31,8 @@ define([
          */
         parse: function (response) {
             if (response.Portalconfig.Baumtyp === "default") {
-                require(["modules/core/parser/defaultTree"], function (DefaultTree) {
-                    new DefaultTree();
+                require(["modules/core/parser/defaultTree"], function (DefaultTreeParser) {
+                    new DefaultTreeParser(response.Themenconfig);
                 });
             }
             else {
@@ -52,6 +52,15 @@ define([
                 delete obj.visibility;
             }
             this.getItemList().push(obj);
+        },
+
+        /**
+         *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
+         */
+        addItems: function (objs, attr) {
+            _.each(objs, function (obj) {
+                this.addItem(_.extend(obj, attr));
+            }, this);
         },
 
         /**

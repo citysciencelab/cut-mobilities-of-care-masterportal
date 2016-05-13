@@ -271,7 +271,7 @@ define([
 
         },
         /**
-        * Holt sich die Liste detr Layer aus dem Layermodul
+        * Holt sich die Liste der Layer aus dem Layermodul
         * und erzeugt daraus einen Baum
         */
         parseLayerList: function () {
