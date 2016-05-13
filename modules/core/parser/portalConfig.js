@@ -1,11 +1,13 @@
 define([
     "backbone",
-    "backbone.radio"
+    "backbone.radio",
+    "modules/core/modelList/list"
 ], function () {
 
-     var Backbone = require("backbone"),
-         Radio = require("backbone.radio"),
-         Parser;
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ModelList = require("modules/core/modelList/list"),
+        Parser;
 
     Parser = Backbone.Model.extend({
         defaults: {
@@ -20,12 +22,6 @@ define([
         url: "config.json",
         initialize: function () {
             var channel = Radio.channel("Parser");
-
-            channel.reply({
-                "getItemList": function () {
-                    return this.getItemList()
-                }
-            }, this);
 
             this.fetch();
         },
@@ -51,6 +47,10 @@ define([
          * @param {Object} obj - Item
          */
         addItem: function (obj) {
+            if (!_.isUndefined(obj.visibility)) {
+                obj.isVisibleInMap = obj.visibility;
+                delete obj.visibility;
+            }
             this.getItemList().push(obj);
         },
 
@@ -76,6 +76,14 @@ define([
           */
         getOverlayer: function () {
             return this.get("Fachdaten");
+        },
+
+        /**
+         * [createModelList description]
+         * @return {[type]} [description]
+         */
+        createModelList: function () {
+            new ModelList(this.getItemList());
         }
     });
 
