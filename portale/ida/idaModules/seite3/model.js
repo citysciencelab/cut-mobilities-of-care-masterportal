@@ -25,9 +25,9 @@ define([
         calcDefaultsForTemplate: function () {
             var brwList = this.get("brwList"),
                 aktBRW = _.filter(brwList, {art: "Akt.BRW"})[0],
-                defaultFlae = aktBRW.flae ? aktBRW.flae : 1000,
-                defaultBauw = aktBRW.bauw ? aktBRW.bauw : "eh",
-                defaultWGFZ = aktBRW.wgfz ? aktBRW.wgfz : 1.0;
+                defaultFlae = aktBRW && aktBRW.flae ? aktBRW.flae : 1000,
+                defaultBauw = aktBRW && aktBRW.bauw ? aktBRW.bauw : "eh",
+                defaultWGFZ = aktBRW && aktBRW.wgfz ? aktBRW.wgfz : 1.0;
 
             this.set("defaultFlae", defaultFlae);
             this.set("defaultBauw", defaultBauw);
