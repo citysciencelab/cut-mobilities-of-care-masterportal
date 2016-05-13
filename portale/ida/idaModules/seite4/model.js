@@ -283,7 +283,7 @@ define([
                     html = "";
 
                 if (filepath) {
-                    this.set("filepath", filepath[0].textContent);
+                    this.set("filepath", filepath.textContent);
                     this.set("result", result);
                 }
                 else {
