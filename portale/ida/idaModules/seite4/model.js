@@ -278,7 +278,7 @@ define([
         handleIDAResponse: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameIDAUmrechnung")) {
                 var result = $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent,
-                    filepath = $(obj.data).find("wps\\:filepath,filepath"),
+                    filepath = $(obj.data).find("wps\\:filepath,filepath")[0],
                     params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0],
                     html = "";
 
