@@ -1,5 +1,5 @@
 {
-  "Portalconfig": [
+  "Portalconfig":
     {
       "PortalTitle": "GeoViewer",
       "menubar": true,
@@ -26,10 +26,10 @@
         "poi": true,
         "fullScreen": true
       }],
-      "scaleLine": true
-    }
-  ],
-  "Themenconfig": [
+      "scaleLine": true,
+      "Baumtyp": "custom"
+    },
+  "Themenconfig":
     {
       "Hintergrundkarten": [
         {
@@ -396,5 +396,4 @@
         }
       ]
     }
-  ]
 }
