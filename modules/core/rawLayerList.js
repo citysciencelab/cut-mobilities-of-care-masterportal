@@ -32,11 +32,6 @@ define([
          * @return {Object[]} response - Objekte aus der services.json
          */
         parse: function (response) {
-            // Im FHH-Atlas und GeoOnline werden nur WMS angezeigt --> tree.type = default
-            // Und nur Layer die einem Metadatensatz zugeordnet sind
-            if (Config.tree.type === "default") {
-                response = this.filterForDefault(response);
-            }
             // Es gibt Layer in einem Dienst, die für unterschiedliche Portale unterschiedliche Daten/GFIs liefern --> z.B. Hochwasserrisikomanagement
             // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gelöscht
             if (_.has(Config.tree, "layerIDsToIgnore")) {
@@ -57,17 +52,6 @@ define([
             }
 
             return response;
-        },
-
-        /**
-         * Filtert alle Objekte aus der response, die kein WMS sind und min. einem Datensatz zugordnet sind
-         * @param  {Object[]} response - Objekte aus der services.json
-         * @return {Object[]} response - Objekte aus der services.json
-         */
-        filterForDefault: function (response) {
-            return _.filter(response, function (element) {
-                return (element.datasets.length > 0 && element.typ === "WMS") ;
-            });
         },
 
         /**
