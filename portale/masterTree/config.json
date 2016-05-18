@@ -2,30 +2,28 @@
   "Portalconfig":
     {
       "PortalTitle": "GeoViewer",
-      "menubar": true,
-      "menu": [{
-        "searchBar": true,
-        "tools": true,
+      "searchBar": true,
+      "menu": {
+        "tools": {
+          "parcelSearch": true,
+          "gfi": true,
+          "print": true,
+          "coord": true,
+          "measure": true,
+          "draw": true,
+          "searchByCoord": true
+        },
         "legend": true,
         "routing": true,
         "addWMS": true
-      }],
-      "tools": [{
-        "parcelSearch": true,
-        "gfi": true,
-        "print": true,
-        "coord": true,
-        "measure": true,
-        "draw": true,
-        "searchByCoord": true
-      }],
-      "controls": [{
+      },
+      "controls": {
         "zoom": true,
         "toggleMenu": true,
         "orientation": "once",
         "poi": true,
         "fullScreen": true
-      }],
+      },
       "scaleLine": true,
       "Baumtyp": "custom"
     },

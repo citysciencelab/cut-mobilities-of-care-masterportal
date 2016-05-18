@@ -10,7 +10,8 @@ define([
             // true wenn der Layer sichtbar ist
             isVisibleInMap: false,
             // true wenn das Item in den Fachdaten "gechecked" ist
-            isChecked: false
+            isChecked: false,
+            isVisibleInTree: false
         },
         initialize: function () {
             this.listenToOnce(this, {
@@ -23,6 +24,24 @@ define([
         createLayerAttr: function (model) {
             // console.log(this);
             // console.log(1224);
+        },
+        setIsVisibleInMap: function (isVisibleInMap) {
+            this.set("isVisibleInMap", isVisibleInMap);
+        },
+        getIsVisibleInMap: function () {
+            this.get("isVisibleInMap");
+        },
+        setIsChecked: function (isChecked) {
+            this.set("isChecked", isChecked);
+        },
+        getIsChecked: function () {
+            this.get("isChecked");
+        },
+        setIsVisibleInTree: function (isVisibleInTree) {
+            this.set("isVisibleInTree", isVisibleInTree);
+        },
+        getIsVisibleInTree: function () {
+            this.get("isVisibleInTree");
         }
     });
 

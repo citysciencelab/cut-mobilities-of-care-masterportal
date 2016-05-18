@@ -24,7 +24,7 @@ define(function () {
            gfi: false
        },
        proxyURL: "/cgi-bin/proxy.cgi",
-       menubar: true,
+       menubar: false,
        mouseHover: true,
        scaleLine: true,
        isMenubarVisible: true,

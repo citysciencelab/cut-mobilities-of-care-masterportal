@@ -1,28 +1,34 @@
 define([
     "backbone",
-    "modules/core/modelList/layer",
-    "modules/core/modelList/folder",
-    "modules/core/modelList/tool"
+    "modules/core/modelList/layer/model",
+    "modules/core/modelList/folder/model",
+    "modules/core/modelList/tool/model"
 ], function () {
 
     var Backbone = require("backbone"),
-        Layer = require("modules/core/modelList/layer"),
-        Folder = require("modules/core/modelList/folder"),
-        Tool = require("modules/core/modelList/tool"),
-        ModelList;
+        Layer = require("modules/core/modelList/layer/model"),
+        Folder = require("modules/core/modelList/folder/model"),
+        Tool = require("modules/core/modelList/tool/model"),
+        ModelList = Backbone.Collection.extend({
+            initialize: function () {
+               // var channel = Radio.channel("ModelList");
+            },
 
-    ModelList = Backbone.Collection.extend({
-        model: function (attrs, options) {
-            if (attrs.type === "layer") {
-                return new Layer(attrs, options);
+            /**
+             * erzeugt die Werkzeugliste im Baum
+             */
+            addToolItems: function () {},
+            model: function (attrs, options) {
+                if (attrs.type === "layer") {
+                    return new Layer(attrs, options);
+                }
+                else if (attrs.type === "folder") {
+                    return new Folder(attrs, options);
+                }
+                else if (attrs.type === "tool") {
+                    return new Tool(attrs, options);
+                }
             }
-            else if (attrs.type === "folder") {
-                return new Folder(attrs, options);
-            }
-            else if (attrs.type === "tool") {
-                return new Tool(attrs, options);
-            }
-        }
     });
 
     return ModelList;

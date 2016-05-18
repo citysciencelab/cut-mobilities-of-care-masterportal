@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<div class="base-layer-catalog">
+    <div class="header">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        <span class="control-label">Hintergrundkarten</span>
+        <span class="glyphicon glyphicon-pushpin rotate-pin-back pull-right" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
+        <span class="glyphicon glyphicon-adjust rotate-adjust-back pull-right" data-toggle="tooltip" data-placement="bottom" title="Kartenhintergrund grau/weiß"></span>
+        <% if (typeof quickHelp !== "undefined" && quickHelp === true) { %>
+        <span class="glyphicon glyphicon-question-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Themenbaum Hilfe"></span>
+        <% } %>
+    </div>
+    <div class="content">
+    </div>
+</div>
+<div class="layer-catalog">
+    <div class="header">
+        <span class="glyphicon glyphicon-minus-sign"></span>
+        <span class="control-label">Fachdaten</span>
+        <% if (typeof type !== "undefined" && type === "default") { %>
+        <form class="form-inline pull-right hidden-xs">
+            <div class="form-group form-group-sm">
+                <span class="control-label layer-catalog-select-label">Kategorie</span>
+                <select class="form-control input-sm layer-catalog-select">
+                    <% _.each(topicList, function (topic) { %>
+                        <% if (topic.toLowerCase() === currentSelection) { %>
+                            <option <% print ("SELECTED") %>><%= topic %></option>
+                        <% } else { %>
+                            <option><%= topic %></option>
+                    <% }}); %>
+                </select>
+            </div>
+        </form>
+        <% } %>
+    </div>
+    <div class="content">
+    </div>
+</div>
+<div class="layer-catalog-extern">
+    <div class="header">
+        <span class="glyphicon glyphicon-minus-sign"></span>
+        <span class="control-label">Externe</span>
+    </div>
+    <div class="content">
+    </div>
+</div>
+
+<div class="layer-selection">
+    <div class="header">
+        <span class="glyphicon glyphicon-minus-sign"></span>
+        <span class="control-label">Auswahl der Karten</span>
+        <% if (typeof saveSelection !== "undefined" && saveSelection === true) { %>
+        <div class="layer-selection-save pull-right">
+            <span>Auswahl speichern</span>
+            <span class="glyphicon glyphicon-share"></span>
+        </div>
+        <% } %>
+    </div>
+    <div class="content">
+    </div>
+</div>
