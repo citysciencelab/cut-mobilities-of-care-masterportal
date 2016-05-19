@@ -1,11 +1,11 @@
 define([
-    "modules/treeMobile/nodeModel"
+    "modules/core/modelList/item"
 ], function () {
 
-    var Node = require("modules/treeMobile/nodeModel"),
-        FolderModel;
+    var Item = require("modules/core/modelList/item"),
+        Folder;
 
-    FolderModel = Node.extend({
+    Folder = Item.extend({
         defaults: {
             // true wenn die Node sichtbar
             isVisible: false,
@@ -25,6 +25,10 @@ define([
             id: "",
             // Folder Glyphicon
             glyphicon: "glyphicon-plus-sign"
+        },
+
+        initialize: function () {
+            console.log(this);
         },
 
         /**
@@ -82,5 +86,5 @@ define([
 
     });
 
-    return FolderModel;
+    return Folder;
 });

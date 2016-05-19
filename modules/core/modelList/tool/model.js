@@ -1,15 +1,15 @@
 define([
-    "modules/treeMobile/nodeModel",
+    "modules/core/modelList/item",
     "backbone.radio",
     "eventbus"
 ], function () {
 
-    var Node = require("modules/treeMobile/nodeModel"),
+    var Item = require("modules/core/modelList/item"),
         EventBus = require("eventbus"),
         Radio = require("backbone.radio"),
-        ItemModel;
+        Tool;
 
-    ItemModel = Node.extend({
+    Tool = Item.extend({
         defaults: {
             // true wenn die Node sichtbar
             isVisible: false,
@@ -76,5 +76,5 @@ define([
         }
     });
 
-    return ItemModel;
+    return Tool;
 });

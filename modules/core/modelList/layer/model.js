@@ -1,13 +1,13 @@
 define([
-    "modules/treeMobile/nodeModel",
+    "modules/core/modelList/item",
     "backbone.radio"
 ], function () {
 
-    var Node = require("modules/treeMobile/nodeModel"),
+    var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
-        LayerModel;
+        Layer;
 
-    LayerModel = Node.extend({
+    Layer = Item.extend({
         defaults: {
             // welcher Node-Type - folder/layer/item
             type: "",
@@ -34,7 +34,7 @@ define([
             // der Index der die Reihenfolge beim Zeichnen der ausgewählten Layer bestimmt
             selectionIDX: 0
         },
-        initialize: function () {
+        initialize: function () {console.log(this);
             var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
 
             this.listenTo(this, {
@@ -142,5 +142,46 @@ define([
        }
     });
 
-    return LayerModel;
+    return Layer;
 });
+
+
+// Layer = Item.extend({
+//     defaults: {
+//         // true wenn der Layer sichtbar ist
+//         isVisibleInMap: false,
+//         // true wenn das Item in den Fachdaten "gechecked" ist
+//         isChecked: false,
+//         isVisibleInTree: false
+//     },
+//     initialize: function () {
+//         this.listenToOnce(this, {
+//             "change:isVisibleInMap": this.createLayerAttr
+//         });
+//         console.log(this.id);
+//         // console.log(this.get("isVisibleInMap"));
+//         // console.log(this.attributes);
+//     },
+//     createLayerAttr: function (model) {
+//         // console.log(this);
+//         // console.log(1224);
+//     },
+//     setIsVisibleInMap: function (isVisibleInMap) {
+//         this.set("isVisibleInMap", isVisibleInMap);
+//     },
+//     getIsVisibleInMap: function () {
+//         this.get("isVisibleInMap");
+//     },
+//     setIsChecked: function (isChecked) {
+//         this.set("isChecked", isChecked);
+//     },
+//     getIsChecked: function () {
+//         this.get("isChecked");
+//     },
+//     setIsVisibleInTree: function (isVisibleInTree) {
+//         this.set("isVisibleInTree", isVisibleInTree);
+//     },
+//     getIsVisibleInTree: function () {
+//         this.get("isVisibleInTree");
+//     }
+// });

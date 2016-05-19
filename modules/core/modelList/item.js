@@ -44,19 +44,20 @@ define([
         },
         setGlyphicon: function (glyphicon) {
             return this.get("glyphicon", glyphicon);
-        }
+        },
         // setIsVisible: function (value) {
         //     this.set("isVisible", value);
         // },
         // getIsVisible: function () {
         //     return this.get("isVisible");
         // },
-        // updateList: function (value) {
-        //     this.collection.updateList(value, "slideForward");
-        //     if (this.getType() === "folder") {
-        //         Radio.trigger("BreadCrumb", "addItem", this);
-        //     }
-        // }
+        updateList: function (value) {
+            console.log(this);
+            this.collection.updateList(value, "slideForward");
+            if (this.getType() === "folder") {
+                Radio.trigger("BreadCrumb", "addItem", this);
+            }
+        }
     });
 
     return Item;
