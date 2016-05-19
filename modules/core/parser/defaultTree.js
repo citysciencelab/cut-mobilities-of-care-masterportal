@@ -18,8 +18,13 @@ define([
          */
         parseTree: function (layerList) {
             // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
-            // Und nur Layer die einem Metadatensatz zugeordnet sind
+            // Und nur Layer die min. einem Metadatensatz zugeordnet sind
             layerList = this.filterList(layerList);
+            // Entfernt alle Layer, die bereits im Cache dargestellt werden
+            layerList = this.deleteLayersIncludeCache(layerList);
+            // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
+            layerList = this.createLayerPerDataset(layerList);
+
             this.parseLayerList(layerList);
 
         },
@@ -29,16 +34,59 @@ define([
          * @param  {Object[]} layerList - Objekte aus der services.json
          * @return {Object[]} layerList - Objekte aus der services.json
          */
-        filterList: function (response) {
-            return _.filter(response, function (element) {
+        filterList: function (layerList) {
+            return _.filter(layerList, function (element) {
                 return (element.datasets.length > 0 && element.typ === "WMS") ;
             });
         },
 
-         /**
-        * Holt sich die Liste der Layer aus dem Layermodul
-        * und erzeugt daraus einen Baum
-        */
+        /**
+         * Entfernt alle Layer, die bereits im Cache dargestellt werden.
+         * @param  {Object[]} layerList - Objekte aus der services.json
+         * @return {Object[]} layerList - Objekte aus der services.json
+         */
+        deleteLayersIncludeCache: function (layerList) {
+            var cacheLayerMetaIDs = [],
+                cacheLayer = _.where(layerList, {cache: true});
+
+            _.each(cacheLayer, function (layer) {
+                cacheLayerMetaIDs.push(layer.datasets[0].md_id);
+            });
+
+            return _.reject(layerList, function (element) {
+                return _.contains(cacheLayerMetaIDs, element.datasets[0].md_id) && element.cache === false;
+            });
+        },
+
+        /**
+         * Holt sich aus der layerList alle Objekte die mehr als einen Datensatz haben
+         * Erzeugt pro Datensatz einen neuen Layer
+         * @param  {Object[]} layerList - Objekte aus der services.json
+         * @return {Object[]} layerList - Objekte aus der services.json die genau einem Datensatz zugeordnet sind
+         */
+        createLayerPerDataset: function (layerList) {
+            var layerListPerDataset = _.filter(layerList, function (element) {
+                return element.datasets.length > 1;
+            });
+
+            _.each(layerListPerDataset, function (layer) {
+                _.each(layer.datasets, function (ds, key) {
+                    var newLayer = _.clone(layer);
+
+                    newLayer.id = layer.id + "_" + key;
+                    newLayer.datasets = [ds];
+                    layerList.push(newLayer);
+                });
+            });
+            return _.filter(layerList, function (element) {
+                return element.datasets.length === 1;
+            });
+        },
+
+        /**
+         * Holt sich die Liste der Layer aus dem Layermodul
+         * und erzeugt daraus einen Baum
+         */
         parseLayerList: function (layerList) {
             var baseLayerIds = _.pluck(this.getBaselayer().Layer, "id"),
                 // Unterscheidung nach Overlay und Baselayer
