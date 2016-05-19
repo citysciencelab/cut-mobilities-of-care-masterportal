@@ -17,8 +17,6 @@ define(function () {
             resolution: 10.583327618336419, // 1:40.000
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
-            
-           
         },
         controls: {
             zoom: true,
@@ -31,42 +29,41 @@ define(function () {
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-
-        
         attributions: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil",
             gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
-            },
-            tree: {
-                minChars: 3
-            },
-            geoLocateHit: true
+            }
         },
         print: {
             printID: "99999",
@@ -94,10 +91,14 @@ define(function () {
              draw: {
                 title: "Zeichnen",
                 glyphicon: "glyphicon-pencil"
-            },
+            }
         },
-        orientation: false,
-        poi: true
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            mousePosition: true,
+            orientation: "once"
+        }
     };
 
     return config;

@@ -21,29 +21,32 @@ define(function () {
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-
-        
         attributions: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
 
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
-
         startUpModul: "",
 
         searchBar: {
@@ -83,10 +86,13 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         },
-
-        orientation: true,
-
-        poi: false
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: "once",
+            poi: false,
+            fullScreen: false
+        }
     };
 
     return config;

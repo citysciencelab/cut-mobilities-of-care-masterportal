@@ -147,7 +147,7 @@ define(function () {
             placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -186,6 +186,10 @@ define(function () {
             draw: {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
+            },
+            kmlimport: {
+                title: "KML Import",
+                glyphicon: "glyphicon-import"
             }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",

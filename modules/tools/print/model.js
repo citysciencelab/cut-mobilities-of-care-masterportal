@@ -141,6 +141,9 @@ define([
         *
         */
         setLayerToPrint: function (layers) {
+            if (Config.tree.type === "light") {
+                layers = layers.reverse();
+            }
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},

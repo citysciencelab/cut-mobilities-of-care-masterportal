@@ -16,6 +16,19 @@ define([
 
                 result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
             });
+
+            /**
+             * Über diesen Parameter wird GeoOnline aus dem Transparenzporal aufgerufen
+             * Der entsprechende Datensatz soll angezeigt werden
+             * Hinter dem Parameter Id steckt die MetadatenId des Metadatensatzes
+             * Die Metadatensatz-Id wird in die config geschrieben
+             */
+            if (_.has(result, "ID")) {
+                var values = _.values(_.pick(result, "ID"))[0].split(",");
+
+                Config.tree.metaIdsToSelected = values;
+            }
+
             /**
              * Gibt die initiale Zentrumskoordinate zurück.
              * Ist der Parameter "center" vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
@@ -35,10 +48,10 @@ define([
                     bezirke = [
                         {name: "ALTONA", number: "2", position: [556681, 5937664]},
                         {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
-                        {name: "HAMBURG-Nord", number: "4", position: [567677, 5941650]},
+                        {name: "HAMBURG-NORD", number: "4", position: [567677, 5941650]},
                         {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
                         {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
-                        {name: "HAMBURG-Mitte", number: "1", position: [566380, 5932134]},
+                        {name: "HAMBURG-MITTE", number: "1", position: [566380, 5932134]},
                         {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
                     ];
 
@@ -46,7 +59,7 @@ define([
                         Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
                     }
                     else {
-                        Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
+                        Config.view.center = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position;
                     }
             }
 

@@ -293,6 +293,11 @@ define([
 
             // Initial sichtbare Hintergrundkarten werden hinzugefügt
             this.add(_.where(treeNodes, {parentId: "BaseLayer"}));
+
+            // Initial sichtbare Fachdaten
+            _.each(Radio.request("LayerList", "getLayerListWhere", {selected: true, isbaselayer: false}), function (layer) {
+                this.add(_.where(treeNodes, {layerId: layer.id}));
+            }, this);
         },
 
         /**
@@ -367,8 +372,6 @@ define([
                     this.createLayersModels(folder.layer, folder.id);
                 }, this);
             }, this);
-            // console.log(treeNodes[125]);
-        //    this.add(treeNodes, {sort: false});
         },
 
         /**
@@ -387,7 +390,8 @@ define([
                 }));
             }
 
-            this.add(_.where(treeNodes, {parentId: parentId}), {"sort": false});
+            this.add(_.where(treeNodes, {parentId: parentId}));
+
             var checkedLayer = this.where({isChecked: true, type: "layer"}),
                 // befinden wir uns in "Auswahl der Karten"
                 isSelection = (parentId === "SelectedLayer") ? true : false;
