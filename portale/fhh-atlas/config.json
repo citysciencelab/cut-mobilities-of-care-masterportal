@@ -1,0 +1,65 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": true,
+    "menu": {
+      "tools": {
+        "parcelSearch": true,
+        "gfi": true,
+        "print": true,
+        "coord": true,
+        "measure": true,
+        "draw": true,
+        "searchByCoord": true
+      },
+      "legend": true,
+      "routing": true,
+      "addWMS": true
+    },
+    "controls": {
+      "zoom": true,
+      "toggleMenu": true,
+      "orientation": "once",
+      "poi": true,
+      "fullScreen": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "default"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "149",
+          "name": "ALKIS grau-blau"
+        },
+        {
+          "id": "368",
+          "name": "ALKIS farbig"
+        },
+        {
+          "id": "8"
+        },
+        {
+          "id": "713",
+          "name": "Geobasiskarten (schwarz-weiß)"
+        },
+        {
+          "id": "1043",
+          "name": "Geobasiskarten (grau-blau)"
+        },
+        {
+          "id": "717",
+          "visibility": true,
+          "name": "Geobasiskarten (farbig)"
+        },
+        {
+          "id": "453"
+        }
+      ]
+    }
+  }
+}
