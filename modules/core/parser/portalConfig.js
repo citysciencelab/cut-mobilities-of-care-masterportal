@@ -36,7 +36,7 @@ define([
          *
          */
         parse: function (response) {
-            this.parseMenu(response.Portalconfig.menu, "menu");
+            this.parseMenu(response.Portalconfig.menu, "root");
             if (response.Portalconfig.Baumtyp === "default") {
                 require(["modules/core/parser/defaultTree"], function (DefaultTreeParser) {
                     new DefaultTreeParser(response.Themenconfig);
@@ -151,7 +151,6 @@ define([
          */
         createModelList: function () {
             new ModelList(this.getItemList());
-            debugger;
         }
     });
 

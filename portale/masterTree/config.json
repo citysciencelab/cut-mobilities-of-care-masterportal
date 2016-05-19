@@ -4,6 +4,7 @@
       "PortalTitle": "GeoViewer",
       "searchBar": true,
       "menu": {
+        "themen": true,
         "tools": {
           "parcelSearch": true,
           "gfi": true,

@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/core/modelList/layer/model",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model"
@@ -9,9 +10,14 @@ define([
         Layer = require("modules/core/modelList/layer/model"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
+        Radio = require("backbone.radio"),
         ModelList = Backbone.Collection.extend({
             initialize: function () {
-               // var channel = Radio.channel("ModelList");
+               var channel = Radio.channel("ModelList");
+               channel.reply("getCollection", this);
+            },
+            getItems: function (attr) {
+
             },
 
             /**
