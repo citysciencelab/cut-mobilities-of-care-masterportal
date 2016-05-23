@@ -44,7 +44,7 @@ define([
             // Layer eines Metadatensatzes (nicht alle) die gruppiert werden sollen --> z.B. Geobasisdaten (farbig)
             // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gruppiert
             if (_.has(Config.tree, "layerIDsToMerge")) {
-                response = this.mergeLayersByIds(response, Config.tree.layerIDsToMerge);
+                // response = this.mergeLayersByIds(response, Config.tree.layerIDsToMerge);
             }
             // Alle Layer eines Metadatensatzes die gruppiert dargestellt werden sollen --> z.B. Bauschutzbereich § 12 LuftVG Hamburg im FHH-Atlas
             if (_.has(Config.tree, "metaIDsToMerge")) {
