@@ -1,14 +1,14 @@
 define([
     "backbone",
-    "text!modules/treeMobile/layer/template.html",
-    "text!modules/treeMobile/layer/templateSelected.html",
-    "text!modules/treeMobile/layer/templateSetting.html"
+    "text!modules/menu/mobile/layer/template.html",
+    "text!modules/menu/mobile/layer/templateSelected.html",
+    "text!modules/menu/mobile/layer/templateSetting.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/treeMobile/layer/template.html"),
-        SelectedLayerTemplate = require("text!modules/treeMobile/layer/templateSelected.html"),
-        SettingTemplate = require("text!modules/treeMobile/layer/templateSetting.html"),
+        LayerTemplate = require("text!modules/menu/mobile/layer/template.html"),
+        SelectedLayerTemplate = require("text!modules/menu/mobile/layer/templateSelected.html"),
+        SettingTemplate = require("text!modules/menu/mobile/layer/templateSetting.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({

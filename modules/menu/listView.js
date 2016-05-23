@@ -1,0 +1,160 @@
+define([
+    "backbone",
+    "backbone.radio",
+    "text!modules/menu/template.html",
+    "text!modules/menu/desktop/template.html",
+    "text!modules/menu/desktop/templateLight.html",
+    "text!modules/menu/mobile/template.html",
+    "modules/menu/desktop/folder/view",
+    "modules/menu/desktop/layer/view",
+    "modules/menu/desktop/tool/view",
+    "modules/menu/mobile/folder/view",
+    "modules/menu/mobile/layer/view",
+    "modules/menu/mobile/tool/view",
+    "modules/menu/mobile/breadCrumb/listView",
+    "bootstrap/dropdown",
+    "bootstrap/collapse",
+    "jqueryui/effect",
+    "jqueryui/effect-slide"
+], function () {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        MenuTemplate = require("text!modules/menu/template.html"),
+        DesktopComplexTemplate = require("text!modules/menu/desktop/template.html"),
+        DesktopLightTemplate = require("text!modules/menu/desktop/templateLight.html"),
+        MobileTemplate = require("text!modules/menu/mobile/template.html"),
+        DesktopFolderView = require("modules/menu/desktop/folder/view"),
+        DesktopLayerView = require("modules/menu/desktop/layer/view"),
+        DesktopToolView = require("modules/menu/desktop/tool/view"),
+        MobileFolderView = require("modules/menu/mobile/folder/view"),
+        MobileLayerView = require("modules/menu/mobile/layer/view"),
+        MobileToolView = require("modules/menu/mobile/tool/view"),
+        BreadCrumbListView = require("modules/menu/mobile/breadCrumb/listView"),
+        Menu;
+
+    Menu = Backbone.View.extend({
+        collection: Radio.request("ModelList", "getCollection"),
+        tagName: "nav",
+        className: "navbar navbar-default navbar-fixed-top",
+        attributes: {role: "navigation"},
+        template: _.template(MenuTemplate),
+        desktopComplexTemplate: _.template(DesktopComplexTemplate),
+        desktopLightTemplate: _.template(DesktopLightTemplate),
+        mobileTemplate: _.template(MobileTemplate),
+
+        initialize: function () {
+
+
+            this.listenTo(this.collection, {
+                "updateTreeView": function () {
+                    this.renderListWithAnimation({animation: "slideForward"});
+                    // console.log(options);
+// console.log(model);
+                    // var rootModels = this.collection.where({isVisible: true});
+                    //     _.each(rootModels, function (model) {
+                    //         this.addViews(model, true);
+                    //     }, this);
+                }
+            });
+            // console.log(this.collection);
+            // this.collection = Radio.request("ModelList", "getCollection");
+
+            new BreadCrumbListView();
+            this.render();
+
+        },
+
+        renderListWithAnimation: function (options) {
+            var visibleModels = this.collection.where({isVisible: true}),
+                modelsInSelection = this.collection.where({isInSelection: true}),
+                slideOut = (options.animation === "slideBack") ? "right" : "left",
+                slideIn = (options.animation === "slideForward") ? "right" : "left",
+                that = this;
+
+                $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
+                    $("div.collapse.navbar-collapse ul.nav-menu").html("");
+                    if (modelsInSelection.length) {
+                        visibleModels = _.sortBy(visibleModels, function (layer) {
+                            return layer.getSelectionIDX();
+                        });
+                        _.each(visibleModels.reverse(), that.addViews, that);
+                    }
+                    else {
+                        _.each(visibleModels, that.addViews, that);
+                    }
+                });
+                $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
+        },
+
+        renderTopMenu: function (isMobile) {
+            console.log(this.collection);
+            var rootModels = this.collection.where({parentId: "root"});
+                _.each(rootModels, function (model) {
+                    this.addViews(model, isMobile);
+                }, this);
+        },
+
+        render: function () {
+            var isMobile = Radio.request("Util", "isViewMobile");
+
+            $("body").append(this.$el.html(this.template()));
+
+            if (isMobile) {
+                $("div.collapse.navbar-collapse ul.nav-menu").removeClass("menubarlgv nav navbar-nav");
+                $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group tree-mobile");
+            }
+            else {
+                $("div.collapse.navbar-collapse ul.nav-menu").addClass("menubarlgv nav navbar-nav");
+                $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group tree-mobile");
+            }
+            this.renderTopMenu(isMobile);
+
+            // if (isMobile) {
+            //     $("body").append(this.$el.append(this.mobileTemplate()));
+            // }
+            // else {
+            //     var treeType = Radio.request("Parser", "getPortalConfig").Baumtyp;
+            //
+            //     if (treeType === "light") {
+            //         // Use light Template
+            //         $("body").append(this.$el.append(this.desktopLightTemplate()));
+            //     }
+            //     else {
+            //         // Use complex Template
+            //         $("body").append(this.$el.append(this.desktopComplexTemplate()));
+            //     }
+            // }
+            // Radio.trigger("MenuBar", "switchedMenu");
+        },
+        /**
+         * Ordnet den Models die richtigen Views zu.
+         * @param {Backbone.Model} model - itemModel | layerModel | folderModel
+         */
+        addViews: function (model, isMobile) {
+            var isMobile = Radio.request("Util", "isViewMobile");
+            var nodeView;
+
+            switch (model.getType()){
+                case "folder": {
+                    // Model für einen Ordner
+                    nodeView = isMobile ? new MobileFolderView({model: model}) : new DesktopFolderView({model: model});
+                    break;
+                }
+                case "layer": {
+                    // Model für ein Layer
+                    nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerView({model: model});
+                    break;
+                }
+                case "tool": {
+                    // Model für Tools/Links/andere Funktionen
+                    nodeView = isMobile ? new MobileToolView({model: model}) : new DesktopToolView({model: model});
+                    break;
+                }
+            }
+            $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        }
+    });
+
+    return Menu;
+});

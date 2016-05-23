@@ -1,12 +1,12 @@
 define([
     "backbone",
-    "text!modules/treeMobile/folder/template.html",
-    "text!modules/treeMobile/folder/templateLeaf.html"
+    "text!modules/menu/mobile/folder/template.html",
+    "text!modules/menu/mobile/folder/templateLeaf.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        FolderTemplate = require("text!modules/treeMobile/folder/template.html"),
-        FolderLeafTemplate = require("text!modules/treeMobile/folder/templateLeaf.html"),
+        FolderTemplate = require("text!modules/menu/mobile/folder/template.html"),
+        FolderLeafTemplate = require("text!modules/menu/mobile/folder/templateLeaf.html"),
         FolderView;
 
     FolderView = Backbone.View.extend({
