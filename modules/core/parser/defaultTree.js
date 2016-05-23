@@ -11,6 +11,7 @@ define([
             var layerList = Radio.request("RawLayerList", "getLayerAttributesList");
 
             this.parseTree(layerList);
+            this.createModelList();
         },
 
         /**
@@ -88,17 +89,25 @@ define([
          * und erzeugt daraus einen Baum
          */
         parseLayerList: function (layerList) {
-            var baseLayerIds = _.pluck(this.getBaselayer().Layer, "id"),
+            var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return (_.contains(baseLayerIds, layer.id)) ? "baselayers" : "overlays";
                 });
 
-            // Models für die Baselayer erzeugen
-            this.addItems(typeGroup.baselayers, {parentId: "BaseLayer", level: 0});
-
+            // Models für die Hintergrundkarten erzeugen
+            this.createBaselayer(layerList);
             // Models für die Fachdaten erzeugen
             this.groupDefaultTreeOverlays(typeGroup.overlays);
+        },
+
+        createBaselayer: function (layerList) {
+            _.each(this.getBaselayer().Layer, function (layer) {
+                if (_.isArray(layer.id)) {
+                    layer = _.extend(this.mergeLayersByIds(layer.id, layerList), _.omit(layer, "id"));
+                }
+                this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0}, layer));
+            }, this);
         },
 
         /**
@@ -106,18 +115,18 @@ define([
          * wenn eine MetaNameGroup nur einen Eintrag hat soll sie
          * als Layer und nicht als Ordner hinzugefügt werden
         */
-        splitIntoFolderAndLayer: function (metaNameGroups, title) {
+        splitIntoFolderAndLayer: function (metaNameGroups, name) {
             var folder = [],
                 layer = [],
                 categories = {};
 
-            _.each(metaNameGroups, function (group, groupTitle) {
+            _.each(metaNameGroups, function (group, groupname) {
                 // Wenn eine Gruppe mehr als einen Eintrag hat -> Ordner erstellen
                 if (Object.keys(group).length > 1) {
                     folder.push({
-                        title: groupTitle,
+                        name: groupname,
                         layer: group,
-                        id: _.uniqueId(groupTitle)
+                        id: _.uniqueId(groupname)
                     });
                 }
                 else {
@@ -125,8 +134,8 @@ define([
                 }
                 categories.folder = folder;
                 categories.layer = layer;
-                categories.id = _.uniqueId(title);
-                categories.title = title;
+                categories.id = _.uniqueId(name);
+                categories.name = name;
             });
             return categories;
         },
@@ -141,12 +150,12 @@ define([
                 return layer.datasets[0].kategorie_opendata[0];
             });
            // Gruppierung nach MetaName
-            _.each(categoryGroups, function (group, title) {
+            _.each(categoryGroups, function (group, name) {
                 var metaNameGroups = _.groupBy(group, function (layer) {
                     return layer.datasets[0].md_name;
                 });
                 // in Layer und Ordner unterteilen
-                tree[title] = this.splitIntoFolderAndLayer(metaNameGroups, title);
+                tree[name] = this.splitIntoFolderAndLayer(metaNameGroups, name);
             }, this);
             this.createModelsForDefaultTree(tree);
         },
@@ -164,15 +173,15 @@ define([
             });
             // Kategorien erzeugen
 
-            this.addItems(sortedCategories, {parentId: "OverLayer", level: 0});
+            this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0});
             _.each(tree, function (category) {
                 // Unterordner erzeugen
-                this.addItems(category.folder, {parentId: category.id, isLeaffolder: true, level: 1});
+                this.addItems(category.folder, {type: "folder", parentId: category.id, isLeaffolder: true, level: 1});
                 // Layer in Unterordner
-                this.addItems(category.layer, {parentId: category.id, level: 1});
+                this.addItems(category.layer, {type: "layer", parentId: category.id, level: 1});
                 _.each(category.folder, function (folder) {
                     // Layer in der untertesten Ebene erzeugen
-                    this.addItems(folder.layer, {parentId: folder.id, level: 2});
+                    this.addItems(folder.layer, {type: "layer", parentId: folder.id, level: 2});
                 }, this);
             }, this);
         }

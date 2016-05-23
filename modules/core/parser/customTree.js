@@ -1,8 +1,10 @@
 define([
-    "modules/core/parser/portalConfig"
+    "modules/core/parser/portalConfig",
+    "backbone.radio"
 ], function () {
 
     var Parser = require("modules/core/parser/portalConfig"),
+        Radio = require("backbone.radio"),
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
@@ -21,6 +23,12 @@ define([
         parseTree: function (object, parentId, level) {
             if (_.has(object, "Layer")) {
                 _.each(object.Layer, function (layer) {
+                    // Layer eines Metadatensatzes (nicht alle) die gruppiert werden sollen --> z.B. Geobasisdaten (farbig)
+                    // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gruppiert
+                    if (_.isArray(layer.id)) {
+                        layer = _.extend(this.mergeLayersByIds(layer.id, Radio.request("RawLayerList", "getLayerAttributesList")), _.omit(layer, "id"));
+                    }
+                    // hier layer mergen wenn mehere layers z.b. Hintergrundkarten
                     // HVV :(
                     if (_.has(layer, "styles") && layer.styles.length > 1) {
                         _.each(layer.styles, function (style) {
@@ -37,7 +45,7 @@ define([
                     var isLeafFolder = (!_.has(folder, "Ordner")) ? true : false;
 
                     folder.id = _.uniqueId(folder.Titel);
-                    this.addItem({type: "folder", parentId: parentId, title: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: level});
+                    this.addItem({type: "folder", parentId: parentId, name: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: level});
                     // rekursiver Aufruf
                     this.parseTree(folder, folder.id, level + 1);
                 }, this);

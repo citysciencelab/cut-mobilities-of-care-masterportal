@@ -14,6 +14,8 @@ define([
     Parser = Backbone.Model.extend({
         defaults: {
             //
+            rawLayerList: [],
+            //
             itemList: [],
             // Themenconfig.Fachdaten
             Fachdaten: [],
@@ -28,15 +30,19 @@ define([
             var channel = Radio.channel("Parser");
 
             channel.reply({
-                "getPortalConfig": this.getPortalConfig
+                "getPortalConfig": this.getPortalConfig,
+                "getItemsByParentId": this.getItemsByParentId
             }, this);
+
             this.fetch();
         },
+
         /**
          *
          */
         parse: function (response) {
             this.parseMenu(response.Portalconfig.menu, "root");
+            this.addTreeMenuItems();
             if (response.Portalconfig.Baumtyp === "default") {
                 require(["modules/core/parser/defaultTree"], function (DefaultTreeParser) {
                     new DefaultTreeParser(response.Themenconfig);
@@ -79,10 +85,11 @@ define([
                         }
                     }
                     this.addItem({
-                    type: type,
-                    title: pair[0],
-                    parentId: parentId,
-                    name: pair[0]
+                        type: type,
+                        // title: pair[0],
+                        parentId: parentId,
+                        name: pair[0],
+                        id: pair[0]
                     });
                 }
             }, this);
@@ -150,7 +157,68 @@ define([
          * @return {[type]} [description]
          */
         createModelList: function () {
-            new ModelList(this.getItemList());
+            new ModelList(_.where(this.getItemList(), {parentId: "root"}));
+        },
+
+        getItemsByParentId: function (value) {
+            return _.where(this.getItemList(), {parentId: value});
+        },
+
+        addTreeMenuItems: function () {
+            this.addItem({
+                type: "folder",
+                name: "Hintergrundkarten",
+                glyphicon: "glyphicon-plus-sign",
+                id: "Baselayer",
+                parentId: "themen"
+            });
+            this.addItem({
+                type: "folder",
+                name: "Fachdaten",
+                glyphicon: "glyphicon-plus-sign",
+                id: "Overlayer",
+                parentId: "themen"
+            });
+            this.addItem({
+                type: "folder",
+                name: "Auswahl der Themen",
+                glyphicon: "glyphicon-plus-sign",
+                id: "SelectedLayer",
+                parentId: "themen",
+                isLeafFolder: true
+            });
+        },
+
+        /**
+         * Gruppiert Objekte aus der layerlist, die mit den Ids in der übergebenen Liste übereinstimmen
+         * @param  {Object[]} layerlist - Objekte aus der services.json
+         * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
+         * @return {Object[]} layerlist - Objekte aus der services.json
+         */
+        mergeLayersByIds: function (ids, layerlist) {
+            var objectsByIds,
+                newObject;
+
+                // Objekte die gruppiert werden
+                objectsByIds = _.filter(layerlist, function (object) {
+                    return _.contains(ids, object.id);
+                });
+                // Das erste Objekt wird kopiert
+                newObject = _.clone(objectsByIds[0]);
+                // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
+                newObject.layers = _.pluck(objectsByIds, "layers").toString();
+                // Das Attribut maxScale wird gruppiert
+                // Am kopierten Objekt wird der höchste Wert gesetzt
+                newObject.maxScale = _.max(_.pluck(objectsByIds, "maxScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                // Das Attribut minScale wird gruppiert
+                // Am kopierten Objekt wird der niedrigste Wert gesetzt
+                newObject.minScale = _.min(_.pluck(objectsByIds, "minScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+
+            return newObject;
         }
     });
 
