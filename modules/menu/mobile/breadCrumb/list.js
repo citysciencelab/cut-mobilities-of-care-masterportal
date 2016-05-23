@@ -24,13 +24,13 @@ define([
 
             this.listenTo(this, {
                 "remove": function () {
-                    Radio.trigger("TreeList", "checkIsExpanded");
+                    Radio.trigger("ModelList", "checkIsExpanded");
                 },
                 "update": function (collection, options) {
                     if (_.has(options, "index")) {
                         var lastModel = collection.at(collection.length - 1);
 
-                        Radio.trigger("TreeList", "updateList", lastModel.getId(), "slideBack");
+                        Radio.trigger("ModelList", "updateList", lastModel.getId(), "slideBack");
                     }
                 }
             });
@@ -43,8 +43,8 @@ define([
          */
         addMainItem: function () {
             this.add({
-                id: "main",
-                title: "Menü"
+                id: "root",
+                name: "Menü"
             });
         },
 
@@ -55,7 +55,7 @@ define([
         addItem: function (model) {
             this.add({
                 id: model.getId(),
-                title: model.getTitle()
+                name: model.getName()
             });
         },
 

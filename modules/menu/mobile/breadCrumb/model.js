@@ -8,7 +8,7 @@ define([
     BreadCrumbItem = Backbone.Model.extend({
         defaults: {
             // Name des Items
-            title: "",
+            name: "",
             // UniqueId
             id: ""
         },

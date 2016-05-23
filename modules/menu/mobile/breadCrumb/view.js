@@ -7,7 +7,7 @@ define([
 
     BreadCrumbView = Backbone.View.extend({
         tagName: "li",
-        template: _.template("<span><%= title %></span>"),
+        template: _.template("<span><%= name %></span>"),
         events: {
             "click": "removeItems"
         },
