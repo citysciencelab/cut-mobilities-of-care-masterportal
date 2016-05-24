@@ -22,6 +22,10 @@ define([
                 "addItem": this.addItem
             }, this);
 
+            channel.reply({
+                "getLastItem": this.getLastItem
+            }, this);
+
             this.listenTo(this, {
                 "remove": function () {
                     Radio.trigger("ModelList", "checkIsExpanded");
@@ -79,6 +83,14 @@ define([
             if (this.length > 1) {
                 this.pop();
             }
+        },
+
+        /**
+         * Gibt das letzte Model aus der Collection zurück
+         * @return {Backbone.Model}
+         */
+        getLastItem: function () {
+            return this.at(this.length - 1);
         }
     });
 
