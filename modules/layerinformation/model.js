@@ -27,13 +27,16 @@ define([
             }
         },
         initialize: function () {
-            this.listenTo(EventBus, {
-                "layerinformation:add": this.setAttributes
-            });
+            var channel = Radio.channel("LayerInformation");
+
+            channel.on({
+                "add": this.setAttributes
+            }, this);
         },
 
         setAttributes: function (attrs) {
             this.set(attrs);
+            this.setMetadataURL();
             if (!_.isUndefined(this.get("metaID"))) {
                 this.fetchData({id: this.get("metaID")});
             }
@@ -90,6 +93,15 @@ define([
                     return moment(dateTime).format("DD.MM.YYYY");
                 }()
             };
+        },
+
+        setMetadataURL: function () {
+            if (this.url().search("metaver") !== -1) {
+                this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            }
+            else {
+                this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            }
         }
     });
 
