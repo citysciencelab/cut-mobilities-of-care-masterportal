@@ -321,7 +321,11 @@ define([
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
                             layerByFeature = _.find(visibleWFSLayerList, function (layer) {
+                                try {
                                 return layer.get("source").getSource().getFeatureById(feature.getId());
+                                }
+                                catch (e) {  
+                                }
                             });
                             if (_.isUndefined(layerByFeature) === false) {
                                 gfiParams.push({
