@@ -45,6 +45,7 @@ define([
 
             this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
             this.setCenterCoords(Radio.request("MapView", "getCenter"));
+            this.setLayerOptions(Radio.request("SelectedList", "getModels"));
             if (_.has(Config, "simpleMap")) {
                 this.setSimpleMap(Config.simpleMap);
             }
