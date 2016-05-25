@@ -64,10 +64,11 @@ define(function () {
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
-                searchParcels: true
+                searchParcels: true,
+                minChars: 3,
             },
             specialWFS: {
-                minChar: 3,
+                minChars: 2,
                 definitions: [
                     {
                         url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
@@ -82,7 +83,8 @@ define(function () {
                 ]
             },
             placeholder: "Suche Adresse, Bebauungsplan",
-            geoLocateHit: true
+            geoLocateHit: true,
+            minChars: 2
         },
         tools: {
             gfi: {
