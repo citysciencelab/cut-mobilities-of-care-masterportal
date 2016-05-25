@@ -247,7 +247,7 @@ define([
                 layers: this.get("layerToPrint"),
                 pages: [
                     {
-                        center: this.get("center"),
+                        center: Radio.request("MapView", "getCenter"),
                         scale: this.get("scale").value,
                         scaleText: this.get("scale").name,
                         geodetic: true,
