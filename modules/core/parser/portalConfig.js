@@ -42,13 +42,16 @@ define([
          */
         parse: function (response) {
             this.parseMenu(response.Portalconfig.menu, "root");
-            this.addTreeMenuItems();
             if (response.Portalconfig.Baumtyp === "default") {
+                this.addTreeMenuItems();
                 require(["modules/core/parser/defaultTree"], function (DefaultTreeParser) {
                     new DefaultTreeParser(response.Themenconfig);
                 });
             }
             else {
+                if (response.Portalconfig.Baumtyp === "custom") {
+                    this.addTreeMenuItems();
+                }
                 require(["modules/core/parser/customTree"], function (CustomTreeParser) {
                     new CustomTreeParser(response.Themenconfig);
                 });

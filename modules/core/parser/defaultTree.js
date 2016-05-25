@@ -106,6 +106,9 @@ define([
                 if (_.isArray(layer.id)) {
                     layer = _.extend(this.mergeLayersByIds(layer.id, layerList), _.omit(layer, "id"));
                 }
+                else {
+                    layer =  _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
+                }
                 this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0}, layer));
             }, this);
         },

@@ -14,7 +14,7 @@ define([
             // true wenn der Inhalt(Kinder) der Node angezeigt wird
             isExpanded: false,
             // true wenn alle Kinder ausgewöhlt sind
-            isChecked: false,
+            isSelected: false,
             // welcher Node-Type - folder/layer/item
             type: "",
             // die ID der Parent-Node
@@ -28,7 +28,7 @@ define([
         },
 
         initialize: function () {
-            console.log(this);
+            // console.log(this);
         },
 
         /**
@@ -51,29 +51,29 @@ define([
          * Setter für Attribut "isChecked"
          * @param {boolean} value - true | false
          */
-        setIsChecked: function (value) {
-            this.set("isChecked", value);
+        setIsSelected: function (value) {
+            this.set("isSelected", value);
         },
 
         /**
          * Getter für Attribut "isChecked"
          * @return {boolean} true | false
          */
-        getIsChecked: function () {
-            return this.get("isChecked");
+        getIsSelected: function () {
+            return this.get("isSelected");
         },
 
         /**
          * "Toggled" das Attribut "isChecked"
          */
-        toggleIsChecked: function () {
-            if (this.getIsChecked() === true) {
-                this.setIsChecked(false);
+        toggleIsSelected: function () {
+            if (this.getIsSelected() === true) {
+                this.setIsSelected(false);
             }
             else {
-                this.setIsChecked(true);
+                this.setIsSelected(true);
             }
-            this.collection.toggleIsCheckedLayers(this);
+            this.collection.toggleIsSelectedLayers(this);
         },
 
         /**

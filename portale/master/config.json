@@ -1,0 +1,69 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": true,
+    "menu": {
+      "themen": true,
+      "tools": {
+        "parcelSearch": true,
+        "gfi": true,
+        "print": true,
+        "coord": true,
+        "measure": true,
+        "draw": true,
+        "searchByCoord": true
+      },
+      "legend": true,
+      "routing": true,
+      "addWMS": true
+    },
+    "controls": {
+      "zoom": true,
+      "toggleMenu": true,
+      "orientation": "once",
+      "poi": true,
+      "fullScreen": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453"
+        },
+        {
+          "id": "452"
+        },
+        {
+          "id": ["713", "714", "715", "716"],
+          "name": "Geobasiskarten (schwarz-weiß)"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+          "id": "1748"
+        },
+        {
+          "id": "1562"
+        },
+        {
+          "id": "45",
+          "clusterDistance": 50,
+          "routable": true
+        },
+        {
+          "id": "1711",
+          "visibility": true
+        }
+      ]
+    }
+  }
+}

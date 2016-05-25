@@ -9,24 +9,18 @@ define([
 
     Layer = Item.extend({
         defaults: {
+            // true wenn der Layer sichtbar ist
+            isVisibleInMap: false,
             // welcher Node-Type - folder/layer/item
             type: "",
             // true wenn die Node sichtbar ist
             isVisible: false,
-            // true wenn die Node zur ersten Ebene gehört
-            isRoot: false,
             // true wenn die Node "gechecked" ist
-            isChecked: false,
-            // true wenn die Node in "Auswahl der Karten" gezeichnet ist
-            isInSelection: false,
+            isSelected: false,
             // die ID der Parent-Node
             parentId: "",
-            // Id vom Layer Objekt
-            layerId: "",
-            // Layer Titel
-            title: "",
-            // true wenn der Layer sichtbar ist
-            isLayerVisible: false,
+            // Layer Name
+            name: "",
             // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
             isSettingVisible: false,
             // die Transparenz des Layers
@@ -34,73 +28,171 @@ define([
             // der Index der die Reihenfolge beim Zeichnen der ausgewählten Layer bestimmt
             selectionIDX: 0
         },
-        initialize: function () {console.log(this);
-            var model = Radio.request("LayerList", "getLayerFindWhere", {id: this.getLayerID()});
+        initialize: function () {
 
-            this.listenTo(this, {
-                "change:isChecked": function () {
-                    Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"selected": this.getIsChecked()});
-                },
-                "change:isInSelection": function () {
-                    // für die aktuelle Layer den Index in der Selektion abfragen
-                    var idx = Radio.request("SelectedList", "getSelectionIDXByID", this.getLayerID());
-
-                    this.setSelectionIDX(idx);
-                    this.setIsVisible(this.getIsInSelection());
-                },
-                "change:isLayerVisible": function () {
-                    Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"visibility": this.getIsLayerVisible()});
-                },
-                "change:transparence": function () {
-                    Radio.trigger("LayerList", "setAttributionsByID", this.getLayerID(), {"transparence": this.getTransparence()});
+            this.listenToOnce(this, {
+                // Die LayerSource wird beim ersten Aktivieren einmalig erstellt
+                "change:isSelected": this.createLayerSource,
+                // Anschließend evt. die ClusterSource und der Layer
+                "change:layerSource": function () {
+                    if (this.has("clusterDistance") === true) {
+                        this.createClusterLayerSource();
+                    }
+                    this.createLayer();
                 }
             });
 
-            // // initial sichtbare layer werden "gechecked"
-            // if (model.getVisibility() === true) {
-            //     this.setIsChecked(true);
-            //     this.setIsLayerVisible(true);
-            // }
-            // // wenn initial noch kein title vorhanden ist (evt. bei Custom-Tree)
-            // if (this.getTitle() === "") {
-            //     this.setTitle(model.get("name"));
-            // }
+            this.listenTo(this, {
+                "change:isSelected": function () {
+                    if (this.getIsSelected() === true) {
+                        Radio.trigger("Map", "addLayer", this.getLayer());
+                        this.setIsVisibleInMap(this.getIsSelected());
+                    }
+                    else {
+                        Radio.trigger("Map", "removeLayer", this.getLayer());
+                    }
+                },
+                "change:transparence": this.updateLayerTransparence
+            });
         },
-        setIsChecked: function (value) {
-            this.set("isChecked", value);
+
+        /**
+         * Funktionen die in den Subclasses überschrieben werden
+         */
+        createLayerSource: function () {},
+        createLayer: function () {},
+
+        /**
+         * Setter für Attribut "layerSource"
+         * @param {ol.source} value
+         */
+        setLayerSource: function (value) {
+            this.set("layerSource", value);
         },
-        getIsChecked: function () {
-            return this.get("isChecked");
+
+        /**
+         * Setter für Attribut "layer"
+         * @param {ol.layer} value
+         */
+        setLayer: function (value) {
+            this.set("layer", value);
         },
-        toggleIsChecked: function () {
-            if (this.getIsChecked() === true) {
-                this.setIsChecked(false);
-            }
-            else {
-                this.setIsChecked(true);
-            }
-            this.collection.everyLayerIsChecked(this);
+
+        /**
+         * Setter für Attribut "isVisibleInMap"
+         * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
+         * @param {boolean} value
+         */
+        setIsVisibleInMap: function (value) {
+            this.set("isVisibleInMap", value);
+            this.getLayer().setVisible(value);
         },
-        setIsLayerVisible: function (value) {
-            this.set("isLayerVisible", value);
+
+        /**
+         * Setter für Attribut "isSelected"
+         * @param {boolean} value
+         */
+        setIsSelected: function (value) {
+            this.set("isSelected", value);
         },
-        getIsLayerVisible: function () {
-            return this.get("isLayerVisible");
-        },
-        toggleLayerVisibility: function () {
-            if (this.getIsLayerVisible() === true) {
-                this.setIsLayerVisible(false);
-            }
-            else {
-                this.setIsLayerVisible(true);
-            }
-        },
+
+        /**
+         * Setter für Attribut "isSettingVisible"
+         * @param {boolean} value
+         */
         setIsSettingVisible: function (value) {
             this.set("isSettingVisible", value);
         },
+
+        /**
+         * Setter für Attribut "transparence"
+         * @param {number} value
+         */
+        setTransparence: function (value) {
+            this.set("transparence", value);
+        },
+
+        /**
+         * Getter für Attribut "layerSource"
+         * @return {ol.source}
+         */
+        getLayerSource: function () {
+            return this.get("layerSource");
+        },
+
+        /**
+         * Getter für Attribut "layer"
+         * @return {ol.layer}
+         */
+        getLayer: function () {
+            return this.get("layer");
+        },
+
+        /**
+         * Getter für Attribut "isVisibleInMap"
+         * @return {boolean}
+         */
+        getIsVisibleInMap: function () {
+            return this.get("isVisibleInMap");
+        },
+
+        /**
+         * Getter für Attribut "isSelected"
+         * @return {boolean}
+         */
+        getIsSelected: function () {
+            return this.get("isSelected");
+        },
+
+        /**
+         * Getter für Attribut "isSettingVisible"
+         * @return {boolean}
+         */
         getIsSettingVisible: function () {
             return this.get("isSettingVisible");
         },
+
+        /**
+         * Getter für Attribut "transparence"
+         * @return {number}
+         */
+        getTransparence: function () {
+            return this.get("transparence");
+        },
+
+        getVersion: function () {
+            return this.get("version");
+        },
+
+        getImageFormat: function () {
+            return this.get("format");
+        },
+
+        getTransparent: function () {
+            return this.get("transparent");
+        },
+
+        toggleIsSelected: function () {
+            if (this.getIsSelected() === true) {
+                this.setIsSelected(false);
+            }
+            else {
+                this.setIsSelected(true);
+            }
+            // nur ausführen wenn parent ein leaffodler ist --> noch zu machen
+            this.collection.everyLayerIsSelected(this);
+        },
+
+        toggleIsVisibleInMap: function () {
+            if (this.getIsVisibleInMap() === true) {
+                this.setIsVisibleInMap(false);
+            }
+            else {
+                this.setIsVisibleInMap(true);
+            }
+        },
+
+
         toggleIsSettingVisible: function () {
             if (this.getIsSettingVisible() === true) {
                 this.setIsSettingVisible(false);
@@ -110,23 +202,24 @@ define([
                 this.setIsSettingVisible(true);
             }
         },
-        setIsInSelection: function (value) {
-            this.set("isInSelection", value);
-        },
-        getIsInSelection: function () {
-            return this.get("isInSelection");
-        },
-        getLayerID: function () {
-            return this.get("layerId");
-        },
-        setTransparence: function (value) {
-            this.set("transparence", value);
-        },
-        getTransparence: function () {
-            return this.get("transparence");
+
+        /**
+         *
+         */
+        updateLayerTransparence: function () {
+            var opacity = (100 - this.get("transparence")) / 100;
+
+            this.get("layer").setOpacity(opacity);
         },
         showLayerInformation: function () {
-            Radio.trigger("LayerList", "showLayerInformationById", this.getLayerID());
+                Radio.trigger("LayerInformation", "add", {
+                    "id": this.getId(),
+                    "legendURL": this.get("legendURL"),
+                    // "metaURL": this.get("dt"),
+                    "metaID": this.get("datasets")[0].md_id,
+                    "name": this.get("datasets")[0].md_name
+                });
+                // window.open(this.get("metaURL"), "_blank");
         },
         setSelectionIDX: function (idx) {
             this.set("selectionIDX", idx);
@@ -135,53 +228,12 @@ define([
            return this.get("selectionIDX");
        },
        moveDown: function () {
-           Radio.trigger("SelectedList", "moveModelDownById", this.getLayerID());
+           Radio.trigger("SelectedList", "moveModelDownById", this.getId());
        },
        moveUp: function () {
-           Radio.trigger("SelectedList", "modeModelUpById", this.getLayerID());
+           Radio.trigger("SelectedList", "modeModelUpById", this.getId());
        }
     });
 
     return Layer;
 });
-
-
-// Layer = Item.extend({
-//     defaults: {
-//         // true wenn der Layer sichtbar ist
-//         isVisibleInMap: false,
-//         // true wenn das Item in den Fachdaten "gechecked" ist
-//         isChecked: false,
-//         isVisibleInTree: false
-//     },
-//     initialize: function () {
-//         this.listenToOnce(this, {
-//             "change:isVisibleInMap": this.createLayerAttr
-//         });
-//         console.log(this.id);
-//         // console.log(this.get("isVisibleInMap"));
-//         // console.log(this.attributes);
-//     },
-//     createLayerAttr: function (model) {
-//         // console.log(this);
-//         // console.log(1224);
-//     },
-//     setIsVisibleInMap: function (isVisibleInMap) {
-//         this.set("isVisibleInMap", isVisibleInMap);
-//     },
-//     getIsVisibleInMap: function () {
-//         this.get("isVisibleInMap");
-//     },
-//     setIsChecked: function (isChecked) {
-//         this.set("isChecked", isChecked);
-//     },
-//     getIsChecked: function () {
-//         this.get("isChecked");
-//     },
-//     setIsVisibleInTree: function (isVisibleInTree) {
-//         this.set("isVisibleInTree", isVisibleInTree);
-//     },
-//     getIsVisibleInTree: function () {
-//         this.get("isVisibleInTree");
-//     }
-// });

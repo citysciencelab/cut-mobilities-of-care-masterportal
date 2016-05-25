@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/menu/mobile/layer/template.html",
     "text!modules/menu/mobile/layer/templateSelected.html",
     "text!modules/menu/mobile/layer/templateSetting.html"
@@ -9,6 +10,7 @@ define([
         LayerTemplate = require("text!modules/menu/mobile/layer/template.html"),
         SelectedLayerTemplate = require("text!modules/menu/mobile/layer/templateSelected.html"),
         SettingTemplate = require("text!modules/menu/mobile/layer/templateSetting.html"),
+        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -18,10 +20,10 @@ define([
         templateSelected: _.template(SelectedLayerTemplate),
         templateSetting: _.template(SettingTemplate),
         events: {
-            "click .layer-item": "toggleIsChecked",
+            "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
             "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
-            "click .selected-layer-item > div": "toggleLayerVisibility",
+            "click .selected-layer-item > div": "toggleIsVisibleInMap",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
@@ -29,7 +31,7 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isChecked change:isLayerVisible": this.render,
+                 "change:isSelected change:isVisibleInMap": this.render,
                  "change:isSettingVisible": this.renderSetting
             });
         },
@@ -37,7 +39,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsInSelection() === true) {
+            if (Radio.request("BreadCrumb", "getLastItem").getId() === "SelectedLayer") {
                 this.$el.html(this.templateSelected(attr));
                 if (this.model.getIsSettingVisible() === true) {
                     this.renderSetting();
@@ -75,19 +77,19 @@ define([
 
         },
 
-        toggleIsChecked: function () {
-            this.model.toggleIsChecked();
+        toggleIsSelected: function () {
+            this.model.toggleIsSelected();
         },
 
         removeFromSelection: function () {
             this.model.setIsInSelection(false);
             this.model.setIsSettingVisible(false);
-            this.model.setIsChecked(false);
+            this.model.setIsSelected(false);
             this.$el.remove();
         },
 
-        toggleLayerVisibility: function () {
-            this.model.toggleLayerVisibility();
+        toggleIsVisibleInMap: function () {
+            this.model.toggleIsVisibleInMap();
         },
 
         showLayerInformation: function () {

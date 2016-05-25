@@ -22,7 +22,7 @@ define([
         *
         */
         initialize: function () {
-             var channel = Radio.channel("map");
+             var channel = Radio.channel("Map");
 
             channel.reply({
                 "getView": MapView.get("view")
@@ -33,7 +33,9 @@ define([
                 }
             }, this);
             channel.on({
-                "setBBox": this.setBBox
+                "setBBox": this.setBBox,
+                "addLayer": this.addLayer,
+                "removeLayer": this.removeLayer
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);

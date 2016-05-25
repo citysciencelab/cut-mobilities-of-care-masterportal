@@ -8,13 +8,13 @@ define([
         Item;
 
     Item = Backbone.Model.extend({
-        defaults: {
-            id: "",
-            parentId: "",
-            type: "", // welcher Node-Type - folder/layer/tool ...
-            title: "", //angezeigter Titel
-            glyphicon: "", // Bootstrap Glyphicon Class
-        },
+        // defaults: {
+        //     id: "",
+        //     parentId: "",
+        //     type: "", // welcher Node-Type - folder/layer/tool ...
+        //     title: "", //angezeigter Titel
+        //     glyphicon: "", // Bootstrap Glyphicon Class
+        // },
         setId: function (value) {
             this.set("id", value);
         },
@@ -27,11 +27,11 @@ define([
         getParentId: function () {
             return this.get("parentId");
         },
-        setTitle: function (value) {
-            this.set("title", value);
+        setName: function (value) {
+            this.set("name", value);
         },
-        getTitle: function () {
-            return this.get("title");
+        getName: function () {
+            return this.get("name");
         },
         setType: function (type) {
             return this.set("type", type);
@@ -45,15 +45,15 @@ define([
         setGlyphicon: function (glyphicon) {
             return this.get("glyphicon", glyphicon);
         },
-        // setIsVisible: function (value) {
-        //     this.set("isVisible", value);
-        // },
-        // getIsVisible: function () {
-        //     return this.get("isVisible");
-        // },
+        setIsVisible: function (value) {
+            this.set("isVisible", value);
+        },
+        getIsVisible: function () {
+            return this.get("isVisible");
+        },
         updateList: function (value) {
-            console.log(this);
             this.collection.updateList(value, "slideForward");
+            // gehört hier nicht hin!?
             if (this.getType() === "folder") {
                 Radio.trigger("BreadCrumb", "addItem", this);
             }

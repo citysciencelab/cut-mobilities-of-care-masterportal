@@ -9,8 +9,16 @@ define([
 
     CustomTreeParser = Parser.extend({
         initialize: function () {
-            this.parseTree(this.getBaselayer(), "Baselayer", 0);
-            this.parseTree(this.getOverlayer(), "Overlayer", 0);
+            var treeType = Radio.request("Parser", "getPortalConfig").Baumtyp;
+
+            if (treeType === "light") {
+                this.parseTree(this.getOverlayer(), "themen", 0);
+                this.parseTree(this.getBaselayer(), "themen", 0);
+            }
+            else {
+                this.parseTree(this.getBaselayer(), "Baselayer", 0);
+                this.parseTree(this.getOverlayer(), "Overlayer", 0);
+            }
             this.createModelList();
         },
 
@@ -25,8 +33,12 @@ define([
                 _.each(object.Layer, function (layer) {
                     // Layer eines Metadatensatzes (nicht alle) die gruppiert werden sollen --> z.B. Geobasisdaten (farbig)
                     // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gruppiert
+                    // merge services.json und config.json
                     if (_.isArray(layer.id)) {
                         layer = _.extend(this.mergeLayersByIds(layer.id, Radio.request("RawLayerList", "getLayerAttributesList")), _.omit(layer, "id"));
+                    }
+                    else {
+                        layer = _.extend(layer, Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.id}), layer);
                     }
                     // hier layer mergen wenn mehere layers z.b. Hintergrundkarten
                     // HVV :(

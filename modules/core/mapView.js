@@ -89,6 +89,9 @@ define([
                 },
                 "getZoomLevel": function () {
                     return this.getZoom();
+                },
+                "getResolutions": function () {
+                    return this.getResolutions();
                 }
             }, this);
 
@@ -295,6 +298,10 @@ define([
                 resolution = scale / (mpu * 39.37 * dpi);
 
             return resolution;
+        },
+
+        getResolutions: function () {
+            return this.get("resolutions");
         },
 
         /**

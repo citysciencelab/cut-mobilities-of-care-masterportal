@@ -42,19 +42,19 @@ define([
                     break;
                 }
                 case "routing" : {
-                    EventBus.trigger("toggleWin", ["routing", this.getTitle(), this.getGlyphicon()]);
+                    EventBus.trigger("toggleWin", ["routing", this.getName(), this.getGlyphicon()]);
                     break;
                 }
                 case "addWMS": {
-                    EventBus.trigger("toggleWin", ["addwms", this.getTitle(), this.getGlyphicon()]);
+                    EventBus.trigger("toggleWin", ["addwms", this.getName(), this.getGlyphicon()]);
                     break;
                 }
                 case "wfsFeatureFilter": {
-                    EventBus.trigger("toggleWin", ["wfsfeaturefilter", this.getTitle(), this.getGlyphicon()]);
+                    EventBus.trigger("toggleWin", ["wfsfeaturefilter", this.getName(), this.getGlyphicon()]);
                     break;
                 }
                 case "treeFilter": {
-                    EventBus.trigger("toggleWin", ["treefilter", this.getTitle(), this.getGlyphicon()]);
+                    EventBus.trigger("toggleWin", ["treefilter", this.getName(), this.getGlyphicon()]);
                     break;
                 }
                 case "featureLister": {
@@ -70,9 +70,6 @@ define([
         },
         getEmail: function () {
             return this.get("email");
-        },
-        getName: function () {
-            return this.get("name");
         }
     });
 

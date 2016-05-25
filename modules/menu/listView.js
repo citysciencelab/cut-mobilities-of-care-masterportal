@@ -45,24 +45,14 @@ define([
 
         initialize: function () {
 
-
             this.listenTo(this.collection, {
                 "updateTreeView": function () {
                     this.renderListWithAnimation({animation: "slideForward"});
-                    // console.log(options);
-// console.log(model);
-                    // var rootModels = this.collection.where({isVisible: true});
-                    //     _.each(rootModels, function (model) {
-                    //         this.addViews(model, true);
-                    //     }, this);
                 }
             });
-            // console.log(this.collection);
-            // this.collection = Radio.request("ModelList", "getCollection");
 
-            new BreadCrumbListView();
             this.render();
-
+            new BreadCrumbListView();
         },
 
         renderListWithAnimation: function (options) {
@@ -88,7 +78,6 @@ define([
         },
 
         renderTopMenu: function (isMobile) {
-            console.log(this.collection);
             var rootModels = this.collection.where({parentId: "root"});
                 _.each(rootModels, function (model) {
                     this.addViews(model, isMobile);

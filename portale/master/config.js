@@ -140,7 +140,7 @@ define(function () {
         * @default [false]
         */
         allowParametricURL: true,
-        
+
         /**
         * @memberof config
         * @type {Object}
@@ -285,7 +285,7 @@ define(function () {
         * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
         * @default [false]
         */
-        menubar: true,
+        // menubar: true,
         /**
         * @memberof config
         * @type {Boolean}

@@ -19,6 +19,7 @@ define([
 
             channel.reply({
                 "getLayerWhere": this.getLayerWhere,
+                "getLayerAttributesWhere": this.getLayerAttributesWhere,
                 "getLayerListWhere": this.getLayerListWhere,
                 "getLayerAttributesList": this.getLayerAttributesList
             }, this);
@@ -219,6 +220,15 @@ define([
          */
         getLayerWhere: function (attributes) {
             return this.findWhere(attributes);
+        },
+
+        /**
+         * Liefert das erste Model zurück, das den Attributen entspricht
+         * @param  {Object} attributes
+         * @return {Backbone.Model[]} - Liste der Models
+         */
+        getLayerAttributesWhere: function (attributes) {
+            return this.findWhere(attributes).toJSON();
         },
 
          /**
