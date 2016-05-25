@@ -76,12 +76,6 @@ define(function () {
         /**
         * @memberof config
         * @type {String}
-        * @desc Pfad zur Konfig-Datei für den automatisiert generiereten Layerbaum
-        */
-        categoryConf: "../components/lgv-config/category.json",
-        /**
-        * @memberof config
-        * @type {String}
         * @desc Pfad zur Proxy-CGI
         */
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -115,19 +109,24 @@ define(function () {
         * @desc Steuert, ob die Menubar initial ausgeklappt ist oder nicht.
         */
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: false
-            // featureLister: 20
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         searchBar: {
