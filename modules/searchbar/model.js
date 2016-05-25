@@ -30,7 +30,7 @@ define([
         setSearchString: function (value, eventType) {
             var splitAdress = value.split(" ");
 
-            if (value.length >= 3) {
+            if (value.length >= Config.searchBar.minChars) {
                 // für Copy/Paste bei Adressen
                 if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
                     var houseNumber = splitAdress[splitAdress.length - 1],
