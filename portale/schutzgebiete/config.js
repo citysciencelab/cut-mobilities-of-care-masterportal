@@ -6,9 +6,9 @@ define(function () {
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
-                {id: "713", visibility: false,  "name" :"Stadtplan S-W"},
+                {id: "713", visibility: false,"name" :"Stadtplan S-W"},
                 {id: "1993", visibility: true,"name" :"Fauna-Flora-Habitat-Gebiete"},
-                {id: "1994", visibility: true, "name" :"Vogelschutzgebiete"},
+                {id: "1994", visibility: true,"name" :"Vogelschutzgebiete"},
                 {id: "1999", visibility: true},
                 {id: "1998", visibility: true},
                 {id: "1992", visibility: true}
@@ -28,6 +28,7 @@ define(function () {
             zoom: true,
             toggleMenu: true,
             orientation: "once",
+            fullScreen: true,
             poi: true
         },
         customModules: [],
