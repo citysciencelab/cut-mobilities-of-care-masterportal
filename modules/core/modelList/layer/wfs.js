@@ -45,7 +45,8 @@ define([
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
                 routable: this.get("routable"),
-                gfiTheme: this.get("gfiTheme")
+                gfiTheme: this.get("gfiTheme"),
+                id: this.getId()
             }));
 
             this.updateData();

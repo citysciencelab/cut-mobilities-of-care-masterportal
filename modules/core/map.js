@@ -95,6 +95,7 @@ define([
             //     }.bind(this), false);
             // }
         Radio.trigger("zoomtofeature","zoomtoid");
+        Radio.trigger("ModelList", "addVisibleItems");
         },
 
         setBBox: function(bbox) {

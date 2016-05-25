@@ -31,7 +31,10 @@ define([
 
             channel.reply({
                 "getPortalConfig": this.getPortalConfig,
-                "getItemsByParentId": this.getItemsByParentId
+                "getItemsByParentId": this.getItemsByParentId,
+                "getItemsByAttributes": function (attributes) {
+                    return _.where(this.getItemList(), attributes);
+                }
             }, this);
 
             this.fetch();

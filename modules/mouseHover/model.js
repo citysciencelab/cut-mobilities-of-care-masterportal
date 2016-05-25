@@ -3,9 +3,8 @@ define([
     "backbone.radio",
     "openlayers",
     "eventbus",
-    "config",
     "bootstrap/popover"
-], function (Backbone, Radio, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
@@ -22,35 +21,31 @@ define([
                 element: $("#mousehoverpopup")[0]
             }));
             this.set("element", this.get("mhpOverlay").getElement());
-            EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            this.checkLayersAndRegisterEvent(Radio.request("map", "getMap"));
+            this.checkLayersAndRegisterEvent(Radio.request("Map", "getMap"));
         },
         GFIPopupVisibility: function (GFIPopupVisibility) {
             this.set("GFIPopupVisibility", GFIPopupVisibility);
         },
         checkLayersAndRegisterEvent: function (map) {
-            // Lese Config-Optionen ein
-            var layerIDs = Config.tree.layer,
+            var layerList = Radio.request("ModelList", "getModelsByAttributes", {typ: "WFS"}),
                 wfsList = [];
 
-            _.each(layerIDs, function (element) {
-                if (_.has(element, "mouseHoverField")) {
-                    var id = element.id,
-                        mhf = element.mouseHoverField;
-
+            _.each(layerList, function (element) {
+                if (element.has("mouseHoverField")) {
                     wfsList.push({
-                        layerId: id,
-                        fieldname: mhf
+                        layerId: element.getId(),
+                        fieldname: element.get("mouseHoverField")
                     });
                 }
             });
+
             // speichere Ergebnisse in wfsList
             this.set("wfsList", wfsList);
             if (wfsList && wfsList.length > 0) {
                 map.on("pointermove", function (evt) {
                     if (this.get("GFIPopupVisibility") === false) {
-                        EventBus.trigger("newMouseHover", evt, map);
+                        this.checkForEachFeatureAtPixel(evt, map);
                     }
                 }, this);
                 /**
@@ -115,14 +110,14 @@ define([
                     _.each(list, function (element) {
                         pFeatureArray.push({
                             feature: element,
-                            layerId: featuresAtPixel.layer.id
+                            layerId: featuresAtPixel.layer.get("id")
                         });
                     });
                 }
                 else {
                     pFeatureArray.push({
                         feature: selFeature,
-                        layerId: featuresAtPixel.layer.id
+                        layerId: featuresAtPixel.layer.get("id")
                     });
                 }
                 if (pFeatureArray.length > 0) {

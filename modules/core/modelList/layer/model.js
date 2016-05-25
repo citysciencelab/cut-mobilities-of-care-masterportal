@@ -54,6 +54,10 @@ define([
                 },
                 "change:transparence": this.updateLayerTransparence
             });
+
+            if (this.getIsVisibleInMap() === true) {
+                this.setIsSelected(true);
+            }
         },
 
         /**

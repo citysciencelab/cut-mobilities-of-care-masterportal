@@ -18,11 +18,17 @@ define([
                var channel = Radio.channel("ModelList");
 
                channel.reply({
-                   "getCollection": this
-               });
+                   "getCollection": this,
+                   "getModelsByAttributes": function (attributes) {
+                       return this.where(attributes)
+                   }
+               }, this);
 
-               channel.on({
-                   "setLayerAttributions": function (layerId, attrs) {
+                channel.on({
+                    "addVisibleItems": function () {
+                        this.add(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}));
+                    },
+                    "setLayerAttributions": function (layerId, attrs) {
                        var model = this.findWhere({type: "layer", layerId: layerId});
 
                        if (!_.isUndefined(model)) {

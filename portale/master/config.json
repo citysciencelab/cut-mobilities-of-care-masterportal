@@ -61,7 +61,8 @@
         },
         {
           "id": "1711",
-          "visibility": true
+          "visibility": true,
+          "mouseHoverField": "name"
         }
       ]
     }
