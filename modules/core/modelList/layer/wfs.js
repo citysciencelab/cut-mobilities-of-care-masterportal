@@ -141,9 +141,6 @@ define([
                     // });
                 }
             });
-            console.log(this);
-            // this.setIsSelected(false);
-            // this.setIsSelected(true);
         },
 
         /*

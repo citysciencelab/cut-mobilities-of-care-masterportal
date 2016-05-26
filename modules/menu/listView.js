@@ -52,7 +52,9 @@ define([
             });
 
             this.render();
-            new BreadCrumbListView();
+            if (Radio.request("Util", "isViewMobile") === true) {
+                new BreadCrumbListView();
+            }
         },
 
         renderListWithAnimation: function (options) {
