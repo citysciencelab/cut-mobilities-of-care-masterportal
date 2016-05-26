@@ -82,10 +82,10 @@ define([
                 var layerName = layer.name.replace(/ /g, ""),
                     metaName;
 
-                if (layer.metaName !== null) {
+                if (layer.metaName !== null) {console.log(layer);
                     metaName = layer.metaName.replace(/ /g, "");
                     if (metaName.search(searchStringRegExp) !== -1 && metaName === layerName) {
-                        layer.type = "nodeLayer";
+                        layer.typ = "nodeLayer";
                         EventBus.trigger("searchbar:pushHits", "hitList", layer);
                     }
                     else if (metaName.search(searchStringRegExp) !== -1 || layerName.search(searchStringRegExp) !== -1) {
