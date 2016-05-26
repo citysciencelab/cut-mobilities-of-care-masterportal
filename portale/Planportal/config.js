@@ -72,12 +72,12 @@ define(function () {
                 definitions: [
                     {
                         url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
-                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
                         name: "bplan"
                     },
                     {
                         url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
-                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=imverfahren&propertyName=plan",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
                         name: "bplan"
                     }
                 ]
