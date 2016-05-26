@@ -60,7 +60,7 @@ define([
                 }
             },
 
-            updateList: function (parentId) {
+            updateList: function (parentId, slideDirection) {
                 var items = Radio.request("Parser", "getItemsByParentId", parentId);
 
                 this.add(items);
@@ -75,7 +75,7 @@ define([
                 else {
                     this.setModelsVisibleByParentId(parentId);
                 }
-                this.trigger("updateTreeView");
+                this.trigger("updateTreeView", slideDirection);
             },
 
             /**

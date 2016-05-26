@@ -46,8 +46,8 @@ define([
         initialize: function () {
 
             this.listenTo(this.collection, {
-                "updateTreeView": function () {
-                    this.renderListWithAnimation({animation: "slideForward"});
+                "updateTreeView": function (slideDirection) {
+                    this.renderListWithAnimation(slideDirection);
                 }
             });
 
@@ -57,11 +57,11 @@ define([
             }
         },
 
-        renderListWithAnimation: function (options) {
+        renderListWithAnimation: function (slideDirection) {
             var visibleModels = this.collection.where({isVisible: true}),
                 modelsInSelection = this.collection.where({isInSelection: true}),
-                slideOut = (options.animation === "slideBack") ? "right" : "left",
-                slideIn = (options.animation === "slideForward") ? "right" : "left",
+                slideOut = (slideDirection === "slideBack") ? "right" : "left",
+                slideIn = (slideDirection === "slideForward") ? "right" : "left",
                 that = this;
 
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
