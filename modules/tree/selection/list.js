@@ -11,7 +11,8 @@ define([
             var channel = Radio.channel("SelectedList");
 
             channel.reply({
-                "getSelectionIDXByID": this.getSelectionIDXByID
+                "getSelectionIDXByID": this.getSelectionIDXByID,
+                "getModels": this.models
             }, this);
 
             this.listenTo(channel, {
