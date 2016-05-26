@@ -147,18 +147,18 @@ define(function () {
         * @desc Optionale Konfigurations-Einstellungen für den URL parameter "featureid"
         * @property {string} [url] - URL zum WFS.
         * @property {string} [version] - Die Version des WFS.
-        * @property {string} [typename] - typename des WFS.
-        * @property {string} [literalprefix] - prefix an das die ID drangehängt wird. da wird. Kommt beim request in den Filter.
+        * @property {string} [typename] - typename des WFS. Entspricht Tabelle. Kommt beim request in den Filter.
+        * @property {string} [valuereference] - valuereference. Entspricht Spalte. Kommt beim request in den Filter.
         * @property {string} [imglink] - Link für den Marker.
         * @property {string} [layerid] - ID des layers an den die Marker gekoppelt werden.
         */
         zoomtofeature: {
             url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version:"2.0.0",
+            version: "2.0.0",
             typename: "app:hamburgconvention",
-            literalprefix: "APP_HAMBURGCONVENTION_",
+            valuereference:"app:flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4425"
+            layerid: "4426"
         },
         /**
         * @memberof config
