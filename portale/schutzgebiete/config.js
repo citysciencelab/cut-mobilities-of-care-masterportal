@@ -6,9 +6,9 @@ define(function () {
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
-                {id: "713", visibility: false,"name" :"Stadtplan S-W"},
-                {id: "1993", visibility: true,"name" :"Fauna-Flora-Habitat-Gebiete"},
-                {id: "1994", visibility: true,"name" :"Vogelschutzgebiete"},
+                {id: "713", visibility: false, "name" : "Stadtplan S-W"},
+                {id: "1993", visibility: true, "name" : "Fauna-Flora-Habitat-Gebiete"},
+                {id: "1994", visibility: true, "name" : "Vogelschutzgebiete"},
                 {id: "1999", visibility: true},
                 {id: "1998", visibility: true},
                 {id: "1992", visibility: true}
@@ -83,19 +83,7 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-        menu: {
-            helpButton: false,
-            searchBar: true,
-            layerTree: true,
-            tools: true,
-            featureLister: 10,
-            treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: true,
-            routing: true,
-            addWMS: true,
-            formular: {}
-        },
+        
         startUpModul: "",
         searchBar: {
             minChars: 3,
@@ -114,6 +102,19 @@ define(function () {
             printID: "99999",
             title: "Schutzgebietskarte",
             gfi: false
+        },
+        menu: {
+            helpButton: false,
+            searchBar: true,
+            layerTree: true,
+            tools: true,
+            featureLister: 10,
+            treeFilter: false,
+            wfsFeatureFilter: true,
+            legend: true,
+            routing: true,
+            addWMS: true,
+            formular: {}
         },
         tools: {
             gfi: {
