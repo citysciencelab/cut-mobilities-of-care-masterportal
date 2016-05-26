@@ -70,34 +70,32 @@ define([
                 if (_.isObject(pair[1])){
                     this.parseMenu(pair[1], pair[0]);
                 }
-                else {
-                    var type = "";
+                var type = "";
 
-                    switch (pair[0]) {
-                        case "parcelSearch":
-                        case "gfi":
-                        case "print":
-                        case "coord":
-                        case "measure":
-                        case "draw":
-                        case "routing":
-                        case "addWMS": {
-                            type = "tool";
-                            break;
-                        }
-                        default: {
-                            type = "folder";
-                            break;
-                        }
+                switch (pair[0]) {
+                    case "parcelSearch":
+                    case "gfi":
+                    case "print":
+                    case "coord":
+                    case "measure":
+                    case "draw":
+                    case "routing":
+                    case "addWMS": {
+                        type = "tool";
+                        break;
                     }
-                    this.addItem({
-                        type: type,
-                        // title: pair[0],
-                        parentId: parentId,
-                        name: pair[0],
-                        id: pair[0]
-                    });
+                    default: {
+                        type = "folder";
+                        break;
+                    }
                 }
+                this.addItem({
+                    type: type,
+                    // title: pair[0],
+                    parentId: parentId,
+                    name: pair[0],
+                    id: pair[0]
+                });
             }, this);
         },
         /**
