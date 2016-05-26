@@ -53,6 +53,10 @@ define([
                 this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
                 this.delegateEvents();
             }
+            else if (this.model.get("isCurrentWin") === false) {
+                $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
+            }
             else {
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
