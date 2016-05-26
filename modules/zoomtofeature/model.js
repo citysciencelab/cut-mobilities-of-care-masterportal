@@ -83,8 +83,6 @@ define([
 
             _.each(ids, function (id) {
                 var data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename + "&Filter=<Filter><PropertyIsEqualTo><ValueReference>" + valuereference + "</ValueReference><Literal>" + id + "</Literal></PropertyIsEqualTo></Filter>";
-                console.log(url);
-console.log(Util.getProxyURL(url));
                 this.sendRequest(url, data);
             }, this);
             this.sendToMap();
@@ -94,15 +92,14 @@ console.log(Util.getProxyURL(url));
         sendRequest: function (url, data) {
             $.ajax({
                     url: Util.getProxyURL(url),
-                    data: data,
+                    data: encodeURI(data),
                     context: this,
                     async: false,
                     type: "GET",
                     success: this.getFeatures,
                     timeout: 6000,
-                    error: function (errorThrown) {
-                        console.log(errorThrown);
-//                        alert("URL: " + Util.getProxyURL(url) + " nicht erreichbar.");
+                    error: function () {
+                        alert("URL: " + Util.getProxyURL(url) + " nicht erreichbar.");
                     }
                 });
         },
