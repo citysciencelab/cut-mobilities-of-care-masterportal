@@ -40,7 +40,10 @@ define([
                }, this);
 
                this.listenTo(this, {
-                   "change:isActive": this.setActiveToolToFalse
+                   "change:isActive": this.setActiveToolToFalse,
+                   "change:isVisibleInMap": function () {
+                       channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
+                   }
                });
             },
 
@@ -52,7 +55,7 @@ define([
                     else if (attrs.typ === "WFS") {
                         return new WFSLayer(attrs, options);
                     }
-                    else if (attrs.typ === "WFS") {
+                    else if (attrs.typ === "GROUP") {
                         // muss noch gemacht werden
                     }
                 }

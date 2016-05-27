@@ -85,7 +85,9 @@ define([
                     case "measure":
                     case "draw":
                     case "routing":
+                    case "legend":
                     case "searchByCoord":
+                    case "kmlimport":
                     case "addWMS": {
                         type = "tool";
                         break;

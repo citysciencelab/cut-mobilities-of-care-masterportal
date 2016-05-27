@@ -12,7 +12,8 @@
           "coord": true,
           "measure": true,
           "draw": true,
-          "searchByCoord": true
+          "searchByCoord": true,
+          "kmlimport": true
         },
         "legend": true,
         "routing": true,

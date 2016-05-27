@@ -37,7 +37,10 @@ define([
 
         activateTool: function () {
             EventBus.trigger("activateClick", this.get("name"));
-            if (this.get("name") !== "gfi" && this.get("name") !== "coord") {
+            if (this.getName() === "legend") {
+                EventBus.trigger("toggleLegendWin");
+            }
+            else if (this.get("name") !== "gfi" && this.get("name") !== "coord") {
                 EventBus.trigger("toggleWin", [this.get("name"), this.get("title"), this.get("glyphicon")]);
             }
             else {

@@ -151,6 +151,17 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                     });
                     break;
                 }
+                case "legend": {
+                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                        if (Util.isAny()) {
+                            new MobileLegendView();
+                        }
+                        else {
+                            new LegendView();
+                        }
+                    });
+                    break;
+                }
                 default: {
                     break;
                 }
