@@ -38,6 +38,10 @@ define([
                    "updateList": this.updateList,
                    "checkIsExpanded": this.checkIsExpanded
                }, this);
+
+               this.listenTo(this, {
+                   "change:isActive": this.setActiveToolToFalse
+               });
             },
 
             model: function (attrs, options) {
@@ -145,6 +149,12 @@ define([
                 _.each(models, function (model) {
                     model.setIsSettingVisible(value);
                 });
+            },
+
+            setActiveToolToFalse: function (model) {
+                var tool = _.without(this.where({isActive: true}), model)[0];
+
+                tool.setIsActive(false, {silent: true});
             }
     });
 

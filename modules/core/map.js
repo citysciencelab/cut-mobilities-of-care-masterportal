@@ -271,12 +271,13 @@ define([
         */
         setPositionCoordPopup: function (evt) {
             // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker(evt.pixel[1], evt.pixel[0]) === true) {
-                return;
-            }
-            else {
+            // TODO
+            // if (this.checkInsideSearchMarker(evt.pixel[1], evt.pixel[0]) === true) {
+            //     return;
+            // }
+            // else {
                 EventBus.trigger("setPositionCoordPopup", evt.coordinate);
-            }
+            // }
         },
         /**
         * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
@@ -299,8 +300,8 @@ define([
          * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
          */
         setGFIParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WMS"}),
-                visibleGeoJSONLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "GeoJSON"}),
+            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}),
+                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GeoJSON"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
                 gfiParams = [],
                 scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale,
@@ -311,20 +312,21 @@ define([
                 coordinate = evt.coordinate;
 
             // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker(eventPixel[1], eventPixel[0]) === true) {
-                return;
-            }
+            // TODO
+            // if (this.checkInsideSearchMarker(eventPixel[1], eventPixel[0]) === true) {
+            //     return;
+            // }
             // WFS
             if (isFeatureAtPixel === true) {
                 var layerByFeature,
-                    visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
+                    visibleWFSLayerList = Radio.request("LayerList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
                     // cluster-source
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
                             layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getSource().getFeatureById(feature.getId());
+                                return layer.getClusterLayerSource().getFeatureById(feature.getId());
                             });
                             if (_.isUndefined(layerByFeature) === false) {
                                 gfiParams.push({
@@ -341,7 +343,7 @@ define([
                     else {
                         if (featureAtPixel.getId() !== undefined) {
                             layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getFeatureById(featureAtPixel.getId());
+                                return layer.getLayerSource().getFeatureById(featureAtPixel.getId());
                             });
                             if (!_.isUndefined(layerByFeature)) {
                                 gfiParams.push({
@@ -364,7 +366,7 @@ define([
 
                     if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                         if (element.get("typ") === "WMS") {
-                            var gfiURL = element.get("source").getGetFeatureInfoUrl(
+                            var gfiURL = element.getLayerSource().getGetFeatureInfoUrl(
                                 coordinate, resolution, projection,
                                 {INFO_FORMAT: element.get("infoFormat") || "text/xml"}
                             );
@@ -395,7 +397,7 @@ define([
 
                         if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                             if (layer.get("typ") === "WMS") {
-                                var gfiURL = layer.get("source").getGetFeatureInfoUrl(
+                                var gfiURL = layer.getLayerSource().getGetFeatureInfoUrl(
                                     coordinate, resolution, projection,
                                     {INFO_FORMAT: layer.get("infoFormat") || "text/xml"}
                                 );

@@ -50,7 +50,7 @@ define(function () {
        searchBar: {
            gazetteer: {
                minChars: 3,
-               url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+               url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                searchStreets: true,
                searchHouseNumbers: true,
                searchDistricts: true,
@@ -86,6 +86,7 @@ define(function () {
            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
            geoLocateHit: true
        },
+       gemarkungen: "../components/lgv-config/gemarkung.json",
        tools: {
            gfi: {
                title: "Informationen abfragen",
@@ -103,6 +104,10 @@ define(function () {
            measure: {
                title: "Strecke / Fläche messen",
                glyphicon: "glyphicon-resize-full"
+           },
+           searchByCoord: {
+               title: "Koordinatensuche",
+               glyphicon: "glyphicon-record"
            }
        }
    };
