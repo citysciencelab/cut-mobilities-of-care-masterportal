@@ -264,16 +264,8 @@ define([
                 var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
                 if (value === "SIMPLE") {
-                    Config.isMenubarVisible = false;
+                    Config.simplemap = true;
                     Config.controls = {};
-                    Config.footer = {};
-                    Config.tools = {
-                        gfi: {
-                            title: "Informationen abfragen",
-                            glyphicon: "glyphicon-info-sign",
-                            isActive: true
-                        }
-                    };
                 }
 
             }

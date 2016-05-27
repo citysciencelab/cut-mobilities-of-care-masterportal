@@ -130,6 +130,7 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,             
             placeholder: "Suche Adresse, Stadtteil",
             gazetteer: {
                 minChars: 3,
