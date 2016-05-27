@@ -85,8 +85,7 @@ define([
         },
 
         /**
-         * Holt sich die Liste der Layer aus dem Layermodul
-         * und erzeugt daraus einen Baum
+         * Erzeugt den Themen Baum aus der von Rawlaylist geparsten Services.json
          */
         parseLayerList: function (layerList) {
             var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
