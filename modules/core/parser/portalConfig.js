@@ -64,15 +64,20 @@ define([
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
-        parseMenu: function (menuLevel, parentId) {
-            var currentLevel = _.pairs(menuLevel);
+        parseMenu: function (items, parentId) {
+            // Pair: (name, items)
+            var currentLevel = _.pairs(items);
+
             _.each(currentLevel, function (pair) {
-                if (_.isObject(pair[1])){
-                    this.parseMenu(pair[1], pair[0]);
+                var name = pair[0],
+                    value = pair[1];
+
+                if (_.isObject(value)) {
+                    this.parseMenu(value, name);
                 }
                 var type = "";
 
-                switch (pair[0]) {
+                switch (name) {
                     case "parcelSearch":
                     case "gfi":
                     case "print":
@@ -80,6 +85,7 @@ define([
                     case "measure":
                     case "draw":
                     case "routing":
+                    case "searchByCoord":
                     case "addWMS": {
                         type = "tool";
                         break;
@@ -93,8 +99,8 @@ define([
                     type: type,
                     // title: pair[0],
                     parentId: parentId,
-                    name: pair[0],
-                    id: pair[0]
+                    name: name,
+                    id: name
                 });
             }, this);
         },
@@ -161,7 +167,11 @@ define([
          * @return {[type]} [description]
          */
         createModelList: function () {
-            new ModelList(_.where(this.getItemList(), {parentId: "root"}));
+            new ModelList(_.filter(this.getItemList(), function (model) {
+                return model.parentId === "root" ||
+                    model.parentId === "tools" ||
+                    model.parentId === "themen";
+            }));
         },
 
         getItemsByParentId: function (value) {
