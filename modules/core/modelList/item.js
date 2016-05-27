@@ -8,13 +8,14 @@ define([
         Item;
 
     Item = Backbone.Model.extend({
-        // defaults: {
-        //     id: "",
-        //     parentId: "",
-        //     type: "", // welcher Node-Type - folder/layer/tool ...
-        //     title: "", //angezeigter Titel
-        //     glyphicon: "", // Bootstrap Glyphicon Class
-        // },
+        defaults: {
+            name: "",
+            id: "",
+            parentId: "",
+            type: "", // welcher Node-Type - folder/layer/tool ...
+            title: "", //angezeigter Titel
+            glyphicon: "", // Bootstrap Glyphicon Class
+        },
         setId: function (value) {
             this.set("id", value);
         },
