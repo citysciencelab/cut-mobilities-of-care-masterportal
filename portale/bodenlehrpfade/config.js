@@ -3,67 +3,81 @@ define(function () {
         allowParametricURL: true,
         view: {
             center: [571174, 5929140], // Rathausmarkt
-            resolution: 5.2916772500211667 // 1:20.000
+            resolution: 5.2916638091682096 // 1:20.000
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        // categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
-        layerIDs:
-        [
-        {id: "453", visible: true},
-        {id: "94", visible: false},
-        {id:
-         [
-            {
-                id: "1935",
-                name: "Bus1"
-            },
-            {
-                id: "1935",
-                name: "Bus2"
-            }
-         ],
-         visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
+        tree: {
+            type: "light",
+            layer: [
+            {id: "453", visible: true},
+            {id: "94", visible: false},
+            {id: "1935", visible: false, styles: ["geofox-bus", "geofox_BusName", "geofox-bahn"], name: ["HVV Buslinien", "HVV Buslinin Nummern", "HVV Bahnlinien"]},
+            {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
+            {id: "2284,2401", visible: true, name: "Lehrpfad"},
+            {id: "2283,2402", visible: true, name: "Tafeln"}
+            ]
         },
-        {id: "1935", visible: false, styles: "geofox-bahn", name: "HVV Bahnlinien"},
-        {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-        {id: "2284,2401", visible: true, name: "Lehrpfad"},
-        {id: "2283,2402", visible: true, name: "Tafeln"}
-        ],
+        controls: {
+            zoom: true,
+            toggleMenu: true
+        },
         menubar: true,
         mouseHover: false,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: false,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,
             placeholder: "Suche Adresse, Stadtteil",
-            gazetteerURL: function () {
-                return "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0";
+            gazetteer: {
+                minChars: 3,
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
             }
         },
         tools: {
-            gfi: true,
-            measure: true,
-            print: true,
-            coord: true,
-            draw: true,
-            active: "gfi"
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
+            print: {
+                title: "Karte drucken",
+                glyphicon: "glyphicon-print"
+            },
+            coord: {
+                title: "Koordinate abfragen",
+                glyphicon: "glyphicon-screenshot"
+            },
+            measure: {
+                title: "Strecke / Fläche messen",
+                glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen / Schreiben",
+                glyphicon: "glyphicon-pencil"
+            }
         },
-        orientation: true,
-        poi: false,
         print: {
             printID: "99997",
             title: "Bodenschutz-Portal",
