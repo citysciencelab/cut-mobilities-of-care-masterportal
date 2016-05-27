@@ -60,9 +60,10 @@ define("app",
 
     require([
         "modules/core/map",
-        "config"
-    ], function (Map, Config) {
-        //new Map();
+        "config",
+        "backbone.radio"
+    ], function (Map, Config, Radio) {
+
 
         if (Util.isAny()) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
@@ -105,83 +106,158 @@ define("app",
             });
         }
 
+        require(["modules/window/view"], function (WindowView) {
+            new WindowView();
+        });
+
+        // Tools
+        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
+            switch (tool.name) {
+                case "gfi": {
+                    require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
+                        new GFIPopupView();
+                    });
+                    break;
+                }
+                case "coord": {
+                    require(["modules/coordpopup/view"], function (CoordPopupView) {
+                        new CoordPopupView();
+                    });
+                    break;
+                }
+                case "measure": {
+                    require(["modules/tools/measure/view"], function (MeasureView) {
+                        new MeasureView();
+                    });
+                    break;
+                }
+                case "draw": {
+                    require(["modules/tools/draw/view"], function (DrawView) {
+                        new DrawView();
+                    });
+                    break;
+                }
+                case "print": {
+                    require(["modules/tools/print/view"], function (PrintView) {
+                        new PrintView();
+                    });
+                    break;
+                }
+                case "parcelSearch": {
+                    require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
+                        new ParcelSearchView();
+                    });
+                    break;
+                }
+                case "searchByCoord": {
+                    require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                        new SearchByCoordView();
+                    });
+                    break;
+                }
+                case "kmlimport": {
+                    require(["modules/tools/kmlimport/view"], function (ImportView) {
+                        new ImportView();
+                    });
+                    break;
+                }
+                case "legend": {
+                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                        if (Util.isAny()) {
+                            new MobileLegendView();
+                        }
+                        else {
+                            new LegendView();
+                        }
+                    });
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        });
+
+        require(["modules/mapMarker/view"], function (MapMarkerView) {
+            new MapMarkerView();
+        });
+
+        if (_.has(Config, "searchBar") === true) {
+            require(["modules/searchbar/view"], function (SearchbarView) {
+                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+            });
+        }
+
         if (Config.menubar === true) {
             require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
                 new MenubarView();
                 if ($("#map").is(":visible") === true) {
                     new ControlsView();
                 }
-                require(["modules/window/view"], function (WindowView) {
-                    new WindowView();
-                });
-                if (_.has(Config, "tools") === true) {
-                    require(["modules/tools/listView"], function (ToolsListView) {
-                        new ToolsListView();
-                    });
-                    if (_.has(Config.tools, "coord") === true) {
-                        require(["modules/coordpopup/view"], function (CoordPopupView) {
-                            new CoordPopupView();
-                        });
-                    }
-                    if (_.has(Config.tools, "gfi") === true) {
-                        require(["modules/gfipopup/popup/view", "modules/gfipopup/popup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
-                            if (Util.isAny()) {
-                                new MobileGFIPopupView();
-                            }
-                            else {
-                                new GFIPopupView();
-                            }
-                        });
-                    }
-                    if (_.has(Config.tools, "measure") === true && !Util.isAny()) {
-                        require(["modules/tools/measure/view"], function (MeasureView) {
-                            new MeasureView();
-                        });
-                    }
-                    if (_.has(Config.tools, "draw") === true && !Util.isAny()) {
-                        require(["modules/tools/draw/view"], function (DrawView) {
-                            new DrawView();
-                        });
-                    }
-                    if (_.has(Config.tools, "kmlimport") === true && !Util.isAny()) {
-                        require(["modules/tools/kmlimport/view"], function (ImportView) {
-                            new ImportView();
-                        });
-                    }
-                    if (Config.tools.record === true) {
-                        require(["modules/wfs_t/view"], function (WFS_TView) {
-                            new WFS_TView();
-                        });
-                    }
-                    if (_.has(Config.tools, "print") === true) {
-                        require(["modules/tools/print/view"], function (PrintView) {
-                            new PrintView();
-                        });
-                    }
-                    if (_.has(Config.tools, "parcelSearch") === true) {
-                        require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
-                            new ParcelSearchView();
-                        });
-                    }
-                    if (_.has(Config.tools, "searchByCoord") === true) {
-                        require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
-                            new SearchByCoordView();
-                        });
-                    }
-                }
+                // require(["modules/window/view"], function (WindowView) {
+                //     new WindowView();
+                // });
+                // if (_.has(Config, "tools") === true) {
+                    // require(["modules/tools/listView"], function (ToolsListView) {
+                    //     new ToolsListView();
+                    // });
+                    // if (_.has(Config.tools, "coord") === true) {
+                    //     require(["modules/coordpopup/view"], function (CoordPopupView) {
+                    //         new CoordPopupView();
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "gfi") === true) {
+                    //     require(["modules/gfipopup/popup/view", "modules/gfipopup/popup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
+                    //         if (Util.isAny()) {
+                    //             new MobileGFIPopupView();
+                    //         }
+                    //         else {
+                    //             new GFIPopupView();
+                    //         }
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "measure") === true && !Util.isAny()) {
+                    //     require(["modules/tools/measure/view"], function (MeasureView) {
+                    //         new MeasureView();
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "draw") === true && !Util.isAny()) {
+                    //     require(["modules/tools/draw/view"], function (DrawView) {
+                    //         new DrawView();
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "kmlimport") === true && !Util.isAny()) {
+                    //     require(["modules/tools/kmlimport/view"], function (ImportView) {
+                    //         new ImportView();
+                    //     });
+                    // }
+                    // if (Config.tools.record === true) {
+                    //     require(["modules/wfs_t/view"], function (WFS_TView) {
+                    //         new WFS_TView();
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "print") === true) {
+                    //     require(["modules/tools/print/view"], function (PrintView) {
+                    //         new PrintView();
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "parcelSearch") === true) {
+                    //     require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
+                    //         new ParcelSearchView();
+                    //     });
+                    // }
+                    // if (_.has(Config.tools, "searchByCoord") === true) {
+                    //     require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                    //         new SearchByCoordView();
+                    //     });
+                    // }
+                // }
                 if (_.has(Config.menuItems, "treeFilter") === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
                     });
                 }
-                require(["modules/mapMarker/view"], function (MapMarkerView) {
-                    new MapMarkerView();
-                });
-                if (_.has(Config, "searchBar") === true) {
-                    require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView(Config.searchBar, Config.searchBar.initString);
-                    });
-                }
+
                 if (_.has(Config.menuItems, "wfsFeatureFilter") === true) {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();

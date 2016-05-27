@@ -1,9 +1,9 @@
 define([
     "backbone",
     "modules/layer/wfsStyle/list",
-    "eventbus",
+    "backbone.radio",
     "bootstrap/modal"
-], function (Backbone, StyleList, EventBus) {
+], function (Backbone, StyleList, Radio) {
 
     var Legend = Backbone.Model.extend({
 
@@ -14,8 +14,8 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(EventBus, {
-                "layerlist:sendVisiblelayerList": this.setLayerList
+            this.listenTo(Radio.channel("ModelList"), {
+                "sendVisiblelayerList": this.setLayerList
             });
 
             this.listenTo(this, {
@@ -24,7 +24,8 @@ define([
                 "change:groupLayerList": this.setLegendParamsFromGROUP
             });
 
-            EventBus.trigger("layerlist:getVisiblelayerList");
+            // EventBus.trigger("layerlist:getVisiblelayerList");
+            this.setLayerList(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
         },
 
         createLegend: function () {
@@ -34,7 +35,7 @@ define([
             }));
         },
 
-        setLayerList: function (layerlist) {
+        setLayerList: function (layerlist) {console.log(layerlist);
             var filteredLayerList,
                 groupedLayers;
 

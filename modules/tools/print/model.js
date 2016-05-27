@@ -66,7 +66,6 @@ define([
             EventBus.on("winParams", this.setStatus, this);
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
             EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
-            EventBus.on("sendDrawLayer", this.setDrawLayer, this);
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
@@ -131,9 +130,6 @@ define([
             }
             else {
                 EventBus.trigger("layerlist:getVisibleWMSlayerList");
-            }
-            if (_.has(Config.tools, "draw") === true) {
-                EventBus.trigger("getDrawlayer");
             }
             this.sendGFIForPrint();
         },
@@ -238,6 +234,8 @@ define([
          *
          */
         setSpecification: function () {
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
+            this.setDrawLayer(Radio.request("draw", "getLayer"));
             var specification = {
                 layout: $("#layoutField option:selected").html(),
                 srs: Config.view.epsg,

@@ -50,7 +50,7 @@ define(function () {
        searchBar: {
            gazetteer: {
                minChars: 3,
-               url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+               url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                searchStreets: true,
                searchHouseNumbers: true,
                searchDistricts: true,
@@ -69,13 +69,13 @@ define(function () {
                minChar: 3,
                definitions: [
                    {
-                       url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                       data: "typeNames=prosin_festgestellt&propertyName=planrecht",
                        name: "bplan"
                    },
                    {
-                       url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=imverfahren&propertyName=plan",
+                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                       data: "typeNames=prosin_imverfahren&propertyName=plan",
                        name: "bplan"
                    }
                ]
@@ -86,6 +86,7 @@ define(function () {
            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
            geoLocateHit: true
        },
+       gemarkungen: "../components/lgv-config/gemarkung.json",
        tools: {
            gfi: {
                title: "Informationen abfragen",
@@ -103,6 +104,10 @@ define(function () {
            measure: {
                title: "Strecke / Fläche messen",
                glyphicon: "glyphicon-resize-full"
+           },
+           searchByCoord: {
+               title: "Koordinatensuche",
+               glyphicon: "glyphicon-record"
            }
        }
    };

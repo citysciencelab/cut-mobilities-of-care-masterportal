@@ -102,6 +102,12 @@ define([
                 }
             }, this);
 
+            channel.reply({
+                "getLayer": function () {console.log(this.get("layer"));
+                    return this.get("layer");
+                }
+            }, this);
+
             this.listenTo(EventBus, {
                 "winParams": this.setStatus,
                 "getDrawlayer": this.getLayer

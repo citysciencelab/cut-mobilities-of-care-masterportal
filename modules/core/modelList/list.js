@@ -38,6 +38,13 @@ define([
                    "updateList": this.updateList,
                    "checkIsExpanded": this.checkIsExpanded
                }, this);
+
+               this.listenTo(this, {
+                   "change:isActive": this.setActiveToolToFalse,
+                   "change:isVisibleInMap": function () {
+                       channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
+                   }
+               });
             },
 
             model: function (attrs, options) {
@@ -48,7 +55,7 @@ define([
                     else if (attrs.typ === "WFS") {
                         return new WFSLayer(attrs, options);
                     }
-                    else if (attrs.typ === "WFS") {
+                    else if (attrs.typ === "GROUP") {
                         // TODO muss noch gemacht werden
                     }
                 }
@@ -60,7 +67,7 @@ define([
                 }
             },
 
-            updateList: function (parentId) {
+            updateList: function (parentId, slideDirection) {
                 var items = Radio.request("Parser", "getItemsByParentId", parentId);
 
                 this.add(items);
@@ -75,7 +82,7 @@ define([
                 else {
                     this.setModelsVisibleByParentId(parentId);
                 }
-                this.trigger("updateTreeView");
+                this.trigger("updateTreeView", slideDirection);
             },
 
             /**
@@ -145,6 +152,12 @@ define([
                 _.each(models, function (model) {
                     model.setIsSettingVisible(value);
                 });
+            },
+
+            setActiveToolToFalse: function (model) {
+                var tool = _.without(this.where({isActive: true}), model)[0];
+
+                tool.setIsActive(false, {silent: true});
             }
     });
 

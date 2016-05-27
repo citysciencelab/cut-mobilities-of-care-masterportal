@@ -1,12 +1,10 @@
 define([
     "modules/core/modelList/item",
-    "backbone.radio",
     "eventbus"
 ], function () {
 
     var Item = require("modules/core/modelList/item"),
         EventBus = require("eventbus"),
-        Radio = require("backbone.radio"),
         Tool;
 
     Tool = Item.extend({
@@ -26,48 +24,47 @@ define([
             // Email Adresse
             email: undefined,
             // Name der Funktion
-            name: ""
+            name: "",
+            // true wenn das Tool aktiviert ist
+            isActive: false
         },
-        checkItem: function () {
-            switch (this.getName()) {
-                case "legend": {
-                    EventBus.trigger("toggleLegendWin");
-                    break;
-                }
-                case "contact": {
-                    var email = this.getEmail() || "LGVGeoPortal-Hilfe@gv.hamburg.de",
-                        mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t\n\n Systeminformationen: \n Platform: " + navigator.platform + "\n CookiesEnabled: " + navigator.cookieEnabled + "\n UserAgent: " + navigator.userAgent);
 
-                    document.location.href = mailto;
-                    break;
-                }
-                case "routing" : {
-                    EventBus.trigger("toggleWin", ["routing", this.getName(), this.getGlyphicon()]);
-                    break;
-                }
-                case "addWMS": {
-                    EventBus.trigger("toggleWin", ["addwms", this.getName(), this.getGlyphicon()]);
-                    break;
-                }
-                case "wfsFeatureFilter": {
-                    EventBus.trigger("toggleWin", ["wfsfeaturefilter", this.getName(), this.getGlyphicon()]);
-                    break;
-                }
-                case "treeFilter": {
-                    EventBus.trigger("toggleWin", ["treefilter", this.getName(), this.getGlyphicon()]);
-                    break;
-                }
-                case "featureLister": {
-                    EventBus.trigger("toggleFeatureListerWin");
-                    break;
-                }
-                // Tools
-                default: {
-                    Radio.trigger("ToolList", "setActiveByName", this.getName());
-                    break;
-                }
+        initialize: function () {
+            this.listenTo(this, {
+                "change:isActive": this.activateTool
+            });
+        },
+
+        activateTool: function () {
+            EventBus.trigger("activateClick", this.get("name"));
+            if (this.getName() === "legend") {
+                EventBus.trigger("toggleLegendWin");
+            }
+            else if (this.get("name") !== "gfi" && this.get("name") !== "coord") {
+                EventBus.trigger("toggleWin", [this.get("name"), this.get("title"), this.get("glyphicon")]);
+            }
+            else {
+                EventBus.trigger("winParams", [false, false, ""]);
             }
         },
+
+        /**
+         * Setter für das Attribut "isActive"
+         * @param {boolean} value
+         * @param {Object} [options] - {silent: true} unterbindet das "change-Event"
+         */
+        setIsActive: function (value, options) {
+            this.set("isActive", value, options);
+        },
+
+        /**
+         * Getter für das Attribut "isActive"
+         * @return {boolean}
+         */
+        getIsActive: function () {
+            return this.get("isActive");
+        },
+
         getEmail: function () {
             return this.get("email");
         }

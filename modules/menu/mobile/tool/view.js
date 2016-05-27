@@ -21,7 +21,7 @@ define([
             return this;
         },
         checkItem: function () {
-            this.model.checkItem();
+            this.model.setIsActive(true);
             // Navigation wird geschlossen
             $("div.collapse.navbar-collapse").removeClass("in");
         }

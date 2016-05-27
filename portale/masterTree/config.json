@@ -12,7 +12,8 @@
           "coord": true,
           "measure": true,
           "draw": true,
-          "searchByCoord": true
+          "searchByCoord": true,
+          "kmlimport": true
         },
         "legend": true,
         "routing": true,
@@ -128,7 +129,7 @@
                 },
                 {
                   "id": "1562",
-                  "visibility": false,
+                  "visibility": true,
                   "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
                   "metaName": "Bebauungspläne im Verfahren (§ 2 BauGB)"
                 },

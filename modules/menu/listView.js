@@ -20,7 +20,6 @@ define([
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        MenuTemplate = require("text!modules/menu/template.html"),
         DesktopComplexTemplate = require("text!modules/menu/desktop/template.html"),
         DesktopLightTemplate = require("text!modules/menu/desktop/templateLight.html"),
         MobileTemplate = require("text!modules/menu/mobile/template.html"),
@@ -35,10 +34,8 @@ define([
 
     Menu = Backbone.View.extend({
         collection: {},
-        tagName: "nav",
-        className: "navbar navbar-default navbar-fixed-top",
+        el: "nav#main-nav",
         attributes: {role: "navigation"},
-        template: _.template(MenuTemplate),
         desktopComplexTemplate: _.template(DesktopComplexTemplate),
         desktopLightTemplate: _.template(DesktopLightTemplate),
         mobileTemplate: _.template(MobileTemplate),
@@ -47,8 +44,8 @@ define([
             this.collection = Radio.request("ModelList", "getCollection");
 
             this.listenTo(this.collection, {
-                "updateTreeView": function () {
-                    this.renderListWithAnimation({animation: "slideForward"});
+                "updateTreeView": function (slideDirection) {
+                    this.renderListWithAnimation(slideDirection);
                 }
             });
 
@@ -58,11 +55,11 @@ define([
             }
         },
 
-        renderListWithAnimation: function (options) {
+        renderListWithAnimation: function (slideDirection) {
             var visibleModels = this.collection.where({isVisible: true}),
                 modelsInSelection = this.collection.where({isInSelection: true}),
-                slideOut = (options.animation === "slideBack") ? "right" : "left",
-                slideIn = (options.animation === "slideForward") ? "right" : "left",
+                slideOut = (slideDirection === "slideBack") ? "right" : "left",
+                slideIn = (slideDirection === "slideForward") ? "right" : "left",
                 that = this;
 
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
@@ -117,8 +114,6 @@ define([
 
         render: function () {
             var isMobile = Radio.request("Util", "isViewMobile");
-
-            $("body").append(this.$el.html(this.template()));
 
             if (isMobile) {
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("menubarlgv nav navbar-nav");
