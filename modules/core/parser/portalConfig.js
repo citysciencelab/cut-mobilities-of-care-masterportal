@@ -37,7 +37,7 @@ define([
                 }
             }, this);
 
-            this.fetch();
+            this.fetch({async: false});
         },
 
         /**

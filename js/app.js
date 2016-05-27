@@ -1,19 +1,29 @@
-define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList", "modules/restReader/collection", "modules/core/parser/portalConfig"], function ($, Config, Util, RawLayerList, RestReaderList, Parser, Menu) {
-    "use strict";
+define("app",
+    [
+    "jquery",
+    "config",
+    "modules/core/util",
+    "modules/core/rawLayerList",
+    "modules/restReader/collection",
+    "modules/core/parser/portalConfig",
+    "modules/core/map",
+    "modules/parametricURL/model"
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Parser, Map, ParametricURL) {
+
+    // Core laden
     new RawLayerList();
     new Parser();
+    new ParametricURL();
+    new Map();
+
+    // Module laden
+
     require(["modules/menu/listView"], function (Menu) {
         new Menu();
     });
     require(["modules/alerting/view"]);
-    Util.showLoader();
     new RestReaderList();
 
-    if (Config.allowParametricURL && Config.allowParametricURL === true) {
-        require(["modules/parametricURL/model"], function (ParametricURL) {
-            new ParametricURL();
-        });
-    }
 
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature ) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
@@ -53,7 +63,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
         "config",
         "backbone.radio"
     ], function (Map, Config, Radio) {
-        new Map();
+
 
         if (Util.isAny()) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {

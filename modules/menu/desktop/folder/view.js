@@ -11,28 +11,19 @@ define([
 
     FolderView = Backbone.View.extend({
         tagName: "li",
-        className: "list-group-item",
+        className: "dropdown dropdown-folder",
         template: _.template(FolderTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
-            "click .folder-item": "updateList",
-            "click .checked-all-item": "toggleIsChecked"
+            "click .folder-item": ""
         },
         initialize: function () {
-            this.listenTo(this.model, {
-                 "change:isChecked": this.render
-            });
+            this.render();
         },
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsExpanded() === true) {
-                this.$el.html(this.templateLeaf(attr));
-            }
-            else {
-                this.$el.html(this.template(attr));
-            }
-            return this;
+           $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
         },
         updateList: function () {
             if (this.model.getIsLeafFolder() === true) {
