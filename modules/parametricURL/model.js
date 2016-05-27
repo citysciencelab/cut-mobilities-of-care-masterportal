@@ -265,7 +265,17 @@ define([
 
                 if (value === "SIMPLE") {
                     Config.simplemap = true;
+                    Config.isMenubarVisible = false;
                     Config.controls = {};
+                    Config.footer = {};
+                    Config.tools = {
+                        gfi: {
+                            title: "Informationen abfragen",
+                            glyphicon: "glyphicon-info-sign",
+                            isActive: true
+                        }
+                    };
+                    $(".changelog-window").hide();
                 }
 
             }
