@@ -34,7 +34,7 @@ define([
         Menu;
 
     Menu = Backbone.View.extend({
-        collection: Radio.request("ModelList", "getCollection"),
+        collection: {},
         tagName: "nav",
         className: "navbar navbar-default navbar-fixed-top",
         attributes: {role: "navigation"},
@@ -44,6 +44,7 @@ define([
         mobileTemplate: _.template(MobileTemplate),
 
         initialize: function () {
+            this.collection = Radio.request("ModelList", "getCollection");
 
             this.listenTo(this.collection, {
                 "updateTreeView": function () {
@@ -70,10 +71,10 @@ define([
                         visibleModels = _.sortBy(visibleModels, function (layer) {
                             return layer.getSelectionIDX();
                         });
-                        _.each(visibleModels.reverse(), that.addViews, that);
+                        that.addViews(visibleModels.reverse());
                     }
                     else {
-                        _.each(visibleModels, that.addViews, that);
+                        that.addViews(visibleModels);
                     }
                 });
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
@@ -81,10 +82,38 @@ define([
 
         renderTopMenu: function (isMobile) {
             var rootModels = this.collection.where({parentId: "root"});
-                _.each(rootModels, function (model) {
-                    this.addViews(model, isMobile);
+                this.addViews(rootModels);
+
+           if (!isMobile) {
+                var toolModels = this.collection.where({parentId: "tools"});
+
+                this.addViews(toolModels);
+
+                this.renderSubTree("themen", 0);
+            }
+        },
+        renderSubTree: function (parentId, level) {
+            var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId);
+            this.collection.add(lightModels)
+            var models = this.collection.filter(function (model) {
+                    return model.getParentId() === parentId;
+                }),
+                folder = _.filter(models, function (model) {
+                    return model.getType() === "folder";
+                });
+
+                this.addViews(folder);
+                var layer = _.filter(models, function (model) {
+                    return model.getType() === "layer";
+                });
+                this.addViews(layer);
+
+                _.each(models, function (model) {
+                    this.renderSubTree(model.getId(), level + 1);
+                    //this.renderSubTree(model.getId(), level + 1, isMobile, "layer");
                 }, this);
         },
+
 
         render: function () {
             var isMobile = Radio.request("Util", "isViewMobile");
@@ -122,28 +151,32 @@ define([
          * Ordnet den Models die richtigen Views zu.
          * @param {Backbone.Model} model - itemModel | layerModel | folderModel
          */
-        addViews: function (model, isMobile) {
-            var isMobile = Radio.request("Util", "isViewMobile");
-            var nodeView;
+        addViews: function (models) {
+            _.each(models, function (model) {
+                var isMobile = Radio.request("Util", "isViewMobile"),
+                    nodeView;
 
-            switch (model.getType()){
-                case "folder": {
-                    // Model für einen Ordner
-                    nodeView = isMobile ? new MobileFolderView({model: model}) : new DesktopFolderView({model: model});
-                    break;
+                switch (model.getType()){
+                    case "folder": {
+                        // Model für einen Ordner
+                        nodeView = isMobile ? new MobileFolderView({model: model}) : new DesktopFolderView({model: model});
+                        break;
+                    }
+                    case "layer": {
+                        // Model für ein Layer
+                        nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerView({model: model});
+                        break;
+                    }
+                    case "tool": {
+                         // Model für Tools/Links/andere Funktionen
+                        nodeView = isMobile ? new MobileToolView({model: model}) : new DesktopToolView({model: model});
+                        break;
+                    }
                 }
-                case "layer": {
-                    // Model für ein Layer
-                    nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerView({model: model});
-                    break;
+                if (isMobile) {
+                    $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
                 }
-                case "tool": {
-                    // Model für Tools/Links/andere Funktionen
-                    nodeView = isMobile ? new MobileToolView({model: model}) : new DesktopToolView({model: model});
-                    break;
-                }
-            }
-            $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+            });
         }
     });
 
