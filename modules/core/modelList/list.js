@@ -20,7 +20,7 @@ define([
                channel.reply({
                    "getCollection": this,
                    "getModelsByAttributes": function (attributes) {
-                       return this.where(attributes)
+                       return this.where(attributes);
                    }
                }, this);
 
@@ -41,7 +41,7 @@ define([
             },
 
             model: function (attrs, options) {
-                if (attrs.type === "layer") {console.log(attrs);
+                if (attrs.type === "layer") {
                     if (attrs.typ === "WMS") {
                         return new WMSLayer(attrs, options);
                     }
@@ -49,7 +49,7 @@ define([
                         return new WFSLayer(attrs, options);
                     }
                     else if (attrs.typ === "WFS") {
-                        // muss noch gemacht werden
+                        // TODO muss noch gemacht werden
                     }
                 }
                 else if (attrs.type === "folder") {
