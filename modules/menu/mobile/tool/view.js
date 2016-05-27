@@ -1,9 +1,11 @@
 define([
     "backbone",
+    "eventbus",
     "text!modules/menu/mobile/tool/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
+        EventBus = require("eventbus"),
         ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),
         ItemView;
 
@@ -21,7 +23,12 @@ define([
             return this;
         },
         checkItem: function () {
-            this.model.setIsActive(true);
+            if (this.model.getName() === "legend") {
+                EventBus.trigger("toggleLegendWin");
+            }
+            else {
+                this.model.setIsActive(true);
+            }
             // Navigation wird geschlossen
             $("div.collapse.navbar-collapse").removeClass("in");
         }

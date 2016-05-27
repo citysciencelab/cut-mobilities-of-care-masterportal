@@ -39,7 +39,8 @@ define([
                         this.createClusterLayerSource();
                     }
                     this.createLayer();
-                }
+                },
+                "change:layer": this.createLegendURL
             });
 
             this.listenTo(this, {
