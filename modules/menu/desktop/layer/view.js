@@ -32,25 +32,23 @@ define([
                  "change:isChecked change:isLayerVisible": this.render,
                  "change:isSettingVisible": this.renderSetting
             });
+            this.render();
         },
 
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsInSelection() === true) {
-                this.$el.html(this.templateSelected(attr));
+
+            /*    this.$el.html(this.templateSelected(attr));
                 if (this.model.getIsSettingVisible() === true) {
                     this.renderSetting();
                 }
-            }
-            else {
                 this.$el.html(this.template(attr));
                 if (this.model.has("treeType")) {
                     this.renderSetting();
-                }
-            }
+                }*/
 
-            return this;
+            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
         },
 
         /**

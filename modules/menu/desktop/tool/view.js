@@ -9,16 +9,17 @@ define([
 
     ItemView = Backbone.View.extend({
         tagName: "li",
-        className: "list-group-item",
+        className: "dropdown dropdown-tools",
         template: _.template(ItemTemplate),
         events: {
             "click": "checkItem"
         },
+        initialize: function () {
+            this.render();
+        },
         render: function () {
             var attr = this.model.toJSON();
-
-            this.$el.html(this.template(attr));
-            return this;
+            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
         },
         checkItem: function () {
             this.model.checkItem();
