@@ -161,6 +161,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
             new MapMarkerView();
         });
 
+        if (_.has(Config, "searchBar") === true) {
+            require(["modules/searchbar/view"], function (SearchbarView) {
+                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+            });
+        }
+
         if (Config.menubar === true) {
             require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
                 new MenubarView();
@@ -231,11 +237,6 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                     });
                 }
 
-                if (_.has(Config, "searchBar") === true) {
-                    require(["modules/searchbar/view"], function (SearchbarView) {
-                        new SearchbarView(Config.searchBar, Config.searchBar.initString);
-                    });
-                }
                 if (_.has(Config.menuItems, "wfsFeatureFilter") === true) {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();

@@ -69,13 +69,13 @@ define(function () {
                minChar: 3,
                definitions: [
                    {
-                       url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                       data: "typeNames=prosin_festgestellt&propertyName=planrecht",
                        name: "bplan"
                    },
                    {
-                       url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=imverfahren&propertyName=plan",
+                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                       data: "typeNames=prosin_imverfahren&propertyName=plan",
                        name: "bplan"
                    }
                ]
