@@ -86,7 +86,7 @@ define([
 
                 this.addViews(toolModels);
 
-                this.renderSubTree("themen", 0);
+                this.renderSubTree("Themen", 0);
             }
         },
         renderSubTree: function (parentId, level) {

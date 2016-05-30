@@ -4,20 +4,32 @@
       "PortalTitle": "GeoViewer",
       "searchBar": true,
       "menu": {
-        "themen": true,
-        "tools": {
-          "parcelSearch": true,
-          "gfi": true,
-          "print": true,
-          "coord": true,
-          "measure": true,
-          "draw": true,
-          "searchByCoord": true,
-          "kmlimport": true
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
         },
-        "legend": true,
-        "routing": true,
-        "addWMS": true
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+            "parcelSearch": {
+              "name": "Flurstückssuche",
+              "glyphicon": "glyphicon-search"
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            }
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+        "draw": {
+          "name": "Zeichnen / Schreiben",
+          "glyphicon": "glyphicon-pencil"
+        }
       },
       "controls": {
         "zoom": true,

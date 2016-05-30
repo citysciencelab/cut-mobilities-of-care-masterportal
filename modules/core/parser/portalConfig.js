@@ -65,45 +65,27 @@ define([
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
         parseMenu: function (items, parentId) {
-            // Pair: (name, items)
-            var currentLevel = _.pairs(items);
 
-            _.each(currentLevel, function (pair) {
-                var name = pair[0],
-                    value = pair[1];
-
-                if (_.isObject(value)) {
-                    this.parseMenu(value, name);
+            _.each(items, function (value, key) {
+                if (_.has(value, "children") || key === "tree") {
+                    this.addItem({
+                        type: "folder",
+                        parentId: parentId,
+                        glyphicon: value.glyphicon,
+                        name: value.name,
+                        id: value.name
+                    });
+                    this.parseMenu(value.children, value.name);
                 }
-                var type = "";
-
-                switch (name) {
-                    case "parcelSearch":
-                    case "gfi":
-                    case "print":
-                    case "coord":
-                    case "measure":
-                    case "draw":
-                    case "routing":
-                    case "legend":
-                    case "searchByCoord":
-                    case "kmlimport":
-                    case "addWMS": {
-                        type = "tool";
-                        break;
-                    }
-                    default: {
-                        type = "folder";
-                        break;
-                    }
+                else {
+                    this.addItem({
+                        type: "tool",
+                        parentId: parentId,
+                        glyphicon: value.glyphicon,
+                        name: value.name,
+                        id: value.name
+                    });
                 }
-                this.addItem({
-                    type: type,
-                    // title: pair[0],
-                    parentId: parentId,
-                    name: name,
-                    id: name
-                });
             }, this);
         },
         /**
@@ -172,7 +154,7 @@ define([
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
                     model.parentId === "tools" ||
-                    model.parentId === "themen";
+                    model.parentId === "tree";
             }));
         },
 
@@ -186,21 +168,21 @@ define([
                 name: "Hintergrundkarten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Baselayer",
-                parentId: "themen"
+                parentId: "Themen"
             });
             this.addItem({
                 type: "folder",
                 name: "Fachdaten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Overlayer",
-                parentId: "themen"
+                parentId: "Themen"
             });
             this.addItem({
                 type: "folder",
                 name: "Auswahl der Themen",
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",
-                parentId: "themen",
+                parentId: "Themen",
                 isLeafFolder: true
             });
         },
