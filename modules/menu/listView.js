@@ -6,6 +6,7 @@ define([
     "text!modules/menu/desktop/templateLight.html",
     "text!modules/menu/mobile/template.html",
     "modules/menu/desktop/folder/view",
+    "modules/menu/desktop/folder/themenView",
     "modules/menu/desktop/layer/view",
     "modules/menu/desktop/tool/view",
     "modules/menu/mobile/folder/view",
@@ -24,6 +25,7 @@ define([
         DesktopLightTemplate = require("text!modules/menu/desktop/templateLight.html"),
         MobileTemplate = require("text!modules/menu/mobile/template.html"),
         DesktopFolderView = require("modules/menu/desktop/folder/view"),
+        DesktopThemenFolderView = require("modules/menu/desktop/folder/themenView"),
         DesktopLayerView = require("modules/menu/desktop/layer/view"),
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         MobileFolderView = require("modules/menu/mobile/folder/view"),
@@ -90,25 +92,25 @@ define([
             }
         },
         renderSubTree: function (parentId, level) {
-            var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId);
-            this.collection.add(lightModels)
-            var models = this.collection.filter(function (model) {
-                    return model.getParentId() === parentId;
-                }),
+            var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId),
+
+                models = this.collection.add(lightModels),
+
                 folder = _.filter(models, function (model) {
                     return model.getType() === "folder";
                 });
 
                 this.addViews(folder);
+
+
+                _.each(folder, function (folder) {
+                    this.renderSubTree(folder.getId(), level + 1);
+                }, this);
+
                 var layer = _.filter(models, function (model) {
                     return model.getType() === "layer";
                 });
                 this.addViews(layer);
-
-                _.each(models, function (model) {
-                    this.renderSubTree(model.getId(), level + 1);
-                    //this.renderSubTree(model.getId(), level + 1, isMobile, "layer");
-                }, this);
         },
 
 
@@ -154,7 +156,13 @@ define([
                 switch (model.getType()){
                     case "folder": {
                         // Model für einen Ordner
-                        nodeView = isMobile ? new MobileFolderView({model: model}) : new DesktopFolderView({model: model});
+
+                        if (isMobile) {
+                            nodeView = new MobileFolderView({model: model});
+                        }
+                        else {
+                           model.getIsInThemen() ? new DesktopThemenFolderView({model: model}) : new DesktopFolderView({model: model});
+                        }
                         break;
                     }
                     case "layer": {
