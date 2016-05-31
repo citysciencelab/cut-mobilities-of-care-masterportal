@@ -153,7 +153,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -162,6 +162,7 @@ define(function () {
             tree: {
                 minChars: 3
             },
+            minChars: 3,
             geoLocateHit: true
         },
         tools: {
