@@ -336,7 +336,7 @@ define([
             this.set("projection", proj);
         },
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
-        setLegendURL: function () {
+        createLegendURL: function () {
             if (!this.get("legendURL").length) {
                 if (!_.isUndefined(this.get("styleId"))) {
                     var style = StyleList.returnModelById(this.get("styleId"));

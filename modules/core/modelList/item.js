@@ -16,7 +16,7 @@ define([
             title: "test", //angezeigter Titel
             glyphicon: "", // Bootstrap Glyphicon Class,
             isInThemen: false,
-            level: -1
+            level: 0
         },
         setId: function (value) {
             this.set("id", value);

@@ -12,8 +12,8 @@ define([
             var treeType = Radio.request("Parser", "getPortalConfig").Baumtyp;
 
             if (treeType === "light") {
-                this.parseTree(this.getOverlayer(), "themen", 0);
-                this.parseTree(this.getBaselayer(), "themen", 0);
+                this.parseTree(this.getOverlayer(), "tree", 0);
+                this.parseTree(this.getBaselayer(), "tree", 0);
             }
             else {
                 this.parseTree(this.getBaselayer(), "Baselayer", 0);

@@ -81,14 +81,19 @@ define([
 
         renderTopMenu: function (isMobile) {
             var rootModels = this.collection.where({parentId: "root"});
+
                 this.addViews(rootModels);
 
            if (!isMobile) {
-                var toolModels = this.collection.where({parentId: "tools"});
+                var toolModels = this.collection.where({parentId: "Werkzeuge"});
 
                 this.addViews(toolModels);
+/*
+                var treeMenu = this.collection.where({parentId: "Themen"});
 
-                this.renderSubTree("themen", 0);
+                this.addViews(treeMenu);*/
+
+                this.renderSubTree("Themen", 0);
             }
         },
         renderSubTree: function (parentId, level) {
@@ -102,7 +107,6 @@ define([
 
                 this.addViews(folder);
 
-
                 _.each(folder, function (folder) {
                     this.renderSubTree(folder.getId(), level + 1);
                 }, this);
@@ -110,6 +114,7 @@ define([
                 var layer = _.filter(models, function (model) {
                     return model.getType() === "layer";
                 });
+
                 this.addViews(layer);
         },
 

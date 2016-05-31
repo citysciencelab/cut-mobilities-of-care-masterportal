@@ -34,7 +34,7 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.attr("id", this.model.getId());
-            if (this.model.getParentId() === "themen") {
+            if (this.model.getParentId() === "Themen") {
                 $("#" + this.model.getParentId()).append(this.$el.html(this.catalogTemplate(attr)));
             }
             else {
@@ -46,11 +46,11 @@ define([
                 else {
                    selector = "#Overlayer";
                 }
-
                 if (this.model.getLevel() > 0) {
                     $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
                 }
                 else {
+
                     $(selector).after(this.$el.html(this.template(attr)));
                 }
                 $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
