@@ -22,8 +22,8 @@ define([
         },
         render: function () {
             var attr = this.model.toJSON();
+            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
 
-           $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
         },
         updateList: function () {
             if (this.model.getIsLeafFolder() === true) {

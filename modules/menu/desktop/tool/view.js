@@ -19,6 +19,7 @@ define([
         },
         render: function () {
             var attr = this.model.toJSON();
+
             $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
         },
         checkItem: function () {
