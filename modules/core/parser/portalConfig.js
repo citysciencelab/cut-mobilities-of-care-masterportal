@@ -97,6 +97,7 @@ define([
                 obj.isVisibleInMap = obj.visibility;
                 delete obj.visibility;
             }
+            obj.id = obj.id.replace(/[^a-zA-Z0-9]/g, '');
             this.getItemList().push(obj);
         },
 
@@ -168,14 +169,18 @@ define([
                 name: "Hintergrundkarten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Baselayer",
-                parentId: "Themen"
+                parentId: "Themen",
+                isInThemen: true,
+                level: 0
             });
             this.addItem({
                 type: "folder",
                 name: "Fachdaten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Overlayer",
-                parentId: "Themen"
+                parentId: "Themen",
+                isInThemen: true,
+                level: 0
             });
             this.addItem({
                 type: "folder",
@@ -183,7 +188,9 @@ define([
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",
                 parentId: "Themen",
-                isLeafFolder: true
+                isLeafFolder: true,
+                isInThemen: true,
+                level: 0
             });
         },
 

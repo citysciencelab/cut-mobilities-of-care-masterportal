@@ -174,11 +174,10 @@ define([
                 sortedCategories.push(tree[key]);
             });
             // Kategorien erzeugen
-
-            this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0});
+            this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0, isInThemen: true});
             _.each(tree, function (category) {
                 // Unterordner erzeugen
-                this.addItems(category.folder, {type: "folder", parentId: category.id, isLeaffolder: true, level: 1});
+                this.addItems(category.folder, {type: "folder", parentId: category.id, isLeaffolder: true, level: 1, isInThemen: true});
                 // Layer in Unterordner
                 this.addItems(category.layer, {type: "layer", parentId: category.id, level: 1});
                 _.each(category.folder, function (folder) {

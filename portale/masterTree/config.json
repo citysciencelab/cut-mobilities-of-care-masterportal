@@ -39,7 +39,7 @@
         "fullScreen": true
       },
       "scaleLine": true,
-      "Baumtyp": "custom"
+      "Baumtyp": "default"
     },
   "Themenconfig":
     {

@@ -1,22 +1,22 @@
 define([
     "backbone",
-    "text!modules/treeMobile/layer/template.html",
-    "text!modules/treeMobile/layer/templateSelected.html",
-    "text!modules/treeMobile/layer/templateSetting.html"
+    "text!modules/menu/desktop/layer/template.html",
+    "text!modules/menu/desktop/layer/templateSelected.html",
+    "text!modules/menu/desktop/layer/templateSetting.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/treeMobile/layer/template.html"),
-        SelectedLayerTemplate = require("text!modules/treeMobile/layer/templateSelected.html"),
-        SettingTemplate = require("text!modules/treeMobile/layer/templateSetting.html"),
+        LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
+        SelectedLayerTemplate = require("text!modules/menu/desktop/layer/templateSelected.html"),
+        SettingTemplate = require("text!modules/menu/desktop/layer/templateSetting.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
-        className: "list-group-item",
+        className: "layer",
         template: _.template(LayerTemplate),
-        templateSelected: _.template(SelectedLayerTemplate),
-        templateSetting: _.template(SettingTemplate),
+        //templateSelected: _.template(SelectedLayerTemplate),
+        //templateSetting: _.template(SettingTemplate),
         events: {
             "click .layer-item": "toggleIsChecked",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
@@ -29,7 +29,7 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isChecked change:isLayerVisible": this.render,
+                 //"change:isChecked change:isLayerVisible": this.render,
                  "change:isSettingVisible": this.renderSetting
             });
             this.render();
@@ -48,7 +48,8 @@ define([
                     this.renderSetting();
                 }*/
 
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
+            $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
         },
 
         /**
