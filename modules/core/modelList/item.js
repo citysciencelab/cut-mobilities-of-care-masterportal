@@ -13,8 +13,10 @@ define([
             id: "",
             parentId: "",
             type: "", // welcher Node-Type - folder/layer/tool ...
-            title: "", //angezeigter Titel
-            glyphicon: "", // Bootstrap Glyphicon Class
+            title: "test", //angezeigter Titel
+            glyphicon: "", // Bootstrap Glyphicon Class,
+            isInThemen: false,
+            level: -1
         },
         setId: function (value) {
             this.set("id", value);
@@ -58,6 +60,18 @@ define([
             if (this.getType() === "folder") {
                 Radio.trigger("BreadCrumb", "addItem", this);
             }
+        },
+        getIsInThemen: function () {
+            return this.get("isInThemen");
+        },
+        setIsInThemen: function (value) {
+            this.set("isInThemen", value);
+        },
+        getLevel: function () {
+            return this.get("level");
+        },
+        setLevel: function (value) {
+            this.set("level", value);
         }
     });
 
