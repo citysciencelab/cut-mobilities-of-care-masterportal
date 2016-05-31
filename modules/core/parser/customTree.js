@@ -57,7 +57,7 @@ define([
                     var isLeafFolder = (!_.has(folder, "Ordner")) ? true : false;
 
                     folder.id = _.uniqueId(folder.Titel);
-                    this.addItem({type: "folder", parentId: parentId, name: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: level});
+                    this.addItem({type: "folder", parentId: parentId, name: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: level, isInThemen: true});
                     // rekursiver Aufruf
                     this.parseTree(folder, folder.id, level + 1);
                 }, this);
