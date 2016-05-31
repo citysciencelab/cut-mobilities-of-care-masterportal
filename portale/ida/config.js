@@ -5,8 +5,9 @@ define(function () {
         restConf: "../../components/lgv-config/rest-services-fhhnet.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         wpsID: "1001",
-        minJahr: 1973,
-        maxJahr: 2014,
+        minJahr: 1974,
+        maxJahr: 2015,
+        jahreText: "Die aktuellsten Daten beziehen sich auf das Jahr 2014. Für den Bodenrichtwert zum 31.12.2014 wählen Sie bitte das Jahr 2015.",
         searchbar: {
             gazetteer: {
                 minChars: 3,
