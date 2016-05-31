@@ -35,7 +35,7 @@ define([
             }));
         },
 
-        setLayerList: function (layerlist) {console.log(layerlist);
+        setLayerList: function (layerlist) {
             var filteredLayerList,
                 groupedLayers;
 

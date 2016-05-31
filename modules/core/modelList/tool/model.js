@@ -17,13 +17,11 @@ define([
             type: "",
             // die ID der Parent-Node
             parentId: "",
-            // Titel (Überschrift) der Funktion
-            title: "",
             // Bootstrap Glyphicon Class
             glyphicon: "",
             // Email Adresse
             email: undefined,
-            // Name der Funktion
+            // Name (Überschrift) der Funktion
             name: "",
             // true wenn das Tool aktiviert ist
             isActive: false
@@ -36,9 +34,9 @@ define([
         },
 
         activateTool: function () {
-            EventBus.trigger("activateClick", this.get("name"));
-            if (this.get("name") !== "gfi" && this.get("name") !== "coord") {
-                EventBus.trigger("toggleWin", [this.get("name"), this.get("title"), this.get("glyphicon")]);
+            EventBus.trigger("activateClick", this.getId());
+            if (this.getId() !== "gfi" && this.getId() !== "coord") {
+                EventBus.trigger("toggleWin", [this.getId(), this.get("name"), this.get("glyphicon")]);
             }
             else {
                 EventBus.trigger("winParams", [false, false, ""]);

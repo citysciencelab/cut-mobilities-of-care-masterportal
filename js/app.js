@@ -112,7 +112,7 @@ define("app",
 
         // Tools
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
-            switch (tool.name) {
+            switch (tool.id) {
                 case "gfi": {
                     require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
                         new GFIPopupView();

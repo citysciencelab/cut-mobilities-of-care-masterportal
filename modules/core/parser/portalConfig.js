@@ -83,7 +83,7 @@ define([
                         parentId: parentId,
                         glyphicon: value.glyphicon,
                         name: value.name,
-                        id: value.name
+                        id: key
                     });
                 }
             }, this);
@@ -153,8 +153,8 @@ define([
         createModelList: function () {
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
-                    model.parentId === "tools" ||
-                    model.parentId === "tree";
+                    model.parentId === "Werkzeuge" ||
+                    model.parentId === "Themen";
             }));
         },
 
