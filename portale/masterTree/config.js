@@ -48,7 +48,8 @@ define(function () {
        },
        startUpModul: "",
        searchBar: {
-           gazetteer: {
+            minChars: 3,
+            gazetteer: {
                minChars: 3,
                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                searchStreets: true,
