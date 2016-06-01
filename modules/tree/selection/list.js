@@ -45,6 +45,7 @@ define([
                             Radio.trigger("TreeList", "setLayerAttributions", model.get("id"), {selectionIDX: collection.indexOf(model)});
                         });
                     }
+                    channel.trigger("changedList", this.models);
                 },
                 "add": this.addLayerToMap,
                 "remove": this.removeLayerFromMap,
