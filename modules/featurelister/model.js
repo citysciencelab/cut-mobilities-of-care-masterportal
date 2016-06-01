@@ -1,10 +1,9 @@
 define([
     "backbone",
-    "backbone.radio",
     "eventbus",
     "config",
     "modules/core/requestor"
-], function (Backbone, Radio, EventBus, Config, Requestor) {
+], function (Backbone, EventBus, Config, Requestor) {
 
     var FeatureListerModel = Backbone.Model.extend({
         defaults: {
@@ -28,6 +27,12 @@ define([
             EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
+        },
+        setPrevFeatureId: function (value) {
+            this.set("prevFeatureId", value);
+        },
+        setPrevStyleScale: function (value) {
+            this.set("prevStyleScale", value);
         },
         /*
         * Wird ein GFI geöffnet, wird versucht das entsprechende Feature in der Liste zu finden und zu selektieren

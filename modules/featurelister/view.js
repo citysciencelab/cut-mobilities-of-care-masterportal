@@ -168,6 +168,8 @@ define([
             $("#featurelist-themes").show();
             $("#featurelist-list").hide();
             $("#featurelist-details").hide();
+            this.model.setPrevFeatureId(-1);
+            this.model.unscaleFeature();
         },
         /*
         * Wechselt den Tab
@@ -350,6 +352,7 @@ define([
                 }
                 this.setMaxHeight();
             }
+            this.model.setPrevFeatureId(-1);
             this.model.unscaleFeature();
         },
         setMaxHeight: function () {
