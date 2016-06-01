@@ -202,8 +202,8 @@ define([
         */
         hoverTr: function (evt) {
             var featureid = evt.currentTarget.id;
-
-            this.model.showMarker(featureid);
+            this.model.unscaleFeature();
+            this.model.scaleFeature(featureid);
         },
         /*
         * Bei Klick auf Layer wird dieser gehighlighted und Layerid wird gesertzt
@@ -350,6 +350,7 @@ define([
                 }
                 this.setMaxHeight();
             }
+            this.model.unscaleFeature();
         },
         setMaxHeight: function () {
             var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
