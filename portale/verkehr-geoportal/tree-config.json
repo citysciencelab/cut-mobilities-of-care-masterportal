@@ -268,7 +268,7 @@
           "Titel": "Verkehrslage",
           "Layer": [
             {
-              "id": "946,947",
+              "id": "947,946",
               "visibility": false,
               "name" : "Verkehrslage auf Autobahnen",
               "metaName": "Verkehrslage auf Autobahnen",
