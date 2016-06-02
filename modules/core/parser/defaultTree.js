@@ -178,7 +178,10 @@ define([
             _.each(tree, function (category) {
                 // Unterordner erzeugen
                 this.addItems(category.folder, {type: "folder", parentId: category.id, isLeaffolder: true, level: 1, isInThemen: true});
-                // Layer in Unterordner
+                _.each(category.layer, function (layer) {
+                    layer.name = layer.datasets[0].md_name;
+                });
+                // Layer dirket in Kategorien
                 this.addItems(category.layer, {type: "layer", parentId: category.id, level: 1});
                 _.each(category.folder, function (folder) {
                     // Layer in der untertesten Ebene erzeugen

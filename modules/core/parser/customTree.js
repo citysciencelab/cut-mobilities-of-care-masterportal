@@ -8,6 +8,7 @@ define([
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
+
         initialize: function () {
             var treeType = Radio.request("Parser", "getPortalConfig").Baumtyp;
 

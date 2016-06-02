@@ -18,26 +18,28 @@
     color: rgb(85, 85, 85) !important;
 }
 
-#themen {
+#Themen ul {
     list-style: none;
-    min-width: 600px;
-}
-#themen ul {
+    min-width:  600px;
     list-style: none;
     padding: 0 0 0 0px;
+    -webkit-padding-start: 0px;
 }
 .layer-catalog > ul{
     max-height:500px;
     overflow: auto;
 }
-#themen ul .glyphicon {
+#Themen ul .glyphicon {
     margin: 5px 0 0 10px;
 }
-#themen ul li {
+#Themen ul .layer {
+    /*display:none;*/
+}
+#Themen li {
     border: 1px solid #ddd;
 }
-#Baselayer{
-    display: none;
+ul#Baselayer{
+    /*display: none;*/
 }
 
 .navbar-collapse.in {
