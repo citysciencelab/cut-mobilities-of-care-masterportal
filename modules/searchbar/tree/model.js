@@ -85,7 +85,7 @@ define([
                 if (layer.metaName !== null) {
                     metaName = layer.metaName.replace(/ /g, "");
                     if (metaName.search(searchStringRegExp) !== -1 && metaName === layerName) {
-                        layer.type = "nodeLayer";
+                        layer.typ = "nodeLayer";
                         EventBus.trigger("searchbar:pushHits", "hitList", layer);
                     }
                     else if (metaName.search(searchStringRegExp) !== -1 || layerName.search(searchStringRegExp) !== -1) {

@@ -27,6 +27,7 @@ define([
                 var values = _.values(_.pick(result, "ID"))[0].split(",");
 
                 Config.tree.metaIdsToSelected = values;
+                Config.view.zoomLevel = 0;
             }
 
             /**

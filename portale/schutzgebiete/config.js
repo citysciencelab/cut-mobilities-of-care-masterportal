@@ -9,9 +9,9 @@ define(function () {
                 {id: "713", visibility: false, "name" : "Stadtplan S-W"},
                 {id: "1993", visibility: true, "name" : "Fauna-Flora-Habitat-Gebiete"},
                 {id: "1994", visibility: true, "name" : "Vogelschutzgebiete"},
-                {id: "1999", visibility: true},
-                {id: "1998", visibility: true},
-                {id: "1992", visibility: true}
+                {id: "1999", visibility: true}, //Naturdenkmal
+                {id: "1998", visibility: true}, //Landschaftschtutzgeb.
+                {id: "1992", visibility: true}  //Naturschutzgebiete
             ]
         },
         simpleMap: false,

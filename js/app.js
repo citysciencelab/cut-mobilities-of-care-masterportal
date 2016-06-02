@@ -36,11 +36,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
     }
 
     // Macht noch Probleme
-    // if (Config.attributions && Config.attributions === true) {
-    //     require(["modules/attribution/view"], function (AttView) {
-    //         new AttView();
-    //     });
-    // }
+    if (Config.attributions && Config.attributions === true) {
+        require(["modules/attribution/view"], function (AttView) {
+            new AttView();
+        });
+    }
 
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {

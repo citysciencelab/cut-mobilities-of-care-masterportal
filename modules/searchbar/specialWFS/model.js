@@ -82,7 +82,7 @@ define([
          * @param {string} type - Der ausgewählte BPlan-Typ, der abgefragt werden soll.
         */
         requestbplan: function (type, name) {
-            var typeName = (type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
+            var typeName = (type === "festgestellt") ? "prosin_festgestellt" : "prosin_imverfahren",
                 propertyName = (type === "festgestellt") ? "planrecht" : "plan",
                 data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 

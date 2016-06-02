@@ -20,7 +20,7 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: false,
+            orientation: "once",
             poi: true
         },
         footer: true,
@@ -56,25 +56,13 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
-        },
+       
         startUpModul: "",
         searchBar: {
             minChars: 3,
             gazetteer: {
                 minChars: 3,
                  url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,

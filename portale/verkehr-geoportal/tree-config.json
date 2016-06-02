@@ -3,9 +3,13 @@
     {
       "Layer": [
         {
-          "id": "452",
+          "id": "148",
           "visibility": false
         },
+        {
+          "id": "8",
+          "visibility": false
+        },  
         {
           "id": "713",
           "visibility": false,
@@ -14,173 +18,87 @@
         },
         {
           "id": "453",
-          "visibility": true,
+          "visibility": false,
           "name" : "Stadtplan (farbig)",
           "metaName": "Stadtplan (farbig)"
-        }
+        },
+        {
+             "id": "717",
+             "visible": true,
+             "minScale": "1000",
+             "name": "Geobasiskarten (farbig)"
+            },
+            {
+             "id": "1043",
+             "visible": false,
+             "minScale": "1000",
+             "name": "Geobasiskarten (grau-blau)"
+            },
+            {
+             "id": "368",
+             "visible": false,
+             "name": "ALKIS farbig (ab 1:10.000)",
+             "maxScale": "10000"
+            },
+            {
+             "id": "149",
+             "visible": false,
+             "name": "ALKIS grau-blau (ab 1:10.000)",
+             "maxScale": "10000"
+            }
       ]
     }
   ],
   "Fachdaten": [
     {
       "Ordner": [
-        {
-          "Titel": "Verwaltungsgrenzen",
+          {
+          "Titel": "Straßennetze",
           "Layer": [
             {
-              "id": "2427",
+              "id": "1556",
+              "visibility": false
+            },
+            {
+              "id": "1557",
+              "visibility": false
+            }
+            ,{
+              "id": "1558",
+              "visibility": false
+            }
+            ,{
+              "id": "1559",
+              "visibility": false
+            },
+            {
+                "id": "1951",
+                "visibility": false,
+                "name" : "Wichtige Bezirksstraßen (ZEB)",
+                "metaName": "Wichtige Bezirksstraßen (ZEB)"
+                },
+            {
+              "id": "1108,1109,1110",
+              "visibility": false
+            },
+            {
+              "id": "1047,1048,1049,1050,1051,1052,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087,1088,1089,1090,1091,1092,1093,1094,1095,1096,1097,1099,1100",
               "visibility": false,
-              "name" : "Hamburg-Grenzen",
-              "metaName": "Hamburg-Grenzen"
+              "name" : "Großraum- u. Schwertransport-Netz",
+              "metaName": "Großraum- u. Schwertransport-Netz"
             },
             {
-              "id": "2426",
-              "visibility": false,
-              "name" : "Bezirksgrenzen",
-              "metaName": "Bezirksgrenzen"
-            },
-            {
-              "id": "2425",
+              "id": "676",
               "visibility": false
             },
             {
-              "id": "2424",
-              "visibility": false
-            },
-            {
-              "id": "1037",
-              "visibility": false
-            },
-            {
-              "id": "2935",
-              "visibility": false
-            },
-            {
-              "id": "2422",
-              "visibility": false
-            },
-            {
-              "id": "367",
-              "visibility": false,
-              "name" : "Polizeikommissariate",
-              "metaName": "Polizeikommissariate"
-
-            },
-            {
-              "id": "2071",
-              "visibility": false
-            },
-            {
-              "id": "2874",
-              "visibility": false
-            },
-            {
-              "id": "2876",
-              "visibility": false
-            },
-            {
-              "id": "2073",
+              "id": "1952",
               "visibility": false
             }
           ]
-        },
+        }, 
         {
-          "Titel": "Bevölkerung",
-          "Layer": [
-            {
-              "id": "2797",
-              "visibility": false
-            }
-          ]
-        },
-        {
-          "Titel": "Bauen und Wohnen",
-          "Layer": [
-            {
-              "id": "1561",
-              "visibility": false
-            },
-            {
-              "id": "2834",
-              "visibility": false,
-              "maxScale": "40000",
-              "name" : "Hamburger Wohnlagenverzeichnis",
-              "metaName": "Hamburger Wohnlagenverzeichnis"
-            },
-            {
-              "id": "2759,2760,2761",
-              "visibility": false
-            },
-            {
-              "id": "1747",
-              "visibility": false
-            },
-            {
-              "id": "2042",
-              "visibility": false
-            },
-            {
-              "id": "2429,2430,2431,2432,2433,2434,2435,2436,2437,2438,2459",
-              "visibility": false
-            },
-            {
-              "id": "2444",
-              "visibility": false,
-              "maxScale": "2500",
-              "name" : "ALKIS - Gebäudeflächen",
-              "metaName": "ALKIS - Gebäudeflächen"
-            },
-            {
-              "id": "2439,2440,2441,2442",
-              "visibility": false,
-              "maxScale": "10000"
-            },
-            {
-              "id": "41",
-              "visibility": false,
-              "name" : "Digitales Informationssystem Planrecht",
-              "metaName": "Digitales Informationssystem Planrecht"
-            },
-            {
-              "id": "1423,1425,1426,1427,1428,1429,1430,1431,1433,1434,1436,1437,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1448,1449,1450",
-              "visibility": false
-            },
-            {
-              "id": "2810,2811,2812,2813,2814,2815,2816,2817,2818,2819",
-              "visibility": false
-            },
-            {
-              "id": "40",
-              "visibility": false,
-              "name" : "Rasterplan Bebauungsplänge im FHHNet",
-              "metaName": "Rasterplan Bebauungsplänge im FHHNet"
-            },
-            {
-              "id": "1170,1171",
-              "visibility": false
-            }
-          ]
-        },
-        {
-          "Titel": "Soziales",
-          "Layer": [
-            {
-              "id": "682,683",
-              "visibility": false
-            }
-          ]
-        },
-        {
-          "Titel": "Bildung",
-          "Layer": [
-            {
-              "id": "1585",
-              "visibility": false
-            }
-          ]
-        },
-        {
-          "Titel": "Hamburger Verkehrsverbund (HVV)",
+          "Titel": "ÖV-Netze",
           "Layer": [
             {
               "id": "1935",
@@ -195,6 +113,12 @@
               "styles": ["geofox_stations"],
               "name": ["Haltestellen"],
               "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
+            },
+             {
+              "id": "2679",
+              "visible": false,
+              "name" : "Schienenverkehrsnetz MRH",
+              "metaName": "Schienenverkehrsnetz MRH"
             }
           ]
         },
@@ -202,11 +126,17 @@
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
             {
-              "id": "475",
+              "id": "1932",
+              "visibility": false,
+              "name" : "StadtRAD-Stationen (ab 1.40 000)",
+              "metaName": "StadtRAD-Stationen (ab 1.40 000)"
+              },
+            {
+              "id": "1007",
               "visibility": false
             },
             {
-              "id": "473",
+              "id": "979",
               "visibility": false
             },
             {
@@ -243,19 +173,102 @@
           ]
         },
         {
-          "Titel": "Baustellen",
+          "Titel": "Parken",
           "Layer": [
             {
-              "id": "938",
+              "id": "945",
               "visibility": false
+            },
+            {
+              "id": "942",
+              "visibility": false,
+              "name" : "Park und Ride HVV",
+              "metaName": "Park und Ride HVV"
+            },
+            {
+              "id": "940",
+              "visibility": false
+            },
+            {
+              "id": "944",
+              "visibility": false
+            },
+            {
+              "id": "941",
+              "visibility": false
+            },
+            {
+              "id": "1580",
+              "visibility": false
+            },
+            {
+              "id": "1578",
+              "visibility": false,
+              "name" : "Parkuhren (ab 1:2.500)",
+              "metaName": "Parkuhren (ab 1:2.500)"
+            },
+            {
+              "id": "943",
+              "visibility": false,
+              "name" : "Bike und Ride HVV",
+              "metaName": "Bike und Ride HVV"
             }
           ]
         },
+        
+          
+         {
+          "Titel": "Verkehrszählungen",
+          "Ordner": [
+            {
+              "Titel": "Zählstellen - Kfz",
+              "Layer": [
+                {
+                  "id": "2157",
+                  "visibility": false
+                },
+                {
+                  "id": "2158",
+                  "visibility": false,
+                  "name" : "Kfz Dauerzählstelle",
+                  "metaName": "Kfz Dauerzählstelle"
+                },
+                {
+                  "id": "2159",
+                  "visibility": false
+                },
+                {
+                  "id": "2160",
+                  "visibility": false
+                }
+              ]
+            },
+            {
+              "Titel": "Zählstellen - Radverkehr",
+              "Layer": [
+                {
+                  "id": "1587",
+                  "visibility": false
+                },
+                {
+                  "id": "1588",
+                  "visibility": false
+                },
+                {
+                  "id": "2918",
+                  "visibility": false
+                }
+              ]
+            }              
+          ]
+        }, 
+          
+          
         {
           "Titel": "Verkehrslage",
           "Layer": [
             {
-              "id": "946,947",
+              "id": "947,946",
               "visibility": false,
               "name" : "Verkehrslage auf Autobahnen",
               "metaName": "Verkehrslage auf Autobahnen",
@@ -303,104 +316,16 @@
           ]
         },
         {
-          "Titel": "Parken",
+          "Titel": "Baustellen",
           "Layer": [
             {
-              "id": "945",
-              "visibility": false
-            },
-            {
-              "id": "942",
-              "visibility": false,
-              "name" : "Park + Ride",
-              "metaName": "Park + Ride"
-            },
-            {
-              "id": "940",
-              "visibility": false
-            },
-            {
-              "id": "944",
-              "visibility": false
-            },
-            {
-              "id": "941",
-              "visibility": false
-            },
-            {
-              "id": "1580",
-              "visibility": false
-            },
-            {
-              "id": "1578",
-              "visibility": false
-            },
-            {
-              "id": "943",
-              "visibility": false,
-              "name" : "Bike + Ride",
-              "metaName": "Bike + Ride"
-            }
-          ]
-        },
-        {
-          "Titel": "Straßennetze",
-          "Layer": [
-            {
-              "id": "1556",
-              "visibility": false
-            },
-            {
-              "id": "1557",
-              "visibility": false
-            }
-            ,{
-              "id": "1558",
-              "visibility": false
-            }
-            ,{
-              "id": "1559",
-              "visibility": false
-            },
-            {
-              "id": "1108,1109,1110",
-              "visibility": false
-            },
-            {
-              "id": "1047,1048,1049,1050,1051,1052,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087,1088,1089,1090,1091,1092,1093,1094,1095,1096,1097,1099,1100",
-              "visibility": false,
-              "name" : "Großraum- u. Schwertransport-Netz",
-              "metaName": "Großraum- u. Schwertransport-Netz"
-            },
-            {
-              "id": "676",
-              "visibility": false
-            },
-            {
-              "id": "1952",
+              "id": "938",
               "visibility": false
             }
           ]
         },
-        {
-          "Titel": "Verkehrszählungen",
-          "Layer": [
-            {
-              "id": "2157,2158,2159,2160",
-              "visibility": false,
-              "name" : "Zählstellen - Kfz",
-              "metaName": "Zählstellen - Kfz"
-            },
-            {
-              "id": "1587,1588,2918",
-              "visibility": false,
-              "name" : "Zählstellen - Radverkehr",
-              "metaName": "Zählstellen - Radverkehr"
-            }
-          ]
-        },
-        {
-          "Titel": "Weitere Straßeninformationen/Straßenausstattung",
+         {
+          "Titel": "Bauwerke und Anlagen",
           "Layer": [
             {
               "id": "669,670",
@@ -466,7 +391,9 @@
             },
             {
               "id": "538,539,540",
-              "visibility": false
+              "visibility": false,
+              "name" : "Kreuzungsskizzen (ab 1:5.000)",
+              "metaName": "Kreuzungsskizzen (ab 1:5.000)"
             }
           ]
         },
@@ -486,7 +413,173 @@
               "metaName": "Lärmkarten - Flugverkehr"
             }
           ]
+        },
+        {
+          "Titel": "Bevölkerung",
+          "Layer": [
+            {
+              "id": "2797",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Bauen und Wohnen",
+          "Layer": [
+            {
+              "id": "1561",
+              "visibility": false
+            },
+            {
+              "id": "2834",
+              "visibility": false,
+              "maxScale": "40000",
+              "name" : "Hamburger Wohnlagenverzeichnis (ab 1:40.000)",
+              "metaName": "Hamburger Wohnlagenverzeichnis (ab 1:40.000)"
+            },
+            {
+                "id": "4409,4410,4411,4412,4413,4414",
+                "visible": false
+            },
+            {
+              "id": "2759,2760,2761",
+              "visibility": false
+            },
+            {
+              "id": "1747",
+              "visibility": false
+            },
+            {
+              "id": "2042",
+              "visibility": false
+            },
+            {
+              "id": "2429,2430,2431,2432,2433,2434,2435,2436,2437,2438,2459",
+              "visibility": false
+            },
+            {
+              "id": "2444",
+              "visibility": false,
+              "maxScale": "2500",
+              "name" : "ALKIS - Gebäudeflächen (ab 1:2.500)",
+              "metaName": "ALKIS - Gebäudeflächen (ab 1:2.500)"
+            },
+            {
+              "id": "2439,2440,2441,2442",
+              "visibility": false,
+              "maxScale": "10000",
+              "name" : "ALKIS -  tatsächliche Nutzung (ab 1:10.000)",
+              "metaName": "ALKIS -  tatsächliche Nutzung (ab 1:10.000)"
+            },
+            {
+              "id": "1201,1202,1203,1204,1205,1206,1207,1208,1209,1210,1211,1212",
+              "visibility": false,
+              "name" : "Digitales Informationssystem Planrecht",
+              "metaName": "Digitales Informationssystem Planrecht"
+            },
+            {
+              "id": "1423,1425,1426,1427,1428,1429,1430,1431,1433,1434,1436,1437,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1448,1449,1450",
+              "visibility": false,
+                "name" : "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1:20.000)",
+                "metaName": "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1:20.000)"
+            },
+            {
+              "id": "2810,2811,2812,2813,2814,2815,2816,2817,2818,2819",
+              "visibility": false,
+                  "name" : "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1:20.000)",
+                "metaName": "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1:20.000)"
+            },
+            {
+              "id": "40",
+              "visibility": false,
+              "name" : "Rasterplan Bebauungsplänge im FHHNet (ab 1:20.000)",
+              "metaName": "Rasterplan Bebauungsplänge im FHHNet (ab 1:20.000)"
+            },
+            {
+              "id": "1170,1171",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Soziales",
+          "Layer": [
+            {
+              "id": "682,683",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Bildung",
+          "Layer": [
+            {
+              "id": "1585",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Verwaltungsgrenzen",
+          "Layer": [
+            {
+              "id": "2427",
+              "visibility": false,
+              "name" : "Hamburg-Grenzen",
+              "metaName": "Hamburg-Grenzen"
+            },
+            {
+              "id": "2426",
+              "visibility": false,
+              "name" : "Bezirksgrenzen",
+              "metaName": "Bezirksgrenzen"
+            },
+            {
+              "id": "2425",
+              "visibility": false
+            },
+            {
+              "id": "2424",
+              "visibility": false
+            },
+            {
+              "id": "1037",
+              "visibility": false
+            },
+            {
+              "id": "2935",
+              "visibility": false
+            },
+            {
+              "id": "2422",
+              "visibility": false
+            },
+            {
+              "id": "367",
+              "visibility": false,
+              "name" : "Polizeikommissariate",
+              "metaName": "Polizeikommissariate"
+
+            },
+            {
+              "id": "2071",
+              "visibility": false
+            },
+            {
+              "id": "2874",
+              "visibility": false
+            },
+            {
+              "id": "2876",
+              "visibility": false
+            },
+            {
+              "id": "2073",
+              "visibility": false
+            }
+          ]
         }
+          
       ]
     }
   ]
