@@ -7,7 +7,6 @@ define([
 
     var Backbone = require("backbone"),
         FolderTemplate = require("text!modules/menu/desktop/folder/thementemplate.html"),
-        CatalogTemplate = require("text!modules/menu/desktop/folder/catalogTemplate.html"),
         FolderLeafTemplate = require("text!modules/menu/desktop/folder/templateLeaf.html"),
         FolderView;
 
@@ -16,7 +15,6 @@ define([
         className: "",
         id: "",
         template: _.template(FolderTemplate),
-        catalogTemplate: _.template(CatalogTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
              "click .layer-catalog .control-label, .layer-catalog > .header > .glyphicon ": "toggleCatalogAndBaseLayer"
@@ -33,11 +31,12 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            this.$el.attr("id", this.model.getId());
-            if (this.model.getParentId() === "Themen") {
-                $("#" + this.model.getParentId()).append(this.$el.html(this.catalogTemplate(attr)));
-            }
-            else {
+            this.$el.remove();
+
+            if (this.model.isVisibleInTree || this.model.getLevel() === 0) {
+
+                this.$el.attr("id", this.model.getId());
+
                 var selector = "";
 
                 if (this.model.getParentId() === "Baselayer") {
@@ -50,12 +49,11 @@ define([
                     $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
                 }
                 else {
-
-                    $(selector).after(this.$el.html(this.template(attr)));
+                    $(selector).prepend(this.$el.html(this.template(attr)));
                 }
                 $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
-                console.log(this.model.getLevel());
             }
+
         },
         updateList: function () {
             if (this.model.getIsLeafFolder() === true) {
@@ -65,16 +63,6 @@ define([
         },
         toggleIsChecked: function () {
             this.model.toggleIsChecked();
-        },
-        toggleCatalogAndBaseLayer: function () {
-              this.toggleOverlayer();
-              this.toggleBaseLayer();
-        },
-        toggleBaseLayer: function () {
-            $("#Baselayer").toggle("slow");
-        },
-        toggleOverlayer: function () {
-            $("#Overlayer").toggle("slow");
         }
     });
 

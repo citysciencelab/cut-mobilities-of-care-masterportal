@@ -16,7 +16,8 @@ define([
     "bootstrap/dropdown",
     "bootstrap/collapse",
     "jqueryui/effect",
-    "jqueryui/effect-slide"
+    "jqueryui/effect-slide",
+    "modules/menu/desktop/folder/catalogView"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -26,6 +27,7 @@ define([
         MobileTemplate = require("text!modules/menu/mobile/template.html"),
         DesktopFolderView = require("modules/menu/desktop/folder/view"),
         DesktopThemenFolderView = require("modules/menu/desktop/folder/themenView"),
+        CatalogFolderView = require("modules/menu/desktop/folder/catalogView"),
         DesktopLayerView = require("modules/menu/desktop/layer/view"),
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         MobileFolderView = require("modules/menu/mobile/folder/view"),
@@ -88,15 +90,14 @@ define([
                 var toolModels = this.collection.where({parentId: "Werkzeuge"});
 
                 this.addViews(toolModels);
-/*
-                var treeMenu = this.collection.where({parentId: "Themen"});
 
-                this.addViews(treeMenu);*/
-
-                this.renderSubTree("Themen", 0);
+                this.renderSubTree("Themen", 0, 3);
             }
         },
-        renderSubTree: function (parentId, level) {
+        renderSubTree: function (parentId, level, levelLimit) {
+            if(level >= levelLimit){
+                return;
+            }
             var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId),
 
                 models = this.collection.add(lightModels),
@@ -105,19 +106,26 @@ define([
                     return model.getType() === "folder";
                 });
 
+                folder = _.sortBy(folder, function (folder) {
+                    return folder.getName();
+                });
+                folder.reverse();
                 this.addViews(folder);
 
                 _.each(folder, function (folder) {
-                    this.renderSubTree(folder.getId(), level + 1);
+                    this.renderSubTree(folder.getId(), level + 1, levelLimit);
                 }, this);
 
                 var layer = _.filter(models, function (model) {
                     return model.getType() === "layer";
                 });
 
+                layer = _.sortBy(layer, function (layer) {
+                    return layer.getName();
+                });
+                layer.reverse();
                 this.addViews(layer);
         },
-
 
         render: function () {
             var isMobile = Radio.request("Util", "isViewMobile");
@@ -157,7 +165,6 @@ define([
             _.each(models, function (model) {
                 var isMobile = Radio.request("Util", "isViewMobile"),
                     nodeView;
-
                 switch (model.getType()){
                     case "folder": {
                         // Model für einen Ordner
@@ -166,7 +173,18 @@ define([
                             nodeView = new MobileFolderView({model: model});
                         }
                         else {
-                           model.getIsInThemen() ? new DesktopThemenFolderView({model: model}) : new DesktopFolderView({model: model});
+                            if (model.getIsInThemen()) {
+                                if (model.getParentId() === "Themen") {
+                                    new CatalogFolderView({model: model});
+                                }
+                                else {
+                                    new DesktopThemenFolderView({model: model});
+                                }
+                            }
+                            else {
+                                new DesktopFolderView({model: model});
+                            }
+
                         }
                         break;
                     }

@@ -1,14 +1,10 @@
 define([
     "backbone",
-    "text!modules/menu/desktop/layer/template.html",
-    "text!modules/menu/desktop/layer/templateSelected.html",
-    "text!modules/menu/desktop/layer/templateSetting.html"
+    "text!modules/menu/desktop/layer/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
         LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
-        SelectedLayerTemplate = require("text!modules/menu/desktop/layer/templateSelected.html"),
-        SettingTemplate = require("text!modules/menu/desktop/layer/templateSetting.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -48,8 +44,17 @@ define([
                     this.renderSetting();
                 }*/
 
-            $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
-            $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
+            if (this.model.isVisibleInTree) {
+                var selector = "";
+
+                if (this.model.getLevel() === 0) {
+                    $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                }
+                else {
+                    $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
+                }
+                $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
+            }
         },
 
         /**
