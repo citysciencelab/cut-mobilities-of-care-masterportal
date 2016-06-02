@@ -30,7 +30,7 @@ define([
         /**
         *
         */
-        search: function (searchString) {
+        search: function (searchString) {console.log(this.get("layers"));
             if (this.get("layers").length === 0) {
                 this.getLayerForSearch();
             }
@@ -104,25 +104,25 @@ define([
          *
          */
         getLayerForSearch: function () {
-            var layerModels = Radio.request("LayerList", "getResponse");
+            var layerModels = Radio.request("LayerList", "getLayerList");
 
             this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
-            layerModels = _.uniq(layerModels, function (model) {
-                return model.name + model.datasets[0].md_id;
-                // return model.get("name") + model.get("metaID");
-            });
+            // layerModels = _.uniq(layerModels, function (model) {
+            //     return model.name + model.datasets[0].md_id;
+            //     // return model.get("name") + model.get("metaID");
+            // });
             _.each(layerModels, function (model) {
                 this.get("layers").push({
-                    // name: model.get("name"),
-                    name: model.name,
-                    // metaName: model.get("metaName"),
-                    metaName: model.datasets[0].md_name,
+                    name: model.get("name"),
+                    // name: model.name,
+                    metaName: model.get("metaName"),
+                    // metaName: model.datasets[0].md_name,
                     type: "Thema",
                     glyphicon: "glyphicon-list",
-                    // id: model.get("id"),
-                    id: model.id,
+                    id: model.get("id"),
+                    // id: model.id,
                     model: model
                 });
             }, this);
