@@ -103,7 +103,7 @@ define([
         createBaselayer: function (layerList) {
             _.each(this.getBaselayer().Layer, function (layer) {
                 if (_.isArray(layer.id)) {
-                    layer = _.extend(this.mergeLayersByIds(layer.id, layerList), _.omit(layer, "id"));
+                    layer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
                 }
                 else {
                     layer =  _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
@@ -128,7 +128,7 @@ define([
                     folder.push({
                         name: groupname,
                         layer: group,
-                        id: _.uniqueId(groupname)
+                        id: this.createUniqId(groupname)
                     });
                 }
                 else {
@@ -136,9 +136,9 @@ define([
                 }
                 categories.folder = folder;
                 categories.layer = layer;
-                categories.id = _.uniqueId(name);
+                categories.id = this.createUniqId(name);
                 categories.name = name;
-            });
+            }, this);
             return categories;
         },
         /**

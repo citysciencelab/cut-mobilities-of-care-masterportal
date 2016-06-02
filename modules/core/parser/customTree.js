@@ -23,7 +23,8 @@ define([
         },
 
         /**
-         * parsed response.Themenconfig
+         * Parsed response.Themenconfig
+         * Die Objekte aus der config.json und services.json werden über die Id zusammengeführt
          * @param  {Object} object - Baselayer | Overlayer | Folder
          * @param  {string} parentId
          * @param  {Number} level - Rekursionsebene = Ebene im Themenbaum
@@ -31,16 +32,34 @@ define([
         parseTree: function (object, parentId, level) {
             if (_.has(object, "Layer")) {
                 _.each(object.Layer, function (layer) {
-                    // Layer eines Metadatensatzes (nicht alle) die gruppiert werden sollen --> z.B. Geobasisdaten (farbig)
-                    // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gruppiert
-                    // merge services.json und config.json
-                    if (_.isArray(layer.id)) {
-                        layer = _.extend(this.mergeLayersByIds(layer.id, Radio.request("RawLayerList", "getLayerAttributesList")), _.omit(layer, "id"));
+                    // Für Singel-Layer (ol.layer.Layer)
+                    // z.B.: {id: "5181", visible: false}
+                    if (_.isString(layer.id)) {
+                        var objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.id});
+
+                        layer = _.extend(objFromRawList, layer);
                     }
-                    else {
-                        layer = _.extend(layer, Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.id}), layer);
+                    // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
+                    // z.B.: {id: ["550,551,552,...,559"], visible: false}
+                    else if (_.isArray(layer.id) && _.isString(layer.id[0])) {
+                        var objsFromRawList = Radio.request("RawLayerList", "getLayerAttributesList"),
+                            mergedObjsFromRawList = this.mergeObjectsByIds(layer.id, objsFromRawList);
+
+                        layer = _.extend(mergedObjsFromRawList, _.omit(layer, "id"));
                     }
-                    // hier layer mergen wenn mehere layers z.b. Hintergrundkarten
+                    // Für Gruppen-Layer (ol.layer.Group)
+                    // z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
+                    else if (_.isArray(layer.id) && _.isObject(layer.id[0])) {
+                        var layerdefinitions = [];
+
+                        _.each(layer.id, function (childLayer) {
+                            var objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: childLayer.id});
+
+                            layerdefinitions.push(objFromRawList);
+                        });
+                        layer = _.extend(layer, {typ: "GROUP", id: _.uniqueId("grouplayer"), layerdefinitions: layerdefinitions});
+                    }
+
                     // HVV :(
                     if (_.has(layer, "styles") && layer.styles.length > 1) {
                         _.each(layer.styles, function (style) {
@@ -48,7 +67,7 @@ define([
                         }, this);
                     }
                     else {
-                        this.addItem(_.extend({type: "layer", parentId: parentId, level: level}, layer));
+                        this.addItem(_.extend({type: "layer", parentId: parentId, level: level, format: "image/png"}, layer));
                     }
                 }, this);
             }
@@ -56,7 +75,7 @@ define([
                 _.each(object.Ordner, function (folder) {
                     var isLeafFolder = (!_.has(folder, "Ordner")) ? true : false;
 
-                    folder.id = _.uniqueId(folder.Titel);
+                    folder.id = this.createUniqId(folder.Titel);
                     this.addItem({type: "folder", parentId: parentId, name: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: level, isInThemen: true});
                     // rekursiver Aufruf
                     this.parseTree(folder, folder.id, level + 1);

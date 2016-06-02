@@ -3,6 +3,7 @@ define([
     "backbone.radio",
     "modules/core/modelList/layer/wms",
     "modules/core/modelList/layer/wfs",
+    "modules/core/modelList/layer/group",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model"
 ], function () {
@@ -10,6 +11,7 @@ define([
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
+        GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         Radio = require("backbone.radio"),
@@ -56,7 +58,7 @@ define([
                         return new WFSLayer(attrs, options);
                     }
                     else if (attrs.typ === "GROUP") {
-                        // TODO muss noch gemacht werden
+                        return new GROUPLayer(attrs, options);
                     }
                 }
                 else if (attrs.type === "folder") {
