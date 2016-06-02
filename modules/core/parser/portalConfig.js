@@ -97,7 +97,6 @@ define([
                 obj.isVisibleInMap = obj.visibility;
                 delete obj.visibility;
             }
-            obj.id = obj.id.replace(/[^a-zA-Z0-9]/g, '');
             this.getItemList().push(obj);
         },
 
@@ -200,7 +199,7 @@ define([
          * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
          * @return {Object[]} layerlist - Objekte aus der services.json
          */
-        mergeLayersByIds: function (ids, layerlist) {
+        mergeObjectsByIds: function (ids, layerlist) {
             var objectsByIds,
                 newObject;
 
@@ -224,6 +223,18 @@ define([
                 });
 
             return newObject;
+        },
+
+        /**
+         * Generiert eine Uniq-Id mit Prefix
+         * Zuvor werden alle Leerzeichen aus dem Prefix entfernt
+         * @param  {String} value - Prefix für Uniq-Id
+         * @return {String} value - Uniq-Id
+         */
+        createUniqId: function (value) {
+            value = value.replace(/[^a-zA-Z0-9]/g, "");
+
+            return _.uniqueId(value);
         }
     });
 
