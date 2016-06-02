@@ -12,7 +12,7 @@ define([
             EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
         },
         setStatus: function (args) {   // Fenstermanagement
-            if (args[2] === "wfsfeaturefilter") {
+            if (args[2] === "wfsFeatureFilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -21,7 +21,7 @@ define([
             }
         },
         getLayers: function () {
-            var layers = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"}),
+            var layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
                 featureLayers = _.filter(layers, function (layer) {
                     return layer.get("layer").getSource().getFeatures().length > 0;
                 }),

@@ -45,13 +45,8 @@ define([
 
             this.listenTo(this, {
                 "change:isSelected": function () {
-                    if (this.getIsSelected() === true) {
-                        Radio.trigger("Map", "addLayer", this.getLayer());
-                        this.setIsVisibleInMap(this.getIsSelected());
-                    }
-                    else {
-                        Radio.trigger("Map", "removeLayer", this.getLayer());
-                    }
+                    this.toggleLayerOnMap();
+                    this.setIsVisibleInMap(this.getIsSelected());
                 },
                 "change:transparence": this.updateLayerTransparence
             });
@@ -197,7 +192,6 @@ define([
             }
         },
 
-
         toggleIsSettingVisible: function () {
             if (this.getIsSettingVisible() === true) {
                 this.setIsSettingVisible(false);
@@ -205,6 +199,19 @@ define([
             else {
                 this.collection.setIsSettingVisible(false);
                 this.setIsSettingVisible(true);
+            }
+        },
+
+        /**
+         * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
+         * Abhängig vom Attribut "isSelected"
+         */
+        toggleLayerOnMap: function () {
+            if (this.getIsSelected() === true) {
+                Radio.trigger("Map", "addLayer", this.getLayer());
+            }
+            else {
+                Radio.trigger("Map", "removeLayer", this.getLayer());
             }
         },
 

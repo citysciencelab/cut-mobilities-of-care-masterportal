@@ -161,6 +161,12 @@ define("app",
                     });
                     break;
                 }
+                case "wfsFeatureFilter": {
+                    require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
+                        new WFSFeatureFilterView();
+                    });
+                    break;
+                }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {

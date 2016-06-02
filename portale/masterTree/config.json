@@ -19,6 +19,26 @@
             "measure": {
               "name": "Strecke / Fläche messen",
               "glyphicon": "glyphicon-resize-full"
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign"
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "kmlimport": {
+              "name": "KML Import",
+              "glyphicon": "glyphicon-import"
             }
           }
         },

@@ -22,7 +22,7 @@ define([
                 t: new Date().getMilliseconds(),
                 zufall: Math.random(),
                 LAYERS: this.getLayers(),
-                FORMAT: this.getImageFormat(),
+                FORMAT: (this.getImageFormat() === "nicht vorhanden") ? "image/png" : this.getImageFormat(),
                 VERSION: this.getVersion(),
                 TRANSPARENT: this.getTransparent().toString()
             };

@@ -4,19 +4,48 @@
     "PortalTitle": "GeoViewer",
     "searchBar": true,
     "menu": {
-      "themen": true,
-      "tools": {
-        "parcelSearch": true,
-        "gfi": true,
-        "print": true,
-        "coord": true,
-        "measure": true,
-        "draw": true,
-        "searchByCoord": true
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
       },
-      "legend": true,
-      "routing": true,
-      "addWMS": true
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "parcelSearch": {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search"
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign"
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "kmlimport": {
+            "name": "KML Import",
+            "glyphicon": "glyphicon-import"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      }
     },
     "controls": {
       "zoom": true,
