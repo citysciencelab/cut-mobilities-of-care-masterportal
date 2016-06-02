@@ -99,6 +99,10 @@ define(function () {
             tree: {
                 minChars: 3
             },
+            visibleWFS: {
+                minChars: 3
+            },
+            minChars: 3,
             geoLocateHit: true
         },
         tools: {
