@@ -56,59 +56,59 @@ define(function () {
         tree: {
             type: "light",
             saveSelection: false,
-            layer: [
-                {id: "453", visibility: true, legendUrl: "ignore"},
-                {id: "452", visibility: false},
-                {id: "1748", visibility: false},
-                {id: "1562", visibility: false},
-                {id: "1561", visibility: false, featureCount: 10},
-                {id: "2003", visibility: false, style: "2003"},
-                {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
-                {id:
-                 [
-                     {
-                         id: "946",
-                         attribution:
-                         {
-                             eventname: "aktualisiereverkehrsnetz",
-                             timeout: (10 * 60000)
-                         }
-                     },
-                     {
-                         id: "947"
-                     }
-                 ],
-                 name: "aktuelle Meldungen der TBZ", visibility: false
-                },
-                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
-                 displayInTree: true,
-                 maxScale: 60000,
-                 minScale: 10000,
-                 filterOptions: [
-                     {
-                         fieldName: "teilnahme_geburtsklinik",
-                         filterType: "combo",
-                         filterName: "Geburtsklinik",
-                         filterString: ["*", "Ja", "Nein"]
-                     },
-                     {
-                         fieldName: "teilnahme_notversorgung",
-                         filterType: "combo",
-                         filterName: "Not- und Unfallversorgung",
-                         filterString: ["*", "Ja", "Eingeschränkt", "Nein"]
-                     }
-                 ],
-                 routable: true
-                },
-                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
-                     {
-                         fieldName: "Bezirk",
-                         filterType: "combo",
-                         filterName: "Bezirk",
-                         filterString: ["*", "Altona"]
-                     }
-                 ], styleLabelField: "", styleField: "", routable: false}
-            ]
+            // layer: [
+            //     {id: "453", visibility: true, legendUrl: "ignore"},
+            //     {id: "452", visibility: false},
+            //     {id: "1748", visibility: false},
+            //     {id: "1562", visibility: false},
+            //     {id: "1561", visibility: false, featureCount: 10},
+            //     {id: "2003", visibility: false, style: "2003"},
+            //     {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
+            //     {id:
+            //      [
+            //          {
+            //              id: "946",
+            //              attribution:
+            //              {
+            //                  eventname: "aktualisiereverkehrsnetz",
+            //                  timeout: (10 * 60000)
+            //              }
+            //          },
+            //          {
+            //              id: "947"
+            //          }
+            //      ],
+            //      name: "aktuelle Meldungen der TBZ", visibility: false
+            //     },
+            //     {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+            //      displayInTree: true,
+            //      maxScale: 60000,
+            //      minScale: 10000,
+            //      filterOptions: [
+            //          {
+            //              fieldName: "teilnahme_geburtsklinik",
+            //              filterType: "combo",
+            //              filterName: "Geburtsklinik",
+            //              filterString: ["*", "Ja", "Nein"]
+            //          },
+            //          {
+            //              fieldName: "teilnahme_notversorgung",
+            //              filterType: "combo",
+            //              filterName: "Not- und Unfallversorgung",
+            //              filterString: ["*", "Ja", "Eingeschränkt", "Nein"]
+            //          }
+            //      ],
+            //      routable: true
+            //     },
+            //     {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+            //          {
+            //              fieldName: "Bezirk",
+            //              filterType: "combo",
+            //              filterName: "Bezirk",
+            //              filterString: ["*", "Altona"]
+            //          }
+            //      ], styleLabelField: "", styleField: "", routable: false}
+            // ]
         },
         /**
         * @memberof config
@@ -346,37 +346,37 @@ define(function () {
         * @example tree: {title: "Themen", glyphicon: "glyphicon-list"}
         * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
         */
-        menuItems: {
-            tree: {
-                title: "Themen",
-                glyphicon: "glyphicon-list"
-            },
-            tools: {
-                title: "Werkzeuge",
-                glyphicon: "glyphicon-wrench"
-            },
-            legend: {
-                title: "Legende",
-                glyphicon: "glyphicon-book"
-            },
-            contact: {
-                title: "Kontakt",
-                glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            },
-            routing: {
-                title: "Routenplaner",
-                glyphicon: "glyphicon-road"
-            },
-            wfsFeatureFilter: {
-                title: "Filter öffnen",
-                glyphicon: "glyphicon-filter"
-            },
-            addWMS: {
-                title: "WMS hinzufügen",
-                glyphicon: "glyphicon-plus"
-            }
-        },
+        // menuItems: {
+        //     tree: {
+        //         title: "Themen",
+        //         glyphicon: "glyphicon-list"
+        //     },
+        //     tools: {
+        //         title: "Werkzeuge",
+        //         glyphicon: "glyphicon-wrench"
+        //     },
+        //     legend: {
+        //         title: "Legende",
+        //         glyphicon: "glyphicon-book"
+        //     },
+        //     contact: {
+        //         title: "Kontakt",
+        //         glyphicon: "glyphicon-envelope",
+        //         email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+        //     },
+        //     routing: {
+        //         title: "Routenplaner",
+        //         glyphicon: "glyphicon-road"
+        //     },
+        //     wfsFeatureFilter: {
+        //         title: "Filter öffnen",
+        //         glyphicon: "glyphicon-filter"
+        //     },
+        //     addWMS: {
+        //         title: "WMS hinzufügen",
+        //         glyphicon: "glyphicon-plus"
+        //     }
+        // },
         /*
         * @property {Object} menu - Das menu-Konfigurationsobject
         * @property {boolean} helpButton - auf false setzen
@@ -414,36 +414,36 @@ define(function () {
         * @example contact: {serviceID: "80001", from: [{email: "lgvgeoportal-hilfe@gv.hamburg.de", name: "LGVGeoportalHilfe"}], to: [{email: "lgvgeoportal-hilfe@gv.hamburg.de",name: "LGVGeoportalHilfe"}], ccToUser: true}
         * @todo helpButton
         */
-        menu: {
-            helpButton: false,
-            searchBar: true,
-            layerTree: true,
-            tools: true,
-            featureLister: 10,
-            treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: true,
-            routing: true,
-            addWMS: true,
-            formular: {},
-            contact: {
-                serviceID: "80001",
-                from: [{
-                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
-                    name: "LGVGeoportalHilfe"
-                }],
-                to: [{
-                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
-                    name: "LGVGeoportalHilfe"
-                }],
-                ccToUser: true,
-                cc: [],
-                bcc: [],
-                subject: "",
-                textPlaceholder: "",
-                includeSystemInfo: true
-            }
-        },
+        // menu: {
+        //     helpButton: false,
+        //     searchBar: true,
+        //     layerTree: true,
+        //     tools: true,
+        //     featureLister: 10,
+        //     treeFilter: false,
+        //     wfsFeatureFilter: true,
+        //     legend: true,
+        //     routing: true,
+        //     addWMS: true,
+        //     formular: {},
+        //     contact: {
+        //         serviceID: "80001",
+        //         from: [{
+        //             email: "lgvgeoportal-hilfe@gv.hamburg.de",
+        //             name: "LGVGeoportalHilfe"
+        //         }],
+        //         to: [{
+        //             email: "lgvgeoportal-hilfe@gv.hamburg.de",
+        //             name: "LGVGeoportalHilfe"
+        //         }],
+        //         ccToUser: true,
+        //         cc: [],
+        //         bcc: [],
+        //         subject: "",
+        //         textPlaceholder: "",
+        //         includeSystemInfo: true
+        //     }
+        // },
         /**
         * @memberof config
         * @type {String}
