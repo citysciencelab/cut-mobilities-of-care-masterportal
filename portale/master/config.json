@@ -114,6 +114,19 @@
               "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
             }
           ]
+        },
+        {
+          "id": "753",
+          "visibility": false,
+          "mouseHoverField": "Name",
+          "filterOptions": [
+            {
+              "fieldName": "Bezirk",
+              "filterType": "combo",
+              "filterName": "Bezirk",
+              "filterString": ["*", "Altona"]
+            }
+          ]
         }
       ]
     }
