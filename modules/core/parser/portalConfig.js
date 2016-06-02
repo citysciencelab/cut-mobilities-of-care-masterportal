@@ -78,13 +78,7 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    this.addItem({
-                        type: "tool",
-                        parentId: parentId,
-                        glyphicon: value.glyphicon,
-                        name: value.name,
-                        id: key
-                    });
+                    this.addItem(_.extend({type: "tool", parentId: parentId, id: key}, value));
                 }
             }, this);
         },

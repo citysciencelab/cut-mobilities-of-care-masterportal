@@ -22,7 +22,8 @@
           },
           "gfi": {
             "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign"
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
           },
           "print": {
             "name": "Karte drucken",
