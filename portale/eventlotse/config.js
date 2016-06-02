@@ -11,7 +11,7 @@ define(function () {
                 {id: "182", visibility: false},// Strassenbaumkataster
                 {id: "582", visibility: false},// Parkanlagen
                 {id: "629,628,627", name: "100 Jahre Stadtgrün", visibility: false},// 100JahreStadtgrün
-                {id: "2030", visibility: false},// Naturschutzgebiete
+                {id: "1992", visibility: false},// Naturschutzgebiete
                 {id: "458", visibility: false},// Wasserschutzgebiete
                 {id: "1754,1755,1756,1757,1758,1759", name: "Denkmalkartierung", visibility: false},// Denkmalkartierung
                 {id: "1849", visibility: false, name: "Bodendenkmäler"},// Bodendenkmale
@@ -33,18 +33,18 @@ define(function () {
                 {id: "945", visibility: false}, // Parkhäuser
                 {id: "942", visibility: false}, // ParkAndRide
 //                {id: "4425", visibility: true, name: "Eventlotse-Flächen", style: "4425"} // WFS Eventlotse (4425)
-                {id: "4426", visibility: true, name:"Eventlotse-Flächen"} // WMS Eventlotse (4426)
+                {id: "4561", visibility: true, name:"Eventlotse-Flächen"} // WMS Eventlotse (4426)
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
             version: "2.0.0",
             typename: "app:hamburgconvention",
             valuereference:"app:flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
+            layerid: "4561"
         },
 
         view: {
