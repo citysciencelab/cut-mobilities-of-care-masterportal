@@ -17,21 +17,21 @@ define([
         template: _.template(FolderTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
-             "click .layer-catalog .control-label, .layer-catalog > .header > .glyphicon ": "toggleCatalogAndBaseLayer"
+            "click": "toggleIsExpanded"
         },
         initialize: function () {
-            this.render();
             // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
             this.$el.on({
                 click: function (e) {
-                    e.stopPropagation();
+                   e.stopPropagation();
                 }
             });
+            this.render();
         },
         render: function () {
-            var attr = this.model.toJSON();
+            this.$el.html("");
 
-            this.$el.remove();
+            var attr = this.model.toJSON();
 
             if (this.model.isVisibleInTree || this.model.getLevel() === 0) {
 
@@ -61,8 +61,8 @@ define([
             }
             this.model.updateList(this.model.getId());
         },
-        toggleIsChecked: function () {
-            this.model.toggleIsChecked();
+        toggleIsExpanded: function () {
+            this.model.toggleIsExpanded();
         }
     });
 

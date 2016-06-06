@@ -75,15 +75,17 @@ define([
             }
             this.collection.toggleIsSelectedLayers(this);
         },
-
         /**
          * Getter für Attribut "isLeafFolder"
          * @return {boolean} true | false
          */
         getIsLeafFolder: function () {
             return this.get("isLeafFolder");
+        },
+        toggleIsExpanded: function () {
+            this.setIsExpanded(!this.getIsExpanded());
+            console.log(this.getIsExpanded());
         }
-
     });
 
     return Folder;

@@ -12,15 +12,14 @@ define([
             className: "layer-catalog",
             template: _.template(Template),
             events: {
-             "click .layer-catalog .control-label, .layer-catalog > .header > .glyphicon ": "toggleCatalogAndBaseLayer"
+             "click .control-label, .glyphicon ": "toggleCatalogAndBaseLayer"
             },
             initialize: function () {
-                this.render();
-                 this.$el.on({
+                this.$el.on({
                 click: function (e) {
                    e.stopPropagation();
-                }
-            });
+                }});
+                this.render();
             },
             render: function () {
                 var attr = this.model.toJSON();
@@ -35,7 +34,7 @@ define([
                 $("ul#Baselayer").toggle("slow");
             },
             toggleOverlayer: function () {
-                $("#Overlayer").toggle("slow");
+                $("ul#Overlayer").toggle("slow");
             }
         });
 

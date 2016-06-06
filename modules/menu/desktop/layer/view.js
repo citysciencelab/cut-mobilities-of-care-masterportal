@@ -45,13 +45,13 @@ define([
                 }*/
 
             if (this.model.isVisibleInTree) {
-                var selector = "";
+                var selector = $("#" + this.model.getParentId());
 
                 if (this.model.getLevel() === 0) {
-                    $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                    selector.append(this.$el.html(this.template(attr)));
                 }
                 else {
-                    $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
+                    selector.after(this.$el.html(this.template(attr)));
                 }
                 $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
             }
