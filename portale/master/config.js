@@ -485,9 +485,10 @@ define(function () {
         * @property {string} [initialQuery] - Initialer Suchstring.
         */
         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,

@@ -22,7 +22,8 @@
           },
           "gfi": {
             "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign"
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
           },
           "print": {
             "name": "Karte drucken",
@@ -112,6 +113,19 @@
               "filterType": "combo",
               "filterName": "Not- und Unfallversorgung",
               "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+            }
+          ]
+        },
+        {
+          "id": "753",
+          "visibility": false,
+          "mouseHoverField": "Name",
+          "filterOptions": [
+            {
+              "fieldName": "Bezirk",
+              "filterType": "combo",
+              "filterName": "Bezirk",
+              "filterString": ["*", "Altona"]
             }
           ]
         }
