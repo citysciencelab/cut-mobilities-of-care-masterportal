@@ -45,6 +45,7 @@ define([
          */
         parse: function (response) {
             this.parseMenu(response.Portalconfig.menu, "root");
+            this.parseControls(response.Portalconfig.controls);
             if (response.Portalconfig.Baumtyp === "default") {
                 this.addTreeMenuItems();
                 require(["modules/core/parser/defaultTree"], function (DefaultTreeParser) {
@@ -82,6 +83,16 @@ define([
                 }
             }, this);
         },
+
+        parseControls: function (items) {
+            _.each(items, function (value, key) {
+                this.addItem({
+                    type: "control",
+                    id: key
+                });
+            }, this);
+        },
+
         /**
          * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) hinzu
          * @param {Object} obj - Item

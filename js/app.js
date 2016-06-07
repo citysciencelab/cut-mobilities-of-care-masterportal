@@ -59,10 +59,9 @@ define("app",
     }
 
     require([
-        "modules/core/map",
         "config",
         "backbone.radio"
-    ], function (Map, Config, Radio) {
+    ], function (Config, Radio) {
 
 
         if (Util.isAny()) {
@@ -184,6 +183,46 @@ define("app",
             }
         });
 
+        require(["modules/controls/view"], function (ControlsView) {
+            new ControlsView();
+        });
+
+        // controls
+        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "control"}), function (control) {
+            switch(control.id) {
+                case "toggleMenu": {
+                    require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                        new ToggleMenuControlView();
+                    });
+                    break;
+                }
+                case "zoom": {
+                    require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                        new ZoomControlView();
+                    });
+                    break;
+                }
+                case "orientation": {
+                    require(["modules/controls/orientation/view"], function (OrientationView) {
+                        new OrientationView();
+                    });
+                    break;
+                }
+                case "mousePosition": {
+                    require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                        new MousePositionView();
+                    });
+                    break;
+                }
+                case "fullScreen": {
+                    require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                        new FullScreenView();
+                    });
+                    break;
+                }
+            }
+        });
+
         require(["modules/mapMarker/view"], function (MapMarkerView) {
             new MapMarkerView();
         });
@@ -195,7 +234,7 @@ define("app",
         }
 
         if (Config.menubar === true) {
-            require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
+            require(["modules/menubar/view"], function (MenubarView) {
                 new MenubarView();
                 if ($("#map").is(":visible") === true) {
                     new ControlsView();
