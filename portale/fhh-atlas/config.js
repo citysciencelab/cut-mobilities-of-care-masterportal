@@ -49,7 +49,7 @@ define(function () {
                 "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1" // Flurstücke schwarz
             ],
             metaIDsToIgnore: [
-                "C52D0974-0E5D-481C-B365-C385F8874374", // Störfallbetriebe Internet
+                "DFA37E3E-F640-47DE-B7EF-3D3FFB11435C", // Störfallbetriebe Internet
                 "09DE39AB-A965-45F4-B8F9-0C339A45B154", // MRH Fachdaten
                 "51656D3F-E801-497C-952C-4F1F605843DD", // MRH Metrokarte
                 "AD579C62-0471-4FA5-8C9A-38B3DCB5B2CB", // MRH Übersichtskarte-blau
@@ -145,6 +145,7 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,
             placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
             gazetteer: {
                 minChars: 3,
