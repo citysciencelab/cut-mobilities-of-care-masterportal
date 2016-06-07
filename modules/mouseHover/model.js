@@ -187,20 +187,21 @@ define([
                             return ele.layerId = element.layerId;
                     });
 
-                    if (value !== "") {
-                        value = value + "</br></br>";
-                    }
-
                     if (listEintrag) {
-                        var mouseHoverField = String(listEintrag.fieldname);
+                        var mouseHoverField = listEintrag.fieldname;
 
-                        if (mouseHoverField) {
+                        if (mouseHoverField && _.isString(mouseHoverField)) {
                             if (_.has(featureProperties, mouseHoverField)) {
                                 value = value + _.values(_.pick(featureProperties, mouseHoverField))[0];
-                                if (!coord) {
-                                    coord = featureGeometry.getCoordinates();
-                                }
                             }
+                        }
+                        else if (mouseHoverField && _.isArray(mouseHoverField)) {
+                            _.each(mouseHoverField, function (element) {
+                                value = value + "<span>" + _.values(_.pick(featureProperties, element)) + "</span></br>";
+                            });
+                        }
+                        if (!coord) {
+                            coord = featureGeometry.getCoordinates();
                         }
                     }
                 }, this);
