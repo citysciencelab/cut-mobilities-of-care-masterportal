@@ -94,8 +94,8 @@ define([
             //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
             //     }.bind(this), false);
             // }
-        Radio.trigger("zoomtofeature","zoomtoid");
-        Radio.trigger("ModelList", "addVisibleItems");
+        Radio.trigger("zoomtofeature", "zoomtoid");
+        this.activateClick(Radio.request("Parser", "getItemByAttributes", {isActive: true}).id);
         },
 
         setBBox: function(bbox) {
