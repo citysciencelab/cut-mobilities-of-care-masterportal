@@ -3,17 +3,8 @@ define(function () {
     var config = {
        wfsImgPath: "..components/lgv-config/img",
        allowParametricURL: true,
-       tree: {
-           type: "custom"
-        },
        view: {
            center: [565874, 5934140] // Rathausmarkt
-       },
-       controls: {
-           zoom: true,
-           toggleMenu: true,
-           orientation: "once",
-           poi: true
        },
        layerConf: "../components/lgv-config/services-fhhnet.json",
        restConf: "../components/lgv-config/rest-services-fhhnet.json",
@@ -28,24 +19,6 @@ define(function () {
        mouseHover: true,
        scaleLine: true,
        isMenubarVisible: true,
-       menuItems: {
-           tree: {
-               title: "Themen",
-               glyphicon: "glyphicon-list"
-           },
-           tools: {
-               title: "Werkzeuge",
-               glyphicon: "glyphicon-wrench"
-           },
-           legend: {
-               title: "Legende",
-               glyphicon: "glyphicon-book"
-           },
-           contact: {
-               title: "Kontakt",
-               glyphicon: "glyphicon-envelope"
-           }
-       },
        startUpModul: "",
        searchBar: {
             minChars: 3,
