@@ -189,7 +189,7 @@ define("app",
 
         // controls
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "control"}), function (control) {
-            switch(control.id) {
+            switch (control.id) {
                 case "toggleMenu": {
                     require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
                         new ToggleMenuControlView();

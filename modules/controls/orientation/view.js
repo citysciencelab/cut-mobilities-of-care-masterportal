@@ -16,12 +16,12 @@ define([
         },
         initialize: function () {
             this.listenTo(EventBus, {
-                "layerlist:sendVisibleWFSlayerList":this.checkWFS
+                "layerlist:sendVisibleWFSlayerList": this.checkWFS
             });
-            this.model.set("zoomMode", Config.controls.orientation);
+            // this.model.set("zoomMode", Config.controls.orientation);
 
             if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
-                require(["modules/controls/orientation/poi/view", "modules/controls/orientation/poi/feature/view"], function (PoiView, FeatureView) {
+                require(["modules/controls/orientation/poi/view", "modules/controls/orientation/poi/feature/view"], function (PoiView) {
                     new PoiView();
                 });
             }
@@ -35,7 +35,7 @@ define([
         /*
         * Steuert die Darstellung des Geolocate-buttons
         */
-        trackingChanged: function (evt) {
+        trackingChanged: function () {
             if (this.model.get("tracking") === true) {
                 $("#geolocate").addClass("toggleButtonPressed");
             }
@@ -44,7 +44,7 @@ define([
             }
         },
         render: function () {
-            var attr = Config;
+            var attr = this.model.toJSON();
 
             $(".controls-view").append(this.$el.html(this.template(attr)));
         },
