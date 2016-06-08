@@ -32,6 +32,9 @@ define([
             channel.reply({
                 "getPortalConfig": this.getPortalConfig,
                 "getItemsByParentId": this.getItemsByParentId,
+                "getItemByAttributes": function (attributes) {
+                    return _.findWhere(this.getItemList(), attributes);
+                },
                 "getItemsByAttributes": function (attributes) {
                     return _.where(this.getItemList(), attributes);
                 }
@@ -88,7 +91,8 @@ define([
             _.each(items, function (value, key) {
                 this.addItem({
                     type: "control",
-                    id: key
+                    id: key,
+                    attr: value
                 });
             }, this);
         },
