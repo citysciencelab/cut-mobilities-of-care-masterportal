@@ -1,11 +1,9 @@
 define([
     "backbone",
-    "backbone.radio",
     "modules/core/parser/defaultTree",
     "modules/core/parser/customTree"
 ], function () {
     var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
         DefaultTreeParser = require("modules/core/parser/defaultTree"),
         CustomTreeParser = require("modules/core/parser/customTree"),
         Preparser;
@@ -16,11 +14,18 @@ define([
             this.fetch({async: false});
         },
         parse: function (response) {
-           if (response.Portalconfig.Baumtyp === "default") {
-                new DefaultTreeParser(response);
+            var attributes = {
+                portalConfig: response.Portalconfig,
+                baselayer: response.Themenconfig.Hintergrundkarten,
+                overlayer: response.Themenconfig.Fachdaten,
+                treeType: response.Portalconfig.Baumtyp
+            };
+
+           if (attributes.treeType === "default") {
+                new DefaultTreeParser(attributes);
             }
             else {
-                new CustomTreeParser(response);
+                new CustomTreeParser(attributes);
             }
         }
     });

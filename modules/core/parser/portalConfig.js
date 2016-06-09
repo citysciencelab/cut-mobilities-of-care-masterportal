@@ -1,70 +1,55 @@
 define([
-    "underscore",
     "backbone",
     "backbone.radio",
     "modules/core/modellist/list"
 ], function () {
 
-    var _ = require("underscore"),
-        Backbone = require("backbone"),
+    var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ModelList = require("modules/core/modellist/list"),
         Parser;
 
     Parser = Backbone.Model.extend({
         defaults: {
-            //
-            rawLayerList: [],
-            //
+            // "light-models"
             itemList: [],
             // Themenconfig.Fachdaten
-            Fachdaten: [],
+            overlayer: [],
             // Themenconfig.Hintergrundkarten
-            Hintergrundkarten: [],
-            // Der Desktoptreetype
+            baselayer: [],
+            // Portalconfig
             portalConfig: {},
             // Baumtyp
             treeType: ""
         },
-        // Pfad zur config
-        url: "config.json",
-        /*constructor : function () {
-           Backbone.Model.apply( this, arguments );
-        },*/
-        initialize: function (response) {
+
+        initialize: function () {
             var channel = Radio.channel("Parser");
-            this.setPortalConfig(response.Themenconfig.Portalconfig);
-            this.setBaselayer(response.Themenconfig.Hintergrundkarten);
-            this.setOverlayer(response.Themenconfig.Fachdaten);
-            this.setTreeType(response.Portalconfig.Baumtyp);
-            if (this.getTreeType() !== "lighttree") {
-                this.addTreeMenuItems();
-            }
-            this.parseMenu(response.Portalconfig.menu, "root");
+
             channel.reply({
-                "getPortalConfig": this.getPortalConfig,
-                "getItemsByParentId": this.getItemsByParentId,
-                "getItemByAttributes": function (attributes) {
-                    return _.findWhere(this.getItemList(), attributes);
-                },
-                "getItemsByAttributes": function (attributes) {
-                    return _.where(this.getItemList(), attributes);
-                }
+                "getItemByAttributes": this.getItemByAttributes,
+                "getItemsByAttributes": this.getItemsByAttributes
             }, this);
+
+            this.parseMenu(this.get("portalConfig").menu, "root");
+            this.parseControls(this.get("portalConfig").controls);
 
             if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
                 this.parseTree(this.getBaselayer(), "Themen", 0);
             }
             else if (this.getTreeType() === "custom") {
+                this.addTreeMenuItems();
                 this.parseTree(this.getBaselayer(), "Baselayer", 0);
                 this.parseTree(this.getOverlayer(), "Overlayer", 0);
             }
             else {
+                this.addTreeMenuItems();
                 this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
             }
             this.createModelList();
         },
+
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
@@ -87,6 +72,11 @@ define([
             }, this);
         },
 
+        /**
+         * [parseControls description]
+         * @param  {[type]} items [description]
+         * @return {[type]}       [description]
+         */
         parseControls: function (items) {
             _.each(items, function (value, key) {
                 this.addItem({
@@ -127,48 +117,35 @@ define([
         },
 
         /**
-         * Getter für Attribut "Hintergrundkarten"
+         * Getter für Attribut "baselayer"
          * @return {Object}
          */
         getBaselayer: function () {
-            return this.get("Hintergrundkarten");
+            return this.get("baselayer");
         },
         /**
-         * setter für Attribut "Hintergrundkarten"
+         * setter für Attribut "baselayer"
          * @return {Object}
          */
         setBaselayer: function (value) {
-            return this.set("Hintergrundkarten", value);
+            return this.set("baselayer", value);
         },
 
          /**
-          * Getter für Attribut "Fachdaten"
+          * Getter für Attribut "overlayer"
           * @return {Object}
           */
         getOverlayer: function () {
-            return this.get("Fachdaten");
+            return this.get("overlayer");
         },
          /**
-          * Setter für Attribut "Fachdaten"
+          * Setter für Attribut "overlayer"
           * @return {Object}
           */
         setOverlayer: function (value) {
-            return this.set("Fachdaten", value);
+            return this.set("overlayer", value);
         },
-        /**
-          * Getter für Attribut "treeType"
-          * @return {String}
-          */
-        getPortalConfig: function () {
-             return this.get("portalConfig");
-        },
-        /**
-          * Getter für Attribut "treeType"
-          * @return {String}
-          */
-        setPortalConfig: function (portalConfig) {
-             return this.set("portalConfig", portalConfig);
-        },
+
         /**
           * Getter für Attribut "treeType"
           * @return {String}
@@ -183,6 +160,25 @@ define([
         setTreeType: function (value) {
              return this.set("treeType", value);
         },
+
+        /**
+         * [getItemByAttributes description]
+         * @param  {[type]} value [description]
+         * @return {[type]}       [description]
+         */
+        getItemByAttributes: function (value) {
+            return _.findWhere(this.getItemList(), value);
+        },
+
+        /**
+         * [getItemsByAttributes description]
+         * @param  {[type]} value [description]
+         * @return {[type]}       [description]
+         */
+        getItemsByAttributes: function (value) {
+            return _.where(this.getItemList(), value);
+        },
+
         /**
          * [createModelList description]
          * @return {[type]} [description]
@@ -193,10 +189,6 @@ define([
                     model.parentId === "Werkzeuge" ||
                     model.parentId === "Themen";
             }));
-        },
-
-        getItemsByParentId: function (value) {
-            return _.where(this.getItemList(), {parentId: value});
         },
 
         addTreeMenuItems: function () {

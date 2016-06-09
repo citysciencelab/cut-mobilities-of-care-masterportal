@@ -91,7 +91,7 @@ define([
             },
 
             updateList: function (parentId, slideDirection) {
-                var items = Radio.request("Parser", "getItemsByParentId", parentId);
+                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
 
                 this.add(items);
                 this.setAllModelsInvisible();

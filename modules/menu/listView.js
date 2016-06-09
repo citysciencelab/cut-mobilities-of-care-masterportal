@@ -107,7 +107,8 @@ define([
             if (level >= levelLimit) {
                 return;
             }
-            var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId),
+
+            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
 
            models = this.collection.add(lightModels);
 
