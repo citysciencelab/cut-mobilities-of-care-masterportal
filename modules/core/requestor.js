@@ -26,13 +26,13 @@ define([
                 gfiContent = null;
                 switch (visibleLayer.ol_layer.get("typ")) {
                     case "WFS": {
-                        this.set("typ",visibleLayer.ol_layer.get("typ"));
+                        this.set("typ", visibleLayer.ol_layer.get("typ"));
                         gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                     case "GeoJSON": {
-                        this.set("typ",visibleLayer.ol_layer.get("typ"));
+                        this.set("typ", visibleLayer.ol_layer.get("typ"));
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
@@ -49,7 +49,7 @@ define([
              if (containsWMS === true) {
                 _.each(sortedParams, function (visibleLayer) {
                     if (visibleLayer.ol_layer.get("typ") === "WMS") {
-                            this.set("typ",visibleLayer.ol_layer.get("typ"));
+                            this.set("typ", visibleLayer.ol_layer.get("typ"));
                             gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
                         }
                 }, this);
@@ -188,7 +188,7 @@ define([
         translateGFI: function (gfiList, gfiAttributes) {
             var pgfi = [],
                 typ = this.get("typ");
-            
+
             _.each(gfiList, function (element) {
                 var preGfi = {},
                     gfi = {};
@@ -208,15 +208,16 @@ define([
                         gfi[key] = value;
                     }, this);
                  if (Util.isInternetExplorer() !== false && typ !== "WFS") {
-                        var keys=[],
-                            values=[];
-                        _.each (gfi,function(value,key){
+                        var keys = [],
+                            values = [];
+
+                        _.each (gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
-                        },this);
+                        }, this);
                         keys.reverse();
                         values.reverse();
-                        gfi= _.object(keys, values);
+                        gfi = _.object(keys, values);
                      }
                 }
                 else {

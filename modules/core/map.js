@@ -316,41 +316,25 @@ define([
                 var layerByFeature,
                     visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
 
-                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
-                    // cluster-source
+                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getSource().getFeatureById(feature.getId());
+                            gfiParams.push({
+                                typ: "WFS",
+                                feature: feature,
+                                attributes: pLayer.get("gfiAttributes"),
+                                name: pLayer.get("name"),
+                                ol_layer: pLayer
                             });
-                            if (_.isUndefined(layerByFeature) === false) {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    feature: feature,
-                                    attributes: layerByFeature.get("gfiAttributes"),
-                                    name: layerByFeature.get("name"),
-                                    ol_layer: layerByFeature.get("layer")
-                                });
-                            }
                         });
                     }
-                    // vector-source
-                    else {
-                        if (featureAtPixel.getId() !== undefined) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getFeatureById(featureAtPixel.getId());
-                            });
-                            if (!_.isUndefined(layerByFeature)) {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    feature: featureAtPixel,
-                                    attributes: layerByFeature.get("gfiAttributes"),
-                                    name: layerByFeature.get("name"),
-                                    ol_layer: layerByFeature.get("layer")
-                                });
-                            }
-                        }
-                    }
+                    gfiParams.push({
+                        typ: "WFS",
+                        feature: featureAtPixel,
+                        attributes: pLayer.get("gfiAttributes"),
+                        name: pLayer.get("name"),
+                        ol_layer: pLayer
+                    });
                 });
             }
 

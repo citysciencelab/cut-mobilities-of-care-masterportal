@@ -40,7 +40,7 @@ define([
          * Ruft das Tool auf, das den Download gestartet hat
          */
         back: function () {
-            EventBus.trigger("toggleWin", [this.model.getCaller().name, this.model.getCaller().name, "glyphicon-pencil"]);
+            EventBus.trigger("toggleWin", [this.model.getCaller().name, "Zeichnen / Schreiben", "glyphicon-pencil"]);
         },
         /**
          *
