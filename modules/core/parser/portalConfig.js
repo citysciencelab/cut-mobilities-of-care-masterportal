@@ -93,6 +93,7 @@ define([
          */
         addItem: function (obj) {
             if (!_.isUndefined(obj.visibility)) {
+                obj.isSelected = obj.visibility;
                 obj.isVisibleInMap = obj.visibility;
                 delete obj.visibility;
             }

@@ -16,12 +16,8 @@ define([
         Tool = require("modules/core/modelList/tool/model"),
         Radio = require("backbone.radio"),
         ModelList = Backbone.Collection.extend({
-            selectionIDXMap: {
-                base: [],
-                over: []
-            },
+            selectionIDX: [],
             initialize: function () {
-                console.log("init:ModelList");
                var channel = Radio.channel("ModelList");
 
                channel.reply({
@@ -30,13 +26,12 @@ define([
                        return this.where(attributes);
                    },
                    "getSelectionIDX": function (model) {
-                       return this.getNewSelectionIDX(model);
+                       return this.insertIntoSelectionIDX(model);
                     }
                }, this);
 
                 channel.on({
                     "addVisibleItems": function () {
-                       console.log("list:addVisibleItems");
                         var visibleItems = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
 
                         _.each(visibleItems, function (item) {
@@ -53,7 +48,7 @@ define([
                    },
                    "updateList": this.updateList,
                    "checkIsExpanded": this.checkIsExpanded,
-                   "removeSelectionIDX": this.removeSelectionIDX
+                   "removeFromSelectionIDX": this.removeFromSelectionIDX
                }, this);
 
                this.listenTo(this, {
@@ -189,54 +184,29 @@ define([
                 });
                 this.trigger("updateOverlayerView");
             },
-            getNewSelectionIDX: function (model) {
-                var newIDX = 0;
+            insertIntoSelectionIDX: function (model) {
 
-                if (model.getParentId() === "Baselayer") {
-                    newIDX = this.newSelectionIDX(this.selectionIDXMap.base);
+                var idx = 0;
 
+                if (this.selectionIDX.length === 0 || model.getParentId() !== "Baselayer") {
+                    idx = this.selectionIDX.push(model) - 1;
                 }
                 else {
-                    newIDX = this.newSelectionIDX(this.selectionIDXMap.over);
-                }
-
-                return newIDX;
-            },
-            newSelectionIDX: function (map) {
-                 var maxIDX = -1;
-
-                _.each(map, function (pair) {
-                    if (pair.idx > maxIDX) {
-                        maxIDX = pair.idx;
+                    while (this.selectionIDX[idx].getParentId() === "Baselayer") {
+                        idx++;
                     }
-                });
-                return maxIDX + 1;
-            },
-            insertIDX: function (map, newIDX, id) {
-                _.each(map, function (pair) {
-                    if (pair.idx >= newIDX) {
-                        pair.idx = pair.idx + 1;
-                    }
-                });
-                map.push({id: id, idx: newIDX});
-            },
-            removeSelectionIDX (model) {
-                if (model.getParentId() === "Baselayer") {
-                    var idx = _.where(this.selectionIDXMap.base, {id: model.getId()}).idx;
-
-                    this.deleteIDX(this.selectionIDXMap.base, idx);
+                    this.selectionIDX.splice(idx, 0, model);
                 }
-                else {
-                    var idx = _.where(this.selectionIDXMap.over, {id: model.getId()}).idx;
-
-                    this.deleteIDX(this.selectionIDXMap.over, idx);
-                }
+                this.updateModelIndeces();
+                return idx;
             },
-            deleteIDX: function (map, idx) {
-                _.each(map, function (pair) {
-                    if (pair.idx > idx) {
-                        pair.idx = pair.idx - 1;
-                    }
+            removeFromSelectionIDX: function (idx) {
+                this.selectionIDX.splice(idx, 1);
+                this.updateModelIndeces();
+            },
+            updateModelIndeces: function () {
+                _.each(this.selectionIDX, function (model, index) {
+                    model.setSelectionIDX(index);
                 });
             }
     });

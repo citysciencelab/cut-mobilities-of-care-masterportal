@@ -96,8 +96,8 @@ define([
             //     }.bind(this), false);
             // }
             Radio.trigger("zoomtofeature", "zoomtoid");
-            console.log(2);
             var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+
             if (!_.isUndefined(activeItem)) {
                 this.activateClick(activeItem.id);
             }
