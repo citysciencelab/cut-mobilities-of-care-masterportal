@@ -57,7 +57,6 @@ define([
                }, this);
 
                this.listenTo(this, {
-                   "change:isActive": this.setActiveToolToFalse,
                    "change:isVisibleInMap": function () {
                        channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
                    },
@@ -176,12 +175,12 @@ define([
                     model.setIsSettingVisible(value);
                 });
             },
+
             setActiveToolToFalse: function (model) {
-                if (model.getIsActive() === true) {
-                    var tool = _.without(this.where({isActive: true}), model)[0];
-                    tool.setIsActive(false, {silent: true});
-                }
+                var tool = _.without(this.where({isActive: true}), model)[0];
+                    tool.setIsActive(false);
             },
+
             toggleTreeVisibilityOfChildren: function (model) {
                var itemListByParentId = this.where({parentId: model.getId()});
 

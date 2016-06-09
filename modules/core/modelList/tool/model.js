@@ -34,12 +34,16 @@ define([
         },
 
         activateTool: function () {
-            EventBus.trigger("activateClick", this.getId());
-            if (this.getId() !== "gfi" && this.getId() !== "coord") {
-                EventBus.trigger("toggleWin", [this.getId(), this.get("name"), this.get("glyphicon")]);
-            }
-            else {
-                EventBus.trigger("winParams", [false, false, ""]);
+            if (this.getIsActive() === true) {
+                this.collection.setActiveToolToFalse(this);
+                EventBus.trigger("activateClick", this.getId());
+                if (this.getId() !== "gfi" && this.getId() !== "coord") {
+                    EventBus.trigger("toggleWin", [this.getId(), this.get("name"), this.get("glyphicon")]);
+                }
+                else {
+                    EventBus.trigger("closeWindow", false);
+                    EventBus.trigger("winParams", [false, false, ""]);
+                }
             }
         },
 
