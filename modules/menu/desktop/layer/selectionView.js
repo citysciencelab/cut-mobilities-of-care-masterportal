@@ -1,20 +1,22 @@
 define([
     "backbone",
-    "text!modules/menu/desktop/layer/template.html"
+    "text!modules/menu/desktop/layer/template.html",
+    "text!modules/menu/desktop/layer/templateSelected.html"
 ], function () {
 
     var Backbone = require("backbone"),
         LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
+        SelectedLayerTemplate = require("text!modules/menu/desktop/layer/templateSelected.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: "layer",
-        template: _.template(LayerTemplate),
-        //templateSelected: _.template(SelectedLayerTemplate),
+        //template: _.template(LayerTemplate),
+        template: _.template(SelectedLayerTemplate),
         //templateSetting: _.template(SettingTemplate),
         events: {
-            "click .layer-item": "toggleIsSelected",
+            "click .glyphicon-check": "toggleIsVisibleInMap",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
             "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
             "click .selected-layer-item > div": "toggleLayerVisibility",
@@ -34,25 +36,18 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-
             /*    this.$el.html(this.templateSelected(attr));
-                if (this.model.getIsSettingVisible() === true) {
-                    this.renderSetting();
-                }
-                this.$el.html(this.template(attr));
-                if (this.model.has("treeType")) {
-                    this.renderSetting();
-                }*/
-            if (this.model.getIsVisibleInTree()) {
-                var selector = $("#" + this.model.getParentId());
+            if (this.model.getIsSettingVisible() === true) {
+                this.renderSetting();
+            }
+            this.$el.html(this.template(attr));
+            if (this.model.has("treeType")) {
+                this.renderSetting();
+            }*/
+            if (this.model.getIsSelected()) {
+                var selector = $("#SelectedLayer");
 
-                if (this.model.getLevel() === 0) {
-                    selector.append(this.$el.html(this.template(attr)));
-                }
-                else {
-                    selector.after(this.$el.html(this.template(attr)));
-                }
-                $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
+                selector.prepend(this.$el.html(this.template(attr)));
             }
         },
 
@@ -83,14 +78,13 @@ define([
         },
 
         removeFromSelection: function () {
-            this.model.setIsInSelection(false);
             this.model.setIsSettingVisible(false);
-            this.model.setIsChecked(false);
+            this.model.setIsSelected(false);
             this.$el.remove();
         },
 
-        toggleLayerVisibility: function () {
-            this.model.toggleLayerVisibility();
+        toggleIsVisibleInMap: function () {
+            this.model.toggleIsVisibleInMap();
         },
 
         showLayerInformation: function () {

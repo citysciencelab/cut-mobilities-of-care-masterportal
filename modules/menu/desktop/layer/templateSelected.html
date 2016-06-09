@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-cog rotate"></span>
-</div>
-<div class="selected-layer-item">
+<span class="selected-layer-item">
     <span class="glyphicon glyphicon-remove pull-left"></span>
-    <div class="pull-left">
-        <% if (isLayerVisible === true) { %>
+    <span class="pull-left">
+        <% if (isVisibleInMap === true) { %>
             <span class="glyphicon glyphicon-check pull-left"></span>
         <% } else { %>
             <span class="glyphicon glyphicon-unchecked pull-left"></span>
         <% } %>
-        <span class="title"><%= title %></span>
-    </div>
-</div>
+        <span class="title"><%= name %></span>
+    </span>
+</span>
+<span class="layer-info-item">
+    <span class="glyphicon glyphicon-cog rotate"></span>
+</span>

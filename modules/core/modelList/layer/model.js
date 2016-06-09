@@ -14,7 +14,7 @@ define([
             // welcher Node-Type - folder/layer/item
             type: "",
             // true wenn die Node sichtbar ist
-            isVisible: false,
+           // isVisible: false,
             // true wenn die Node "gechecked" ist
             isSelected: false,
             // die ID der Parent-Node
@@ -45,8 +45,10 @@ define([
 
             this.listenTo(this, {
                 "change:isSelected": function () {
-                    this.toggleLayerOnMap();
                     this.setIsVisibleInMap(this.getIsSelected());
+                },
+                "change:isVisibleInMap": function () {
+                    this.toggleLayerOnMap();
                 },
                 "change:transparence": this.updateLayerTransparence
             });
@@ -57,7 +59,7 @@ define([
         },
 
         /**
-         * Funktionen die in den Subclasses überschrieben werden
+         * abstrakte Funktionen die in den Subclasses überschrieben werden
          */
         createLayerSource: function () {},
         createLayer: function () {},
@@ -175,11 +177,13 @@ define([
         toggleIsSelected: function () {
             if (this.getIsSelected() === true) {
                 this.setIsSelected(false);
+                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
             }
             else {
                 this.setIsSelected(true);
+                Radio.trigger("ModelList", "removeSelectionIDX", this);
             }
-            // nur ausführen wenn parent ein leaffodler ist --> noch zu machen
+            // TODO nur ausführen wenn parent ein leaffodler ist --> noch zu machen
             this.collection.everyLayerIsSelected(this);
         },
 
@@ -201,14 +205,13 @@ define([
                 this.setIsSettingVisible(true);
             }
         },
-
         /**
          * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-         * Abhängig vom Attribut "isSelected"
+         * Abhängig vom Attribut "isVisibleInMap"
          */
         toggleLayerOnMap: function () {
-            if (this.getIsSelected() === true) {
-                Radio.trigger("Map", "addLayer", this.getLayer());
+            if (this.getIsVisibleInMap() === true) {
+                Radio.trigger("Map", "addLayerToIndex", this.getSelectionIDX());
             }
             else {
                 Radio.trigger("Map", "removeLayer", this.getLayer());

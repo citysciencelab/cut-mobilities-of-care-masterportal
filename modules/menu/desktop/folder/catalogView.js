@@ -12,7 +12,7 @@ define([
             className: "layer-catalog",
             template: _.template(Template),
             events: {
-             "click .control-label, .glyphicon ": "toggleCatalogAndBaseLayer"
+             "click .header": "toggleCatalogAndBaseLayer"
             },
             initialize: function () {
                 this.$el.on({
@@ -29,12 +29,17 @@ define([
             toggleCatalogAndBaseLayer: function () {
               this.toggleOverlayer();
               this.toggleBaseLayer();
+              this.toggleCatalog();
             },
             toggleBaseLayer: function () {
                 $("ul#Baselayer").toggle("slow");
             },
             toggleOverlayer: function () {
                 $("ul#Overlayer").toggle("slow");
+            },
+            toggleCatalog: function () {
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             }
         });
 

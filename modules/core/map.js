@@ -35,6 +35,7 @@ define([
             channel.on({
                 "setBBox": this.setBBox,
                 "addLayer": this.addLayer,
+                "addLayerToIndex": this.addLayerToIndex,
                 "removeLayer": this.removeLayer
             }, this);
 
@@ -95,6 +96,7 @@ define([
             //     }.bind(this), false);
             // }
         Radio.trigger("zoomtofeature","zoomtoid");
+        console.log("Map:addVisibleItems");
         Radio.trigger("ModelList", "addVisibleItems");
         },
 
@@ -104,7 +106,7 @@ define([
         },
         BBoxToMap: function(bbox) {
             if (bbox) {
-                this.get("view").fit(bbox,this.get("map").getSize());
+                this.get("view").fit(bbox, this.get("map").getSize());
             }
         },
 

@@ -17,7 +17,8 @@ define([
     "bootstrap/collapse",
     "jqueryui/effect",
     "jqueryui/effect-slide",
-    "modules/menu/desktop/folder/catalogView"
+    "modules/menu/desktop/folder/catalogView",
+    "modules/menu/desktop/layer/selectionView"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -29,6 +30,7 @@ define([
         DesktopThemenFolderView = require("modules/menu/desktop/folder/themenView"),
         CatalogFolderView = require("modules/menu/desktop/folder/catalogView"),
         DesktopLayerView = require("modules/menu/desktop/layer/view"),
+        DesktopLayerSelectionView = require("modules/menu/desktop/layer/selectionView"),
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         MobileFolderView = require("modules/menu/mobile/folder/view"),
         MobileLayerView = require("modules/menu/mobile/layer/view"),
@@ -47,9 +49,17 @@ define([
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
 
-            this.listenTo(this.collection, {
+            this.listenTo(this.collection,
+            {
                 "updateTreeView": function (slideDirection) {
                     this.renderListWithAnimation(slideDirection);
+                },
+                "updateOverlayerView": function () {
+                    this.renderDesktopThemen("Overlayer");
+                },
+                "updateSelectionView": function () {
+
+                    this.renderSelectedList("Overlayer");
                 }
             });
 
@@ -60,7 +70,7 @@ define([
         },
 
         renderListWithAnimation: function (slideDirection) {
-            var visibleModels = this.collection.where({isVisible: true}),
+            var visibleModels = this.collection.where({isVisibleInTree: true}),
                 modelsInSelection = this.collection.where({isInSelection: true}),
                 slideOut = (slideDirection === "slideBack") ? "right" : "left",
                 slideIn = (slideDirection === "slideForward") ? "right" : "left",
@@ -87,46 +97,55 @@ define([
                 this.addViews(rootModels);
 
            if (!isMobile) {
+               // this.$el.html("");
                 var toolModels = this.collection.where({parentId: "Werkzeuge"});
 
                 this.addViews(toolModels);
-
-                this.renderSubTree("Themen", 0, 3);
             }
         },
         renderSubTree: function (parentId, level, levelLimit) {
-            if(level >= levelLimit){
+            if (level >= levelLimit) {
                 return;
             }
             var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId),
 
-                models = this.collection.add(lightModels),
+           models = this.collection.add(lightModels);
 
-                folder = _.filter(models, function (model) {
-                    return model.getType() === "folder";
-                });
+           this.addViewsToItemsOfType("layer", models);
 
-                folder = _.sortBy(folder, function (folder) {
-                    return folder.getName();
-                });
-                folder.reverse();
-                this.addViews(folder);
+           var folder = this.addViewsToItemsOfType("folder", models);
 
-                _.each(folder, function (folder) {
-                    this.renderSubTree(folder.getId(), level + 1, levelLimit);
-                }, this);
+            _.each(folder, function (folder) {
+                this.renderSubTree(folder.getId(), level + 1, levelLimit);
+            }, this);
 
-                var layer = _.filter(models, function (model) {
-                    return model.getType() === "layer";
-                });
-
-                layer = _.sortBy(layer, function (layer) {
-                    return layer.getName();
-                });
-                layer.reverse();
-                this.addViews(layer);
         },
 
+        renderDesktopThemen: function (parentId) {
+            $("#" + parentId).html("");
+            this.renderSubTree(parentId, 0, 3);
+        },
+        renderSelectedList: function () {
+            $("#" + "SelectedLayer").html("");
+           var selectedModels = this.collection.where({isVisibleInMap: true});
+
+           selectedModels = _.sortBy(selectedModels, function (model) {
+                return model.getSelectionIDX();
+           });
+           this.addSelectionView(selectedModels);
+        },
+        addViewsToItemsOfType: function (type, items) {
+            items = _.filter(items, function (model) {
+                return model.getType() === type;
+            });
+
+            items = _.sortBy(items, function (item) {
+                return item.getName();
+            });
+            items.reverse();
+            this.addViews(items);
+            return items;
+        },
         render: function () {
             var isMobile = Radio.request("Util", "isViewMobile");
 
@@ -139,6 +158,11 @@ define([
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group tree-mobile");
             }
             this.renderTopMenu(isMobile);
+
+            if (!isMobile) {
+                this.renderDesktopThemen("Themen");
+                this.renderSelectedList();
+            }
 
             // if (isMobile) {
             //     $("body").append(this.$el.append(this.mobileTemplate()));
@@ -157,14 +181,15 @@ define([
             // }
             // Radio.trigger("MenuBar", "switchedMenu");
         },
+
         /**
          * Ordnet den Models die richtigen Views zu.
          * @param {Backbone.Model} model - itemModel | layerModel | folderModel
          */
         addViews: function (models) {
+            var isMobile = Radio.request("Util", "isViewMobile"),
+                nodeView;
             _.each(models, function (model) {
-                var isMobile = Radio.request("Util", "isViewMobile"),
-                    nodeView;
                 switch (model.getType()){
                     case "folder": {
                         // Model für einen Ordner
@@ -203,6 +228,12 @@ define([
                     $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
                 }
             });
+        },
+        addSelectionView: function (models) {
+            _.each(models, function (model) {
+                new DesktopLayerSelectionView({model: model});
+            });
+
         }
     });
 

@@ -16,7 +16,8 @@ define([
             title: "test", //angezeigter Titel
             glyphicon: "", // Bootstrap Glyphicon Class,
             isInThemen: false,
-            level: 0
+            level: 0,
+            isVisibleInTree: false
         },
         setId: function (value) {
             this.set("id", value);
@@ -48,12 +49,6 @@ define([
         setGlyphicon: function (glyphicon) {
             return this.get("glyphicon", glyphicon);
         },
-        setIsVisible: function (value) {
-            this.set("isVisible", value);
-        },
-        getIsVisible: function () {
-            return this.get("isVisible");
-        },
         updateList: function (value) {
             this.collection.updateList(value, "slideForward");
             // gehört hier nicht hin!?
@@ -72,6 +67,20 @@ define([
         },
         setLevel: function (value) {
             this.set("level", value);
+        },
+         /**
+         * Getter für Attribut "isVisibleInTree"
+         * @return {boolean}
+         */
+        getIsVisibleInTree: function () {
+            return this.get("isVisibleInTree");
+        },
+        /**
+         * Setter für Attribut "isVisibleInTree"
+         * @return {boolean}
+         */
+        setIsVisibleInTree: function (value) {
+            this.set("isVisibleInTree", value);
         }
     });
 

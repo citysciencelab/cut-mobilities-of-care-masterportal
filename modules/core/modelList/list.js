@@ -16,19 +16,33 @@ define([
         Tool = require("modules/core/modelList/tool/model"),
         Radio = require("backbone.radio"),
         ModelList = Backbone.Collection.extend({
+            selectionIDXMap: {
+                base: [],
+                over: []
+            },
             initialize: function () {
+                console.log("init:ModelList");
                var channel = Radio.channel("ModelList");
 
                channel.reply({
                    "getCollection": this,
                    "getModelsByAttributes": function (attributes) {
                        return this.where(attributes);
-                   }
+                   },
+                   "getSelectionIDX": function (model) {
+                       return this.getNewSelectionIDX(model);
+                    }
                }, this);
 
                 channel.on({
                     "addVisibleItems": function () {
-                        this.add(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}));
+                       console.log("list:addVisibleItems");
+                        var visibleItems = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
+
+                        _.each(visibleItems, function (item) {
+                            _.extend(item, {selectionIDX: this.newSelectionIDX()});
+                        }, this);
+                        this.add(visibleItems);
                     },
                     "setLayerAttributions": function (layerId, attrs) {
                        var model = this.findWhere({type: "layer", layerId: layerId});
@@ -38,14 +52,21 @@ define([
                        }
                    },
                    "updateList": this.updateList,
-                   "checkIsExpanded": this.checkIsExpanded
+                   "checkIsExpanded": this.checkIsExpanded,
+                   "removeSelectionIDX": this.removeSelectionIDX
                }, this);
 
                this.listenTo(this, {
                    "change:isActive": this.setActiveToolToFalse,
                    "change:isVisibleInMap": function () {
                        channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
-                   }
+                   },
+                   "change:isExpanded": function (model) {
+                        this.toggleTreeVisibilityOfChildren(model);
+                    },
+                    "change:isSelected": function () {
+                        this.trigger("updateSelectionView");
+                    }
                });
             },
 
@@ -78,7 +99,7 @@ define([
                     var selectedLayer = this.where({isSelected: true, type: "layer"});
 
                     _.each(selectedLayer, function (layer) {
-                        layer.setIsVisible(true);
+                        layer.setIsVisibleInTree(true);
                     });
                 }
                 else {
@@ -110,7 +131,7 @@ define([
                     selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
 
                 _.each(_.union(selectedLeafFolder, itemListByParentId), function (item) {
-                    item.setIsVisible(true);
+                    item.setIsVisibleInTree(true);
                 });
             },
 
@@ -119,7 +140,7 @@ define([
              */
             setAllModelsInvisible: function () {
                 this.forEach(function (model) {
-                    model.setIsVisible(false);
+                    model.setIsVisibleInTree(false);
                 });
             },
 
@@ -160,6 +181,64 @@ define([
                 var tool = _.without(this.where({isActive: true}), model)[0];
 
                 tool.setIsActive(false, {silent: true});
+            },
+            toggleTreeVisibilityOfChildren: function (model) {
+               var itemListByParentId = this.where({parentId: model.getId()});
+
+                _.each(itemListByParentId, function (item) {
+                    item.setIsVisibleInTree(!item.getIsVisibleInTree());
+                });
+                this.trigger("updateOverlayerView");
+            },
+            getNewSelectionIDX: function (model) {
+                var newIDX = 0;
+
+                if (model.getParentId() === "Baselayer") {
+                    newIDX = this.newSelectionIDX(this.selectionIDXMap.base);
+
+                }
+                else {
+                    newIDX = this.newSelectionIDX(this.selectionIDXMap.over);
+                }
+
+                return newIDX;
+            },
+            newSelectionIDX: function (map) {
+                 var maxIDX = -1;
+
+                _.each(map, function (pair) {
+                    if (pair.idx > maxIDX) {
+                        maxIDX = pair.idx;
+                    }
+                });
+                return maxIDX + 1;
+            },
+            insertIDX: function (map, newIDX, id) {
+                _.each(map, function (pair) {
+                    if (pair.idx >= newIDX) {
+                        pair.idx = pair.idx + 1;
+                    }
+                });
+                map.push({id: id, idx: newIDX});
+            },
+            removeSelectionIDX (model) {
+                if (model.getParentId() === "Baselayer") {
+                    var idx = _.where(this.selectionIDXMap.base, {id: model.getId()}).idx;
+
+                    this.deleteIDX(this.selectionIDXMap.base, idx);
+                }
+                else {
+                    var idx = _.where(this.selectionIDXMap.over, {id: model.getId()}).idx;
+
+                    this.deleteIDX(this.selectionIDXMap.over, idx);
+                }
+            },
+            deleteIDX: function (map, idx) {
+                _.each(map, function (pair) {
+                    if (pair.idx > idx) {
+                        pair.idx = pair.idx - 1;
+                    }
+                });
             }
     });
 

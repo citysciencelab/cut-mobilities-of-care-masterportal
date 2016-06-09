@@ -7,8 +7,6 @@ define([
 
     Folder = Item.extend({
         defaults: {
-            // true wenn die Node sichtbar
-            isVisible: false,
             // true wenn die Node zur ersten Ebene gehört
             isRoot: false,
             // true wenn der Inhalt(Kinder) der Node angezeigt wird
@@ -84,7 +82,6 @@ define([
         },
         toggleIsExpanded: function () {
             this.setIsExpanded(!this.getIsExpanded());
-            console.log(this.getIsExpanded());
         }
     });
 

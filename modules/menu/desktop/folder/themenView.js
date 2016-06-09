@@ -33,7 +33,7 @@ define([
 
             var attr = this.model.toJSON();
 
-            if (this.model.isVisibleInTree || this.model.getLevel() === 0) {
+            if (this.model.getIsVisibleInTree()) {
 
                 this.$el.attr("id", this.model.getId());
 

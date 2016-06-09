@@ -39,7 +39,7 @@
     border: 1px solid #ddd;
 }
 ul#Baselayer{
-    /*display: none;*/
+    display: none;
 }
 
 .navbar-collapse.in {
