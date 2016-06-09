@@ -51,6 +51,19 @@ define([
                     return _.where(this.getItemList(), attributes);
                 }
             }, this);
+
+            if (this.getTreeType() === "light") {
+                this.parseTree(this.getOverlayer(), "Themen", 0);
+                this.parseTree(this.getBaselayer(), "Themen", 0);
+            }
+            else if (this.getTreeType() === "custom") {
+                this.parseTree(this.getBaselayer(), "Baselayer", 0);
+                this.parseTree(this.getOverlayer(), "Overlayer", 0);
+            }
+            else {
+                this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
+            }
+            this.createModelList();
         },
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)

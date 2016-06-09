@@ -1,12 +1,10 @@
 define([
-    "underscore",
     "backbone",
     "backbone.radio",
     "modules/core/parser/defaultTree",
     "modules/core/parser/customTree"
 ], function () {
-    var _ = require("underscore"),
-        Backbone = require("backbone"),
+    var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         DefaultTreeParser = require("modules/core/parser/defaultTree"),
         CustomTreeParser = require("modules/core/parser/customTree"),
