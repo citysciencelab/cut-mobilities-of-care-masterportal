@@ -22,13 +22,25 @@ define([
             // Themenconfig.Hintergrundkarten
             Hintergrundkarten: [],
             // Der Desktoptreetype
-            portalConfig: {}
+            portalConfig: {},
+            // Baumtyp
+            treeType: ""
         },
         // Pfad zur config
         url: "config.json",
-        initialize: function () {
+        /*constructor : function () {
+           Backbone.Model.apply( this, arguments );
+        },*/
+        initialize: function (response) {
             var channel = Radio.channel("Parser");
-
+            this.setPortalConfig(response.Themenconfig.Portalconfig);
+            this.setBaselayer(response.Themenconfig.Hintergrundkarten);
+            this.setOverlayer(response.Themenconfig.Fachdaten);
+            this.setTreeType(response.Portalconfig.Baumtyp);
+            if (this.getTreeType() !== "lighttree") {
+                this.addTreeMenuItems();
+            }
+            this.parseMenu(response.Portalconfig.menu, "root");
             channel.reply({
                 "getPortalConfig": this.getPortalConfig,
                 "getItemsByParentId": this.getItemsByParentId,
@@ -36,30 +48,6 @@ define([
                     return _.where(this.getItemList(), attributes);
                 }
             }, this);
-
-            this.fetch({async: false});
-        },
-
-        /**
-         *
-         */
-        parse: function (response) {
-            this.parseMenu(response.Portalconfig.menu, "root");
-            if (response.Portalconfig.Baumtyp === "default") {
-                this.addTreeMenuItems();
-                require(["modules/core/parser/defaultTree"], function (DefaultTreeParser) {
-                    new DefaultTreeParser(response.Themenconfig);
-                });
-            }
-            else {
-                if (response.Portalconfig.Baumtyp === "custom") {
-                    this.addTreeMenuItems();
-                }
-                require(["modules/core/parser/customTree"], function (CustomTreeParser) {
-                    new CustomTreeParser(response.Themenconfig);
-                });
-            }
-            this.setPortalConfig(response.Portalconfig);
         },
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
@@ -118,6 +106,13 @@ define([
         getBaselayer: function () {
             return this.get("Hintergrundkarten");
         },
+        /**
+         * setter für Attribut "Hintergrundkarten"
+         * @return {Object}
+         */
+        setBaselayer: function (value) {
+            return this.set("Hintergrundkarten", value);
+        },
 
          /**
           * Getter für Attribut "Fachdaten"
@@ -125,6 +120,13 @@ define([
           */
         getOverlayer: function () {
             return this.get("Fachdaten");
+        },
+         /**
+          * Setter für Attribut "Fachdaten"
+          * @return {Object}
+          */
+        setOverlayer: function (value) {
+            return this.set("Fachdaten", value);
         },
         /**
           * Getter für Attribut "treeType"
@@ -139,6 +141,20 @@ define([
           */
         setPortalConfig: function (portalConfig) {
              return this.set("portalConfig", portalConfig);
+        },
+        /**
+          * Getter für Attribut "treeType"
+          * @return {String}
+          */
+        getTreeType: function () {
+             return this.get("treeType");
+        },
+        /**
+          * Getter für Attribut "treeType"
+          * @return {String}
+          */
+        setTreeType: function (value) {
+             return this.set("treeType", value);
         },
         /**
          * [createModelList description]

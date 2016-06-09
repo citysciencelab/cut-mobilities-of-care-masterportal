@@ -5,14 +5,14 @@ define("app",
     "modules/core/util",
     "modules/core/rawLayerList",
     "modules/restReader/collection",
-    "modules/core/parser/portalConfig",
+    "modules/core/parser/preparser",
     "modules/core/map",
     "modules/parametricURL/model"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Parser, Map, ParametricURL) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
 
     // Core laden
     new RawLayerList();
-    new Parser();
+    new Preparser();
     new ParametricURL();
     new Map();
 
@@ -63,7 +63,6 @@ define("app",
         "config",
         "backbone.radio"
     ], function (Map, Config, Radio) {
-
 
         if (Util.isAny()) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {

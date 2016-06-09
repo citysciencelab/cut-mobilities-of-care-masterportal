@@ -1,13 +1,18 @@
 define([
     "backbone.radio",
     "modules/core/parser/portalConfig"
-], function () {
+], function (Backbone, Parser) {
 
-     var Parser = require("modules/core/parser/portalConfig"),
+     var //Parser = require("modules/core/parser/portalConfig"),
         Radio = require("backbone.radio"),
 
         DefaultTreeParser = Parser.extend({
+        /*constructor : function () {
+           Parser.apply( this, arguments );
+        },*/
         initialize: function () {
+            // Initialize des Superobjektes aufrufen
+            Parser.prototype.initialize.apply(this, arguments);
             var layerList = Radio.request("RawLayerList", "getLayerAttributesList");
 
             this.parseTree(layerList);
@@ -88,12 +93,12 @@ define([
          * Erzeugt den Themen Baum aus der von Rawlaylist geparsten Services.json
          */
         parseLayerList: function (layerList) {
+
             var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return (_.contains(baseLayerIds, layer.id)) ? "baselayers" : "overlays";
                 });
-
             // Models für die Hintergrundkarten erzeugen
             this.createBaselayer(layerList);
             // Models für die Fachdaten erzeugen
@@ -108,7 +113,7 @@ define([
                 else {
                     layer =  _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
                 }
-                this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0}, layer));
+                this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, layer));
             }, this);
         },
 
@@ -174,7 +179,7 @@ define([
                 sortedCategories.push(tree[key]);
             });
             // Kategorien erzeugen
-            this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0, isInThemen: true});
+            this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0, isInThemen: true, isVisibleInTree: "true"});
             _.each(tree, function (category) {
                 // Unterordner erzeugen
                 this.addItems(category.folder, {type: "folder", parentId: category.id, isLeaffolder: true, level: 1, isInThemen: true});

@@ -8,15 +8,15 @@ define([
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
-
         initialize: function () {
-            var treeType = Radio.request("Parser", "getPortalConfig").Baumtyp;
+            Parser.prototype.initialize.apply(this, arguments);
 
-            if (treeType === "light") {
+            if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
                 this.parseTree(this.getBaselayer(), "Themen", 0);
             }
             else {
+                debugger;
                 this.parseTree(this.getBaselayer(), "Baselayer", 0);
                 this.parseTree(this.getOverlayer(), "Overlayer", 0);
             }
@@ -64,11 +64,25 @@ define([
                     // HVV :(
                     if (_.has(layer, "styles") && layer.styles.length > 1) {
                         _.each(layer.styles, function (style) {
-                            this.addItem(_.extend({type: "layer", parentId: parentId, id: layer.id + style.toLowerCase(), level: level}, _.omit(layer, "id")));
+                            this.addItem(_.extend(
+                                {
+                                    type: "layer",
+                                    parentId: parentId,
+                                    id: layer.id + style.toLowerCase(),
+                                    level: level,
+                                    isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
+                                }, _.omit(layer, "id")));
                         }, this);
                     }
                     else {
-                        this.addItem(_.extend({type: "layer", parentId: parentId, level: level, format: "image/png"}, layer));
+                        this.addItem(_.extend(
+                            {
+                                type: "layer",
+                                parentId: parentId,
+                                level: level,
+                                format: "image/png",
+                                isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
+                            }, layer));
                     }
                 }, this);
             }
@@ -77,11 +91,25 @@ define([
                     var isLeafFolder = (!_.has(folder, "Ordner")) ? true : false;
 
                     folder.id = this.createUniqId(folder.Titel);
-                    this.addItem({type: "folder", parentId: parentId, name: folder.Titel, id: folder.id, isLeafFolder: isLeafFolder, level: level, isInThemen: true});
+                    this.addItem(
+                    {
+                        type: "folder",
+                        parentId: parentId,
+                        name: folder.Titel,
+                        id: folder.id,
+                        isLeafFolder: isLeafFolder,
+                        level: level,
+                        isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
+                        isInThemen: true
+                    });
                     // rekursiver Aufruf
                     this.parseTree(folder, folder.id, level + 1);
                 }, this);
             }
+        },
+        getIsVisibleInTree: function (level, type, isInThemen) {
+            isInThemen = _.isUndefined(isInThemen) ? false : isInThemen;
+            return level === 0 && ((type === "layer") || (type === "folder" && isInThemen));
         }
     });
 
