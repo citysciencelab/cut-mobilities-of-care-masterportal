@@ -23,9 +23,6 @@ define([
                 "change:wfsLayerList": this.setLegendParamsFromWFS,
                 "change:groupLayerList": this.setLegendParamsFromGROUP
             });
-
-            // EventBus.trigger("layerlist:getVisiblelayerList");
-            this.setLayerList(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
         },
 
         createLegend: function () {

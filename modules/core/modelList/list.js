@@ -25,6 +25,9 @@ define([
                    "getModelsByAttributes": function (attributes) {
                        return this.where(attributes);
                    },
+                   "getModelByAttributes": function (attributes) {
+                       return this.findWhere(attributes);
+                   },
                    "getSelectionIDX": function (model) {
                        return this.insertIntoSelectionIDX(model);
                     }
@@ -173,7 +176,10 @@ define([
 
             setActiveToolToFalse: function (model) {
                 var tool = _.without(this.where({isActive: true}), model)[0];
+
+                if (_.isUndefined(tool) === false) {
                     tool.setIsActive(false);
+                }
             },
 
             toggleTreeVisibilityOfChildren: function (model) {

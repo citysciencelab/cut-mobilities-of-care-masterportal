@@ -37,7 +37,10 @@ define([
             if (this.getIsActive() === true) {
                 this.collection.setActiveToolToFalse(this);
                 EventBus.trigger("activateClick", this.getId());
-                if (this.getId() !== "gfi" && this.getId() !== "coord") {
+                if (this.getId() === "legend") {
+                    EventBus.trigger("toggleLegendWin");
+                }
+                else if (this.getId() !== "gfi" && this.getId() !== "coord") {
                     EventBus.trigger("toggleWin", [this.getId(), this.get("name"), this.get("glyphicon")]);
                 }
                 else {

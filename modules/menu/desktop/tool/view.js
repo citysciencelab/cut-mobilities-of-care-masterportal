@@ -45,7 +45,7 @@ define([
         },
 
         toggleIsActiveClass: function () {
-            if (this.model.getIsActive() === true) {
+            if (this.model.getIsActive() === true && this.model.getId() !== "legend") {
                 this.$el.addClass("active");
             }
             else {
