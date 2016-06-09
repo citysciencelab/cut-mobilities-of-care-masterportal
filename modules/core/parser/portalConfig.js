@@ -28,9 +28,6 @@ define([
         },
         // Pfad zur config
         url: "config.json",
-        /*constructor : function () {
-           Backbone.Model.apply( this, arguments );
-        },*/
         initialize: function (response) {
             var channel = Radio.channel("Parser");
             this.setPortalConfig(response.Themenconfig.Portalconfig);
@@ -90,6 +87,7 @@ define([
          */
         addItem: function (obj) {
             if (!_.isUndefined(obj.visibility)) {
+                obj.isSelected = obj.visibility;
                 obj.isVisibleInMap = obj.visibility;
                 delete obj.visibility;
             }

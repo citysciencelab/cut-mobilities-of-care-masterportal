@@ -29,7 +29,6 @@ define([
             selectionIDX: 0
         },
         initialize: function () {
-
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Aktivieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,
@@ -53,8 +52,9 @@ define([
                 "change:transparence": this.updateLayerTransparence
             });
 
-            if (this.getIsVisibleInMap() === true) {
-                this.setIsSelected(true);
+            if (this.getIsSelected() === true) {
+                this.createLayerSource();
+                this.toggleLayerOnMap();
             }
         },
 
@@ -176,12 +176,11 @@ define([
 
         toggleIsSelected: function () {
             if (this.getIsSelected() === true) {
+                Radio.trigger("ModelList", "removeSelectionIDX", this);
                 this.setIsSelected(false);
-                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
             }
             else {
                 this.setIsSelected(true);
-                Radio.trigger("ModelList", "removeSelectionIDX", this);
             }
             // TODO nur ausführen wenn parent ein leaffodler ist --> noch zu machen
             this.collection.everyLayerIsSelected(this);
@@ -211,9 +210,11 @@ define([
          */
         toggleLayerOnMap: function () {
             if (this.getIsVisibleInMap() === true) {
-                Radio.trigger("Map", "addLayerToIndex", this.getSelectionIDX());
+                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
+                Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
             }
             else {
+                Radio.trigger("ModelList", "removeFromSelectionIDX", this.getSelectionIDX());
                 Radio.trigger("Map", "removeLayer", this.getLayer());
             }
         },
