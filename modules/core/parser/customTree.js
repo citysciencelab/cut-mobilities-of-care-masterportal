@@ -16,7 +16,6 @@ define([
                 this.parseTree(this.getBaselayer(), "Themen", 0);
             }
             else {
-                debugger;
                 this.parseTree(this.getBaselayer(), "Baselayer", 0);
                 this.parseTree(this.getOverlayer(), "Overlayer", 0);
             }

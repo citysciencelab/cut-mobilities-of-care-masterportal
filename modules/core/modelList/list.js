@@ -176,11 +176,11 @@ define([
                     model.setIsSettingVisible(value);
                 });
             },
-
             setActiveToolToFalse: function (model) {
-                var tool = _.without(this.where({isActive: true}), model)[0];
-
-                tool.setIsActive(false, {silent: true});
+                if (model.getIsActive() === true) {
+                    var tool = _.without(this.where({isActive: true}), model)[0];
+                    tool.setIsActive(false, {silent: true});
+                }
             },
             toggleTreeVisibilityOfChildren: function (model) {
                var itemListByParentId = this.where({parentId: model.getId()});

@@ -95,9 +95,12 @@ define([
             //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
             //     }.bind(this), false);
             // }
-        Radio.trigger("zoomtofeature","zoomtoid");
-        console.log("Map:addVisibleItems");
-        Radio.trigger("ModelList", "addVisibleItems");
+            Radio.trigger("zoomtofeature", "zoomtoid");
+            console.log(2);
+            var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+            if (!_.isUndefined(activeItem)) {
+                this.activateClick(activeItem.id);
+            }
         },
 
         setBBox: function(bbox) {

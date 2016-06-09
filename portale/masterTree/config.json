@@ -54,13 +54,13 @@
       },
       "controls": {
         "zoom": true,
-        "toggleMenu": true,
         "orientation": "once",
         "poi": true,
-        "fullScreen": true
+        "fullScreen": true,
+        "mousePosition": true
       },
       "scaleLine": true,
-      "Baumtyp": "default"
+      "Baumtyp": "custom"
     },
   "Themenconfig":
     {

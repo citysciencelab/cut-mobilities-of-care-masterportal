@@ -12,12 +12,6 @@ define([
                 maxPosTop: "10px"
             },
             initialize: function () {
-                if (Config.tree.type === "light") {
-                    this.set("marginBottom", "0");
-                }
-                else {
-                    this.set("marginBottom", "24px");
-                }
                 EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);

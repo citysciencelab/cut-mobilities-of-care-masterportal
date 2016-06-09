@@ -17,8 +17,12 @@ define([
             "click": "checkItem"
         },
         initialize: function () {
+            this.listenTo(this.model, {
+                "change:isActive": this.toggleIsActiveClass
+            });
             this.render();
             this.setCssClass();
+            this.toggleIsActiveClass();
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -37,6 +41,15 @@ define([
             }
             else {
                 this.$el.addClass("tool-style");
+            }
+        },
+
+        toggleIsActiveClass: function () {
+            if (this.model.getIsActive() === true) {
+                this.$el.addClass("active");
+            }
+            else {
+                this.$el.removeClass("active");
             }
         },
 

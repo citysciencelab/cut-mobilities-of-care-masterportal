@@ -44,6 +44,9 @@ define([
             channel.reply({
                 "getPortalConfig": this.getPortalConfig,
                 "getItemsByParentId": this.getItemsByParentId,
+                "getItemByAttributes": function (attributes) {
+                    return _.findWhere(this.getItemList(), attributes);
+                },
                 "getItemsByAttributes": function (attributes) {
                     return _.where(this.getItemList(), attributes);
                 }
@@ -70,6 +73,17 @@ define([
                 }
             }, this);
         },
+
+        parseControls: function (items) {
+            _.each(items, function (value, key) {
+                this.addItem({
+                    type: "control",
+                    id: key,
+                    attr: value
+                });
+            }, this);
+        },
+
         /**
          * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) hinzu
          * @param {Object} obj - Item
