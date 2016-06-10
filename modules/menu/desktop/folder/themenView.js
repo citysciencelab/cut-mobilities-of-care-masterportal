@@ -12,7 +12,7 @@ define([
 
     FolderView = Backbone.View.extend({
         tagName: "li",
-        className: "",
+        className: "themen-folder",
         id: "",
         template: _.template(FolderTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
@@ -51,7 +51,7 @@ define([
                 else {
                     $(selector).prepend(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
+                $(this.$el).css("padding-left", (this.model.getLevel()+1) * 10 + "px");
             }
 
         },
@@ -62,6 +62,7 @@ define([
             this.model.updateList(this.model.getId());
         },
         toggleIsExpanded: function () {
+            console.log(1);
             this.model.toggleIsExpanded();
         }
     });

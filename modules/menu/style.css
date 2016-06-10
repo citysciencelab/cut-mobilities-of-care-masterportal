@@ -18,36 +18,12 @@
     color: rgb(85, 85, 85) !important;
 }
 
-#Themen ul {
-    list-style: none;
-    min-width:  600px;
-    list-style: none;
-    padding: 0 0 0 0px;
-    -webkit-padding-start: 0px;
-}
-.layer-catalog > ul{
-    max-height:500px;
-    overflow: auto;
-}
-#Themen ul .glyphicon {
-    margin: 5px 0 0 10px;
-}
-#Themen ul .layer {
-    /*display:none;*/
-}
-#Themen li {
-    border: 1px solid #ddd;
-}
-ul#Baselayer{
-    display: none;
-}
-
 .navbar-collapse.in {
     padding: 0;
-    /**
+    *
      * Relative to 1% of the width of the viewport
      * Viewport = the browser window size. If the viewport is 50cm wide, 1vw = 0.5cm.
-     */
+
     max-height:100%;
 
 }
@@ -68,19 +44,6 @@ ul#Baselayer{
     background-color: #fff;
 }
 
-.dropdown-menu {
-    padding:  0;
-    margin-left: -2px;
-}
-
-.dropdown-menu > li > a {
-    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
-}
-
-.menuitem {
-    font-size: 14px;
-    letter-spacing: 0.6px;
-}
 
 @media (min-width: 768px) {
     a.dropdown-toggle > span.glyphicon {
@@ -103,3 +66,47 @@ ul#Baselayer{
         font-size: 18px;
     }
 }
+#Themen {
+   font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+}
+
+#Themen ul {
+    list-style: none;
+    max-height: 600px;
+    padding: 0 0 0 0px;
+    -webkit-padding-start: 0px;
+}
+
+#Themen .title {
+    font-family: UniversNextW01-Regular,"Arial Narrow",Arial,sans-serif;
+    font-size: 12px;
+    color: rgb(85, 85, 85);
+    cursor: pointer;
+}
+
+#Themen ul  .glyphicon {
+    top: 2px;
+}
+ul#Themen .closed{
+    border-bottom: 1px solid #ddd;
+    min-width:  380px;
+}
+#Themen ul li {
+    border-bottom: 1px solid #ddd;
+    padding: 8px 15px;
+}
+#Themen .layer-catalog > .header {
+    padding: 8px;
+    background-color: rgb(85, 85, 85);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+#Themen #SelectedLayer li {
+    overflow: auto;
+    padding: 8px 15px 8px 2px;
+}
+#Themen #SelectedLayer .glyphicon {
+    font-size: 15px;
+    padding: 0 5px;
+}
+

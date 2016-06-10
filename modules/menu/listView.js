@@ -108,7 +108,6 @@ define([
                 return;
             }
             var lightModels  = Radio.request("Parser", "getItemsByParentId", parentId),
-
            models = this.collection.add(lightModels);
 
            this.addViewsToItemsOfType("layer", models);

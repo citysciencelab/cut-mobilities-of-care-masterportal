@@ -1,6 +1,11 @@
 <!DOCTYPE html>
+ <% if (isExpanded === true) { %>
     <div class="header">
+        <span class="glyphicon glyphicon-minus-sign"></span>
+ <% } else {%>
+    <div class="header closed">
         <span class="glyphicon glyphicon-plus-sign"></span>
+<% } %>
         <span class="control-label"><%= name %></span>
         <span class="glyphicon glyphicon-pushpin rotate-pin-back pull-right" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
         <span class="glyphicon glyphicon-adjust rotate-adjust-back pull-right" data-toggle="tooltip" data-placement="bottom" title="Kartenhintergrund grau/weiß"></span>
