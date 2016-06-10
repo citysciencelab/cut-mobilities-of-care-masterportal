@@ -51,6 +51,10 @@
           "name": "Legende",
           "glyphicon": "glyphicon-book"
         },
+        "treeFilter": {
+          "name": "Filter",
+          "glyphicon": "glyphicon-leaf"
+        },
         "contact": {
             "name": "Kontakt",
             "glyphicon": "glyphicon-envelope",

@@ -158,6 +158,12 @@ define("app",
                     });
                     break;
                 }
+                case "treeFilter": {
+                    require(["modules/treefilter/view"], function (TreeFilterView) {
+                        new TreeFilterView();
+                    });
+                    break;
+                }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {
@@ -289,11 +295,6 @@ define("app",
                     //     });
                     // }
                 // }
-                if (_.has(Config.menuItems, "treeFilter") === true) {
-                    require(["modules/treefilter/view"], function (TreeFilterView) {
-                        new TreeFilterView();
-                    });
-                }
 
                 if (_.has(Config.menuItems, "wfsFeatureFilter") === true) {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
