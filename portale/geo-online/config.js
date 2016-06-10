@@ -111,7 +111,7 @@ define(function () {
             layerTree: true,
             helpButton: false,
             contact: {
-                serviceID: "80001",
+                serviceID: "80002",
                 from: [{
                     email: "lgvgeoportal-hilfe@gv.hamburg.de",
                     name: "LGVGeoportalHilfe"
@@ -201,8 +201,7 @@ define(function () {
             outputFilename: "Ausdruck Geo-Online",
             gfi: true
         },
-        proxyURL: "/cgi-bin/proxy.cgi",
-        wpsID: "80001"
+        proxyURL: "/cgi-bin/proxy.cgi"
     };
 
     return config;
