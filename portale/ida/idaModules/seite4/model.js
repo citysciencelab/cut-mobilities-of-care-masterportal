@@ -6,7 +6,7 @@ define([
     var Seite4Model = Backbone.Model.extend({
         defaults: {
             params: {},
-            brwList: [],
+            brwList: "", // default !== [], damit startCalculation auch checkResponseReceived ausführen läßt
             aktBRW: "",
             normBRW: "",
             nutzung: "",
@@ -52,8 +52,8 @@ define([
         /*
         * wird von View bei init gerufen
         */
-        startCalculation: function () {
-            var brwList = this.addId(this.get("brwList")),
+        startCalculation: function (brwList) {
+            var brwList = this.addId(brwList),
                 params = this.get("params"),
                 STRL = _.has(params, "STRL") === true ? params.STRL : "",
                 BAUW = _.has(params, "BAUW") === true ? params.BAUW : "",
@@ -208,12 +208,7 @@ define([
             this.set("LAGE", LAGE);
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("nutzung", "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("produkt", "string"));
-            dataInputs += "<wps:Input>";
-            dataInputs += "<ows:Identifier>DATU</ows:Identifier>";
-            dataInputs += "<wps:Data>";
-            dataInputs += "<wps:LiteralData dataType='string'>" + this.get("jahr") + "-07-01</wps:LiteralData>"; // immer 1. Juli des gewählten Jahres
-            dataInputs += "</wps:Data>";
-            dataInputs += "</wps:Input>";
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("jahr", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("StadtteilName", "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("WGFZ", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FLAE", "float"));

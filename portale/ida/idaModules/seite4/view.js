@@ -16,14 +16,12 @@ define([
             this.listenTo(this.model, "change:result", this.refreshResult),
             this.listenTo(this.model, "change:error", this.refreshError);
 
-            this.model.set("params", params),
-            this.model.set("nutzung", nutzung),
-            this.model.set("produkt", produkt),
-            this.model.set("jahr", jahr),
-            this.model.set("brwList", brwList);
+            this.model.set("params", params);
+            this.model.set("nutzung", nutzung);
+            this.model.set("produkt", produkt);
+            this.model.set("jahr", jahr);
             this.model.set("lage", lage);
-
-            this.model.startCalculation();
+            this.model.startCalculation(brwList);
             this.show();
         },
         weiter: function () {
