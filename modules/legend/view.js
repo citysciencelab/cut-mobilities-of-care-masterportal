@@ -63,8 +63,10 @@ define([
         },
 
         toggle: function () {
-            var isViewMobile = Radio.request("Util", "isViewMobile");
+            var isViewMobile = Radio.request("Util", "isViewMobile"),
+                legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
 
+            this.model.setLayerList(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
             if (isViewMobile === true) {
                 this.$el.modal({
                     backdrop: true,
@@ -73,6 +75,13 @@ define([
             }
             else {
                 this.$el.toggle();
+            }
+
+            if (this.$el.css("display") === "block") {
+                legendModel.setIsActive(true);
+            }
+            else {
+                legendModel.setIsActive(false);
             }
         }
     });

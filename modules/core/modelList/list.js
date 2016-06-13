@@ -25,12 +25,20 @@ define([
                    "getModelsByAttributes": function (attributes) {
                        return this.where(attributes);
                    },
+                   "getModelByAttributes": function (attributes) {
+                       return this.findWhere(attributes);
+                   },
                    "getSelectionIDX": function (model) {
                        return this.insertIntoSelectionIDX(model);
                     }
                }, this);
 
                 channel.on({
+                    "setModelAttributesById": function (id, attrs) {
+                        var model = this.get(id);
+
+                        model.set(attrs);
+                    },
                     "addVisibleItems": function () {
                         var visibleItems = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
 
@@ -52,7 +60,6 @@ define([
                }, this);
 
                this.listenTo(this, {
-                   "change:isActive": this.setActiveToolToFalse,
                    "change:isVisibleInMap": function () {
                        channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
                    },
@@ -86,7 +93,7 @@ define([
             },
 
             updateList: function (parentId, slideDirection) {
-                var items = Radio.request("Parser", "getItemsByParentId", parentId);
+                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
 
                 this.add(items);
                 this.setAllModelsInvisible();
@@ -171,12 +178,15 @@ define([
                     model.setIsSettingVisible(value);
                 });
             },
+
             setActiveToolToFalse: function (model) {
-                if (model.getIsActive() === true) {
-                    var tool = _.without(this.where({isActive: true}), model)[0];
-                    tool.setIsActive(false, {silent: true});
+                var tool = _.without(this.where({isActive: true}), model)[0];
+
+                if (_.isUndefined(tool) === false) {
+                    tool.setIsActive(false);
                 }
             },
+
             toggleTreeVisibilityOfChildren: function (model) {
                var itemListByParentId = this.where({parentId: model.getId()});
 

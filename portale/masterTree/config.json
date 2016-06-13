@@ -40,6 +40,10 @@
             "kmlimport": {
               "name": "KML Import",
               "glyphicon": "glyphicon-import"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
             }
           }
         },
@@ -47,9 +51,14 @@
           "name": "Legende",
           "glyphicon": "glyphicon-book"
         },
-        "draw": {
-          "name": "Zeichnen / Schreiben",
-          "glyphicon": "glyphicon-pencil"
+        "treeFilter": {
+          "name": "Filter",
+          "glyphicon": "glyphicon-leaf"
+        },
+        "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de"
         }
       },
       "controls": {

@@ -49,7 +49,8 @@ define([
                 "change:isVisibleInMap": function () {
                     this.toggleLayerOnMap();
                 },
-                "change:transparence": this.updateLayerTransparence
+                "change:transparence": this.updateLayerTransparence,
+                "change:SLDBody": this.updateSourceSLDBody
             });
 
             if (this.getIsSelected() === true) {

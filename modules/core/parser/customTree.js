@@ -8,19 +8,6 @@ define([
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
-        initialize: function () {
-            Parser.prototype.initialize.apply(this, arguments);
-
-            if (this.getTreeType() === "light") {
-                this.parseTree(this.getOverlayer(), "Themen", 0);
-                this.parseTree(this.getBaselayer(), "Themen", 0);
-            }
-            else {
-                this.parseTree(this.getBaselayer(), "Baselayer", 0);
-                this.parseTree(this.getOverlayer(), "Overlayer", 0);
-            }
-            this.createModelList();
-        },
 
         /**
          * Parsed response.Themenconfig

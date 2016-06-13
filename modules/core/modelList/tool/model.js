@@ -34,12 +34,26 @@ define([
         },
 
         activateTool: function () {
-            EventBus.trigger("activateClick", this.getId());
-            if (this.getId() !== "gfi" && this.getId() !== "coord") {
-                EventBus.trigger("toggleWin", [this.getId(), this.get("name"), this.get("glyphicon")]);
-            }
-            else {
-                EventBus.trigger("winParams", [false, false, ""]);
+            if (this.getIsActive() === true) {
+                this.collection.setActiveToolToFalse(this);
+                EventBus.trigger("activateClick", this.getId());
+                if (this.getId() === "legend") {
+                    EventBus.trigger("toggleLegendWin");
+                }
+                else if (this.getId() === "contact") {
+                    var email = this.getEmail() || "LGVGeoPortal-Hilfe@gv.hamburg.de",
+                        mailto = encodeURI("mailto:" + email + "?subject=Frage zum Portal: " + document.title + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen. Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu. Vielen Dank! \n \n Name:\t\t\n Telefon:\t\n Anliegen:\t\n\n Systeminformationen: \n Platform: " + navigator.platform + "\n CookiesEnabled: " + navigator.cookieEnabled + "\n UserAgent: " + navigator.userAgent);
+
+                    document.location.href = mailto;
+                }
+                else if (this.getId() !== "gfi" && this.getId() !== "coord") {
+                    EventBus.trigger("toggleWin", [this.getId(), this.get("name"), this.get("glyphicon")]);
+                }
+
+                else {
+                    EventBus.trigger("closeWindow", false);
+                    EventBus.trigger("winParams", [false, false, ""]);
+                }
             }
         },
 

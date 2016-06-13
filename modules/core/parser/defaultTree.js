@@ -1,23 +1,11 @@
 define([
-    "backbone.radio",
     "modules/core/parser/portalConfig"
-], function (Backbone, Parser) {
+], function () {
 
-     var //Parser = require("modules/core/parser/portalConfig"),
-        Radio = require("backbone.radio"),
+    var Parser = require("modules/core/parser/portalConfig"),
+        DefaultTreeParser;
 
-        DefaultTreeParser = Parser.extend({
-        /*constructor : function () {
-           Parser.apply( this, arguments );
-        },*/
-        initialize: function () {
-            // Initialize des Superobjektes aufrufen
-            Parser.prototype.initialize.apply(this, arguments);
-            var layerList = Radio.request("RawLayerList", "getLayerAttributesList");
-
-            this.parseTree(layerList);
-            this.createModelList();
-        },
+    DefaultTreeParser = Parser.extend({
 
         /**
          *

@@ -15,10 +15,8 @@ define(function () {
            gfi: false
        },
        proxyURL: "/cgi-bin/proxy.cgi",
-       menubar: false,
        mouseHover: true,
        scaleLine: true,
-       isMenubarVisible: true,
        startUpModul: "",
        searchBar: {
             minChars: 3,
@@ -60,30 +58,7 @@ define(function () {
            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
            geoLocateHit: true
        },
-       gemarkungen: "../components/lgv-config/gemarkung.json",
-       tools: {
-           gfi: {
-               title: "Informationen abfragen",
-               glyphicon: "glyphicon-info-sign",
-               isActive: true
-           },
-           print: {
-               title: "Karte drucken",
-               glyphicon: "glyphicon-print"
-           },
-           coord: {
-               title: "Koordinate abfragen",
-               glyphicon: "glyphicon-screenshot"
-           },
-           measure: {
-               title: "Strecke / Fläche messen",
-               glyphicon: "glyphicon-resize-full"
-           },
-           searchByCoord: {
-               title: "Koordinatensuche",
-               glyphicon: "glyphicon-record"
-           }
-       }
+       gemarkungen: "../components/lgv-config/gemarkung.json"
    };
 
    return config;
