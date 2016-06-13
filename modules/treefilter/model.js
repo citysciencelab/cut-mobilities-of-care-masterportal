@@ -13,8 +13,8 @@ define([
             errors: "",
             treeCategory: "", // Baumgattung
             treeType: "", // Baumart
-            yearMin: "0", // Pflanzjahr von
-            yearMax: "2014", // Pflanzjahr bis
+            yearMin: "1", // Pflanzjahr von
+            yearMax: "2015", // Pflanzjahr bis
             diameterMin: "0", // Kronendurchmesser[m] von
             diameterMax: "50", // Kronendurchmesser[m] bis
             perimeterMin: "0", // Stammumfang[cm] von
@@ -182,8 +182,8 @@ define([
                 return errors;
             }
         },
-        setCategory: function () {
-            this.set("treeCategory", $("#categoryInput").val());
+        setCategory: function (value) {
+            this.set("treeCategory", value);
         },
         setSearchCategoryString: function (value) {
             this.set("searchCategoryString", value);
@@ -204,8 +204,8 @@ define([
             }
             this.set("categoryArray", catArray);
         },
-        setType: function () {
-            this.set("treeType", $("#typeInput").val());
+        setType: function (value) {
+            this.set("treeType", value);
         },
         setSearchTypeString: function (value) {
             this.set("searchTypeString", value);
@@ -249,12 +249,12 @@ define([
                     this.set("treeFilterType", "");
                 }
             }
-            this.set("yearMax", $("#yearMax > input").val());
-            this.set("yearMin", $("#yearMin > input").val());
-            this.set("diameterMax", $("#diameterMax > input").val());
-            this.set("diameterMin", $("#diameterMin > input").val());
-            this.set("perimeterMax", $("#perimeterMax > input").val());
-            this.set("perimeterMin", $("#perimeterMin > input").val());
+            // this.set("yearMax", $("#yearMax > input").val());
+            // this.set("yearMin", $("#yearMin > input").val());
+            // this.set("diameterMax", $("#diameterMax > input").val());
+            // this.set("diameterMin", $("#diameterMin > input").val());
+            // this.set("perimeterMax", $("#perimeterMax > input").val());
+            // this.set("perimeterMin", $("#perimeterMin > input").val());
 
             if (this.isValid() === true) {
                 this.set("isFilter", true);
@@ -282,18 +282,24 @@ define([
 
             this.set("treeCategory", "");
             this.set("treeType", "");
-            this.set("yearMax", "2014");
-            this.set("yearMin", "0");
-            this.set("diameterMax", "50");
-            this.set("diameterMin", "0");
-            this.set("perimeterMax", "1000");
-            this.set("perimeterMin", "0");
-            $("#yearMax > input").val("2014");
-            $("#yearMin > input").val("0");
-            $("#diameterMax > input").val("50");
-            $("#diameterMin > input").val("0");
-            $("#perimeterMax > input").val("1000");
-            $("#perimeterMin > input").val("0");
+            // this.set("yearMax", "2014");
+            this.setYearMax("2015");
+            this.setYearMin("1");
+            // this.set("yearMin", "0");
+            this.setDiamterMax("50");
+            this.setDiameterMin("0");
+            // this.set("diameterMax", "50");
+            // this.set("diameterMin", "0");
+            this.setPerimeterMin("0");
+            this.setPerimeterMax("1000");
+            // this.set("perimeterMax", "1000");
+            // this.set("perimeterMin", "0");
+            // $("#yearMax > input").val("2015");
+            // $("#yearMin > input").val("0");
+            // $("#diameterMax > input").val("50");
+            // $("#diameterMin > input").val("0");
+            // $("#perimeterMax > input").val("1000");
+            // $("#perimeterMin > input").val("0");
         },
         createFilter: function () {
             var filter, filter2, symbolizer, header, footer, filterwfs, filterCategory, filterType, filterYear, filterDiameter, filterPerimeter;
@@ -337,7 +343,7 @@ define([
         getFilterHits: function () {
             $("#loader").show();
             $.ajax({
-                url: Config.proxyURL + "?url=http://geofos.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_strassenbaumkataster",
+                url: "/geodienste-hamburg/HH_WFS_Strassenbaumkataster",
                 data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' resultType='hits' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:strassenbaumkataster'>" + this.get("filter") + "</wfs:Query></wfs:GetFeature>",
                 type: "POST",
                 context: this, // model
@@ -359,6 +365,24 @@ define([
                     $("#loader").hide();
                 }
             });
+        },
+        setYearMin: function (value) {
+            this.set("yearMin", value);
+        },
+        setYearMax: function (value) {
+            this.set("yearMax", value);
+        },
+        setDiameterMin: function (value) {
+            this.set("diameterMin", value);
+        },
+        setDiamterMax: function (value) {
+            this.set("diameterMax", value);
+        },
+        setPerimeterMin: function (value) {
+            this.set("perimeterMin", value);
+        },
+        setPerimeterMax: function (value) {
+            this.set("perimeterMax", value);
         }
     });
 

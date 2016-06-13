@@ -1,10 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "config",
     "text!modules/footer/template.html",
     "modules/footer/model"
-], function (_, Backbone, Config, Template, Footermodel) {
+], function (Backbone, Config, Template, Footermodel) {
 
     var view = Backbone.View.extend({
         template: _.template(Template),

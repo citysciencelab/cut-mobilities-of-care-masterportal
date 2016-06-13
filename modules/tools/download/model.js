@@ -8,10 +8,14 @@ define([
         var Download = Backbone.Model.extend({
             // Die Features
             data: {},
+            // das ausgewählte Format
+            selectedFormat: $(".file-endings").val(),
             // Die Fromate
             formats: {},
             // Das Modul, das den Download gestartet hat
             caller: {},
+            // download button selector
+            dlBtnSel: "a.download",
             initialize: function () {
                  EventBus.on("winParams", this.setStatus, this);
             },
@@ -43,6 +47,26 @@ define([
                 this.data = data;
             },
             /**
+             * setter für Data
+             * @param {Ol.Feature} data Vektor Objekt das heruntergeladen werden kann
+             */
+            getData: function () {
+                return this.data;
+            },
+             /**
+             * getter für Format
+             */
+            getSelectedFormat: function () {
+                return $(".file-endings").val();
+            },
+            /**
+             * setter für Format
+             * @param {String} formats die möglich Formate in die die Features umgewandelt werden können
+             */
+             setSelectedFormat: function (selectedFormat) {
+                this.selectedFormat = selectedFormat;
+            },
+            /**
              * getter für Format
              */
             getFormats: function () {
@@ -68,40 +92,110 @@ define([
                 this.caller = caller;
             },
             /**
-             * Startet den Download eines konvertierten Objektes
+             * getter für den Selector des Download Buttons
              */
-            download: function () {
-                var filename = $("input.file-name").val(),
-                data = this.data,
-                converted = {};
+            getDlBtnSel: function () {
+                return this.dlBtnSel;
+            },
 
+            /**
+             * validates Filename
+             */
+             validateFilename: function (filename) {
                 filename.trim();
-                if (!filename.match(/^[0-9a-zA-Z ]+(\.[0-9a-zA-Z]+)?$/)) {
+                var result = filename.match(/^[0-9a-zA-Z ]+(\.[0-9a-zA-Z]+)?$/);
+
+                if (!result) {
                     EventBus.trigger("alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
                 }
-                else {
-                    var format = $(".file-endings").val();
+                return result;
+             },
+             appendFileExtension: function (filename, format) {
 
-                    if (format === "none") {
-                         EventBus.trigger("alert", "Bitte Format auswählen");
+                var suffix = "." + format;
+
+                if (filename.indexOf(suffix, filename.length - suffix.length) === -1) {
+                    filename += "." + format;
+                }
+                return filename;
+             },
+             /**
+              * Überprüft, ob im Format Selectfeld ein Format ausgewählt wurde.
+              * @return {[type]} [description]
+              */
+             validateFileExtension: function () {
+                var format = this.getSelectedFormat();
+                if (format === "none" || format === "" || typeof format === "undefined") {
+                     EventBus.trigger("alert", "Bitte Format auswählen");
+                     return false;
+                }
+                return true;
+            },
+
+            /**
+             * prepare Convertiert die Übergebenen Daten für den Download und setzt sie hinterher wieder zurück,
+             * damit sie weiterhin korrekt angezeigt werden.
+             */
+            prepareData: function () {
+
+                var backup = this.backupCoords(this.getData()),
+                converted;
+
+                converted = this.convert(this.getSelectedFormat(), this.getData());
+
+                this.restoreCoords(this.getData(), backup);
+                this.setData(converted);
+                return converted;
+            },
+            /**
+             * Gibt zurück, ob der Browser die Microsoft File API unterstützt
+             * @return {Boolean}
+             */
+            isInternetExplorer: function () {
+                return window.navigator.msSaveOrOpenBlob;
+            },
+
+            /**
+             * Stand: 26.04.16 Der IE unterstüzt das HTML5 downlaod Attribut nicht deswegen wird
+             * Ein die nur von IE unterstütze File Api verwendet
+             */
+            prepareDownloadButtonIE: function () {
+                    var fileData = [this.getData()],
+                    blobObject = new Blob(fileData),
+                    that = this;
+
+                    $(this.getDlBtnSel()).on("click", function () {
+                        var filename = $("input.file-name").val();
+
+                        if (that.validateFilename(filename)) {
+                            if (that.validateFileExtension()) {
+                                filename = that.appendFileExtension(filename, that.getSelectedFormat());
+                                window.navigator.msSaveOrOpenBlob(blobObject, filename);
+                            }
+                        }
+                    });
+            },
+            /**
+             * Nutzt das 'HTML% Attribute "Download" um einen localen Download zu ermöglichen.
+             * @return {[type]} [description]
+             */
+            prepareDownloadButtonNonIE: function () {
+                var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.getData());
+                $(this.getDlBtnSel()).attr("href", url);
+
+                var that = this;
+
+                $(this.getDlBtnSel()).on("click", function (e) {
+                    var filename = $("input.file-name").val();
+
+                    if (!that.validateFilename(filename) || !that.validateFileExtension()) {
+                        e.preventDefault();
                     }
                     else {
-                        var backup = this.backupCoords(data);
-
-                        converted = this.convert(format, data);
-
-                        this.restoreCoords(data, backup);
-                        if (converted !== "invalid Format") {
-                            if (!name.endsWith("." + format)) {
-                                filename += "." + format;
-                            }
-                            var a = this.createDOM(converted, filename);
-
-                            a.click();
-                            EventBus.trigger("alert", "Die Datei: <br><strong>" + filename + "</strong><br> wurde in Ihr Downloadverzeichnis heruntergeladen");
-                        }
+                        filename = that.appendFileExtension(filename, that.getSelectedFormat());
+                        $(that.getDlBtnSel()).attr("download", filename);
                     }
-                }
+                });
             },
             backupCoords: function (data) {
                 var coords = [];
@@ -158,17 +252,18 @@ define([
             },
             /**
              * Diese funktion wählt anhand der im Dropdown ausgewählten Endung die Konvertier funktion
-             * ==>!! Neue Formate im Default ausgeben !!<==
              * @param  {string} format das Fromat in das konvertiert wird
              * @return {function} die Konvertierfunktion
              */
             getConverter: function (format) {
+                var knownFormats =  ["kml", "jpg"];
+
                 switch (format) {
-                    case "kml": {
+                    case knownFormats[0]: {
                         return this.convertFeaturesToKML;
                     }
                     default: {
-                        EventBus.trigger("alert", "Unbekanntes Format: <br><strong>" + format + "</strong><br> Bekannte Formate:<br>" + "\"kml\"");
+                        EventBus.trigger("alert", "Ein Unbekanntes Format wurde an das Download Tool übergeben: <br><strong>" + format + "</strong><br> Bekannte Formate:<br>" + knownFormats);
                     }
                 }
             },
@@ -255,7 +350,12 @@ define([
                 var format = new ol.format.KML();
 
                 _.each(features, function (feature) {
-                    var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25833", "EPSG:4326", "32"));
+                    var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
+
+                    //für den Download nach einem Import! Z-Koordinate absägen
+                    if (transCoord.length === 3) {
+                        transCoord.pop();
+                    }
 
                     feature.getGeometry().setCoordinates(transCoord, "XY");
 

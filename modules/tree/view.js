@@ -1,9 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/tree/model",
     "text!modules/tree/template.html",
-    "eventbus"
-], function (Backbone, LayerTree, LayerTreeTemplate, EventBus) {
+    "eventbus",
+    "modules/layer/list"
+], function (Backbone, Radio, LayerTree, LayerTreeTemplate, EventBus) {
 
         var TreeView = Backbone.View.extend({
             model: new LayerTree(),
@@ -33,13 +35,21 @@ define([
                 "click .layer-catalog-extern > .header > span": "toggleExternLayer"
             },
             initialize: function () {
-                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView", "modules/tools/saveSelection/view"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView, SaveSelectionView) {
+                this.listenTo(Radio.channel("MenuBar"), {
+                    "switchedMenu": this.render
+                });
+
+                require(["modules/tree/selection/listView", "modules/tree/catalogLayer/listView", "modules/tree/catalogBaseLayer/listView", "modules/tree/catalogExtern/listView"], function (LayerSelectionListView, LayerTreeView, BaseLayerListView, CataExView) {
                     new LayerSelectionListView();
                     new LayerTreeView();
                     new BaseLayerListView();
                     new CataExView();
-                    new SaveSelectionView();
                 });
+                if (this.model.get("saveSelection") === true) {
+                    require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
+                        new SaveSelectionView();
+                    });
+                }
                 this.$el.on({
                     click: function (e) {
                         e.stopPropagation();
@@ -48,9 +58,15 @@ define([
                 this.render();
             },
             render: function () {
-                var attr = this.model.toJSON();
+                var isMobile = Radio.request("MenuBar", "isMobile");
 
-                $(".dropdown-tree").append(this.$el.html(this.template(attr)));
+                if (isMobile === false) {
+                    var attr = this.model.toJSON();
+
+                    this.stopEventPropagation();
+                    this.setElement($(".dropdown-tree"));
+                    this.$el.html(this.template(attr));
+                }
             },
             setSelection: function (evt) {
                 this.model.setSelection(evt.target.value);
@@ -60,8 +76,8 @@ define([
             },
             toggleCatalog: function () {
                 $(".layer-catalog-list").toggle("slow");
-                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
-                $(".layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             },
             toggleSelection: function () {
                 $(".layer-selected-list").toggle("slow");
@@ -70,8 +86,8 @@ define([
             },
             toggleBaseLayer: function () {
                 $(".base-layer-list").toggle("slow");
-                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-minus-sign");
-                $(".base-layer-catalog > .header > .glyphicon").toggleClass("glyphicon-plus-sign");
+                $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
+                $(".base-layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
             },
             toggleCatalogAndBaseLayer: function () {
               this.toggleCatalog();
@@ -107,6 +123,16 @@ define([
             },
             helpForFixing: function (evt) {
                 evt.stopPropagation();
+            },
+            // stopPropagation verhindert, dass ein Event im DOM-Baum nach oben reist
+            // und dabei Aktionen auf anderen Elementen triggert.
+            // In diesem Fall wird der Baum nicht geschlossen wenn z.B. auf eine Layer-View geklickt wird.
+            stopEventPropagation: function () {
+                $(".dropdown-tree").on({
+                    click: function (e) {
+                        e.stopPropagation();
+                    }
+                });
             }
         });
 

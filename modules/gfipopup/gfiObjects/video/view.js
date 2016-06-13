@@ -2,9 +2,8 @@ define([
     "backbone",
     "text!modules/gfipopup/gfiObjects/video/template.html",
     "modules/gfipopup/gfiObjects/video/model",
-    "eventbus",
-    "modules/core/util"
-], function (Backbone, VideoTemplate, VideoModel, EventBus, Util) {
+    "eventbus"
+], function (Backbone, VideoTemplate, VideoModel, EventBus) {
     "use strict";
     var VideoView = Backbone.View.extend({
         template: _.template(VideoTemplate),
@@ -17,15 +16,10 @@ define([
         /**
          * Video nur im Desktop-Modus
          */
-        initialize: function (url) {
+        initialize: function (url) {console.log(url);
             this.model = new VideoModel();
             this.model.set("url", url);
-            if (!Util.isAny()) {
-                this.render();
-            }
-            else {
-                this.$el.html("");
-            }
+            this.render();
         },
         /**
          *

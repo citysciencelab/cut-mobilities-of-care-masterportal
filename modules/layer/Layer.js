@@ -15,7 +15,9 @@ define([
             settings: false,
             visibility: false,
             treeType: Config.tree.type,
-            metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
+            featureCount: 1,
+            metaName: null, // --> für Olympia-Portal, rendern sonst nicht möglich
+            transparence: 0
         },
         initialize: function () {
             this.listenToOnce(EventBus, {
@@ -23,7 +25,6 @@ define([
                 "mapView:sendMinResolution": this.setMinResolution,
                 "mapView:sendMaxResolution": this.setMaxResolution
             });
-
             this.listenTo(EventBus, {
                 "mapView:sendOptions": this.setViewResolution
             });
@@ -41,9 +42,18 @@ define([
 
             this.listenTo(this, {
                 "change:viewResolution": this.setIsResolutionInRange,
-                "change:visibility": this.setVisibility,
-                "change:transparence": this.updateOpacity,
-                "change:selected": this.toggleToSelectionLayerList,
+                "change:visibility": function () {
+                    this.setVisibility();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {isLayerVisible: this.getVisibility()});
+                },
+                "change:transparence": function () {
+                    this.updateOpacity();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {transparence: this.getTransparence()});
+                },
+                "change:selected": function () {
+                    this.toggleToSelectionLayerList();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {isChecked: this.getSelected()});
+                },
                 "change:SLDBody": this.updateSourceSLDBody
             });
             this.set("settings", false);
@@ -51,8 +61,6 @@ define([
             this.set("gfiTheme", this.get("gfiTheme") || "default");
             // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
             this.set("routable", this.get("routable") || false);
-            // Tranparenz
-            this.listenTo(this, "change:transparence", this.updateOpacity);
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
@@ -62,7 +70,6 @@ define([
             else {
                 this.postInit();
             }
-            // EventBus.trigger("mapView:getViewStartResolution");
         },
 
         postInit: function () {
@@ -75,9 +82,6 @@ define([
             if (this.get("transparence")) {
                 this.set("transparence", parseInt(this.get("transparence"), 10));
             }
-            else {
-                this.set("transparence", 0);
-            }
             // this.updateOpacity();
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
@@ -87,6 +91,10 @@ define([
                 this.set("visibility", this.get("visible"));
             }
             this.get("layer").setVisible(this.get("visibility"));
+            this.setVisibility();
+            if (this.getVisibility() === true) {
+                this.set("selected", true);
+            }
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -112,7 +120,7 @@ define([
                             this.set("metaName", dataset.md_name);
                         }
                     }
-                    if (Config.tree.orderBy === "opendata") {
+                    if (Config.tree.orderBy === "opendata" && !this.has("node")) {
                         if (dataset.kategorie_opendata.length > 1) {
                             this.set("node", dataset.kategorie_opendata);
                         }
@@ -120,7 +128,7 @@ define([
                             this.set("node", dataset.kategorie_opendata[0]);
                         }
                     }
-                    else if (Config.tree.orderBy === "inspire") {
+                    else if (Config.tree.orderBy === "inspire" && !this.has("node")) {
                         if (dataset.kategorie_inspire.length > 1) {
                             this.set("node", dataset.kategorie_inspire);
                         }
@@ -179,6 +187,7 @@ define([
                 this.set("transparence", this.get("transparence") - value);
             }
         },
+
         /**
          *
          */
@@ -287,6 +296,21 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        setSelected: function (value) {
+            this.set("selected", value);
+        },
+        getVisibility: function () {
+            return this.get("visibility");
+        },
+        getSelected: function () {
+            return this.get("selected");
+        },
+        getTransparence: function () {
+            return this.get("transparence");
+        },
+        getId: function () {
+            return this.get("id");
         }
     });
 

@@ -17,7 +17,7 @@ define([
             featureProps: {} // Properties des Features mit gesuchter featureid
         },
         initialize: function () {
-            this.set("maxFeatures", Config.menu.featureLister);
+            this.set("maxFeatures", Config.menuItems.featureLister);
 
             EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
             EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
@@ -123,6 +123,7 @@ define([
                 var tester = _.filter(layers, function (lay) {
                     return lay.id === layer.id;
                 });
+
                 if (tester.length === 0) {
                     // layer ist nun nicht sichtbar...
                     if (activeLayerId && activeLayerId === layer.id) {
@@ -138,6 +139,7 @@ define([
                 var tester = _.filter(layerlist, function (lay) {
                     return lay.id === layer.id;
                 });
+
                 if (tester.length === 0) {
                     this.addLayerToList(layer);
                 }

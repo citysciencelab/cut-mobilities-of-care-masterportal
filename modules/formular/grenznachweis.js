@@ -1,12 +1,12 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "openlayers",
     "modules/cookie/view",
-    "modules/restReader/collection",
     "modules/core/util"
-], function (Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
+], function (Backbone, Radio, EventBus, Config, ol, cookie, Util) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -42,7 +42,7 @@ define([
             // lese WPS-Url aus JSON ein
             var resp, newURL;
 
-            resp = RestReader.getServiceById(Config.wpsID);
+            resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
             newURL = Util.getProxyURL(resp[0].get("url"));
             this.set("wpsurl", newURL);
             // Fenstermanagement
@@ -357,13 +357,13 @@ define([
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>auftragsnummer</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("auftragsnummer") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("auftragsnummer")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>lagebeschreibung</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("lage") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("lage")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
@@ -393,13 +393,13 @@ define([
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>freitext</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("freitext") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("freitext")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>kundennummer</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundennummer") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundennummer")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
@@ -411,48 +411,48 @@ define([
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>name</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenname") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenname")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>firma</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenfirma") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenfirma")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>adresse</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenadresse") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenadresse")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>plz</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenplz") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenplz")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>ort</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenort") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenort")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input><wps:Input>";
             request_str += "    <ows:Identifier>email</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenemail") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenemail")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>festnetz</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenfestnetz") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenfestnetz")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";
             request_str += "    <ows:Identifier>mobilfunk</ows:Identifier>";
             request_str += "    <wps:Data>";
-            request_str += "      <wps:LiteralData dataType='string'>" + this.get("kundenmobilfunk") + "</wps:LiteralData>";
+            request_str += "      <wps:LiteralData dataType='string'>" + encodeURI(this.get("kundenmobilfunk")) + "</wps:LiteralData>";
             request_str += "    </wps:Data>";
             request_str += "  </wps:Input>";
             request_str += "  <wps:Input>";

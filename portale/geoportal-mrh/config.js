@@ -7,6 +7,7 @@ define(function () {
         tree: {
             type: "custom",
             customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
+            saveSelection: true,
             baseLayer: [
                 {id: "51", visibility: true}, // WebAtlas
                 {id: "53", visibility: false}, // WebAtlas_grau
@@ -31,8 +32,10 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true
+            mousePosition: true,
+            orientation: "allways"
         },
+        simpleMap: true,
         feature_count: [
             {
                 id: 73,
@@ -96,6 +99,18 @@ define(function () {
             },
 			{
                 id: 105,
+                count: 10
+            },
+            {
+                id: 303,
+                count: 10
+            },
+            {
+                id: 301,
+                count: 10
+            },
+            {
+                id: 293,
                 count: 10
             }
         ],
@@ -199,26 +214,40 @@ define(function () {
         menubar: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "Geoportal GDI-MRH",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: true
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
+            }
         },
         startUpModul: "",
         searchBar: {
             placeholder: "Suchen nach Adresse, Thema",
             bkg: {
+                minChars: 3,
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
-                suggestCount: 100
+                extent: [454591, 5809000, 700000, 6075769],
+                epsg: "EPSG:25832",
+                filter: "filter=(typ:*)",
+                score: 0.6
             },
             tree: {
                 minChars: 3

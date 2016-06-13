@@ -1,25 +1,39 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/tools/list",
-    "modules/tools/view"
-], function (Backbone, TreeList, ToolView) {
+    "modules/tools/view",
+    "modules/core/util"
+], function (Backbone, Radio, TreeList, ToolView, Util) {
 
     var ToolListView = Backbone.View.extend({
         collection: new TreeList(),
-        el: "#tools",
+        tagName: "ul",
+        className: "dropdown-menu",
         initialize: function () {
+            this.listenTo(Radio.channel("MenuBar"), {
+                "switchedMenu": this.render
+            });
+
             this.render();
         },
         render: function () {
-            this.collection.forEach(this.addTool, this);
-            // löscht den letzten divider in der Toolliste
-            $("#tools li:last-child").remove();
+            var isMobile = Radio.request("MenuBar", "isMobile");
+
+            if (isMobile === false) {
+                $(".dropdown-tools").append(this.$el.html(""));
+                this.collection.forEach(this.addTool, this);
+                // löscht den letzten divider in der Toolliste
+                $(".dropdown-tools > .dropdown-menu li:last-child").remove();
+            }
         },
         addTool: function (tool) {
-            var toolView = new ToolView({model: tool});
+            if (!((tool.attributes.name === "draw" || tool.attributes.name === "measure") && Util.isAny())) {
+                var toolView = new ToolView({model: tool});
 
-            this.$el.append(toolView.render().el);
-            this.$el.append("<li class='divider'></li>");
+                this.$el.append(toolView.render().el);
+                this.$el.append("<li class='divider'></li>");
+            }
         }
     });
 

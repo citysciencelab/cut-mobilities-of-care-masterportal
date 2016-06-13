@@ -1,12 +1,14 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus"
+    "eventbus",
+    "config"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         EventBus = require("eventbus"),
+        Config = require("config"),
         SaveSelection;
 
     SaveSelection = Backbone.Model.extend({
@@ -15,7 +17,9 @@ define([
             centerCoords: [],
             layerIDList: [],
             layerVisibilityList: [],
-            url: ""
+            layerTranseparenceList: [],
+            url: "",
+            simpleMap: false
         },
         initialize: function () {
             this.listenTo(Radio.channel("SelectedList"), {
@@ -33,12 +37,18 @@ define([
 
             this.listenTo(this, {
                 "change:layerVisibilityList": this.setUrl,
+                "change:layerTranseparenceList": this.setUrl,
                 "change:zoomLevel": this.setUrl,
-                "change:centerCoords": this.setUrl
+                "change:centerCoords": this.setUrl,
+                "change:url": this.setSimpleMapUrl
             });
 
             this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
             this.setCenterCoords(Radio.request("MapView", "getCenter"));
+            this.setLayerOptions(Radio.request("SelectedList", "getModels"));
+            if (_.has(Config, "simpleMap")) {
+                this.setSimpleMap(Config.simpleMap);
+            }
         },
         setStatus: function (args) {
             if (args[2] === "saveSelection") {
@@ -74,11 +84,21 @@ define([
         getLayerVisibilityList: function () {
             return this.get("layerVisibilityList");
         },
+        setLayerTransparenceList: function (list) {
+            this.set("layerTranseparenceList", list);
+        },
+        getLayerTransparenceList: function () {
+            return this.get("layerTranseparenceList");
+        },
         setUrl: function () {
-            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
+            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&transparence=" + this.getLayerTransparenceList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
+        },
+        setSimpleMapUrl: function (model, value) {
+            this.set("simpleMapUrl", value + "&style=simple");
         },
         setLayerOptions: function (layerList) {
-            var layerVisibilities = [];
+            var layerVisibilities = [],
+                layerTrancparence = [];
 
             // externe Layer werden rausgefiltert
             layerList = _.filter(layerList, function (model) {
@@ -89,8 +109,16 @@ define([
 
             _.each(layerList, function (model) {
                 layerVisibilities.push(model.get("visibility"));
+                layerTrancparence.push(model.getTransparence());
             });
+            this.setLayerTransparenceList(layerTrancparence);
             this.setLayerVisibilityList(layerVisibilities);
+        },
+        setSimpleMap: function (value) {
+            return this.set("simpleMap", value);
+        },
+        getSimpleMap: function () {
+            return this.get("simpleMap");
         }
     });
 

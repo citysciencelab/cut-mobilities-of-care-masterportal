@@ -39,11 +39,12 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "once",
             poi: false
         },
         attributions: false,
         allowParametricURL: true,
+        quickHelp: false,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
@@ -53,12 +54,37 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
+            featureLister: 0,
             contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: false,
             routing: false
+        },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            featureLister: {
+                title: "Liste",
+                glyphicon: "glyphicon-plus",
+                lister: 20
+            },
+            wfsFeatureFilter: {
+                title: "Filter öffnen",
+                glyphicon: "glyphicon-filter"
+            }
         },
         startUpModul: "",
         searchBar: {
@@ -83,18 +109,6 @@ define(function () {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
                 isActive: true
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-record"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
             }
         }
     }

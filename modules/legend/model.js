@@ -15,7 +15,10 @@ define([
 
         initialize: function () {
             this.listenTo(EventBus, {
-                "layerlist:sendVisiblelayerList": this.setLayerList
+                "layerlist:sendVisiblelayerList": this.setLayerList,
+                "toggleLegendWin": function () {
+                    EventBus.trigger("layerlist:getVisiblelayerList");
+                }
             });
 
             this.listenTo(this, {
@@ -82,32 +85,43 @@ define([
 
         setLegendParamsFromWFS: function () {
             _.each(this.get("wfsLayerList"), function (layer) {
-                var image = [],
-                    name = [],
-                    styleList;
-
-                styleList = StyleList.returnAllModelsById(layer.get("styleId"));
-                if (styleList.length > 1) {
-                    _.each(styleList, function (style) {
-                        image.push(style.getSimpleStyle()[0].getImage().getSrc());
-                        if (style.has("legendValue")) {
-                            name.push(style.get("legendValue"));
-                        }
-                        else {
-                            name.push(style.get("styleFieldValue"));
-                        }
+                if (typeof layer.get("legendURL") === "string") {
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        img: layer.get("legendURL"),
+                        typ: "WMS"
                     });
                 }
                 else {
-                    image.push(styleList[0].getSimpleStyle()[0].getImage().getSrc());
-                    name.push(layer.get("name"));
+                    var image = [],
+                        name = [],
+                        styleList;
+
+                    styleList = StyleList.returnAllModelsById(layer.get("styleId"));
+                    if (styleList.length > 1) {
+                        _.each(styleList, function (style) {
+                            image.push(style.getSimpleStyle()[0].getImage().getSrc());
+                                if (style.has("legendValue")) {
+                                    name.push(style.get("legendValue"));
+                                }
+                                else {
+                                    name.push(style.get("styleFieldValue"));
+                                }
+                            });
+                        }
+                        else {
+                            if (styleList[0].getSimpleStyle()[0].getImage() != null) {
+                                image.push(styleList[0].getSimpleStyle()[0].getImage().getSrc());
+                            }
+                            name.push(layer.get("name"));
+                        }
+                        this.push("tempArray", {
+                            layername: layer.get("name"),
+                            legendname: name,
+                            img: image,
+                            typ: "WFS"
+                        });
                 }
-                this.push("tempArray", {
-                    layername: layer.get("name"),
-                    legendname: name,
-                    img: image,
-                    typ: "WFS"
-                });
             }, this);
         },
 

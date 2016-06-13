@@ -11,7 +11,7 @@ define(function () {
             layer: [
                 {id: "453", visible: true},
                 {id: "94", visibility: false, name: "Luftbilder"},
-                {id: "2426", visibility: true},
+                {id: "2426", visibility: false},
                 {id: "1750", visibility: false},
                 // {id: "522,521,523,524,525,526,527,528,529,530,531,532,533,534,535,536", visibility: false},
                 {id: "1747", visibility: false, name: "Flächennutzungsplan (FNP) ab 1:10000"},
@@ -23,7 +23,7 @@ define(function () {
                 // {id: "1748", visibility: false}, ehemals APRO Cache
                 {id: "1409,1410,1411,1412,1413,1414,1415", visibility: false},
                 {id: "1416", visibility: false, name: "Änderungsübersicht zum Arten- und Biotopschutz"},
-                {id: "433,434", visibility: false, name: "Soziale Erhaltungsverordnungen"},
+                {id: "4445,4446", visibility: false, name: "Soziale Erhaltungsverordnungen"},
                 {id: "1205", visibility: false},
                 {id: "1562", visibility: true},
                 {id: "1561", visibility: true}
@@ -38,16 +38,24 @@ define(function () {
         mouseHover: false,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         searchBar: {
@@ -56,25 +64,27 @@ define(function () {
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
-                searchParcels: true
+                searchParcels: true,
+                minChars: 3,
             },
             specialWFS: {
-                minChar: 3,
+                minChars: 2,
                 definitions: [
                     {
                         url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
-                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
                         name: "bplan"
                     },
                     {
                         url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
-                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=imverfahren&propertyName=plan",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
                         name: "bplan"
                     }
                 ]
             },
             placeholder: "Suche Adresse, Bebauungsplan",
-            geoLocateHit: true
+            geoLocateHit: true,
+            minChars: 2
         },
         tools: {
             gfi: {

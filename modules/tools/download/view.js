@@ -11,8 +11,8 @@ define([
         model: DownloadModel,
         template: _.template(DownloadWin),
         events: {
-        "click button.download": "triggerDownload",
-        "click button.back": "back"
+        "click button.back": "back",
+        "change .file-endings": "prepareData"
         },
         initialize: function () {
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
@@ -28,7 +28,7 @@ define([
          */
         start: function (features) {
             if (features.data.length === 0) {
-                EventBus.trigger("alert", "Bitte erstellen sie zuerst eine Zeichnung oder eínen Text!");
+                EventBus.trigger("alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
                 return;
             }
             this.model.setData(features.data);
@@ -41,6 +41,22 @@ define([
          */
         back: function () {
             EventBus.trigger("toggleWin", [this.model.getCaller().name, this.model.getCaller().name, "glyphicon-pencil"]);
+        },
+        /**
+         *
+         * @return {[type]} [description]
+         */
+        prepareDownloadButton: function () {
+            this.model.setSelectedFormat();
+            if (this.model.prepareData() !== "invalid Format") {
+
+               if (this.model.isInternetExplorer()) {
+                    this.model.prepareDownloadButtonIE();
+                }
+                else {
+                    this.model.prepareDownloadButtonNonIE();
+               }
+            }
         },
         /**
          * startet den Download, wenn auf den Button geklickt wird
@@ -75,6 +91,7 @@ define([
             });
             if (options.length === 1) {
                 $(".file-endings").val(options[0]);
+                this.prepareDownloadButton();
             }
         }
     });

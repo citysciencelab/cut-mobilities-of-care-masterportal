@@ -1,17 +1,15 @@
 define([
     "backbone",
-    "underscore",
-    "openlayers",
     "eventbus",
     "config"
-], function (Backbone, _, ol, Eventbus, Config) {
+], function (Backbone, Eventbus, Config) {
     var FooterModel = Backbone.Model.extend({
         defaults: {
             urls: [
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",
                     "url": "http://www.geoinfo.hamburg.de/",
-                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias": "Landesbetrieb Geoinformation und Vermessung",
                     "alias_mobil": "LGV Hamburg"
                 }
             ]

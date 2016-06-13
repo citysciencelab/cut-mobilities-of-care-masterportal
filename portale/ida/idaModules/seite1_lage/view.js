@@ -16,7 +16,7 @@ define([
             "keyup #flurstuecksstrasse": "setFlurstuecksstrasse"
         },
         initialize: function () {
-            new Searchbar(Config.searchbar);
+            new Searchbar(Config.searchBar);
         },
         switchLage: function (evt) {
             if (evt.target.value === "radio1") {

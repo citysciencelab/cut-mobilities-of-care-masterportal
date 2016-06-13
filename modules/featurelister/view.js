@@ -25,19 +25,25 @@ define([
             "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
         initialize: function () {
-            if (!Util.isAny()) { // nicht in mobiler Variante
-                this.listenTo(this.model, {"change:layerlist": this.updateVisibleLayer});
-                this.listenTo(this.model, {"change:layer": this.updateLayerHeader});
-                this.listenTo(this.model, {"change:layer": this.updateLayerList});
-                this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
-                this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
-                this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
-                this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
-                this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
-                this.render();
-                if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
-                    this.toggle();
+            EventBus.trigger("appendItemToMenubar", {
+                title: "Liste",
+                symbol: "glyphicon glyphicon-menu-hamburger hidden-sm",
+                classname: "featureLister",
+                clickFunction: function () {
+                    EventBus.trigger("toggleFeatureListerWin");
                 }
+            });
+            this.listenTo(this.model, {"change:layerlist": this.updateVisibleLayer});
+            this.listenTo(this.model, {"change:layer": this.updateLayerHeader});
+            this.listenTo(this.model, {"change:layer": this.updateLayerList});
+            this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
+            this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
+            this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
+            this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
+            this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
+            this.render();
+            if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
+                this.toggle();
             }
         },
         /*
@@ -116,7 +122,7 @@ define([
                 $("#featurelistFeaturedetails").removeClass("disabled");
                 $(".featurelist-details-li").remove();
                 _.each(props, function (value, key) {
-                    $(".featurelist-details-ul").append("<li class='list-group-item list-group-item-info featurelist-details-li'>" + key + "</li>");
+                    $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
                     $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
                 });
                 this.switchTabToDetails();
@@ -293,7 +299,9 @@ define([
             var shownFeaturesCount = $("#featurelist-list-table tr").length - 1;
 
             if (shownFeaturesCount < totalFeaturesCount) {
-                $(".featurelist-list-footer").show();
+                $(".featurelist-list-footer").show(0, function () {
+                    this.setMaxHeight();
+                }.bind(this));
                 $(".featurelist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
             }
             else {
@@ -326,18 +334,39 @@ define([
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: "#map",
-                handle: ".featurelist-win-header"
+                handle: ".featurelist-win-header",
+                drag: function () {
+                    this.setMaxHeight();
+                }.bind(this)
             });
         },
         toggle: function () {
-            if ($(this.$el).is(":visible") === false) {
+            this.$el.toggle();
+            if ($(this.$el).is(":visible") === true) {
                 this.updateVisibleLayer();
                 // wenn nur ein Layer gefunden, lade diesen sofort
                 if (this.model.get("layerlist").length === 1) {
                     this.model.set("layerid", this.model.get("layerlist")[0].id);
                 }
+                this.setMaxHeight();
             }
-            this.$el.toggle();
+        },
+        setMaxHeight: function () {
+            var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
+                shownFeaturesCount = $("#featurelist-list-table tr").length - 1,
+                posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top) : parseInt(this.$el.css("top")),
+                winHeight = $(window).height(),
+                marginTop = parseInt(this.$el.css("marginTop")),
+                marginBottom = parseInt(this.$el.css("marginBottom")),
+                header = 107,
+                footer = shownFeaturesCount < totalFeaturesCount ? 71 : 0,
+                maxHeight = winHeight - posY - marginTop - marginBottom - header - footer - 5,
+                maxWidth = $(window).width() * 0.4;
+
+            $(".featurelist-list-table").css("max-height", maxHeight);
+            $(".featurelist-list-table").css("max-width", maxWidth);
+            $(".featurelist-details-ul").css("max-height", maxHeight);
+            $(".featurelist-details-ul").css("max-width", maxWidth);
         }
     });
 

@@ -20,13 +20,13 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: false,
+            orientation: "once",
             poi: true
         },
         footer: true,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -37,30 +37,37 @@ define(function () {
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+         menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
+
         startUpModul: "",
-       searchBar: {
+        searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                 url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
-            },
-            visibleWFS: {
-                minChars: 3
+
             },
             placeholder: "Suche nach Adresse, Stadtteil",
             geoLocateHit: true

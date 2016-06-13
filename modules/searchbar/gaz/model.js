@@ -71,6 +71,7 @@ define([
             this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
+                    searchString = searchString.replace(/[()]/g, '\\$&');
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
@@ -105,10 +106,14 @@ define([
         */
         adressSearch: function (adress) {
             if (adress.affix && adress.affix !== "") {
-                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + adress.streetname + "&hausnummer=" + adress.housenumber + "&zusatz=" + adress.affix, this.getAdress, false);
+                var searchString = (adress.streetname + "&hausnummer=" + adress.housenumber + "&zusatz=" + adress.affix).replace(/[()]/g, '\\$&');
+
+                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.getAdress, false);
             }
             else {
-                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + adress.streetname + "&hausnummer=" + adress.housenumber, this.getAdress, false);
+                var searchString = (adress.streetname + "&hausnummer=" + adress.housenumber).replace(/[()]/g, '\\$&');
+
+                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false);
             }
         },
         /**
@@ -329,8 +334,10 @@ define([
                 type: "GET",
                 success: successFunction,
                 timeout: 6000,
-                error: function () {
-                    EventBus.trigger("alert", "Gazetteer-URL nicht erreichbar.");
+                error: function (err) {
+                    var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+                    EventBus.trigger("alert", "Gazetteer-URL nicht erreichbar. " + detail);
                 },
                 complete: function () {
                     this.set("inUse", this.get("inUse") - 1);

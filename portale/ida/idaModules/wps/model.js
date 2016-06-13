@@ -1,11 +1,11 @@
 define([
     "underscore",
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
-    "modules/core/util",
-    "modules/restReader/collection"
-], function (_, Backbone, EventBus, Config, Util, RestReader) {
+    "modules/core/util"
+], function (_, Backbone, Radio, EventBus, Config, Util) {
 
     var WPSModel = Backbone.Model.extend({
         defaults: {
@@ -14,12 +14,17 @@ define([
             processesRunning: 0
         },
         initialize: function () {
-            var resp = RestReader.getServiceById(Config.wpsID),
-                newURL = Util.getProxyURL(resp[0].get("url"));
+            try {
+                var resp = Radio.request("RestReader", "getServiceById", Config.wpsID),
+                    newURL = Util.getProxyURL(resp[0].get("url"));
 
-            this.set("url", newURL);
-            this.listenTo(this, "change:processesRunning", this.checkProcesses);
-            EventBus.on("wps:request", this.request, this);
+                this.set("url", newURL);
+                this.listenTo(this, "change:processesRunning", this.checkProcesses);
+                EventBus.on("wps:request", this.request, this);
+            }
+            catch (err) {
+                alert("Fehler beim initialisieren des WPS-Modul: " + err.message);
+            }
         },
         request: function (request) {
             var request_str = "<wps:Execute xmlns:wps='http://www.opengis.net/wps/1.0.0' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ows='http://www.opengis.net/ows/1.1' service='WPS' version='1.0.0' xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'><ows:Identifier>" + request.workbenchname + ".fmw</ows:Identifier>" + request.dataInputs + "</wps:Execute>";
