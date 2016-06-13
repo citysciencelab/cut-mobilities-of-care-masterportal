@@ -25,12 +25,18 @@ define([
         },
         url: Util.getPath(Config.treeConf),
         initialize: function () {
-            EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
+            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             // EventBus.once("layerlist:sendLayerByID", this.setListenerForVisibility, this);
             // EventBus.trigger("layerlist:getLayerByID", "182");
-            this.setListenerForVisibility(Radio.request("ModelList", "getModelByAttributes", {id: "182"}));
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
+
+            if (!_.isUndefined(model)) {
+                this.setListenerForVisibility(model);
+            }
+            else {
+                Radio.trigger("Alert", "alert", "Layer 182 (Straßenbäume) nicht definiert");
+            }
             // var t = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
-            // console.log(t);
             this.listenTo(this, "change:searchCategoryString", this.setCategoryArray);
             this.listenTo(this, "change:treeCategory", this.setTypeArray);
             this.listenTo(this, "change:searchTypeString", this.setTypeArray);
@@ -67,9 +73,8 @@ define([
             }
         },
         setListenerForVisibility: function (model) {
-            model.listenTo(model, "change:visibility", function () {
-                // EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": model.get("visibility")});
-                Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibility": model.get("visibility")});
+            model.listenTo(model, "change:visibleInMap", function () {
+                Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibleInMap": model.get("visibleInMap")});
             });
         },
         parse: function (response) {
