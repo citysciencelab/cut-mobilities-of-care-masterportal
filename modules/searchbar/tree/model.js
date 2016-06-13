@@ -25,11 +25,12 @@ define([
             }
             EventBus.on("searchbar:search", this.search, this);
             EventBus.on("sendNodeChild", this.getNodesForSearch, this);
+            EventBus.on("layerlist:sendOverlayerList", this.getLayerForSearch, this);
         },
         /**
         *
         */
-        search: function (searchString) {
+        search: function (searchString) {console.log(this.get("layers"));
             if (this.get("layers").length === 0) {
                 this.getLayerForSearch();
             }
@@ -83,7 +84,8 @@ define([
 
                 if (layer.metaName !== null) {
                     metaName = layer.metaName.replace(/ /g, "");
-                    if (layer.model.get("type") === "nodeLayer" && metaName.search(searchStringRegExp) !== -1) {
+                    if (metaName.search(searchStringRegExp) !== -1 && metaName === layerName) {
+                        layer.typ = "nodeLayer";
                         EventBus.trigger("searchbar:pushHits", "hitList", layer);
                     }
                     else if (metaName.search(searchStringRegExp) !== -1 || layerName.search(searchStringRegExp) !== -1) {
@@ -102,21 +104,25 @@ define([
          *
          */
         getLayerForSearch: function () {
-            var layerModels = Radio.request("LayerList", "getOverlayerList");
+            var layerModels = Radio.request("LayerList", "getLayerList");
 
             this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
-            layerModels = _.uniq(layerModels, function (model) {
-                return model.get("name") + model.get("metaID");
-            });
+            // layerModels = _.uniq(layerModels, function (model) {
+            //     return model.name + model.datasets[0].md_id;
+            //     // return model.get("name") + model.get("metaID");
+            // });
             _.each(layerModels, function (model) {
                 this.get("layers").push({
                     name: model.get("name"),
+                    // name: model.name,
                     metaName: model.get("metaName"),
+                    // metaName: model.datasets[0].md_name,
                     type: "Thema",
                     glyphicon: "glyphicon-list",
                     id: model.get("id"),
+                    // id: model.id,
                     model: model
                 });
             }, this);

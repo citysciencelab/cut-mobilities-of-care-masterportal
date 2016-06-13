@@ -56,6 +56,22 @@
     }
 }
 
+/***** FullScreen *****/
+.full-screen-button {
+    margin-top: 20px;
+}
+
+.full-screen-button > .glyphicon {
+    font-size: 20px;
+    padding: 7px 6px 6px 7px;
+}
+
+@media (max-width: 767px) {
+    .full-screen-button {
+        display: none;
+    }
+}
+
 /***** OrientationControl *****/
 .orientationButtons {
     margin-top: 30px;

@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/layer/list",
     "modules/treeLight/view",
     "eventbus",
-        "jqueryui/sortable"
-], function (Backbone, LayerList, LayerView, EventBus) {
+    "jqueryui/sortable"
+], function (Backbone, Radio, LayerList, LayerView, EventBus) {
 
     var LayerListView = Backbone.View.extend({
         collection: LayerList,
@@ -15,13 +16,22 @@ define([
                 "add": this.render
             });
 
-            this.setMaxHeight();
+            this.listenTo(Radio.channel("MenuBar"), {
+                "switchedMenu": this.render
+            });
+
             this.render();
+            this.setMaxHeight();
         },
         render: function () {
-            $(".dropdown-tree").append(this.$el.html(""));
-            this.collection.forEach(this.addTreeNode, this);
-            EventBus.trigger("registerLayerTreeInClickCounter", this.$el);
+            var isMobile = Radio.request("MenuBar", "isMobile");
+
+            if (isMobile === false) {
+                this.stopEventPropagation();
+                $(".dropdown-tree").append(this.$el.html(""));
+                this.collection.forEach(this.addTreeNode, this);
+                EventBus.trigger("registerLayerTreeInClickCounter", this.$el);
+            }
         },
         addTreeNode: function (node) {
             // hier nur von displayintree nicht auf false
@@ -33,6 +43,16 @@ define([
             this.$el.css("max-height", $(window).height() - 100);
             this.$el.css("overflow-y", "auto");
             this.$el.css("overflow-x", "hidden");
+        },
+        // stopPropagation verhindert, dass ein Event im DOM-Baum nach oben reist
+        // und dabei Aktionen auf anderen Elementen triggert.
+        // In diesem Fall wird der Baum nicht geschlossen wenn z.B. auf eine Layer-View geklickt wird.
+        stopEventPropagation: function () {
+            $(".dropdown-tree").on({
+                click: function (e) {
+                    e.stopPropagation();
+                }
+            });
         }
     });
 

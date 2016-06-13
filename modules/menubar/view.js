@@ -1,73 +1,111 @@
 define([
     "backbone",
-    "text!modules/menubar/template.html",
-    "modules/treeLight/listView",
-    "modules/menubar/model",
+    "backbone.radio",
     "config",
+    "text!modules/menubar/templateMobile.html",
+    "text!modules/menubar/templateDesktop.html",
+    "modules/menubar/model",
     "eventbus"
-], function (Backbone, MenubarTemplate, TreeLightView, Menubar, Config, EventBus) {
+], function () {
 
-    var MenubarView = Backbone.View.extend({
-        model: Menubar,
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Config = require("config"),
+        MenubarTemplate = require("text!modules/menubar/templateMobile.html"),
+        DesktopMenubarTemplate = require("text!modules/menubar/templateDesktop.html"),
+        Menubar = require("modules/menubar/model"),
+        EventBus = require("eventbus"),
+        MenubarView;
+
+    MenubarView = Backbone.View.extend({
+        model: new Menubar(),
         tagName: "nav",
         className: "navbar navbar-default navbar-fixed-top",
         attributes: {role: "navigation"},
-        template: _.template(MenubarTemplate),
-        initialize: function () {
-            EventBus.on("appendItemToMenubar", this.appendItemToMenubar, this);
-            this.render();
-            $(".dropdown-tree").on({
-                click: function (e) {
-                    e.stopPropagation();
-                }
-            });
-        },
+        templateMobile: _.template(MenubarTemplate),
+        templateDesktop: _.template(DesktopMenubarTemplate),
         events: {
             "click .filterTree": "activateFilterTree",
             "click .filterWfsFeature": "activateWfsFilter",
             "click .legend": "activateLegend",
             "click .routingModul": "activateRoutingModul",
             "click .addWMS": "activateAddWMSModul",
-            "click .wfsFeatureFilter": "activateWfsFeatureFilter",
-            "click .featureLister": "activateFeatureLister"
+            "click .wfsFeatureFilter": "activateWfsFeatureFilter"
         },
+
+        /**
+         *
+         */
+        initialize: function () {
+            this.listenTo(this.model, {
+                "change:isMobile": this.render,
+                "change:isVisible": this.toggle
+            });
+
+            this.listenTo(EventBus, {
+                "appendItemToMenubar": this.appendItemToMenubar
+            });
+
+            this.loadTrees();
+            this.render();
+        },
+
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.append(this.template(attr)));
-
-            if (Config.isMenubarVisible === false) {
-                $("#navbarRow").toggle();
-            }
-            if (_.has(Config, "tree") && Config.tree.type !== "light") {
-                require(["modules/tree/view"], function (TreeView) {
-                    new TreeView();
-                });
+            this.$el.empty();
+            if (this.model.getIsMobile() === true) {
+                $("body").append(this.$el.append(this.templateMobile(attr)));
             }
             else {
-                new TreeLightView();
+                $("body").append(this.$el.append(this.templateDesktop(attr)));
             }
+            Radio.trigger("MenuBar", "switchedMenu");
+
             if (_.has(Config, "title") === true) {
                 require(["modules/title/view"], function (TitleView) {
                     new TitleView();
                 });
             }
-            // new OpenDataTreeList();
         },
+
+        toggle: function () {
+            if (this.model.getIsVisible() === true) {
+                this.$el.show();
+            }
+            else {
+                this.$el.hide();
+            }
+        },
+
+        loadTrees: function () {
+            if (this.model.getTreeType() !== "light") {
+                require(["modules/tree/view"], function (TreeView) {
+                    new TreeView();
+                    require(["modules/treeMobile/listView"], function (TreeMobileView) {
+                        new TreeMobileView();
+                    });
+                });
+            }
+            else {
+                require(["modules/treeLight/listView"], function (TreeLightView) {
+                    new TreeLightView();
+                    require(["modules/treeMobile/listView"], function (TreeMobileView) {
+                        new TreeMobileView();
+                    });
+                });
+            }
+        },
+
         appendItemToMenubar: function (obj) {
             var html = "<li>";
 
             html += "<a href='#' class='menuitem " + obj.classname + "'>";
-            html += "<span class='' + obj.symbol + ''></span>&nbsp;" + obj.title;
+            html += "<span class='" + obj.symbol + "'></span>" + obj.title;
             html += "</a>";
             html += "</li>";
             $(".menubarlgv").append(html);
-            $("." + obj.classname).on("click", function (evt) {
-                EventBus.trigger("toggleWin", [evt.target.className.split(" ")[1], evt.target.text, evt.target.children[0].className]);
-            });
-        },
-        activateFeatureLister: function () {
-            EventBus.trigger("toggleFeatureListerWin");
+            $("." + obj.classname).on("click", obj.clickFunction);
         },
         activateFilterTree: function () {
             EventBus.trigger("toggleWin", ["treefilter", "Filtereinstellungen", "glyphicon-filter"]);

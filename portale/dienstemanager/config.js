@@ -25,12 +25,13 @@ define(function () {
             viewerName: "GeoViewer",
             searchBar: true,
             layerTree: true,
+            addWMS: true,
             helpButton: false,
             contactButton: true,
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         startUpModul: "",
@@ -70,7 +71,7 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             },
             draw: {
-                title: "Zeichnen",
+                title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
             },
             searchByCoord: {

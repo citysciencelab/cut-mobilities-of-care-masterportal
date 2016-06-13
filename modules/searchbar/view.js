@@ -31,22 +31,22 @@ define([
         */
         initialize: function (config, querySearchString) {
             // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
-            var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
-                mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
-                mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
-                that = this;
-
-            // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
-            mediaQueryOrientation.addListener(function () {
-                that.render();
-            });
-            // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
-            mediaQueryMinWidth.addListener(function () {
-                that.render();
-            });
-            mediaQueryMaxWidth.addListener(function () {
-                that.render();
-            });
+            // var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
+            //     mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
+            //     mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
+            //     that = this;
+            //
+            // // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
+            // mediaQueryOrientation.addListener(function () {
+            //     that.render();
+            // });
+            // // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
+            // mediaQueryMinWidth.addListener(function () {
+            //     that.render();
+            // });
+            // mediaQueryMaxWidth.addListener(function () {
+            //     that.render();
+            // });
 
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
@@ -66,6 +66,10 @@ define([
             // this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
+            });
+
+            this.listenTo(Radio.channel("MenuBar"), {
+                "switchedMenu": this.render
             });
 
             this.render();
@@ -127,7 +131,10 @@ define([
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": function () {
+            "click .list-group-item.type": function (e) {
+                // fix für Firefox
+                var event = e || window.event;
+
                 this.collapseHits($(event.target));
             },
             "click .btn-search-question": function () {
@@ -156,6 +163,7 @@ define([
             if (this.model.get("searchString").length !== 0) {
                 $("#searchInput:focus").css("border-right-width", "0");
             }
+            this.delegateEvents(this.events);
         },
         /**
         * @description Methode, um den Searchstring über den Eventbus zu steuern ohne Event auszulösen
@@ -234,10 +242,11 @@ define([
             }
             // 0. Füge Layer ggf. zum Themenbaum hinzu
             if (_.isUndefined(hitID) === false && Config.tree && Config.tree.type === "light" && hit.type === "Thema") {
-                Radio.trigger("RawLayerList", "addModelToLayerListById", hitID);
+                // noch fehlerhaft
+                //Radio.trigger("LayerList", "addModelById", hitID);
             }
             // 1. Schreibe Text in Searchbar
-            if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
+            if (_.has(hit, "model") && hit.model.type === "nodeLayer") {
                 this.setSearchbarString(hit.metaName);
             }
             else {
@@ -250,13 +259,15 @@ define([
             // 4. Triggere Treffer über Eventbus
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
-            if (evt) {
+            if (evt){
                 evt.stopPropagation();
             }
         },
-        navigateList: function () {
+        navigateList: function (e) {
             var selected = {},
-            firstListElement = {};
+            firstListElement = {},
+            // fix für Firefox
+            event = e || window.event;
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
                 var selected = this.getSelectedElement(),

@@ -25,17 +25,7 @@ define(function () {
                     "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
                     "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",  "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
-            ],
-            baseLayer: [
-            {id: "94", visibility: false}, // luftbilder unbelaubt
-            {id: "756", visibility: false}, // luftbilder belaubt
-            {id: "713", visibility: false}, // stadtplan s-w
-            {id: "717", visibility: false}, // stadtplan farbig
-            {id: "1043", visibility: true}, // stadtplan g-b
-            {id: "368", visibility: false}, // alkis farbig
-            {id: "149", visibility: false} // alkis g-b
-          ],
-            customConfig: "../components/lgv-config/tree-config/architekten.json"
+            ]
         },
         controls: {
             zoom: true,
@@ -55,8 +45,8 @@ define(function () {
         },
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
 
         print: {
@@ -81,11 +71,26 @@ define(function () {
             legend: false,
             routing: false
         },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
+        },
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -94,6 +99,10 @@ define(function () {
             tree: {
                 minChars: 3
             },
+            visibleWFS: {
+                minChars: 3
+            },
+            minChars: 3,
             geoLocateHit: true
         },
         tools: {

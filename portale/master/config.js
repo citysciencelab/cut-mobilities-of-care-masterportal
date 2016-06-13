@@ -15,6 +15,7 @@ define(function () {
         * @type {Object}
         * @property {Object} tree - Das tree-Konfigurationsobject
         * @property {('light'|'custom'|'default')} tree.type - Art des trees. 'light' = einfache Auflistung, 'default' = FHH-Atlas, 'custom' = benutzerdefinierte Layerliste anhand json.
+        * @property {Boolean} tree.saveSelection - Aktviert die Funktion "Auswahl speichern" (nur bei tree.type = default oder custom).
         * @property {Object[]} [tree.layer] - Bei type: light. Array, bestehend aus Layer-Konfigurationsobjekten.
         * @property {String} tree.layer.id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
         * @property {Boolean} tree.layer.visible - Initiale Sichtbarkeit des Layers.
@@ -38,6 +39,7 @@ define(function () {
         * @property {String} [tree.layer.minScale] - Mindestmaßstab zum Anzeigen dieses Layers.
         * @property {String} [tree.layer.maxScale] - Maximalmaßstab zum Anzeigen dieses Layers.
         * @property {Boolean} [tree.layer.routable] - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
+        * @property {integer} [tree.layer.featureCount=[featureCount in layerConf]{@link config.layerConf}|1] - Nur bei WMS-Layern. Anzahl der im GetFeatureInfo abzufragenden Features, wird dem request angefügt. Wird hier kein Wert eingegeben, so wird der Wert aus der layerConf genommen. Wird dort kein Wert gefunden, dann default = 1.
         * @property {Array} [tree.layerIDsToMerge] - Bei type: custom|default. Arrays der Definitionen, die im Baum zusammengefasst werden.
         * @property {string[]} tree.layerIDsToMerge. - Array der LayerIDs.
         * @property {Object[]} [tree.layerIDsToStyle] - Bei type: custom|default. Array der Konfigurationsobjekte zur Styledefinition.
@@ -53,14 +55,15 @@ define(function () {
         */
         tree: {
             type: "light",
+            saveSelection: false,
             layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "1748", visible: false},
-                {id: "1562", visible: false},
-                {id: "1561", visible: false},
-                {id: "2003", visible: false, style: "2003"},
-                {id: "45", visible: false, style: "45", clusterDistance: 50, routable: true},
+                {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "452", visibility: false},
+                {id: "1748", visibility: false},
+                {id: "1562", visibility: false},
+                {id: "1561", visibility: false, featureCount: 10},
+                {id: "2003", visibility: false, style: "2003"},
+                {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [
                      {
@@ -75,9 +78,9 @@ define(function () {
                          id: "947"
                      }
                  ],
-                 name: "aktuelle Meldungen der TBZ", visible: false
+                 name: "aktuelle Meldungen der TBZ", visibility: false
                 },
-                {id: "1711", visible: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  maxScale: 60000,
                  minScale: 10000,
@@ -97,7 +100,7 @@ define(function () {
                  ],
                  routable: true
                 },
-                {id: "753", visibility: true, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
+                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
                      {
                          fieldName: "Bezirk",
                          filterType: "combo",
@@ -109,6 +112,13 @@ define(function () {
         },
         /**
         * @memberof config
+        * @type {Boolean}
+        * @desc Erstellt einen SimpleMap-Link (Nur die Karte mit Layern ohne Menü).
+        * @example simpleMap: true
+        */
+        simpleMap: false,
+        /**
+        * @memberof config
         * @type {String}
         * @desc Pfad zum Ordner mit IMGs, die für WFS-Styles benutzt werden ausgehend von main.js.
         * @example wfsImgPath: "../components/lgv-config/img/"
@@ -117,6 +127,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
+        * @property {string} [FEATUREID] - id (oder ids, komma-separiert) der WFS-Features auf dessen/deren BBoxes der initiale Kartenextent gestellt wird..
         * @property {string} [CENTER] - Zentrumskoordinate. Rechtswert, Hochwert. EPSG:25832. Siehe {@link config.view}.
         * @property {string} [LAYERIDS] - Kommagetrennte Aulistung der initial sichtbaren LayerIDs. Siehe {@link config.tree}.
         * @property {string} [VISIBILITY] - Kommagetrennte Aulistung der Sichtbarkeit, der unter LAYERIDS genannten Layer. Nur bei tree.type: custom interessant.
@@ -129,6 +140,26 @@ define(function () {
         * @default [false]
         */
         allowParametricURL: true,
+
+        /**
+        * @memberof config
+        * @type {Object}
+        * @desc Optionale Konfigurations-Einstellungen für den URL parameter "featureid"
+        * @property {string} [url] - URL zum WFS.
+        * @property {string} [version] - Die Version des WFS.
+        * @property {string} [typename] - typename des WFS. Entspricht Tabelle. Kommt beim request in den Filter.
+        * @property {string} [valuereference] - valuereference. Entspricht Spalte. Kommt beim request in den Filter.
+        * @property {string} [imglink] - Link für den Marker.
+        * @property {string} [layerid] - ID des layers an den die Marker gekoppelt werden.
+        */
+        zoomtofeature: {
+            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            version: "2.0.0",
+            typename: "app:hamburgconvention",
+            valuereference:"app:flaechenid",
+            imglink: "../img/location_eventlotse.svg",
+            layerid: "4426"
+        },
         /**
         * @memberof config
         * @type {Object}
@@ -154,12 +185,14 @@ define(function () {
         * @property {Boolean}  [toggleMenu=false] - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
         * @property {'none'|'allways'|'once'} [orientation=none] - Legt fest ob das Orientation-Modul geladen werden soll, oder nicht ('none'). Bei 'allways' wird zusätzlich zur Standpunktdarstellung auch auf die Position gezoomt. Bei 'once' wird nur einmalig gezoomt.
         * @property {Boolean}  [poi=false] - Legt fest ob die Points of Interest angezeigt werden sollen. Nur möglich, bei orientation: true.
+        * @property {Boolean}  [fullScreen=false] - Legt fest ob der FullScreen-Button angezeigt werden soll, um in den FullScreen-Modus schalten zu können.
         */
         controls: {
             zoom: true,
             toggleMenu: true,
             orientation: "once",
-            poi: true
+            poi: true,
+            fullScreen: true
         },
         /**
         * @memberof config
@@ -195,7 +228,7 @@ define(function () {
                     "bezeichnung": "",
                     "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
                     "alias": "SDP Download",
-                    "alias_mobil": "ttt"
+                    "alias_mobil": "SDP"
                 },
                 {
                     "bezeichnung": "",
@@ -278,13 +311,77 @@ define(function () {
         * @memberof config
         * @type {Object}
         * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste konfigurieren.
+        * @property {Object} [menu] - Das menu-Konfigurationsobjekt für die Menüeinträge
+        * @property {Object} [menu.tree] - Themenbaum
+        * @property {string} [menu.tree.title] - Der Title für den Menüeintrag Themenbaum.
+        * @property {string} [menu.tree.glyphicon] - Das glyphicon für den Menüeintrag Themenbaum (Bootstrap Class).
+        * @property {Object} [menu.tools] - Werkzeuge
+        * @property {string} [menu.tools.title] - Der Title für den Menüeintrag Werkzeuge.
+        * @property {string} [menu.tools.glyphicon] - Das glyphicon für den Menüeintrag Werkzeuge.
+        * @property {Object} [menu.legend] - Legende
+        * @property {string} [menu.legend.title] - Der Title für den Menüeintrag Legende.
+        * @property {string} [menu.legend.glyphicon] - Das glyphicon für den Menüeintrag Legende.
+        * @property {Object} [menu.contact] - Kontakbutton
+        * @property {string} [menu.contact.title] - Der Title für den Menüeintrag Kontakbutton.
+        * @property {string} [menu.contact.glyphicon] - Das glyphicon für den Menüeintrag Kontakbutton.
+        * @property {string} [menu.contact.email] - Emailadresse Empfänger.
+        * @property {Object} [menu.routing] - Routenplaner
+        * @property {string} [menu.routing.title] - Der Title für den Menüeintrag Routenplaner.
+        * @property {string} [menu.routing.glyphicon] - Das glyphicon für den Menüeintrag Routenplaner.
+        * @property {Object} [menu.wfsFeatureFilter] - WFSFeatureFilter
+        * @property {string} [menu.wfsFeatureFilter.title] - Der Title für den Menüeintrag WFSFeatureFilter.
+        * @property {string} [menu.wfsFeatureFilter.glyphicon] - Das glyphicon für den Menüeintrag WFSFeatureFilter.
+        * @property {Object} [menu.treeFilter] - Baumfilter
+        * @property {string} [menu.treeFilter.title] - Der Title für den Menüeintrag Baumfilter.
+        * @property {string} [menu.treeFilter.glyphicon] - Das glyphicon für den Menüeintrag Baumfilter.
+        * @property {Object} [menu.formular] - Konfigurationsobjekt eines Formulars
+        * @property {string} [menu.formular.title] -  Bezeichnung des Formulars
+        * @property {string} [menu.formular.symbol] - Symbolname
+        * @property {string} [menu.formular.modelname] - Modelname, wie in view definiert.
+        * @property {Object} [menu.featureLister] - FeatureLister
+        * @property {string} [menu.featureLister.title] - Der Title für den Menüeintrag FeatureLister.
+        * @property {string} [menu.featureLister.glyphicon] - Das glyphicon für den Menüeintrag FeatureLister.
+        * @property {string} [menu.featureLister.lister] - Wenn 0, dann ist es deaktiviert.
+        * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
+        * @example tree: {title: "Themen", glyphicon: "glyphicon-list"}
+        * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
+        */
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            routing: {
+                title: "Routenplaner",
+                glyphicon: "glyphicon-road"
+            },
+            wfsFeatureFilter: {
+                title: "Filter öffnen",
+                glyphicon: "glyphicon-filter"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
+            }
+        },
+        /*
         * @property {Object} menu - Das menu-Konfigurationsobject
         * @property {boolean} helpButton - auf false setzen
         * @property {Boolean} [menu.searchBar=false] - Legt fest, ob die Suchfunktion geladen werden soll.
         * @property {Boolean}  menu.layerTree - Legt fest, ob der Themenbaum geladen werden soll.
-        * @property {Object}  menu.contactButton - Konfigurationsobjekt des Kontakt-Buttons.
-        * @property {boolean} [menu.contactButton.on=false] Kontakt-Button anzeigen.
-        * @property {string} menu.contactButton.email Emailadresse Empfänger.
         * @property {Boolean}  menu.tools - Legt fest, ob der Werkzeuge-Button angezeigt werden soll.
         * @property {Boolean}  menu.treeFilter - Legt fest, ob der Filter für die Straßenbäume angezeigt werden soll.
         * @property {Boolean}  menu.wfsFeatureFilter - Legt fest, ob der WFS-Filter geladen werden soll. Siehe {@link config.tree}.
@@ -295,23 +392,57 @@ define(function () {
         * @property {string}  menu.formular.symbol - Symbolname
         * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
         * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
-        * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
+        * @property {Object}  [menu.contact] - Konfigurationsobjekt des Kontaktformulars. In diesem wird es dem Anwender ermöglicht, seinen Namen, Emailadresse und Tel. einzugeben und mit einem Freitext per Email zu verschicken. Der Betreffzeile wird eine TicketNo vorangestellt.
+        * @property {string}  menu.contact.serviceID - ID aus restConf mit Emaildefinition. Siehe {@link config.restConf}.
+        * @property {Object[]}  menu.contact.from - Array der Absender. Der erste Absender wird im From eingetragen. Alle anderen im Reply.
+        * @property {string}  menu.contact.from.email - Emailadresse
+        * @property {string}  menu.contact.from.name - Anzeigename
+        * @property {Object[]}  menu.contact.to - Array der Empfänger.
+        * @property {string}  menu.contact.to.email - Emailadresse
+        * @property {string}  menu.contact.to.name - Anzeigename
+        * @property {Object[]}  [menu.contact.cc] - Array der cc-Empfänger.
+        * @property {string}  menu.contact.cc.email - Emailadresse
+        * @property {string}  menu.contact.cc.name - Anzeigename
+        * @property {Object[]}  [menu.contact.bcc] - Array der bcc-Empfänger.
+        * @property {string}  menu.contact.bcc.email - Emailadresse
+        * @property {string}  menu.contact.bcc.name - Anzeigename
+        * @property {boolean}  [menu.contact.ccToUser=false] - Gibt an, ob die im Formular genannte Emailadresse des Users in den cc des Headers aufgenommen wird.
+        * @property {string}  [menu.contact.subject=Supportanfrage zum Portal document.title] - Text der Betreffzeile der versandten Email.
+        * @property {string}  [menu.contact.textPlaceholder=Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;] - Placeholder des Textfeldes.
+        * @property {boolean}  [menu.contact.includeSystemInfo=false] - Gibt an, ob navigator-Informationen in den Rumpf der Email aufgenommen werden sollen.
         * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
+        * @example contact: {serviceID: "80001", from: [{email: "lgvgeoportal-hilfe@gv.hamburg.de", name: "LGVGeoportalHilfe"}], to: [{email: "lgvgeoportal-hilfe@gv.hamburg.de",name: "LGVGeoportalHilfe"}], ccToUser: true}
         * @todo helpButton
         */
         menu: {
             helpButton: false,
             searchBar: true,
             layerTree: true,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
-            featureLister: 20,
+            featureLister: 10,
             treeFilter: false,
             wfsFeatureFilter: true,
             legend: true,
             routing: true,
             addWMS: true,
-            formular: {}
+            formular: {},
+            contact: {
+                serviceID: "80001",
+                from: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                to: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                ccToUser: true,
+                cc: [],
+                bcc: [],
+                subject: "",
+                textPlaceholder: "",
+                includeSystemInfo: true
+            }
         },
         /**
         * @memberof config
@@ -367,7 +498,7 @@ define(function () {
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
                 extent: [454591, 5809000, 700000, 6075769],
-                suggestCount:10,
+                suggestCount: 10,
                 epsg: "EPSG:25832",
                 filter: "filter=(typ:*)",
                 score: 0.6
@@ -393,8 +524,7 @@ define(function () {
             layer: {
                 minChar: 3
             },
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
-            geoLocateHit: true
+            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan"
         },
         /**
         * @memberof config
@@ -468,6 +598,10 @@ define(function () {
             draw: {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
+            },
+            kmlimport: {
+                title: "KML Import",
+                glyphicon: "glyphicon-import"
             },
             searchByCoord: {
                 title: "Koordinatensuche",

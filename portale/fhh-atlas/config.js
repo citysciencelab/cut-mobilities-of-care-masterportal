@@ -5,6 +5,7 @@ define(function () {
         tree: {
             type: "default",
             orderBy: "opendata",
+            saveSelection: true,
             baseLayer: [
                 {id: "453", minScale: "500"},
                 {id: "8"},
@@ -64,7 +65,8 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            mousePosition: true
+            mousePosition: true,
+            fullScreen: true
         },
         csw: {
             id: "1"
@@ -110,23 +112,42 @@ define(function () {
         scaleLine: true,
         isMenubarVisible: true,
         menu: {
-            viewerName: "FHH - Atlas",
-            searchBar: true,
+            // viewerName: "FHH - Atlas",
+            // searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
             routing: false
         },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
+        },
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -134,8 +155,7 @@ define(function () {
             },
             tree: {
                 minChars: 3
-            },
-            geoLocateHit: true
+            }
         },
         tools: {
             parcelSearch: {
@@ -166,6 +186,10 @@ define(function () {
             draw: {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
+            },
+            kmlimport: {
+                title: "KML Import",
+                glyphicon: "glyphicon-import"
             }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",

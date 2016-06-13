@@ -13,6 +13,10 @@ define([
             this.listenTo(this, {
                  "change:isActive": this.activateTool
             });
+
+            if (this.get("isActive") === true) {
+                EventBus.trigger("activateClick", this.get("name"));
+            }
         },
         // Setzt das Tool auf aktiviert
         setActiveToTrue: function () {

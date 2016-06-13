@@ -9,7 +9,7 @@ define([
 
     var CoordPopup = Backbone.Model.extend({
          defaults: {
-            element: $("#gfipopup"),
+            element: $("#popup"),
             coordOverlay: {},
             coordinateUTM: {},
             coordinateGeo: {}

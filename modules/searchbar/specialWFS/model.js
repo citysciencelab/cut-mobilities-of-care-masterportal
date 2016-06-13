@@ -61,13 +61,14 @@ define([
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
+                searchString = searchString.replace(/[()]/g, '\\$&');
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 if (this.get("olympia").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInOlympiaFeatures(searchStringRegExp);
                 }
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInBPlans(searchStringRegExp);
+                    this.searchInBPlans(searchString);
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
@@ -81,7 +82,7 @@ define([
          * @param {string} type - Der ausgewählte BPlan-Typ, der abgefragt werden soll.
         */
         requestbplan: function (type, name) {
-            var typeName = (type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
+            var typeName = (type === "festgestellt") ? "prosin_festgestellt" : "prosin_imverfahren",
                 propertyName = (type === "festgestellt") ? "planrecht" : "plan",
                 data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
@@ -108,10 +109,15 @@ define([
         /**
         *
         */
-        searchInBPlans: function (searchStringRegExp) {
+        searchInBPlans: function (searchString) {
             _.each(this.get("bPlans"), function (bPlan) {
+                searchString = searchString.replace(/ö/g, 'oe');
+                searchString = searchString.replace(/ä/g, 'ae');
+                searchString = searchString.replace(/ü/g, 'ue');
+                searchString = searchString.replace(/ß/g, 'ss');
+                var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (bPlan.name.search(searchStringRegExp) !== -1) {
+                 if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
                     EventBus.trigger("searchbar:pushHits", "hitList", bPlan);
                 }
             }, this);

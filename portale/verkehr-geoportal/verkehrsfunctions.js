@@ -16,7 +16,7 @@ define([
 
             EventBus.on("aktualisiereverkehrsnetz", this.refreshVerkehrssituation, this);
             _.each(LayerList.models, function (layerdef) {
-                if (layerdef.id === "2404") {
+                if (layerdef.id === "2132") {
                     url = Util.getProxyURL(layerdef.get("url"));
                 }
             });

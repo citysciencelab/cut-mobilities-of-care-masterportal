@@ -60,9 +60,10 @@
 
 .gfi-content {
     font-size: 12px;
-    max-height: 66%;
+    max-height: 40vh;
     min-width:400px;
     overflow-y: auto;
+    overflow-x:hidden;
 }
 
 .gfi-content > table {

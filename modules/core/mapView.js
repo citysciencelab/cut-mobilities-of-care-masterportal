@@ -92,6 +92,10 @@ define([
                 }
             }, this);
 
+            channel.on({
+                "setCenter": this.setCenter
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapView:getResolutions": function () {
                     EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
@@ -164,7 +168,12 @@ define([
         },
 
         setResolutions: function () {
-            this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+            if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
+                this.set("resolutions", Config.view.resolutions);
+            }
+            else {
+                this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+            }
         },
 
         setZoomLevels: function () {

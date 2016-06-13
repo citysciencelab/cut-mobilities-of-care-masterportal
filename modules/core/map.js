@@ -32,6 +32,9 @@ define([
                     return this.get("map");
                 }
             }, this);
+            channel.on({
+                "setBBox": this.setBBox
+            }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
@@ -89,6 +92,17 @@ define([
             //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
             //     }.bind(this), false);
             // }
+        Radio.trigger("zoomtofeature","zoomtoid");
+        },
+
+        setBBox: function(bbox) {
+            this.set("bbox", bbox);
+            this.BBoxToMap(this.get("bbox"));
+        },
+        BBoxToMap: function(bbox) {
+            if (bbox) {
+                this.get("view").fit(bbox,this.get("map").getSize());
+            }
         },
 
         GFIPopupVisibility: function (value) {
@@ -302,37 +316,25 @@ define([
                 var layerByFeature,
                     visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
 
-                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
-                    // cluster-source
+                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getSource().getFeatureById(feature.getId());
+                            gfiParams.push({
+                                typ: "WFS",
+                                feature: feature,
+                                attributes: pLayer.get("gfiAttributes"),
+                                name: pLayer.get("name"),
+                                ol_layer: pLayer
                             });
-                            if (_.isUndefined(layerByFeature) === false) {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    feature: feature,
-                                    attributes: layerByFeature.get("gfiAttributes"),
-                                    name: layerByFeature.get("name"),
-                                    ol_layer: layerByFeature.get("layer")
-                                });
-                            }
                         });
                     }
-                    // vector-source
-                    else {
-                        layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                            return layer.get("source").getFeatureById(featureAtPixel.getId());
-                        });
-                        gfiParams.push({
-                            typ: "WFS",
-                            feature: featureAtPixel,
-                            attributes: layerByFeature.get("gfiAttributes"),
-                            name: layerByFeature.get("name"),
-                            ol_layer: layerByFeature.get("layer")
-                        });
-                    }
+                    gfiParams.push({
+                        typ: "WFS",
+                        feature: featureAtPixel,
+                        attributes: pLayer.get("gfiAttributes"),
+                        name: pLayer.get("name"),
+                        ol_layer: pLayer
+                    });
                 });
             }
 
