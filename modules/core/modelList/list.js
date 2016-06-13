@@ -34,9 +34,9 @@ define([
                }, this);
 
                 channel.on({
-                    "setModelAttributesById": function (id, attrs) {console.log(id);
+                    "setModelAttributesById": function (id, attrs) {
                         var model = this.get(id);
-console.log(model);
+
                         model.set(attrs);
                     },
                     "addVisibleItems": function () {

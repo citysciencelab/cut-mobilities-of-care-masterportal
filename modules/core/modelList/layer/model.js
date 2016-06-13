@@ -215,6 +215,7 @@ define([
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
             }
             else {
+                // model.collection besser?!
                 Radio.trigger("ModelList", "removeFromSelectionIDX", this.getSelectionIDX());
                 Radio.trigger("Map", "removeLayer", this.getLayer());
             }
