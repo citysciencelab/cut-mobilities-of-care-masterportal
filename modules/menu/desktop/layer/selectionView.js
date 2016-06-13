@@ -1,20 +1,20 @@
 define([
     "backbone",
-    "text!modules/menu/desktop/layer/template.html",
-    "text!modules/menu/desktop/layer/templateSelected.html"
+    "text!modules/menu/desktop/layer/templateSelected.html",
+    "text!modules/menu/desktop/layer/templateSetting.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
         SelectedLayerTemplate = require("text!modules/menu/desktop/layer/templateSelected.html"),
+        SettingTemplate = require("text!modules/menu/desktop/layer/templateSetting.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
-        className: "layer",
+        className: " layer-item",
         //template: _.template(LayerTemplate),
         template: _.template(SelectedLayerTemplate),
-        //templateSetting: _.template(SettingTemplate),
+        templateSetting: _.template(SettingTemplate),
         events: {
             "click .glyphicon-check": "toggleIsVisibleInMap",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
@@ -26,35 +26,28 @@ define([
             "change select": "setTransparence"
         },
         initialize: function () {
-            this.listenTo(this.model, {
-                 //"change:isChecked change:isLayerVisible": this.render,
-                 "change:isSettingVisible": this.renderSetting
-            });
             this.render();
         },
 
         render: function () {
-            var attr = this.model.toJSON();
+            this.$el.html("");
+            var selector = $("ul#SelectedLayer"),
+                attr = this.model.toJSON(),
+                template = this.template(attr);
 
-            /*    this.$el.html(this.templateSelected(attr));
             if (this.model.getIsSettingVisible() === true) {
-                this.renderSetting();
+                this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+                template = this.templateSetting(attr);
             }
-            this.$el.html(this.template(attr));
-            if (this.model.has("treeType")) {
-                this.renderSetting();
-            }*/
             if (this.model.getIsSelected()) {
-                var selector = $("#SelectedLayer");
-
-                selector.prepend(this.$el.html(this.template(attr)));
+                selector.prepend(this.$el.html(template));
             }
         },
 
-        /**
+        /*
          * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
          */
-        renderSetting: function () {
+        /*renderSetting: function () {
             var attr = this.model.toJSON();
 
             // Animation Zahnrad
@@ -71,7 +64,7 @@ define([
                 this.$el.find(".item-settings").slideDown();
             }
 
-        },
+        },*/
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
@@ -95,6 +88,7 @@ define([
 
         toggleIsSettingVisible: function () {
             this.model.toggleIsSettingVisible();
+            this.render();
         },
 
         setTransparence: function (evt) {

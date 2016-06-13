@@ -108,13 +108,12 @@ define([
                 return;
             }
 
-            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
+            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+                models = this.collection.add(lightModels);
 
-           models = this.collection.add(lightModels);
+            this.addViewsToItemsOfType("layer", models);
 
-           this.addViewsToItemsOfType("layer", models);
-
-           var folder = this.addViewsToItemsOfType("folder", models);
+            var folder = this.addViewsToItemsOfType("folder", models);
 
             _.each(folder, function (folder) {
                 this.renderSubTree(folder.getId(), level + 1, levelLimit);

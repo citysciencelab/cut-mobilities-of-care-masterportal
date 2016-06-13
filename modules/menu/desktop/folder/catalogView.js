@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/menu/desktop/folder/template.html",
     "text!modules/menu/desktop/folder/templateLeaf.html",
     "text!modules/menu/desktop/folder/catalogTemplate.html"
@@ -7,12 +8,13 @@ define([
 
     var Backbone = require("backbone"),
         Template = require("text!modules/menu/desktop/folder/catalogTemplate.html"),
+        Radio = require("backbone.radio"),
         FolderView = Backbone.View.extend({
             tagName: "li",
             className: "layer-catalog",
             template: _.template(Template),
             events: {
-             "click .header": "toggleCatalogAndBaseLayer"
+             "click .header > .glyphicon, .header > .control-label": "toggleCatalogs"
             },
             initialize: function () {
                 this.$el.on({
@@ -24,22 +26,34 @@ define([
             render: function () {
                 var attr = this.model.toJSON();
 
+                $(".header").toggleClass("closed");
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                if (!this.model.getIsExpanded()) {
+                    $("#" + this.model.getId()).css("display", "none");
+                }
             },
-            toggleCatalogAndBaseLayer: function () {
-              this.toggleOverlayer();
-              this.toggleBaseLayer();
-              this.toggleCatalog();
+            toggleCatalogs: function () {
+                if (this.model.getIsExpanded()) {
+                    this.hideCatalog(this.model);
+                }
+                else {
+                    var catalogs = Radio.request("ModelList", "getModelsByAttributes", {parentId: "Themen"});
+
+                    this.showCatalog(this.model);
+                    _.each(catalogs, function (model) {
+                        if (model.getId() !== this.model.getId()) {
+                            this.hideCatalog(model);
+                        }
+                    }, this);
+                }
             },
-            toggleBaseLayer: function () {
-                $("ul#Baselayer").toggle("slow");
+            showCatalog: function (model) {
+                model.setIsExpanded(true, {silent: true});
+                this.$el.find("ul#" + model.getId()).show(500);
             },
-            toggleOverlayer: function () {
-                $("ul#Overlayer").toggle("slow");
-            },
-            toggleCatalog: function () {
-                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-minus-sign");
-                $(".layer-catalog > .header > .glyphicon:not(.glyphicon-adjust)").toggleClass("glyphicon-plus-sign");
+            hideCatalog: function (model) {
+                this.$el.find("ul#" + model.getId()).hide(500);
+                model.setIsExpanded(false, {silent: true});
             }
         });
 

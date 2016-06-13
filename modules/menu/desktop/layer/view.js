@@ -11,8 +11,6 @@ define([
         tagName: "li",
         className: "layer",
         template: _.template(LayerTemplate),
-        //templateSelected: _.template(SelectedLayerTemplate),
-        //templateSetting: _.template(SettingTemplate),
         events: {
             "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
@@ -24,58 +22,25 @@ define([
             "change select": "setTransparence"
         },
         initialize: function () {
-            this.listenTo(this.model, {
-                 //"change:isChecked change:isLayerVisible": this.render,
-                 "change:isSettingVisible": this.renderSetting
-            });
             this.render();
         },
 
         render: function () {
-            var attr = this.model.toJSON();
+            this.$el.html("");
+            var attr = this.model.toJSON(),
+                template = this.template(attr),
+                selector = $("#" + this.model.getParentId());
 
-
-            /*    this.$el.html(this.templateSelected(attr));
-                if (this.model.getIsSettingVisible() === true) {
-                    this.renderSetting();
-                }
-                this.$el.html(this.template(attr));
-                if (this.model.has("treeType")) {
-                    this.renderSetting();
-                }*/
             if (this.model.getIsVisibleInTree()) {
-                var selector = $("#" + this.model.getParentId());
 
                 if (this.model.getLevel() === 0) {
-                    selector.append(this.$el.html(this.template(attr)));
+                    selector.append(this.$el.html(template));
                 }
                 else {
-                    selector.after(this.$el.html(this.template(attr)));
+                    selector.after(this.$el.html(template));
                 }
-                $(this.$el).css("padding-left", this.model.getLevel() * 10 + "px");
+                $(this.$el).css("padding-left", (this.model.getLevel() + 1) * 10 + "px");
             }
-        },
-
-        /**
-         * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
-         */
-        renderSetting: function () {
-            var attr = this.model.toJSON();
-
-            // Animation Zahnrad
-            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
-            // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
-                this.$el.find(".item-settings").slideUp("slow", function () {
-                    this.remove();
-                });
-            }
-            else {
-                this.$el.append(this.templateSetting(attr));
-                this.$el.find(".item-settings").hide();
-                this.$el.find(".item-settings").slideDown();
-            }
-
         },
 
         toggleIsSelected: function () {

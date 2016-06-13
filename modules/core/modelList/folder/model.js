@@ -33,8 +33,8 @@ define([
          * Setter für Attribut "isExpanded"
          * @param {boolean} value - true | false
          */
-        setIsExpanded: function (value) {
-            this.set("isExpanded", value);
+        setIsExpanded: function (value, options) {
+            this.set("isExpanded", value, options);
         },
 
         /**
