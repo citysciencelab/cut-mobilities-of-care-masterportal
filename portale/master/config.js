@@ -25,7 +25,7 @@ define(function () {
         * @property {String} [tree.layer.searchField] - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
         * @property {String} [tree.layer.styleField] - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
         * @property {String} [tree.layer.styleLabelField] - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String} [tree.layer.mouseHoverField] - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
+        * @property {String|Array} [tree.layer.mouseHoverField] - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
         * @property {Object[]} [tree.layer.filterOptions] - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
         * @property {String} tree.layer.filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
         * @property {('combo')} tree.layer.filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
@@ -80,7 +80,7 @@ define(function () {
                  ],
                  name: "aktuelle Meldungen der TBZ", visibility: false
                 },
-                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: ["name", "strasse", "ort", "stand"], attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  maxScale: 60000,
                  minScale: 10000,
