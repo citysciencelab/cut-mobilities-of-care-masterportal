@@ -1,11 +1,12 @@
 define([
     "underscore",
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "modules/core/util",
     "modules/restReader/collection"
-], function (_, Backbone, EventBus, Config, Util, RestReader) {
+], function (_, Backbone, Radio, EventBus, Config, Util) {
 
     var WPSModel = Backbone.Model.extend({
         defaults: {
@@ -14,7 +15,7 @@ define([
             processesRunning: 0
         },
         initialize: function () {
-            var resp = RestReader.getServiceById(Config.wpsID),
+            var resp = Radio.request("RestReader", "getServiceById", Config.wpsID),
                 newURL = Util.getProxyURL(resp[0].get("url"));
 
             this.set("url", newURL);
