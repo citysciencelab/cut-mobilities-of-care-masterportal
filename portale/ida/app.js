@@ -1,6 +1,10 @@
-define("app", ["jquery", "modules/restReader/collection"], function ($, RestReaderList) {
+define("app", ["jquery", "backbone.radio", "modules/restReader/collection"], function ($, Radio, RestReaderList) {
     "use strict";
-    new RestReaderList;
-    require(["idaModules/seite1/view"]);
+    var channel = Radio.channel("RestReader");
 
+    channel.on({
+        "isReady": function () {
+            require(["idaModules/seite1/view"]);
+        }
+    }, this);
 });

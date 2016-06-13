@@ -5,7 +5,6 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
     "use strict";
     require(["modules/alerting/view"]);
     Util.showLoader();
-    new RestReaderList();
     new RawLayerList();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true) {
