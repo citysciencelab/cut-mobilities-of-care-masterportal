@@ -107,7 +107,7 @@ function (Backbone, EventBus) {
         },
 
         /**
-         * success-Funktion für die Olympiastandorte. Schreibt Ergebnisse in "bplan".
+         *Schreibt Ergebnisse in "bplan".
          * @param  {xml} data - getFeature-Request
          */
         getFeaturesForBPlan: function (data) {
@@ -116,13 +116,15 @@ function (Backbone, EventBus) {
                 type;
 
             _.each(hits, function (hit) {
-                if ($(hit).find("app\\:planrecht, planrecht")[0] !== undefined) {
+                if (!_.isUndefined($(hit).find("app\\:planrecht, planrecht")[0])) {
                     name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
                     type = "festgestellt";
                 }
                 else {
-                    name = $(hit).find("app\\:plan, plan")[0].textContent;
-                    type = "im Verfahren";
+                    if(!_.isUndefined($(hit).find("app\\:plan, plan")[0])) {
+                        name = $(hit).find("app\\:plan, plan")[0].textContent;
+                        type = "im Verfahren";
+                    }
                 }
                 // BPlan-Objekte
                 this.get("bPlans").push({
