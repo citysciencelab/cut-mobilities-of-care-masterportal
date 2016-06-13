@@ -14,7 +14,7 @@ define([
             className: "layer-catalog",
             template: _.template(Template),
             events: {
-             "click .header > .glyphicon, .header > .control-label": "toggleCatalogs"
+             "click .header": "toggleCatalogs"
             },
             initialize: function () {
                 this.$el.on({
@@ -49,10 +49,10 @@ define([
             },
             showCatalog: function (model) {
                 model.setIsExpanded(true, {silent: true});
-                this.$el.find("ul#" + model.getId()).show(500);
+                this.$el.find("#" + model.getId()).show(500);
             },
             hideCatalog: function (model) {
-                this.$el.find("ul#" + model.getId()).hide(500);
+                $("ul#" + model.getId()).hide(500);
                 model.setIsExpanded(false, {silent: true});
             }
         });
