@@ -34,7 +34,6 @@ define([
                }, this);
 
                 channel.on({
-
                     "setModelAttributesById": function (id, attrs) {
                         var model = this.get(id);
 
