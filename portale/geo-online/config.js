@@ -7,11 +7,13 @@ define(function () {
             orderBy: "opendata",
             saveSelection: true,
             baseLayer: [
-                {id: "453", minScale: "500"},
-                {id: "8"},
-                {id: "717", visibility: true, minScale: "1000", name: "Geobasiskarten (farbig)"},
+                {id: "453", visibility: true, minScale: "500"},
+                {id: "717", minScale: "1000", name: "Geobasiskarten (farbig)"},
                 {id: "713", minScale: "1000", name: "Geobasiskarten (schwarz-weiß)"},
                 {id: "1043", minScale: "1000", name: "Geobasiskarten (grau-blau)"},
+                {id: "94"},
+                {id: "452", name: "Luftbilder DOP 40 (mit Umland)"},
+                {id: "756"},
                 {id: "368", name: "ALKIS farbig", maxScale: "10000"},
                 {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
             ],
