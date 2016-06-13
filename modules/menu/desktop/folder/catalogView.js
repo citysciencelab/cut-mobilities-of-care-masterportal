@@ -35,6 +35,7 @@ define([
             toggleCatalogs: function () {
                 if (this.model.getIsExpanded()) {
                     this.hideCatalog(this.model);
+                    this.toggleGlyphicon(this.model);
                 }
                 else {
                     var catalogs = Radio.request("ModelList", "getModelsByAttributes", {parentId: "Themen"});
@@ -44,6 +45,7 @@ define([
                         if (model.getId() !== this.model.getId()) {
                             this.hideCatalog(model);
                         }
+                        this.toggleGlyphicon(model);
                     }, this);
                 }
             },
@@ -54,6 +56,18 @@ define([
             hideCatalog: function (model) {
                 $("ul#" + model.getId()).hide(500);
                 model.setIsExpanded(false, {silent: true});
+            },
+            toggleGlyphicon: function (model) {
+                var elem =  $("ul#" + model.getId()).prev().find(".glyphicon:first");
+
+                if (!model.getIsExpanded()) {
+                   elem.removeClass("glyphicon-minus-sign");
+                   elem.addClass("glyphicon-plus-sign");
+                }
+                else {
+                    elem.removeClass("glyphicon-plus-sign");
+                   elem.addClass("glyphicon-minus-sign");
+                }
             }
         });
 
