@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 @import "../components/bootstrap/dist/css/bootstrap.css";
+@import "../components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
 @import "../components/video.js/dist/video-js/video-js.css";
 @import "../components/ol3-bower/ol.css";
 @import "../components/lgv-config/css/fonts.css";
