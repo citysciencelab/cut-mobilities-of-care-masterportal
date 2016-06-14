@@ -347,7 +347,7 @@ define([
              * @return {KML-String} das Resultierende KML
              */
             convertFeaturesToKML: function (features, context) {
-                var format = new ol.format.KML();
+                var format = new ol.format.KML({extractStyles: true});
 
                 _.each(features, function (feature) {
                     var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));

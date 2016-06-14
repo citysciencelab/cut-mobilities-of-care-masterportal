@@ -18,7 +18,7 @@ define([
             features: [],
             source: new ol.source.Vector({useSpatialIndex: false}),
             layer: new ol.layer.Vector(),
-            format: new ol.format.KML()
+            format: new ol.format.KML({extractStyles:true})
         },
 
         initialize: function () {
@@ -96,9 +96,7 @@ define([
             if (this.getText() !== "") {
                 this.setText("");
                 $("#fakebutton").toggleClass("btn-primary");
-//                this.setFormat(new ol.format.KML());
-//                this.setSource(new ol.source.Vector({useSpatialIndex: false}));
-//                this.setLayer(new ol.layer.Vector());
+                $("#btn_import").prop("disabled", true);
             }
         },
         // features von KML (in "text" gespeichert) einlesen
@@ -121,13 +119,15 @@ define([
             var features = this.getFeatures();
 
              _.each(features, function (feature) {
-                 var type = feature.getGeometry().getType();
-
+                 var type = feature.getGeometry().getType(),
+                 styles = feature.getStyleFunction().call(feature),
+                 style = styles[0];
+                 
                  // wenn Punkt-Geometrie
                  if (type === "Point") {
                      // wenn Text
                      if (feature.get("name") !== undefined) {
-                         feature.setStyle(this.getTextStyle(feature.get("name")));
+                         feature.setStyle(this.getTextStyle(feature.get("name"), style));
                      }
                      else {
                         feature.setStyle(null);
@@ -136,14 +136,11 @@ define([
             }, this);
         },
 
-        getTextStyle: function (name) {
-
+        getTextStyle: function (name, style) {
             return new ol.style.Style({
                 text: new ol.style.Text({
                     text: name,
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 0, 0, 1)"
-                    })
+                    fill: style.getText().getFill()
                 })
             });
         },
