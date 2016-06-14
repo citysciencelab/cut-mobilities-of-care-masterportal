@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <select class="form-control input-sm" id="layerField">
+                <option class="pull-left" value="default" <% if (layerId === "default") { print ("SELECTED")} %>>Bitte Layer ausw&auml;hlen</option>
+                <% _.each(layers, function (layer) { %>
+                    <option class="pull-left" value=<%= layer.get("id") %>  <% if (layerId === layer.get("id")) { print ("SELECTED")} %>><%= layer.get("name") %></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <% if (layerId !== "default") { %>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <select class="form-control input-sm" id="attributField">
+                <option class="pull-left" value="default" <% if (attributeName === "default") { print ("SELECTED")} %>>Bitte Attribut ausw&auml;hlen</option>
+                <% _.each(layer.get("attributesToStyle"), function (attribute) { %>
+                    <option class="pull-left" value=<%= attribute %> <% if (attribute === attributeName) { print ("SELECTED")} %>><%= attribute %></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <% } %>
+    <% if (attributeName !== "default") { %>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <select class="form-control input-sm" id="numberField">
+                <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
+                <% _.each(numberOfClassesList, function (number) { %>
+                    <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <% } %>
+    <% if (numberOfClasses !== "default") { %>
+        <% for (var i = 0; i < numberOfClasses; i++) { %>
+            <div class="form-group">
+                <div class="col-md-4 col-sm-4">
+                    <label>Wertebereich Klasse <%= i + 1 %></label>
+                    <input class="form-control input-sm <%= 'start-range' + i %>" placeholder="von">
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <label>&nbsp;</label>
+                    <input class="form-control input-sm <%= 'stop-range' + i %>" placeholder="bis">
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <label>&nbsp;</label>
+                    <div class="input-group colorpicker-component">
+                        <input type="text" value="#00AABB" class="form-control input-sm <%= 'selected-color' + i %>">
+                        <span class="input-group-addon"><i></i></span>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <div class="form-group form-group-sm">
+            <% if (typeof errors !== "undefined") { %>
+                <span id="yearError" class="col-xs-7 col-xs-offset-5 treeFilterError"><%= errors.range %></span>
+            <% } %>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <button class="btn btn-panel-submit col-md-12 col-sm-12">Senden</button>
+            </div>
+        </div>
+    <% } %>
+</div>
