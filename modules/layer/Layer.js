@@ -268,12 +268,10 @@ define([
             }
             else {
                 if (this.get("url") !== undefined && this.has("link") === false) {
-                    if (this.get("url").search("geodienste") !== -1) {
-                        this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
-                    }
-                    else {
-                        this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
-                    }
+                    var url = Radio.request("RestReader", "getServiceById", "2"),
+                    url = url[0].attributes.url;
+                    
+                    this.set("metaURL", url + this.get("metaID"));
                 }
                 else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
                     if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
