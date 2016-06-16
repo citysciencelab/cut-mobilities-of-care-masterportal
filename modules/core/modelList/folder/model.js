@@ -6,7 +6,7 @@ define([
         Folder;
 
     Folder = Item.extend({
-        defaults: {
+        defaults: _.extend({}, Item.prototype.defaults, {
             // true wenn die Node zur ersten Ebene gehört
             isRoot: false,
             // true wenn der Inhalt(Kinder) der Node angezeigt wird
@@ -21,9 +21,9 @@ define([
             isLeafFolder: false,
             // UniqueId
             id: "",
-            // Folder Glyphicon
-            glyphicon: "glyphicon-plus-sign"
-        },
+            // Glyphicon massen auswahl
+            selectAllGlyphicon: "glyphicon-unchecked"
+        }),
 
         initialize: function () {
             // console.log(this);
@@ -71,7 +71,7 @@ define([
             else {
                 this.setIsSelected(true);
             }
-            this.collection.toggleIsSelectedLayers(this);
+            //this.collection.toggleIsSelectedLayers(this);
         },
         /**
          * Getter für Attribut "isLeafFolder"
@@ -82,6 +82,9 @@ define([
         },
         toggleIsExpanded: function () {
             this.setIsExpanded(!this.getIsExpanded());
+        },
+        setSelectAllGlyphicon: function (value) {
+            this.set("selectAllGlyphicon", value);
         }
     });
 

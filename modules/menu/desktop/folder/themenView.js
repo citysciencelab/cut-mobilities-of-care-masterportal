@@ -7,7 +7,6 @@ define([
 
     var Backbone = require("backbone"),
         FolderTemplate = require("text!modules/menu/desktop/folder/thementemplate.html"),
-        FolderLeafTemplate = require("text!modules/menu/desktop/folder/templateLeaf.html"),
         FolderView;
 
     FolderView = Backbone.View.extend({
@@ -15,9 +14,9 @@ define([
         className: "themen-folder",
         id: "",
         template: _.template(FolderTemplate),
-        templateLeaf: _.template(FolderLeafTemplate),
         events: {
-            "click": "toggleIsExpanded"
+            "click": "toggleIsExpanded",
+            "click .selectall": "toggleIsSelected"
         },
         initialize: function () {
             // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
@@ -31,9 +30,22 @@ define([
         render: function () {
             this.$el.html("");
 
-            var attr = this.model.toJSON();
-
             if (this.model.getIsVisibleInTree()) {
+                // due Ordner auf unterster ebene bekommen eine SelectAllLayer Checkbox
+                if (this.model.getIsLeafFolder()) {
+                    if (this.model.getIsSelected()) {
+                        this.model.setSelectAllGlyphicon("glyphicon-check");
+                    }
+                    else {
+                        this.model.setSelectAllGlyphicon("glyphicon-unchecked");
+                    }
+                }
+                if (this.model.getIsExpanded()) {
+                    this.model.setGlyphicon("glyphicon-minus-sign");
+                }
+                else {
+                    this.model.setGlyphicon("glyphicon-plus-sign");
+                }
 
                 this.$el.attr("id", this.model.getId());
 
@@ -45,13 +57,15 @@ define([
                 else {
                    selector = "#Overlayer";
                 }
+                var attr = this.model.toJSON();
+
                 if (this.model.getLevel() > 0) {
                     $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
                 }
                 else {
                     $(selector).prepend(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel()+1) * 10 + "px");
+                $(this.$el).css("padding-left", (this.model.getLevel()+1) * 15 + "px");
             }
 
         },
@@ -62,8 +76,10 @@ define([
             this.model.updateList(this.model.getId());
         },
         toggleIsExpanded: function () {
-            console.log(1);
             this.model.toggleIsExpanded();
+        },
+        toggleIsSelected: function () {
+            this.model.toggleIsSelected();
         }
     });
 

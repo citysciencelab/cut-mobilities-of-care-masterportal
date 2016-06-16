@@ -1,3 +1,6 @@
 <!DOCTYPE html>
-    <span class="glyphicon glyphicon-plus-sign" </span>
+    <span class="glyphicon <%= glyphicon %>"> </span>
+    <% if(isLeafFolder) { %>
+        <span class="glyphicon <%= selectAllGlyphicon %> selectall"></span>
+    <%}%>
     <span class="title"><%= name %></span>

@@ -47,7 +47,7 @@ define([
             return this.get("glyphicon");
         },
         setGlyphicon: function (glyphicon) {
-            return this.get("glyphicon", glyphicon);
+            return this.set("glyphicon", glyphicon);
         },
         updateList: function (value) {
             this.collection.updateList(value, "slideForward");

@@ -39,7 +39,7 @@ define([
                 else {
                     selector.after(this.$el.html(template));
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel() + 1) * 10 + "px");
+                $(this.$el).css("padding-left", (this.model.getLevel() + 1) * 15 + "px");
             }
         },
 
