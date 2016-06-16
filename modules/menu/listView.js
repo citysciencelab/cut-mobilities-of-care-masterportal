@@ -113,18 +113,26 @@ define([
 
             this.addViewsToItemsOfType("layer", models);
 
-            var folder = this.addViewsToItemsOfType("folder", models);
+            var folder = this.addViewsToItemsOfType("folder", models, parentId);
 
             _.each(folder, function (folder) {
                 this.renderSubTree(folder.getId(), level + 1, levelLimit);
             }, this);
 
         },
-
+        /**
+         * Rendert in der Desktop Ansicht den Themenbaum
+         * @param  {[type]} parentId [description]
+         * @return {[type]}          [description]
+         */
         renderDesktopThemen: function (parentId) {
             $("#" + parentId).html("");
             this.renderSubTree(parentId, 0, 3);
         },
+        /**
+         * Rendert die  Auswahlliste
+         * @return {[type]} [description]
+         */
         renderSelectedList: function () {
             $("#" + "SelectedLayer").html("");
            var selectedModels = this.collection.where({isVisibleInMap: true});
@@ -134,12 +142,12 @@ define([
            });
            this.addSelectionView(selectedModels);
         },
-        addViewsToItemsOfType: function (type, items) {
+        addViewsToItemsOfType: function (type, items, parentId) {
             items = _.filter(items, function (model) {
                 return model.getType() === type;
             });
 
-            if (Radio.request("Parser", "getTreeType") === "default") {
+            if (Radio.request("Parser", "getTreeType") === "default" || parentId === "Themen") {
                 items = _.sortBy(items, function (item) {
                     return item.getName();
                 });
