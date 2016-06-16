@@ -65,7 +65,7 @@ define([
                 else {
                     $(selector).prepend(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel()+1) * 15 + "px");
+                $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
             }
 
         },

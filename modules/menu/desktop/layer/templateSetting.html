@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<div class="item-settings">
-    <div class="layer-info-item pull-right">
-        <span class="glyphicon glyphicon-info-sign"></span>
-    </div>
-    <% if (typeof treeType === "undefined") { %>
-    <div class="layer-sort-item pull-right">
-        <span class="glyphicon glyphicon-triangle-top"></span>
-        <span class="glyphicon glyphicon-triangle-bottom"></span>
-    </div>
-    <% } %>
-    <form class="form-inline pull-left" role="form">
-        <div class="form-group">
-            <label>Transparenz:</label>
-            <select class="form-control input-sm">
-               <option value="0" <% if (transparence === 0) print ("SELECTED") %> >0%</option>
-               <option value="10" <% if (transparence === 10) print ("SELECTED") %> >10%</option>
-               <option value="20" <% if (transparence === 20) print ("SELECTED") %> >20%</option>
-               <option value="30" <% if (transparence === 30) print ("SELECTED") %> >30%</option>
-               <option value="40" <% if (transparence === 40) print ("SELECTED") %> >40%</option>
-               <option value="50" <% if (transparence === 50) print ("SELECTED") %> >50%</option>
-               <option value="60" <% if (transparence === 60) print ("SELECTED") %> >60%</option>
-               <option value="70" <% if (transparence === 70) print ("SELECTED") %> >70%</option>
-               <option value="80" <% if (transparence === 80) print ("SELECTED") %> >80%</option>
-               <option value="90" <% if (transparence === 90) print ("SELECTED") %> >90%</option>
-            </select>
-       </div>
-    </form>
+<span class="glyphicon glyphicon-remove-circle pull-left"></span>
+<div class="layer-settings">
+    <span class="layer-name" data-toggle="tooltip" data-placement="bottom" title="<%= name %>"><%= name.substr(0,8) + "..." %></span>
+    <span class="pull-right">
+        <span class="transparence">
+            <span class="text">Transparenz:</span>
+            <span class="glyphicon glyphicon-plus-sign" data-toggle="tooltip" data-placement="bottom" title="Transparenz erhöhen"></span>
+            <span class="badge"> <%= transparence + '%' %></span>
+            <span class="glyphicon glyphicon-minus-sign" data-toggle="tooltip" data-placement="bottom" title="Transparenz verringern"></span>
+        </span>
+        <span class="arrows">
+            <span class="glyphicon glyphicon-arrow-up" data-toggle="tooltip" data-placement="bottom" title="Ebene nach oben"></span>
+            <span class="glyphicon glyphicon-arrow-down" data-toggle="tooltip" data-placement="bottom" title="Ebene nach unten"></span>
+        </span>
+        <span class="layer-info-item">
+        <span "cog-span">
+            <span class="glyphicon glyphicon-cog rotate"></span>
+        </span>
+    </span>
+</span>
+
 </div>
+
