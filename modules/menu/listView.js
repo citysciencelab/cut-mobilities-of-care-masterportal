@@ -139,9 +139,11 @@ define([
                 return model.getType() === type;
             });
 
-            items = _.sortBy(items, function (item) {
-                return item.getName();
-            });
+            if (Radio.request("Parser", "getTreeType") === "default") {
+                items = _.sortBy(items, function (item) {
+                    return item.getName();
+                });
+            }
             items.reverse();
             this.addViews(items);
             return items;

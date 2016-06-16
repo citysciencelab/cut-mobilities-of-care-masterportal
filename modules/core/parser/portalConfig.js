@@ -28,7 +28,8 @@ define([
 
             channel.reply({
                 "getItemByAttributes": this.getItemByAttributes,
-                "getItemsByAttributes": this.getItemsByAttributes
+                "getItemsByAttributes": this.getItemsByAttributes,
+                "getTreeType": this.getTreeType
             }, this);
 
             this.parseMenu(this.get("portalConfig").menu, "root");
