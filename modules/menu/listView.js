@@ -135,6 +135,7 @@ define([
          */
         renderSelectedList: function () {
             $("#" + "SelectedLayer").html("");
+
            var selectedModels = this.collection.where({isVisibleInMap: true});
 
            selectedModels = _.sortBy(selectedModels, function (model) {
@@ -172,6 +173,7 @@ define([
             if (!isMobile) {
                 this.renderDesktopThemen("Themen");
                 this.renderSelectedList();
+                $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             }
 
             // if (isMobile) {
@@ -199,6 +201,7 @@ define([
         addViews: function (models) {
             var isMobile = Radio.request("Util", "isViewMobile"),
                 nodeView;
+
             _.each(models, function (model) {
                 switch (model.getType()){
                     case "folder": {

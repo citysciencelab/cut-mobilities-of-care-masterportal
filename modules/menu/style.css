@@ -61,13 +61,13 @@ ul#Themen .glyphicon {
 
 ul#Themen .closed:not(.SelectedLayer ){
     border-bottom: 1px solid #ddd;
+    max-width:  500px;
     min-width:  380px;
 }
 
 /*Unterlisten*/
 ul#Themen ul {
     list-style: none;
-    max-height: 70vh;
     padding: 0 0 0 0px;
     -webkit-padding-start: 0px;
 }
@@ -99,6 +99,11 @@ ul#Themen .themen-folder {
     font-weight: 400;
 }
 /*-------------------Selection/Settings----------------------*/
+ul#Themen ul{
+   overflow-y: auto;
+   overflow-x: auto;
+}
+
 ul#Themen #SelectedLayer li {
     overflow: auto;
     padding: 5px 4px 7px 2px;
