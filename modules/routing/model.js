@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config"
-], function (Backbone, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
 
     var RoutingModel = Backbone.Model.extend({
         defaults: {
@@ -171,7 +172,17 @@ define([
             });
         },
         requestRoute: function () {
-            var request = "PROVIDERID=HHBWVI&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
+            var providerid = Radio.request("RestReader", "getServiceById", "3"),
+            providerid = providerid[0].attributes.id;
+            
+            console.log(providerid);
+            
+            var viomurl = Radio.request("RestReader", "getServiceById", "4"),
+            viomurl = viomurl[0].attributes.url;
+            
+            console.log(viomurl);
+            
+            var request = "PROVIDERID=" + "HHBWVI" + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]
             *  routingdate [yyyy-mm-dd]
