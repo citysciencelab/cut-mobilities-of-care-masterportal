@@ -1,4 +1,11 @@
 <span class="glyphicon glyphicon-remove-circle pull-left"></span>
+<span class="pull-left">
+    <% if (isVisibleInMap === true) { %>
+        <span class="glyphicon glyphicon-check pull-left"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked pull-left"></span>
+    <% } %>
+</span>
 <div class="layer-settings">
     <span class="layer-name" data-toggle="tooltip" data-placement="bottom" title="<%= name %>"><%= name.substr(0,8) + "..." %></span>
     <span class="pull-right">

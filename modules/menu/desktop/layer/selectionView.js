@@ -20,7 +20,7 @@ define([
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
             "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
             "click .selected-layer-item > div": "toggleLayerVisibility",
-            "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
+            "click .layer-info-item  .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
             "change select": "setTransparence"
@@ -43,28 +43,17 @@ define([
                 selector.prepend(this.$el.html(template));
             }
         },
+        rerender: function () {
+            this.$el.html("");
+            var attr = this.model.toJSON(),
+                template = this.template(attr);
 
-        /*
-         * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
-         */
-        /*renderSetting: function () {
-            var attr = this.model.toJSON();
-
-            // Animation Zahnrad
-            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
-            // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
-                this.$el.find(".item-settings").slideUp("slow", function () {
-                    this.remove();
-                });
+            if (this.model.getIsSettingVisible() === true) {
+                this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+                template = this.templateSetting(attr);
             }
-            else {
-                this.$el.append(this.templateSetting(attr));
-                this.$el.find(".item-settings").hide();
-                this.$el.find(".item-settings").slideDown();
-            }
-
-        },*/
+            this.$el.html(template);
+        },
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
@@ -87,8 +76,9 @@ define([
         },
 
         toggleIsSettingVisible: function () {
+            console.log("click");
             this.model.toggleIsSettingVisible();
-            this.render();
+            this.rerender();
         },
 
         setTransparence: function (evt) {
@@ -101,6 +91,9 @@ define([
 
         moveModelUp: function () {
             this.model.moveUp();
+        },
+        updateSelectionView: function () {
+
         }
     });
 
