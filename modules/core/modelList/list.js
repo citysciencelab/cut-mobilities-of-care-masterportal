@@ -196,14 +196,13 @@ define([
                 this.trigger("updateOverlayerView");
             },
             insertIntoSelectionIDX: function (model) {
-
                 var idx = 0;
 
                 if (this.selectionIDX.length === 0 || model.getParentId() !== "Baselayer") {
                     idx = this.selectionIDX.push(model) - 1;
                 }
                 else {
-                    while (this.selectionIDX[idx].getParentId() === "Baselayer") {
+                    while (idx < this.selectionIDX.length && this.selectionIDX[idx].getParentId() === "Baselayer") {
                         idx++;
                     }
                     this.selectionIDX.splice(idx, 0, model);
