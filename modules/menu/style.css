@@ -73,7 +73,7 @@ ul#Themen ul {
 }
 
 ul#Themen ul  .glyphicon {
-    top: 2px;
+    top: 3px;
 }
 
 ul#Themen ul .title {
@@ -89,7 +89,7 @@ ul#Themen ul li {
     padding: 5px 15px;
 }
 ul#Themen .layer-catalog > .header {
-    padding: 5px 5px 5px 5px;
+    padding: 5px 5px 4px 5px;
     background-color: rgb(85, 85, 85);
     color: rgb(255, 255, 255);
     cursor: pointer;
@@ -110,7 +110,7 @@ ul#Themen #SelectedLayer .layer-settings .glyphicon {
     font-size: 15px;
     padding: 0 0px;
 }
-ul#Themen #SelectedLayer .layer-settings .arrows, #Themen .layer-settings .transparence, #Themen .layer-settings .layer-info-item {
+ul#Themen #SelectedLayer .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparence, #Themen #SelectedLayer .layer-settings .layer-info-item {
     padding: 0px 5px;
 }
 
