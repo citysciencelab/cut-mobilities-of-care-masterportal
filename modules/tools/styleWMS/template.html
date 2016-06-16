@@ -3,19 +3,19 @@
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12">
             <select class="form-control input-sm" id="layerField">
-                <option class="pull-left" value="default" <% if (layerId === "default") { print ("SELECTED")} %>>Bitte Layer ausw&auml;hlen</option>
-                <% _.each(layers, function (layer) { %>
-                    <option class="pull-left" value=<%= layer.get("id") %>  <% if (layerId === layer.get("id")) { print ("SELECTED")} %>><%= layer.get("name") %></option>
+                <option class="pull-left" value="default" <% if (modelId === "default") { print ("SELECTED")} %>>Bitte Layer ausw&auml;hlen</option>
+                <% _.each(modelList, function (model) { %>
+                    <option class="pull-left" value=<%= model.get("id") %>  <% if (modelId === model.get("id")) { print ("SELECTED")} %>><%= model.get("name") %></option>
                 <% }); %>
             </select>
         </div>
     </div>
-    <% if (layerId !== "default") { %>
+    <% if (modelId !== "default") { %>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12">
             <select class="form-control input-sm" id="attributField">
                 <option class="pull-left" value="default" <% if (attributeName === "default") { print ("SELECTED")} %>>Bitte Attribut ausw&auml;hlen</option>
-                <% _.each(layer.get("attributesToStyle"), function (attribute) { %>
+                <% _.each(model.get("attributesToStyle"), function (attribute) { %>
                     <option class="pull-left" value=<%= attribute %> <% if (attribute === attributeName) { print ("SELECTED")} %>><%= attribute %></option>
                 <% }); %>
             </select>
@@ -38,15 +38,15 @@
         <% for (var i = 0; i < numberOfClasses; i++) { %>
             <div class="form-group">
                 <div class="col-md-4 col-sm-4">
-                    <label>Wertebereich Klasse <%= i + 1 %></label>
+                    <label class="range-label">Wertebereich Klasse <%= i + 1 %></label>
                     <input class="form-control input-sm <%= 'start-range' + i %>" placeholder="von">
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <label>&nbsp;</label>
+                    <label class="range-label">&nbsp;</label>
                     <input class="form-control input-sm <%= 'stop-range' + i %>" placeholder="bis">
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <label>&nbsp;</label>
+                    <label class="range-label">&nbsp;</label>
                     <div class="input-group colorpicker-component">
                         <input type="text" value="#00AABB" class="form-control input-sm <%= 'selected-color' + i %>">
                         <span class="input-group-addon"><i></i></span>
