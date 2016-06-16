@@ -58,7 +58,9 @@ define(function () {
             saveSelection: false,
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
-                {id: "4441", visibility: true, styleable: true, attributesToStyle: ["AP30Sum", "AP60Sum"]},
+                {id: "4441", visibility: true, styleable: true, geomType: "Polygon", attributesToStyle: ["AP30Sum", "AP60Sum"]},
+                {id: "2644", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["P_HAUSH"]},
+                // {id: "182", visibility: true, styleable: true, attributesToStyle: ["pflanzjahr"]},
                 {id: "452", visibility: false},
                 {id: "1748", visibility: false},
                 {id: "1562", visibility: false},
