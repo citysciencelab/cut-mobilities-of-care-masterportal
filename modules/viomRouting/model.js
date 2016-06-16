@@ -172,7 +172,8 @@ define([
             });
         },
         requestRoute: function () {
-            var providerid = Radio.request("RestReader", "getServiceById", "3"),
+            var id = Config.menu.viomproviderid,
+            providerid = Radio.request("RestReader", "getServiceById", id),
             viomurl = Radio.request("RestReader", "getServiceById", "4");
             
             providerid = providerid[0].attributes.url;

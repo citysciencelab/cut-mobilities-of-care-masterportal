@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!modules/routing/template.html',
-    'modules/routing/model',
+    'text!modules/viomRouting/template.html',
+    'modules/viomRouting/model',
     'eventbus',
     'config',
     'modules/controls/orientation/model'
