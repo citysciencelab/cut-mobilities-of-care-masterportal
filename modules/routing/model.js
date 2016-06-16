@@ -173,16 +173,12 @@ define([
         },
         requestRoute: function () {
             var providerid = Radio.request("RestReader", "getServiceById", "3"),
-            providerid = providerid[0].attributes.id;
+            viomurl = Radio.request("RestReader", "getServiceById", "4");
             
-            console.log(providerid);
-            
-            var viomurl = Radio.request("RestReader", "getServiceById", "4"),
+            providerid = providerid[0].attributes.url;
             viomurl = viomurl[0].attributes.url;
             
-            console.log(viomurl);
-            
-            var request = "PROVIDERID=" + "HHBWVI" + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
+            var request = "PROVIDERID=" + providerid + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]
             *  routingdate [yyyy-mm-dd]
@@ -196,7 +192,7 @@ define([
             }
             $("#loader").show();
             $.ajax({
-                url: "/viom_v05",
+                url: viomurl,
                 data: request,
                 async: true,
                 context: this,
