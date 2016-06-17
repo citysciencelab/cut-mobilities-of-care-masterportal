@@ -16,11 +16,16 @@ define([
         },
         paramChanged: function (target) {
             var id = target.id,
-                value = target.checked ? target.checked : target.value,
-                attrObj = this.get("params"),
-                newObj = _.extend(attrObj, _.object([id], [value]));
+                value = "",
+                attrObj = this.get("params");
 
-            this.set("params", newObj);
+            if (target.type === "checkbox") {
+                value = target.checked ? true : false;
+            }
+            else {
+                value = target.value;
+            }
+            this.set("params", _.extend(attrObj, _.object([id], [value])));
         },
         calcDefaultsForTemplate: function () {
             var brwList = this.get("brwList"),
