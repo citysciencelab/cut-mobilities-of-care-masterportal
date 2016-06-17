@@ -1,3 +1,51 @@
+/* ----------------------Themenbaum light -----------------------------*/
+ul#Themen.light {
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    font-size: 12px;
+    color: rgb(85, 85, 85);
+    border: 1px solid rgb(229, 229, 229);
+}
+
+ul#Themen.light li {
+    border-bottom: 1px solid #ddd;
+    padding: 8px 6px;
+    max-width: 500px;
+    min-width: 380px;
+    overflow: auto;
+    font-weight: normal;
+}
+
+ul#Themen.light li span.title {
+    vertical-align: sub;
+}
+
+ul#Themen.light .layer-settings .glyphicon {
+    font-size: 15px;
+    padding: 0 0px;
+}
+
+ul#Themen.light .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparence, #Themen #SelectedLayer .layer-settings .layer-info-item {
+    padding: 0px 5px;
+}
+
+ul#Themen.light .layer-settings {
+    font-size: 12px;
+}
+ul#Themen.light .layer-settings .text {
+    position: relative;
+    top: -1px;
+}
+ul#Themen.light .layer-settings .layer-name{
+    position: relative;
+    top: 1px;
+}
+ul#Themen.light .layer-settings .transparence .badge {
+    top: -2px;
+    position: relative;
+}
+ul#Themen.light .layer-settings .transparence .glyphicon {
+    padding-left: 0px;
+}
 /* -----------------------Themenbaum-----------------------------------*/
 /*Haupt Themenliste */
 ul#Themen {
@@ -37,7 +85,6 @@ ul#Themen ul .title {
 }
 
 ul#Themen ul li {
-
     border-bottom: 1px solid #ddd;
     padding: 5px 15px;
 }
