@@ -14,7 +14,6 @@ define([
         events: {
             "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
-            "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
             "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
@@ -23,6 +22,9 @@ define([
         },
         initialize: function () {
             this.render();
+            this.listenTo(this.model, {
+                "change:isSelected": this.rerender
+            });
         },
 
         render: function () {
@@ -42,15 +44,21 @@ define([
                 $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
             }
         },
+        rerender: function () {
+            this.$el.html("");
+            var attr = this.model.toJSON(),
+                template = this.template(attr);
+
+            this.$el.html(template);
+        },
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
+            this.rerender();
         },
 
         removeFromSelection: function () {
             this.model.setIsInSelection(false);
-            this.model.setIsSettingVisible(false);
-            this.model.setIsChecked(false);
             this.$el.remove();
         },
 

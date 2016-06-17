@@ -17,12 +17,12 @@ define([
         templateSetting: _.template(SettingTemplate),
         events: {
             "click .glyphicon-check": "toggleIsVisibleInMap",
+            "click .glyphicon-unchecked": "toggleIsVisibleInMap",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
-            "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
-            "click .selected-layer-item > div": "toggleLayerVisibility",
+            "click .glyphicon-remove-circle": "removeFromSelection",
             "click .layer-info-item  .glyphicon-cog": "toggleIsSettingVisible",
-            "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-            "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
+            "click .layer-sort-item  .glyphicon-triangle-top": "moveModelUp",
+            "click .layer-sort-item  .glyphicon-triangle-bottom": "moveModelDown",
             "change select": "setTransparence"
         },
         initialize: function () {
@@ -67,6 +67,7 @@ define([
 
         toggleIsVisibleInMap: function () {
             this.model.toggleIsVisibleInMap();
+            this.rerender();
         },
 
         showLayerInformation: function () {
@@ -76,7 +77,6 @@ define([
         },
 
         toggleIsSettingVisible: function () {
-            console.log("click");
             this.model.toggleIsSettingVisible();
             this.rerender();
         },

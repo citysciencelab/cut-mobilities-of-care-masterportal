@@ -14,7 +14,15 @@ define([
             className: "layer-catalog",
             template: _.template(Template),
             events: {
-             "click .header": "toggleCatalogs"
+                "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
+                "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
+                    console.log(1);
+                    Radio.trigger("Quickhelp", "showWindowHelp", "tree");
+                },
+                "click .rotate-adjust": "greyBackground",
+                "click .rotate-adjust-back": "whiteBackground",
+                "click .rotate-pin": "unfixTree",
+                "click .rotate-pin-back": "fixTree"
             },
             initialize: function () {
                 this.$el.on({
@@ -68,6 +76,32 @@ define([
                     elem.removeClass("glyphicon-plus-sign");
                    elem.addClass("glyphicon-minus-sign");
                 }
+            },
+            whiteBackground: function () {
+                this.model.set("defaultBackground", $("#map").css("background"));
+                $("#map").css("background", "white");
+                $(".glyphicon-adjust").addClass("rotate-adjust");
+                $(".glyphicon-adjust").removeClass("rotate-adjust-back");
+            },
+            greyBackground: function () {
+                $("#map").css("background", this.model.get("defaultBackground"));
+                $(".glyphicon-adjust").removeClass("rotate-adjust");
+                $(".glyphicon-adjust").addClass("rotate-adjust-back");
+            },
+            fixTree: function () {
+                $("body").on("click", "#map", this.helpForFixing);
+                $("body").on("click", "#searchbar", this.helpForFixing);
+                $(".glyphicon-pushpin").addClass("rotate-pin");
+                $(".glyphicon-pushpin").removeClass("rotate-pin-back");
+            },
+            unfixTree: function () {
+                $("body").off("click", "#map", this.helpForFixing);
+                $("body").off("click", "#searchbar", this.helpForFixing);
+                $(".glyphicon-pushpin").removeClass("rotate-pin");
+                $(".glyphicon-pushpin").addClass("rotate-pin-back");
+            },
+            helpForFixing: function (evt) {
+                evt.stopPropagation();
             }
         });
 
