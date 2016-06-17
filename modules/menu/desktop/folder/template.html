@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="<%= name %>">
 <span class="glyphicon <%= glyphicon %> hidden-sm"></span>
 <span class="menuitem"><%= name %></span>
 </a>
-<ul id="<%= id %>" class="dropdown-menu">
-</ul>
+<% if (treeType === "light") { %>
+    <ul id="<%= id %>" class="dropdown-menu light">
+    </ul>
+<% }
+else { %>
+    <ul id="<%= id %>" class="dropdown-menu">
+    </ul>
+<% } %>
