@@ -161,11 +161,11 @@ define([
             var isMobile = Radio.request("Util", "isViewMobile");
 
             if (isMobile) {
-                $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav");
+                $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
                 $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
             }
             else {
-                $("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav");
+                $("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav desktop");
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
             }
             this.renderTopMenu(isMobile);
