@@ -22,3 +22,7 @@
 #root .dropdown {
     border-right: 1px solid #e5e5e5;
 }
+.navbar-collapse.in {
+    padding: 0;
+    height: 100%;
+}
