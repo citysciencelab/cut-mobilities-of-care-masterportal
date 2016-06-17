@@ -45,6 +45,7 @@ ul#Themen .layer-catalog > .header {
     padding: 5px 5px 4px 5px;
     background-color: rgb(85, 85, 85);
     color: rgb(255, 255, 255);
+    font-size: 13px;
 }
 
 ul#Themen .themen-folder {
