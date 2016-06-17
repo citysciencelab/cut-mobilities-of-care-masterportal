@@ -15,22 +15,38 @@ define([
         className: "win-body",
         template: _.template(StyleWMSTemplate),
         events: {
-            "change #layerField": "setLayerId",
+            // Layerauswahl
+            "change #layerField": "setModelId",
+            // Auswahl der Attribute
             "change #attributField": "setAttributeName",
+            // Auswahl Anzahl der Klassen
             "change #numberField": "setNumberOfClasses",
             "click button": "setStyle"
         },
+
+        /**
+        * Wird aufgerufen wenn die View erzeugt wird
+        * Registriert Listener auf das Model
+        */
         initialize: function () {
             this.listenTo(this.model, {
+                // ändert sich der Fensterstatus wird neu gezeichnet
                 "change:isCollapsed change:isCurrentWin": this.render,
-                "change:layer change:attributeName change:numberOfClasses": this.render,
-                "invalid": this.showErrorMessage
+                // ändert sich eins dieser Attribute wird neu gezeichnet
+                "change:model change:attributeName change:numberOfClasses": this.render,
+                // Liefert die validate Methode Error Meldungen zurück, werden diese angezeigt
+                "invalid": this.showErrorMessages
             });
         },
+
+        /**
+         * [render description]
+         * @return {[type]} [description]
+         */
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -40,25 +56,41 @@ define([
             }
         },
 
-        setLayerId: function (evt) {
-            this.model.setLayerId(evt.target.value);
+        /**
+         * Ruft setModelId im Model auf und übergibt die ModelId
+         * @param {ChangeEvent} evt
+         */
+        setModelId: function (evt) {
+            this.model.setModelId(evt.target.value);
         },
 
+        /**
+         * Ruft setAttributeName im Model auf und übergibt den Attributnamen
+         * @param {ChangeEvent} evt
+         */
         setAttributeName: function (evt) {
             this.model.setAttributeName(evt.target.value);
         },
 
+        /**
+         * Ruft setNumberOfClasses im Model auf und übergibt die Anzahl der Klassen
+         * Alle Colorpicker werden scharf geschaltet
+         * @param {ChangeEvent} evt
+         */
         setNumberOfClasses: function (evt) {
             this.model.setNumberOfClasses(evt.target.value);
+            // aktiviert den/die colorpicker
             this.$el.find("[class*=selected-color]").parent().colorpicker();
         },
 
+        /**
+         * Erstellt die Style-Klassen und übergibt sie an die Setter Methode im Model
+         */
         setStyle: function () {
             var styleClassAttributes = [];
 
-            this.hideErrorMessage();
+            this.removeErrorMessages();
             for (var i = 0; i < this.model.get("numberOfClasses"); i++) {
-                console.log($(".selected-color" + i).val());
                 styleClassAttributes.push({
                     startRange: $(".start-range" + i).val(),
                     stopRange: $(".stop-range" + i).val(),
@@ -68,11 +100,14 @@ define([
             this.model.setStyleClassAttributes(styleClassAttributes);
         },
 
-        showErrorMessage: function () {
+        /**
+         * zeigt die Error Meldungen im Formular an
+         */
+        showErrorMessages: function () {
             _.each(this.model.getErrors(), function (error) {
                 if (_.has(error, "colorText") === true) {
                     this.$el.find(".selected-color" + error.colorIndex).parent().addClass("has-error");
-                    this.$el.find(".selected-color" + error.colorIndex).prepend("<span class='error'>" + error.colorText + "</span>");
+                    this.$el.find(".selected-color" + error.colorIndex).parent().after("<span class='error'>" + error.colorText + "</span>");
                 }
                 if (_.has(error, "rangeText") === true) {
                     this.$el.find(".start-range" + error.rangeIndex).parent().addClass("has-error");
@@ -96,7 +131,10 @@ define([
             }, this);
         },
 
-        hideErrorMessage: function () {
+        /**
+         * löscht die Error Meldungen aus dem Formular
+         */
+        removeErrorMessages: function () {
             this.$el.find(".error").remove();
             this.$el.find("[class*=selected-color], [class*=start-range], [class*=stop-range]").parent().removeClass("has-error");
         }

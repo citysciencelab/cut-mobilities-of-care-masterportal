@@ -69,7 +69,7 @@ define([
                 },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
-                    EventBus.trigger("layerlist:setAttributionsByID", this.getModelId(), {"SLDBody": this.getSLDBody()});
+                    EventBus.trigger("layerlist:setAttributionsByID", this.getModelId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
                 }
             });
         },
