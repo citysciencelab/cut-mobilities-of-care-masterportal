@@ -21,35 +21,33 @@ define([
             "change select": "setTransparence"
         },
         initialize: function () {
-            this.render();
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender
             });
+
+            this.render();
         },
 
         render: function () {
-            this.$el.html("");
             var attr = this.model.toJSON(),
-                template = this.template(attr),
                 selector = $("#" + this.model.getParentId());
 
+            this.$el.html("");
             if (this.model.getIsVisibleInTree()) {
-
                 if (this.model.getLevel() === 0) {
-                    selector.append(this.$el.html(template));
+                    selector.append(this.$el.html(this.template(attr)));
                 }
                 else {
-                    selector.after(this.$el.html(template));
+                    selector.after(this.$el.html(this.template(attr)));
                 }
                 $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
             }
         },
         rerender: function () {
-            this.$el.html("");
-            var attr = this.model.toJSON(),
-                template = this.template(attr);
+            var attr = this.model.toJSON();
 
-            this.$el.html(template);
+            this.$el.html("");
+            this.$el.html(this.template(attr));
         },
 
         toggleIsSelected: function () {
