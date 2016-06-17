@@ -249,6 +249,7 @@ define([
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("ENER", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("KELL", "boolean"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("LIFT", "boolean"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("EBK", "boolean"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("STST", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("FKWERT", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("SACH", "float"));
