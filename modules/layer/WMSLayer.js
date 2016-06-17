@@ -164,7 +164,7 @@ define([
         },
 
         updateSourceSLDBody: function () {
-            this.get("source").updateParams({SLD_BODY: this.get("SLDBody"), STYLES:"erreichbarkeitCustomStyle"});
+            this.get("source").updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         }
     });
 
