@@ -1,6 +1,14 @@
 <!DOCTYPE html>
-    <span class="glyphicon <%= glyphicon %>"> </span>
+    <% if (this.model.getIsExpanded()) { %>
+        <span class="glyphicon glyphicon-minus-sign"> </span>
+   <% } else { %>
+        <span class="glyphicon glyphicon-plus-sign"> </span>
+   <% } %>
     <% if(isLeafFolder) { %>
-        <span class="glyphicon <%= selectAllGlyphicon %> selectall"></span>
+        <% if(isSelected) { %>
+            <span class="glyphicon glyphicon-check selectall"></span>
+        <%} else {%>
+            <span class="glyphicon glyphicon-unchecked selectall"></span>
+        <%}%>
     <%}%>
     <span class="title"><%= name %></span>

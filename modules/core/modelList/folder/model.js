@@ -49,8 +49,11 @@ define([
          * Setter für Attribut "isChecked"
          * @param {boolean} value - true | false
          */
-        setIsSelected: function (value) {
-            this.set("isSelected", value);
+        setIsSelected: function (value, silent) {
+            if (_.isUndefined(silent)) {
+                silent = false;
+            }
+            this.set("isSelected", value, {silent: silent});
         },
 
         /**

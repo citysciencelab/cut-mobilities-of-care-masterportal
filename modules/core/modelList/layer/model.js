@@ -183,8 +183,6 @@ define([
             else {
                 this.setIsSelected(true);
             }
-            // TODO nur ausführen wenn parent ein leaffodler ist --> noch zu machen
-            this.collection.everyLayerIsSelected(this);
         },
 
         toggleIsVisibleInMap: function () {

@@ -1,11 +1,13 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/menu/desktop/folder/thementemplate.html",
     "text!modules/menu/desktop/folder/templateLeaf.html",
     "text!modules/menu/desktop/folder/catalogTemplate.html"
 ], function () {
 
     var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
         FolderTemplate = require("text!modules/menu/desktop/folder/thementemplate.html"),
         FolderView;
 
@@ -15,7 +17,7 @@ define([
         id: "",
         template: _.template(FolderTemplate),
         events: {
-            "click": "toggleIsExpanded",
+            "click .title, .glyphicon-minus-sign, .glyphicon-plus-sign": "toggleIsExpanded",
             "click .selectall": "toggleIsSelected"
         },
         initialize: function () {
@@ -25,27 +27,15 @@ define([
                    e.stopPropagation();
                 }
             });
+            this.listenTo(this.model, {
+                "change:isSelected": this.rerender
+            });
             this.render();
         },
         render: function () {
             this.$el.html("");
 
             if (this.model.getIsVisibleInTree()) {
-                // due Ordner auf unterster ebene bekommen eine SelectAllLayer Checkbox
-                if (this.model.getIsLeafFolder()) {
-                    if (this.model.getIsSelected()) {
-                        this.model.setSelectAllGlyphicon("glyphicon-check");
-                    }
-                    else {
-                        this.model.setSelectAllGlyphicon("glyphicon-unchecked");
-                    }
-                }
-                if (this.model.getIsExpanded()) {
-                    this.model.setGlyphicon("glyphicon-minus-sign");
-                }
-                else {
-                    this.model.setGlyphicon("glyphicon-plus-sign");
-                }
 
                 this.$el.attr("id", this.model.getId());
 
@@ -69,6 +59,11 @@ define([
             }
 
         },
+        rerender: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+        },
         updateList: function () {
             if (this.model.getIsLeafFolder() === true) {
                 this.model.setIsExpanded(true);
@@ -80,6 +75,8 @@ define([
         },
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
+            Radio.trigger("ModelList", "toggleIsSelectedChildLayers", this.model);
+            this.model.setIsExpanded(true);
         }
     });
 

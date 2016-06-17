@@ -170,7 +170,7 @@ define([
             this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0, isInThemen: true, isVisibleInTree: "true"});
             _.each(tree, function (category) {
                 // Unterordner erzeugen
-                this.addItems(category.folder, {type: "folder", parentId: category.id, isLeaffolder: true, level: 1, isInThemen: true});
+                this.addItems(category.folder, {type: "folder", parentId: category.id, isLeafFolder: true, level: 1, isInThemen: true});
                 _.each(category.layer, function (layer) {
                     layer.name = layer.datasets[0].md_name;
                 });

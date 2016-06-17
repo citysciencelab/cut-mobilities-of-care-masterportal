@@ -1,9 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/menu/desktop/layer/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
         LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
         LayerView;
 
@@ -54,6 +56,7 @@ define([
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
+            Radio.trigger("ModelList", "isEveryChildLayerSelected", this.model);
             this.rerender();
         },
 

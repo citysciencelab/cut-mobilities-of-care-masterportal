@@ -56,7 +56,9 @@ define([
                    },
                    "updateList": this.updateList,
                    "checkIsExpanded": this.checkIsExpanded,
-                   "removeFromSelectionIDX": this.removeFromSelectionIDX
+                   "removeFromSelectionIDX": this.removeFromSelectionIDX,
+                   "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
+                   "isEveryChildLayerSelected": this.isEveryChildLayerSelected
                }, this);
 
                this.listenTo(this, {
@@ -145,20 +147,30 @@ define([
                     model.setIsVisibleInTree(false);
                 });
             },
+             /**
+            * Alle Layermodels von einem Leaffolder werden "gechecked" oder "unchecked"
+            * @param {Backbone.Model} model - folderModel
+            */
+            toggleIsSelectedChildLayers: function (model) {
+                var layers = this.where({parentId: model.getId()});
 
+                _.each(layers, function (layer) {
+                    layer.setIsSelected(model.getIsSelected());
+                });
+            },
             /**
              * Prüft ob alle Layer im Leaffolder isSelected = true sind
              * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt
              * @param {Backbone.Model} model - layerModel
              */
-            everyLayerIsSelected: function (model) {
+            isEveryChildLayerSelected: function (model) {
                 var layers = this.where({parentId: model.getParentId()}),
                    folderModel = this.findWhere({id: model.getParentId()}),
-                   allLayersChecked = _.every(layers, function (layer) {
+                   allLayersSelected = _.every(layers, function (layer) {
                         return layer.getIsSelected() === true;
                    });
 
-                if (allLayersChecked === true) {
+                if (allLayersSelected === true) {
                     folderModel.setIsSelected(true);
                 }
                 else {
