@@ -57,9 +57,26 @@ define([
                 params = this.get("params"),
                 STRL = _.has(params, "STRL") === true ? params.STRL : "",
                 BAUW = _.has(params, "BAUW") === true ? params.BAUW : "",
-                ZWGFZ = _.has(params, "WGFZ") === true ? parseFloat(params.WGFZ.replace(/,/, ".").trim()) : "",
+                ZWGFZ = "",
                 ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : "";
 
+            // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern
+            if (_.has(params, "WGFZ") === false) {
+                if (_.has(params, "WOFL") === true && _.has(params, "FLAE") === true) {
+                    var WOFL = Number(params.WOFL.replace(/,/, ".").trim()),
+                        FLAE = Number(params.FLAE.replace(/,/, ".").trim()),
+                        EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
+                        OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
+                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78).toFixed(2);
+
+                    ZWGFZ = WGFZ;
+                    params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
+                    this.set("params", params);
+                }
+            }
+            else {
+                ZWGFZ = params.WGFZ.replace(/,/, ".").trim();
+            }
             this.set("brwList", brwList);
             _.each(brwList, function (brw) {
                 switch (brw.art) {
@@ -206,6 +223,7 @@ define([
 
             this.set("BRWJSON", BRWJSON);
             this.set("LAGE", LAGE);
+
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("nutzung", "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("produkt", "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("jahr", "integer"));
