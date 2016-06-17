@@ -1,30 +1,40 @@
 define([
     "backbone",
     "backbone.radio",
-    "text!modules/menu/desktop/layer/template.html"
+    "text!modules/menu/desktop/layer/templateSetting.html",
+    "text!modules/menu/desktop/layer/templateLight.html"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
+        SettingTemplate = require("text!modules/menu/desktop/layer/templateSetting.html"),
+        LayerTemplate = require("text!modules/menu/desktop/layer/templateLight.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: "layer",
         template: _.template(LayerTemplate),
+        templateSetting: _.template(SettingTemplate),
         events: {
             "click .layer-item": "toggleIsSelected",
-            "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
+            "click .glyphicon-info-sign": "showLayerInformation",
             "click .selected-layer-item > div": "toggleLayerVisibility",
-            "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
+            "click .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
             "change select": "setTransparence"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isSelected": this.rerender
+                "change:isSelected": this.rerender,
+                "change:isSettingVisible": this.rerender
+            });
+
+            this.$el.on({
+                click: function (e) {
+                    e.stopPropagation();
+                }
             });
 
             this.render();
@@ -35,32 +45,23 @@ define([
                 selector = $("#" + this.model.getParentId());
 
             this.$el.html("");
-            if (this.model.getIsVisibleInTree()) {
-                if (this.model.getLevel() === 0) {
-                    selector.append(this.$el.html(this.template(attr)));
-                }
-                else {
-                    selector.after(this.$el.html(this.template(attr)));
-                }
-                $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
-            }
+            selector.append(this.$el.html(this.template(attr)));
         },
         rerender: function () {
             var attr = this.model.toJSON();
 
             this.$el.html("");
-            this.$el.html(this.template(attr));
+            if (this.model.getIsSettingVisible() === true) {
+                this.$el.html(this.templateSetting(attr));
+            }
+            else {
+                this.$el.html(this.template(attr));
+            }
         },
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
-            Radio.trigger("ModelList", "isEveryChildLayerSelected", this.model);
             this.rerender();
-        },
-
-        removeFromSelection: function () {
-            this.model.setIsInSelection(false);
-            this.$el.remove();
         },
 
         toggleLayerVisibility: function () {

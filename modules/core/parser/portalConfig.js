@@ -58,13 +58,22 @@ define([
 
             _.each(items, function (value, key) {
                 if (_.has(value, "children") || key === "tree") {
-                    this.addItem({
+                    var item = {
                         type: "folder",
                         parentId: parentId,
                         glyphicon: value.glyphicon,
                         name: value.name,
-                        id: value.name
-                    });
+                        id: value.name,
+                        treeType: this.getTreeType()
+                    };
+
+                    // folder Themen bekommt noch den Baumtyp als Attribut
+                    if (value.name === "Themen") {
+                        this.addItem(_.extend(item, {treeType: this.getTreeType()}));
+                    }
+                    else {
+                        this.addItem(item);
+                    }
                     this.parseMenu(value.children, value.name);
                 }
                 else {

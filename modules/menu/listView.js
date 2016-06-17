@@ -8,6 +8,7 @@ define([
     "modules/menu/desktop/folder/view",
     "modules/menu/desktop/folder/themenView",
     "modules/menu/desktop/layer/view",
+    "modules/menu/desktop/layer/viewLight",
     "modules/menu/desktop/tool/view",
     "modules/menu/mobile/folder/view",
     "modules/menu/mobile/layer/view",
@@ -30,6 +31,7 @@ define([
         DesktopThemenFolderView = require("modules/menu/desktop/folder/themenView"),
         CatalogFolderView = require("modules/menu/desktop/folder/catalogView"),
         DesktopLayerView = require("modules/menu/desktop/layer/view"),
+        DesktopLayerViewLight = require("modules/menu/desktop/layer/viewLight"),
         DesktopLayerSelectionView = require("modules/menu/desktop/layer/selectionView"),
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         MobileFolderView = require("modules/menu/mobile/folder/view"),
@@ -111,15 +113,21 @@ define([
             var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
                 models = this.collection.add(lightModels);
 
-            this.addViewsToItemsOfType("layer", models);
+            if (Radio.request("Parser", "getTreeType") === "light") {
+                this.addViews(models);
+            }
+            else {
+                this.addViewsToItemsOfType("layer", models);
 
-            var folder = this.addViewsToItemsOfType("folder", models, parentId);
+                var folder = this.addViewsToItemsOfType("folder", models, parentId);
 
-            _.each(folder, function (folder) {
-                this.renderSubTree(folder.getId(), level + 1, levelLimit);
-            }, this);
-
+                _.each(folder, function (folder) {
+                    this.renderSubTree(folder.getId(), level + 1, levelLimit);
+                }, this);
+            }
         },
+
+        // renderLightTree
         /**
          * Rendert in der Desktop Ansicht den Themenbaum
          * @param  {[type]} parentId [description]
@@ -200,6 +208,7 @@ define([
          */
         addViews: function (models) {
             var isMobile = Radio.request("Util", "isViewMobile"),
+                treeType = Radio.request("Parser", "getTreeType"),
                 nodeView;
 
             _.each(models, function (model) {
@@ -228,7 +237,12 @@ define([
                     }
                     case "layer": {
                         // Model für ein Layer
-                        nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerView({model: model});
+                        if (treeType === "light") {
+                            nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerViewLight({model: model});
+                        }
+                        else {
+                            nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerView({model: model});
+                        }
                         break;
                     }
                     case "tool": {
