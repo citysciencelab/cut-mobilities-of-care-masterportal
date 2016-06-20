@@ -21,8 +21,8 @@ define([
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
             "click .glyphicon-remove-circle": "removeFromSelection",
             "click .layer-info-item  .glyphicon-cog": "toggleIsSettingVisible",
-            "click .layer-sort-item  .glyphicon-triangle-top": "moveModelUp",
-            "click .layer-sort-item  .glyphicon-triangle-bottom": "moveModelDown",
+            "click .arrows > .glyphicon-arrow-up": "moveModelUp",
+            "click .arrows > .glyphicon-arrow-down": "moveModelDown",
             "change select": "setTransparence"
         },
         initialize: function () {

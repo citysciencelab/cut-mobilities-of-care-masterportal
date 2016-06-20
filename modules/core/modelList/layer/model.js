@@ -242,13 +242,13 @@ define([
         },
         getSelectionIDX: function () {
            return this.get("selectionIDX");
-       },
-       moveDown: function () {
-           Radio.trigger("SelectedList", "moveModelDownById", this.getId());
-       },
-       moveUp: function () {
-           Radio.trigger("SelectedList", "modeModelUpById", this.getId());
-       }
+        },
+        moveDown: function () {
+           Radio.trigger("ModelList", "moveModelDown", this);
+        },
+        moveUp: function () {
+           Radio.trigger("ModelList", "moveModelUp", this);
+        }
     });
 
     return Layer;

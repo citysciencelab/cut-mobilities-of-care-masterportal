@@ -58,7 +58,9 @@ define([
                    "checkIsExpanded": this.checkIsExpanded,
                    "removeFromSelectionIDX": this.removeFromSelectionIDX,
                    "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
-                   "isEveryChildLayerSelected": this.isEveryChildLayerSelected
+                   "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
+                   "moveModelDown" : this.moveModelDown,
+                   "moveModelUp" : this.moveModelUp
                }, this);
 
                this.listenTo(this, {
@@ -222,9 +224,35 @@ define([
                 this.updateModelIndeces();
                 return idx;
             },
+            insertIntoSelectionIDXAt: function (model, idx) {
+                this.selectionIDX.splice(idx, 0, model);
+                this.updateModelIndeces();
+            },
             removeFromSelectionIDX: function (idx) {
                 this.selectionIDX.splice(idx, 1);
                 this.updateModelIndeces();
+            },
+            moveModelDown: function (model) {
+                var oldIDX = model.getSelectionIDX(),
+                    newIDX = oldIDX - 1;
+
+                if (oldIDX > 0) {
+                    this.removeFromSelectionIDX(model.getSelectionIDX());
+                    this.insertIntoSelectionIDXAt(model, newIDX);
+                }
+                Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                this.trigger("updateSelectionView");
+            },
+            moveModelUp: function (model) {
+                var oldIDX = model.getSelectionIDX(),
+                    newIDX = oldIDX + 1;
+
+                if (oldIDX < this.selectionIDX.length - 1) {
+                    this.removeFromSelectionIDX(model.getSelectionIDX());
+                    this.insertIntoSelectionIDXAt(model, newIDX);
+                }
+                Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                this.trigger("updateSelectionView");
             },
             updateModelIndeces: function () {
                 _.each(this.selectionIDX, function (model, index) {

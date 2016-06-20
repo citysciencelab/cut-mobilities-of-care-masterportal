@@ -19,7 +19,6 @@ define([
             "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-            "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
             "change select": "setTransparence"
         },
         initialize: function () {
