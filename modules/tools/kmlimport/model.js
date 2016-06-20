@@ -18,7 +18,7 @@ define([
             features: [],
             source: new ol.source.Vector({useSpatialIndex: false}),
             layer: new ol.layer.Vector(),
-            format: new ol.format.KML({extractStyles:true})
+            format: new ol.format.KML({extractStyles: true})
         },
 
         initialize: function () {
@@ -122,7 +122,7 @@ define([
                  var type = feature.getGeometry().getType(),
                  styles = feature.getStyleFunction().call(feature),
                  style = styles[0];
-                 
+
                  // wenn Punkt-Geometrie
                  if (type === "Point") {
                      // wenn Text
@@ -140,7 +140,9 @@ define([
             return new ol.style.Style({
                 text: new ol.style.Text({
                     text: name,
-                    fill: style.getText().getFill()
+                    font: "8px Arial",
+                    fill: style.getText().getFill(),
+                    scale: style.getText().getScale()
                 })
             });
         },

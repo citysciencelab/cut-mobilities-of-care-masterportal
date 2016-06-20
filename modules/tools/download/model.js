@@ -125,6 +125,7 @@ define([
               */
              validateFileExtension: function () {
                 var format = this.getSelectedFormat();
+
                 if (format === "none" || format === "" || typeof format === "undefined") {
                      EventBus.trigger("alert", "Bitte Format auswählen");
                      return false;
@@ -181,6 +182,7 @@ define([
              */
             prepareDownloadButtonNonIE: function () {
                 var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.getData());
+
                 $(this.getDlBtnSel()).attr("href", url);
 
                 var that = this;
@@ -256,7 +258,7 @@ define([
              * @return {function} die Konvertierfunktion
              */
             getConverter: function (format) {
-                var knownFormats =  ["kml", "jpg"];
+                var knownFormats = ["kml", "jpg"];
 
                 switch (format) {
                     case knownFormats[0]: {
@@ -352,7 +354,7 @@ define([
                 _.each(features, function (feature) {
                     var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
 
-                    //für den Download nach einem Import! Z-Koordinate absägen
+                    // für den Download nach einem Import! Z-Koordinate absägen
                     if (transCoord.length === 3) {
                         transCoord.pop();
                     }
