@@ -175,10 +175,10 @@ define([
             var id = Config.menu.viomRouting,
             providerid = Radio.request("RestReader", "getServiceById", id),
             viomurl = Radio.request("RestReader", "getServiceById", "4");
-            
+
             providerid = providerid[0].attributes.url;
             viomurl = viomurl[0].attributes.url;
-            
+
             var request = "PROVIDERID=" + providerid + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]

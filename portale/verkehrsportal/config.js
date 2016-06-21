@@ -77,7 +77,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur json mit Druck- und WPS-Dienst
         */
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         /**
         * @memberof config
         * @type {String}
