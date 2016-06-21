@@ -137,7 +137,7 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: true,
-            viomproviderid: "3",
+            viomRouting: "3",
             addWMS: false,
             featureLister: 20
         },

@@ -172,7 +172,7 @@ define([
             });
         },
         requestRoute: function () {
-            var id = Config.menu.viomproviderid,
+            var id = Config.menu.viomRouting,
             providerid = Radio.request("RestReader", "getServiceById", id),
             viomurl = Radio.request("RestReader", "getServiceById", "4");
             
