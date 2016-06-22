@@ -20,52 +20,14 @@
               "Titel": "Bohrungen",
               "Layer": [
                 {
-                  "id": "4423",
-                  "visibility": false
-                },
-                {
                   "id": "2407",
                   "visibility": false
                 }
               ]
-            
-        },
-        {
-          "Titel": "Geothermie",
-          "Layer": [
-            {
-              "id": "2203",
-              "visibility": false
-            },
-            {
-              "id": "658",
-              "visibility": false
-            },
-            {
-              "id": "659",
-              "visibility": false
-            },
-              {
-              "id": "660",
-              "visibility": false
-            },
-            {
-              "id": "661",
-              "visibility": false
-            },
-            {
-              "id": "662",
-              "visibility": false
-            }
-          ]
         },
           {
           "Titel": "Geologie",
           "Layer": [
-            {
-              "id": "647",
-              "visibility": false
-            },
             {
               "id": "649",
               "visibility": false
@@ -77,9 +39,66 @@
             {
               "id": "646",
               "visibility": false
+            },
+            {
+              "id": "647",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Geothermie",
+          "Layer": [
+            {
+              "id": "4546",
+              "visibility": false
+            },
+            {
+              "id": "4545",
+              "visibility": false
+            },
+            {
+              "id": "4544",
+              "visibility": false
+            },
+              {
+              "id": "4543",
+              "visibility": false
+            },
+            {
+              "id": "4542",
+              "visibility": false
+            },
+            {
+              "id": "4541",
+              "visibility": false
+            },
+            {
+              "id": "4423",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Hydrogeologie",
+          "Layer": [
+            {
+              "id": "4449",
+              "visibility": false
+            },
+            {
+              "id": "4450",
+              "visibility": false
+            },
+            {
+              "id": "4451",
+              "visibility": false
+            },
+              {
+              "id": "690",
+              "visibility": false
             }
           ]
         }
       ]
     }
-  

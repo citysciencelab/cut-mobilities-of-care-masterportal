@@ -4,8 +4,9 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
-            poi: false
+            mousePosition: true,
+            fullScreen: true,
+            orientation: "once"
         },
         wfsImgPath: "..components/lgv-config/img",
         allowParametricURL: true,
@@ -39,12 +40,42 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: true,
+            contact: {
+                serviceID: "80002",
+                from: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                to: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                ccToUser: true,
+                cc: [],
+                bcc: [],
+                subject: "",
+                textPlaceholder: "",
+                includeSystemInfo: true
+            },
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
             legend: true,
             routing: false
+        },
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            }
         },
         startUpModul: "",
         searchBar: {
