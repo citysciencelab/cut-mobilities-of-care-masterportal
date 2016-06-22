@@ -219,7 +219,7 @@ define([
                 id: "Overlayer",
                 parentId: "Themen",
                 isInThemen: true,
-                isExpanded: true,
+                isExpanded: false,
                 level: 0
             });
             this.addItem({
