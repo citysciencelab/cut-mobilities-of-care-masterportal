@@ -165,3 +165,8 @@ ul#Themen #SelectedLayer .layer-settings .transparence .badge {
 ul#Themen #SelectedLayer .layer-settings .transparence .glyphicon {
     padding-left: 0px;
 }
+ul#Themen .SelectedLayer .layer-selection-save {
+    font-size: 11px;
+    font-weight: 400;
+    cursor: pointer;
+}
