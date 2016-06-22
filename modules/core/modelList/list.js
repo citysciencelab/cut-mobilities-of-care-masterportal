@@ -239,9 +239,9 @@ define([
                 if (oldIDX > 0) {
                     this.removeFromSelectionIDX(model.getSelectionIDX());
                     this.insertIntoSelectionIDXAt(model, newIDX);
+                    Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                    this.trigger("updateSelectionView");
                 }
-                Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
-                this.trigger("updateSelectionView");
             },
             moveModelUp: function (model) {
                 var oldIDX = model.getSelectionIDX(),
@@ -250,9 +250,9 @@ define([
                 if (oldIDX < this.selectionIDX.length - 1) {
                     this.removeFromSelectionIDX(model.getSelectionIDX());
                     this.insertIntoSelectionIDXAt(model, newIDX);
+                    Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                    this.trigger("updateSelectionView");
                 }
-                Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
-                this.trigger("updateSelectionView");
             },
             updateModelIndeces: function () {
                 _.each(this.selectionIDX, function (model, index) {
