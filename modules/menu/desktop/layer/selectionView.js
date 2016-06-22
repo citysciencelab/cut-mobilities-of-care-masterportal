@@ -18,7 +18,7 @@ define([
         events: {
             "click .glyphicon-check": "toggleIsVisibleInMap",
             "click .glyphicon-unchecked": "toggleIsVisibleInMap",
-            "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
+            "click .glyphicon-info-sign": "showLayerInformation",
             "click .glyphicon-remove-circle": "removeFromSelection",
             "click .layer-info-item  .glyphicon-cog": "toggleIsSettingVisible",
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
@@ -36,7 +36,6 @@ define([
                 template = this.template(attr);
 
             if (this.model.getIsSettingVisible() === true) {
-                this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
                 template = this.templateSetting(attr);
             }
             if (this.model.getIsSelected()) {
@@ -49,7 +48,6 @@ define([
                 template = this.template(attr);
 
             if (this.model.getIsSettingVisible() === true) {
-                this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
                 template = this.templateSetting(attr);
             }
             this.$el.html(template);

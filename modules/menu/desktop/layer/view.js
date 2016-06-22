@@ -36,7 +36,7 @@ define([
             this.$el.html("");
             if (this.model.getIsVisibleInTree()) {
                 if (this.model.getLevel() === 0) {
-                    selector.append(this.$el.html(this.template(attr)));
+                    selector.prepend(this.$el.html(this.template(attr)));
                 }
                 else {
                     selector.after(this.$el.html(this.template(attr)));

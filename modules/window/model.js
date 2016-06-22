@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "config",
     "eventbus"
-], function (Backbone, Config, EventBus) {
+], function (Backbone, Radio, Config, EventBus) {
 
         var Window = Backbone.Model.extend({
             defaults: {
@@ -16,6 +17,11 @@ define([
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
+                var channel = Radio.channel("window");
+
+                channel.on({
+                    "toggleWin": this.setParams
+                }, this);
             },
             collapseWindow: function () {
                 this.setCollapse(true);

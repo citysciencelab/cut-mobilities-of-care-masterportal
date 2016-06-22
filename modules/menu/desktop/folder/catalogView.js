@@ -16,13 +16,21 @@ define([
             events: {
                 "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
                 "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
-                    console.log(1);
                     Radio.trigger("Quickhelp", "showWindowHelp", "tree");
                 },
                 "click .rotate-adjust": "greyBackground",
                 "click .rotate-adjust-back": "whiteBackground",
                 "click .rotate-pin": "unfixTree",
-                "click .rotate-pin-back": "fixTree"
+                "click .rotate-pin-back": "fixTree",
+                "click .layer-selection-save": function () {
+                    Radio.trigger("window", "toggleWin", ["saveSelection", "Auswahl speichern", "glyphicon-share"]);
+                    // Schließt den Baum
+                    $(".nav li:first-child").removeClass("open");
+                    // Schließt die Mobile Navigation
+                    $(".navbar-collapse").removeClass("in");
+                    // Selektiert die URL
+                    $(".input-save-url").select();
+                },
             },
             initialize: function () {
                 this.$el.on({
@@ -35,7 +43,7 @@ define([
                 var attr = this.model.toJSON();
 
                 $(".header").toggleClass("closed");
-                $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                $("#" + this.model.getParentId()).prepend(this.$el.html(this.template(attr)));
                 if (!this.model.getIsExpanded()) {
                     $("#" + this.model.getId()).css("display", "none");
                 }
