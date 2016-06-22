@@ -105,6 +105,20 @@ define([
                 this.addViews(toolModels);
             }
         },
+        renderThemenMenu: function (isMobile) {
+            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "Themen"}),
+                items = this.collection.add(lightModels);
+
+            items = _.sortBy(items, function (item) {
+                    return item.getName();
+            });
+
+            if (!isMobile) {
+                var fachdaten = _.findWhere(items, {id: "Overlayer"});
+                fachdaten.setIsExpanded(true);
+            }
+            this.addViews(items);
+        },
         renderSubTree: function (parentId, level, levelLimit) {
             if (level >= levelLimit) {
                 return;
@@ -177,11 +191,17 @@ define([
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
             }
             this.renderTopMenu(isMobile);
-
-            if (!isMobile) {
+            if (Radio.request("Parser", "getTreeType") !== "light") {
+                this.renderThemenMenu(isMobile);
+                if (!isMobile) {
+                    this.renderDesktopThemen("Baselayer");
+                    this.renderDesktopThemen("Overlayer");
+                    this.renderSelectedList();
+                    $("ul#Themen ul#Overlayer").css("max-height", "80vh");
+                }
+            }
+            else {
                 this.renderDesktopThemen("Themen");
-                this.renderSelectedList();
-                $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             }
 
             // if (isMobile) {
