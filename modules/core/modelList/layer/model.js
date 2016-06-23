@@ -54,6 +54,9 @@ define([
             });
 
             if (this.getIsSelected() === true) {
+                if (Radio.request("Parser", "getTreeType") !== "light") {
+                    this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
+                }
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
@@ -96,6 +99,12 @@ define([
          * @param {boolean} value
          */
         setIsSelected: function (value) {
+            if (value && Radio.request("Parser", "getTreeType") !== "light") {
+                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
+            }
+            else {
+                Radio.trigger("ModelList", "removeSelectionIDX", this.getSelectionIDX());
+            }
             this.set("isSelected", value);
         },
 
@@ -177,7 +186,6 @@ define([
 
         toggleIsSelected: function () {
             if (this.getIsSelected() === true) {
-                Radio.trigger("ModelList", "removeSelectionIDX", this);
                 this.setIsSelected(false);
             }
             else {
@@ -199,7 +207,6 @@ define([
                 this.setIsSettingVisible(false);
             }
             else {
-                this.collection.setIsSettingVisible(false);
                 this.setIsSettingVisible(true);
             }
         },
@@ -209,12 +216,10 @@ define([
          */
         toggleLayerOnMap: function () {
             if (this.getIsVisibleInMap() === true) {
-                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
             }
             else {
                 // model.collection besser?!
-                Radio.trigger("ModelList", "removeFromSelectionIDX", this.getSelectionIDX());
                 Radio.trigger("Map", "removeLayer", this.getLayer());
             }
         },

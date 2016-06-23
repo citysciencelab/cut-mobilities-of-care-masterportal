@@ -45,7 +45,12 @@ define([
                 selector = $("#" + this.model.getParentId());
 
             this.$el.html("");
-            selector.append(this.$el.html(this.template(attr)));
+            if (this.model.getIsSettingVisible() === true) {
+                selector.prepend(this.$el.html(this.templateSetting(attr)));
+            }
+            else {
+                selector.prepend(this.$el.html(this.template(attr)));
+            }
         },
         rerender: function () {
             var attr = this.model.toJSON();

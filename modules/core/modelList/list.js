@@ -72,8 +72,11 @@ define([
                     },
                     "change:isSelected": function () {
                         this.trigger("updateSelectionView");
+                    },
+                    "update": function () {
+
                     }
-               });
+                });
             },
 
             model: function (attrs, options) {
@@ -180,19 +183,6 @@ define([
                 }
             },
 
-            /**
-             * Steuert, ob an den Models in der Auswahl das Zahnrad angezeigt werden soll
-             * dies soll nur geschehen, wenn die Auswahl gerade angezeigt wird.
-             * @param {[type]} value [description]
-             */
-            setIsSettingVisible: function (value) {
-                var models = this.where({type: "layer"});
-
-                _.each(models, function (model) {
-                    model.setIsSettingVisible(value);
-                });
-            },
-
             setActiveToolToFalse: function (model) {
                 var tool = _.without(this.where({isActive: true}), model)[0];
 
@@ -239,8 +229,10 @@ define([
                 if (oldIDX > 0) {
                     this.removeFromSelectionIDX(model.getSelectionIDX());
                     this.insertIntoSelectionIDXAt(model, newIDX);
-                    Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
-                    this.trigger("updateSelectionView");
+                    if (!_.isUndefined(model.getLayer())) {
+                        Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                    }
+                    this.trigger("updateSelectionOrLightTreeView");
                 }
             },
             moveModelUp: function (model) {
@@ -250,14 +242,32 @@ define([
                 if (oldIDX < this.selectionIDX.length - 1) {
                     this.removeFromSelectionIDX(model.getSelectionIDX());
                     this.insertIntoSelectionIDXAt(model, newIDX);
-                    Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
-                    this.trigger("updateSelectionView");
+                    if (!_.isUndefined(model.getLayer())) {
+                        Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                    }
+                    this.trigger("updateSelectionOrLightTreeView");
                 }
             },
             updateModelIndeces: function () {
+                console.log("---------------------------");
+                _.each(this.selectionIDX, function (model, index) {
+                    console.log(model.getName() + " " + model.getId() + " " + index);
+                });
                 _.each(this.selectionIDX, function (model, index) {
                     model.setSelectionIDX(index);
                 });
+            },
+            initLightTreeSelectionIDX: function () {
+                if (this.selectionIDX.length === 0) {
+                    console.log(1);
+                    var models = this.where({type: "layer"});
+
+                    _.each(models.reverse(), function (model) {
+                        this.selectionIDX.push(model);
+                        console.log(model.getName() + " " + model.getId());
+                    }, this);
+                }
+                this.updateModelIndeces();
             }
     });
 

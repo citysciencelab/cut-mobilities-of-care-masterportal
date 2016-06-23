@@ -20,7 +20,10 @@ define([
             // Portalconfig
             portalConfig: {},
             // Baumtyp
-            treeType: ""
+            treeType: "",
+            // Nur für Lighttree: Index der zuletzt eingefügten Layer,
+            // wird für die Sortierung/das Verschieben benötigt
+            selectionIDX: -1
         },
 
         initialize: function () {
@@ -277,6 +280,13 @@ define([
             value = value.replace(/[^a-zA-Z0-9]/g, "");
 
             return _.uniqueId(value);
+        },
+        getNextSelectionIDX: function () {
+            var idx = this.get("selectionIDX");
+
+            this.set("selectionIDX", idx + 1);
+
+            return idx + 1;
         }
     });
 

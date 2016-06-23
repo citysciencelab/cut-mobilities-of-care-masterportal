@@ -59,8 +59,8 @@ define([
                 "updateOverlayerView": function () {
                     this.renderDesktopThemen("Overlayer");
                 },
-                "updateSelectionView": function () {
-
+                "updateSelectionOrLightTreeView": function () {
+                    this.updateLightTree("Themen");
                     this.renderSelectedList("Overlayer");
                 }
             });
@@ -115,6 +115,7 @@ define([
 
             if (!isMobile) {
                 var fachdaten = _.findWhere(items, {id: "Overlayer"});
+
                 fachdaten.setIsExpanded(true);
             }
             this.addViews(items);
@@ -127,21 +128,36 @@ define([
             var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
                 models = this.collection.add(lightModels);
 
-            if (Radio.request("Parser", "getTreeType") === "light") {
-                this.addViews(models);
-            }
-            else {
-                this.addViewsToItemsOfType("layer", models);
+            this.addViewsToItemsOfType("layer", models);
 
-                var folder = this.addViewsToItemsOfType("folder", models, parentId);
+            var folder = this.addViewsToItemsOfType("folder", models, parentId);
 
-                _.each(folder, function (folder) {
-                    this.renderSubTree(folder.getId(), level + 1, levelLimit);
-                }, this);
-            }
+            _.each(folder, function (folder) {
+                this.renderSubTree(folder.getId(), level + 1, levelLimit);
+            }, this);
         },
+        renderLightTree: function (parentId) {
 
-        // renderLightTree
+            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
+
+            var models = this.collection.add(lightModels);
+
+            this.collection.initLightTreeSelectionIDX(models);
+            models = _.sortBy(models, function (model) {
+                return model.getSelectionIDX();
+            });
+
+            this.addViews(models);
+        },
+        updateLightTree: function () {
+            $("#" + "Themen").html("");
+            var models = this.collection.where({type: "layer"});
+            models = _.sortBy(models, function (model) {
+                return model.getSelectionIDX();
+            });
+            //models.reverse();
+            this.addViews(models);
+        },
         /**
          * Rendert in der Desktop Ansicht den Themenbaum
          * @param  {[type]} parentId [description]
@@ -158,7 +174,7 @@ define([
         renderSelectedList: function () {
             $("#" + "SelectedLayer").html("");
 
-           var selectedModels = this.collection.where({isVisibleInMap: true});
+           var selectedModels = this.collection.where({isSelected: true, type: "layer"});
 
            selectedModels = _.sortBy(selectedModels, function (model) {
                 return model.getSelectionIDX();
@@ -201,8 +217,9 @@ define([
                 }
             }
             else {
-                this.renderDesktopThemen("Themen");
+                this.renderLightTree("Themen");
             }
+
 
             // if (isMobile) {
             //     $("body").append(this.$el.append(this.mobileTemplate()));
