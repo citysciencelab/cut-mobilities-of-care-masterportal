@@ -80,7 +80,7 @@ define([
         setNumberOfClasses: function (evt) {
             this.model.setNumberOfClasses(evt.target.value);
             // aktiviert den/die colorpicker
-            this.$el.find("[class*=selected-color]").parent().colorpicker();
+            this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
         },
 
         /**
