@@ -249,22 +249,16 @@ define([
                 }
             },
             updateModelIndeces: function () {
-                console.log("---------------------------");
-                _.each(this.selectionIDX, function (model, index) {
-                    console.log(model.getName() + " " + model.getId() + " " + index);
-                });
                 _.each(this.selectionIDX, function (model, index) {
                     model.setSelectionIDX(index);
                 });
             },
             initLightTreeSelectionIDX: function () {
                 if (this.selectionIDX.length === 0) {
-                    console.log(1);
                     var models = this.where({type: "layer"});
 
                     _.each(models.reverse(), function (model) {
                         this.selectionIDX.push(model);
-                        console.log(model.getName() + " " + model.getId());
                     }, this);
                 }
                 this.updateModelIndeces();
