@@ -61,8 +61,6 @@ ul#Themen .glyphicon {
 
 ul#Themen .closed:not(.SelectedLayer ){
     border-bottom: 1px solid #ddd;
-    max-width:  500px;
-    min-width:  380px;
 }
 
 /*Unterlisten*/
@@ -126,13 +124,18 @@ ul#Themen .rotate-pin-back {
     font-size: 14px;
     cursor: pointer;
 }
-ul#Themen ul .glyphicon-check, ul#Themen ul .glyphicon-check + .title {
+ul#Themen ul .glyphicon-check, ul#Themen ul .glyphicon-check + .title:not {
     color: rgb(255, 127, 0);
+}
+ul#Themen ul#SelectedLayer .glyphicon-check, ul#Themen ul#SelectedLayer .glyphicon-check + .title {
+    color: rgb(85, 85, 85);
 }
 /*-------------------Selection/Settings----------------------*/
 ul#Themen ul{
    overflow-y: auto;
    overflow-x: auto;
+    max-width:  500px;
+    min-width:  380px;
 }
 
 ul#Themen #SelectedLayer li {
