@@ -29,7 +29,7 @@ define([
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
-                resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
+                resp = Radio.request("RestReader", "getServiceById", Config.menu.contact.serviceID);
 
             if (resp && resp.length === 1) {
                 this.set("url", _.first(resp).get("url"));

@@ -11,8 +11,8 @@ define(function () {
                 {id: "53", visibility: false}, // WebAtlas_grau
                 {id: "55", visibility: false}, // Luftbilder
                 {id: "57", visibility: false}, // 1:5000
-                {id: "99999", style: "99999", visibility: false, styleField: "kategorie", mouseHoverField: "bezeichnung"}, // Lieblingsplaetze Poi
-                {id: "99997", visibility: true}
+                {id: "4431", style: "4431", visibility: false, styleField: "kategorie", mouseHoverField: "bezeichnung"}, // Lieblingsplaetze Poi
+                {id: "4429", visibility: true}
             ]
         },
         controls: {
@@ -110,24 +110,34 @@ define(function () {
                 }
             ]
         },
-        layerConf: "../components/lgv-config/services-mrh.json",
+        layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "Geoportal GDI-MRH",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: true
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            },
+            addWMS: {
+                title: "WMS hinzufügen",
+                glyphicon: "glyphicon-plus"
+            }
         },
         startUpModul: "",
         searchBar: {

@@ -13,7 +13,8 @@ define(function () {
                 ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
                 ["713", "714", "715", "716"],
                 ["717", "718", "719", "720"],
-                ["1043", "1044", "1045", "1046"]
+                ["1043", "1044", "1045", "1046"],
+                ["2709","2885","2890","2900"]
               ],
             layerIDsToStyle: [
                 {
@@ -153,13 +154,16 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
             },
             tree: {
+                minChars: 3
+            },
+            visibleWFS: {
                 minChars: 3
             },
             minChars: 3,

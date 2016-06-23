@@ -14,15 +14,25 @@ define([
             layer: {}, // Layer aus Layerlist mit gesuchter layerid
             headers: [], // Liste der Überschriften in Liste
             featureid: "", // ID des Features, das angezeigt werden soll.
-            featureProps: {} // Properties des Features mit gesuchter featureid
+            featureProps: {}, // Properties des Features mit gesuchter featureid
+            prevFeatureId: -1,
+            prevStyleScale: 1
         },
         initialize: function () {
-            this.set("maxFeatures", Config.menuItems.featureLister);
+            if(_.has(Config.menuItems.featureLister,"lister") === true) {
+                this.set("maxFeatures", Config.menuItems.featureLister.lister);
+            }
 
             EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
             EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
+        },
+        setPrevFeatureId: function (value) {
+            this.set("prevFeatureId", value);
+        },
+        setPrevStyleScale: function (value) {
+            this.set("prevStyleScale", value);
         },
         /*
         * Wird ein GFI geöffnet, wird versucht das entsprechende Feature in der Liste zu finden und zu selektieren
@@ -78,20 +88,40 @@ define([
             }
         },
         /*
-        * Ruft über EventBus Hover des selektierten Features
+        * Skaliert den Style des selektierten Features um das 1.5-fache
         */
-        showMarker: function (id) {
-            var features = this.get("layer").features,
+        scaleFeature: function (id) {
+            var layer = this.get("layer"),
+                features = layer.features,
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === id;
                 }),
-                geometry = feature.geometry;
+            style = layer.style(feature.feature)[0],
+            image = style.getImage();
 
-            if (geometry) {
-                EventBus.trigger("mapHandler:zoomTo", {
-                    type: "Feature-Lister-Hover",
-                    coordinate: geometry
-                });
+            this.set("prevStyleScale",image.getScale())
+            this.set("prevFeatureId",id);
+            image.setScale(image.getScale()*1.5);
+            feature.feature.setStyle(style);
+        },
+        /*
+        * Skaliert den Style des zuvor selektierten Features auf den Ursprungswert
+        */
+        unscaleFeature: function () {
+            var prevfeatureid = this.get("prevFeatureId"),
+                prevStyleScale = this.get("prevStyleScale");
+
+            if(prevfeatureid !== -1) {
+                var layer = this.get("layer"),
+                    features = layer.features,
+                    feature = _.find(features, function (feat) {
+                        return feat.id.toString() === prevfeatureid;
+                    }),
+                style = layer.style(feature.feature)[0],
+                image = style.getImage();
+
+                image.setScale(prevStyleScale);
+                feature.feature.setStyle(style);
             }
         },
         /*
@@ -207,7 +237,8 @@ define([
             layerlist.push({
                 id: layer.id,
                 name: layer.get("name"),
-                features: featurelist
+                features: featurelist,
+                style: layer.get("style")
             });
             this.unset("layerlist", {silent: true});
             this.set("layerlist", layerlist);

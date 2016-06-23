@@ -6,23 +6,26 @@ define(function () {
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
-                {id: "713", visibility: false, "name" : "Stadtplan S-W"},
-                {id: "1993", visibility: true, "name" : "Fauna-Flora-Habitat-Gebiete"},
-                {id: "1994", visibility: true, "name" : "Vogelschutzgebiete"},
-                {id: "1999", visibility: true}, //Naturdenkmal
-                {id: "1998", visibility: true}, //Landschaftschtutzgeb.
-                {id: "1992", visibility: true}  //Naturschutzgebiete
+                {id: "1751", visibility: false}
             ]
         },
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
+        
+        zoomtofeature: {
+            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            version: "2.0.0",
+            typename: "app:hamburgconvention",
+            valuereference:"app:flaechenid",
+            imglink: "../img/location_eventlotse.svg",
+            layerid: "4426"
+        },
         view: {
-           center: [565874, 5934140],
-            resolution: 66.14579761460263,
+           /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
-            
+            */
         },
         controls: {
             zoom: true,
@@ -31,6 +34,8 @@ define(function () {
             poi: true,
             fullScreen: true
         },
+        customModules: [],
+ 
         footer: {
             visibility: true,
             urls: [
@@ -58,7 +63,6 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -83,26 +87,6 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-        
-        startUpModul: "",
-        searchBar: {
-            minChars: 3,
-            gazetteer: {
-                minChars: 3,
-               url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-           
-            placeholder: "Suche nach Adresse / Stadtteil"
-        },
-        print: {
-            printID: "99999",
-            title: "Schutzgebietskarte",
-            gfi: false
-        },
         menu: {
             helpButton: false,
             searchBar: true,
@@ -115,6 +99,44 @@ define(function () {
             routing: true,
             addWMS: true,
             formular: {}
+        },
+        startUpModul: "",
+        searchBar: {
+            gazetteer: {
+                minChars: 3,
+                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
+            },
+            specialWFS: {
+                minChar: 3,
+                definitions: [
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        name: "bplan"
+                    },
+                    {
+                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                        data: "typeNames=imverfahren&propertyName=plan",
+                        name: "bplan"
+                    }
+                ]
+            },
+            visibleWFS: {
+                minChars: 3
+            },
+            layer: {
+                minChar: 3
+            },
+            placeholder: "Suche nach Adresse"
+        },
+        print: {
+            printID: "99999",
+            title: "Solaratlas",
+            gfi: false
         },
         tools: {
             gfi: {
@@ -133,8 +155,13 @@ define(function () {
             measure: {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
+            },
+            draw: {
+                title: "Zeichnen / Schreiben",
+                glyphicon: "glyphicon-pencil"
             }
         },
+      
         geoAPI: false,
         clickCounter: {},
         gemarkungen: "../components/lgv-config/gemarkung.json"

@@ -1,17 +1,19 @@
 define(function () {
     var config = {
-        title: "FHH - Atlas",
+        title: "Geo - Online",
         logo: "../img/hh-logo.png",
         tree: {
             type: "default",
             orderBy: "opendata",
             saveSelection: true,
             baseLayer: [
-                {id: "453", minScale: "500"},
-                {id: "8"},
-                {id: "717", visibility: true, minScale: "1000", name: "Geobasiskarten (farbig)"},
+                {id: "453", visibility: true, minScale: "500"},
+                {id: "717", minScale: "1000", name: "Geobasiskarten (farbig)"},
                 {id: "713", minScale: "1000", name: "Geobasiskarten (schwarz-weiß)"},
                 {id: "1043", minScale: "1000", name: "Geobasiskarten (grau-blau)"},
+                {id: "94"},
+                {id: "452", name: "Luftbilder DOP 40 (mit Umland)"},
+                {id: "756"},
                 {id: "368", name: "ALKIS farbig", maxScale: "10000"},
                 {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
             ],
@@ -49,7 +51,6 @@ define(function () {
                 "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1" // Flurstücke schwarz
             ],
             metaIDsToIgnore: [
-                "DFA37E3E-F640-47DE-B7EF-3D3FFB11435C", // Störfallbetriebe Internet
                 "09DE39AB-A965-45F4-B8F9-0C339A45B154", // MRH Fachdaten
                 "51656D3F-E801-497C-952C-4F1F605843DD", // MRH Metrokarte
                 "AD579C62-0471-4FA5-8C9A-38B3DCB5B2CB", // MRH Übersichtskarte-blau
@@ -67,7 +68,8 @@ define(function () {
             zoom: true,
             toggleMenu: true,
             mousePosition: true,
-            fullScreen: true
+            fullScreen: true,
+            orientation: "once"
         },
         csw: {
             id: "1"
@@ -79,13 +81,8 @@ define(function () {
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",
                     "url": "http://www.geoinfo.hamburg.de/",
-                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias": "Landesbetrieb Geoinformation und Vermessung",
                     "alias_mobil": "LGV Hamburg"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download"
                 },
                 {
                     "bezeichnung": "",
@@ -94,8 +91,8 @@ define(function () {
                 },
                 {
                     "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/fhh-atlas_alt/",
-                    "alias": "Zum alten FHH-Atlas"
+                    "url": "http://geoportal-hamburg.de/Geoportal/Geo-Online_alt/",
+                    "alias": "Zum alten Geo-Online"
                 }
             ]
         },
@@ -105,19 +102,33 @@ define(function () {
             center: [565874, 5934140],
             extent: [442800, 5809000, 738000, 6102200]
         },
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,
         isMenubarVisible: true,
         menu: {
-            // viewerName: "FHH - Atlas",
-            // searchBar: true,
             layerTree: true,
             helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
+            contact: {
+                serviceID: "80002",
+                from: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                to: [{
+                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
+                    name: "LGVGeoportalHilfe"
+                }],
+                ccToUser: true,
+                cc: [],
+                bcc: [],
+                subject: "",
+                textPlaceholder: "",
+                includeSystemInfo: true
+            },
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
@@ -136,16 +147,10 @@ define(function () {
             legend: {
                 title: "Legende",
                 glyphicon: "glyphicon-book"
-            },
-            contact: {
-                title: "Kontakt",
-                glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
         startUpModul: "",
         searchBar: {
-            minChars: 3,
             placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
             gazetteer: {
                 minChars: 3,
@@ -157,7 +162,8 @@ define(function () {
             },
             tree: {
                 minChars: 3
-            }
+            },
+            minChars: 3
         },
         tools: {
             parcelSearch: {
@@ -188,17 +194,13 @@ define(function () {
             draw: {
                 title: "Zeichnen / Schreiben",
                 glyphicon: "glyphicon-pencil"
-            },
-            kmlimport: {
-                title: "KML Import",
-                glyphicon: "glyphicon-import"
             }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",
         print: {
             printID: "99999",
-            title: "Freie und Hansestadt Hamburg - Atlas",
-            outputFilename: "Ausdruck FHH - Atlas",
+            title: "Geo - Online",
+            outputFilename: "Ausdruck Geo-Online",
             gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi"

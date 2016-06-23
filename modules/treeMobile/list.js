@@ -133,13 +133,15 @@ define([
          */
         addToolItems: function () {
             _.each(Config.tools, function (value, key) {
-                this.add({
-                    type: "item",
-                    title: value.title,
-                    glyphicon: value.glyphicon,
-                    parentId: "tools",
-                    name: key
-                });
+                if (!(key === "draw" || key === "measure")) {
+                    this.add({
+                        type: "item",
+                        title: value.title,
+                        glyphicon: value.glyphicon,
+                        parentId: "tools",
+                        name: key
+                    });
+                }
             }, this);
         },
         /**

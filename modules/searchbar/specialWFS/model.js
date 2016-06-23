@@ -111,10 +111,10 @@ define([
         */
         searchInBPlans: function (searchString) {
             _.each(this.get("bPlans"), function (bPlan) {
-                searchString = searchString.replace(/ö/g, 'oe');
-                searchString = searchString.replace(/ä/g, 'ae');
-                searchString = searchString.replace(/ü/g, 'ue');
-                searchString = searchString.replace(/ß/g, 'ss');
+                searchString = searchString.replace(/ö/g, "oe");
+                searchString = searchString.replace(/ä/g, "ae");
+                searchString = searchString.replace(/ü/g, "ue");
+                searchString = searchString.replace(/ß/g, "ss");
                 var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
                  if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
@@ -155,18 +155,25 @@ define([
                 if ($(hit).find("app\\:planrecht, planrecht")[0] !== undefined) {
                     name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
                     type = "festgestellt";
+                    // BPlan-Objekte
+                    this.get("bPlans").push({
+                        name: name.trim(),
+                        type: type,
+                        glyphicon: "glyphicon-picture",
+                        id: name.replace(/ /g, "") + "BPlan"
+                    });
                 }
-                else {
+                else if ($(hit).find("app\\:plan, plan")[0] !== undefined) {
                     name = $(hit).find("app\\:plan, plan")[0].textContent;
                     type = "im Verfahren";
+                    // BPlan-Objekte
+                    this.get("bPlans").push({
+                        name: name.trim(),
+                        type: type,
+                        glyphicon: "glyphicon-picture",
+                        id: name.replace(/ /g, "") + "BPlan"
+                    });
                 }
-                // BPlan-Objekte
-                this.get("bPlans").push({
-                    name: name.trim(),
-                    type: type,
-                    glyphicon: "glyphicon-picture",
-                    id: name.replace(/ /g, "") + "BPlan"
-                });
             }, this);
         },
         /**

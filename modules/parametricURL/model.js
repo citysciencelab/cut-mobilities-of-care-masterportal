@@ -265,6 +265,7 @@ define([
                 var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
                 if (value === "SIMPLE") {
+                    Config.simplemap = true;
                     Config.isMenubarVisible = false;
                     Config.controls = {};
                     Config.footer = {};
@@ -275,6 +276,7 @@ define([
                             isActive: true
                         }
                     };
+                    $(".changelog-window").hide();
                 }
 
             }
