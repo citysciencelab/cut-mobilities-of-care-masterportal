@@ -19,7 +19,6 @@ define([
         events: {
             "click .glyphicon-unchecked, .glyphicon-check, .title": "toggleIsSelected",
             "click .glyphicon-info-sign": "showLayerInformation",
-            "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .glyphicon-cog": "toggleIsSettingVisible",
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
@@ -71,11 +70,6 @@ define([
             this.model.toggleIsSelected();
             this.rerender();
         },
-
-        toggleLayerVisibility: function () {
-            this.model.toggleLayerVisibility();
-        },
-
         showLayerInformation: function () {
             this.model.showLayerInformation();
             // Navigation wird geschlossen

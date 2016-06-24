@@ -84,10 +84,6 @@ define([
             this.rerender();
         },
 
-        setTransparency: function (evt) {
-            this.model.setTransparency(parseInt(evt.target.value, 10));
-        },
-
         moveModelDown: function () {
             this.model.moveDown();
         },
