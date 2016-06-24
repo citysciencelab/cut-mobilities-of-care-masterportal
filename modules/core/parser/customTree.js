@@ -85,6 +85,7 @@ define([
                         id: folder.id,
                         isLeafFolder: isLeafFolder,
                         level: level,
+                        glyphicon: "glyphicon-plus-sign",
                         isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
                         isInThemen: true
                     });
