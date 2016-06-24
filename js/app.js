@@ -157,11 +157,6 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                             new SearchByCoordView();
                         });
                     }
-                    if (_.has(Config.tools, "styleWMS") === true) {
-                        require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
-                            new StyleWMSView();
-                        });
-                    }
                 }
                 if (_.has(Config.menuItems, "treeFilter") === true) {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
@@ -191,6 +186,9 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         }
                     });
                 }
+                require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+                    new StyleWMSView();
+                });
                 if (_.has(Config.menuItems, "routing") === true) {
                     require(["modules/routing/view"], function (RoutingView) {
                         new RoutingView();
