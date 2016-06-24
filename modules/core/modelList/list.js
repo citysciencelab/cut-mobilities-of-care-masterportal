@@ -47,6 +47,11 @@ define([
                         }, this);
                         this.add(visibleItems);
                     },
+                    "addModelsByAttributes": function (attrs) {
+                        var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
+
+                        this.add(lightModels);
+                    },
                     "setLayerAttributions": function (layerId, attrs) {
                        var model = this.findWhere({type: "layer", layerId: layerId});
 
@@ -59,8 +64,8 @@ define([
                    "removeFromSelectionIDX": this.removeFromSelectionIDX,
                    "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
                    "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
-                   "moveModelDown" : this.moveModelDown,
-                   "moveModelUp" : this.moveModelUp
+                   "moveModelDown": this.moveModelDown,
+                   "moveModelUp": this.moveModelUp
                }, this);
 
                this.listenTo(this, {

@@ -68,46 +68,22 @@ define([
             }));
 
             this.get("map").on("pointermove", this.pointerMoveOnMap);
-            // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
-            // if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
-            //     var startx = 0,
-            //         starty = 0;
-            //
-            //     this.get("map").getViewport().addEventListener("touchstart", function (e) {
-            //         var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
-            //
-            //         startx = parseInt(touchobj.clientX, 10); // get x position of touch point relative to left edge of browser
-            //         // e.preventDefault();
-            //     }, false);
-            //     this.get("map").getViewport().addEventListener("touchend", function (e) {
-            //         var touchobj = e.changedTouches[0], // reference first touch point (ie: first finger)
-            //         // Calculate if there was "significant" movement of the finger
-            //         movementX = Math.abs(startx - touchobj.clientX),
-            //         movementY = Math.abs(starty - touchobj.clientY);
-            //
-            //         if (movementX < 5 || movementY < 5) {
-            //             var x = _.values(_.pick(touchobj, "pageX"))[0],
-            //                 y = _.values(_.pick(touchobj, "pageY"))[0],
-            //                 coordinates = this.get("map").getCoordinateFromPixel([x, y]);
-            //             // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
-            //             // this.setGFIParams({coordinate: coordinates});
-            //         }
-            //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
-            //     }.bind(this), false);
-            // }
+
             Radio.trigger("zoomtofeature", "zoomtoid");
+            Radio.trigger("ModelList", "addModelsByAttributes", {isSelected: true});
             var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(activeItem)) {
                 this.activateClick(activeItem.id);
             }
+
         },
 
-        setBBox: function(bbox) {
+        setBBox: function (bbox) {
             this.set("bbox", bbox);
             this.BBoxToMap(this.get("bbox"));
         },
-        BBoxToMap: function(bbox) {
+        BBoxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
