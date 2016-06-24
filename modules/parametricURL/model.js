@@ -70,10 +70,10 @@ define([
             if (_.has(result, "LAYERIDS")) {
                 var valuesString = _.values(_.pick(result, "LAYERIDS"))[0],
                     visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
-                    transparenceListString = _.values(_.pick(result, "TRANSPARENCE"))[0],
+                    transparencyListString = _.values(_.pick(result, "transparency"))[0],
                     values = [],
                     visibilityList = [],
-                    transparenceList = [];
+                    transparencyList = [];
 
                 if (valuesString.indexOf(",") !== -1) {
                     values = valuesString.split(",");
@@ -89,12 +89,12 @@ define([
                         visibilityList.push(visibilityListString);
                     }
                 }
-                if (_.has(result, "TRANSPARENCE")) {
-                    if (transparenceListString && transparenceListString.indexOf(",") !== -1) {
-                        transparenceList = transparenceListString.split(",");
+                if (_.has(result, "transparency")) {
+                    if (transparencyListString && transparencyListString.indexOf(",") !== -1) {
+                        transparencyList = transparencyListString.split(",");
                     }
                     else {
-                        transparenceList.push(transparenceListString);
+                        transparencyList.push(transparencyListString);
                     }
                 }
                 if (Config.tree.type === "light" || Config.tree.type === "custom") {
@@ -114,7 +114,7 @@ define([
                             params.push({
                                 id: values[i],
                                 visibility: visibleParam,
-                                transparence: transparenceList[i]
+                                transparency: transparencyList[i]
                             });
                         }
                         // wenn nicht, alle defaultmäßig "true"setzen
@@ -150,7 +150,7 @@ define([
                             Config.tree.layer.push({
                                 id: param.id,
                                 visibility: false,
-                                transparence: param.transparence
+                                transparency: param.transparency
                             });
                         }
                     });
@@ -185,10 +185,10 @@ define([
                     Config.tree.layerIDsToSelect = [];
                     _.each(values, function (value, index) {
                         if (visibilityList[index] === "TRUE") {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: true, transparence: transparenceList[index]});
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: true, transparency: transparencyList[index]});
                         }
                         else {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: false, transparence: transparenceList[index]});
+                            Config.tree.layerIDsToSelect.push({id: value, visibility: false, transparency: transparencyList[index]});
                         }
                     });
                 }

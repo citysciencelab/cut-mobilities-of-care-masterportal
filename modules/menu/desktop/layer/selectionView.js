@@ -23,9 +23,14 @@ define([
             "click .layer-info-item  .glyphicon-cog": "toggleIsSettingVisible",
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
-            "change select": "setTransparence"
+            "click .glyphicon-plus-sign": "incTransparency",
+            "click .glyphicon-minus-sign": "decTransparency"
         },
         initialize: function () {
+             this.listenTo(this.model, {
+                "change:isSettingVisible": this.rerender,
+                "change:transparency": this.rerender
+            });
             this.render();
         },
 
@@ -79,8 +84,8 @@ define([
             this.rerender();
         },
 
-        setTransparence: function (evt) {
-            this.model.setTransparence(parseInt(evt.target.value, 10));
+        setTransparency: function (evt) {
+            this.model.setTransparency(parseInt(evt.target.value, 10));
         },
 
         moveModelDown: function () {
@@ -90,8 +95,11 @@ define([
         moveModelUp: function () {
             this.model.moveUp();
         },
-        updateSelectionView: function () {
-
+        incTransparency: function () {
+            this.model.incTransparency(10);
+        },
+        decTransparency: function () {
+            this.model.decTransparency(10);
         }
     });
 

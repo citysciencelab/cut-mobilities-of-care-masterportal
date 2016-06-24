@@ -30,7 +30,7 @@ ul#Themen.light .layer-settings .glyphicon {
 }
 
 
-ul#Themen.light .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparence, #Themen #SelectedLayer .layer-settings .layer-info-item {
+ul#Themen.light .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparency, #Themen #SelectedLayer .layer-settings .layer-info-item {
     padding: 0px 5px;
 }
 
@@ -45,11 +45,11 @@ ul#Themen.light .layer-settings .layer-name{
     position: relative;
     top: 1px;
 }
-ul#Themen.light .layer-settings .transparence .badge {
+ul#Themen.light .layer-settings .transparency .badge {
     top: -2px;
     position: relative;
 }
-ul#Themen.light .layer-settings .transparence .glyphicon {
+ul#Themen.light .layer-settings .transparency .glyphicon {
     padding-left: 0px;
 }
 /* -----------------------Themenbaum-----------------------------------*/
@@ -156,7 +156,7 @@ ul#Themen #SelectedLayer .layer-settings .glyphicon {
     font-size: 15px;
     padding: 0 0px;
 }
-ul#Themen #SelectedLayer .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparence, #Themen #SelectedLayer .layer-settings .layer-info-item {
+ul#Themen #SelectedLayer .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparency, #Themen #SelectedLayer .layer-settings .layer-info-item {
     padding: 0px 5px;
 }
 
@@ -171,11 +171,11 @@ ul#Themen #SelectedLayer .layer-settings .layer-name{
     position: relative;
     top: 1px;
 }
-ul#Themen #SelectedLayer .layer-settings .transparence .badge {
+ul#Themen #SelectedLayer .layer-settings .transparency .badge {
     top: -2px;
     position: relative;
 }
-ul#Themen #SelectedLayer .layer-settings .transparence .glyphicon {
+ul#Themen #SelectedLayer .layer-settings .transparency .glyphicon {
     padding-left: 0px;
 }
 ul#Themen .SelectedLayer .layer-selection-save {

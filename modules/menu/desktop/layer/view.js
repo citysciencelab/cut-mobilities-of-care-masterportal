@@ -19,7 +19,7 @@ define([
             "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-            "change select": "setTransparence"
+            "change select": "setTransparency"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -76,8 +76,8 @@ define([
             this.model.toggleIsSettingVisible();
         },
 
-        setTransparence: function (evt) {
-            this.model.setTransparence(parseInt(evt.target.value, 10));
+        setTransparency: function (evt) {
+            this.model.setTransparency(parseInt(evt.target.value, 10));
         },
 
         moveModelDown: function () {

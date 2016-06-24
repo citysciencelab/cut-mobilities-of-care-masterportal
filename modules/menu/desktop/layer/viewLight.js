@@ -23,12 +23,15 @@ define([
             "click .glyphicon-cog": "toggleIsSettingVisible",
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
-            "change select": "setTransparence"
+            "click .glyphicon-plus-sign": "incTransparency",
+            "click .glyphicon-minus-sign": "decTransparency",
+            "change select": "setTransparency"
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender,
-                "change:isSettingVisible": this.rerender
+                "change:isSettingVisible": this.rerender,
+                "change:transparency": this.rerender
             });
 
             this.$el.on({
@@ -83,8 +86,8 @@ define([
             this.model.toggleIsSettingVisible();
         },
 
-        setTransparence: function (evt) {
-            this.model.setTransparence(parseInt(evt.target.value, 10));
+        setTransparency: function (evt) {
+            this.model.setTransparency(parseInt(evt.target.value, 10));
         },
 
         moveModelDown: function () {
@@ -93,6 +96,12 @@ define([
 
         moveModelUp: function () {
             this.model.moveUp();
+        },
+        incTransparency: function () {
+            this.model.incTransparency(10);
+        },
+        decTransparency: function () {
+            this.model.decTransparency(10);
         }
     });
 
