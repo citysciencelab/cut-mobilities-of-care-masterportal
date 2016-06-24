@@ -287,10 +287,11 @@ define([
         getDrawStyle: function () {
             var rgbColor = this.get("selectedColor").value,
                 opacity = this.get("selectedOpacity"),
-                color;
+                color,
+                colorName = this.get("selectedColor").name.toLowerCase(),
+                radius = this.get("radius");
 
             color = rgbColor.substr(0, rgbColor.length - 4) + opacity + ")";
-
             return new ol.style.Style({
                 fill: new ol.style.Fill({
                     color: color
@@ -299,12 +300,20 @@ define([
                     color: color.substr(0, color.length - 6) + ", 1)",
                     width: this.get("selectedStrokeWidth")
                 }),
-                image: new ol.style.Circle({
-                    radius: this.get("radius"),
-                    fill: new ol.style.Fill({
-                        color: color
-                    })
-                })
+//                image: new ol.style.Circle({
+//                    radius: this.get("radius"),
+//                    fill: new ol.style.Fill({
+//                        color: color
+//                    })
+//                }),
+                image: new ol.style.Icon({
+                    anchor: [0.5, 0.5],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'fraction',
+                    opacity: opacity,
+                    src: '../../../img/kmlPoint/punkt_' + radius + 'px_' + colorName + '.png'
+                  })
+                
             });
         },
 

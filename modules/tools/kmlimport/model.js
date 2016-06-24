@@ -129,9 +129,9 @@ define([
                      if (feature.get("name") !== undefined) {
                          feature.setStyle(this.getTextStyle(feature.get("name"), style));
                      }
-                     else {
-                        feature.setStyle(null);
-                     }
+//                     else {
+//                        feature.setStyle(null);
+//                     }
                  }
             }, this);
         },
