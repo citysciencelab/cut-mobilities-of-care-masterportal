@@ -12,6 +12,7 @@ define([
     "modules/menu/desktop/tool/view",
     "modules/menu/mobile/folder/view",
     "modules/menu/mobile/layer/view",
+    "modules/menu/mobile/layer/viewLight",
     "modules/menu/mobile/tool/view",
     "modules/menu/mobile/breadCrumb/listView",
     "bootstrap/dropdown",
@@ -36,6 +37,7 @@ define([
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         MobileFolderView = require("modules/menu/mobile/folder/view"),
         MobileLayerView = require("modules/menu/mobile/layer/view"),
+        MobileLayerViewLight = require("modules/menu/mobile/layer/viewLight"),
         MobileToolView = require("modules/menu/mobile/tool/view"),
         BreadCrumbListView = require("modules/menu/mobile/breadCrumb/listView"),
         Menu;
@@ -273,7 +275,7 @@ define([
                     case "layer": {
                         // Model für ein Layer
                         if (treeType === "light") {
-                            nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerViewLight({model: model});
+                            nodeView = isMobile ? new MobileLayerViewLight({model: model}) : new DesktopLayerViewLight({model: model});
                         }
                         else {
                             nodeView = isMobile ? new MobileLayerView({model: model}) : new DesktopLayerView({model: model});

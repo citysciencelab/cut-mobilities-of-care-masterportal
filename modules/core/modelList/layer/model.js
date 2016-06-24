@@ -207,6 +207,8 @@ define([
                 this.setIsSettingVisible(false);
             }
             else {
+                // setzt vorher alle Models auf false, damit immer nur eins angezeigt wird
+                this.collection.setIsSettingVisible(false);
                 this.setIsSettingVisible(true);
             }
         },

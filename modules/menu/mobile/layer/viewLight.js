@@ -1,16 +1,14 @@
 define([
     "backbone",
-    "backbone.radio",
-    "text!modules/menu/mobile/layer/template.html",
+    "text!modules/menu/mobile/layer/templateLight.html",
     "text!modules/menu/mobile/layer/templateSelected.html",
     "text!modules/menu/mobile/layer/templateSetting.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/menu/mobile/layer/template.html"),
+        LayerTemplate = require("text!modules/menu/mobile/layer/templateLight.html"),
         SelectedLayerTemplate = require("text!modules/menu/mobile/layer/templateSelected.html"),
         SettingTemplate = require("text!modules/menu/mobile/layer/templateSetting.html"),
-        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -22,7 +20,6 @@ define([
         events: {
             "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
-            "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
             "click .selected-layer-item > div": "toggleIsVisibleInMap",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
@@ -39,14 +36,9 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            if (Radio.request("BreadCrumb", "getLastItem").getId() === "SelectedLayer") {
-                this.$el.html(this.templateSelected(attr));
-                if (this.model.getIsSettingVisible() === true) {
-                    this.renderSetting();
-                }
-            }
-            else {
-                this.$el.html(this.template(attr));
+            this.$el.html(this.template(attr));
+            if (this.model.getIsSettingVisible() === true) {
+                this.renderSetting();
             }
 
             return this;
@@ -76,12 +68,6 @@ define([
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
-        },
-
-        removeFromSelection: function () {
-            this.model.setIsSettingVisible(false);
-            this.model.setIsSelected(false);
-            this.$el.remove();
         },
 
         toggleIsVisibleInMap: function () {

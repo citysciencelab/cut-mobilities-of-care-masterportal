@@ -262,6 +262,18 @@ define([
                     }, this);
                 }
                 this.updateModelIndeces();
+            },
+
+            /**
+             * Setzt bei allen Models vom Typ "layer" das Attribut "isSettingVisible"
+             * @param {boolean} value
+             */
+            setIsSettingVisible: function (value) {
+                var models = this.where({type: "layer"});
+
+                _.each(models, function (model) {
+                    model.setIsSettingVisible(value);
+                });
             }
     });
 
