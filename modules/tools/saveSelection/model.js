@@ -83,14 +83,14 @@ define([
         getLayerVisibilityList: function () {
             return this.get("layerVisibilityList");
         },
-        setLayerTransparenceList: function (list) {
+        setLayertransparencyList: function (list) {
             this.set("layerTranseparenceList", list);
         },
-        getLayerTransparenceList: function () {
+        getLayertransparencyList: function () {
             return this.get("layerTranseparenceList");
         },
         setUrl: function () {
-            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&transparence=" + this.getLayerTransparenceList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
+            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&transparency=" + this.getLayertransparencyList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
         },
         setSimpleMapUrl: function (model, value) {
             this.set("simpleMapUrl", value + "&style=simple");
@@ -108,9 +108,9 @@ define([
 
             _.each(layerList, function (model) {
                 layerVisibilities.push(model.get("visibility"));
-                layerTrancparence.push(model.getTransparence());
+                layerTrancparence.push(model.getTransparency());
             });
-            this.setLayerTransparenceList(layerTrancparence);
+            this.setLayertransparencyList(layerTrancparence);
             this.setLayerVisibilityList(layerVisibilities);
         },
         setSimpleMap: function (value) {

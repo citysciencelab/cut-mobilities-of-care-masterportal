@@ -16,10 +16,8 @@ define([
         events: {
             "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
-            "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
-            "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-            "change select": "setTransparence"
+            "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -50,36 +48,23 @@ define([
             this.$el.html("");
             this.$el.html(this.template(attr));
         },
-
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
             Radio.trigger("ModelList", "isEveryChildLayerSelected", this.model);
             this.rerender();
         },
-
         removeFromSelection: function () {
             this.model.setIsInSelection(false);
             this.$el.remove();
         },
-
-        toggleLayerVisibility: function () {
-            this.model.toggleLayerVisibility();
-        },
-
         showLayerInformation: function () {
             this.model.showLayerInformation();
             // Navigation wird geschlossen
             $("div.collapse.navbar-collapse").removeClass("in");
         },
-
         toggleIsSettingVisible: function () {
             this.model.toggleIsSettingVisible();
         },
-
-        setTransparence: function (evt) {
-            this.model.setTransparence(parseInt(evt.target.value, 10));
-        },
-
         moveModelDown: function () {
             this.model.moveDown();
         },

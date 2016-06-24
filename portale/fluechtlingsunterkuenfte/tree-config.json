@@ -13,13 +13,13 @@
         {
           "id": "2425",
           "visibility": true,
-          "transparence": "60",
+          "transparency": "60",
           "gfiAttributes": "ignore"
         },
         {
           "id": "2426",
           "visibility": true,
-          "transparence": "60",
+          "transparency": "60",
           "gfiAttributes": "ignore"
         }
       ]

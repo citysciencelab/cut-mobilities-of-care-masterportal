@@ -23,7 +23,7 @@ define(function () {
             layer: [
                 {id: "453", visible: true},
                 {id: "94", visible: false},
-                {id: "2013", visible: true, transparence: "50"}
+                {id: "2013", visible: true, transparency: "50"}
             ]
         },
         menubar: true,

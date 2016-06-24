@@ -24,7 +24,7 @@ define([
             // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
             isSettingVisible: false,
             // die Transparenz des Layers
-            transparence: 0,
+            transparency: 0,
             // der Index der die Reihenfolge beim Zeichnen der ausgewählten Layer bestimmt
             selectionIDX: 0
         },
@@ -49,7 +49,7 @@ define([
                 "change:isVisibleInMap": function () {
                     this.toggleLayerOnMap();
                 },
-                "change:transparence": this.updateLayerTransparence,
+                "change:transparency": this.updateLayerTransparency,
                 "change:SLDBody": this.updateSourceSLDBody
             });
 
@@ -117,13 +117,12 @@ define([
         },
 
         /**
-         * Setter für Attribut "transparence"
+         * Setter für Attribut "transparency"
          * @param {number} value
          */
-        setTransparence: function (value) {
-            this.set("transparence", value);
+        setTransparency: function (value) {
+            this.set("transparency", value);
         },
-
         /**
          * Getter für Attribut "layerSource"
          * @return {ol.source}
@@ -165,13 +164,22 @@ define([
         },
 
         /**
-         * Getter für Attribut "transparence"
+         * Getter für Attribut "transparency"
          * @return {number}
          */
-        getTransparence: function () {
-            return this.get("transparence");
+        getTransparency: function () {
+            return this.get("transparency");
         },
-
+        incTransparency: function () {
+            if (this.getTransparency() <= 90) {
+                this.setTransparency(this.get("transparency") + 10);
+            }
+        },
+        decTransparency: function () {
+             if (this.getTransparency() >= 10) {
+                this.setTransparency(this.get("transparency") - 10);
+            }
+        },
         getVersion: function () {
             return this.get("version");
         },
@@ -229,10 +237,12 @@ define([
         /**
          *
          */
-        updateLayerTransparence: function () {
-            var opacity = (100 - this.get("transparence")) / 100;
+        updateLayerTransparency: function () {
+            var opacity = (100 - this.get("transparency")) / 100;
 
-            this.get("layer").setOpacity(opacity);
+            if (!_.isUndefined( this.getLayer())) {
+                this.getLayer().setOpacity(opacity);
+            }
         },
         showLayerInformation: function () {
                 Radio.trigger("LayerInformation", "add", {
