@@ -349,7 +349,9 @@ define([
              * @return {KML-String} das Resultierende KML
              */
             convertFeaturesToKML: function (features, context) {
-                var format = new ol.format.KML({extractStyles: true});
+                var format = new ol.format.KML({extractStyles: true}),
+                    pointOpacities = [],
+                    pointColors = [];
 
                 _.each(features, function (feature) {
                     var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
@@ -360,12 +362,61 @@ define([
                     }
 
                     feature.getGeometry().setCoordinates(transCoord, "XY");
+                      var type = feature.getGeometry().getType(),
+                    styles = feature.getStyleFunction().call(feature),
+                    style = styles[0];
+
+                 // wenn Punkt-Geometrie
+                 if (type === "Point") {
+                     // wenn kein Text
+                     if (!feature.getStyle().getText()) {
+                         // bei Farbwahl
+                         pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
+
+                         var color = style.getFill().getColor().split("(")[1].split(",");
+                         pointColors.push(color[0] + "," + color[1] + "," + color[2]);
+
+                         // bei PNGs
+//                        pointOpacities.push(style.getImage().getOpacity());
+                     }
+                 }
 
                 }, context);
+//                console.log(pointOpacities);
                 features = format.writeFeatures(features);
 
+                var featuresWithPointStyle = jQuery.parseXML(features);
+
+                $(featuresWithPointStyle).find("Point").each(function (i, point) {
+                    var placemark = point.parentNode;
+                    // bei PNGs
+//                    var iconStyle = $(placemark).find("IconStyle")[0];
+
+//                    console.log($(placemark).find("name")[0]);
+
+                    // kein Text
+                    if (!$(placemark).find("name")[0]) {
+                        var style = $(placemark).find("Style")[0];
+
+                        var pointStyle = "<PointStyle>";
+                        pointStyle += "<color>" + pointColors[i] + "</color>";
+                        pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
+                        pointStyle += "</PointStyle>";
+
+                        $(style).append(pointStyle);
+                    }
+                    // bei PNGs
+//                    if (iconStyle) {
+//                        console.log(i);
+//                        console.log(pointOpacities[i]);
+//                        console.log(iconStyle);
+//                    }
+
+                });
+                features = new XMLSerializer().serializeToString(featuresWithPointStyle);
                 return features;
             },
+
             /**
              * Erzeugt Projection aus ESPG codes und zone
              * @param  {String} sourceProj ESPG der Ausgangsprojektion

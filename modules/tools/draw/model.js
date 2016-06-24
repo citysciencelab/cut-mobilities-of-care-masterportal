@@ -300,20 +300,21 @@ define([
                     color: color.substr(0, color.length - 6) + ", 1)",
                     width: this.get("selectedStrokeWidth")
                 }),
-//                image: new ol.style.Circle({
-//                    radius: this.get("radius"),
-//                    fill: new ol.style.Fill({
-//                        color: color
-//                    })
-//                }),
-                image: new ol.style.Icon({
-                    anchor: [0.5, 0.5],
-                    anchorXUnits: 'fraction',
-                    anchorYUnits: 'fraction',
-                    opacity: opacity,
-                    src: '../../../img/kmlPoint/punkt_' + radius + 'px_' + colorName + '.png'
-                  })
-                
+                image: new ol.style.Circle({
+                    radius: this.get("radius"),
+                    fill: new ol.style.Fill({
+                        color: color
+                    })
+                }),
+                //PNGs aus IMG ordner
+//                image: new ol.style.Icon({
+//                    anchor: [0.5, 0.5],
+//                    anchorXUnits: 'fraction',
+//                    anchorYUnits: 'fraction',
+//                    opacity: opacity,
+//                    src: '../../../img/kmlPoint/punkt_' + radius + 'px_' + colorName + '.png'
+//                  })
+
             });
         },
 

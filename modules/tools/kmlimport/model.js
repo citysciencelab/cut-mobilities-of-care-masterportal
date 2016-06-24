@@ -116,7 +116,31 @@ define([
 
         // Workaround der Styles für Punkte und Text
         setStyle: function () {
-            var features = this.getFeatures();
+            var features = this.getFeatures(),
+                kml = jQuery.parseXML(this.get("text")),
+                pointStyleColors = [],
+                pointStyleTransparencies = [],
+                pointStyleCounter = 0;
+                         // kml parsen und eigenen pointStyle auf features anwenden
+
+                        $(kml).find("Point").each(function (i, point) {
+                            var placemark = point.parentNode;
+
+                            // kein Text
+                            if (!$(placemark).find("name")[0]) {
+                                var pointStyle = $(placemark).find("PointStyle")[0];
+                                var color = $(pointStyle).find("color")[0],
+                                    transparency = $(pointStyle).find("transparency")[0];
+
+                                color = new XMLSerializer().serializeToString(color);
+                                transparency = new XMLSerializer().serializeToString(transparency);
+
+                                color = color.split(">")[1].split("<")[0];
+                                transparency = transparency.split(">")[1].split("<")[0];
+                                pointStyleColors.push(color);
+                                pointStyleTransparencies.push(transparency);
+                            }
+                        });
 
              _.each(features, function (feature) {
                  var type = feature.getGeometry().getType(),
@@ -129,11 +153,23 @@ define([
                      if (feature.get("name") !== undefined) {
                          feature.setStyle(this.getTextStyle(feature.get("name"), style));
                      }
-//                     else {
-//                        feature.setStyle(null);
-//                     }
+                     else {
+                         console.log("rgba("+pointStyleColors[pointStyleCounter]+", "+pointStyleTransparencies[pointStyleCounter]+")");
+                         var style = new ol.style.Style({
+                            image: new ol.style.Circle({
+                                radius: this.get("radius"),
+                                fill: new ol.style.Fill({
+                                    color: "rgba("+pointStyleColors[pointStyleCounter]+", "+pointStyleTransparencies[pointStyleCounter]+")"
+                                })
+                            })
+                        });
+                         console.log(style);
+                         feature.setStyle(style);
+                     }
                  }
             }, this);
+
+
         },
 
         getTextStyle: function (name, style) {
