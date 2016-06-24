@@ -138,9 +138,8 @@ define([
         },
         renderLightTree: function (parentId) {
 
-            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
-
-            var models = this.collection.add(lightModels);
+            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+                models = this.collection.add(lightModels);
 
             this.collection.initLightTreeSelectionIDX(models);
             models = _.sortBy(models, function (model) {
@@ -155,7 +154,6 @@ define([
             models = _.sortBy(models, function (model) {
                 return model.getSelectionIDX();
             });
-            //models.reverse();
             this.addViews(models);
         },
         /**
