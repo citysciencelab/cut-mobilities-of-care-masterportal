@@ -1,12 +1,14 @@
 define([
     "backbone",
     "text!modules/menu/mobile/folder/template.html",
-    "text!modules/menu/mobile/folder/templateLeaf.html"
+    "text!modules/menu/mobile/folder/templateLeaf.html",
+    "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
         FolderTemplate = require("text!modules/menu/mobile/folder/template.html"),
         FolderLeafTemplate = require("text!modules/menu/mobile/folder/templateLeaf.html"),
+        Radio = require("backbone.radio"),
         FolderView;
 
     FolderView = Backbone.View.extend({
@@ -16,11 +18,11 @@ define([
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
             "click .folder-item": "updateList",
-            "click .checked-all-item": "toggleIsChecked"
+            "click .checked-all-item": "toggleIsSelected"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isChecked": this.render
+                 "change:isSelected": this.render
             });
         },
         render: function () {
@@ -40,8 +42,10 @@ define([
             }
             this.model.updateList(this.model.getId());
         },
-        toggleIsChecked: function () {
-            this.model.toggleIsChecked();
+        toggleIsSelected: function () {
+            this.model.toggleIsSelected();
+            Radio.trigger("ModelList", "toggleIsSelectedChildLayers", this.model);
+            this.model.setIsExpanded(true);
         }
     });
 

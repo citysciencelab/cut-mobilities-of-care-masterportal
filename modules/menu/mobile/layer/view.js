@@ -71,11 +71,12 @@ define([
                 this.$el.find(".item-settings").hide();
                 this.$el.find(".item-settings").slideDown();
             }
-
         },
 
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
+            Radio.trigger("ModelList", "isEveryChildLayerSelected", this.model);
+            this.render();
         },
 
         removeFromSelection: function () {
