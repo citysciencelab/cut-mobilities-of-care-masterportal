@@ -120,22 +120,7 @@ define([
             }
             this.addViews(items);
         },
-        renderSubTree: function (parentId, level, levelLimit) {
-            if (level >= levelLimit) {
-                return;
-            }
 
-            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                models = this.collection.add(lightModels);
-
-            this.addViewsToItemsOfType("layer", models);
-
-            var folder = this.addViewsToItemsOfType("folder", models, parentId);
-
-            _.each(folder, function (folder) {
-                this.renderSubTree(folder.getId(), level + 1, levelLimit);
-            }, this);
-        },
         renderLightTree: function (parentId) {
 
             var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
@@ -164,6 +149,26 @@ define([
         renderDesktopThemen: function (parentId) {
             $("#" + parentId).html("");
             this.renderSubTree(parentId, 0, 3);
+        },
+        /**
+         * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
+         */
+
+        renderSubTree: function (parentId, level, levelLimit) {
+            if (level >= levelLimit) {
+                return;
+            }
+
+            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+                models = this.collection.add(lightModels);
+
+            this.addViewsToItemsOfType("layer", models);
+
+            var folder = this.addViewsToItemsOfType("folder", models, parentId);
+
+            _.each(folder, function (folder) {
+                this.renderSubTree(folder.getId(), level + 1, levelLimit);
+            }, this);
         },
         /**
          * Rendert die  Auswahlliste
@@ -206,8 +211,8 @@ define([
             }
             this.renderTopMenu(isMobile);
             if (Radio.request("Parser", "getTreeType") !== "light") {
-                this.renderThemenMenu(isMobile);
                 if (!isMobile) {
+                    this.renderThemenMenu(isMobile);
                     this.renderDesktopThemen("Baselayer");
                     this.renderDesktopThemen("Overlayer");
                     this.renderSelectedList();
