@@ -5,6 +5,9 @@ ul#Themen.light {
     color: rgb(85, 85, 85);
     border: 1px solid rgb(229, 229, 229);
 }
+ul#Themen.light .glyphicon {
+    cursor:pointer;
+}
 
 ul#Themen.light li {
     border-bottom: 1px solid #ddd;
@@ -17,12 +20,15 @@ ul#Themen.light li {
 
 ul#Themen.light li span.title {
     vertical-align: sub;
+    cursor:pointer;
 }
 
 ul#Themen.light .layer-settings .glyphicon {
     font-size: 15px;
     padding: 0 0px;
+    cursor:pointer;
 }
+
 
 ul#Themen.light .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparence, #Themen #SelectedLayer .layer-settings .layer-info-item {
     padding: 0px 5px;
@@ -126,7 +132,7 @@ ul#Themen .rotate-pin-back {
     font-size: 14px;
     cursor: pointer;
 }
-ul#Themen ul .glyphicon-check, ul#Themen ul .glyphicon-check + .title:not {
+ul#Themen ul .glyphicon-check, ul#Themen ul .glyphicon-check + .title {
     color: rgb(255, 127, 0);
 }
 ul#Themen ul#SelectedLayer .glyphicon-check, ul#Themen ul#SelectedLayer .glyphicon-check + .title {

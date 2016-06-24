@@ -1,13 +1,13 @@
 define([
     "backbone",
     "backbone.radio",
-    "text!modules/menu/desktop/layer/templateSetting.html",
+    "text!modules/menu/desktop/layer/templateLightSetting.html",
     "text!modules/menu/desktop/layer/templateLight.html"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        SettingTemplate = require("text!modules/menu/desktop/layer/templateSetting.html"),
+        SettingTemplate = require("text!modules/menu/desktop/layer/templateLightSetting.html"),
         LayerTemplate = require("text!modules/menu/desktop/layer/templateLight.html"),
         LayerView;
 
@@ -17,7 +17,7 @@ define([
         template: _.template(LayerTemplate),
         templateSetting: _.template(SettingTemplate),
         events: {
-            "click .layer-item": "toggleIsSelected",
+            "click .glyphicon-unchecked, .glyphicon-check, .title": "toggleIsSelected",
             "click .glyphicon-info-sign": "showLayerInformation",
             "click .selected-layer-item > div": "toggleLayerVisibility",
             "click .glyphicon-cog": "toggleIsSettingVisible",
