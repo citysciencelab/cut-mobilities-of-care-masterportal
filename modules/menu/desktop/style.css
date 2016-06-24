@@ -52,6 +52,8 @@ ul#Themen {
    border: none;
    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
    padding: 0px 0;
+
+    min-width:  380px;
 }
 ul#Themen .glyphicon {
     font-size: 15px;
@@ -135,7 +137,6 @@ ul#Themen ul{
    overflow-y: auto;
    overflow-x: auto;
     max-width:  500px;
-    min-width:  380px;
 }
 
 ul#Themen #SelectedLayer li {
