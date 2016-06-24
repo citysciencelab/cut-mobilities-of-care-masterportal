@@ -68,7 +68,7 @@ define([
                        channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
                    },
                    "change:isExpanded": function (model) {
-                        this.toggleTreeVisibilityOfChildren(model);
+                       this.toggleTreeVisibilityOfChildren(model);
                     },
                     "change:isSelected": function () {
                         this.trigger("updateSelectionView");
@@ -197,7 +197,9 @@ define([
                 _.each(itemListByParentId, function (item) {
                     item.setIsVisibleInTree(!item.getIsVisibleInTree());
                 });
-                this.trigger("updateOverlayerView");
+                if (model.getId() !== "SelectedLayer") {
+                    this.trigger("updateOverlayerView");
+                }
             },
             insertIntoSelectionIDX: function (model) {
                 var idx = 0;
