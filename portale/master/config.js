@@ -609,10 +609,6 @@ define(function () {
             searchByCoord: {
                 title: "Koordinatensuche",
                 glyphicon: "glyphicon-search"
-            },
-            styleWMS: {
-                title: "Style WMS",
-                glyphicon: "glyphicon-picture"
             }
         },
         /**
