@@ -187,7 +187,7 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                     });
                 }
                 if (_.has(Config.menuItems, "routing") === true) {
-                    require(["modules/routing/view"], function (RoutingView) {
+                    require(["modules/viomRouting/view"], function (RoutingView) {
                         new RoutingView();
                     });
                 }
