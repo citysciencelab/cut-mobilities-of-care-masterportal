@@ -2,13 +2,15 @@ define([
     "backbone",
     "text!modules/treeMobile/layer/template.html",
     "text!modules/treeMobile/layer/templateSelected.html",
-    "text!modules/treeMobile/layer/templateSetting.html"
+    "text!modules/treeMobile/layer/templateSetting.html",
+    "eventbus"
 ], function () {
 
     var Backbone = require("backbone"),
         LayerTemplate = require("text!modules/treeMobile/layer/template.html"),
         SelectedLayerTemplate = require("text!modules/treeMobile/layer/templateSelected.html"),
         SettingTemplate = require("text!modules/treeMobile/layer/templateSetting.html"),
+        EventBus = require("eventbus"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -25,6 +27,7 @@ define([
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
+            "click .layer-sort-item > .glyphicon-picture": "openStyleWMS",
             "change select": "setTransparence"
         },
         initialize: function () {
@@ -110,6 +113,10 @@ define([
 
         moveModelUp: function () {
             this.model.moveUp();
+        },
+        openStyleWMS: function () {
+            EventBus.trigger("toggleWin", ["styleWMS", "Style WMS", "glyphicon-picture", this.model.getId()]);
+            $(".navbar-collapse").removeClass("in");
         }
     });
 

@@ -7,3 +7,16 @@
     letter-spacing: 0.6px;
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
+
+.win-body > .layer-name {
+    color: rgb(182, 0, 0);
+    padding-bottom: 6px;
+}
+
+#style-wms-colorpicker > input {
+    display: none;
+}
+
+#style-wms-colorpicker > span {
+    border-left: 1px solid #ccc;
+}

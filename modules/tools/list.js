@@ -42,7 +42,7 @@ define([
             model.set("isActive", true);
             this.setActiveToFalse(model);
         },
-        setActiveByName: function (value) {
+        setActiveByName: function (value) {console.log(value);
             var model = this.findWhere({name: value});
 
             model.set("isActive", true);

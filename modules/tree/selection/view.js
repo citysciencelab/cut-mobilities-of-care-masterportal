@@ -1,8 +1,9 @@
 define([
     "backbone",
     "text!modules/tree/selection/template.html",
-    "text!modules/tree/selection/templateSettings.html"
-], function (Backbone, Template, SettingTemplate) {
+    "text!modules/tree/selection/templateSettings.html",
+    "eventbus"
+], function (Backbone, Template, SettingTemplate, EventBus) {
 
     var view = Backbone.View.extend({
         tagName: "li",
@@ -19,7 +20,8 @@ define([
             "click .glyphicon-arrow-down": "moveModelDown",
             "click .layer-toggle-button": "toggleSettings",
             "click .glyphicon-remove-circle": "toggleSelected",
-            "movemodel": "moveModelDelta"
+            "movemodel": "moveModelDelta",
+            "click .glyphicon-picture": "openStyleWMS"
         },
         initialize: function () {
             this.$el.append(this.templateButton);
@@ -77,6 +79,10 @@ define([
         },
         moveModelDelta: function (evt, index) {
             this.model.collection.moveModelDelta(this.model, index);
+        },
+        openStyleWMS: function () {
+            EventBus.trigger("toggleWin", ["styleWMS", "Style WMS", "glyphicon-picture", this.model.getId()]);
+            $(".nav li:first-child").removeClass("open");
         }
     });
 

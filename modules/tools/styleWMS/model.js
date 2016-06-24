@@ -15,10 +15,8 @@ define([
             isCurrentWin: false,
             // true wenn das Fenster minimiert ist
             isCollapsed: false,
-            // Models deren Layer "styleable" sind
-            modelList: [],
             // Id vom Model dessen Layer ein neues Styling bekommt
-            modelId: "default",
+            modelId: "",
             // Model dessen Layer ein neues Styling bekommt
             model: {},
             // Art der Layer Geometrie
@@ -46,13 +44,10 @@ define([
 
             // Eigene Listener
             this.listenTo(this, {
-                // wenn das Tool aktiviert ist, fragt es alle Model an die "styleable" sind
-                "change:isCurrentWin": function (model, value) {
-                    if (value === true) {
-                        this.setModelList(Radio.request("LayerList", "getLayerListWhere", {styleable: true}));
-                    }
+                // ändert sich die ModelId, wird das entsprechende Model dessen Layer gestylt werden soll, aus der Layerlist geholt
+                "change:modelId": function () {
+                    this.setModel(Radio.request("LayerList", "getLayerFindWhere", {id: this.getModelId()}));
                 },
-                "change:modelId": this.filterLayerById,
                 // ändert sich das Model, wird der entsprechende Geometrietyp gesetzt
                 // und der Attributname zurückgesetzt
                 "change:model": function (model, value) {
@@ -137,27 +132,12 @@ define([
          */
         checkStatus: function (args) {
             if (args[2] === "styleWMS") {
+                this.setModelId(args[3]);
                 this.setIsCollapsed(args[1]);
                 this.setIsCurrentWin(args[0]);
             }
             else {
                 this.setIsCurrentWin(false);
-            }
-        },
-
-        /**
-         * Das Model dessen Layer gestylt werden soll, wird aus der Modellist gefiltert
-         * Default wird übergeben, wenn kein Model ausgewählt wurde
-         * @param  {Backbone.Model} model - this
-         * @param  {string} value - Id vom Model || default
-         */
-        filterLayerById: function (model, value) {
-            if (value !== "default") {
-                var layer = _.filter(this.getModelList(), function (layer) {
-                    return layer.id === this.getModelId();
-                }, this);
-
-                this.setModel(layer[0]);
             }
         },
 
@@ -288,14 +268,6 @@ define([
         },
 
         /**
-         * Setter für das Attribut modelList
-         * @param {Backbone.Model[]} value
-         */
-        setModelList: function (value) {
-            this.set("modelList", value);
-        },
-
-        /**
          * Setter für das Attribut modelId
          * @param {string} value
          */
@@ -373,14 +345,6 @@ define([
          */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
-        },
-
-        /**
-         * Getter für das Attribut modelList
-         * @return {Backbone.Model[]}
-         */
-        getModelList: function () {
-            return this.get("modelList");
         },
 
         /**
