@@ -23,8 +23,8 @@ define([
              * Hinter dem Parameter Id steckt die MetadatenId des Metadatensatzes
              * Die Metadatensatz-Id wird in die config geschrieben
              */
-            if (_.has(result, "ID")) {
-                var values = _.values(_.pick(result, "ID"))[0].split(",");
+            if (_.has(result, "MDID")) {
+                var values = _.values(_.pick(result, "MDID"))[0].split(",");
 
                 Config.tree.metaIdsToSelected = values;
                 Config.view.zoomLevel = 0;
