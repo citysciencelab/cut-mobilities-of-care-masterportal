@@ -287,9 +287,7 @@ define([
         getDrawStyle: function () {
             var rgbColor = this.get("selectedColor").value,
                 opacity = this.get("selectedOpacity"),
-                color,
-                colorName = this.get("selectedColor").name.toLowerCase(),
-                radius = this.get("radius");
+                color;
 
             color = rgbColor.substr(0, rgbColor.length - 4) + opacity + ")";
             return new ol.style.Style({
@@ -305,15 +303,7 @@ define([
                     fill: new ol.style.Fill({
                         color: color
                     })
-                }),
-                //PNGs aus IMG ordner
-//                image: new ol.style.Icon({
-//                    anchor: [0.5, 0.5],
-//                    anchorXUnits: 'fraction',
-//                    anchorYUnits: 'fraction',
-//                    opacity: opacity,
-//                    src: '../../../img/kmlPoint/punkt_' + radius + 'px_' + colorName + '.png'
-//                  })
+                })
 
             });
         },

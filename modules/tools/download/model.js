@@ -351,7 +351,8 @@ define([
             convertFeaturesToKML: function (features, context) {
                 var format = new ol.format.KML({extractStyles: true}),
                     pointOpacities = [],
-                    pointColors = [];
+                    pointColors = [],
+                    pointRadiuses = [];
 
                 _.each(features, function (feature) {
                     var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
@@ -368,49 +369,36 @@ define([
 
                  // wenn Punkt-Geometrie
                  if (type === "Point") {
-                     // wenn kein Text
+                     // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                      if (!feature.getStyle().getText()) {
-                         // bei Farbwahl
-                         pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
-
                          var color = style.getFill().getColor().split("(")[1].split(",");
+                         
+                         pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
                          pointColors.push(color[0] + "," + color[1] + "," + color[2]);
-
-                         // bei PNGs
-//                        pointOpacities.push(style.getImage().getOpacity());
+                         pointRadiuses.push(style.getImage().getRadius());
                      }
                  }
-
                 }, context);
-//                console.log(pointOpacities);
                 features = format.writeFeatures(features);
 
+                // KML zerlegen und die Punktstyles einfügen
                 var featuresWithPointStyle = jQuery.parseXML(features);
 
                 $(featuresWithPointStyle).find("Point").each(function (i, point) {
                     var placemark = point.parentNode;
-                    // bei PNGs
-//                    var iconStyle = $(placemark).find("IconStyle")[0];
 
-//                    console.log($(placemark).find("name")[0]);
-
-                    // kein Text
+                    // kein Text, muss also Punkt sein
                     if (!$(placemark).find("name")[0]) {
-                        var style = $(placemark).find("Style")[0];
-
-                        var pointStyle = "<PointStyle>";
+                        var style = $(placemark).find("Style")[0],
+                            pointStyle = "<PointStyle>";
+                        
                         pointStyle += "<color>" + pointColors[i] + "</color>";
                         pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
+                        pointStyle += "<radius>" + pointRadiuses[i] + "</radius>";
                         pointStyle += "</PointStyle>";
 
                         $(style).append(pointStyle);
                     }
-                    // bei PNGs
-//                    if (iconStyle) {
-//                        console.log(i);
-//                        console.log(pointOpacities[i]);
-//                        console.log(iconStyle);
-//                    }
 
                 });
                 features = new XMLSerializer().serializeToString(featuresWithPointStyle);
