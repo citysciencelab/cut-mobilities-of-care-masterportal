@@ -58,10 +58,6 @@ define([
                 "change:attributeName": function () {
                     this.setNumberOfClasses("default");
                 },
-                // wurden die Styleklassen gesetzt oder angepasst, wird das SLD gesetzt
-                "change:styleClassAttributes": function () {
-                    this.setSLD(this.createAndGetRootElement());
-                },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
                     EventBus.trigger("layerlist:setAttributionsByID", this.getModelId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
@@ -138,6 +134,15 @@ define([
             }
             else {
                 this.setIsCurrentWin(false);
+            }
+        },
+
+        /**
+         * Prüft ob die Style-Klassen valide sind. Wenn ja, wird das SLD erstellt und gesetzt
+         */
+        createSLD: function () {
+            if (this.isValid() === true) {
+                this.setSLD(this.createAndGetRootElement());
             }
         },
 
@@ -312,7 +317,7 @@ define([
          * @param {Object[]} value
          */
         setStyleClassAttributes: function (value) {
-            this.set("styleClassAttributes", value, {validate: true});
+            this.set("styleClassAttributes", value);
         },
 
         /**

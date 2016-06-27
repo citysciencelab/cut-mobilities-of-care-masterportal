@@ -15,13 +15,16 @@ define([
         className: "win-body",
         template: _.template(StyleWMSTemplate),
         events: {
-            // Layerauswahl
-            "change #layerField": "setModelId",
             // Auswahl der Attribute
             "change #attributField": "setAttributeName",
             // Auswahl Anzahl der Klassen
             "change #numberField": "setNumberOfClasses",
-            "click button": "setStyle"
+            // Eingabe der Wertebereiche
+            "keyup [class*=start-range], [class*=stop-range]": "setStyleClassAttributes",
+            // Auswahl der Farbe
+            "changeColor [id*=style-wms-colorpicker]": "setStyleClassAttributes",
+            // Anwenden Button
+            "click button": "createSLD"
         },
 
         /**
@@ -54,14 +57,8 @@ define([
             else {
                 this.undelegateEvents();
             }
-        },
-
-        /**
-         * Ruft setModelId im Model auf und übergibt die ModelId
-         * @param {ChangeEvent} evt
-         */
-        setModelId: function (evt) {
-            this.model.setModelId(evt.target.value);
+            // aktiviert den/die colorpicker
+            this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
         },
 
         /**
@@ -79,14 +76,12 @@ define([
          */
         setNumberOfClasses: function (evt) {
             this.model.setNumberOfClasses(evt.target.value);
-            // aktiviert den/die colorpicker
-            this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
         },
 
         /**
          * Erstellt die Style-Klassen und übergibt sie an die Setter Methode im Model
          */
-        setStyle: function () {
+        setStyleClassAttributes: function () {
             var styleClassAttributes = [];
 
             this.removeErrorMessages();
@@ -98,6 +93,13 @@ define([
                 });
             }
             this.model.setStyleClassAttributes(styleClassAttributes);
+        },
+
+        /**
+         * Ruft createSLD im Model auf
+         */
+        createSLD: function () {
+            this.model.createSLD();
         },
 
         /**

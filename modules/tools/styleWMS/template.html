@@ -31,16 +31,16 @@
             <div class="form-group">
                 <div class="col-md-5 col-sm-5">
                     <label class="range-label">Wertebereich Klasse <%= i + 1 %></label>
-                    <input class="form-control input-sm <%= 'start-range' + i %>" placeholder="von">
+                    <input class="form-control input-sm <%= 'start-range' + i %>" value="<% if (typeof styleClassAttributes[i] !== 'undefined') { print (styleClassAttributes[i].startRange)} %>" placeholder="von">
                 </div>
                 <div class="col-md-5 col-sm-5">
                     <label class="range-label">&nbsp;</label>
-                    <input class="form-control input-sm <%= 'stop-range' + i %>" placeholder="bis">
+                    <input class="form-control input-sm <%= 'stop-range' + i %>" value="<% if (typeof styleClassAttributes[i] !== 'undefined') { print (styleClassAttributes[i].stopRange)} %>" placeholder="bis">
                 </div>
                 <div class="col-md-2 col-sm-2">
                     <label class="range-label">&nbsp;</label>
                     <div id="style-wms-colorpicker" class="input-group colorpicker-component">
-                        <input type="text" value="#00AABB" class="form-control input-sm <%= 'selected-color' + i %>">
+                        <input class="form-control input-sm <%= 'selected-color' + i %>" value="<% if (typeof styleClassAttributes[i] !== 'undefined') { print (styleClassAttributes[i].color)} else { print ('#337ab7')} %>">
                         <span class="input-group-addon"><i></i></span>
                     </div>
                 </div>
