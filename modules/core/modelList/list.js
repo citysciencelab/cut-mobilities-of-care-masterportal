@@ -225,7 +225,7 @@ define([
                 if (oldIDX > 0) {
                     this.removeFromSelectionIDX(model.getSelectionIDX());
                     this.insertIntoSelectionIDXAt(model, newIDX);
-                    if (!_.isUndefined(model.getLayer())) {
+                    if (model.getIsSelected()) {
                         Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                     }
                     this.trigger("updateSelectionOrLightTreeView");
@@ -240,7 +240,7 @@ define([
                     this.insertIntoSelectionIDXAt(model, newIDX);
                     // Auch wenn die Layer im simple Tree noch nicht selected wurde, können
                     // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
-                    if (!_.isUndefined(model.getLayer())) {
+                    if (model.getIsSelected()) {
                         Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                     }
                     this.trigger("updateSelectionOrLightTreeView");
