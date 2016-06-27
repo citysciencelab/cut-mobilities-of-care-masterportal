@@ -290,7 +290,6 @@ define([
                 color;
 
             color = rgbColor.substr(0, rgbColor.length - 4) + opacity + ")";
-
             return new ol.style.Style({
                 fill: new ol.style.Fill({
                     color: color
@@ -305,6 +304,7 @@ define([
                         color: color
                     })
                 })
+
             });
         },
 
