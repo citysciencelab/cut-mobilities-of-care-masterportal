@@ -39,19 +39,8 @@ define([
 
                         model.set(attrs);
                     },
-                    "addVisibleItems": function () {
-                        var visibleItems = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
-
-                        _.each(visibleItems, function (item) {
-                            _.extend(item, {selectionIDX: this.newSelectionIDX()});
-                        }, this);
-                        this.add(visibleItems);
-                    },
-                    "addModelsByAttributes": function (attrs) {
-                        var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
-
-                        this.add(lightModels);
-                    },
+                    "addInitialyNeededModels": this.addInitialyNeededModels,
+                    "addModelsByAttributes": this.addModelsByAttributes,
                     "setLayerAttributions": function (layerId, attrs) {
                        var model = this.findWhere({type: "layer", layerId: layerId});
 
@@ -249,6 +238,8 @@ define([
                 if (oldIDX < this.selectionIDX.length - 1) {
                     this.removeFromSelectionIDX(model.getSelectionIDX());
                     this.insertIntoSelectionIDXAt(model, newIDX);
+                    // Auch wenn die Layer im simple Tree noch nicht selected wurde, können
+                    // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
                     if (!_.isUndefined(model.getLayer())) {
                         Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                     }
@@ -259,16 +250,6 @@ define([
                 _.each(this.selectionIDX, function (model, index) {
                     model.setSelectionIDX(index);
                 });
-            },
-            initLightTreeSelectionIDX: function () {
-                if (this.selectionIDX.length === 0) {
-                    var models = this.where({type: "layer"});
-
-                    _.each(models.reverse(), function (model) {
-                        this.selectionIDX.push(model);
-                    }, this);
-                }
-                this.updateModelIndeces();
             },
 
             /**
@@ -281,6 +262,31 @@ define([
                 _.each(models, function (model) {
                     model.setIsSettingVisible(value);
                 });
+            },
+            /**
+             * Im Lighttree alle Models hinzufügen ansonsten, die Layer die initial
+             * angezeigt werden sollen.
+             */
+            addInitialyNeededModels: function () {
+                // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
+                // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
+                // wie sie hinzugefügt werden
+                if (Radio.request("Parser", "getTreeType") === "light") {
+                    var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
+
+                    lightModels.reverse();
+                    this.add(lightModels);
+
+                }
+                // Only Add models in selection
+                else {
+                    this.addModelsByAttributes({type: "layer", isSelected: true});
+                }
+            },
+            addModelsByAttributes: function (attrs) {
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
+
+                this.add(lightModels);
             }
     });
 

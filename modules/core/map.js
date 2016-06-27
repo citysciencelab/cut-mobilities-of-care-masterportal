@@ -70,7 +70,7 @@ define([
             this.get("map").on("pointermove", this.pointerMoveOnMap);
 
             Radio.trigger("zoomtofeature", "zoomtoid");
-            Radio.trigger("ModelList", "addModelsByAttributes", {isSelected: true});
+            Radio.trigger("ModelList", "addInitialyNeededModels");
             var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(activeItem)) {

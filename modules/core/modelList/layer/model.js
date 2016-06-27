@@ -53,10 +53,12 @@ define([
                 "change:SLDBody": this.updateSourceSLDBody
             });
 
-            if (this.getIsSelected() === true) {
-                if (Radio.request("Parser", "getTreeType") !== "light") {
-                    this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
-                }
+            //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
+            //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
+            //  selectionIDX benötigen, um verschoben werden zu können
+            if (this.getIsSelected() === true || Radio.request("Parser", "getTreeType") === "light") {
+                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
+
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
@@ -239,8 +241,9 @@ define([
          */
         updateLayerTransparency: function () {
             var opacity = (100 - this.get("transparency")) / 100;
-
-            if (!_.isUndefined( this.getLayer())) {
+            // Auch wenn die Layer im simple Tree noch nicht selected wurde können
+            // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
+            if (!_.isUndefined(this.getLayer())) {
                 this.getLayer().setOpacity(opacity);
             }
         },

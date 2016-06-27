@@ -125,10 +125,8 @@ define([
 
         renderLightTree: function (parentId) {
 
-            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                models = this.collection.add(lightModels);
+            var models = Radio.request("ModelList", "getModelsByAttributes", {parentId: parentId}),
 
-            this.collection.initLightTreeSelectionIDX(models);
             models = _.sortBy(models, function (model) {
                 return model.getSelectionIDX();
             });
@@ -138,6 +136,7 @@ define([
         updateLightTree: function () {
             $("#" + "Themen").html("");
             var models = this.collection.where({type: "layer"});
+
             models = _.sortBy(models, function (model) {
                 return model.getSelectionIDX();
             });
@@ -224,24 +223,6 @@ define([
             else {
                 this.renderLightTree("Themen");
             }
-
-
-            // if (isMobile) {
-            //     $("body").append(this.$el.append(this.mobileTemplate()));
-            // }
-            // else {
-            //     var treeType = Radio.request("Parser", "getPortalConfig").Baumtyp;
-            //
-            //     if (treeType === "light") {
-            //         // Use light Template
-            //         $("body").append(this.$el.append(this.desktopLightTemplate()));
-            //     }
-            //     else {
-            //         // Use complex Template
-            //         $("body").append(this.$el.append(this.desktopComplexTemplate()));
-            //     }
-            // }
-            // Radio.trigger("MenuBar", "switchedMenu");
         },
 
         /**
