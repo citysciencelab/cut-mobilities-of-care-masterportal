@@ -176,6 +176,7 @@ define(function () {
             mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
         },
         searchBar: {
+            minChars: 3,
             bkg: {
                 minChars: 3,
                 bkgSuggestURL: "/bkg_suggest",
