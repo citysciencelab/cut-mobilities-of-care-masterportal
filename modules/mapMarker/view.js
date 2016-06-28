@@ -64,7 +64,7 @@ define([
                     }
                 }
             }, this);
-            
+
             this.listenTo(EventBus, {
                 "mapHandler:clearMarker": this.clearMarker,
                 "mapHandler:zoomTo": this.zoomTo,
@@ -128,7 +128,9 @@ define([
                     break;
                 }
                 case "Thema": {
-                    EventBus.trigger("showLayerInTree", hit.model); // den Tree gibt es nur zusammen mit Karte
+                    Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
+                    Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
+                    //EventBus.trigger("showLayerInTree", hit.id); // den Tree gibt es nur zusammen mit Karte
                     break;
                 }
                 case "Olympiastandort": {
