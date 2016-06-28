@@ -48,16 +48,18 @@ define([
                     }
 
                     // HVV :(
-                    if (_.has(layer, "styles") && layer.styles.length > 1) {
-                        _.each(layer.styles, function (style) {
+                    if (_.has(layer, "styles") && layer.styles.length >= 1) {
+                        _.each(layer.styles, function (style, index) {
                             this.addItem(_.extend(
                                 {
                                     type: "layer",
                                     parentId: parentId,
+                                    name: layer.name[index],
                                     id: layer.id + style.toLowerCase(),
+                                    styles: layer.styles[index],
                                     level: level,
                                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
-                                }, _.omit(layer, "id")));
+                                }, _.omit(layer, "id", "name", "styles")));
                         }, this);
                     }
                     else {
