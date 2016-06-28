@@ -1,8 +1,9 @@
 define([
     "backbone",
     "text!modules/treeLight/template.html",
-    "text!modules/treeLight/templateSettings.html"
-], function (Backbone, LayerTemplate, SettingsTemplate) {
+    "text!modules/treeLight/templateSettings.html",
+    "eventbus"
+], function (Backbone, LayerTemplate, SettingsTemplate, EventBus) {
 
     var LayerView = Backbone.View.extend({
         className: "list-group-item tree-light-list",
@@ -22,7 +23,8 @@ define([
             "click .check, .unchecked, .layer > div > .name": "toggleVisibility",
             "click .up": "moveModelUp",
             "click .down": "moveModelDown",
-            "click .refresh": "toggleSettings"
+            "click .refresh": "toggleSettings",
+            "click .picture": "openStyleWMS"
         },
 
         render: function () {
@@ -71,6 +73,10 @@ define([
             else {
                 this.$el.css("color", "rgba(153, 153, 153, 0.6)");
             }
+        },
+        openStyleWMS: function () {
+            EventBus.trigger("toggleWin", ["styleWMS", "Style WMS", "glyphicon-picture", this.model.getId()]);
+            $(".nav li:first-child").removeClass("open");
         }
     });
 

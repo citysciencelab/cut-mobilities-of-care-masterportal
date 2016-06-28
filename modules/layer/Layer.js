@@ -309,6 +309,9 @@ define([
         },
         getId: function () {
             return this.get("id");
+        },
+        getTitle: function () {
+            return this.get("layers");
         }
     });
 

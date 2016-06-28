@@ -58,6 +58,9 @@ define(function () {
             saveSelection: false,
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "4441", visibility: true, styleable: true, geomType: "Polygon", attributesToStyle: ["AP30Sum", "AP60Sum"]},
+                {id: "2644", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["P_HAUSH"]},
+                // {id: "182", visibility: true, styleable: true, attributesToStyle: ["pflanzjahr"]},
                 {id: "452", visibility: false},
                 {id: "1748", visibility: false},
                 {id: "1562", visibility: false},
@@ -80,7 +83,7 @@ define(function () {
                  ],
                  name: "aktuelle Meldungen der TBZ", visibility: false
                 },
-                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: ["name", "strasse", "ort", "stand"], attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
+                {id: "1711", visibility: false, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: ["name", "strasse", "ort", "stand"], attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
                  displayInTree: true,
                  maxScale: 60000,
                  minScale: 10000,
@@ -250,7 +253,7 @@ define(function () {
         * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes.
         * @example layerConf: "../components/lgv-config/services-fhhnet.json"
         */
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         /**
         * @memberof config
         * @type {String}
