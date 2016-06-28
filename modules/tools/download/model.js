@@ -349,7 +349,10 @@ define([
              * @return {KML-String} das Resultierende KML
              */
             convertFeaturesToKML: function (features, context) {
-                var format = new ol.format.KML({extractStyles: true});
+                var format = new ol.format.KML({extractStyles: true}),
+                    pointOpacities = [],
+                    pointColors = [],
+                    pointRadiuses = [];
 
                 _.each(features, function (feature) {
                     var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
@@ -360,12 +363,48 @@ define([
                     }
 
                     feature.getGeometry().setCoordinates(transCoord, "XY");
+                      var type = feature.getGeometry().getType(),
+                    styles = feature.getStyleFunction().call(feature),
+                    style = styles[0];
 
+                 // wenn Punkt-Geometrie
+                 if (type === "Point") {
+                     // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
+                     if (!feature.getStyle().getText()) {
+                         var color = style.getFill().getColor().split("(")[1].split(",");
+                         
+                         pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
+                         pointColors.push(color[0] + "," + color[1] + "," + color[2]);
+                         pointRadiuses.push(style.getImage().getRadius());
+                     }
+                 }
                 }, context);
                 features = format.writeFeatures(features);
 
+                // KML zerlegen und die Punktstyles einfügen
+                var featuresWithPointStyle = jQuery.parseXML(features);
+
+                $(featuresWithPointStyle).find("Point").each(function (i, point) {
+                    var placemark = point.parentNode;
+
+                    // kein Text, muss also Punkt sein
+                    if (!$(placemark).find("name")[0]) {
+                        var style = $(placemark).find("Style")[0],
+                            pointStyle = "<PointStyle>";
+                        
+                        pointStyle += "<color>" + pointColors[i] + "</color>";
+                        pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
+                        pointStyle += "<radius>" + pointRadiuses[i] + "</radius>";
+                        pointStyle += "</PointStyle>";
+
+                        $(style).append(pointStyle);
+                    }
+
+                });
+                features = new XMLSerializer().serializeToString(featuresWithPointStyle);
                 return features;
             },
+
             /**
              * Erzeugt Projection aus ESPG codes und zone
              * @param  {String} sourceProj ESPG der Ausgangsprojektion
