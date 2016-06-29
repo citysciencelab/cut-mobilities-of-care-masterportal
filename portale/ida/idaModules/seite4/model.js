@@ -60,14 +60,16 @@ define([
                 ZWGFZ = "",
                 ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : "";
 
-            // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern
+            // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern.
+            // Für den Miteigentumsanteil MEA wird der Quotient von MEAN / MEAZ verwendet.
             if (_.has(params, "WGFZ") === false) {
                 if (_.has(params, "WOFL") === true && _.has(params, "FLAE") === true) {
                     var WOFL = Number(params.WOFL.replace(/,/, ".").trim()),
                         FLAE = Number(params.FLAE.replace(/,/, ".").trim()),
                         EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
                         OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
-                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78).toFixed(2);
+                        MEA = _.has(params, "MEA") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
+                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78 * MEA).toFixed(2);
 
                     ZWGFZ = WGFZ;
                     params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
