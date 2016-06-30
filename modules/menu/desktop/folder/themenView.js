@@ -53,7 +53,7 @@ define([
                     $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
                 }
                 else {
-                    $(selector).prepend(this.$el.html(this.template(attr)));
+                    $(selector).append(this.$el.html(this.template(attr)));
                 }
                 $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
             }

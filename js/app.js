@@ -17,9 +17,8 @@ define("app",
     new Map();
 
     // Module laden
-
-    require(["modules/menu/listView"], function (Menu) {
-        new Menu();
+    require(["modules/menu/menuLoader"], function (MenuLoader) {
+        new MenuLoader();
     });
     require(["modules/alerting/view"]);
     new RestReaderList();

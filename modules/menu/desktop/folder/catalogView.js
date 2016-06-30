@@ -43,7 +43,7 @@ define([
                 var attr = this.model.toJSON();
 
                 $(".header").toggleClass("closed");
-                $("#" + this.model.getParentId()).prepend(this.$el.html(this.template(attr)));
+                $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
                 if (!this.model.getIsExpanded()) {
                     $("#" + this.model.getId()).css("display", "none");
                 }

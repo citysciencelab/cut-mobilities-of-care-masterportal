@@ -228,7 +228,8 @@ define([
                     if (model.getIsSelected()) {
                         Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                     }
-                    this.trigger("updateSelectionOrLightTreeView");
+                    this.trigger("updateSelection");
+                    this.trigger("updateLightTree");
                 }
             },
             moveModelUp: function (model) {
@@ -243,7 +244,9 @@ define([
                     if (model.getIsSelected()) {
                         Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                     }
-                    this.trigger("updateSelectionOrLightTreeView");
+                    this.trigger("updateSelection");
+
+                    this.trigger("updateLightTree");
                 }
             },
             updateModelIndeces: function () {
