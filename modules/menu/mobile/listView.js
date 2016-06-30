@@ -77,7 +77,7 @@ define([
                             break;
                         }
                         case "layer": {
-                            nodeView = (treeType === "light"? new LayerViewLight({model: model}) : new LayerView({model: model}));
+                            nodeView = (treeType === "light" ? new LayerViewLight({model: model}) : new LayerView({model: model}));
                             break;
                         }
                     }
