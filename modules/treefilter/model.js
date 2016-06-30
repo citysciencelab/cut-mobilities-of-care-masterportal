@@ -13,7 +13,7 @@ define([
             errors: "",
             treeCategory: "", // Baumgattung
             treeType: "", // Baumart
-            yearMin: "1", // Pflanzjahr von
+            yearMin: "0", // Pflanzjahr von
             yearMax: "2015", // Pflanzjahr bis
             diameterMin: "0", // Kronendurchmesser[m] von
             diameterMax: "50", // Kronendurchmesser[m] bis
