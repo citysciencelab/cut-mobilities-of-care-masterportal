@@ -1,11 +1,17 @@
 .mouseHover {
     font-size: 12px;
+    text-align: left;
     max-width: inherit;
-    padding: 6px;
+    padding: 8px;
     background-color: rgb(255, 255, 255);
     color: #777;
-    font-weight: bold;
     /*display: block;*/
     white-space: pre;
-    border: 1px solid #777;
+    border: 1px solid rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+.mouseHover span:first-child {
+    font-size: 13px;
+    font-weight: bold;
 }

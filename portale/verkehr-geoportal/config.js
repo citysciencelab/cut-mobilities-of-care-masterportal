@@ -13,7 +13,8 @@ define(function () {
                 ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
                 ["713", "714", "715", "716"],
                 ["717", "718", "719", "720"],
-                ["1043", "1044", "1045", "1046"]
+                ["1043", "1044", "1045", "1046"],
+                ["2709","2885","2890","2900"]
               ],
             layerIDsToStyle: [
                 {
@@ -55,7 +56,7 @@ define(function () {
                 {id: "368", visibility: false}, // aLKIS farbig
                 {id: "149", visibility: false} // aLKIS grau-blau
             ],
-            customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
+           
         },
         controls: {
             zoom: true,
@@ -125,23 +126,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contact: {
-                serviceID: "80001",
-                from: [{
-                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
-                    name: "LGVGeoportalHilfe"
-                }],
-                to: [{
-                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
-                    name: "LGVGeoportalHilfe"
-                }],
-                ccToUser: true,
-                cc: [],
-                bcc: [],
-                subject: "",
-                textPlaceholder: "",
-                includeSystemInfo: true
-            },
+            
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
@@ -153,7 +138,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -162,6 +147,10 @@ define(function () {
             tree: {
                 minChars: 3
             },
+            visibleWFS: {
+                minChars: 3
+            },
+            minChars: 3,
             geoLocateHit: true
         },
         tools: {

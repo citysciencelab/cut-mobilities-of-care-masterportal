@@ -41,9 +41,14 @@ define([
 
             channel.on({
                 "setLayerAttributions": function (layerId, attrs) {
-                    var model = this.findWhere({type: "layer", layerId: layerId});
+                    var model = this.findWhere({type: "layer", layerId: layerId}),
+                        treeNode = _.where(treeNodes, {layerId: layerId, type: "layer"});
 
-                    if (!_.isUndefined(model)) {
+                    // Model wird hinzugefügt falls es noch nicht vorhanden ist
+                    if (treeNode.length > 0) {
+                        this.add(_.where(treeNodes, {layerId: layerId, type: "layer"}));
+                    }
+                    else if (!_.isUndefined(model)) {
                         model.set(attrs);
                     }
                 },
@@ -133,13 +138,15 @@ define([
          */
         addToolItems: function () {
             _.each(Config.tools, function (value, key) {
-                this.add({
-                    type: "item",
-                    title: value.title,
-                    glyphicon: value.glyphicon,
-                    parentId: "tools",
-                    name: key
-                });
+                if (!(key === "draw" || key === "measure")) {
+                    this.add({
+                        type: "item",
+                        title: value.title,
+                        glyphicon: value.glyphicon,
+                        parentId: "tools",
+                        name: key
+                    });
+                }
             }, this);
         },
         /**

@@ -18,7 +18,7 @@ define([
             features: [],
             source: new ol.source.Vector({useSpatialIndex: false}),
             layer: new ol.layer.Vector(),
-            format: new ol.format.KML()
+            format: new ol.format.KML({extractStyles: true})
         },
 
         initialize: function () {
@@ -96,9 +96,7 @@ define([
             if (this.getText() !== "") {
                 this.setText("");
                 $("#fakebutton").toggleClass("btn-primary");
-//                this.setFormat(new ol.format.KML());
-//                this.setSource(new ol.source.Vector({useSpatialIndex: false}));
-//                this.setLayer(new ol.layer.Vector());
+                $("#btn_import").prop("disabled", true);
             }
         },
         // features von KML (in "text" gespeichert) einlesen
@@ -118,32 +116,76 @@ define([
 
         // Workaround der Styles für Punkte und Text
         setStyle: function () {
-            var features = this.getFeatures();
+            var features = this.getFeatures(),
+                kml = jQuery.parseXML(this.get("text")),
+                pointStyleColors = [],
+                pointStyleTransparencies = [],
+                pointStyleRadiuses = [],
+                pointStyleCounter = 0;
+            
+                // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
+                $(kml).find("Point").each(function (i, point) {
+                    var placemark = point.parentNode;
+
+                    // kein Text
+                    if (!$(placemark).find("name")[0]) {
+                        var pointStyle = $(placemark).find("PointStyle")[0];
+                        var color = $(pointStyle).find("color")[0],
+                            transparency = $(pointStyle).find("transparency")[0],
+                            radius = $(pointStyle).find("radius")[0];
+
+                        // rgb in array schreiben
+                        color = new XMLSerializer().serializeToString(color);
+                        color = color.split(">")[1].split("<")[0];
+                        pointStyleColors.push(color);
+                        // transparenz in array schreiben
+                        transparency = new XMLSerializer().serializeToString(transparency);
+                        transparency = transparency.split(">")[1].split("<")[0];
+                        pointStyleTransparencies.push(transparency);
+                        // punktradius in array schreiben
+                        radius = new XMLSerializer().serializeToString(radius);
+                        radius = parseInt(radius.split(">")[1].split("<")[0]);
+                        pointStyleRadiuses.push(radius);
+                    }
+                });
 
              _.each(features, function (feature) {
-                 var type = feature.getGeometry().getType();
+                 var type = feature.getGeometry().getType(),
+                 styles = feature.getStyleFunction().call(feature),
+                 style = styles[0];
 
                  // wenn Punkt-Geometrie
                  if (type === "Point") {
                      // wenn Text
                      if (feature.get("name") !== undefined) {
-                         feature.setStyle(this.getTextStyle(feature.get("name")));
+                         feature.setStyle(this.getTextStyle(feature.get("name"), style));
                      }
+                     // wenn Punkt
                      else {
-                        feature.setStyle(null);
+                         var style = new ol.style.Style({
+                            image: new ol.style.Circle({
+                                radius: pointStyleRadiuses[pointStyleCounter],
+                                fill: new ol.style.Fill({
+                                    color: "rgba("+pointStyleColors[pointStyleCounter]+", "+pointStyleTransparencies[pointStyleCounter]+")"
+                                })
+                            })
+                        });
+                         feature.setStyle(style);
+                         pointStyleCounter ++;
                      }
                  }
             }, this);
+
+
         },
 
-        getTextStyle: function (name) {
-
+        getTextStyle: function (name, style) {
             return new ol.style.Style({
                 text: new ol.style.Text({
                     text: name,
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 0, 0, 1)"
-                    })
+                    font: "8px Arial",
+                    fill: style.getText().getFill(),
+                    scale: style.getText().getScale()
                 })
             });
         },

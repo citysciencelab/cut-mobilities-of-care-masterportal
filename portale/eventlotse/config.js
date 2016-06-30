@@ -11,7 +11,7 @@ define(function () {
                 {id: "182", visibility: false},// Strassenbaumkataster
                 {id: "582", visibility: false},// Parkanlagen
                 {id: "629,628,627", name: "100 Jahre Stadtgrün", visibility: false},// 100JahreStadtgrün
-                {id: "2030", visibility: false},// Naturschutzgebiete
+                {id: "1992", visibility: false},// Naturschutzgebiete
                 {id: "458", visibility: false},// Wasserschutzgebiete
                 {id: "1754,1755,1756,1757,1758,1759", name: "Denkmalkartierung", visibility: false},// Denkmalkartierung
                 {id: "1849", visibility: false, name: "Bodendenkmäler"},// Bodendenkmale
@@ -32,19 +32,18 @@ define(function () {
                 {id: "1933", visibility: false, styles: "geofox_stations", name: "HVV Haltestellen"},// HVV Haltestellen
                 {id: "945", visibility: false}, // Parkhäuser
                 {id: "942", visibility: false}, // ParkAndRide
-//                {id: "4425", visibility: true, name: "Eventlotse-Flächen", style: "4425"} // WFS Eventlotse (4425)
-                {id: "4426", visibility: true, name:"Eventlotse-Flächen WMS"} // WMS Eventlotse (4426)
+                {id: "4561", visibility: true, name:"Eventlotse-Flächen"} // Eventlotse 
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
             version: "2.0.0",
             typename: "app:hamburgconvention",
-            literalprefix: "APP_HAMBURGCONVENTION_",
+            valuereference:"app:flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
+            layerid: "4561"
         },
 
         view: {
@@ -73,12 +72,6 @@ define(function () {
         * @desc Pfad zur Style-Datei für die WFS-Dienste.
         */
         styleConf: "../components/lgv-config/style.json",
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Pfad zur Konfig-Datei für den automatisiert generiereten Layerbaum
-        */
-        categoryConf: "../components/lgv-config/category.json",
         /**
         * @memberof config
         * @type {String}
@@ -115,22 +108,28 @@ define(function () {
         * @desc Steuert, ob die Menubar initial ausgeklappt ist oder nicht.
         */
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: false
-            // featureLister: 20
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,             
             placeholder: "Suche Adresse, Stadtteil",
             gazetteer: {
                 minChars: 3,
@@ -161,7 +160,7 @@ define(function () {
             printID: "99999",
             title: "Eventlotse",
             gfi: true
-        },
+        }
     };
 
     return config;

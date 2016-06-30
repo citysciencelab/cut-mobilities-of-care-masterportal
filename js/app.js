@@ -39,11 +39,11 @@ define("app",
     }
 
     // Macht noch Probleme
-    // if (Config.attributions && Config.attributions === true) {
-    //     require(["modules/attribution/view"], function (AttView) {
-    //         new AttView();
-    //     });
-    // }
+    if (Config.attributions && Config.attributions === true) {
+        require(["modules/attribution/view"], function (AttView) {
+            new AttView();
+        });
+    }
 
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {
@@ -316,8 +316,11 @@ define("app",
                         }
                     });
                 }
+                require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+                    new StyleWMSView();
+                });
                 if (_.has(Config.menuItems, "routing") === true) {
-                    require(["modules/routing/view"], function (RoutingView) {
+                    require(["modules/viomRouting/view"], function (RoutingView) {
                         new RoutingView();
                     });
                 }

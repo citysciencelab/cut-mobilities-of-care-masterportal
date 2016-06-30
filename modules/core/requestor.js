@@ -10,6 +10,7 @@ define([
         requestCount: 0,
         response: [],
         pContent: [],
+        typ: "",
         /**
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
@@ -25,11 +26,13 @@ define([
                 gfiContent = null;
                 switch (visibleLayer.ol_layer.get("typ")) {
                     case "WFS": {
+                        this.set("typ", visibleLayer.ol_layer.get("typ"));
                         gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                     case "GeoJSON": {
+                        this.set("typ", visibleLayer.ol_layer.get("typ"));
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
@@ -46,6 +49,7 @@ define([
              if (containsWMS === true) {
                 _.each(sortedParams, function (visibleLayer) {
                     if (visibleLayer.ol_layer.get("typ") === "WMS") {
+                            this.set("typ", visibleLayer.ol_layer.get("typ"));
                             gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
                         }
                 }, this);
@@ -182,7 +186,8 @@ define([
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         translateGFI: function (gfiList, gfiAttributes) {
-            var pgfi = [];
+            var pgfi = [],
+                typ = this.get("typ");
 
             _.each(gfiList, function (element) {
                 var preGfi = {},
@@ -202,16 +207,17 @@ define([
                         key = this.beautifyString(key);
                         gfi[key] = value;
                     }, this);
-                 if (Util.isInternetExplorer() !== false) {
-                        var keys=[],
-                            values=[];
-                        _.each (gfi,function(value,key){
+                 if (Util.isInternetExplorer() !== false && typ !== "WFS") {
+                        var keys = [],
+                            values = [];
+
+                        _.each (gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
-                        },this);
+                        }, this);
                         keys.reverse();
                         values.reverse();
-                        gfi= _.object(keys, values);
+                        gfi = _.object(keys, values);
                      }
                 }
                 else {

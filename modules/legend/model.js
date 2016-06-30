@@ -14,6 +14,7 @@ define([
         },
 
         initialize: function () {
+
             this.listenTo(Radio.channel("ModelList"), {
                 "sendVisiblelayerList": this.setLayerList
             });

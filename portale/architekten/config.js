@@ -45,8 +45,8 @@ define(function () {
         },
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
 
         print: {
@@ -90,7 +90,7 @@ define(function () {
         searchBar: {
             placeholder: "Suche Adresse, Stadtteil, Thema",
             gazetteer: {
-                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -99,6 +99,10 @@ define(function () {
             tree: {
                 minChars: 3
             },
+            visibleWFS: {
+                minChars: 3
+            },
+            minChars: 3,
             geoLocateHit: true
         },
         tools: {

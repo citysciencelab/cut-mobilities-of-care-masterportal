@@ -11,7 +11,8 @@ define([
             var channel = Radio.channel("SelectedList");
 
             channel.reply({
-                "getSelectionIDXByID": this.getSelectionIDXByID
+                "getSelectionIDXByID": this.getSelectionIDXByID,
+                "getModels": this.models
             }, this);
 
             this.listenTo(channel, {
@@ -44,6 +45,7 @@ define([
                             Radio.trigger("TreeList", "setLayerAttributions", model.get("id"), {selectionIDX: collection.indexOf(model)});
                         });
                     }
+                    channel.trigger("changedList", this.models);
                 },
                 "add": this.addLayerToMap,
                 "remove": this.removeLayerFromMap,

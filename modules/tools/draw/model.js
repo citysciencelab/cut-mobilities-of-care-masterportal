@@ -98,7 +98,7 @@ define([
                     EventBus.trigger("addLayer", this.get("layer"));
                 },
                 "getSource": function () {
-                    Radio.trigger("kmlimport", "setSource",this.getSource());
+                    Radio.trigger("kmlimport", "setSource", this.getSource());
                 }
             }, this);
 
@@ -147,6 +147,7 @@ define([
         setSource: function (value) {
             this.set("source", value);
             var layer = this.get("layer");
+
             layer.setSource(value);
             this.set("layer", layer);
         },
@@ -295,7 +296,6 @@ define([
                 color;
 
             color = rgbColor.substr(0, rgbColor.length - 4) + opacity + ")";
-
             return new ol.style.Style({
                 fill: new ol.style.Fill({
                     color: color
@@ -310,6 +310,7 @@ define([
                         color: color
                     })
                 })
+
             });
         },
 
@@ -323,10 +324,11 @@ define([
             return new ol.style.Style({
                 text: new ol.style.Text({
                     text: this.get("text"),
-                    font: this.get("selectedFontSize") + "px " + this.get("selectedFont"),
+                    font: "8px " + this.get("selectedFont"),
                     fill: new ol.style.Fill({
                         color: rgbColor.substr(0, rgbColor.length - 6) + ", 1)"
-                    })
+                    }),
+                    scale: this.get("selectedFontSize") / 8
                 })
             });
         },

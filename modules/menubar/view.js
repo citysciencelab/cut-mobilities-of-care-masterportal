@@ -67,6 +67,9 @@ define([
                     new TitleView();
                 });
             }
+            if (_.has(Config, "simplemap") === true && Config.simplemap === true) {
+                $(".navbar").hide();
+            }
         },
 
         toggle: function () {

@@ -302,22 +302,21 @@ define([
                 var layerByFeature,
                     visibleWFSLayerList = Radio.request("LayerList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
-                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
-                    // cluster-source
+                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
                             layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.getClusterLayerSource().getFeatureById(feature.getId());
-                            });
-                            if (_.isUndefined(layerByFeature) === false) {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    feature: feature,
-                                    attributes: layerByFeature.get("gfiAttributes"),
-                                    name: layerByFeature.get("name"),
-                                    ol_layer: layerByFeature.get("layer")
-                                });
-                            }
+                                 return layer.getClusterLayerSource().getFeatureById(feature.getId());
+                             });
+                             if (_.isUndefined(layerByFeature) === false) {
+                                 gfiParams.push({
+                                     typ: "WFS",
+                                     feature: feature,
+                                     attributes: layerByFeature.get("gfiAttributes"),
+                                     name: layerByFeature.get("name"),
+                                     ol_layer: layerByFeature.get("layer")
+                                 });
+                             }
                         });
                     }
                     // vector-source

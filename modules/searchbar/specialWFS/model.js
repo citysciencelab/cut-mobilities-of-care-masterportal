@@ -53,10 +53,11 @@ function (Backbone, EventBus) {
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
+                searchString = searchString.replace(/[()]/g, '\\$&');
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInBPlans(searchStringRegExp);
+                    this.searchInBPlans(searchString);
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
@@ -97,10 +98,15 @@ function (Backbone, EventBus) {
         /**
         *
         */
-        searchInBPlans: function (searchStringRegExp) {
+        searchInBPlans: function (searchString) {
             _.each(this.get("bPlans"), function (bPlan) {
+                searchString = searchString.replace(/ö/g, "oe");
+                searchString = searchString.replace(/ä/g, "ae");
+                searchString = searchString.replace(/ü/g, "ue");
+                searchString = searchString.replace(/ß/g, "ss");
+                var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (bPlan.name.search(searchStringRegExp) !== -1) {
+                 if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
                     EventBus.trigger("searchbar:pushHits", "hitList", bPlan);
                 }
             }, this);
@@ -119,20 +125,27 @@ function (Backbone, EventBus) {
                 if (!_.isUndefined($(hit).find("app\\:planrecht, planrecht")[0])) {
                     name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
                     type = "festgestellt";
+                    // BPlan-Objekte
+                    this.get("bPlans").push({
+                        name: name.trim(),
+                        type: type,
+                        glyphicon: "glyphicon-picture",
+                        id: name.replace(/ /g, "") + "BPlan"
+                    });
                 }
                 else {
-                    if(!_.isUndefined($(hit).find("app\\:plan, plan")[0])) {
+                    if (!_.isUndefined($(hit).find("app\\:plan, plan")[0])) {
                         name = $(hit).find("app\\:plan, plan")[0].textContent;
                         type = "im Verfahren";
+                        // BPlan-Objekte
+                        this.get("bPlans").push({
+                            name: name.trim(),
+                            type: type,
+                            glyphicon: "glyphicon-picture",
+                            id: name.replace(/ /g, "") + "BPlan"
+                        });
                     }
                 }
-                // BPlan-Objekte
-                this.get("bPlans").push({
-                    name: name.trim(),
-                    type: type,
-                    glyphicon: "glyphicon-picture",
-                    id: name.replace(/ /g, "") + "BPlan"
-                });
             }, this);
         },
 

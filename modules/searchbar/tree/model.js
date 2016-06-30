@@ -109,9 +109,16 @@ define([
             this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
+<<<<<<< HEAD
             layerModels = _.uniq(layerModels, function (model) {
                 return model.name + model.datasets[0].md_id;
             });
+=======
+            // layerModels = _.uniq(layerModels, function (model) {
+            //     return model.name + model.datasets[0].md_id;
+            //     // return model.get("name") + model.get("metaID");
+            // });
+>>>>>>> dev
             _.each(layerModels, function (model) {
                 this.get("layers").push({
                     name: model.name,

@@ -3,7 +3,7 @@ define([
     "config",
     "backbone.radio",
     "modules/core/util",
-    "eventbus",
+    "eventbus"
 ], function () {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
@@ -74,16 +74,15 @@ define([
         // baut sich aus den Config-prefs die URL zusammen
         requestFeatureFromWFS: function () {
             var prefs = this.getPrefs(),
-            id = prefs.id,
+            id = prefs.id, // wird von parametricUrl in die config geschrieben
             url = prefs.url,
             version = prefs.version,
             typename = prefs.typename,
-            literalprefix = prefs.literalprefix,
+            valuereference = prefs.valuereference,
             ids = id.split(",");
 
             _.each(ids, function (id) {
-                var data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename + "&Filter=<Filter><PropertyIsEqualTo><ValueReference>@gml:id</ValueReference><Literal>" + literalprefix + id + "</Literal></PropertyIsEqualTo></Filter>";
-
+                var data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename + "&Filter=<Filter><PropertyIsEqualTo><ValueReference>" + valuereference + "</ValueReference><Literal>" + id + "</Literal></PropertyIsEqualTo></Filter>";
                 this.sendRequest(url, data);
             }, this);
             this.sendToMap();
@@ -93,7 +92,7 @@ define([
         sendRequest: function (url, data) {
             $.ajax({
                     url: Util.getProxyURL(url),
-                    data: data,
+                    data: encodeURI(data),
                     context: this,
                     async: false,
                     type: "GET",

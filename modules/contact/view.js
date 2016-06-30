@@ -13,7 +13,7 @@ define([
         initialize: function () {
             EventBus.trigger("appendItemToMenubar", {
                 title: "Kontakt",
-                symbol: "glyphicon glyphicon-envelope",
+                symbol: "glyphicon glyphicon-envelope hidden-sm",
                 classname: "contact",
                 clickFunction: function () {
                     EventBus.trigger("toggleWin", ["contact", "Kontakt", "glyphicon glyphicon-envelope"]);

@@ -25,7 +25,7 @@ define(function () {
         * @property {String} [tree.layer.searchField] - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
         * @property {String} [tree.layer.styleField] - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
         * @property {String} [tree.layer.styleLabelField] - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String} [tree.layer.mouseHoverField] - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
+        * @property {String|Array} [tree.layer.mouseHoverField] - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
         * @property {Object[]} [tree.layer.filterOptions] - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
         * @property {String} tree.layer.filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
         * @property {('combo')} tree.layer.filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
@@ -55,7 +55,7 @@ define(function () {
         */
         tree: {
             type: "light",
-            saveSelection: false,
+            saveSelection: false
             // layer: [
             //     {id: "453", visibility: true, legendUrl: "ignore"},
             //     {id: "452", visibility: false},
@@ -147,18 +147,18 @@ define(function () {
         * @desc Optionale Konfigurations-Einstellungen für den URL parameter "featureid"
         * @property {string} [url] - URL zum WFS.
         * @property {string} [version] - Die Version des WFS.
-        * @property {string} [typename] - typename des WFS.
-        * @property {string} [literalprefix] - prefix an das die ID drangehängt wird. da wird. Kommt beim request in den Filter.
+        * @property {string} [typename] - typename des WFS. Entspricht Tabelle. Kommt beim request in den Filter.
+        * @property {string} [valuereference] - valuereference. Entspricht Spalte. Kommt beim request in den Filter.
         * @property {string} [imglink] - Link für den Marker.
         * @property {string} [layerid] - ID des layers an den die Marker gekoppelt werden.
         */
         zoomtofeature: {
             url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version:"2.0.0",
+            version: "2.0.0",
             typename: "app:hamburgconvention",
-            literalprefix: "APP_HAMBURGCONVENTION_",
+            valuereference:"app:flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4425"
+            layerid: "4426"
         },
         /**
         * @memberof config
@@ -250,7 +250,7 @@ define(function () {
         * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes.
         * @example layerConf: "../components/lgv-config/services-fhhnet.json"
         */
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         /**
         * @memberof config
         * @type {String}
