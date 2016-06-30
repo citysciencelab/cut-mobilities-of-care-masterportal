@@ -15,7 +15,9 @@ define([
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         Radio = require("backbone.radio"),
-        ModelList = Backbone.Collection.extend({
+        ModelList;
+
+    ModelList = Backbone.Collection.extend({
             selectionIDX: [],
             initialize: function () {
                 var channel = Radio.channel("ModelList");
@@ -27,9 +29,6 @@ define([
                     },
                     "getModelByAttributes": function (attributes) {
                         return this.findWhere(attributes);
-                    },
-                    "getSelectionIDX": function (model) {
-                        return this.insertIntoSelectionIDX(model);
                     }
                 }, this);
 
@@ -37,20 +36,10 @@ define([
                     "setModelAttributesById": this.setModelAttributesById,
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
-                    "setLayerAttributions": function (layerId, attrs) {
-                       var model = this.findWhere({type: "layer", layerId: layerId});
-
-                       if (!_.isUndefined(model)) {
-                           model.set(attrs);
-                       }
-                   },
-                   "updateList": this.updateList,
-                   "checkIsExpanded": this.checkIsExpanded,
-                   "removeFromSelectionIDX": this.removeFromSelectionIDX,
-                   "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
-                   "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
-                   "moveModelDown": this.moveModelDown,
-                   "moveModelUp": this.moveModelUp
+                    "updateList": this.updateList,
+                    "checkIsExpanded": this.checkIsExpanded,
+                    "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
+                    "isEveryChildLayerSelected": this.isEveryChildLayerSelected
                }, this);
 
                this.listenTo(this, {
@@ -62,7 +51,7 @@ define([
                        this.toggleTreeVisibilityOfChildren(model);
                     },
                     "change:isSelected": function () {
-                        this.trigger("updateSelectionOrLightTreeView");
+                        this.trigger("updateSelection");
                         channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     },
                     "change:transparency": function () {
@@ -200,20 +189,27 @@ define([
                 var idx = 0;
 
                 if (this.selectionIDX.length === 0 || model.getParentId() !== "Baselayer") {
-                    idx = this.selectionIDX.push(model) - 1;
+                    idx = this.appendToSelectionIDX(model);
+                    // idx = this.selectionIDX.push(model) - 1;
                 }
                 else {
                     while (idx < this.selectionIDX.length && this.selectionIDX[idx].getParentId() === "Baselayer") {
                         idx++;
                     }
                     this.selectionIDX.splice(idx, 0, model);
+                    this.updateModelIndeces();
                 }
-                this.updateModelIndeces();
                 return idx;
             },
             insertIntoSelectionIDXAt: function (model, idx) {
                 this.selectionIDX.splice(idx, 0, model);
                 this.updateModelIndeces();
+            },
+            appendToSelectionIDX: function (model) {
+                var idx = this.selectionIDX.push(model) - 1;
+
+                this.updateModelIndeces();
+                return idx;
             },
             removeFromSelectionIDX: function (idx) {
                 this.selectionIDX.splice(idx, 1);
@@ -289,14 +285,16 @@ define([
                 }
                 // Parametrisierter Aufruf
                 else if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                    _.each(Radio.request("ParametricURL", "getLayerParams"), function (param, index) {
-                        this.addModelsByAttributes({id: param.id});
-                        this.setModelAttributesById(param.id, {isSelected: true, transparency: param.transparency, selectionIDX: index});
+                    _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
+                        var lightModel = Radio.request("Parser", "getItemByAttributes", {id: param.id});
+
+                        lightModel.isSelected = true;
+                        this.add(lightModel);
                         if (param.visibility === "TRUE") {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: true});
+                            this.setModelAttributesById(param.id, {isVisibleInMap: true, transparency: param.transparency});
                         }
                         else {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: false});
+                            this.setModelAttributesById(param.id, {isVisibleInMap: false, transparency: param.transparency});
                         }
                     }, this);
                 }
@@ -308,7 +306,7 @@ define([
             addModelsByAttributes: function (attrs) {
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
-                this.add(lightModels);
+                return this.add(lightModels);
             },
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);

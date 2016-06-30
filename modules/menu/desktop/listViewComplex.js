@@ -24,7 +24,8 @@ define([
                         this.updateOverlayer();
                     },
                     "updateSelection": function () {
-                        this.updateLightTree("Themen");
+                        // this.updateLightTree("Themen");
+                        this.trigger("updateLightTree");
                         this.renderSelectedList("Overlayer");
                     }
                 });

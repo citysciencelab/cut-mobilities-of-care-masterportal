@@ -44,6 +44,7 @@ define([
 
             this.listenTo(this, {
                 "change:isSelected": function () {
+                    console.log(this.getName());
                     this.setIsVisibleInMap(this.getIsSelected());
                 },
                 "change:isVisibleInMap": function () {
@@ -57,7 +58,12 @@ define([
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
             if (this.getIsSelected() === true || Radio.request("Parser", "getTreeType") === "light") {
-                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
+                if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
+                    this.collection.appendToSelectionIDX(this);
+                }
+                else {
+                    this.collection.insertIntoSelectionIDX(this);
+                }
 
                 this.createLayerSource();
                 this.toggleLayerOnMap();
@@ -91,7 +97,7 @@ define([
          * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
          * @param {boolean} value
          */
-        setIsVisibleInMap: function (value) {
+        setIsVisibleInMap: function (value) {console.log(value);
             this.set("isVisibleInMap", value);
             this.getLayer().setVisible(value);
         },
@@ -102,10 +108,10 @@ define([
          */
         setIsSelected: function (value) {
             if (value && Radio.request("Parser", "getTreeType") !== "light") {
-                this.setSelectionIDX(Radio.request("ModelList", "getSelectionIDX", this));
+                this.collection.insertIntoSelectionIDX(this);
             }
             else {
-                Radio.trigger("ModelList", "removeSelectionIDX", this.getSelectionIDX());
+                this.collection.removeFromSelectionIDX(this);
             }
             this.set("isSelected", value);
         },
@@ -264,10 +270,10 @@ define([
            return this.get("selectionIDX");
         },
         moveDown: function () {
-           Radio.trigger("ModelList", "moveModelDown", this);
+            this.collection.moveModelDown(this);
         },
         moveUp: function () {
-           Radio.trigger("ModelList", "moveModelUp", this);
+            this.collection.moveModelUp(this);
         }
     });
 
