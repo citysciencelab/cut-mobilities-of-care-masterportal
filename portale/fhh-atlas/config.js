@@ -2,10 +2,11 @@ define(function () {
     var config = {
         title: "FHH - Atlas",
         logo: "../img/hh-logo.png",
+        simpleMap: true,
         tree: {
             type: "default",
             orderBy: "opendata",
-            saveSelection: true,
+            // saveSelection: true,
             baseLayer: [
                 {id: "453", minScale: "500"},
                 {id: "8"},

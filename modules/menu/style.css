@@ -10,6 +10,11 @@
     /*font-size: 12px;*/
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.176);
 }
+
+.dropdown-menu {
+    padding: 0;
+}
+
 #root > .dropdown {
     color: #555;
     font-size: 14px;
