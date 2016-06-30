@@ -55,6 +55,9 @@ define(function () {
            visibleWFS: {
                minChars: 3
            },
+           tree: {
+               minChars: 3
+           },
            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
            geoLocateHit: true
        },

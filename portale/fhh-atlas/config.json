@@ -39,6 +39,10 @@
           "kmlimport": {
             "name": "KML Import",
             "glyphicon": "glyphicon-import"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
           }
         }
       },

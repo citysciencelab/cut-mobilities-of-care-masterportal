@@ -1,12 +1,71 @@
 define([
-    "underscore",
-    "config",
-    "backbone"
-], function (_, Config, Backbone) {
+    "backbone",
+    "backbone.radio",
+    "config"
+], function (Backbone, Radio, Config) {
 
     var ParametricURL = Backbone.Model.extend({
 
         initialize: function () {
+            var channel = Radio.channel("ParametricURL");
+
+            channel.reply({
+                "getResult": this.getResult,
+                "getLayerParams": this.getLayerParams
+            }, this);
+
+            this.parseURL();
+        },
+
+        setResult: function (value) {
+            this.set("result", value);
+        },
+
+        setLayerParams: function (value) {
+            this.set("layerParams", value);
+        },
+
+        getResult: function () {
+            return this.get("result");
+        },
+
+        getLayerParams: function () {
+            return this.get("layerParams");
+        },
+
+        createLayerParams: function () {
+            var layerIdString = _.values(_.pick(this.getResult(), "LAYERIDS"))[0],
+                visibilityListString = "",
+                transparencyListString = "",
+                layerIdList = [],
+                visibilityList = [],
+                transparencyList = [],
+                layerParams = [];
+
+                if (_.has(this.getResult(), "VISIBILITY")) {
+                    visibilityListString = _.values(_.pick(this.getResult(), "VISIBILITY"))[0];
+                }
+                if (_.has(this.getResult(), "TRANSPARENCY")) {
+                     transparencyListString = _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0];
+                }
+
+           if (layerIdString.indexOf(",") !== -1) {
+               layerIdList = layerIdString.split(",");
+               visibilityList = visibilityListString.split(",");
+               transparencyList = transparencyListString.split(",");
+           }
+           else {
+               layerIdList.push(layerIdString);
+               visibilityList.push(visibilityListString);
+               transparencyList.push(transparencyListString);
+           }
+           _.each(layerIdList, function (val, index) {
+               layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
+           });
+           this.setLayerParams(layerParams);
+        },
+
+        parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
             var query = location.search.substr(1).toUpperCase(), // URL --> alles nach ? wenn vorhanden
                 result = {};
@@ -17,6 +76,7 @@ define([
                 result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
             });
 
+            this.setResult(result);
             /**
              * Über diesen Parameter wird GeoOnline aus dem Transparenzporal aufgerufen
              * Der entsprechende Datensatz soll angezeigt werden
@@ -67,131 +127,146 @@ define([
              * Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
              * Ist der Parameter "layerIDs" vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
              */
-            if (_.has(result, "LAYERIDS")) {
-                var valuesString = _.values(_.pick(result, "LAYERIDS"))[0],
-                    visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
-                    transparencyListString = _.values(_.pick(result, "transparency"))[0],
-                    values = [],
-                    visibilityList = [],
-                    transparencyList = [];
+            if (_.has(result, "LAYERIDS") && result.LAYERIDS.length > 0) {
+                this.createLayerParams();
+//                 var valuesString = _.values(_.pick(result, "LAYERIDS"))[0],
+//                     visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
+//                     transparencyListString = _.values(_.pick(result, "TRANSPARENCY"))[0],
+//                     values = [],
+//                     vis = [],
+//                     trans = [];
+// // console.log(visibilityListString);
+//                 if (valuesString.indexOf(",") !== -1) {
+//                     values = valuesString.split(",");
+//                     vis = visibilityListString.split(",");
+//                     trans = transparencyListString.split(",");
+//                 }
+//                 else {
+//                     values.push(valuesString);
+//                 }
+//                 console.log(values);
+//                 _.each(values, function (val, index) {//console.log(val + " " + vis[index] + " " + typeof vis[index] + " " + trans[index]);
+//                     Radio.trigger("ModelList", "addModelsByAttributes", {id: val});
+//                     Radio.trigger("ModelList", "setModelAttributesById", val, {isSelected: true, transparency: trans[index]});
+//                     if (vis[index] === "TRUE") {
+//                         Radio.trigger("ModelList", "setModelAttributesById", val, {isVisibleInMap: true});
+//                     }
+//                     else {
+//                         Radio.trigger("ModelList", "setModelAttributesById", val, {isVisibleInMap: false});
+//                     }
+//                 });
 
-                if (valuesString.indexOf(",") !== -1) {
-                    values = valuesString.split(",");
-                }
-                else {
-                    values.push(valuesString);
-                }
-                if (_.has(result, "VISIBILITY")) {
-                    if (visibilityListString && visibilityListString.indexOf(",") !== -1) {
-                        visibilityList = visibilityListString.split(",");
-                    }
-                    else {
-                        visibilityList.push(visibilityListString);
-                    }
-                }
-                if (_.has(result, "transparency")) {
-                    if (transparencyListString && transparencyListString.indexOf(",") !== -1) {
-                        transparencyList = transparencyListString.split(",");
-                    }
-                    else {
-                        transparencyList.push(transparencyListString);
-                    }
-                }
-                if (Config.tree.type === "light" || Config.tree.type === "custom") {
-                    var params = [],
-                        visibilitycheck = false;
-
-                    if (visibilityListString) {
-                        // für alle Layerid-parameter visible-parameter enthalten?
-                        visibilitycheck = (visibilityList.length === values.length);
-                    }
-                    // Layer-ID-Objekt aus Url-Params erstellen
-                    _.each(values, function (k, i) {
-                        // wenn für alle Layerid-parameter visible-parameter enthalten sind.
-                        if (visibilitycheck === true) {
-                            var visibleParam = (visibilityList[i] === "TRUE");
-
-                            params.push({
-                                id: values[i],
-                                visibility: visibleParam,
-                                transparency: transparencyList[i]
-                            });
-                        }
-                        // wenn nicht, alle defaultmäßig "true"setzen
-                        else {
-                            params.push({
-                                id: values[i],
-                                visibility: true
-                                });
-                            }
-                    });
-                    // Wenn Layer nicht im tree.layer enthalten ist, diesen hinzufügen
-                    if (_.has(Config.tree, "layer") === false) {
-                         Config.tree.layer = [];
-                    }
-                    _.each(params, function (param) {
-                        var layer = _.find(Config.tree.layer, function (layer) {
-                            var layerid = "";
-                            // Gruppenlayer
-                            if (_.isObject(layer.id)) {
-                                _.each (layer.id, function (obj) {
-                                    layerid += obj.id + "_";
-                                });
-                                layerid = layerid.substring(0, layerid.length - 1);
-                            }
-                            // Singlelayer
-                            else {
-                                layerid = layer.id;
-                            }
-                            return layerid === param.id;
-                        });
-
-                        if (!layer) {
-                            Config.tree.layer.push({
-                                id: param.id,
-                                visibility: false,
-                                transparency: param.transparency
-                            });
-                        }
-                    });
-                    // Layersichtbarkeit schalten
-                    _.each(Config.tree.layer, function (layer) {
-                        var layerid = "";
-
-                        // Gruppenlayer
-                        if (_.isObject(layer.id)) {
-                            _.each (layer.id, function (obj) {
-                                layerid += obj.id + "_";
-                            });
-                            layerid = layerid.substring(0, layerid.length - 1);
-                        }
-                        // Singlelayer
-                        else {
-                            layerid = layer.id;
-                        }
-                        var param = _.find(params, function (par) {
-                            return par.id === layerid;
-                        });
-
-                        if (param && param.visibility === true) {
-                            layer.visibility = true;
-                        }
-                        else {
-                            layer.visibility = false;
-                        }
-                    });
-                }
-                else if (Config.tree.type === "default" && visibilityListString) {
-                    Config.tree.layerIDsToSelect = [];
-                    _.each(values, function (value, index) {
-                        if (visibilityList[index] === "TRUE") {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: true, transparency: transparencyList[index]});
-                        }
-                        else {
-                            Config.tree.layerIDsToSelect.push({id: value, visibility: false, transparency: transparencyList[index]});
-                        }
-                    });
-                }
+                // if (_.has(result, "VISIBILITY")) {
+                //     if (visibilityListString && visibilityListString.indexOf(",") !== -1) {
+                //         visibilityList = visibilityListString.split(",");
+                //     }
+                //     else {
+                //         visibilityList.push(visibilityListString);
+                //     }
+                // }
+                // if (_.has(result, "transparency")) {
+                //     if (transparencyListString && transparencyListString.indexOf(",") !== -1) {
+                //         transparencyList = transparencyListString.split(",");
+                //     }
+                //     else {
+                //         transparencyList.push(transparencyListString);
+                //     }
+                // }
+                // if (Config.tree.type === "light" || Config.tree.type === "custom") {
+                //     var params = [],
+                //         visibilitycheck = false;
+                //
+                //     if (visibilityListString) {
+                //         // für alle Layerid-parameter visible-parameter enthalten?
+                //         visibilitycheck = (visibilityList.length === values.length);
+                //     }
+                //     // Layer-ID-Objekt aus Url-Params erstellen
+                //     _.each(values, function (k, i) {
+                //         // wenn für alle Layerid-parameter visible-parameter enthalten sind.
+                //         if (visibilitycheck === true) {
+                //             var visibleParam = (visibilityList[i] === "TRUE");
+                //
+                //             params.push({
+                //                 id: values[i],
+                //                 visibility: visibleParam,
+                //                 transparency: transparencyList[i]
+                //             });
+                //         }
+                //         // wenn nicht, alle defaultmäßig "true"setzen
+                //         else {
+                //             params.push({
+                //                 id: values[i],
+                //                 visibility: true
+                //                 });
+                //             }
+                //     });
+                //     // Wenn Layer nicht im tree.layer enthalten ist, diesen hinzufügen
+                //     if (_.has(Config.tree, "layer") === false) {
+                //          Config.tree.layer = [];
+                //     }
+                //     _.each(params, function (param) {
+                //         var layer = _.find(Config.tree.layer, function (layer) {
+                //             var layerid = "";
+                //             // Gruppenlayer
+                //             if (_.isObject(layer.id)) {
+                //                 _.each (layer.id, function (obj) {
+                //                     layerid += obj.id + "_";
+                //                 });
+                //                 layerid = layerid.substring(0, layerid.length - 1);
+                //             }
+                //             // Singlelayer
+                //             else {
+                //                 layerid = layer.id;
+                //             }
+                //             return layerid === param.id;
+                //         });
+                //
+                //         if (!layer) {
+                //             Config.tree.layer.push({
+                //                 id: param.id,
+                //                 visibility: false,
+                //                 transparency: param.transparency
+                //             });
+                //         }
+                //     });
+                //     // Layersichtbarkeit schalten
+                //     _.each(Config.tree.layer, function (layer) {
+                //         var layerid = "";
+                //
+                //         // Gruppenlayer
+                //         if (_.isObject(layer.id)) {
+                //             _.each (layer.id, function (obj) {
+                //                 layerid += obj.id + "_";
+                //             });
+                //             layerid = layerid.substring(0, layerid.length - 1);
+                //         }
+                //         // Singlelayer
+                //         else {
+                //             layerid = layer.id;
+                //         }
+                //         var param = _.find(params, function (par) {
+                //             return par.id === layerid;
+                //         });
+                //
+                //         if (param && param.visibility === true) {
+                //             layer.visibility = true;
+                //         }
+                //         else {
+                //             layer.visibility = false;
+                //         }
+                //     });
+                // }
+                // else if (Config.tree.type === "default" && visibilityListString) {
+                //     Config.tree.layerIDsToSelect = [];
+                //     _.each(values, function (value, index) {
+                //         if (visibilityList[index] === "TRUE") {
+                //             Config.tree.layerIDsToSelect.push({id: value, visibility: true, transparency: transparencyList[index]});
+                //         }
+                //         else {
+                //             Config.tree.layerIDsToSelect.push({id: value, visibility: false, transparency: transparencyList[index]});
+                //         }
+                //     });
+                // }
             }
             if (_.has(result, "FEATUREID")) {
                 var id = _.values(_.pick(result, "FEATUREID"))[0];
@@ -264,18 +339,8 @@ define([
                 var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
                 if (value === "SIMPLE") {
-                    Config.isMenubarVisible = false;
-                    Config.controls = {};
-                    Config.footer = {};
-                    Config.tools = {
-                        gfi: {
-                            title: "Informationen abfragen",
-                            glyphicon: "glyphicon-info-sign",
-                            isActive: true
-                        }
-                    };
+                    $("#main-nav").hide();
                 }
-
             }
         }
     });

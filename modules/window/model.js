@@ -17,7 +17,7 @@ define([
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
-                var channel = Radio.channel("window");
+                var channel = Radio.channel("Window");
 
                 channel.on({
                     "toggleWin": this.setParams
@@ -42,6 +42,7 @@ define([
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {
+                Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
                 EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
             }
         });

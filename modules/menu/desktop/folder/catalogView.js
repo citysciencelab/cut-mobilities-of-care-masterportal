@@ -1,8 +1,6 @@
 define([
     "backbone",
     "backbone.radio",
-    "text!modules/menu/desktop/folder/template.html",
-    "text!modules/menu/desktop/folder/templateLeaf.html",
     "text!modules/menu/desktop/folder/catalogTemplate.html"
 ], function () {
 
@@ -23,14 +21,14 @@ define([
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
                 "click .layer-selection-save": function () {
-                    Radio.trigger("window", "toggleWin", ["saveSelection", "Auswahl speichern", "glyphicon-share"]);
+                    Radio.trigger("Window", "toggleWin", ["saveSelection", "Auswahl speichern", "glyphicon-share"]);
                     // Schließt den Baum
                     $(".nav li:first-child").removeClass("open");
                     // Schließt die Mobile Navigation
                     $(".navbar-collapse").removeClass("in");
                     // Selektiert die URL
                     $(".input-save-url").select();
-                },
+                }
             },
             initialize: function () {
                 this.$el.on({
@@ -74,7 +72,7 @@ define([
                 model.setIsExpanded(false, {silent: true});
             },
             toggleGlyphicon: function (model) {
-                var elem =  $("ul#" + model.getId()).prev().find(".glyphicon:first");
+                var elem = $("ul#" + model.getId()).prev().find(".glyphicon:first");
 
                 if (!model.getIsExpanded()) {
                    elem.removeClass("glyphicon-minus-sign");

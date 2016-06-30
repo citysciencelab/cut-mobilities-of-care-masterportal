@@ -1,6 +1,7 @@
 define([
-    "backbone"
-], function (Backbone) {
+    "backbone",
+    "backbone.radio"
+], function (Backbone, Radio) {
 
     var ControlsView = Backbone.View.extend({
         className: "container-fluid controls-view",
@@ -13,7 +14,18 @@ define([
             });
         },
         render: function () {
-            $(".navbar").after(this.$el);
+            var result = Radio.request("ParametricURL", "getResult");
+
+            if (_.has(result, "STYLE")) {
+                var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
+
+                if (value === "SIMPLE") {
+                    this.$el.hide();
+                }
+            }
+            else {
+                $(".navbar").after(this.$el);
+            }
         }
     });
 

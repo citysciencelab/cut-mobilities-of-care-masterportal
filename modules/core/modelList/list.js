@@ -18,27 +18,23 @@ define([
         ModelList = Backbone.Collection.extend({
             selectionIDX: [],
             initialize: function () {
-               var channel = Radio.channel("ModelList");
+                var channel = Radio.channel("ModelList");
 
-               channel.reply({
-                   "getCollection": this,
-                   "getModelsByAttributes": function (attributes) {
-                       return this.where(attributes);
-                   },
-                   "getModelByAttributes": function (attributes) {
-                       return this.findWhere(attributes);
-                   },
-                   "getSelectionIDX": function (model) {
-                       return this.insertIntoSelectionIDX(model);
+                channel.reply({
+                    "getCollection": this,
+                    "getModelsByAttributes": function (attributes) {
+                        return this.where(attributes);
+                    },
+                    "getModelByAttributes": function (attributes) {
+                        return this.findWhere(attributes);
+                    },
+                    "getSelectionIDX": function (model) {
+                        return this.insertIntoSelectionIDX(model);
                     }
-               }, this);
+                }, this);
 
                 channel.on({
-                    "setModelAttributesById": function (id, attrs) {
-                        var model = this.get(id);
-
-                        model.set(attrs);
-                    },
+                    "setModelAttributesById": this.setModelAttributesById,
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
                     "setLayerAttributions": function (layerId, attrs) {
@@ -60,15 +56,20 @@ define([
                this.listenTo(this, {
                    "change:isVisibleInMap": function () {
                        channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
+                       channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                    },
                    "change:isExpanded": function (model) {
                        this.toggleTreeVisibilityOfChildren(model);
                     },
                     "change:isSelected": function () {
-                        this.trigger("updateSelectionView");
+                        this.trigger("updateSelectionOrLightTreeView");
+                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     },
-                    "update": function () {
-
+                    "change:transparency": function () {
+                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                    },
+                    "change:selectionIDX": function () {
+                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     }
                 });
             },
@@ -279,7 +280,25 @@ define([
 
                     lightModels.reverse();
                     this.add(lightModels);
-
+                    // Parametrisierter Aufruf im lighttree
+                    if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
+                        _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
+                            this.setModelAttributesById(param.id, {isVisibleInMap: true});
+                        }, this);
+                    }
+                }
+                // Parametrisierter Aufruf
+                else if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
+                    _.each(Radio.request("ParametricURL", "getLayerParams"), function (param, index) {
+                        this.addModelsByAttributes({id: param.id});
+                        this.setModelAttributesById(param.id, {isSelected: true, transparency: param.transparency, selectionIDX: index});
+                        if (param.visibility === "TRUE") {
+                            this.setModelAttributesById(param.id, {isVisibleInMap: true});
+                        }
+                        else {
+                            this.setModelAttributesById(param.id, {isVisibleInMap: false});
+                        }
+                    }, this);
                 }
                 // Only Add models in selection
                 else {
@@ -290,6 +309,11 @@ define([
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
                 this.add(lightModels);
+            },
+            setModelAttributesById: function (id, attrs) {
+                var model = this.get(id);
+
+                model.set(attrs);
             }
     });
 

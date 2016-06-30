@@ -246,12 +246,7 @@ define([
                 //Radio.trigger("LayerList", "addModelById", hitID);
             }
             // 1. Schreibe Text in Searchbar
-            if (_.has(hit, "model") && hit.model.type === "nodeLayer") {
-                this.setSearchbarString(hit.metaName);
-            }
-            else {
-                this.setSearchbarString(hit.name);
-            }
+            this.setSearchbarString(hit.name);
             // 2. Verberge Suchmenü
             this.hideMenu();
             // 3. Zoome ggf. auf Ergebnis

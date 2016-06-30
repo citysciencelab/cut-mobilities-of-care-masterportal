@@ -145,6 +145,12 @@ define("app",
                     });
                     break;
                 }
+                case "saveSelection": {
+                    require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
+                        new SaveSelectionView();
+                    });
+                    break;
+                }
                 case "kmlimport": {
                     require(["modules/tools/kmlimport/view"], function (ImportView) {
                         new ImportView();
