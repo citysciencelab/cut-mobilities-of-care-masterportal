@@ -60,11 +60,28 @@ define([
                 }
 
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                    models = this.collection.add(lightModels);
+                    models = this.collection.add(lightModels),
+                    layer = _.filter(models, function (model) {
+                        return model.getType() === "layer";
+                    });
 
-                this.addViewsToItemsOfType("layer", models);
+                // Layer Atlas sortieren
+                if (Radio.request("Parser", "getTreeType") === "default") {
+                    layer = _.sortBy(layer, function (item) {
+                        return item.getName();
+                    });
+                }
+                // Notwendig, da jQuery.after() benutzt werden muss, um den Layern auf allen Ebenen die volle Breite des Baumes zu geben
+                // Mit append würden sie als unter Element immer mit dem Eltern elemnt zusammen eingerückt werden
+                layer.reverse();
 
-                var folder = this.addViewsToItemsOfType("folder", models, parentId);
+                this.addOverlayViews(layer);
+
+                 var folder = _.filter(models, function (model) {
+                    return model.getType() === "folder";
+                });
+
+                this.addOverlayViews(folder);
 
                 _.each(folder, function (folder) {
                     this.renderSubTree(folder.getId(), level + 1, levelLimit);
