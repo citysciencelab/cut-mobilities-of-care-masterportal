@@ -151,7 +151,7 @@ define([
                 _.each(itemListByParentId, function (item) {
                     item.setIsVisibleInTree(false);
                     if (item.getType() === "folder") {
-                        item.setIsExpanded(false);
+                        item.setIsExpanded(false, {silent: true});
                     }
                     this.setAllAncestersInvisible(item.getId());
                 }, this);
