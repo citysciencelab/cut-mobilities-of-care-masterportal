@@ -20,8 +20,8 @@ define([
 
                 this.listenTo(this.collection,
                 {
-                    "updateOverlayerView": function () {
-                        this.updateOverlayer();
+                    "updateOverlayerView": function (parentId) {
+                        this.updateOverlayer(parentId);
                     },
                     "updateSelection": function () {
                         // this.updateLightTree("Themen");
@@ -33,7 +33,7 @@ define([
             },
             render: function () {
                 $("#" + "Themen").html("");
-                this.renderSubTree("Themen", 0, 3);
+                this.renderSubTree("Themen", 0, 1);
                 this.renderSelectedList();
                 $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             },
@@ -55,13 +55,18 @@ define([
             * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
              */
             renderSubTree: function (parentId, level, levelLimit) {
-                if (level >= levelLimit) {
+                if (level > levelLimit) {
                     return;
                 }
 
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                    models = this.collection.add(lightModels),
-                    layer = _.filter(models, function (model) {
+                    models = this.collection.add(lightModels);
+
+                if (level === 0) {
+                    this.collection.setVisibleByParentIsExpanded(parentId);
+                }
+
+                var layer = _.filter(models, function (model) {
                         return model.getType() === "layer";
                     });
 
@@ -87,9 +92,8 @@ define([
                     this.renderSubTree(folder.getId(), level + 1, levelLimit);
                 }, this);
             },
-            updateOverlayer: function () {
-                $("#" + "Overlayer").html("");
-                this.renderSubTree("Overlayer", 0, 3);
+            updateOverlayer: function (parentId) {
+                this.renderSubTree(parentId, 0, 1);
             },
             addViewsToItemsOfType: function (type, items, parentId) {
                 items = _.filter(items, function (model) {

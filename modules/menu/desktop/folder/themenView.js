@@ -28,7 +28,9 @@ define([
                 }
             });
             this.listenTo(this.model, {
-                "change:isSelected": this.rerender
+                "change:isSelected": this.rerender,
+                "change:isExpanded": this.rerender,
+                "change:isVisibleInTree": this.rerender
             });
             this.render();
         },
@@ -62,7 +64,12 @@ define([
         rerender: function () {
             var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
+            if (this.model.getIsVisibleInTree()) {
+                this.$el.html(this.template(attr));
+            }
+            else {
+                this.remove();
+            }
         },
         updateList: function () {
             if (this.model.getIsLeafFolder() === true) {
@@ -78,6 +85,7 @@ define([
             Radio.trigger("ModelList", "toggleIsSelectedChildLayers", this.model);
             this.model.setIsExpanded(true);
         }
+
     });
 
     return FolderView;

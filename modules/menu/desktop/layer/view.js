@@ -21,7 +21,8 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isSelected": this.rerender
+                "change:isSelected": this.rerender,
+                "change:isVisibleInTree": this.removeIfNotVisible
             });
 
             this.render();
@@ -71,6 +72,11 @@ define([
 
         moveModelUp: function () {
             this.model.moveUp();
+        },
+        removeIfNotVisible: function () {
+            if (!this.model.getIsVisibleInTree()) {
+                this.remove();
+            }
         }
     });
 
