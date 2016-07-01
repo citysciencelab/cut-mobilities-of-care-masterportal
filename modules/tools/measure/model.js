@@ -37,8 +37,11 @@ define([
 
         initialize: function () {
             this.listenTo(EventBus, {
-                "winParams": this.setStatus,
                 "pointerMoveOnMap": this.placeMeasureTooltip
+            });
+
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
             this.listenTo(this, {
@@ -57,7 +60,7 @@ define([
             }
         },
         setStatus: function (args) {
-            if (args[2] === "measure" && args[0] === true) {
+            if (args[2].getId() === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();

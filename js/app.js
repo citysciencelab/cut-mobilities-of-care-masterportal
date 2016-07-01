@@ -169,6 +169,18 @@ define("app",
                     });
                     break;
                 }
+                case "routing": {
+                    require(["modules/viomRouting/view"], function (RoutingView) {
+                        new RoutingView();
+                    });
+                    break;
+                }
+                case "contact" : {
+                    require(["modules/contact/view"], function (Contact) {
+                        new Contact();
+                    });
+                    break;
+                }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {
@@ -319,11 +331,11 @@ define("app",
                 require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
                     new StyleWMSView();
                 });
-                if (_.has(Config.menuItems, "routing") === true) {
-                    require(["modules/viomRouting/view"], function (RoutingView) {
-                        new RoutingView();
-                    });
-                }
+                // if (_.has(Config.menuItems, "routing") === true) {
+                //     require(["modules/viomRouting/view"], function (RoutingView) {
+                //         new RoutingView();
+                //     });
+                // }
                 if (_.has(Config.menuItems , "addWMS") === true) {
                     require(["modules/addwms/view"
                         ], function (AddWMSView) {
@@ -342,11 +354,6 @@ define("app",
                                 new FormularView(obj.modelname, obj.title, obj.symbol);
                             });
                         }
-                    });
-                }
-                if (_.has(Config.menu, "contact") === true && _.isObject(Config.menu.contact) === true) {
-                    require(["modules/contact/view"], function (Contact) {
-                        new Contact();
                     });
                 }
             });

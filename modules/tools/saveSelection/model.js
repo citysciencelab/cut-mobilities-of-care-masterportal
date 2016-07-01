@@ -54,7 +54,7 @@ define([
          * @return {[type]}      [description]
          */
         checkStatus: function (args) {
-            if (args[2] === "saveSelection") {
+            if (args[2].getId() === "saveSelection") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

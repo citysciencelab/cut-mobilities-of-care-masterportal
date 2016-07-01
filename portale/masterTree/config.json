@@ -48,6 +48,11 @@
             "saveSelection": {
               "name": "Auswahl speichern",
               "glyphicon": "glyphicon-share"
+            },
+            "routing": {
+              "name": "Routenplaner",
+              "glyphicon": "glyphicon-road",
+              "viomRouting": "3"
             }
           }
         },
@@ -58,7 +63,26 @@
         "contact": {
             "name": "Kontakt",
             "glyphicon": "glyphicon-envelope",
-            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80001",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "subject": "",
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
         }
       },
       "controls": {

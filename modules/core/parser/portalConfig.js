@@ -80,7 +80,7 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    this.addItem(_.extend({type: "tool", parentId: parentId, id: key}, value));
+                    this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
                 }
             }, this);
         },

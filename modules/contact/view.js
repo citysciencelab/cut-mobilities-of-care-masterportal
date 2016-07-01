@@ -11,14 +11,14 @@ define([
         model: Model,
         template: _.template(Template),
         initialize: function () {
-            EventBus.trigger("appendItemToMenubar", {
-                title: "Kontakt",
-                symbol: "glyphicon glyphicon-envelope hidden-sm",
-                classname: "contact",
-                clickFunction: function () {
-                    EventBus.trigger("toggleWin", ["contact", "Kontakt", "glyphicon glyphicon-envelope"]);
-                }
-            });
+            // EventBus.trigger("appendItemToMenubar", {
+            //     title: "Kontakt",
+            //     symbol: "glyphicon glyphicon-envelope hidden-sm",
+            //     classname: "contact",
+            //     clickFunction: function () {
+            //         EventBus.trigger("toggleWin", ["contact", "Kontakt", "glyphicon glyphicon-envelope"]);
+            //     }
+            // });
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
             this.model.on("invalid", this.showValidity, this);
         },
