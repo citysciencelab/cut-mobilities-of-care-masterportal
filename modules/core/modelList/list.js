@@ -49,7 +49,7 @@ define([
                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                    },
                    "change:isExpanded": function (model) {
-                       this.toggleTreeVisibilityOfChildren(model);
+                       this.trigger("updateOverlayerView", model.getId());
                     },
                     "change:isSelected": function () {
                         this.trigger("updateSelection");
@@ -128,6 +128,35 @@ define([
                     item.setIsVisibleInTree(true);
                 });
             },
+             /**
+            *
+            *
+            * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
+            */
+            setVisibleByParentIsExpanded: function (parentId) {
+                var itemListByParentId = this.where({parentId: parentId}),
+                    parent = this.findWhere({id: parentId});
+
+                if (!parent.getIsExpanded()) {
+                    this.setAllAncestersInvisible(parentId);
+                }
+                else {
+                     _.each(itemListByParentId, function (item) {
+                        item.setIsVisibleInTree(true);
+                    });
+                }
+            },
+            setAllAncestersInvisible: function (parentId) {
+                var itemListByParentId = this.where({parentId: parentId});
+
+                _.each(itemListByParentId, function (item) {
+                    item.setIsVisibleInTree(false);
+                    if (item.getType() === "folder") {
+                        item.setIsExpanded(false, {silent: true});
+                    }
+                    this.setAllAncestersInvisible(item.getId());
+                }, this);
+            },
 
             /**
              * Setzt alle Models unsichtbar
@@ -176,16 +205,6 @@ define([
                 }
             },
 
-            toggleTreeVisibilityOfChildren: function (model) {
-               var itemListByParentId = this.where({parentId: model.getId()});
-
-                _.each(itemListByParentId, function (item) {
-                    item.setIsVisibleInTree(!item.getIsVisibleInTree());
-                });
-                if (model.getId() !== "SelectedLayer") {
-                    this.trigger("updateOverlayerView");
-                }
-            },
             insertIntoSelectionIDX: function (model) {
                 var idx = 0;
 
