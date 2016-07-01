@@ -291,10 +291,10 @@ define([
                         lightModel.isSelected = true;
                         this.add(lightModel);
                         if (param.visibility === "TRUE") {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: true, transparency: param.transparency});
+                            this.setModelAttributesById(param.id, {isVisibleInMap: true, transparency: parseInt(param.transparency)});
                         }
                         else {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: false, transparency: param.transparency});
+                            this.setModelAttributesById(param.id, {isVisibleInMap: false, transparency: parseInt(param.transparency)});
                         }
                     }, this);
                 }
