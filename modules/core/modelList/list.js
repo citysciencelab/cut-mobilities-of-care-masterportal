@@ -39,7 +39,8 @@ define([
                     "updateList": this.updateList,
                     "checkIsExpanded": this.checkIsExpanded,
                     "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
-                    "isEveryChildLayerSelected": this.isEveryChildLayerSelected
+                    "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
+                    "showModelInTree": this.showModelInTree
                }, this);
 
                this.listenTo(this, {
@@ -306,12 +307,34 @@ define([
             addModelsByAttributes: function (attrs) {
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
-                return this.add(lightModels);
+                this.add(lightModels);
             },
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);
 
                 model.set(attrs);
+            },
+
+            showModelInTree: function (id) {
+                $("#root li:first-child").addClass("open");
+                var lightModel = Radio.request("Parser", "getItemByAttributes", {id: id});
+this.add(lightModel);
+                console.log(lightModel.parentId);
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
+                this.add(lightModels);
+                _.each(lightModels, function (light) {
+                    this.setModelAttributesById(light.id, {isExpanded: true});
+                }, this);
+                console.log(lightModels);
+                var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
+                this.add(parentModel);
+                console.log(parentModel);
+                this.setModelAttributesById(parentModel.id, {isExpanded: true});
+                var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
+                this.add(folder);
+                this.setModelAttributesById(folder.id, {isExpanded: true});
+                console.log(folder);
+                this.trigger("updateOverlayerView");
             }
     });
 

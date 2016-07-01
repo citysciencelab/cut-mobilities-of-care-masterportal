@@ -128,8 +128,7 @@ define([
                     break;
                 }
                 case "Thema": {
-                    Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
-                    Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
+                    Radio.trigger("ModelList", "showModelInTree", hit.id);
                     //EventBus.trigger("showLayerInTree", hit.id); // den Tree gibt es nur zusammen mit Karte
                     break;
                 }

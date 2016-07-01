@@ -44,7 +44,6 @@ define([
 
             this.listenTo(this, {
                 "change:isSelected": function () {
-                    console.log(this.getName());
                     this.setIsVisibleInMap(this.getIsSelected());
                 },
                 "change:isVisibleInMap": function () {
@@ -97,7 +96,7 @@ define([
          * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
          * @param {boolean} value
          */
-        setIsVisibleInMap: function (value) {console.log(value);
+        setIsVisibleInMap: function (value) {
             this.set("isVisibleInMap", value);
             this.getLayer().setVisible(value);
         },
