@@ -43,9 +43,6 @@ define([
             });
 
             this.listenTo(this, {
-                "change:isSelected": function () {
-                    this.setIsVisibleInMap(this.getIsSelected());
-                },
                 "change:isVisibleInMap": function () {
                     this.toggleLayerOnMap();
                 },
@@ -106,12 +103,6 @@ define([
          * @param {boolean} value
          */
         setIsSelected: function (value) {
-            if (value && Radio.request("Parser", "getTreeType") !== "light") {
-                this.collection.insertIntoSelectionIDX(this);
-            }
-            else {
-                this.collection.removeFromSelectionIDX(this);
-            }
             this.set("isSelected", value);
         },
 

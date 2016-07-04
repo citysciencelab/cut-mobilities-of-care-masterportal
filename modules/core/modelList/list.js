@@ -51,7 +51,9 @@ define([
                    "change:isExpanded": function (model) {
                        this.trigger("updateOverlayerView", model.getId());
                     },
-                    "change:isSelected": function () {
+                    "change:isSelected": function (model) {
+                        this.resetSelectionIdx(model);
+                        model.setIsVisibleInMap(model.getIsSelected());
                         this.trigger("updateSelection");
                         channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     },
@@ -211,6 +213,7 @@ define([
                 if (this.selectionIDX.length === 0 || model.getParentId() !== "Baselayer") {
                     idx = this.appendToSelectionIDX(model);
                     // idx = this.selectionIDX.push(model) - 1;
+                    console.log(idx);
                 }
                 else {
                     while (idx < this.selectionIDX.length && this.selectionIDX[idx].getParentId() === "Baselayer") {
@@ -234,6 +237,15 @@ define([
             removeFromSelectionIDX: function (idx) {
                 this.selectionIDX.splice(idx, 1);
                 this.updateModelIndeces();
+            },
+
+            resetSelectionIdx: function (model) {
+                if (model.getIsSelected() && Radio.request("Parser", "getTreeType") !== "light") {
+                    this.insertIntoSelectionIDX(model);
+                }
+                else {
+                    this.removeFromSelectionIDX(model);
+                }
             },
             moveModelDown: function (model) {
                 var oldIDX = model.getSelectionIDX(),
@@ -308,13 +320,14 @@ define([
                     _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
                         var lightModel = Radio.request("Parser", "getItemByAttributes", {id: param.id});
 
-                        lightModel.isSelected = true;
+                        // lightModel.isSelected = true;
                         this.add(lightModel);
+                        // this.get(param.id).setIsSelected(true);
                         if (param.visibility === "TRUE") {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: true, transparency: parseInt(param.transparency)});
+                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency)});
                         }
                         else {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: false, transparency: parseInt(param.transparency)});
+                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency)});
                         }
                     }, this);
                 }
@@ -337,23 +350,29 @@ define([
             showModelInTree: function (id) {
                 $("#root li:first-child").addClass("open");
                 var lightModel = Radio.request("Parser", "getItemByAttributes", {id: id});
-this.add(lightModel);
-                console.log(lightModel.parentId);
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
-                this.add(lightModels);
-                _.each(lightModels, function (light) {
-                    this.setModelAttributesById(light.id, {isExpanded: true});
-                }, this);
-                console.log(lightModels);
-                var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
-                this.add(parentModel);
-                console.log(parentModel);
-                this.setModelAttributesById(parentModel.id, {isExpanded: true});
-                var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
-                this.add(folder);
-                this.setModelAttributesById(folder.id, {isExpanded: true});
-                console.log(folder);
-                this.trigger("updateOverlayerView");
+
+                this.add(lightModel);
+                this.setModelAttributesById(id, {isSelected: true});
+// this.get(id).setIsSelected(true);
+
+                // console.log(lightModel.parentId);
+                // var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
+                // console.log(343);
+                // this.add(lightModels);
+                // console.log(343);
+                // // _.each(lightModels, function (light) {
+                // //     this.setModelAttributesById(light.id, {isExpanded: true});
+                // // }, this);
+                // console.log(lightModels);
+                // var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
+                // this.add(parentModel);
+                // console.log(parentModel);
+                // // this.setModelAttributesById(parentModel.id, {isExpanded: true});
+                // var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
+                // this.add(folder);
+                // this.setModelAttributesById(folder.id, {isExpanded: true});
+                // console.log(folder);
+                // this.trigger("updateOverlayerView");
             }
     });
 
