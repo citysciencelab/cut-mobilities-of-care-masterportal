@@ -40,9 +40,11 @@ define([
              * Rendert die  Auswahlliste
              * @return {[type]} [description]
              */
-            renderSelectedList: function (parent) {
+            renderSelectedList: function () {
                 $("#" + "SelectedLayer").html("");
-                if (parent.getIsExpanded()) {
+                var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"});
+
+                if (selectedLayerModel.getIsExpanded()) {
                     var selectedModels = this.collection.where({isSelected: true, type: "layer"});
 
                     selectedModels = _.sortBy(selectedModels, function (model) {
