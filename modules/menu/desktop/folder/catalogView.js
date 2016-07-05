@@ -45,7 +45,7 @@ define([
             render: function () {
                 var attr = this.model.toJSON();
 
-                $(".header").toggleClass("closed");
+                this.$el.find(".header").toggleClass("closed");
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
             },
             toggleIsExpanded: function () {
