@@ -49,9 +49,10 @@ define([
                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                    },
                    "change:isExpanded": function (model) {
-                       if (model.getParentId() !== "Themen") {
                            this.trigger("updateOverlayerView", model.getId());
-                       }
+                        if (model.getId() === "SelectedLayer") {
+                            this.trigger("updateSelection", model);
+                        }
                     },
                     "change:isSelected": function (model) {
                         this.resetSelectionIdx(model);

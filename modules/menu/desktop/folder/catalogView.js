@@ -33,7 +33,7 @@ define([
             },
             initialize: function () {
                 this.listenTo(this.model, {
-                    "change:isExpanded": this.toggleCatalogs
+                    "change:isExpanded": this.toggleGlyphicon
                 }, this);
 
                 this.$el.on({
@@ -47,29 +47,9 @@ define([
 
                 $(".header").toggleClass("closed");
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
-                if (!this.model.getIsExpanded()) {
-                    $("#" + this.model.getId()).css("display", "none");
-                }
             },
-
             toggleIsExpanded: function () {
                 this.model.toggleIsExpanded();
-            },
-
-            toggleCatalogs: function () {
-                if (this.model.getIsExpanded() === false) {
-                    this.hideCatalog();
-                }
-                else {
-                    this.showCatalog();
-                }
-                    this.toggleGlyphicon();
-            },
-            showCatalog: function () {
-                this.$el.find("#" + this.model.getId()).show(500);
-            },
-            hideCatalog: function () {
-                $("ul#" + this.model.getId()).hide(500);
             },
             toggleGlyphicon: function () {
                 var elem = $("ul#" + this.model.getId()).prev().find(".glyphicon:first");

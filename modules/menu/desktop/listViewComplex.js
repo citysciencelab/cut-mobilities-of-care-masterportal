@@ -23,9 +23,9 @@ define([
                     "updateOverlayerView": function (parentId) {
                         this.updateOverlayer(parentId);
                     },
-                    "updateSelection": function () {
+                    "updateSelection": function (model) {
                         this.trigger("updateLightTree");
-                        this.renderSelectedList("Overlayer");
+                        this.renderSelectedList(model);
                     }
                 });
                 this.renderMain();
@@ -34,22 +34,22 @@ define([
             render: function () {
                 $("#" + "Themen").html("");
                 this.renderSubTree("Themen", 0, 0);
-                this.renderSelectedList();
                 $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             },
             /**
              * Rendert die  Auswahlliste
              * @return {[type]} [description]
              */
-            renderSelectedList: function () {
+            renderSelectedList: function (parent) {
                 $("#" + "SelectedLayer").html("");
+                if (parent.getIsExpanded()) {
+                    var selectedModels = this.collection.where({isSelected: true, type: "layer"});
 
-               var selectedModels = this.collection.where({isSelected: true, type: "layer"});
-
-               selectedModels = _.sortBy(selectedModels, function (model) {
-                    return model.getSelectionIDX();
-               });
-               this.addSelectionView(selectedModels);
+                    selectedModels = _.sortBy(selectedModels, function (model) {
+                        return model.getSelectionIDX();
+                    });
+                    this.addSelectionView(selectedModels);
+                }
             },
             /**
             * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
