@@ -12,7 +12,8 @@ define([
             className: "layer-catalog",
             template: _.template(Template),
             events: {
-                "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
+                "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
+                // "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
                 "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
                     Radio.trigger("Quickhelp", "showWindowHelp", "tree");
                 },
@@ -31,6 +32,10 @@ define([
                 }
             },
             initialize: function () {
+                this.listenTo(this.model, {
+                    "change:isExpanded": this.toggleCatalogs
+                }, this);
+
                 this.$el.on({
                 click: function (e) {
                    e.stopPropagation();
@@ -46,35 +51,30 @@ define([
                     $("#" + this.model.getId()).css("display", "none");
                 }
             },
+
+            toggleIsExpanded: function () {
+                this.model.toggleIsExpanded();
+            },
+
             toggleCatalogs: function () {
-                if (this.model.getIsExpanded()) {
-                    this.hideCatalog(this.model);
-                    this.toggleGlyphicon(this.model);
+                if (this.model.getIsExpanded() === false) {
+                    this.hideCatalog();
                 }
                 else {
-                    var catalogs = Radio.request("ModelList", "getModelsByAttributes", {parentId: "Themen"});
-
-                    this.showCatalog(this.model);
-                    _.each(catalogs, function (model) {
-                        if (model.getId() !== this.model.getId()) {
-                            this.hideCatalog(model);
-                        }
-                        this.toggleGlyphicon(model);
-                    }, this);
+                    this.showCatalog();
                 }
+                    this.toggleGlyphicon();
             },
-            showCatalog: function (model) {
-                model.setIsExpanded(true, {silent: true});
-                this.$el.find("#" + model.getId()).show(500);
+            showCatalog: function () {
+                this.$el.find("#" + this.model.getId()).show(500);
             },
-            hideCatalog: function (model) {
-                $("ul#" + model.getId()).hide(500);
-                model.setIsExpanded(false, {silent: true});
+            hideCatalog: function () {
+                $("ul#" + this.model.getId()).hide(500);
             },
-            toggleGlyphicon: function (model) {
-                var elem = $("ul#" + model.getId()).prev().find(".glyphicon:first");
+            toggleGlyphicon: function () {
+                var elem = $("ul#" + this.model.getId()).prev().find(".glyphicon:first");
 
-                if (!model.getIsExpanded()) {
+                if (!this.model.getIsExpanded()) {
                    elem.removeClass("glyphicon-minus-sign");
                    elem.addClass("glyphicon-plus-sign");
                 }

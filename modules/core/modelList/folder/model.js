@@ -84,7 +84,15 @@ define([
             return this.get("isLeafFolder");
         },
         toggleIsExpanded: function () {
-            this.setIsExpanded(!this.getIsExpanded());
+            if (this.getIsExpanded() === true) {
+                this.setIsExpanded(false);
+            }
+            else {
+                this.setIsExpanded(true);
+            }
+            if (this.getParentId() === "Themen") {
+                this.collection.toggleCatalogs(this.getId());
+            }
         },
         setSelectAllGlyphicon: function (value) {
             this.set("selectAllGlyphicon", value);

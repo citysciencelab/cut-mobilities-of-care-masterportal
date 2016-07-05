@@ -37,7 +37,7 @@ define([
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
                     "updateList": this.updateList,
-                    "checkIsExpanded": this.checkIsExpanded,
+                    // "checkIsExpanded": this.checkIsExpanded,
                     "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
                     "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
                     "showModelInTree": this.showModelInTree
@@ -49,7 +49,9 @@ define([
                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                    },
                    "change:isExpanded": function (model) {
-                       this.trigger("updateOverlayerView", model.getId());
+                       if (model.getParentId() !== "Themen") {
+                           this.trigger("updateOverlayerView", model.getId());
+                       }
                     },
                     "change:isSelected": function (model) {
                         this.resetSelectionIdx(model);
@@ -213,7 +215,6 @@ define([
                 if (this.selectionIDX.length === 0 || model.getParentId() !== "Baselayer") {
                     idx = this.appendToSelectionIDX(model);
                     // idx = this.selectionIDX.push(model) - 1;
-                    console.log(idx);
                 }
                 else {
                     while (idx < this.selectionIDX.length && this.selectionIDX[idx].getParentId() === "Baselayer") {
@@ -353,26 +354,23 @@ define([
 
                 this.add(lightModel);
                 this.setModelAttributesById(id, {isSelected: true});
-// this.get(id).setIsSelected(true);
 
-                // console.log(lightModel.parentId);
-                // var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
-                // console.log(343);
-                // this.add(lightModels);
-                // console.log(343);
-                // // _.each(lightModels, function (light) {
-                // //     this.setModelAttributesById(light.id, {isExpanded: true});
-                // // }, this);
-                // console.log(lightModels);
-                // var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
-                // this.add(parentModel);
-                // console.log(parentModel);
-                // // this.setModelAttributesById(parentModel.id, {isExpanded: true});
-                // var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
-                // this.add(folder);
-                // this.setModelAttributesById(folder.id, {isExpanded: true});
-                // console.log(folder);
-                // this.trigger("updateOverlayerView");
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
+                this.add(lightModels);
+                var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
+                this.add(parentModel);
+                var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
+                this.add(folder);
+                this.get(folder.id).setIsExpanded(true);
+                this.get(parentModel.id).setIsExpanded(true);
+            },
+
+            toggleCatalogs: function (id) {
+                _.each(this.where({parentId: "Themen"}), function (model) {
+                    if (model.getId() !== id) {
+                        model.setIsExpanded(false);
+                    }
+                }, this);
             }
     });
 
