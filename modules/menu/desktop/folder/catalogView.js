@@ -64,12 +64,12 @@ define([
                 }
             },
             showCatalog: function (model) {
-                model.setIsExpanded(true, {silent: true});
+                model.setIsExpanded(true);
                 this.$el.find("#" + model.getId()).show(500);
             },
             hideCatalog: function (model) {
                 $("ul#" + model.getId()).hide(500);
-                model.setIsExpanded(false, {silent: true});
+                model.setIsExpanded(false);
             },
             toggleGlyphicon: function (model) {
                 var elem = $("ul#" + model.getId()).prev().find(".glyphicon:first");

@@ -67,10 +67,11 @@ define([
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
             });
-
-            this.listenTo(Radio.channel("MenuBar"), {
-                "switchedMenu": this.render
-            });
+            Radio.on("Util", {
+                "isViewMobileChanged": function () {
+                    this.render();
+                }
+            }, this);
 
             this.render();
 

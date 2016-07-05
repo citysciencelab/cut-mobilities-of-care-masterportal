@@ -44,7 +44,6 @@ define([
 
             this.listenTo(this, {
                 "change:isSelected": function () {
-                    console.log(this.getName());
                     this.setIsVisibleInMap(this.getIsSelected());
                 },
                 "change:isVisibleInMap": function () {

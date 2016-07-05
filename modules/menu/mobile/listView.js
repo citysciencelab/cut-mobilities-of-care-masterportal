@@ -25,6 +25,8 @@ define([
             collection: {},
             el: "nav#main-nav",
             attributes: {role: "navigation"},
+            subviews : [],
+            breadCrumbListView: {},
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
                 this.listenTo(this.collection,
@@ -34,12 +36,13 @@ define([
                     }
                 });
                 this.render();
-                new BreadCrumbListView();
+                this.breadCrumbListView = new BreadCrumbListView();
             },
             render: function () {
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
                 $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
                 var rootModels = this.collection.where({parentId: "root"});
+
                 this.addViews(rootModels);
             },
             renderListWithAnimation: function (slideDirection) {
@@ -81,8 +84,19 @@ define([
                             break;
                         }
                     }
+                    this.subviews.push(nodeView);
                     $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
-                });
+                }, this);
+            },
+            removeView: function () {
+                this.$el.find("ul.nav-menu").html("");
+
+                this.breadCrumbListView.removeView();
+                while (this.subviews.length) {
+                    this.subviews.pop().remove();
+                }
+                this.remove();
+                $("body").append(this.el);
             }
         });
         return Menu;

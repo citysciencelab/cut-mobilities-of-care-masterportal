@@ -18,6 +18,7 @@ define([
         className: "breadcrumb-mobile",
         targetElement: "div.collapse.navbar-collapse",
         template: _.template(BreadCrumbTemplate),
+        subviews : [],
         events: {
             "click ul.back-item": "removeLastItem"
         },
@@ -43,16 +44,9 @@ define([
          * Zeichnet das Breadcrumb
          */
         render: function () {
-            var isMobile = Radio.request("Util", "isViewMobile");
-
-            if (isMobile === true) {
-                this.delegateEvents(this.events);
-                $(this.targetElement).prepend(this.$el.html(this.template()));
-                this.collection.forEach(this.addViews, this);
-            }
-            else {
-                this.collection.removeItems(this.collection.get("main"));
-            }
+            this.delegateEvents(this.events);
+            $(this.targetElement).prepend(this.$el.html(this.template()));
+            this.collection.forEach(this.addViews, this);
         },
 
         /**
@@ -62,6 +56,7 @@ define([
         addViews: function (model) {
             var breadCrumbView = new BreadCrumbView({model: model});
 
+            this.subviews.push(breadCrumbView);
             $(".breadcrumb-mobile > .breadcrumb").append(breadCrumbView.render().el);
         },
 
@@ -71,6 +66,12 @@ define([
          */
         removeLastItem: function () {
             this.collection.removeLastItem();
+        },
+        removeView: function () {
+            while (this.subviews.length) {
+                this.subviews.pop().remove();
+            }
+            this.remove();
         }
     });
 

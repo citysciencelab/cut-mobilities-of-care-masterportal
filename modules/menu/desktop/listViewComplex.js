@@ -16,7 +16,7 @@ define([
 
         Menu = listView.extend({
             initialize: function () {
-                listView.prototype.initialize.apply(this, arguments);
+                 this.collection = Radio.request("ModelList", "getCollection");
 
                 this.listenTo(this.collection,
                 {
@@ -24,16 +24,16 @@ define([
                         this.updateOverlayer(parentId);
                     },
                     "updateSelection": function () {
-                        // this.updateLightTree("Themen");
                         this.trigger("updateLightTree");
                         this.renderSelectedList("Overlayer");
                     }
                 });
+                this.renderMain();
                 this.render();
             },
             render: function () {
                 $("#" + "Themen").html("");
-                this.renderSubTree("Themen", 0, 1);
+                this.renderSubTree("Themen", 0, 0);
                 this.renderSelectedList();
                 $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             },
@@ -93,7 +93,7 @@ define([
                 }, this);
             },
             updateOverlayer: function (parentId) {
-                this.renderSubTree(parentId, 0, 1);
+                this.renderSubTree(parentId, 0, 0);
             },
             addViewsToItemsOfType: function (type, items, parentId) {
                 items = _.filter(items, function (model) {
@@ -117,21 +117,21 @@ define([
                     if (model.getType() === "folder") {
                         // Oberste ebene im Themenbaum?
                         if (model.getParentId() === "Themen") {
-                            new CatalogFolderView({model: model});
+                            this.subviews.push(new CatalogFolderView({model: model}));
                         }
                         else {
-                            new DesktopThemenFolderView({model: model});
+                            this.subviews.push(new DesktopThemenFolderView({model: model}));
                         }
                     }
                     else {
-                        new DesktopLayerView({model: model});
+                        this.subviews.push(new DesktopLayerView({model: model}));
                     }
-                });
+                }, this);
             },
             addSelectionView: function (models) {
                 _.each(models, function (model) {
-                    new SelectionView({model: model});
-                });
+                    this.subviews.push(new SelectionView({model: model}));
+                }, this);
             }
         });
         return Menu;
