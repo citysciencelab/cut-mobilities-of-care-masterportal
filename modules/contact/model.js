@@ -9,38 +9,46 @@ define([
     var ContactModel = Backbone.Model.extend({
         defaults: {
             maxLines: Util.isAny() ? "5" : "10",
-            from: Config.menu.contact.from,
-            to: Config.menu.contact.to,
-            cc: Config.menu.contact.cc ? Config.menu.contact.cc : [],
-            ccToUser: Config.menu.contact.ccToUser ? Config.menu.contact.ccToUser : false,
-            bcc: Config.menu.contact.bcc ? Config.menu.contact.bcc : [],
-            subject: Config.menu.contact.subject ? Config.menu.contact.subject : "Supportanfrage zum Portal " + document.title,
-            textPlaceholder: Config.menu.contact.textPlaceholder ? Config.menu.contact.textPlaceholder : "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
+            cc: [],
+            ccToUser: false,
+            bcc: [],
+            subject: "Supportanfrage zum Portal " + document.title,
+            textPlaceholder: "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
             text: "",
-            systemInfo: Config.menu.contact.includeSystemInfo && Config.menu.contact.includeSystemInfo === true ? "<br>==================<br>Platform: " + navigator.platform + "<br>" + "Cookies enabled: " + navigator.cookieEnabled + "<br>" + "UserAgent: " + navigator.userAgent : "",
+            systemInfo: "<br>==================<br>Platform: " + navigator.platform + "<br>" + "Cookies enabled: " + navigator.cookieEnabled + "<br>" + "UserAgent: " + navigator.userAgent,
             url: "",
             ticketID: "",
             userName: "",
             userEmail: "",
-            userTel: ""
+            userTel: "",
+            isCurrentWin: false
         },
         initialize: function () {
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
+            });
+
+            this.setAttributes();
+        },
+        setAttributes: function () {
+            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"});
+
+            this.set(toolModel.attributes);
             var date = new Date(),
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
-                resp = Radio.request("RestReader", "getServiceById", Config.menu.contact.serviceID);
+                resp = Radio.request("RestReader", "getServiceById", toolModel.get("serviceID"));
 
             if (resp && resp.length === 1) {
                 this.set("url", _.first(resp).get("url"));
                 this.set("ticketID", ticketID);
-                this.listenTo(EventBus, {
-                    "winParams": this.setStatus
-                });
             }
         },
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "contact") {
+
+        setStatus: function (args) {
+            // Fenstermanagement
+            if (args[2].getId() === "contact") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -48,7 +56,7 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
-        validate: function (attributes, identifier) {
+        validate: function (attributes) {
             var userNameValid = attributes.userName.length >= 3,
                 userEmailValid1 = attributes.userEmail.length >= 1,
                 userEmailValid2 = attributes.userEmail.match(/^[A-Z0-9\.\_\%\+\-]+@{1}[A-Z0-9\.\-]+\.{1}[A-Z]{2,4}$/igm) === null ? false : true,

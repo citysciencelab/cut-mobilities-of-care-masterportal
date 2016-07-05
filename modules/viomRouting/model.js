@@ -24,14 +24,16 @@ define([
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
                 this.set("bbox", "&bbox=" + Config.view.extent[0] + "," + Config.view.extent[1] + "," + Config.view.extent[2] + "," + Config.view.extent[3] + "&srsName=" + Config.view.epsg);
             }
-            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
+            // EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
             EventBus.on("setMap", this.setMap, this);
             EventBus.trigger("getMap", this);
+            Radio.on("Window", "winParams", this.setStatus, this);
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "routing") {
+            if (args[2].getId() === "routing") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
+                this.set("provid", args[2].get("viomRouting"));
             }
             else {
                 this.set("isCurrentWin", false);
@@ -172,9 +174,8 @@ define([
             });
         },
         requestRoute: function () {
-            var id = Config.menu.viomRouting,
-            providerid = Radio.request("RestReader", "getServiceById", id),
-            viomurl = "";
+            var providerid = Radio.request("RestReader", "getServiceById", this.get("provid")),
+                viomurl = "";
 
             viomurl = providerid[0].attributes.url;
             providerid = providerid[0].attributes.providerID;

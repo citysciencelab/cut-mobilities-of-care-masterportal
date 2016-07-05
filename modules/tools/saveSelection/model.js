@@ -54,7 +54,7 @@ define([
          * @return {[type]}      [description]
          */
         checkStatus: function (args) {
-            if (args[2] === "saveSelection") {
+            if (args[2].getId() === "saveSelection") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -71,10 +71,10 @@ define([
             var filteredLayerList = _.filter(layerList, function (model) {
                 return !model.get("isExternal");
             });
+
             filteredLayerList = _.sortBy(filteredLayerList, function (model) {
                 return model.getSelectionIDX();
             });
-            console.log(filteredLayerList);
             this.setLayerList(filteredLayerList);
             this.createParamsValues();
         },
@@ -88,7 +88,6 @@ define([
                 layerTrancparence = [];
 
             _.each(this.getLayerList(), function (model) {
-                console.log(model.getName() + " " + model.getSelectionIDX());
                 layerVisibilities.push(model.getIsVisibleInMap());
                 layerTrancparence.push(model.getTransparency());
             });

@@ -109,8 +109,11 @@ define([
             }, this);
 
             this.listenTo(EventBus, {
-                "winParams": this.setStatus,
                 "getDrawlayer": this.getLayer
+            });
+
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
             this.listenTo(this, {
@@ -155,7 +158,7 @@ define([
             return this.get("source");
         },
         setStatus: function (args) {
-            if (args[2] === "draw" && args[0] === true) {
+            if (args[2].getId() === "draw") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.setStyle();

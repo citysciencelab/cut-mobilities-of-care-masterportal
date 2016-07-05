@@ -13,7 +13,7 @@ define([
                 maxPosTop: "10px"
             },
             initialize: function () {
-                EventBus.on("toggleWin", this.setParams, this);
+                // EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
@@ -35,24 +35,32 @@ define([
             setVisible: function (value) {
                 this.set("isVisible", value);
             },
-            setParams: function (args) {
-                if (_.isUndefined(args[3]) === false) {
-                    this.set("modelId", args[3]);
-                }
-                this.set("title", args[1]);
-                this.set("icon", args[2]);
-                this.set("winType", args[0]);
+            setParams: function (value) {console.log(value);
+                this.setTool(value);
+                // if (_.isUndefined(args[3]) === false) {
+                //     this.set("modelId", args[3]);
+                // }
+                this.set("title", value.getName());
+                this.set("icon", value.getGlyphicon());
+                this.set("winType", value.getId());
                 this.set("isVisible", true);
             },
-            sendParamsToWinCotent: function () {
-                if (this.has("modelId")) {
-                    Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
-                    EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
-                }
-                else {
-                    Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
-                    EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
-                }
+            sendParamsToWinCotent: function () {console.log(this);
+                Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
+                // if (this.has("modelId")) {
+                //     Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
+                //     EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
+                // }
+                // else {
+                //     Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
+                //     EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
+                // }
+            },
+            setTool: function (value) {
+                this.set("tool", value);
+            },
+            getTool: function () {
+                return this.get("tool");
             }
         });
 
