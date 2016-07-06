@@ -6,7 +6,7 @@ define(function () {
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
-                {id: "4537,4538", visibility: true, gfiTheme: "solaratlas"}
+                {id: "4537,4538",  name: "Eignungsflächen, Darstellung ab 1: 5 000", visibility: true, gfiTheme: "solaratlas"}
             ]
         },
         simpleMap: false,
