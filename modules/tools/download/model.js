@@ -372,7 +372,7 @@ define([
                      // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                      if (!feature.getStyle().getText()) {
                          var color = style.getFill().getColor().split("(")[1].split(",");
-                         
+
                          pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
                          pointColors.push(color[0] + "," + color[1] + "," + color[2]);
                          pointRadiuses.push(style.getImage().getRadius());
@@ -391,7 +391,7 @@ define([
                     if (!$(placemark).find("name")[0]) {
                         var style = $(placemark).find("Style")[0],
                             pointStyle = "<PointStyle>";
-                        
+
                         pointStyle += "<color>" + pointColors[i] + "</color>";
                         pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
                         pointStyle += "<radius>" + pointRadiuses[i] + "</radius>";
