@@ -259,13 +259,14 @@ define([
             // window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            var url = Radio.request("RestReader", "getServiceById", "2"),
-            url = url[0].attributes.url;
+            var url = Radio.request("RestReader", "getServiceById", "2");
 
-            if (url === null || url === undefined) {
+            if (url[0] === null || url[0] === undefined) {
                 this.set("metaURL", null);
             }
             else {
+                url = url[0].attributes.url;
+
                 if (this.get("url") !== undefined && this.has("link") === false) {
                     this.set("metaURL", url + this.get("metaID"));
                 }
