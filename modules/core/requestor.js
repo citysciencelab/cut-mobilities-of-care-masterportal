@@ -207,6 +207,7 @@ define([
                         key = this.beautifyString(key);
                         gfi[key] = value;
                     }, this);
+                    // im IE müssen die Attribute für WMS umgedreht werden
                  if (Util.isInternetExplorer() !== false && typ !== "WFS") {
                         var keys = [],
                             values = [];
@@ -222,10 +223,17 @@ define([
                 }
                 else {
                     // map object keys to gfiAttributes from layer model
-                    _.each(preGfi, function (value, key) {
-                        key = gfiAttributes[key];
+
+//                    _.each(preGfi, function (value, key) {
+//                        key = gfiAttributes[key];
+//                        if (key) {
+//                            gfi[key] = value;
+//                        }
+//                    });
+                    _.each(gfiAttributes, function (value, key) {
+                        key = preGfi[key];
                         if (key) {
-                            gfi[key] = value;
+                            gfi[value] = key;
                         }
                     });
                 }
