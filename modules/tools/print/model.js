@@ -210,25 +210,16 @@ define([
                     var type = feature.getGeometry().getType(),
                         styles = feature.getStyleFunction().call(feature),
                         style = styles[0];
-
                     // Punkte
-                    if (type === "Point" && style.getText() === null) {
-                        featureStyles[index] = {
-                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                                pointRadius: style.getImage().getRadius(),
-                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                            };
-                    }
-                    else {
-                        // Polygone oder Linestrings
-                        if (style.getText().getText() === undefined) {
+                    if (type === "Point") {
+                        //Punkte ohne Text
+                        if (style.getText() === null) {
                             featureStyles[index] = {
-                                fillColor: this.getColor(style.getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getFill().getColor()).opacity,
-                                strokeColor: this.getColor(style.getStroke().getColor()).color,
-                                strokeWidth: style.getStroke().getWidth()
+                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                            pointRadius: style.getImage().getRadius(),
+                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
                             };
                         }
                         //Texte
@@ -238,6 +229,15 @@ define([
                                 fontColor: this.getColor(style.getText().getFill().getColor()).color
                             };
                         }
+                    }
+                    // Polygone oder Linestrings
+                    else {
+                        featureStyles[index] = {
+                            fillColor: this.getColor(style.getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                            strokeColor: this.getColor(style.getStroke().getColor()).color,
+                            strokeWidth: style.getStroke().getWidth()
+                        };
                     }
                 }
             }, this);
