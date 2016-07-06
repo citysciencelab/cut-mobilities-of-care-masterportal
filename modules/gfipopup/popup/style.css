@@ -110,6 +110,14 @@
     white-space: normal;
 }
 
+.popover-solaratlas {
+    margin: 8px;
+}
+
+.popover-solaratlas p {
+    font-size: 12px;
+}
+
 /* minimiertes Info-Fenster*/
 .popover-min {
     position: fixed;

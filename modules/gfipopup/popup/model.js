@@ -112,6 +112,13 @@ define([
                             });
                             break;
                         }
+                        case "solaratlas": {
+                            require(["modules/gfipopup/themes/solaratlas/view"], function (TrinkwasserTheme) {
+                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                            });
+                            break;
+                        }
                         default: {
                             require(["modules/gfipopup/themes/default/view", "backbone.radio"], function (DefaultTheme, Radio) {
                                 templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
