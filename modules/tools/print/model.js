@@ -206,20 +206,37 @@ define([
                             type: feature.getGeometry().getType()
                         }
                     });
-                    if (feature.getStyle().getText() === null) {
-                        featureStyles[index] = {
-                            fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
-                            fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
-                            pointRadius: feature.getStyle().getImage().getRadius(),
-                            strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
-                            strokeWidth: feature.getStyle().getStroke().getWidth(),
-                            strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
-                        };
+
+                    var type = feature.getGeometry().getType(),
+                        styles = feature.getStyleFunction().call(feature),
+                        style = styles[0];
+                    // Punkte
+                    if (type === "Point") {
+                        //Punkte ohne Text
+                        if (style.getText() === null) {
+                            featureStyles[index] = {
+                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                            pointRadius: style.getImage().getRadius(),
+                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                            };
+                        }
+                        //Texte
+                        else {
+                            featureStyles[index] = {
+                                label: style.getText().getText(),
+                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                            };
+                        }
                     }
+                    // Polygone oder Linestrings
                     else {
                         featureStyles[index] = {
-                            label: feature.getStyle().getText().getText(),
-                            fontColor: this.getColor(feature.getStyle().getText().getFill().getColor()).color
+                            fillColor: this.getColor(style.getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                            strokeColor: this.getColor(style.getStroke().getColor()).color,
+                            strokeWidth: style.getStroke().getWidth()
                         };
                     }
                 }
@@ -401,6 +418,8 @@ define([
         getColor: function (value) {
             var color = value,
                 opacity = 1;
+            // color kommt als array--> parsen als String
+            color=color.toString();
 
             if (color.search("#") === -1) {
                 var begin = color.indexOf("(") + 1;
