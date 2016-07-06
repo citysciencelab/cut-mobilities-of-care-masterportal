@@ -40,7 +40,8 @@ define([
                     // "checkIsExpanded": this.checkIsExpanded,
                     "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
                     "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
-                    "showModelInTree": this.showModelInTree
+                    "showModelInTree": this.showModelInTree,
+                    "closeExpandedFolder": this.closeExpandedFolder
                }, this);
 
                this.listenTo(this, {
@@ -111,7 +112,7 @@ define([
              * [checkIsExpanded description]
              * @return {[type]} [description]
              */
-            checkIsExpanded: function () {
+            closeExpandedFolder: function () {
                 var folderModel = this.findWhere({isExpanded: true});
 
                 if (!_.isUndefined(folderModel)) {

@@ -28,7 +28,7 @@ define([
 
             this.listenTo(this, {
                 "remove": function () {
-                    Radio.trigger("ModelList", "checkIsExpanded");
+                    Radio.trigger("ModelList", "closeExpandedFolder");
                 },
                 "update": function (collection, options) {
                     if (_.has(options, "index")) {
