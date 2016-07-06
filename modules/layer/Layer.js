@@ -259,17 +259,13 @@ define([
             // window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL === "ignore") {
-                // hack
+            var url = Radio.request("RestReader", "getServiceById", "2"),
+            url = url[0].attributes.url;
+
+            if (url === null || url === undefined) {
                 this.set("metaURL", null);
             }
-            else if (Config.metadatenURL && Config.metadatenURL !== "") {
-                this.set("metaURL", Config.metadatenURL + this.get("metaID"));
-            }
             else {
-                var url = Radio.request("RestReader", "getServiceById", "2"),
-                url = url[0].attributes.url;
-
                 if (this.get("url") !== undefined && this.has("link") === false) {
                     this.set("metaURL", url + this.get("metaID"));
                 }
