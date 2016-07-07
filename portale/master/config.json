@@ -44,6 +44,15 @@
           "wfsFeatureFilter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter"
+          },
+          "routing": {
+            "name": "Routenplaner",
+            "glyphicon": "glyphicon-road",
+            "viomRouting": "3"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
           }
         }
       },
@@ -51,9 +60,29 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
-      "draw": {
-        "name": "Zeichnen / Schreiben",
-        "glyphicon": "glyphicon-pencil"
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
       }
     },
     "controls": {
@@ -129,6 +158,22 @@
               "filterString": ["*", "Altona"]
             }
           ]
+        },
+        {
+          "id":[
+            {
+              "id": "946"
+            },
+            {
+              "id": "947"
+            }
+          ],
+          "name": "aktuelle Meldungen der TBZ",
+          "attribution": {
+            "eventname": "aktualisiereverkehrsnetz",
+            "timeout": 600000
+          },
+          "visibility": false
         }
       ]
     }

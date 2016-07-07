@@ -1,10 +1,12 @@
 define([
     "modules/core/modelList/item",
-    "backbone.radio"
+    "backbone.radio",
+    "eventbus"
 ], function () {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
+        EventBus = require("eventbus"),
         Layer;
 
     Layer = Item.extend({
@@ -45,6 +47,7 @@ define([
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     this.toggleLayerOnMap();
+                    this.toggleEventAttribution(this.getIsVisibleInMap());
                 },
                 "change:transparency": this.updateLayerTransparency,
                 "change:SLDBody": this.updateSourceSLDBody
@@ -229,6 +232,17 @@ define([
             else {
                 // model.collection besser?!
                 Radio.trigger("Map", "removeLayer", this.getLayer());
+            }
+        },
+
+        toggleEventAttribution: function (value) {console.log(this);
+            if (_.has(this, "EventAttribution")) {
+                if (value === true) {
+                    EventBus.trigger("startEventAttribution", this);
+                }
+                else {
+                    EventBus.trigger("stopEventAttribution", this);
+                }
             }
         },
 

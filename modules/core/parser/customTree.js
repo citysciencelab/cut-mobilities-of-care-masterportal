@@ -44,7 +44,7 @@ define([
 
                             layerdefinitions.push(objFromRawList);
                         });
-                        layer = _.extend(layer, {typ: "GROUP", id: _.uniqueId("grouplayer"), layerdefinitions: layerdefinitions});
+                        layer = _.extend(layer, {typ: "GROUP", id: layerdefinitions[0].id, layerdefinitions: layerdefinitions});
                     }
 
                     // HVV :(
