@@ -2,25 +2,36 @@ define(function () {
     var config = {
         tree: {
             type: "light",
+            saveSelection: false,
             layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "95", visible: false, name:"Lärm Straßenverkehr Nacht 2012"},     //Lärm_night_2012
-                {id: "96", visible: false, name:"Lärm Straßenverkehr Tag 2012"}      //Lärm_den_2012
+                {id: "453", visibility: true, legendUrl: "ignore"},
+                {id: "452", visibility: false},
+                {id: "713", visibility: false,"name" :"Stadtplan S-W"},
+                {id: "1993", visibility: true,"name" :"Fauna-Flora-Habitat-Gebiete"},
+                {id: "1994", visibility: true,"name" :"Vogelschutzgebiete"},
+                {id: "1999", visibility: true},
+                {id: "1998", visibility: true},
+                {id: "1992", visibility: true}
             ]
         },
+        simpleMap: false,
+        wfsImgPath: "../components/lgv-config/img/",
+        allowParametricURL: true,
         view: {
-            center: [565874, 5934140],  //Rathaus
-            resolution: 15.874991427504629, //1.60.000
-            scale: 60000, // für print.js benötigt
-            extent: [454591, 5809000, 700000, 6075769]
+           center: [565874, 5934140],
+            resolution: 66.14579761460263,
+            extent: [454591, 5809000, 700000, 6075769],
+            epsg: "EPSG:25832"
+            
         },
-         controls: {
+        controls: {
             zoom: true,
             toggleMenu: true,
             orientation: "once",
-            poi: false
-         },
+            fullScreen: true,
+            poi: true
+        },
+        customModules: [],
         footer: {
             visibility: true,
             urls: [
@@ -49,7 +60,8 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -68,7 +80,7 @@ define(function () {
             routing: false
         },
         startUpModul: "",
-        searchBar: {
+       searchBar: {
             gazetteer: {
                 minChars: 3,
                 url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
@@ -85,11 +97,15 @@ define(function () {
         },
         print: {
             printID: "99999",
-            title: "Lärmkarte-Straßenverkehr",
+            title: "Lärmschutzbereiche Flughafen Hamburg",
             gfi: false
         },
-        tools: {
-            
+         tools: {
+            gfi: {
+                title: "Informationen abfragen",
+                glyphicon: "glyphicon-info-sign",
+                isActive: true
+            },
             print: {
                 title: "Karte drucken",
                 glyphicon: "glyphicon-print"
@@ -103,9 +119,7 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         },
-        orientation: true,
-       
-        poi: false
+        
     };
 
     return config;

@@ -41,7 +41,34 @@ define(function () {
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
-        footer: true,
+        controls: {
+            zoom: true,
+            toggleMenu: true,
+            orientation: "once",
+            poi: true
+         },
+         footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "ttt"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf:"../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
@@ -63,13 +90,13 @@ define(function () {
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,
-            legend: false,
+            legend: true,
             routing: false
         },
         searchBar: {
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
