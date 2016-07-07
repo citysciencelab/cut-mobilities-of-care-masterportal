@@ -54,28 +54,34 @@ define([
                 children = [],
                 lastroutenval,
                 lastroutenkey;
-            _.each(element, function (val, key) {
-                if (key === "Bild") {
-                    var imgView = new ImgView(val);
-                    element[key] = "#";
-                    children.push({
-                        key: imgView.model.get("id"),
-                        val: imgView
+
+            if (_.isString(element) && element.match(/content="text\/html/g)) {
+                children.push(element);
+            }
+            else {
+                _.each(element, function (val, key) {
+                    if (key === "Bild") {
+                        var imgView = new ImgView(val);
+                        element[key] = "#";
+                        children.push({
+                            key: imgView.model.get("id"),
+                            val: imgView
+                        });
+                    }
+                    else if (key === "video") {
+                        var videoView = new VideoView(val);
+                        element[key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView
+                        });
+                    }
+                    // lösche leere Dummy-Einträge wieder raus.
+                    element = _.omit(element, function (value) {
+                        return value === "#";
                     });
-                }
-                else if (key === "video") {
-                    var videoView = new VideoView(val);
-                    element[key] = "#";
-                    children.push({
-                        key: videoView.model.get("id"),
-                        val: videoView
-                    });
-                }
-                // lösche leere Dummy-Einträge wieder raus.
-                element = _.omit(element, function (value) {
-                    return value === "#";
-                });
-            }, this);
+                }, this);
+            }
             if (children.length > 0) {
                 this.set("children", children);
             }

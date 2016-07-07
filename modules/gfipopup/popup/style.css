@@ -155,3 +155,8 @@
     color: #fff;
     cursor: pointer;
 }
+
+.gfi-iFrame {
+    height: 300px;
+    width: 500px;
+}
