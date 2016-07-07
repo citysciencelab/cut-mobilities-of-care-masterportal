@@ -380,7 +380,7 @@ define([
                 this.add(lightSiblingsModels);
                 // Abbruchbedingung
                 if (parentModel.id !== "Themen") {
-                    this.addModelsRecursive(parentModel.parentId);
+                    this.addAndExpandModelsRecursive(parentModel.parentId);
                     this.get(parentModel.id).setIsExpanded(true);
                 }
             },
