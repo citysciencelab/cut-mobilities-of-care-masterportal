@@ -33,16 +33,16 @@ define([
             $("#seite_vier").show();
         },
         refreshResult: function () {
-            var page = this.model.get("result"),
+            var result = this.model.get("result"),
                 filepath = this.model.get("filepath");
 
-            $("#ok_p").append("/Data/IDABerechnungen/" + filepath + "</br>");
-            $("#ok_p").append(page);
+            $("#ok_p").append(result);
+            $("#ok_ref").attr("href", "https://geoportal-hamburg.de/ida/results/" + filepath);
         },
         refreshError: function () {
-            var page = this.model.get("error");
+            var error = this.model.get("error");
 
-            $("#fehler_p").append(page);
+            $("#fehler_p").append(error);
         }
     });
 
