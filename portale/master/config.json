@@ -90,7 +90,8 @@
       "toggleMenu": true,
       "orientation": "once",
       "poi": true,
-      "fullScreen": true
+      "fullScreen": true,
+      "attributions": true
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -120,7 +121,8 @@
           "id": "1748"
         },
         {
-          "id": "1562"
+          "id": "1562",
+          "attributions": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "45",
@@ -130,6 +132,7 @@
         {
           "id": "1711",
           "visibility": true,
+          "attributions": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": "name",
           "filterOptions": [
             {
@@ -160,18 +163,18 @@
           ]
         },
         {
-          "id":[
-            {
-              "id": "946"
+          "id":[{"id": "946"
             },
             {
               "id": "947"
             }
           ],
-          "name": "aktuelle Meldungen der TBZ",
-          "attribution": {
+          "name": "Verkehrslage auf Autobahnen",
+          "attributions": {
+            "text": "",
+            "channel": "Verkehrsfunctions",
             "eventname": "aktualisiereverkehrsnetz",
-            "timeout": 600000
+            "timeout": 60000
           },
           "visibility": false
         }
