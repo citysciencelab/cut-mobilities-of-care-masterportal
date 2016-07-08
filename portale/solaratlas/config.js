@@ -21,8 +21,8 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: "once",
-            poi: true,
+            orientation: false,
+            poi: false,
             fullScreen: true
         },
         customModules: [],
@@ -93,13 +93,14 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
+                searchDistricts: false,
+                searchParcels: false
             },
             placeholder: "Suche nach Adresse"
         },
