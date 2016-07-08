@@ -37,7 +37,6 @@ define([
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
                     "updateList": this.updateList,
-                    // "checkIsExpanded": this.checkIsExpanded,
                     "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
                     "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
                     "showModelInTree": this.showModelInTree,
@@ -46,7 +45,7 @@ define([
 
                this.listenTo(this, {
                    "change:isVisibleInMap": function () {
-                       channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
+                       channel.trigger("updateVisibleInMapList");
                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                    },
                    "change:isExpanded": function (model) {

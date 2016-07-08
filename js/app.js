@@ -39,11 +39,11 @@ define("app",
     }
 
     // Macht noch Probleme
-    if (Config.attributions && Config.attributions === true) {
-        require(["modules/attribution/view"], function (AttView) {
-            new AttView();
-        });
-    }
+    // if (Config.attributions && Config.attributions === true) {
+    //     require(["modules/attribution/view"], function (AttView) {
+    //         new AttView();
+    //     });
+    // }
 
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {
@@ -232,6 +232,12 @@ define("app",
                 case "fullScreen": {
                     require(["modules/controls/fullScreen/view"], function (FullScreenView) {
                         new FullScreenView();
+                    });
+                    break;
+                }
+                case "attributions": {
+                    require(["modules/controls/attributions/view"], function (AttributionsView) {
+                        new AttributionsView();
                     });
                     break;
                 }

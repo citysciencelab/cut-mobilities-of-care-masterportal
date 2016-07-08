@@ -1,12 +1,10 @@
 define([
     "modules/core/modelList/item",
-    "backbone.radio",
-    "eventbus"
+    "backbone.radio"
 ], function () {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
-        EventBus = require("eventbus"),
         Layer;
 
     Layer = Item.extend({
@@ -47,7 +45,7 @@ define([
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     this.toggleLayerOnMap();
-                    this.toggleEventAttribution(this.getIsVisibleInMap());
+                    this.toggleAttributionsInterval();
                 },
                 "change:transparency": this.updateLayerTransparency,
                 "change:SLDBody": this.updateSourceSLDBody
@@ -171,6 +169,15 @@ define([
         getTransparency: function () {
             return this.get("transparency");
         },
+
+        /**
+         * Getter für Attribut "attributions"
+         * @return {String|Object}
+         */
+        getAttributions: function () {
+            return this.get("attributions");
+        },
+
         incTransparency: function () {
             if (this.getTransparency() <= 90) {
                 this.setTransparency(this.get("transparency") + 10);
@@ -235,13 +242,25 @@ define([
             }
         },
 
-        toggleEventAttribution: function (value) {console.log(this);
-            if (_.has(this, "EventAttribution")) {
-                if (value === true) {
-                    EventBus.trigger("startEventAttribution", this);
+        /**
+         * Wenn die Attributions als Objekt definiert ist,
+         * wird in einem bestimmten Intervall die Attributions angefragt, solange "isVisibleInMap" true ist
+         * Wird für die Verkehrslage auf den Autobahnen genutzt
+         */
+        toggleAttributionsInterval: function () {
+            if (this.has("attributions") && _.isObject(this.getAttributions())) {
+                var channelName = this.getAttributions().channel,
+                    eventName = this.getAttributions().eventname,
+                    timeout = this.getAttributions().timeout;
+
+                if (this.getIsVisibleInMap() === true) {
+                    Radio.trigger(channelName, eventName, this);
+                    this.getAttributions().interval = setInterval (function (model) {
+                        Radio.trigger(channelName, eventName, model);
+                    }, timeout, this);
                 }
                 else {
-                    EventBus.trigger("stopEventAttribution", this);
+                    clearInterval(this.getAttributions().interval);
                 }
             }
         },
