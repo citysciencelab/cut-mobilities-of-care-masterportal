@@ -5,8 +5,8 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "95", visible: false, name:"Lärm Straßenverkehr Nacht 2012"},     //Lärm_night_2012
-                {id: "96", visible: false, name:"Lärm Straßenverkehr Tag 2012"}      //Lärm_den_2012
+                {id: "95", visible: false, name: "Lärm Straßenverkehr Nacht 2012"},     //Lärm_night_2012
+                {id: "96", visible: false, name: "Lärm Straßenverkehr Tag 2012"}      //Lärm_den_2012
             ]
         },
         view: {
@@ -22,12 +22,32 @@ define(function () {
             poi: false
         },
         
-        footer: true,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "SDP"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         
         attributions: true,
@@ -35,7 +55,7 @@ define(function () {
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-         menuItems: {
+        menuItems: {
             tree: {
                 title: "Themen",
                 glyphicon: "glyphicon-list"
@@ -60,7 +80,7 @@ define(function () {
             minChars: 3,
             gazetteer: {
                 minChars: 3,
-                 url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -76,11 +96,6 @@ define(function () {
             gfi: false
         },
         tools: {
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
             print: {
                 title: "Karte drucken",
                 glyphicon: "glyphicon-print"
@@ -93,7 +108,7 @@ define(function () {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
             }
-        },
+        }
     };
 
     return config;
