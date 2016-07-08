@@ -5,9 +5,9 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "2413,2415", visible: false, name:'Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)'},
-            {id: "2412,2415", visible: false, name:'Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)'},
-            {id: "2414,2416", visible: false, name:'Nacht-Schutzzonen mit Isolinien LAeq in dB(A)'}
+                {id: "2413,2415", visible: false, name: 'Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)'},
+                {id: "2412,2415", visible: false, name: 'Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)'},
+                {id: "2414,2416", visible: false, name: 'Nacht-Schutzzonen mit Isolinien LAeq in dB(A)'}
             ]
         },
 
@@ -28,16 +28,15 @@ define(function () {
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 
 
-        attributions: true,
+//        attributions: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-         menuItems: {
+        menuItems: {
             tree: {
                 title: "Themen",
                 glyphicon: "glyphicon-list"
@@ -62,7 +61,7 @@ define(function () {
             minChars: 3,
             gazetteer: {
                 minChars: 3,
-                 url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -77,7 +76,7 @@ define(function () {
             title: "Lärmschutzbereiche Flughafen Hamburg",
             gfi: false
         },
-         tools: {
+        tools: {
             print: {
                 title: "Karte drucken",
                 glyphicon: "glyphicon-print"
@@ -90,7 +89,7 @@ define(function () {
                 title: "Strecke / Fläche messen",
                 glyphicon: "glyphicon-resize-full"
             }
-        },
+        }
         
     };
 
