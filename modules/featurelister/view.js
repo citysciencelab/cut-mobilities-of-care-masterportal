@@ -6,7 +6,7 @@ define([
     "modules/featurelister/model",
     "modules/core/util",
     "modules/menubar/view",
-    "jqueryui/draggable"
+    "jqueryui/widgets/draggable"
 ], function (Backbone, EventBus, Config, Template, Model, Util) {
 
     var FeatureLister = Backbone.View.extend({

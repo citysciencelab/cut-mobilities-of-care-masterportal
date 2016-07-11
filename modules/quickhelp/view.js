@@ -6,7 +6,7 @@ define([
     "text!modules/quickhelp/templateMeasureTool.html",
     "eventbus",
     "modules/core/util",
-    "jqueryui/draggable"
+    "jqueryui/widgets/draggable"
 ], function (Backbone, Radio, TemplateSearch, TemplateTree, TemplateMeasureTool, EventBus, Util) {
 
     var view = Backbone.View.extend({

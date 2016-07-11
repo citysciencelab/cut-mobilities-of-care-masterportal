@@ -18,7 +18,7 @@ define([
     "bootstrap/dropdown",
     "bootstrap/collapse",
     "jqueryui/effect",
-    "jqueryui/effect-slide",
+    "jqueryui/effects/effect-slide",
     "modules/menu/desktop/folder/catalogView",
     "modules/menu/desktop/layer/selectionView"
 ], function () {

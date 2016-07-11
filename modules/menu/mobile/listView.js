@@ -9,7 +9,7 @@ define([
     "modules/menu/mobile/tool/view",
     "modules/menu/mobile/breadCrumb/listView",
     "jqueryui/effect",
-    "jqueryui/effect-slide"
+    "jqueryui/effects/effect-slide"
     ],
     function () {
         var Backbone = require("backbone"),
