@@ -17,7 +17,10 @@ define([
             this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             this.$el.draggable({
                 containment: "#map",
-                handle: ".header"
+                handle: ".header",
+                stop: function (event, ui) {
+                    ui.helper.css({"height": "", "width": ""});
+                }
             });
             this.$el.css({
                 "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
