@@ -46,7 +46,7 @@ define([
             },
             removeView: function () {
                 this.$el.find("ul.nav-menu").html("");
-
+                this.collection.setModelAttributesById("Themen", {isExpanded: false});
                 this.collection.setAllDescendantsInvisible("Themen");
 
                 while (this.subviews.length) {
