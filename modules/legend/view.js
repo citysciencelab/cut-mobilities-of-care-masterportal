@@ -5,7 +5,7 @@ define([
     "modules/legend/model",
     "eventbus",
     "backbone.radio",
-    "jqueryui/draggable"
+    "jqueryui/widgets/draggable"
 ], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, EventBus, Radio) {
 
     var LegendView = Backbone.View.extend({
