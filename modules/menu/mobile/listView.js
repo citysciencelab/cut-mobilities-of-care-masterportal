@@ -103,11 +103,14 @@ define([
             descentInTree: function (model) {
                 var models = [],
                     lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()});
-
                 models = this.collection.add(lightModels);
+                if (model.getIsLeafFolder()) {
+                    models.push(model);
+                }
                 this.slideModels("descent", models, model.getParentId());
             },
             ascentInTree: function (model) {
+                model.setIsVisibleInTree(false);
                 var models = this.collection.where({parentId: model.getParentId()});
 
                 this.slideModels("ascent", models, model.getId());
