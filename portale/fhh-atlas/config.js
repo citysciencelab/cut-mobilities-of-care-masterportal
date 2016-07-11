@@ -47,9 +47,7 @@ define(function () {
                 "3EE8938B-FF9E-467B-AAA2-8534BB505580", // Bauschutzbereich § 12 LuftVG Hamburg
                 "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB", // Straßen HH-SIB
                 "F691CFB0-D38F-4308-B12F-1671166FF181", // Flurstücke gelb
-                "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1", // Flurstücke schwarz
-                "DB433BD1-1640-4FBC-A879-72402BD5CFDB", // Bodenrichtwertzonen Hamburg
-                "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71" // Bodenrichtwerte für Hamburg
+                "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1" // Flurstücke schwarz
             ],
             metaIDsToIgnore: [
                 "DFA37E3E-F640-47DE-B7EF-3D3FFB11435C", // Störfallbetriebe Internet
@@ -63,7 +61,9 @@ define(function () {
                 "AA06AD76-6110-4718-89E1-F1EDDA1DF4CF", // Regionales Raumordnungsprogramm Stade+Rotenburg
                 "1C8086F7-059F-4ACF-96C5-7AFEB8F8B751", // Fachdaten der Metropolregion
                 "A46086BA-4A4C-48A4-AC1D-9735DDB4FDDE", // Denkmalkartierung FIS
-                "98377F7D-84AB-4089-BDF1-F962B2C173CC" // Ausgleichsflächen Internet
+                "98377F7D-84AB-4089-BDF1-F962B2C173CC", // Ausgleichsflächen Internet
+                "DB433BD1-1640-4FBC-A879-72402BD5CFDB", // Bodenrichtwertzonen Hamburg
+                "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71" // Bodenrichtwerte für Hamburg
             ]
         },
         controls: {
