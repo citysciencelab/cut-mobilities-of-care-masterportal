@@ -30,7 +30,7 @@ define([
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender,
                 "change:isExpanded": this.rerender,
-                "change:isVisibleInTree": this.rerender
+                "change:isVisibleInTree": this.removeIfNotVisible
             });
             this.render();
         },
@@ -64,18 +64,7 @@ define([
         rerender: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsVisibleInTree()) {
-                this.$el.html(this.template(attr));
-            }
-            else {
-                this.remove();
-            }
-        },
-        updateList: function () {
-            if (this.model.getIsLeafFolder() === true) {
-                this.model.setIsExpanded(true);
-            }
-            this.model.updateList(this.model.getId());
+            this.$el.html(this.template(attr));
         },
         toggleIsExpanded: function () {
             this.model.toggleIsExpanded();
@@ -84,6 +73,11 @@ define([
             this.model.toggleIsSelected();
             Radio.trigger("ModelList", "toggleIsSelectedChildLayers", this.model);
             this.model.setIsExpanded(true);
+        },
+        removeIfNotVisible: function () {
+            if (!this.model.getIsVisibleInTree()) {
+                this.remove();
+            }
         }
 
     });

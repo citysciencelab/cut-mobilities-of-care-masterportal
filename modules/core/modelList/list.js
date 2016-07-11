@@ -37,11 +37,11 @@ define([
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
                     "updateList": this.updateList,
-                    // "checkIsExpanded": this.checkIsExpanded,
                     "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
                     "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
                     "showModelInTree": this.showModelInTree,
-                    "closeExpandedFolder": this.closeExpandedFolder
+                    "closeAllExpandedFolder": this.closeExpandedFolder,
+                    "setAllDescendantsInvisible": this.setAllDescendantsInvisible
                }, this);
 
                this.listenTo(this, {
@@ -54,10 +54,14 @@ define([
                         if (model.getId() === "SelectedLayer") {
                             this.trigger("updateSelection", model);
                         }
+                        // Trigger für mobiles Wandern im Baum
+                        this.trigger("traverseTree", model);
                     },
                     "change:isSelected": function (model) {
-                        this.resetSelectionIdx(model);
-                        model.setIsVisibleInMap(model.getIsSelected());
+                        if (model.getType() === "layer") {
+                            this.resetSelectionIdx(model);
+                            model.setIsVisibleInMap(model.getIsSelected());
+                        }
                         this.trigger("updateSelection");
                         channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     },
@@ -69,7 +73,6 @@ define([
                     }
                 });
             },
-
             model: function (attrs, options) {
                 if (attrs.type === "layer") {
                     if (attrs.typ === "WMS") {
@@ -89,30 +92,11 @@ define([
                     return new Tool(attrs, options);
                 }
             },
-
-            updateList: function (parentId, slideDirection) {
-                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
-
-                this.add(items);
-                this.setAllModelsInvisible();
-                if (parentId === "SelectedLayer") {
-                    var selectedLayer = this.where({isSelected: true, type: "layer"});
-
-                    _.each(selectedLayer, function (layer) {
-                        layer.setIsVisibleInTree(true);
-                    });
-                }
-                else {
-                    this.setModelsVisibleByParentId(parentId);
-                }
-                this.trigger("updateTreeView", slideDirection);
-            },
-
             /**
              * [checkIsExpanded description]
              * @return {[type]} [description]
              */
-            closeExpandedFolder: function () {
+            closeAllExpandedFolder: function () {
                 var folderModel = this.findWhere({isExpanded: true});
 
                 if (!_.isUndefined(folderModel)) {
@@ -135,6 +119,24 @@ define([
                 });
             },
              /**
+            * Setzt bei Änderung der Ebene, alle Model
+            * auf der alten Ebene auf unsichtbar
+            * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
+            */
+            setModelsInvisibleByParentId: function (parentId) {
+                var children;
+
+                if (parentId === "SelectedLayer") {
+                    children = this.where({isSelected: true});
+                }
+                else {
+                    children = this.where({parentId: parentId});
+                }
+                _.each(children, function (item) {
+                    item.setIsVisibleInTree(false);
+                });
+            },
+             /**
             *
             *
             * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
@@ -144,7 +146,7 @@ define([
                     parent = this.findWhere({id: parentId});
 
                 if (!parent.getIsExpanded()) {
-                    this.setAllAncestersInvisible(parentId);
+                    this.setAllDescendantsInvisible(parentId);
                 }
                 else {
                      _.each(itemListByParentId, function (item) {
@@ -152,7 +154,7 @@ define([
                     });
                 }
             },
-            setAllAncestersInvisible: function (parentId) {
+            setAllDescendantsInvisible: function (parentId) {
                 var itemListByParentId = this.where({parentId: parentId});
 
                 _.each(itemListByParentId, function (item) {
@@ -160,7 +162,7 @@ define([
                     if (item.getType() === "folder") {
                         item.setIsExpanded(false, {silent: true});
                     }
-                    this.setAllAncestersInvisible(item.getId());
+                    this.setAllDescendantsInvisible(item.getId());
                 }, this);
             },
 
@@ -177,7 +179,7 @@ define([
             * @param {Backbone.Model} model - folderModel
             */
             toggleIsSelectedChildLayers: function (model) {
-                var layers = this.where({parentId: model.getId()});
+                var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}));
 
                 _.each(layers, function (layer) {
                     layer.setIsSelected(model.getIsSelected());
@@ -262,6 +264,8 @@ define([
                     }
                     this.trigger("updateSelection");
                     this.trigger("updateLightTree");
+                    // Trigger für mobil
+                    this.trigger("changeSelectedList");
                 }
             },
             moveModelUp: function (model) {
@@ -277,8 +281,9 @@ define([
                         Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                     }
                     this.trigger("updateSelection");
-
                     this.trigger("updateLightTree");
+                    // Trigger für mobil
+                    this.trigger("changeSelectedList");
                 }
             },
             updateModelIndeces: function () {
@@ -358,10 +363,15 @@ define([
                 this.setModelAttributesById(id, {isSelected: true});
 
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
+
                 this.add(lightModels);
+
                 var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
+
                 this.add(parentModel);
+
                 var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
+
                 this.add(folder);
                 this.get(folder.id).setIsExpanded(true);
                 this.get(parentModel.id).setIsExpanded(true);

@@ -26,12 +26,6 @@ define([
             $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
 
         },
-        updateList: function () {
-            if (this.model.getIsLeafFolder() === true) {
-                this.model.setIsExpanded(true);
-            }
-            this.model.updateList(this.model.getId());
-        },
         toggleIsChecked: function () {
             this.model.toggleIsChecked();
         }

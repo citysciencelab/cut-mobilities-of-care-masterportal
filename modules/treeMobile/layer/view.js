@@ -28,7 +28,7 @@ define([
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
             "click .layer-sort-item > .glyphicon-picture": "openStyleWMS",
-            "change select": "setTransparence"
+            "change select": "setTransparency"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -103,7 +103,7 @@ define([
             this.model.toggleIsSettingVisible();
         },
 
-        setTransparence: function (evt) {
+        setTransparency: function (evt) {
             this.model.setTransparence(parseInt(evt.target.value, 10));
         },
 

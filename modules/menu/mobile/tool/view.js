@@ -16,6 +16,11 @@ define([
         events: {
             "click": "checkItem"
         },
+        initialize: function () {
+            this.listenTo(this.model, {
+                "change:isVisibleInTree": this.removeIfNotVisible
+            });
+        },
         render: function () {
             var attr = this.model.toJSON();
 
@@ -31,6 +36,11 @@ define([
             }
             // Navigation wird geschlossen
             $("div.collapse.navbar-collapse").removeClass("in");
+        },
+        removeIfNotVisible: function () {
+            if (!this.model.getIsVisibleInTree()) {
+                this.remove();
+            }
         }
     });
 

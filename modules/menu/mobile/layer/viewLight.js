@@ -24,12 +24,13 @@ define([
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
-            "change select": "setTransparence"
+            "change select": "setTransparency"
         },
         initialize: function () {
             this.listenTo(this.model, {
                  "change:isSelected change:isVisibleInMap": this.render,
-                 "change:isSettingVisible": this.renderSetting
+                 "change:isSettingVisible": this.renderSetting,
+                 "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
 
@@ -84,8 +85,8 @@ define([
             this.model.toggleIsSettingVisible();
         },
 
-        setTransparence: function (evt) {
-            this.model.setTransparence(parseInt(evt.target.value, 10));
+        setTransparency: function (evt) {
+            this.model.setTransparency(parseInt(evt.target.value, 10));
         },
 
         moveModelDown: function () {
@@ -94,6 +95,11 @@ define([
 
         moveModelUp: function () {
             this.model.moveUp();
+        },
+        removeIfNotVisible: function () {
+            if (!this.model.getIsVisibleInTree()) {
+                this.remove();
+            }
         }
     });
 

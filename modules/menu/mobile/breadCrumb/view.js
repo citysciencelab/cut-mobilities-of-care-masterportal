@@ -11,7 +11,11 @@ define([
         events: {
             "click": "removeItems"
         },
-
+        initialze: function () {
+            this.listenTo(this.model, {
+                "remove": this.remove
+            });
+        },
         /**
          * Zeichnet das Item und gibt es an die ListView zurück
          * @return {Backbone.View} this

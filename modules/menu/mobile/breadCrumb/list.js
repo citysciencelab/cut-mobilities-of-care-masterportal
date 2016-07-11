@@ -26,19 +26,6 @@ define([
                 "getLastItem": this.getLastItem
             }, this);
 
-            this.listenTo(this, {
-                "remove": function () {
-                    Radio.trigger("ModelList", "closeExpandedFolder");
-                },
-                "update": function (collection, options) {
-                    if (_.has(options, "index")) {
-                        var lastModel = collection.at(collection.length - 1);
-
-                        Radio.trigger("ModelList", "updateList", lastModel.getId(), "slideBack");
-                    }
-                }
-            });
-
             this.addMainItem();
         },
 
@@ -74,6 +61,8 @@ define([
                 });
 
             this.remove(models);
+            Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].getId());
+            Radio.trigger("ModelList", "setModelAttributesById", models[0], {isExpanded: false});
         },
 
         /**
@@ -81,7 +70,7 @@ define([
          */
         removeLastItem: function () {
             if (this.length > 1) {
-                this.pop();
+                Radio.trigger("ModelList", "setModelAttributesById", this.pop().getId(), {isExpanded: false});
             }
         },
 
