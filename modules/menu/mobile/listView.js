@@ -67,7 +67,6 @@ define([
                 }
             },
             updateLightTree: function () {
-                debugger;
                 var models = [],
                 lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "Themen"});
 
