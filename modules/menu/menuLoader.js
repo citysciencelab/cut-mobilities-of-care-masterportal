@@ -2,7 +2,7 @@ define(
     [
         "backbone.radio",
         "modules/menu/desktop/listViewLight",
-        "modules/menu/desktop/listViewComplex",
+        "modules/menu/desktop/listView",
         "modules/menu/mobile/listView"
     ], function () {
         var Radio = require("backbone.radio"),
@@ -37,7 +37,7 @@ define(
                     });
                     }
                     else {
-                        require(["modules/menu/desktop/listViewComplex"], function (Menu) {
+                        require(["modules/menu/desktop/listView"], function (Menu) {
                         caller.currentMenu = new Menu();
                     });
                     }

@@ -2,23 +2,23 @@ define([
     "backbone",
     "backbone.radio",
     "text!modules/menu/mobile/layer/template.html",
-    "text!modules/menu/mobile/layer/templateSelected.html",
-    "text!modules/menu/mobile/layer/templateSetting.html"
+    "text!modules/menu/mobile/layer/templateSelection.html",
+    "text!modules/menu/mobile/layer/templateSettings.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/menu/mobile/layer/template.html"),
-        SelectedLayerTemplate = require("text!modules/menu/mobile/layer/templateSelected.html"),
-        SettingTemplate = require("text!modules/menu/mobile/layer/templateSetting.html"),
+        Template = require("text!modules/menu/mobile/layer/template.html"),
+        SelectionTemplate = require("text!modules/menu/mobile/layer/templateSelection.html"),
+        SettingsTemplate = require("text!modules/menu/mobile/layer/templateSettings.html"),
         Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: "list-group-item",
-        template: _.template(LayerTemplate),
-        templateSelected: _.template(SelectedLayerTemplate),
-        templateSetting: _.template(SettingTemplate),
+        template: _.template(Template),
+        templateSelected: _.template(SelectionTemplate),
+        templateSetting: _.template(SettingsTemplate),
         events: {
             "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",

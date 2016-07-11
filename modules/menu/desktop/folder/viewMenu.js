@@ -1,19 +1,16 @@
 define([
     "backbone",
-    "text!modules/menu/desktop/folder/template.html",
-    "text!modules/menu/desktop/folder/templateLeaf.html"
+    "text!modules/menu/desktop/folder/templateMenu.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        FolderTemplate = require("text!modules/menu/desktop/folder/template.html"),
-        FolderLeafTemplate = require("text!modules/menu/desktop/folder/templateLeaf.html"),
+        Template = require("text!modules/menu/desktop/folder/templateMenu.html"),
         FolderView;
 
     FolderView = Backbone.View.extend({
         tagName: "li",
         className: "dropdown dropdown-folder",
-        template: _.template(FolderTemplate),
-        templateLeaf: _.template(FolderLeafTemplate),
+        template: _.template(Template),
         events: {
             "click .folder-item": ""
         },

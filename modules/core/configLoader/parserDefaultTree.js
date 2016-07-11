@@ -1,8 +1,8 @@
 define([
-    "modules/core/parser/portalConfig"
+    "modules/core/configLoader/parser"
 ], function () {
 
-    var Parser = require("modules/core/parser/portalConfig"),
+    var Parser = require("modules/core/configLoader/parser"),
         DefaultTreeParser;
 
     DefaultTreeParser = Parser.extend({

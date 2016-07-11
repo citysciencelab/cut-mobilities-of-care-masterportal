@@ -5,9 +5,9 @@ define("app",
     "modules/core/util",
     "modules/core/rawLayerList",
     "modules/restReader/collection",
-    "modules/core/parser/preparser",
+    "modules/core/configLoader/preparser",
     "modules/core/map",
-    "modules/parametricURL/model"
+    "modules/core/parametricURL"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
 
     // Core laden

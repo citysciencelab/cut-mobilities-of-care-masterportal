@@ -6,13 +6,13 @@ define([
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        LayerTemplate = require("text!modules/menu/desktop/layer/template.html"),
+        Template = require("text!modules/menu/desktop/layer/template.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: "layer",
-        template: _.template(LayerTemplate),
+        template: _.template(Template),
         events: {
             "click .layer-item": "toggleIsSelected",
             "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",

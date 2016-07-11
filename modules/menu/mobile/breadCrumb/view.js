@@ -1,13 +1,15 @@
 define([
-    "backbone"
+    "backbone",
+    "text!modules/menu/mobile/breadCrumb/template.html"
 ], function () {
 
     var Backbone = require("backbone"),
+        Template = require("text!modules/menu/mobile/breadCrumb/template.html"),
         BreadCrumbView;
 
     BreadCrumbView = Backbone.View.extend({
         tagName: "li",
-        template: _.template("<span><%= name %></span>"),
+        template: _.template(Template),
         events: {
             "click": "removeItems"
         },

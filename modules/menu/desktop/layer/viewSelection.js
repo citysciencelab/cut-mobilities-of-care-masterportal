@@ -1,20 +1,19 @@
 define([
     "backbone",
-    "text!modules/menu/desktop/layer/templateSelected.html",
-    "text!modules/menu/desktop/layer/templateSetting.html"
+    "text!modules/menu/desktop/layer/templateSelection.html",
+    "text!modules/menu/desktop/layer/templateSettings.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        SelectedLayerTemplate = require("text!modules/menu/desktop/layer/templateSelected.html"),
-        SettingTemplate = require("text!modules/menu/desktop/layer/templateSetting.html"),
+        Template = require("text!modules/menu/desktop/layer/templateSelection.html"),
+        TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: " layer-item",
-        //template: _.template(LayerTemplate),
-        template: _.template(SelectedLayerTemplate),
-        templateSetting: _.template(SettingTemplate),
+        template: _.template(Template),
+        templateSettings: _.template(TemplateSettings),
         events: {
             "click .glyphicon-check": "toggleIsVisibleInMap",
             "click .glyphicon-unchecked": "toggleIsVisibleInMap",
@@ -41,7 +40,7 @@ define([
                 template = this.template(attr);
 
             if (this.model.getIsSettingVisible() === true) {
-                template = this.templateSetting(attr);
+                template = this.templateSettings(attr);
             }
             if (this.model.getIsSelected()) {
                 selector.prepend(this.$el.html(template));
@@ -53,7 +52,7 @@ define([
                 template = this.template(attr);
 
             if (this.model.getIsSettingVisible() === true) {
-                template = this.templateSetting(attr);
+                template = this.templateSettings(attr);
             }
             this.$el.html(template);
         },

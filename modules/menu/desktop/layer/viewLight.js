@@ -1,21 +1,19 @@
 define([
     "backbone",
-    "backbone.radio",
-    "text!modules/menu/desktop/layer/templateLightSetting.html",
+    "text!modules/menu/desktop/layer/templateLightSettings.html",
     "text!modules/menu/desktop/layer/templateLight.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        SettingTemplate = require("text!modules/menu/desktop/layer/templateLightSetting.html"),
-        LayerTemplate = require("text!modules/menu/desktop/layer/templateLight.html"),
+        TemplateSettings = require("text!modules/menu/desktop/layer/templateLightSettings.html"),
+        Template = require("text!modules/menu/desktop/layer/templateLight.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: "layer",
-        template: _.template(LayerTemplate),
-        templateSetting: _.template(SettingTemplate),
+        template: _.template(Template),
+        templateSettings: _.template(TemplateSettings),
         events: {
             "click .glyphicon-unchecked, .glyphicon-check, .title": "toggleIsSelected",
             "click .glyphicon-info-sign": "showLayerInformation",
@@ -48,7 +46,7 @@ define([
 
             this.$el.html("");
             if (this.model.getIsSettingVisible() === true) {
-                selector.prepend(this.$el.html(this.templateSetting(attr)));
+                selector.prepend(this.$el.html(this.templateSettings(attr)));
             }
             else {
                 selector.prepend(this.$el.html(this.template(attr)));
@@ -59,7 +57,7 @@ define([
 
             this.$el.html("");
             if (this.model.getIsSettingVisible() === true) {
-                this.$el.html(this.templateSetting(attr));
+                this.$el.html(this.templateSettings(attr));
             }
             else {
                 this.$el.html(this.template(attr));

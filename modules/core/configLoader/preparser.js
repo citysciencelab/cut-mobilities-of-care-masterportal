@@ -1,11 +1,11 @@
 define([
     "backbone",
-    "modules/core/parser/defaultTree",
-    "modules/core/parser/customTree"
+    "modules/core/configLoader/parserDefaultTree",
+    "modules/core/configLoader/parserCustomTree"
 ], function () {
     var Backbone = require("backbone"),
-        DefaultTreeParser = require("modules/core/parser/defaultTree"),
-        CustomTreeParser = require("modules/core/parser/customTree"),
+        DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
+        CustomTreeParser = require("modules/core/configLoader/parserCustomTree"),
         Preparser;
 
     Preparser = Backbone.Model.extend({

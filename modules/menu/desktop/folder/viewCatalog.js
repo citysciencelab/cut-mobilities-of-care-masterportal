@@ -1,11 +1,11 @@
 define([
     "backbone",
     "backbone.radio",
-    "text!modules/menu/desktop/folder/catalogTemplate.html"
+    "text!modules/menu/desktop/folder/templateCatalog.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        Template = require("text!modules/menu/desktop/folder/catalogTemplate.html"),
+        Template = require("text!modules/menu/desktop/folder/templateCatalog.html"),
         Radio = require("backbone.radio"),
         FolderView = Backbone.View.extend({
             tagName: "li",

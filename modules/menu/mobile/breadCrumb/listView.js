@@ -3,22 +3,22 @@ define([
     "backbone.radio",
     "modules/menu/mobile/breadCrumb/list",
     "modules/menu/mobile/breadCrumb/view",
-    "text!modules/menu/mobile/breadCrumb/template.html"
+    "text!modules/menu/mobile/breadCrumb/templateListView.html"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        BreadCrumbList = require("modules/menu/mobile/breadCrumb/list"),
-        BreadCrumbView = require("modules/menu/mobile/breadCrumb/view"),
-        BreadCrumbTemplate = require("text!modules/menu/mobile/breadCrumb/template.html"),
-        BreadCrumbListView;
+        List = require("modules/menu/mobile/breadCrumb/list"),
+        View = require("modules/menu/mobile/breadCrumb/view"),
+        Template = require("text!modules/menu/mobile/breadCrumb/templateListView.html"),
+        ListView;
 
-    BreadCrumbListView = Backbone.View.extend({
-        collection: new BreadCrumbList(),
+    ListView = Backbone.View.extend({
+        collection: new List(),
         className: "breadcrumb-mobile",
         targetElement: "div.collapse.navbar-collapse",
-        template: _.template(BreadCrumbTemplate),
-        subviews : [],
+        template: _.template(Template),
+        subviews: [],
         events: {
             "click ul.back-item": "removeLastItem"
         },
@@ -54,7 +54,7 @@ define([
          * @param {Backbone.Model} model
          */
         addViews: function (model) {
-            var breadCrumbView = new BreadCrumbView({model: model});
+            var breadCrumbView = new View({model: model});
 
             this.subviews.push(breadCrumbView);
             $(".breadcrumb-mobile > .breadcrumb").append(breadCrumbView.render().el);
@@ -75,5 +75,5 @@ define([
         }
     });
 
-    return BreadCrumbListView;
+    return ListView;
 });

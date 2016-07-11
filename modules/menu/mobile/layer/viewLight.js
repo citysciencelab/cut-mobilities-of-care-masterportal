@@ -1,21 +1,18 @@
 define([
     "backbone",
     "text!modules/menu/mobile/layer/templateLight.html",
-    "text!modules/menu/mobile/layer/templateSelected.html",
-    "text!modules/menu/mobile/layer/templateSetting.html"
+    "text!modules/menu/mobile/layer/templateSettings.html"
 ], function () {
 
     var Backbone = require("backbone"),
-        LayerTemplate = require("text!modules/menu/mobile/layer/templateLight.html"),
-        SelectedLayerTemplate = require("text!modules/menu/mobile/layer/templateSelected.html"),
-        SettingTemplate = require("text!modules/menu/mobile/layer/templateSetting.html"),
+        Template = require("text!modules/menu/mobile/layer/templateLight.html"),
+        SettingTemplate = require("text!modules/menu/mobile/layer/templateSettings.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
         tagName: "li",
         className: "list-group-item",
-        template: _.template(LayerTemplate),
-        templateSelected: _.template(SelectedLayerTemplate),
+        template: _.template(Template),
         templateSetting: _.template(SettingTemplate),
         events: {
             "click .layer-item": "toggleIsSelected",

@@ -1,14 +1,14 @@
 define([
     "backbone",
     "modules/menu/desktop/tool/view",
-    "modules/menu/desktop/folder/view",
+    "modules/menu/desktop/folder/viewMenu",
       "bootstrap/dropdown",
     "bootstrap/collapse"
     ],
     function () {
         var Backbone = require("backbone"),
             DesktopToolView = require("modules/menu/desktop/tool/view"),
-            DesktopFolderView = require("modules/menu/desktop/folder/view"),
+            DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
             Menu;
 
         Menu = Backbone.View.extend({

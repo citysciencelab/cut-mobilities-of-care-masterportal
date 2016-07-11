@@ -1,16 +1,16 @@
 define([
     "backbone.radio",
     "modules/menu/desktop/listViewMain",
-    "modules/menu/desktop/folder/themenView",
-    "modules/menu/desktop/folder/catalogView",
-    "modules/menu/desktop/layer/selectionView",
+    "modules/menu/desktop/folder/viewTree",
+    "modules/menu/desktop/folder/viewCatalog",
+    "modules/menu/desktop/layer/viewSelection",
     "modules/menu/desktop/layer/view"
     ], function () {
         var listView = require("modules/menu/desktop/listViewMain"),
-            DesktopThemenFolderView = require("modules/menu/desktop/folder/themenView"),
-            CatalogFolderView = require("modules/menu/desktop/folder/catalogView"),
+            DesktopThemenFolderView = require("modules/menu/desktop/folder/viewTree"),
+            CatalogFolderView = require("modules/menu/desktop/folder/viewCatalog"),
             DesktopLayerView = require("modules/menu/desktop/layer/view"),
-            SelectionView = require("modules/menu/desktop/layer/selectionView"),
+            SelectionView = require("modules/menu/desktop/layer/viewSelection"),
             Radio = require("backbone.radio"),
             Menu;
 
