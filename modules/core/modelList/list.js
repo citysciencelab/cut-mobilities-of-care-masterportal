@@ -34,11 +34,11 @@ define([
 
                 channel.on({
                     "setModelAttributesById": this.setModelAttributesById,
+                    // Initial sichtbare Layer etc.
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
-                    "updateList": this.updateList,
-                    "toggleIsSelectedChildLayers": this.toggleIsSelectedChildLayers,
-                    "isEveryChildLayerSelected": this.isEveryChildLayerSelected,
+                    "setIsSelectedOnChildLayers": this.setIsSelectedOnChildLayers,
+                    "setIsSelectedOnParent": this.setIsSelectedOnParent,
                     "showModelInTree": this.showModelInTree,
                     "closeAllExpandedFolder": this.closeExpandedFolder,
                     "setAllDescendantsInvisible": this.setAllDescendantsInvisible
@@ -175,10 +175,10 @@ define([
                 });
             },
              /**
-            * Alle Layermodels von einem Leaffolder werden "gechecked" oder "unchecked"
+            * Alle Layermodels von einem Leaffolder werden "selected" oder "unselected"
             * @param {Backbone.Model} model - folderModel
             */
-            toggleIsSelectedChildLayers: function (model) {
+            setIsSelectedOnChildLayers: function (model) {
                 var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}));
 
                 _.each(layers, function (layer) {
@@ -190,7 +190,7 @@ define([
              * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt
              * @param {Backbone.Model} model - layerModel
              */
-            isEveryChildLayerSelected: function (model) {
+            setIsSelectedOnParent: function (model) {
                 var layers = this.where({parentId: model.getParentId()}),
                    folderModel = this.findWhere({id: model.getParentId()}),
                    allLayersSelected = _.every(layers, function (layer) {
