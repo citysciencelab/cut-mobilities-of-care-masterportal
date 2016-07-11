@@ -1,79 +1,100 @@
 define([
     "backbone",
     "openlayers",
-    "modules/core/modelList/layer/model",
-    "modules/core/modelList/layer/wms",
-    "modules/core/modelList/layer/wfs",
-    "backbone.radio"
-], function (Backbone, ol, Layer, WMSLayer, WFSLayer, Radio) {
+    "modules/core/modelList/layer/model"
+], function (Backbone, ol, Layer) {
 
-    /**
-     *
-     */
     var GroupLayer = Layer.extend({
+
         /**
          *
          */
         createLayerSource: function () {
-            // Erzeuge Layers-Objekt
-            var layerdefinitions = this.get("layerdefinitions"),
-                childlayers = new ol.Collection(),
-                newlayer;
-            //
-            _.each(layerdefinitions, function (childLayer) {
-                this.getChildLayerSource(childLayer);
-                    newlayer = new ol.layer.Tile({
-                        source: this.getChildLayerSource(childLayer)
-                    });
-
-                childlayers.push(newlayer);
-                // console.log(newlayer);
-            }, this);
-            // console.log(childlayers);
-            // this.unset("layerdefinitions");
-            this.setChildLayers(childlayers);
+            // TODO noch keine Typ unterscheidung -> nur WMS
+            this.createChildLayerSources(this.get("layerdefinitions"));
+            this.createChildLayers(this.get("layerdefinitions"));
             this.createLayer();
+        },
+
+        /**
+         * [createChildLayerSource description]
+         * @return {[type]} [description]
+         */
+        createChildLayerSources: function (childlayers) {
+            var sources = [];
+
+            _.each(childlayers, function (child) {
+                var source = new ol.source.TileWMS({
+                    url: child.url,
+                    params: {
+                        LAYERS: child.layers,
+                        FORMAT: child.format,
+                        VERSION: child.version,
+                        TRANSPARENT: true
+                    }
+                });
+
+                sources.push(source);
+            });
+            this.setChildLayerSources(sources);
+        },
+
+        /**
+         * [createChildLayer description]
+         * @return {[type]} [description]
+         */
+        createChildLayers: function (childlayers) {
+            var layer = new ol.Collection();
+
+            _.each(childlayers, function (childLayer, index) {
+                layer.push(new ol.layer.Tile({
+                    source: this.getChildLayerSources()[index]
+                }));
+            }, this);
+            this.setChildLayers(layer);
         },
 
         /**
          *
          */
         createLayer: function () {
-            this.setLayer(new ol.layer.Group({
+            var groupLayer = new ol.layer.Group({
                 layers: this.getChildLayers()
-            }));
-        },
-
-        getChildLayerSource: function (child) {
-
-            var params = {
-                LAYERS: child.layers,
-                FORMAT: child.format,
-                VERSION: child.version,
-                TRANSPARENT: true
-            };
-            var source = new ol.source.TileWMS({
-                url: child.url,
-                params: params,
-                // tileGrid: new ol.tilegrid.TileGrid({
-                //     resolutions: Radio.request("MapView", "getResolutions"),
-                //     origin: [
-                //         442800,
-                //         5809000
-                //     ],
-                //     tileSize: parseInt(child.tilesize, 10)
-                // })
             });
-            return source;
+
+            this.setLayer(groupLayer);
         },
 
-        setLegendURL: function () {
+        /**
+         * [createLegendURL description]
+         * @return {[type]} [description]
+         */
+        createLegendURL: function () {
             var legendURL = [];
 
-            _.each(this.get("backbonelayers"), function (layer) {
-                legendURL.push(layer.get("legendURL")[0]);
-            });
+            _.each(this.get("layerdefinitions"), function (layer) {
+                if (layer.legendURL === "" || layer.legendURL === undefined) {
+                    var layerNames = layer.layers.split(",");
+
+                    if (layerNames.length === 1) {
+                        legendURL.push(layer.url + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
+                    }
+                    else if (layerNames.length > 1) {
+                        _.each(layerNames, function (layerName) {
+                            legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
+                        }, this);
+                    }
+                }
+            }, this);
             this.set("legendURL", legendURL);
+        },
+
+        /**
+         * Setter für das Attribut "childLayerSources"
+         * @param {ol.source[]} value
+         */
+        setChildLayerSources: function (value) {
+            this.set("childLayerSources", value);
         },
 
         /**
@@ -85,23 +106,21 @@ define([
         },
 
         /**
+        * Getter für das Attribute "childLayerSources"
+        * @return {ol.source[]}
+        */
+        getChildLayerSources: function () {
+            return this.get("childLayerSources");
+        },
+
+        /**
          * Getter für das Attribut "childlayers"
          * @return {ol.Collection} - Eine ol.Collection mit ol.layer Objekten
          */
         getChildLayers: function () {
             return this.get("childlayers");
-        },
+        }
 
-        showLayerInformation: function () {console.log(this);
-                Radio.trigger("LayerInformation", "add", {
-                    "id": this.getId(),
-                    "legendURL": this.get("legendURL"),
-                    // "metaURL": this.get("dt"),
-                    "metaID": this.get("datasets")[0].md_id,
-                    "name": this.get("datasets")[0].md_name
-                });
-                // window.open(this.get("metaURL"), "_blank");
-        },
     });
 
     return GroupLayer;
