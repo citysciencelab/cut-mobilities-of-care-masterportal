@@ -51,7 +51,7 @@ define([
         },
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
-            Radio.trigger("ModelList", "isEveryChildLayerSelected", this.model);
+            Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
             this.rerender();
         },
         removeFromSelection: function () {
