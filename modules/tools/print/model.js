@@ -135,7 +135,7 @@ define([
             if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
-            this.sendGFIForPrint();
+            this.getGFIForPrint();
         },
         /**
         *
@@ -212,7 +212,7 @@ define([
                         style = styles[0];
                     // Punkte
                     if (type === "Point") {
-                        //Punkte ohne Text
+                        // Punkte ohne Text
                         if (style.getText() === null) {
                             featureStyles[index] = {
                             fillColor: this.getColor(style.getImage().getFill().getColor()).color,
@@ -222,7 +222,7 @@ define([
                             strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
                             };
                         }
-                        //Texte
+                        // Texte
                         else {
                             featureStyles[index] = {
                                 label: style.getText().getText(),
@@ -337,34 +337,35 @@ define([
             }
             this.setSpecification();
         },
+
         /**
-        * Abfrage an popupmodel starten. Bedingt Config.tools.gfi: true.
-        */
-        sendGFIForPrint: function () {
-            EventBus.trigger("sendGFIForPrint");
-        },
-        /**
-        * [[Description]]
+        * Abfrage an popupmodel starten.
         * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
         */
-        receiveGFIForPrint: function (values) {
-            this.set("gfiParams", _.pairs(values[0]));
-            this.set("gfiTitle", values[1]);
-            this.set("printGFIPosition", values[2]);
-            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-            if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
-                this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-            }
-            else {
-                if (_.has(Config.print, "configYAML") === true) {
-                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
+        getGFIForPrint: function () {
+            var gfis = Radio.request("GFIPopup", "getGFIForPrint");
+
+            if (_.isUndefined(gfis) === false) {
+                this.set("gfiParams", _.pairs(gfis[0]));
+                this.set("gfiTitle", gfis[1]);
+                this.set("printGFIPosition", gfis[2]);
+                // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                    this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
                 }
                 else {
-                    this.set("createURL", this.get("printurl") + "/master/create.json");
+                    if (_.has(Config.print, "configYAML") === true) {
+                        this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
+                    }
+                    else {
+                        this.set("createURL", this.get("printurl") + "/master/create.json");
+                    }
                 }
-
+                this.setGFIPos();
             }
-            this.setGFIPos();
+            else {
+                this.setSpecification();
+            }
         },
 
         /**
@@ -419,7 +420,7 @@ define([
             var color = value,
                 opacity = 1;
             // color kommt als array--> parsen als String
-            color=color.toString();
+            color = color.toString();
 
             if (color.search("#") === -1) {
                 var begin = color.indexOf("(") + 1;
