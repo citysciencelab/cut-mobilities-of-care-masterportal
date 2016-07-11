@@ -46,6 +46,10 @@ define([
                 this.$el.attr("id", "base-modal-legend");
                 this.$el.attr("class", "modal bs-example-modal-sm legend fade in");
                 this.$el.html(this.templateMobile(attr));
+                this.$el.modal({
+                    backdrop: "static",
+                    show: false
+                });
             }
             else {
                 this.$el.attr("id", "");
@@ -57,9 +61,7 @@ define([
                     containment: "#map",
                     handle: ".legend-win-header"
                 });
-                // this.$el.show();
             }
-
         },
 
         toggle: function () {
@@ -68,10 +70,8 @@ define([
 
             this.model.setLayerList(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
             if (isViewMobile === true) {
-                this.$el.modal({
-                    backdrop: true,
-                    show: true
-                });
+
+                this.$el.modal("toggle");
             }
             else {
                 this.$el.toggle();
