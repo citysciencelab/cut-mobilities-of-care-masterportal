@@ -23,7 +23,8 @@ define(function () {
                 ["1043", "1044", "1045", "1046"]
             ],
             layerIDsToIgnore: [
-                "1912", "1913", "1914", "1915", "1916", "1917" // UESG
+                "1912", "1913", "1914", "1915", "1916", "1917", // UESG
+                "1791" // nachträgliche Bodenrichtwerte lagetypisch 1964
             ],
             layerIDsToStyle: [
                 {
@@ -46,7 +47,9 @@ define(function () {
                 "3EE8938B-FF9E-467B-AAA2-8534BB505580", // Bauschutzbereich § 12 LuftVG Hamburg
                 "19A39B3A-2D9E-4805-A5E6-56A5CA3EC8CB", // Straßen HH-SIB
                 "F691CFB0-D38F-4308-B12F-1671166FF181", // Flurstücke gelb
-                "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1" // Flurstücke schwarz
+                "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1", // Flurstücke schwarz
+                "DB433BD1-1640-4FBC-A879-72402BD5CFDB", // Bodenrichtwertzonen Hamburg
+                "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71" // Bodenrichtwerte für Hamburg
             ],
             metaIDsToIgnore: [
                 "DFA37E3E-F640-47DE-B7EF-3D3FFB11435C", // Störfallbetriebe Internet
