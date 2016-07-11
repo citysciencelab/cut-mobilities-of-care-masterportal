@@ -174,7 +174,7 @@
             "text": "",
             "channel": "Verkehrsfunctions",
             "eventname": "aktualisiereverkehrsnetz",
-            "timeout": 6000
+            "timeout": 60000
           },
           "visibility": false
         }
