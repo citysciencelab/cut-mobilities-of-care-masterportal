@@ -245,11 +245,13 @@ define([
             },
 
             resetSelectionIdx: function (model) {
-                if (model.getIsSelected() && Radio.request("Parser", "getTreeType") !== "light") {
-                    this.insertIntoSelectionIDX(model);
-                }
-                else {
-                    this.removeFromSelectionIDX(model);
+                if (Radio.request("Parser", "getTreeType") !== "light") {
+                    if (model.getIsSelected()) {
+                        this.insertIntoSelectionIDX(model);
+                    }
+                    else {
+                        this.removeFromSelectionIDX(model);
+                    }
                 }
             },
             moveModelDown: function (model) {
