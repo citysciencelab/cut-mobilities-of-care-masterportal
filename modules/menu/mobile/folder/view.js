@@ -17,12 +17,13 @@ define([
         template: _.template(FolderTemplate),
         templateLeaf: _.template(FolderLeafTemplate),
         events: {
-            "click .folder-item": "updateList",
+            "click .folder-item": "expand",
             "click .checked-all-item": "toggleIsSelected"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isSelected": this.render
+                 "change:isSelected": this.render,
+                 "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
         render: function () {
@@ -36,16 +37,18 @@ define([
             }
             return this;
         },
-        updateList: function () {
-            if (this.model.getIsLeafFolder() === true) {
-                this.model.setIsExpanded(true);
-            }
-            this.model.updateList(this.model.getId());
+        expand: function () {
+            this.model.setIsExpanded(true);
         },
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
             Radio.trigger("ModelList", "toggleIsSelectedChildLayers", this.model);
             this.model.setIsExpanded(true);
+        },
+        removeIfNotVisible: function () {
+            if (!this.model.getIsVisibleInTree()) {
+                this.remove();
+            }
         }
     });
 

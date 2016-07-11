@@ -49,13 +49,6 @@ define([
         setGlyphicon: function (glyphicon) {
             return this.set("glyphicon", glyphicon);
         },
-        updateList: function (value) {
-            this.collection.updateList(value, "slideForward");
-            // gehört hier nicht hin!?
-            if (this.getType() === "folder") {
-                Radio.trigger("BreadCrumb", "addItem", this);
-            }
-        },
         getIsInThemen: function () {
             return this.get("isInThemen");
         },

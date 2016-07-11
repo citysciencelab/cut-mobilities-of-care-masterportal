@@ -47,7 +47,7 @@ define([
             removeView: function () {
                 this.$el.find("ul.nav-menu").html("");
 
-                this.collection.setAllAncestersInvisible("Themen");
+                this.collection.setAllDescendantsInvisible("Themen");
 
                 while (this.subviews.length) {
                     this.subviews.pop().remove();

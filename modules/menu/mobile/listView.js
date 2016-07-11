@@ -25,14 +25,20 @@ define([
             collection: {},
             el: "nav#main-nav",
             attributes: {role: "navigation"},
-            subviews : [],
+            subviews: [],
             breadCrumbListView: {},
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
                 this.listenTo(this.collection,
                 {
-                    "updateTreeView": function (slideDirection) {
-                        this.renderListWithAnimation(slideDirection);
+                    "traverseTree": this.traverseTree,
+                    "changeSelectedList": function () {
+                        if (Radio.request("Parser", "getTreeType") === "light") {
+                            this.updateLightTree();
+                        }
+                        else {
+                            this.renderSelection(false);
+                        }
                     }
                 });
                 this.render();
@@ -45,31 +51,99 @@ define([
 
                 this.addViews(rootModels);
             },
-            renderListWithAnimation: function (slideDirection) {
-            var visibleModels = this.collection.where({isVisibleInTree: true}),
-                modelsInSelection = this.collection.where({isInSelection: true}),
-                slideOut = (slideDirection === "slideBack") ? "right" : "left",
-                slideIn = (slideDirection === "slideForward") ? "right" : "left",
-                that = this;
+            traverseTree: function (model) {
 
-                $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
-                    $("div.collapse.navbar-collapse ul.nav-menu").html("");
-                    if (modelsInSelection.length) {
-                        visibleModels = _.sortBy(visibleModels, function (layer) {
-                            return layer.getSelectionIDX();
-                        });
-                        that.addViews(visibleModels.reverse());
+                if (model.getIsExpanded()) {
+                    if (model.getId() === "SelectedLayer") {
+                        this.renderSelection(true);
                     }
                     else {
-                        that.addViews(visibleModels);
+                        this.descentInTree(model);
                     }
-                });
+                    this.breadCrumbListView.collection.addItem(model);
+                }
+                else {
+                     this.ascentInTree(model);
+                }
+            },
+            updateLightTree: function () {
+                var models = [],
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "Themen"});
+
+                models = this.collection.add(lightModels);
+
+                models = _.sortBy(models, function (layer) {
+                        return layer.getSelectionIDX();
+                }).reverse();
+
+                _.each(models, function (model) {
+                        model.setIsVisibleInTree(false);
+                    }, this);
+
+                this.addViews(models);
+            },
+            renderSelection: function (withAnimation) {
+                var models = this.collection.where({isSelected: true});
+
+                models = _.sortBy(models, function (layer) {
+                        return layer.getSelectionIDX();
+                }).reverse();
+                if (withAnimation) {
+                    this.slideModels("descent", models, "Themen");
+                }
+                else {
+                    // Views löschen um doppeltes Zeichnen zu vermeiden
+                    _.each(models, function (model) {
+                        model.setIsVisibleInTree(false);
+                    }, this);
+
+                    this.addViews(models);
+                }
+            },
+            descentInTree: function (model) {
+                var models = [],
+                    lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()});
+
+                models = this.collection.add(lightModels);
+                this.slideModels("descent", models, model.getParentId());
+            },
+            ascentInTree: function (model) {
+                var models = this.collection.where({parentId: model.getParentId()});
+
+                this.slideModels("ascent", models, model.getId());
+            },
+            slideModels: function (direction, modelsToShow, parentIdOfModelsToHide) {
+                var slideIn, slideOut;
+
+                if (direction === "descent") {
+                    slideIn = "right";
+                    slideOut = "left";
+                }
+                else {
+                    slideIn = "left";
+                    slideOut = "right";
+                }
+                var that = this;
+
+                $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"},
+                    function () {
+                        that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
+                        // Folder zuerst zeichnen
+                        var groupedModels = _.groupBy(modelsToShow, function  (model) {
+                            return (model.getType() === "folder"? "folder" : "other");
+                        }) ;
+
+                        that.addViews(groupedModels.folder);
+                        that.addViews(groupedModels.other);
+                    }
+                );
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
             },
             addViews: function (models) {
                 var nodeView, treeType = Radio.request("Parser", "getTreeType");
 
                 _.each(models, function (model) {
+                    model.setIsVisibleInTree(true);
                     switch (model.getType()){
                         case "folder": {
                             nodeView = new FolderView({model: model});
@@ -88,6 +162,9 @@ define([
                     $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
                 }, this);
             },
+            /**
+             * Entfernt diesen ListView und alle subViews
+             */
             removeView: function () {
                 this.$el.find("ul.nav-menu").html("");
 

@@ -32,7 +32,8 @@ define([
         initialize: function () {
             this.listenTo(this.model, {
                  "change:isSelected change:isVisibleInMap": this.render,
-                 "change:isSettingVisible": this.renderSetting
+                 "change:isSettingVisible": this.renderSetting,
+                 "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
 
@@ -109,7 +110,13 @@ define([
 
         moveModelUp: function () {
             this.model.moveUp();
+        },
+        removeIfNotVisible: function () {
+            if (!this.model.getIsVisibleInTree()) {
+                this.remove();
+            }
         }
+
     });
 
     return LayerView;
