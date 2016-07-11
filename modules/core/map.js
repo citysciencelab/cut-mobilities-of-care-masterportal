@@ -300,7 +300,7 @@ define([
             // WFS
             if (isFeatureAtPixel === true) {
                 var layerByFeature,
-                    visibleWFSLayerList = Radio.request("LayerList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+                    visibleWFSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
