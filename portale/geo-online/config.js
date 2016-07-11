@@ -25,7 +25,8 @@ define(function () {
                 ["1043", "1044", "1045", "1046"]
             ],
             layerIDsToIgnore: [
-                "1912", "1913", "1914", "1915", "1916", "1917" // UESG
+                "1912", "1913", "1914", "1915", "1916", "1917", // UESG
+				"2298" // Stra?enbaumkataster cache grau
             ],
             layerIDsToStyle: [
                 {

@@ -259,29 +259,20 @@ define([
             // window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL === "ignore") {
-                // hack
+            var url = Radio.request("RestReader", "getServiceById", "2");
+
+            if (url[0] === null || url[0] === undefined) {
                 this.set("metaURL", null);
             }
-            else if (Config.metadatenURL && Config.metadatenURL !== "") {
-                this.set("metaURL", Config.metadatenURL + this.get("metaID"));
-            }
             else {
+                url = url[0].attributes.url;
+
                 if (this.get("url") !== undefined && this.has("link") === false) {
-                    var url = Radio.request("RestReader", "getServiceById", "2"),
-                    url = url[0].attributes.url;
-                    
                     this.set("metaURL", url + this.get("metaID"));
                 }
                 else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
-                    if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
-                        this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
-                    }
-                    else {
-                        this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
-                    }
+                    this.set("metaURL", url + this.get("backbonelayers")[0].get("metaID"));
+                    this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                 }
                 else {
                     // für olympia-portal --> hat keine metadaten!! Es wird auf ein PDF verlinkt.
