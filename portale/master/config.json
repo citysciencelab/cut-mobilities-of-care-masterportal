@@ -44,6 +44,15 @@
           "wfsFeatureFilter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter"
+          },
+          "routing": {
+            "name": "Routenplaner",
+            "glyphicon": "glyphicon-road",
+            "viomRouting": "3"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
           }
         }
       },
@@ -51,9 +60,29 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
-      "draw": {
-        "name": "Zeichnen / Schreiben",
-        "glyphicon": "glyphicon-pencil"
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
       }
     },
     "controls": {
@@ -61,7 +90,8 @@
       "toggleMenu": true,
       "orientation": "once",
       "poi": true,
-      "fullScreen": true
+      "fullScreen": true,
+      "attributions": true
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -91,7 +121,8 @@
           "id": "1748"
         },
         {
-          "id": "1562"
+          "id": "1562",
+          "attributions": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "45",
@@ -101,6 +132,7 @@
         {
           "id": "1711",
           "visibility": true,
+          "attributions": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": "name",
           "filterOptions": [
             {
@@ -129,6 +161,22 @@
               "filterString": ["*", "Altona"]
             }
           ]
+        },
+        {
+          "id":[{"id": "946"
+            },
+            {
+              "id": "947"
+            }
+          ],
+          "name": "Verkehrslage auf Autobahnen",
+          "attributions": {
+            "text": "",
+            "channel": "Verkehrsfunctions",
+            "eventname": "aktualisiereverkehrsnetz",
+            "timeout": 6000
+          },
+          "visibility": false
         }
       ]
     }

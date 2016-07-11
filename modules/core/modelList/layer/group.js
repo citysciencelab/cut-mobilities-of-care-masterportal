@@ -3,8 +3,9 @@ define([
     "openlayers",
     "modules/core/modelList/layer/model",
     "modules/core/modelList/layer/wms",
-    "modules/core/modelList/layer/wfs"
-], function (Backbone, ol, Layer, WMSLayer, WFSLayer) {
+    "modules/core/modelList/layer/wfs",
+    "backbone.radio"
+], function (Backbone, ol, Layer, WMSLayer, WFSLayer, Radio) {
 
     /**
      *
@@ -17,24 +18,21 @@ define([
             // Erzeuge Layers-Objekt
             var layerdefinitions = this.get("layerdefinitions"),
                 childlayers = new ol.Collection(),
-                newlayer,
-                backbonelayers = [];
+                newlayer;
+            //
+            _.each(layerdefinitions, function (childLayer) {
+                this.getChildLayerSource(childLayer);
+                    newlayer = new ol.layer.Tile({
+                        source: this.getChildLayerSource(childLayer)
+                    });
 
-            _.each(layerdefinitions, function (layerdefinition) {
-                if (layerdefinition.typ === "WMS") {
-                    newlayer = new WMSLayer(layerdefinition);
-                }
-                else if (layerdefinition.typ === "WFS") {
-                    newlayer = new WFSLayer(layerdefinition);
-                }
-                newlayer.createLayerSource();
-                childlayers.push(newlayer.getLayer());
-                backbonelayers.push(newlayer);
+                childlayers.push(newlayer);
+                // console.log(newlayer);
             }, this);
-            this.unset("layerdefinitions");
+            // console.log(childlayers);
+            // this.unset("layerdefinitions");
             this.setChildLayers(childlayers);
             this.createLayer();
-            this.set("backbonelayers", backbonelayers);
         },
 
         /**
@@ -44,6 +42,29 @@ define([
             this.setLayer(new ol.layer.Group({
                 layers: this.getChildLayers()
             }));
+        },
+
+        getChildLayerSource: function (child) {
+
+            var params = {
+                LAYERS: child.layers,
+                FORMAT: child.format,
+                VERSION: child.version,
+                TRANSPARENT: true
+            };
+            var source = new ol.source.TileWMS({
+                url: child.url,
+                params: params,
+                // tileGrid: new ol.tilegrid.TileGrid({
+                //     resolutions: Radio.request("MapView", "getResolutions"),
+                //     origin: [
+                //         442800,
+                //         5809000
+                //     ],
+                //     tileSize: parseInt(child.tilesize, 10)
+                // })
+            });
+            return source;
         },
 
         setLegendURL: function () {
@@ -69,7 +90,18 @@ define([
          */
         getChildLayers: function () {
             return this.get("childlayers");
-        }
+        },
+
+        showLayerInformation: function () {console.log(this);
+                Radio.trigger("LayerInformation", "add", {
+                    "id": this.getId(),
+                    "legendURL": this.get("legendURL"),
+                    // "metaURL": this.get("dt"),
+                    "metaID": this.get("datasets")[0].md_id,
+                    "name": this.get("datasets")[0].md_name
+                });
+                // window.open(this.get("metaURL"), "_blank");
+        },
     });
 
     return GroupLayer;

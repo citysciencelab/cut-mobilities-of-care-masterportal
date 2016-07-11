@@ -46,7 +46,7 @@ define([
 
                this.listenTo(this, {
                    "change:isVisibleInMap": function () {
-                       channel.trigger("sendVisiblelayerList", this.where({isVisibleInMap: true}));
+                       channel.trigger("updateVisibleInMapList");
                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                    },
                    "change:isExpanded": function (model) {
@@ -332,10 +332,10 @@ define([
                         this.add(lightModel);
                         // this.get(param.id).setIsSelected(true);
                         if (param.visibility === "TRUE") {
-                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency)});
+                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
                         }
                         else {
-                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency)});
+                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
                         }
                     }, this);
                 }
@@ -344,37 +344,50 @@ define([
                     this.addModelsByAttributes({type: "layer", isSelected: true});
                 }
             },
-            addModelsByAttributes: function (attrs) {
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
-                this.add(lightModels);
-            },
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);
 
                 model.set(attrs);
             },
 
-            showModelInTree: function (id) {
-                $("#root li:first-child").addClass("open");
-                var lightModel = Radio.request("Parser", "getItemByAttributes", {id: id});
-
-                this.add(lightModel);
-                this.setModelAttributesById(id, {isSelected: true});
-
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: lightModel.parentId});
+            addModelsByAttributes: function (attrs) {
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
                 this.add(lightModels);
+            },
 
-                var parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightModel.parentId});
+            /**
+             * Wird aus der Themensuche heraus aufgerufen
+             * Öffnet den Themenbaum, selektiert das Model und fügt es zur Themenauswahl hinzu
+             * @param  {String} modelId
+             */
+            showModelInTree: function (modelId) {
+                var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
-                this.add(parentModel);
+                // öffnet den Themenbaum
+                $("#root li:first-child").addClass("open");
+                // Parent und eventuelle Siblings werden hinzugefügt
+                this.addAndExpandModelsRecursive(lightModel.parentId);
+                this.setModelAttributesById(modelId, {isSelected: true});
+            },
 
-                var folder = Radio.request("Parser", "getItemByAttributes", {id: parentModel.parentId});
+            /**
+            * Rekursive Methode, die von unten im Themenbaum startet
+            * Fügt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
+            * Beim Zurücklaufen werden die Parent-Models expanded
+            * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefügt
+            */
+            addAndExpandModelsRecursive: function (parentId) {
+                var lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+                parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightSiblingsModels[0].parentId});
 
-                this.add(folder);
-                this.get(folder.id).setIsExpanded(true);
-                this.get(parentModel.id).setIsExpanded(true);
+                this.add(lightSiblingsModels);
+                // Abbruchbedingung
+                if (parentModel.id !== "Themen") {
+                    this.addAndExpandModelsRecursive(parentModel.parentId);
+                    this.get(parentModel.id).setIsExpanded(true);
+                }
             },
 
             toggleCatalogs: function (id) {

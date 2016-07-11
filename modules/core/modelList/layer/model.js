@@ -45,6 +45,7 @@ define([
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     this.toggleLayerOnMap();
+                    this.toggleAttributionsInterval();
                 },
                 "change:transparency": this.updateLayerTransparency,
                 "change:SLDBody": this.updateSourceSLDBody
@@ -168,6 +169,15 @@ define([
         getTransparency: function () {
             return this.get("transparency");
         },
+
+        /**
+         * Getter für Attribut "attributions"
+         * @return {String|Object}
+         */
+        getAttributions: function () {
+            return this.get("attributions");
+        },
+
         incTransparency: function () {
             if (this.getTransparency() <= 90) {
                 this.setTransparency(this.get("transparency") + 10);
@@ -229,6 +239,29 @@ define([
             else {
                 // model.collection besser?!
                 Radio.trigger("Map", "removeLayer", this.getLayer());
+            }
+        },
+
+        /**
+         * Wenn die Attributions als Objekt definiert ist,
+         * wird in einem bestimmten Intervall die Attributions angefragt, solange "isVisibleInMap" true ist
+         * Wird für die Verkehrslage auf den Autobahnen genutzt
+         */
+        toggleAttributionsInterval: function () {
+            if (this.has("attributions") && _.isObject(this.getAttributions())) {
+                var channelName = this.getAttributions().channel,
+                    eventName = this.getAttributions().eventname,
+                    timeout = this.getAttributions().timeout;
+
+                if (this.getIsVisibleInMap() === true) {
+                    Radio.trigger(channelName, eventName, this);
+                    this.getAttributions().interval = setInterval (function (model) {
+                        Radio.trigger(channelName, eventName, model);
+                    }, timeout, this);
+                }
+                else {
+                    clearInterval(this.getAttributions().interval);
+                }
             }
         },
 

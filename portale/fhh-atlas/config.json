@@ -56,7 +56,8 @@
       "toggleMenu": true,
       "orientation": "once",
       "poi": true,
-      "fullScreen": true
+      "fullScreen": true,
+      "attributions": true
     },
     "scaleLine": true,
     "Baumtyp": "default"

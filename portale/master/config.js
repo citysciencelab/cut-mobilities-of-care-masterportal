@@ -53,9 +53,9 @@ define(function () {
         * @property {string[]} [tree.metaIDsToIgnore] - Bei type: default. IDs der Metadaten, die nicht dargestellt werden sollen.
         * @desc Diese Konfiguration steuert die inhaltliche und graphische Ausgestaltung des Layertrees in der Menubar.
         */
-        tree: {
-            type: "light",
-            saveSelection: false
+        // tree: {
+            // type: "light",
+            // saveSelection: false
             // layer: [
             //     {id: "453", visibility: true, legendUrl: "ignore"},
             //     {id: "452", visibility: false},
@@ -109,7 +109,7 @@ define(function () {
             //          }
             //      ], styleLabelField: "", styleField: "", routable: false}
             // ]
-        },
+        // },
         /**
         * @memberof config
         * @type {Boolean}
@@ -187,13 +187,13 @@ define(function () {
         * @property {Boolean}  [poi=false] - Legt fest ob die Points of Interest angezeigt werden sollen. Nur möglich, bei orientation: true.
         * @property {Boolean}  [fullScreen=false] - Legt fest ob der FullScreen-Button angezeigt werden soll, um in den FullScreen-Modus schalten zu können.
         */
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: "once",
-            poi: true,
-            fullScreen: true
-        },
+        // controls: {
+        //     zoom: true,
+        //     toggleMenu: true,
+        //     orientation: "once",
+        //     poi: true,
+        //     fullScreen: true
+        // },
         /**
         * @memberof config
         * @desc Lädt zusätzliche Module außerhalb der main.js
@@ -202,7 +202,7 @@ define(function () {
         * @example customModules: ["../url", "../url"]
         * @default []
         */
-        customModules: [],
+        customModules: ["../portale/master/verkehrsfunctions"],
         /**
         * @memberof config
         * @type {Object}
@@ -508,13 +508,13 @@ define(function () {
                 minChar: 3,
                 definitions: [
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                        url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
                         name: "bplan"
                     },
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=imverfahren&propertyName=plan",
+                        url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
                         name: "bplan"
                     }
                 ]
@@ -574,41 +574,41 @@ define(function () {
         * @property {string} [tools.searchByCoord.glyphicon] - Das Glyphicon (Bootstrap Class).
         * @property {Boolean} [tools.searchByCoord.isActive] - Tool initial aktiviert.
         */
-        tools: {
-            parcelSearch: {
-                title: "Flurstückssuche",
-                glyphicon: "glyphicon-search"
-            },
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            },
-            draw: {
-                title: "Zeichnen / Schreiben",
-                glyphicon: "glyphicon-pencil"
-            },
-            kmlimport: {
-                title: "KML Import",
-                glyphicon: "glyphicon-import"
-            },
-            searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-search"
-            }
-        },
+        // tools: {
+        //     parcelSearch: {
+        //         title: "Flurstückssuche",
+        //         glyphicon: "glyphicon-search"
+        //     },
+        //     gfi: {
+        //         title: "Informationen abfragen",
+        //         glyphicon: "glyphicon-info-sign",
+        //         isActive: true
+        //     },
+        //     print: {
+        //         title: "Karte drucken",
+        //         glyphicon: "glyphicon-print"
+        //     },
+        //     coord: {
+        //         title: "Koordinate abfragen",
+        //         glyphicon: "glyphicon-screenshot"
+        //     },
+        //     measure: {
+        //         title: "Strecke / Fläche messen",
+        //         glyphicon: "glyphicon-resize-full"
+        //     },
+        //     draw: {
+        //         title: "Zeichnen / Schreiben",
+        //         glyphicon: "glyphicon-pencil"
+        //     },
+        //     kmlimport: {
+        //         title: "KML Import",
+        //         glyphicon: "glyphicon-import"
+        //     },
+        //     searchByCoord: {
+        //         title: "Koordinatensuche",
+        //         glyphicon: "glyphicon-search"
+        //     }
+        // },
         /**
         * @memberof config
         * @type {Boolean}
