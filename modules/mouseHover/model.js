@@ -28,7 +28,7 @@ define([
             this.set("GFIPopupVisibility", GFIPopupVisibility);
         },
         checkLayersAndRegisterEvent: function (map) {
-            var layerList = Radio.request("ModelList", "getModelsByAttributes", {typ: "WFS"}),
+            var layerList = Radio.request("ModelList", "getModelsByAttributes", {typ: "WFS", isVisibleInMap: true}),
                 wfsList = [];
 
             _.each(layerList, function (element) {

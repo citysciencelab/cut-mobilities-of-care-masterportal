@@ -181,6 +181,12 @@ define("app",
                     });
                     break;
                 }
+                case "featureLister": {
+                    require(["modules/featurelister/view"], function (FeatureLister) {
+                        new FeatureLister();
+                    });
+                    break;
+                }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {
@@ -348,11 +354,7 @@ define("app",
                         new AddWMSView();
                     });
                 }
-                if (_.has(Config.menuItems, "featureLister") === true && Config.menuItems.featureLister.lister > 0 && !Util.isAny()) {
-                    require(["modules/featurelister/view"], function (FeatureLister) {
-                        new FeatureLister();
-                    });
-                }
+
                 if ($.isArray(Config.menuItems.formular)) {
                     $.each(Config.menuItems.formular, function (name, obj) {
                         if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {

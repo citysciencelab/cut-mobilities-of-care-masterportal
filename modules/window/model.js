@@ -35,7 +35,7 @@ define([
             setVisible: function (value) {
                 this.set("isVisible", value);
             },
-            setParams: function (value) {console.log(value);
+            setParams: function (value) {
                 this.setTool(value);
                 // if (_.isUndefined(args[3]) === false) {
                 //     this.set("modelId", args[3]);
@@ -45,7 +45,7 @@ define([
                 this.set("winType", value.getId());
                 this.set("isVisible", true);
             },
-            sendParamsToWinCotent: function () {console.log(this);
+            sendParamsToWinCotent: function () {
                 Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
                 // if (this.has("modelId")) {
                 //     Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);

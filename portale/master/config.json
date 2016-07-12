@@ -53,6 +53,11 @@
           "draw": {
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
+          },
+          "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
           }
         }
       },
@@ -134,6 +139,7 @@
           "visibility": true,
           "attributions": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": "name",
+          "searchField": "name",
           "filterOptions": [
             {
               "fieldName": "teilnahme_geburtsklinik",

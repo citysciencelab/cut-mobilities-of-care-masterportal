@@ -42,6 +42,9 @@ define([
                 if (this.getId() === "legend") {
                     EventBus.trigger("toggleLegendWin");
                 }
+                else if (this.getId() === "featureLister") {
+                    EventBus.trigger("toggleFeatureListerWin");
+                }
                 else if (this.getId() !== "gfi" && this.getId() !== "coord") {
                     Radio.trigger("Window", "toggleWin", this);console.log(this);
                 }
