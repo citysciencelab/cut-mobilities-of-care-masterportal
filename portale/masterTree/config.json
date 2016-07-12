@@ -53,6 +53,10 @@
               "name": "Routenplaner",
               "glyphicon": "glyphicon-road",
               "viomRouting": "3"
+            },
+            "styleWMS": {
+              "name": "Style WMS",
+              "glyphicon": "glyphicon-picture"
             }
           }
         },
@@ -160,6 +164,13 @@
                     {
                       "id": "685",
                       "visibility": false
+                    },
+                    {
+                      "id": "4439",
+                      "visibility": true,
+                      "styleable": true,
+                      "geomType": "Polygon",
+                      "attributesToStyle": ["AP30Sum", "AP60Sum"]
                     }
                   ]
                 }

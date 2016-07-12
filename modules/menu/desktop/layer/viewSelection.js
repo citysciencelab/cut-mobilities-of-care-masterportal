@@ -1,12 +1,14 @@
 define([
     "backbone",
     "text!modules/menu/desktop/layer/templateSelection.html",
-    "text!modules/menu/desktop/layer/templateSettings.html"
+    "text!modules/menu/desktop/layer/templateSettings.html",
+    "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
         Template = require("text!modules/menu/desktop/layer/templateSelection.html"),
         TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
+        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -23,7 +25,8 @@ define([
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
             "click .glyphicon-plus-sign": "incTransparency",
-            "click .glyphicon-minus-sign": "decTransparency"
+            "click .glyphicon-minus-sign": "decTransparency",
+            "click .glyphicon-picture": "openStyleWMS"
         },
         initialize: function () {
              this.listenTo(this.model, {
@@ -95,7 +98,11 @@ define([
         },
         decTransparency: function () {
             this.model.decTransparency(10);
-        }
+        },
+        openStyleWMS: function () {
+            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "styleWMS"}), this.model.getId());
+            $(".nav li:first-child").removeClass("open");
+         }
     });
 
     return LayerView;

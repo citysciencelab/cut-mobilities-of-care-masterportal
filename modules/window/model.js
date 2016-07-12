@@ -42,6 +42,7 @@ define([
                 }
                 this.set("title", value.getName());
                 this.set("icon", value.getGlyphicon());
+                this.set("winType", value.getId());
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {

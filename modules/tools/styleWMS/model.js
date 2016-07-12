@@ -162,7 +162,7 @@ define([
          */
         createAndGetNamedLayer: function () {
             return "<sld:NamedLayer>" +
-                       "<sld:Name>" + this.getModel().getName() + "</sld:Name>" +
+                       "<sld:Name>" + this.getModel().get("layers") + "</sld:Name>" +
                        this.createAndGetUserStyle() +
                    "</sld:NamedLayer>";
         },
