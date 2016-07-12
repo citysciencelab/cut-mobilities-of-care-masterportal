@@ -229,6 +229,12 @@ define("app",
                     });
                     break;
                 }
+                case "poi": {
+                    require(["modules/controls/orientation/poi/view"], function (PoiView) {
+                        new PoiView();
+                    });
+                    break;
+                }
                 case "mousePosition": {
                     require(["modules/controls/mousePosition/view"], function (MousePositionView) {
                         new MousePositionView();
