@@ -123,8 +123,10 @@ define([
             }
         },
 
-        updateSourceSLDBody: function () {
-            this.getLayerSource().updateParams({SLD_BODY: this.get("SLDBody")});
+        updateSourceSLDBody: function () {console.log("update");
+        console.log(this.get("layerSource"));
+        console.log(this.getLayerSource());
+            this.getLayerSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
         /**

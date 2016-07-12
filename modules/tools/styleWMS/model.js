@@ -6,7 +6,6 @@ define([
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        EventBus = require("eventbus"),
         StyleWMS;
 
     StyleWMS = Backbone.Model.extend({
@@ -37,8 +36,7 @@ define([
          */
         initialize: function () {
 
-            // Listener auf den EventBus
-            this.listenTo(EventBus, {
+            this.listenTo(Radio.channel("Window"), {
                 "winParams": this.checkStatus
             });
 
@@ -46,7 +44,7 @@ define([
             this.listenTo(this, {
                 // ändert sich die ModelId, wird das entsprechende Model dessen Layer gestylt werden soll, aus der Layerlist geholt
                 "change:modelId": function () {
-                    this.setModel(Radio.request("LayerList", "getLayerFindWhere", {id: this.getModelId()}));
+                    this.setModel(Radio.request("ModelList", "getModelByAttributes", {id: this.getModelId()}));
                 },
                 // ändert sich das Model, wird der entsprechende Geometrietyp gesetzt
                 // und der Attributname zurückgesetzt
@@ -60,7 +58,7 @@ define([
                 },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
-                    EventBus.trigger("layerlist:setAttributionsByID", this.getModelId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
+                    Radio.trigger("ModelList", "setModelAttributesById", this.getModelId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
                 }
             });
         },
@@ -127,7 +125,7 @@ define([
          * @param {Array} args - args[0] = true|false, args[1] = true|false, args[2] = ToolId
          */
         checkStatus: function (args) {
-            if (args[2] === "styleWMS") {
+            if (args[2].getId() === "styleWMS") {
                 this.setModelId(args[3]);
                 this.setIsCollapsed(args[1]);
                 this.setIsCurrentWin(args[0]);
@@ -164,7 +162,7 @@ define([
          */
         createAndGetNamedLayer: function () {
             return "<sld:NamedLayer>" +
-                       "<sld:Name>" + this.getModel().getTitle() + "</sld:Name>" +
+                       "<sld:Name>" + this.getModel().getName() + "</sld:Name>" +
                        this.createAndGetUserStyle() +
                    "</sld:NamedLayer>";
         },

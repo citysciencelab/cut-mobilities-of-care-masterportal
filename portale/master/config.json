@@ -58,6 +58,10 @@
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
               "lister": 10
+          },
+          "styleWMS": {
+            "name": "Style WMS",
+            "glyphicon": "glyphicon-picture"
           }
         }
       },
@@ -128,6 +132,13 @@
         {
           "id": "1562",
           "attributions": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
+        },
+        {
+          "id": "4441",
+          "visibility": true,
+          "styleable": true,
+          "geomType": "Polygon",
+          "attributesToStyle": ["AP30Sum", "AP60Sum"]
         },
         {
           "id": "45",

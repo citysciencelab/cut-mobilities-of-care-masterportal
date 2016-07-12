@@ -266,6 +266,10 @@ define("app",
             });
         }
 
+        require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+            new StyleWMSView();
+        });
+
         if (Config.menubar === true) {
             require(["modules/menubar/view"], function (MenubarView) {
                 new MenubarView();
@@ -346,9 +350,7 @@ define("app",
                         }
                     });
                 }
-                require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
-                    new StyleWMSView();
-                });
+
                 // if (_.has(Config.menuItems, "routing") === true) {
                 //     require(["modules/viomRouting/view"], function (RoutingView) {
                 //         new RoutingView();

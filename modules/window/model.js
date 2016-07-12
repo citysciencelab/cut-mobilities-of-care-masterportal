@@ -35,26 +35,22 @@ define([
             setVisible: function (value) {
                 this.set("isVisible", value);
             },
-            setParams: function (value) {
+            setParams: function (value, modelId) {
                 this.setTool(value);
-                // if (_.isUndefined(args[3]) === false) {
-                //     this.set("modelId", args[3]);
-                // }
+                if (_.isUndefined(modelId) === false) {
+                    this.set("modelId", modelId);
+                }
                 this.set("title", value.getName());
                 this.set("icon", value.getGlyphicon());
-                this.set("winType", value.getId());
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {
-                Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
-                // if (this.has("modelId")) {
-                //     Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
-                //     EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
-                // }
-                // else {
-                //     Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
-                //     EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
-                // }
+                if (this.has("modelId")) {
+                    Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool(), this.get("modelId")]);
+                }
+                else {
+                    Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
+                }
             },
             setTool: function (value) {
                 this.set("tool", value);
