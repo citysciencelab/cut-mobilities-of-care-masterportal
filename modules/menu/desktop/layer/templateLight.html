@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<span class="layer-item">
+<span class="layer-item pull-left">
     <span class="pull-left">
         <% if (isVisibleInMap === true) { %>
             <span class="glyphicon glyphicon-check pull-left"></span>
         <% } else { %>
             <span class="glyphicon glyphicon-unchecked pull-left"></span>
         <% } %>
-        <span class="title"><%= name %></span>
+        <span class="title" title="<%= name %>"><%= name.substr(0,38)%><%if(name.length >= 38) {%>... <% }  %></span>
     </span>
 </span>
-<span class="glyphicon glyphicon-cog rotate pull-right"></span>
-<span class="glyphicon glyphicon-info-sign pull-right" data-toggle="tooltip" data-placement="bottom" title="Informationen und Legende"></span>
+<span class="pull-right">
+    <span class="glyphicon glyphicon-cog rotate"></span>
+    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Informationen und Legende"></span>
+</span>

@@ -1,12 +1,14 @@
 define([
     "backbone",
     "text!modules/menu/mobile/layer/templateLight.html",
+    "backbone.radio",
     "text!modules/menu/mobile/layer/templateSettings.html"
 ], function () {
 
     var Backbone = require("backbone"),
         Template = require("text!modules/menu/mobile/layer/templateLight.html"),
         SettingTemplate = require("text!modules/menu/mobile/layer/templateSettings.html"),
+        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -21,7 +23,8 @@ define([
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
-            "change select": "setTransparency"
+            "change select": "setTransparency",
+            "click .glyphicon-picture": "openStyleWMS"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -97,6 +100,10 @@ define([
             if (!this.model.getIsVisibleInTree()) {
                 this.remove();
             }
+        },
+        openStyleWMS: function () {
+            Radio.trigger("StyleWMS", "openStyleWMS", this.model);
+            $(".navbar-collapse").removeClass("in");
         }
     });
 

@@ -27,7 +27,8 @@ define([
             "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
             "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
             "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
-            "change select": "setTransparency"
+            "change select": "setTransparency",
+            "click .glyphicon-picture": "openStyleWMS"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -115,6 +116,10 @@ define([
             if (!this.model.getIsVisibleInTree()) {
                 this.remove();
             }
+        },
+        openStyleWMS: function () {
+            Radio.trigger("StyleWMS", "openStyleWMS", this.model);
+            $(".navbar-collapse").removeClass("in");
         }
 
     });

@@ -100,7 +100,7 @@ define([
             this.model.decTransparency(10);
         },
         openStyleWMS: function () {
-            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "styleWMS"}), this.model.getId());
+            Radio.trigger("StyleWMS", "openStyleWMS", this.model);
             $(".nav li:first-child").removeClass("open");
          }
     });

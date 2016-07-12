@@ -58,10 +58,6 @@
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
               "lister": 10
-          },
-          "styleWMS": {
-            "name": "Style WMS",
-            "glyphicon": "glyphicon-picture"
           }
         }
       },

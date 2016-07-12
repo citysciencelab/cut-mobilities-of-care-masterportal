@@ -35,17 +35,17 @@ define([
          * Registriert Listener auf sich selbst und den EventBus
          */
         initialize: function () {
+            var channel = Radio.channel("StyleWMS");
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.checkStatus
-            });
+            channel.on({
+                "openStyleWMS": function (model) {
+                    this.setModel(model);
+                    this.trigger("sync");
+                }
+            }, this);
 
             // Eigene Listener
             this.listenTo(this, {
-                // ändert sich die ModelId, wird das entsprechende Model dessen Layer gestylt werden soll, aus der Layerlist geholt
-                "change:modelId": function () {
-                    this.setModel(Radio.request("ModelList", "getModelByAttributes", {id: this.getModelId()}));
-                },
                 // ändert sich das Model, wird der entsprechende Geometrietyp gesetzt
                 // und der Attributname zurückgesetzt
                 "change:model": function (model, value) {
@@ -58,7 +58,7 @@ define([
                 },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
-                    Radio.trigger("ModelList", "setModelAttributesById", this.getModelId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
+                    Radio.trigger("ModelList", "setModelAttributesById", this.getModel().getId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
                 }
             });
         },
@@ -117,21 +117,6 @@ define([
             this.setErrors(errors);
             if (_.isEmpty(errors) === false) {
                 return errors;
-            }
-        },
-
-        /**
-         * Prüft ob dieses Tool aktiviert ist und ob das Fenster minimiert ist
-         * @param {Array} args - args[0] = true|false, args[1] = true|false, args[2] = ToolId
-         */
-        checkStatus: function (args) {
-            if (args[2].getId() === "styleWMS") {
-                this.setModelId(args[3]);
-                this.setIsCollapsed(args[1]);
-                this.setIsCurrentWin(args[0]);
-            }
-            else {
-                this.setIsCurrentWin(false);
             }
         },
 
@@ -271,14 +256,6 @@ define([
         },
 
         /**
-         * Setter für das Attribut modelId
-         * @param {string} value
-         */
-        setModelId: function (value) {
-            this.set("modelId", value);
-        },
-
-        /**
          * Setter für das Attribut model
          * @param {Backbone.Model} value
          */
@@ -348,14 +325,6 @@ define([
          */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
-        },
-
-        /**
-         * Getter für das Attribut modelId
-         * @return {string}
-         */
-        getModelId: function () {
-            return this.get("modelId");
         },
 
         /**

@@ -37,21 +37,13 @@ define([
             },
             setParams: function (value, modelId) {
                 this.setTool(value);
-                if (_.isUndefined(modelId) === false) {
-                    this.set("modelId", modelId);
-                }
                 this.set("title", value.getName());
                 this.set("icon", value.getGlyphicon());
                 this.set("winType", value.getId());
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {
-                if (this.has("modelId")) {
-                    Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool(), this.get("modelId")]);
-                }
-                else {
-                    Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
-                }
+                Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
             },
             setTool: function (value) {
                 this.set("tool", value);

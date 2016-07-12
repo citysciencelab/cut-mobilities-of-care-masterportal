@@ -46,7 +46,7 @@ define([
                     EventBus.trigger("toggleFeatureListerWin");
                 }
                 else if (this.getId() !== "gfi" && this.getId() !== "coord") {
-                    Radio.trigger("Window", "toggleWin", this);console.log(this);
+                    Radio.trigger("Window", "toggleWin", this);
                 }
 
                 else {

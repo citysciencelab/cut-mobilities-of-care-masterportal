@@ -53,10 +53,6 @@
               "name": "Routenplaner",
               "glyphicon": "glyphicon-road",
               "viomRouting": "3"
-            },
-            "styleWMS": {
-              "name": "Style WMS",
-              "glyphicon": "glyphicon-picture"
             }
           }
         },
