@@ -29,7 +29,8 @@ define([
                     },
                     "getModelByAttributes": function (attributes) {
                         return this.findWhere(attributes);
-                    }
+                    },
+                    "getModelByFeatureId": this.getModelByFeatureId
                 }, this);
 
                 channel.on({
@@ -398,6 +399,10 @@ define([
                         model.setIsExpanded(false);
                     }
                 }, this);
+            },
+
+            getModelByFeatureId: function (id) {
+                console.log(id);
             }
     });
 

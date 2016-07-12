@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "modules/core/modelList/layer/model"
-], function (Backbone, ol, Layer) {
+], function (Backbone, Radio, ol, Layer) {
 
     var GroupLayer = Layer.extend({
 
@@ -87,6 +88,19 @@ define([
                 }
             }, this);
             this.set("legendURL", legendURL);
+        },
+
+        /**
+         * [showLayerInformation description]
+         * @return {[type]} [description]
+         */
+        showLayerInformation: function () {
+            Radio.trigger("LayerInformation", "add", {
+                "id": this.getId(),
+                "legendURL": this.get("legendURL"),
+                "metaID": this.get("layerdefinitions")[0].datasets[0].md_id,
+                "name": this.get("layerdefinitions")[0].datasets[0].md_name
+            });
         },
 
         /**

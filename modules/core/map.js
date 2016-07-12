@@ -292,48 +292,34 @@ define([
                 projection = this.get("view").getProjection(),
                 coordinate = evt.coordinate;
 
-            // Abbruch, wenn auf SearchMarker x geklickt wird.
-            // TODO
-            // if (this.checkInsideSearchMarker(eventPixel[1], eventPixel[0]) === true) {
-            //     return;
-            // }
             // WFS
             if (isFeatureAtPixel === true) {
-                var layerByFeature,
-                    visibleWFSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
-
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
+                    var modelByFeature = Radio.request("ModelList", "getModelByAttributes", {id: pLayer.get("id")});
+                    // Cluster Feature
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                 return layer.getClusterLayerSource().getFeatureById(feature.getId());
-                             });
-                             if (_.isUndefined(layerByFeature) === false) {
+                             if (_.isUndefined(modelByFeature) === false) {
                                  gfiParams.push({
                                      typ: "WFS",
                                      feature: feature,
-                                     attributes: layerByFeature.get("gfiAttributes"),
-                                     name: layerByFeature.get("name"),
-                                     ol_layer: layerByFeature.get("layer")
+                                     attributes: modelByFeature.get("gfiAttributes"),
+                                     name: modelByFeature.get("name"),
+                                     ol_layer: modelByFeature.get("layer")
                                  });
                              }
                         });
                     }
-                    // vector-source
+                    // Feature
                     else {
-                        if (featureAtPixel.getId() !== undefined) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.getLayerSource().getFeatureById(featureAtPixel.getId());
+                        if (!_.isUndefined(modelByFeature)) {
+                            gfiParams.push({
+                                typ: "WFS",
+                                feature: featureAtPixel,
+                                attributes: modelByFeature.get("gfiAttributes"),
+                                name: modelByFeature.get("name"),
+                                ol_layer: modelByFeature.get("layer")
                             });
-                            if (!_.isUndefined(layerByFeature)) {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    feature: featureAtPixel,
-                                    attributes: layerByFeature.get("gfiAttributes"),
-                                    name: layerByFeature.get("name"),
-                                    ol_layer: layerByFeature.get("layer")
-                                });
-                            }
                         }
                     }
                 });
