@@ -254,7 +254,7 @@ define([
          *
          */
         setSpecification: function () {
-            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setDrawLayer(Radio.request("draw", "getLayer"));
             var specification = {
                 layout: $("#layoutField option:selected").html(),

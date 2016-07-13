@@ -25,10 +25,11 @@ define([
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
                 this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
             }
-
+            this.listenTo(Radio.channel("ModelList"), {
+                "updateVisibleInMapList": this.checkWFS
+            });
             EventBus.on("setOrientation", this.track, this);
             EventBus.on("getPOI", this.getPOI, this);
-            EventBus.on("layerlist:sendVisiblePOIlayerList", this.getPOIParams, this);
             EventBus.on("orientation:removeOverlay", this.removeOverlay, this);
         },
         removeOverlay: function () {
@@ -146,13 +147,15 @@ define([
                 circleExtent = circle.getExtent();
 
             this.set("circleExtent", circleExtent);
-            EventBus.trigger("layerlist:getVisiblePOIlayerList", this);
+            this.getPOIParams();
         },
         getPOIParams: function (visibleWFSLayers) {
+            var visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+
             if (this.get("circleExtent") && visibleWFSLayers) {
                 _.each(visibleWFSLayers, function (layer) {
-                    if (layer.has("source") === true) {
-                        layer.get("source").forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
+                    if (layer.has("layerSource") === true) {
+                        layer.get("layer").getSource().forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
                             EventBus.trigger("setModel", feature, StyleList, this.get("distance"), this.get("newCenter"), layer);
                         }, this);
                     }

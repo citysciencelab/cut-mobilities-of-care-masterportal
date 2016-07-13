@@ -74,7 +74,7 @@ define([
                 var lineString = new ol.geom.LineString(lineStringArray),
                     distance = Math.round(lineString.getLength()),
                     img = _.find(styleList.models, function (num) {
-                        return num.attributes.layerId == layer.attributes.id;
+                        return num.attributes.layerId === layer.attributes.id;
                     });
 
                 if (distance <= maxDist) {
@@ -86,7 +86,7 @@ define([
                         yCoord: yCoord
                     }));
                 }
-            };
+            }
         },
         removeAllModels: function () {
             this.reset();

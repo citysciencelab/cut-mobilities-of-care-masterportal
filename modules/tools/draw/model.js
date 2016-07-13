@@ -103,7 +103,7 @@ define([
             }, this);
 
             channel.reply({
-                "getLayer": function () {console.log(this.get("layer"));
+                "getLayer": function () {
                     return this.get("layer");
                 }
             }, this);

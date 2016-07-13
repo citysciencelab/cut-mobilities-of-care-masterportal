@@ -160,6 +160,13 @@
                     {
                       "id": "685",
                       "visibility": false
+                    },
+                    {
+                      "id": "4439",
+                      "visibility": true,
+                      "styleable": true,
+                      "geomType": "Polygon",
+                      "attributesToStyle": ["AP30Sum", "AP60Sum"]
                     }
                   ]
                 }

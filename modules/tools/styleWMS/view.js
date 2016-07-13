@@ -12,7 +12,7 @@ define([
 
     StyleWMSView = Backbone.View.extend({
         model: new StyleWMS(),
-        className: "win-body",
+        className: "style-wms-win",
         template: _.template(StyleWMSTemplate),
         events: {
             // Auswahl der Attribute
@@ -24,7 +24,8 @@ define([
             // Auswahl der Farbe
             "changeColor [id*=style-wms-colorpicker]": "setStyleClassAttributes",
             // Anwenden Button
-            "click button": "createSLD"
+            "click button": "createSLD",
+            "click .glyphicon-remove": "hide"
         },
 
         /**
@@ -34,7 +35,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, {
                 // ändert sich der Fensterstatus wird neu gezeichnet
-                "change:isCollapsed change:isCurrentWin": this.render,
+                "change:isCollapsed change:isCurrentWin sync": this.render,
                 // ändert sich eins dieser Attribute wird neu gezeichnet
                 "change:model change:attributeName change:numberOfClasses": this.render,
                 // Liefert die validate Methode Error Meldungen zurück, werden diese angezeigt
@@ -49,14 +50,12 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
-            }
-            else {
-                this.undelegateEvents();
-            }
+            $("body").append(this.$el.html(this.template(attr)));
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".header > .title"
+            });
+            this.$el.show();
             // aktiviert den/die colorpicker
             this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
         },
@@ -139,6 +138,13 @@ define([
         removeErrorMessages: function () {
             this.$el.find(".error").remove();
             this.$el.find("[class*=selected-color], [class*=start-range], [class*=stop-range]").parent().removeClass("has-error");
+        },
+
+        /**
+         * Versteckt das Fenster
+         */
+        hide: function () {
+            this.$el.hide();
         }
     });
 
