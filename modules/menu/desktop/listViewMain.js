@@ -46,14 +46,13 @@ define([
             },
             removeView: function () {
                 this.$el.find("ul.nav-menu").html("");
-                this.collection.setModelAttributesById("Themen", {isExpanded: false});
-                this.collection.setAllDescendantsInvisible("Themen");
 
                 while (this.subviews.length) {
                     this.subviews.pop().remove();
                 }
                 // remove entfernt alle Listener und das Dom-Element
                 this.remove();
+                this.collection.setAllModelsInvisible();
                 // Das Dom-Element wird für den mobile-View beim wechsel benötigt
                 // deswegen wieder anhängen.
                 $("body").append(this.el);

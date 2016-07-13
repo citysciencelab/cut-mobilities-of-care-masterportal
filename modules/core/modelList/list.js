@@ -172,6 +172,9 @@ define([
             setAllModelsInvisible: function () {
                 this.forEach(function (model) {
                     model.setIsVisibleInTree(false);
+                    if (model.getType() === "folder") {
+                        model.setIsExpanded(false, {silent: true});
+                    }
                 });
             },
              /**

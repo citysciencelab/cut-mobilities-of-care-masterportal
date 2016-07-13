@@ -176,6 +176,7 @@ define([
                     this.subviews.pop().remove();
                 }
                 this.remove();
+                this.collection.setAllModelsInvisible();
                 $("body").append(this.el);
             }
         });
