@@ -73,7 +73,10 @@ define([
 
                     ZWGFZ = WGFZ;
                     params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
-                    params = _.extend(params, _.object(["MEA"], [MEA]));
+                    if (MEA !== 1) {
+                        // MEA = 1 ist uninteressant für JasperReport
+                        params = _.extend(params, _.object(["MEA"], [MEA]));
+                    }
                     this.set("params", params);
                 }
             }
