@@ -69,7 +69,7 @@ define([
                         EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
                         OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
                         MEA = _.has(params, "MEAN") === true && _.has(params, "MEAZ") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
-                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78 * MEA).toFixed(2);
+                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78 / MEA).toFixed(2);
 
                     ZWGFZ = WGFZ;
                     params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
