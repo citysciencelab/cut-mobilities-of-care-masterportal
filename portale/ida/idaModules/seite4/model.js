@@ -73,6 +73,7 @@ define([
 
                     ZWGFZ = WGFZ;
                     params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
+                    params = _.extend(params, _.object(["MEA"], [MEA]));
                     this.set("params", params);
                 }
             }
@@ -238,6 +239,7 @@ define([
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("BAUJ", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("MODG", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("WOFL", "float"));
+            dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("MEA", "float"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("ZAWO", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("GARI", "integer"));
             dataInputs = this.concatStrings (dataInputs, this.returnIDAInputSnippet("GARA", "integer"));
