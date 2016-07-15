@@ -33,7 +33,7 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -88,13 +88,13 @@ define(function () {
             },
             placeholder: "Suche nach Adresse oder Kita-Namen",
             geoLocateHit: true
-        },      
+        },
         print: {
             printID: "99999",
             title: "Kita-Stadtplan",
             gfi: false
         },
-                  
+
          tools: {
             gfi: {
                 title: "Informationen abfragen",

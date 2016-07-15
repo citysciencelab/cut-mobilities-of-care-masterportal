@@ -9,7 +9,7 @@
         {
           "id": "8",
           "visibility": false
-        },  
+        },
         {
           "id": "713",
           "visibility": false,
@@ -96,7 +96,7 @@
               "visibility": false
             }
           ]
-        }, 
+        },
         {
           "Titel": "ÖV-Netze",
           "Layer": [
@@ -174,7 +174,7 @@
         },
         {
           "Titel": "Parken",
-            
+
           "Layer": [
             {
               "id": "945",
@@ -214,11 +214,11 @@
               "name" : "Bike und Ride HVV",
               "metaName": "Bike und Ride HVV"
             }
-            
+
           ]
         },
-        
-          
+
+
          {
           "Titel": "Verkehrszählungen",
           "Ordner": [
@@ -261,11 +261,11 @@
                   "visibility": false
                 }
               ]
-            }              
+            }
           ]
-        }, 
-          
-          
+        },
+
+
         {
           "Titel": "Verkehrslage",
           "Layer": [
@@ -581,7 +581,7 @@
             }
           ]
         }
-          
+
       ]
     }
   ]

@@ -122,7 +122,7 @@ define([
                 pointStyleTransparencies = [],
                 pointStyleRadiuses = [],
                 pointStyleCounter = 0;
-            
+
                 // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
                 $(kml).find("Point").each(function (i, point) {
                     var placemark = point.parentNode;

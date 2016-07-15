@@ -26,7 +26,7 @@ define([
 
             if (attributes.coordSystem === "ETRS89") {
                 _.each(attributes.coordinates, function (value, key) {
-                    
+
                     var fieldName;
 
                     $(fieldName + ".text-danger").html("");
@@ -56,7 +56,7 @@ define([
                 }
                       );
             }
-            
+
             else if (attributes.coordSystem === "WGS84") {
                 _.each(attributes.coordinates[0].coord, function (value, key) {
                         if (attributes.coordinates[0].coord[key].length < 1) {
@@ -99,7 +99,7 @@ define([
                         }
                     });
             }
-            
+
             else if (attributes.coordSystem === "WGS84(Dezimalgrad)") {
                 _.each(attributes.coordinates[0].coord, function (value, key) {
                     if (attributes.coordinates[0].coord[key].length < 1) {
@@ -141,7 +141,7 @@ define([
                 });
 
             }
-            
+
             if (attributes.coordinates[0].ErrorMsg || attributes.coordinates[1].ErrorMsg) {
                 return "Fehlerhafte Eingabe!";
             }
@@ -188,7 +188,7 @@ define([
             }
         },
         getNewCenter: function () {
-         
+
             if (this.get("coordSystem") === "WGS84") {
                 var easting = (this.get("eastingCoords")[0] * 1) + (this.get("eastingCoords")[1] * 1 / 60) + (this.get("eastingCoords")[2] * 1 / 60 / 60),
                 northing = (this.get("northingCoords")[0] * 1) + ((this.get("northingCoords")[1] * 1) / 60) + ((this.get("northingCoords")[2] * 1) / 60 / 60);

@@ -22,7 +22,7 @@ define(function () {
             resolution: 66.14579761460263,
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
-            
+
         },
         controls: {
             zoom: true,
@@ -58,7 +58,7 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -83,7 +83,7 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-        
+
         startUpModul: "",
         searchBar: {
             minChars: 3,
@@ -95,7 +95,7 @@ define(function () {
                 searchDistricts: true,
                 searchParcels: true
             },
-           
+
             placeholder: "Suche nach Adresse / Stadtteil"
         },
         print: {

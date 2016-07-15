@@ -64,7 +64,7 @@ define([
                     }
                 }
             }, this);
-            
+
             this.listenTo(EventBus, {
                 "mapHandler:clearMarker": this.clearMarker,
                 "mapHandler:zoomTo": this.zoomTo,

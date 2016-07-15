@@ -55,7 +55,7 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-       
+
         startUpModul: "",
         searchBar: {
             minChars: 3,
@@ -66,7 +66,7 @@ define(function () {
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
-         
+
             },
             placeholder: "Suche nach Adresse, Stadtteil",
             geoLocateHit: true
@@ -90,7 +90,6 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         }
-        
     };
 
     return config;

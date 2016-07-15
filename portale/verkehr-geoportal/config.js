@@ -56,7 +56,7 @@ define(function () {
                 {id: "368", visibility: false}, // aLKIS farbig
                 {id: "149", visibility: false} // aLKIS grau-blau
             ],
-           
+
         },
         controls: {
             zoom: true,
@@ -126,7 +126,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            
+
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,

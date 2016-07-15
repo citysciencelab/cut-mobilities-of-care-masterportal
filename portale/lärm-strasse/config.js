@@ -5,13 +5,13 @@ define(function () {
             layer: [
                 {id: "453", visible: true, legendUrl: "ignore"},
                 {id: "452", visible: false},
-                {id: "95", visible: false, name: "Lärm Straßenverkehr Nacht 2012"},     //Lärm_night_2012
-                {id: "96", visible: false, name: "Lärm Straßenverkehr Tag 2012"}      //Lärm_den_2012
+                {id: "95", visible: false, name: "Lärm Straßenverkehr Nacht 2012"}, // Lärm_night_2012
+                {id: "96", visible: false, name: "Lärm Straßenverkehr Tag 2012"} // Lärm_den_2012
             ]
         },
         view: {
-            center: [565874, 5934140],  //Rathaus
-            resolution: 15.874991427504629, //1.60.000
+            center: [565874, 5934140], // Rathaus
+            resolution: 15.874991427504629, // 1.60.000
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
@@ -21,7 +21,7 @@ define(function () {
             orientation: "allways",
             poi: false
         },
-        
+
         footer: {
             visibility: true,
             urls: [
@@ -49,7 +49,6 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -74,7 +73,6 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-        
         startUpModul: "",
         searchBar: {
             minChars: 3,
@@ -85,7 +83,6 @@ define(function () {
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
-         
             },
             placeholder: "Suche nach Adresse, Stadtteil",
             geoLocateHit: true

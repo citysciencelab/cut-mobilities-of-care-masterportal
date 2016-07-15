@@ -1,11 +1,11 @@
 define(function () {
     var config = {
-        
+
         tree: {
             type: "light",
             saveSelection: false,
             layer: [
-                {id: "453", visibility: true, legendUrl: "ignore"}, 
+                {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
                 {id: "627", visibility: true},  //icons
                 {id: "628", visibility: true},  //strecke
@@ -35,7 +35,7 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -58,13 +58,13 @@ define(function () {
                 title: "Kontakt",
                 glyphicon: "glyphicon-envelope",
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            },            
+            },
             routing: {
                 title: "Routenplaner",
                 glyphicon: "glyphicon-road"
             }
         },
-        
+
         menu: {
             helpButton: false,
             searchBar: true,
@@ -90,8 +90,8 @@ define(function () {
             featureLister: false,
             treeFilter: false,
             wfsFeatureFilter: true,
-            
-            
+
+
         },
         startUpModul: "",
         searchBar: {
