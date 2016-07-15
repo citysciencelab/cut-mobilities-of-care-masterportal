@@ -10,9 +10,27 @@ define(
 
         MenuLoader =  function () {
             this.treeType = Radio.request("Parser", "getTreeType");
+            this.loadMenu = function (caller) {
+                var isMobile = Radio.request("Util", "isViewMobile");
+                if (isMobile) {
+                    require(["modules/menu/mobile/listView"], function (Menu) {
+                        caller.currentMenu = new Menu();
+                    });
+                }
+                else {
+                    if (this.treeType === "light") {
+                        require(["modules/menu/desktop/listViewLight"], function (Menu) {
+                            caller.currentMenu = new Menu();
+                        });
+                    }
+                    else {
+                        require(["modules/menu/desktop/listView"], function (Menu) {
+                            caller.currentMenu = new Menu();
+                        });
+                    }
+                }
+            }
             this.currentMenu = this.loadMenu(this);
-
-
             Radio.on("Util", {
                 "isViewMobileChanged": function () {
                     this.currentMenu.removeView();
@@ -20,29 +38,7 @@ define(
                     this.currentMenu = this.loadMenu(this);
                 }
             }, this);
-        },
-        MenuLoader.prototype = {
-            loadMenu: function (caller) {
-                var isMobile = Radio.request("Util", "isViewMobile");
-                if (isMobile) {
-                    require(["modules/menu/mobile/listView"], function (Menu) {
-
-                        caller.currentMenu = new Menu();
-                    });
-                }
-                else {
-                    if (this.treeType === "light") {
-                        require(["modules/menu/desktop/listViewLight"], function (Menu) {
-                        caller.currentMenu = new Menu();
-                    });
-                    }
-                    else {
-                        require(["modules/menu/desktop/listView"], function (Menu) {
-                        caller.currentMenu = new Menu();
-                    });
-                    }
-                }
-            }
         };
         return MenuLoader;
     });
+
