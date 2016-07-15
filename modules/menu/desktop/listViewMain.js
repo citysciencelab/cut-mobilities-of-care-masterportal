@@ -17,7 +17,6 @@ define([
             attributes: {
                 role: "navigation"
             },
-            subviews : [],
             renderMain: function () {
                 $("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav desktop");
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
@@ -36,20 +35,17 @@ define([
             },
             addFolderViews: function (models) {
                 _.each(models, function (model) {
-                    this.subviews.push(new DesktopFolderView({model: model}));
+                    new DesktopFolderView({model: model});
                 }, this);
             },
             addToolViews: function (models) {
                 _.each(models, function (model) {
-                    this.subviews.push(new DesktopToolView({model: model}));
+                    new DesktopToolView({model: model});
                 }, this);
             },
             removeView: function () {
                 this.$el.find("ul.nav-menu").html("");
 
-                while (this.subviews.length) {
-                    this.subviews.pop().remove();
-                }
                 // remove entfernt alle Listener und das Dom-Element
                 this.remove();
                 this.collection.setAllModelsInvisible();

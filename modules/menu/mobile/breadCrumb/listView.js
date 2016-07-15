@@ -18,7 +18,6 @@ define([
         className: "breadcrumb-mobile",
         targetElement: "div.collapse.navbar-collapse",
         template: _.template(Template),
-        subviews: [],
         events: {
             "click ul.back-item": "removeLastItem"
         },
@@ -57,7 +56,6 @@ define([
         addViews: function (model) {
             var breadCrumbView = new View({model: model});
 
-            this.subviews.push(breadCrumbView);
             $(".breadcrumb-mobile > .breadcrumb").append(breadCrumbView.render().el);
         },
 
@@ -69,9 +67,6 @@ define([
             this.collection.removeLastItem();
         },
         removeView: function () {
-            while (this.subviews.length) {
-                this.subviews.pop().remove();
-            }
             this.collection = {};
 
             this.remove();

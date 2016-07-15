@@ -119,20 +119,20 @@ define([
                     if (model.getType() === "folder") {
                         // Oberste ebene im Themenbaum?
                         if (model.getParentId() === "Themen") {
-                            this.subviews.push(new CatalogFolderView({model: model}));
+                            new CatalogFolderView({model: model});
                         }
                         else {
-                            this.subviews.push(new DesktopThemenFolderView({model: model}));
+                            new DesktopThemenFolderView({model: model});
                         }
                     }
                     else {
-                        this.subviews.push(new DesktopLayerView({model: model}));
+                        new DesktopLayerView({model: model});
                     }
                 }, this);
             },
             addSelectionView: function (models) {
                 _.each(models, function (model) {
-                    this.subviews.push(new SelectionView({model: model}));
+                   new SelectionView({model: model});
                 }, this);
             }
         });

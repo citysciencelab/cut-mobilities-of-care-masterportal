@@ -32,7 +32,7 @@ define([
             },
             addViews: function (models) {
                 _.each(models, function (model) {
-                     this.subviews.push(new DesktopLayerViewLight({model: model}));
+                     new DesktopLayerViewLight({model: model});
                 }, this);
             }
         });
