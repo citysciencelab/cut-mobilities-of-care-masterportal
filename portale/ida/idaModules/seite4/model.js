@@ -98,7 +98,7 @@ define([
             }, this);
         },
         /*
-        * stellt Requests zur Abfrage der einzelnen BRW zusammen
+        * stellt Requests zur Abfrage der einzelnen BRW zusammen. Die Abfrage erfolgt immer in EUR, Rückgabe ist entsprechend auch in EUR.
         */
         requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE) {
             var stichtag = brw.stichtag.split("."),
