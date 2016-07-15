@@ -41,6 +41,16 @@ define([
         setInitialParams: function (liste) {
             var params = {};
 
+            liste.find("div[class=btn-group]").each(function (num, input) {
+                $(input).find("button").each(function (num2, button) {
+                    if ($(button).hasClass("active") === true) {
+                        var id = input.id,
+                            val = button.value;
+
+                        params = _.extend(params, _.object([id], [val]));
+                    }
+                });
+            });
             liste.find("input[type=number]").each(function (num, input) {
                 var id = input.id,
                     val = input.value;

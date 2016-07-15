@@ -177,12 +177,6 @@
             <input id="BAUJ" class="form-control" type="number" min="1700" max="2030" value="1950" pattern="[0-9]"/>
         </div>
         <% } %>
-        <% if (requestedParams.MODG === true) { %>
-        <div class="form-group col-md-6">
-            <p>Modernisierungsgrad (0..20 Punkte, 21 = Neubau/Erstbezug)</p>
-            <input id="MODG" class="form-control" type="number" min="0" max="21" value="21" pattern="[0-9]"/>
-        </div>
-        <% } %>
         <% if (requestedParams.WOFL === true) { %>
         <div class="form-group col-md-6">
             <p>Wohnfläche in m²</p>
@@ -271,6 +265,17 @@
         <div class="form-group col-md-6">
             <p>Endenergiebedarf in kWh / m² a</p>
             <input id="ENER" class="form-control" type="number" min="30" max="250" value="30" step="0.1" pattern="[0-9]"/>
+        </div>
+        <% } %>
+        <% if (requestedParams.MODG === true) { %>
+        <div class="form-group col-md-6">
+            <p>Modernisierungsgrad des Gebäudes</p>
+            <div class="input-group">
+                <div id="MODG" class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default active" value="21">Erstbezug / Neubau</button>
+                    <button type="button" class="btn btn-default" value="0">nicht modernisiert</button>
+                </div>
+            </div>
         </div>
         <% } %>
         <% if (requestedParams.KELL === true) { %>

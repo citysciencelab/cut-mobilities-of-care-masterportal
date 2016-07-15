@@ -20,7 +20,20 @@ define([
             "change #OGFL": "commaChanger",
             "change #WONKM": "commaChanger",
             "change #SONKM": "commaChanger",
-            "change #JEZ": "commaChanger"
+            "change #JEZ": "commaChanger",
+            "click .btn-group": "buttonChanger"
+        },
+        buttonChanger: function (evt) {
+            $(evt.currentTarget).find("button").each(function () {
+                if ($(this).hasClass("active") === true) {
+                    $(this).removeClass("active");
+                }
+                else {
+                    $(this).addClass("active");
+                }
+            });
+            evt.target.id = evt.currentTarget.id;
+            this.model.paramChanged(evt.target);
         },
         commaChanger: function (evt) {
             var id = evt.target.id,
