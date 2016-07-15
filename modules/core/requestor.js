@@ -51,6 +51,11 @@ define([
                 // Die Layer mit dem InfoFormat text/html werden hier separat behandelt.
                 // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
                 _.each(paramList.html, function (param) {
+                    if (param.ol_layer.get("featureCount")) {
+                        var featurecount = "&FEATURE_COUNT=";
+                        featurecount= featurecount.concat(param.ol_layer.get("featureCount").toString());
+                        param.url=param.url.concat(featurecount);
+                    }
                     if (param.ol_layer.id === "2407" || param.ol_layer.id === "4423") {
                         window.open(param.url, "_blank");
                     }
