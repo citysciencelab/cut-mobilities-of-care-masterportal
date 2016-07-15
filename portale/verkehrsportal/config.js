@@ -77,7 +77,7 @@ define(function () {
         * @type {String}
         * @desc Pfad zur json mit Druck- und WPS-Dienst
         */
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         /**
         * @memberof config
         * @type {String}
@@ -137,6 +137,7 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: true,
+            viomRouting: "3",
             addWMS: false,
             featureLister: 20
         },
@@ -175,6 +176,7 @@ define(function () {
             mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
         },
         searchBar: {
+            minChars: 3,
             bkg: {
                 minChars: 3,
                 bkgSuggestURL: "/bkg_suggest",

@@ -56,7 +56,7 @@ define(function () {
                 {id: "368", visibility: false}, // aLKIS farbig
                 {id: "149", visibility: false} // aLKIS grau-blau
             ],
-            customConfig: "../components/lgv-config/tree-config/verkehr-geoportal.json"
+
         },
         controls: {
             zoom: true,
@@ -126,23 +126,7 @@ define(function () {
             searchBar: true,
             layerTree: true,
             helpButton: false,
-            contact: {
-                serviceID: "80001",
-                from: [{
-                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
-                    name: "LGVGeoportalHilfe"
-                }],
-                to: [{
-                    email: "lgvgeoportal-hilfe@gv.hamburg.de",
-                    name: "LGVGeoportalHilfe"
-                }],
-                ccToUser: true,
-                cc: [],
-                bcc: [],
-                subject: "",
-                textPlaceholder: "",
-                includeSystemInfo: true
-            },
+
             tools: true,
             treeFilter: false,
             wfsFeatureFilter: false,

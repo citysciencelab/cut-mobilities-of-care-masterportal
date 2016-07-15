@@ -185,8 +185,11 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                         }
                     });
                 }
+                require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+                    new StyleWMSView();
+                });
                 if (_.has(Config.menuItems, "routing") === true) {
-                    require(["modules/routing/view"], function (RoutingView) {
+                    require(["modules/viomRouting/view"], function (RoutingView) {
                         new RoutingView();
                     });
                 }

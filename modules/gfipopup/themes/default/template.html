@@ -1,6 +1,15 @@
 <table class="table table-condensed table-hover no-margin">
-<%  _.each(gfiContent, function(value, key) {
-        if (_.isString(key) === false || _.isString(value)=== false) return;
+    <%  _.each(gfiContent, function(value, key) {
+        if (value.match(/INFO_FORMAT=text%2Fhtml/g)) { %>
+            <tr colspan="1" >
+                <td >
+                    <iframe src="<%= value%>" class="gfi-iFrame">
+                    </iframe>
+                </td>
+            </tr>
+        <% }
+        else { %>
+<%     if (_.isString(key) === false || _.isString(value)=== false) return;
     %>
 <tr colspan="2">
     <td>
@@ -21,5 +30,5 @@
         <% } %>
     </td>
 </tr>
-<% }); %>
+<% }}); %>
 </table>

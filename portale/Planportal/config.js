@@ -60,7 +60,7 @@ define(function () {
         startUpModul: "",
         searchBar: {
             gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
@@ -71,12 +71,12 @@ define(function () {
                 minChars: 2,
                 definitions: [
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
                         data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
                         name: "bplan"
                     },
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene",
+                        url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
                         data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
                         name: "bplan"
                     }

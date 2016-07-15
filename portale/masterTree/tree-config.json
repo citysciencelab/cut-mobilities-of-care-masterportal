@@ -11,6 +11,13 @@
           "visibility": false,
           "test": "test",
           "hier": "dore"
+        },
+        {
+          "id": "4441",
+          "visibility": true,
+          "styleable": true,
+          "geomType": "Polygon",
+          "attributesToStyle": ["AP30Sum", "AP60Sum"]
         }
       ]
     }

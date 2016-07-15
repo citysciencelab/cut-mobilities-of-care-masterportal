@@ -7,11 +7,14 @@
     margin-bottom: 30px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     z-index: 999;
+    max-width: 500px;
 }
 
 .tool-window > .header {
     padding-left: 10px;
     border-bottom: 1px solid rgb(229, 229, 229);
+    letter-spacing: 0.6px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
 
 .tool-window > .header-min {
@@ -71,6 +74,7 @@
 }
 
 .win-body {
-    padding: 15px;
+    padding: 20px;
     overflow: auto;
+    background-color: rgb(255, 255, 255);
 }

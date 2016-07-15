@@ -32,8 +32,7 @@ define(function () {
                 {id: "1933", visibility: false, styles: "geofox_stations", name: "HVV Haltestellen"},// HVV Haltestellen
                 {id: "945", visibility: false}, // Parkhäuser
                 {id: "942", visibility: false}, // ParkAndRide
-//                {id: "4425", visibility: true, name: "Eventlotse-Flächen", style: "4425"} // WFS Eventlotse (4425)
-                {id: "4561", visibility: true, name:"Eventlotse-Flächen"} // WMS Eventlotse (4426)
+                {id: "4561", visibility: true, name:"Eventlotse-Flächen"} // Eventlotse
             ]
         },
         wfsImgPath: "../components/lgv-config/img/",

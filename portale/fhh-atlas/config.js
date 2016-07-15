@@ -23,7 +23,8 @@ define(function () {
                 ["1043", "1044", "1045", "1046"]
             ],
             layerIDsToIgnore: [
-                "1912", "1913", "1914", "1915", "1916", "1917" // UESG
+                "1912", "1913", "1914", "1915", "1916", "1917", // UESG
+                "1791" // nachträgliche Bodenrichtwerte lagetypisch 1964
             ],
             layerIDsToStyle: [
                 {
@@ -60,7 +61,9 @@ define(function () {
                 "AA06AD76-6110-4718-89E1-F1EDDA1DF4CF", // Regionales Raumordnungsprogramm Stade+Rotenburg
                 "1C8086F7-059F-4ACF-96C5-7AFEB8F8B751", // Fachdaten der Metropolregion
                 "A46086BA-4A4C-48A4-AC1D-9735DDB4FDDE", // Denkmalkartierung FIS
-                "98377F7D-84AB-4089-BDF1-F962B2C173CC" // Ausgleichsflächen Internet
+                "98377F7D-84AB-4089-BDF1-F962B2C173CC", // Ausgleichsflächen Internet
+                "DB433BD1-1640-4FBC-A879-72402BD5CFDB", // Bodenrichtwertzonen Hamburg
+                "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71" // Bodenrichtwerte für Hamburg
             ]
         },
         controls: {

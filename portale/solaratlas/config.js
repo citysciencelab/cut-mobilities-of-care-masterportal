@@ -6,21 +6,12 @@ define(function () {
             layer: [
                 {id: "453", visibility: true, legendUrl: "ignore"},
                 {id: "452", visibility: false},
-                {id: "1751", visibility: false}
+                {id: "4537,4538",  name: "Eignungsflächen, Darstellung ab 1: 5 000", visibility: true, gfiTheme: "solaratlas"}
             ]
         },
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-
-        zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version: "2.0.0",
-            typename: "app:hamburgconvention",
-            valuereference:"app:flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
-        },
         view: {
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
@@ -30,8 +21,8 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: "once",
-            poi: true,
+            orientation: false,
+            poi: false,
             fullScreen: true
         },
         customModules: [],
@@ -59,7 +50,7 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
@@ -102,34 +93,14 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            specialWFS: {
-                minChar: 3,
-                definitions: [
-                    {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
-                        name: "bplan"
-                    },
-                    {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=imverfahren&propertyName=plan",
-                        name: "bplan"
-                    }
-                ]
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            layer: {
-                minChar: 3
+                searchDistricts: false,
+                searchParcels: false
             },
             placeholder: "Suche nach Adresse"
         },

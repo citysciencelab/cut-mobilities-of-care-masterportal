@@ -110,6 +110,14 @@
     white-space: normal;
 }
 
+.popover-solaratlas {
+    margin: 8px;
+}
+
+.popover-solaratlas p {
+    font-size: 12px;
+}
+
 /* minimiertes Info-Fenster*/
 .popover-min {
     position: fixed;
@@ -155,4 +163,9 @@
     background-color: #337ab7;
     color: #fff;
     cursor: pointer;
+}
+
+.gfi-iFrame {
+    height: 300px;
+    width: 500px;
 }

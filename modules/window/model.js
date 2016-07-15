@@ -36,13 +36,21 @@ define([
                 this.set("isVisible", value);
             },
             setParams: function (args) {
+                if (_.isUndefined(args[3]) === false) {
+                    this.set("modelId", args[3]);
+                }
                 this.set("title", args[1]);
                 this.set("icon", args[2]);
                 this.set("winType", args[0]);
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {
-                EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
+                if (this.has("modelId")) {
+                    EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
+                }
+                else {
+                    EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
+                }
             }
         });
 

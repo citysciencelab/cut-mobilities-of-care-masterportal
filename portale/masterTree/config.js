@@ -15,7 +15,7 @@ define(function () {
            orientation: "once",
            poi: true
        },
-       layerConf: "../components/lgv-config/services-fhhnet.json",
+       layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
        restConf: "../components/lgv-config/rest-services-fhhnet.json",
        styleConf: "../components/lgv-config/style.json",
        print: {

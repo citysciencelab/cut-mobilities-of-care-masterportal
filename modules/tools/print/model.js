@@ -135,7 +135,7 @@ define([
             if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
-            this.sendGFIForPrint();
+            this.getGFIForPrint();
         },
         /**
         *
@@ -206,20 +206,37 @@ define([
                             type: feature.getGeometry().getType()
                         }
                     });
-                    if (feature.getStyle().getText() === null) {
-                        featureStyles[index] = {
-                            fillColor: this.getColor(feature.getStyle().getFill().getColor()).color,
-                            fillOpacity: this.getColor(feature.getStyle().getFill().getColor()).opacity,
-                            pointRadius: feature.getStyle().getImage().getRadius(),
-                            strokeColor: this.getColor(feature.getStyle().getStroke().getColor()).color,
-                            strokeWidth: feature.getStyle().getStroke().getWidth(),
-                            strokeOpacity: this.getColor(feature.getStyle().getStroke().getColor()).opacity
-                        };
+
+                    var type = feature.getGeometry().getType(),
+                        styles = feature.getStyleFunction().call(feature),
+                        style = styles[0];
+                    // Punkte
+                    if (type === "Point") {
+                        // Punkte ohne Text
+                        if (style.getText() === null) {
+                            featureStyles[index] = {
+                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                            pointRadius: style.getImage().getRadius(),
+                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                            };
+                        }
+                        // Texte
+                        else {
+                            featureStyles[index] = {
+                                label: style.getText().getText(),
+                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                            };
+                        }
                     }
+                    // Polygone oder Linestrings
                     else {
                         featureStyles[index] = {
-                            label: feature.getStyle().getText().getText(),
-                            fontColor: this.getColor(feature.getStyle().getText().getFill().getColor()).color
+                            fillColor: this.getColor(style.getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                            strokeColor: this.getColor(style.getStroke().getColor()).color,
+                            strokeWidth: style.getStroke().getWidth()
                         };
                     }
                 }
@@ -320,34 +337,35 @@ define([
             }
             this.setSpecification();
         },
+
         /**
-        * Abfrage an popupmodel starten. Bedingt Config.tools.gfi: true.
-        */
-        sendGFIForPrint: function () {
-            EventBus.trigger("sendGFIForPrint");
-        },
-        /**
-        * [[Description]]
+        * Abfrage an popupmodel starten.
         * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
         */
-        receiveGFIForPrint: function (values) {
-            this.set("gfiParams", _.pairs(values[0]));
-            this.set("gfiTitle", values[1]);
-            this.set("printGFIPosition", values[2]);
-            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-            if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
-                this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-            }
-            else {
-                if (_.has(Config.print, "configYAML") === true) {
-                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
+        getGFIForPrint: function () {
+            var gfis = Radio.request("GFIPopup", "getGFIForPrint");
+
+            if (_.isUndefined(gfis) === false) {
+                this.set("gfiParams", _.pairs(gfis[0]));
+                this.set("gfiTitle", gfis[1]);
+                this.set("printGFIPosition", gfis[2]);
+                // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                    this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
                 }
                 else {
-                    this.set("createURL", this.get("printurl") + "/master/create.json");
+                    if (_.has(Config.print, "configYAML") === true) {
+                        this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
+                    }
+                    else {
+                        this.set("createURL", this.get("printurl") + "/master/create.json");
+                    }
                 }
-
+                this.setGFIPos();
             }
-            this.setGFIPos();
+            else {
+                this.setSpecification();
+            }
         },
 
         /**
@@ -401,6 +419,8 @@ define([
         getColor: function (value) {
             var color = value,
                 opacity = 1;
+            // color kommt als array--> parsen als String
+            color = color.toString();
 
             if (color.search("#") === -1) {
                 var begin = color.indexOf("(") + 1;

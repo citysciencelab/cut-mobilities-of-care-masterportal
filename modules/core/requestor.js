@@ -47,12 +47,40 @@ define([
                 }
              });
              if (containsWMS === true) {
-                _.each(sortedParams, function (visibleLayer) {
-                    if (visibleLayer.ol_layer.get("typ") === "WMS") {
-                            this.set("typ", visibleLayer.ol_layer.get("typ"));
-                            gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
-                        }
+                // Hier wird sortedParams gefiltert nach dem infoFormat text/html in dem Attribut url.
+                 var paramList = _.groupBy(sortedParams, function (param) {
+                     return param.url.match(/INFO_FORMAT=text%2Fhtml/g) ? "html" : "xml";
+                 });
+                // Die Layer mit dem InfoFormat text/html werden hier separat behandelt.
+                // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
+                _.each(paramList.html, function (param) {
+                    if (param.ol_layer.get("featureCount")) {
+                        var featurecount = "&FEATURE_COUNT=";
+                        featurecount= featurecount.concat(param.ol_layer.get("featureCount").toString());
+                        param.url=param.url.concat(featurecount);
+                    }
+                    if (param.ol_layer.id === "2407" || param.ol_layer.id === "4423") {
+                        window.open(param.url, "_blank");
+                    }
+                    else {
+                        var gfiFeatures = {"html": param.url};
+
+                        this.pushGFIContent([gfiFeatures], param);
+                    }
                 }, this);
+                // Wenn keine weiteren Layer im xml Format abgefragt werden wird hier das template gebaut.
+                if (_.isUndefined(paramList.xml)) {
+                    this.buildTemplate(positionGFI);
+                }
+                else {
+                    _.each(paramList.xml, function (param) {
+
+                        if (param.ol_layer.get("typ") === "WMS") {
+                                this.set("typ", param.ol_layer.get("typ"));
+                                gfiContent = this.setWMSPopupContent(param, positionGFI);
+                            }
+                    }, this);
+                }
             }
             else {
                 this.buildTemplate(positionGFI);
@@ -207,6 +235,7 @@ define([
                         key = this.beautifyString(key);
                         gfi[key] = value;
                     }, this);
+                    // im IE müssen die Attribute für WMS umgedreht werden
                  if (Util.isInternetExplorer() !== false && typ !== "WFS") {
                         var keys = [],
                             values = [];
@@ -222,10 +251,17 @@ define([
                 }
                 else {
                     // map object keys to gfiAttributes from layer model
-                    _.each(preGfi, function (value, key) {
-                        key = gfiAttributes[key];
+
+//                    _.each(preGfi, function (value, key) {
+//                        key = gfiAttributes[key];
+//                        if (key) {
+//                            gfi[key] = value;
+//                        }
+//                    });
+                    _.each(gfiAttributes, function (value, key) {
+                        key = preGfi[key];
                         if (key) {
-                            gfi[key] = value;
+                            gfi[value] = key;
                         }
                     });
                 }

@@ -14,7 +14,7 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render,
+                "change:isCollapsed change:isCurrentWin": this.render
             });
         },
 
@@ -37,9 +37,18 @@ define([
         },
 
         setText: function (evt) {
-            var reader = null;
-            var file = evt.target.files[0];
-            var reader = new FileReader();
+            var reader = null,
+                file = evt.target.files[0],
+                reader = new FileReader();
+
+            $("#fakebutton").toggleClass("btn-primary");
+
+            if ($("#fakebutton").hasClass("btn-primary") === true) {
+                $("#btn_import").prop("disabled", false);
+            }
+            else {
+                $("#btn_import").prop("disabled", true);
+            }
 
             reader.onload = (function () {
                 var fakeBtnTxt = $("#kmlinput").val(),
@@ -48,13 +57,9 @@ define([
                 this.model.setText(reader.result);
                 $("#fakebutton").html("Datei: " +
                 test);
-                $("#fakebutton").toggleClass("btn-primary");
             }).bind(this);
             reader.readAsText(file);
-        },
-        searchFile: function () {
-            console.log("searchFile");
-        },
+        }
     });
 
     return ImportView;
