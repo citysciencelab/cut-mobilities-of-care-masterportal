@@ -4,7 +4,7 @@ define([
     "text!modules/window/templateMax.html",
     "text!modules/window/templateMin.html",
     "eventbus",
-    "jqueryui/draggable"
+    "jqueryui/widgets/draggable"
 ], function (Backbone, Window, templateMax, templateMin, EventBus) {
 
     var WindowView = Backbone.View.extend({

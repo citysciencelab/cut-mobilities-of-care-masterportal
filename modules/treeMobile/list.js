@@ -7,7 +7,7 @@ define([
     "modules/treeMobile/item/model",
     "modules/treeMobile/layer/model",
     "jqueryui/effect",
-    "jqueryui/effect-slide"
+    "jqueryui/effects/effect-slide"
 ], function () {
 
      var Backbone = require("backbone"),

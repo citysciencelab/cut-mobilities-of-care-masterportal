@@ -4,7 +4,7 @@ define([
     "modules/layer/list",
     "modules/treeLight/view",
     "eventbus",
-    "jqueryui/sortable"
+    "jqueryui/widgets/sortable"
 ], function (Backbone, Radio, LayerList, LayerView, EventBus) {
 
     var LayerListView = Backbone.View.extend({
