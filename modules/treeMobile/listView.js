@@ -7,7 +7,7 @@ define([
     "modules/treeMobile/item/view",
     "modules/treeMobile/breadCrumb/listView",
     "jqueryui/effect",
-    "jqueryui/effects/effect-slide"
+    "jqueryui/effect-slide"
 ], function () {
 
     var Backbone = require("backbone"),
