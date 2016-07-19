@@ -1,12 +1,12 @@
 define([
     "backbone",
-    "text!modules/menu/desktop/layer/templateLightSettings.html",
+    "text!modules/menu/desktop/layer/templateSettings.html",
     "text!modules/menu/desktop/layer/templateLight.html",
     "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
-        TemplateSettings = require("text!modules/menu/desktop/layer/templateLightSettings.html"),
+        TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
         Template = require("text!modules/menu/desktop/layer/templateLight.html"),
         Radio = require("backbone.radio"),
         LayerView;
@@ -30,7 +30,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender,
-                "change:isSettingVisible": this.rerender,
+                "change:isSettingVisible": this.renderSetting,
                 "change:transparency": this.rerender
             });
 
@@ -47,26 +47,41 @@ define([
             var attr = this.model.toJSON(),
                 selector = $("#" + this.model.getParentId());
 
-            this.$el.html("");
+            selector.prepend(this.$el.html(this.template(attr)));
             if (this.model.getIsSettingVisible() === true) {
-                selector.prepend(this.$el.html(this.templateSettings(attr)));
-            }
-            else {
-                selector.prepend(this.$el.html(this.template(attr)));
+                 this.$el.append(this.templateSettings(attr));
             }
         },
+
         rerender: function () {
             var attr = this.model.toJSON();
 
-            this.$el.html("");
+            this.$el.html(this.template(attr));
             if (this.model.getIsSettingVisible() === true) {
-                this.$el.html(this.templateSettings(attr));
-            }
-            else {
-                this.$el.html(this.template(attr));
+                this.$el.append(this.templateSettings(attr));
             }
         },
 
+        /**
+         * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+         */
+        renderSetting: function () {
+            var attr = this.model.toJSON();
+
+            // Animation Zahnrad
+            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+            // Slide-Animation templateSetting
+            if (this.model.getIsSettingVisible() === false) {
+                this.$el.find(".layer-settings").slideUp("slow", function () {
+                    this.remove();
+                });
+            }
+            else {
+                this.$el.append(this.templateSettings(attr));
+                this.$el.find(".layer-settings").hide();
+                this.$el.find(".layer-settings").slideDown();
+            }
+        },
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
             this.rerender();

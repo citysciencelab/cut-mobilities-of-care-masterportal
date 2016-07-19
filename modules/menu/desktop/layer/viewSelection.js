@@ -17,11 +17,11 @@ define([
         template: _.template(Template),
         templateSettings: _.template(TemplateSettings),
         events: {
-            "click .glyphicon-check": "toggleIsVisibleInMap",
+            "click .glyphicon-check, .title": "toggleIsVisibleInMap",
             "click .glyphicon-unchecked": "toggleIsVisibleInMap",
             "click .glyphicon-info-sign": "showLayerInformation",
             "click .glyphicon-remove-circle": "removeFromSelection",
-            "click .layer-info-item  .glyphicon-cog": "toggleIsSettingVisible",
+            "click .glyphicon-cog": "toggleIsSettingVisible",
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
             "click .glyphicon-plus-sign": "incTransparency",
@@ -30,34 +30,50 @@ define([
         },
         initialize: function () {
              this.listenTo(this.model, {
-                "change:isSettingVisible": this.rerender,
+                "change:isVisibleInMap": this.rerender,
+                "change:isSettingVisible": this.renderSetting,
                 "change:transparency": this.rerender
             });
             this.render();
         },
 
         render: function () {
-            this.$el.html("");
             var selector = $("ul#SelectedLayer"),
-                attr = this.model.toJSON(),
-                template = this.template(attr);
+                attr = this.model.toJSON();
 
+            selector.prepend(this.$el.html(this.template(attr)));
             if (this.model.getIsSettingVisible() === true) {
-                template = this.templateSettings(attr);
-            }
-            if (this.model.getIsSelected()) {
-                selector.prepend(this.$el.html(template));
+                this.$el.append(this.templateSettings(attr));
             }
         },
         rerender: function () {
-            this.$el.html("");
-            var attr = this.model.toJSON(),
-                template = this.template(attr);
+            var attr = this.model.toJSON();
 
+            this.$el.html(this.template(attr));
             if (this.model.getIsSettingVisible() === true) {
-                template = this.templateSettings(attr);
+                this.$el.append(this.templateSettings(attr));
             }
-            this.$el.html(template);
+        },
+
+        /**
+         * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+         */
+        renderSetting: function () {
+            var attr = this.model.toJSON();
+
+            // Animation Zahnrad
+            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+            // Slide-Animation templateSetting
+            if (this.model.getIsSettingVisible() === false) {
+                this.$el.find(".layer-settings").slideUp("slow", function () {
+                    this.remove();
+                });
+            }
+            else {
+                this.$el.append(this.templateSettings(attr));
+                this.$el.find(".layer-settings").hide();
+                this.$el.find(".layer-settings").slideDown();
+            }
         },
 
         toggleIsSelected: function () {
@@ -72,7 +88,6 @@ define([
 
         toggleIsVisibleInMap: function () {
             this.model.toggleIsVisibleInMap();
-            this.rerender();
         },
 
         showLayerInformation: function () {
@@ -83,7 +98,6 @@ define([
 
         toggleIsSettingVisible: function () {
             this.model.toggleIsSettingVisible();
-            this.rerender();
         },
 
         moveModelDown: function () {

@@ -1,32 +1,18 @@
-<span class="glyphicon glyphicon-remove-circle pull-left"></span>
-<span class="pull-left">
-    <% if (isVisibleInMap === true) { %>
-        <span class="glyphicon glyphicon-check pull-left"></span>
-    <% } else { %>
-        <span class="glyphicon glyphicon-unchecked pull-left"></span>
-    <% } %>
-</span>
+<!DOCTYPE html>
 <div class="layer-settings">
-    <span class="layer-name" data-toggle="tooltip" data-placement="bottom" title="<%= name %>"><%= name.substr(0,7) + "..." %></span>
-    <span class="pull-right">
+    <span class="">
         <span class="transparency">
             <span class="text">Transparenz:</span>
             <span class="glyphicon glyphicon-plus-sign" data-toggle="tooltip" data-placement="bottom" title="Transparenz erhöhen"></span>
             <span class="badge"> <%= transparency + '%' %></span>
             <span class="glyphicon glyphicon-minus-sign" data-toggle="tooltip" data-placement="bottom" title="Transparenz verringern"></span>
         </span>
-        <% if (typeof styleable !== "undefined" && styleable === true) { %>
-           <span class="glyphicon glyphicon-picture" data-toggle="tooltip" data-placement="bottom" title="Layer stylen"></span>
-        <% } %>
-        <span class="arrows">
+        <span class="arrows pull-right">
+            <% if (typeof styleable !== "undefined" && styleable === true) { %>
+                <span class="glyphicon glyphicon-picture" data-toggle="tooltip" data-placement="bottom" title="Layer stylen"></span>
+                <% } %>
             <span class="glyphicon glyphicon-arrow-up" data-toggle="tooltip" data-placement="bottom" title="Ebene nach oben"></span>
             <span class="glyphicon glyphicon-arrow-down" data-toggle="tooltip" data-placement="bottom" title="Ebene nach unten"></span>
         </span>
-        <span class="layer-info-item">
-        <span "cog-span">
-            <span class="glyphicon glyphicon-cog rotate"></span>
-        </span>
     </span>
-</span>
-
 </div>

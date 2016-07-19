@@ -1,12 +1,33 @@
+/**************** Themenbaum ****************/
+ul#Themen {
+    border: none;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    padding: 0px 0;
+    min-width:  380px;
+}
+
+ul#Themen .glyphicon {
+    cursor: pointer;
+    font-size: 15px;
+    padding-right: 5px;
+    top: 3px;
+}
+
+ul#Themen .glyphicon-cog {
+    font-size: 18px;
+    padding: 0;
+}
+
+ul#Themen .glyphicon-info-sign {
+    font-size: 18px;
+    padding-right: 6px;
+}
+
 /* ----------------------Themenbaum light -----------------------------*/
 ul#Themen.light {
-    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     font-size: 12px;
     color: rgb(85, 85, 85);
     border: 1px solid rgb(229, 229, 229);
-}
-ul#Themen.light .glyphicon {
-    cursor:pointer;
 }
 
 ul#Themen.light li {
@@ -23,49 +44,7 @@ ul#Themen.light li span.title {
     cursor:pointer;
 }
 
-ul#Themen.light .layer-settings .glyphicon {
-    font-size: 15px;
-    padding: 0 0px;
-    cursor:pointer;
-}
-
-
-ul#Themen.light .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparency, #Themen #SelectedLayer .layer-settings .layer-info-item {
-    padding: 0px 5px;
-}
-
-ul#Themen.light .layer-settings {
-    font-size: 12px;
-}
-ul#Themen.light .layer-settings .text {
-    position: relative;
-    top: -1px;
-}
-ul#Themen.light .layer-settings .layer-name{
-    position: relative;
-    top: 1px;
-}
-ul#Themen.light .layer-settings .transparency .badge {
-    top: -2px;
-    position: relative;
-}
-ul#Themen.light .layer-settings .transparency .glyphicon {
-    padding-left: 0px;
-}
-/* -----------------------Themenbaum-----------------------------------*/
 /*Haupt Themenliste */
-ul#Themen {
-   border: none;
-   font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
-   padding: 0px 0;
-
-    min-width:  380px;
-}
-ul#Themen .glyphicon {
-    font-size: 15px;
-    padding: 0 5px;
-    top: 3px;
-}
 
 ul#Themen .closed:not(.SelectedLayer ){
     border-bottom: 1px solid #ddd;
@@ -81,6 +60,10 @@ ul#Themen ul {
 ul#Themen .catalog_buttons .glyphicon {
     padding: 0px 0;
     cursor: pointer;
+}
+
+ul#Themen .catalog_buttons .glyphicon-adjust {
+    font-size: 14px
 }
 
 ul#Themen ul .title {
@@ -145,45 +128,17 @@ ul#Themen ul{
     max-width:  500px;
 }
 
-ul#Themen .glyphicon {
-    cursor: pointer;
-}
-
 ul#Themen #SelectedLayer li {
     overflow: auto;
-    padding: 5px 4px 7px 2px;
-}
-ul#Themen #SelectedLayer .glyphicon {
-    padding-left: 6px
-}
-ul#Themen #SelectedLayer .layer-settings .glyphicon {
-    font-size: 15px;
-    padding: 0 0px;
-}
-ul#Themen #SelectedLayer .layer-settings .arrows, #Themen #SelectedLayer .layer-settings .transparency, #Themen #SelectedLayer .layer-settings .layer-info-item {
-    padding: 0px 5px;
+    padding: 8px 6px;
 }
 
-ul#Themen #SelectedLayer .layer-settings {
-    font-size: 12px;
-}
-ul#Themen #SelectedLayer .layer-settings .text {
-    position: relative;
-    top: -1px;
-}
-ul#Themen #SelectedLayer .layer-settings .layer-name{
-    position: relative;
-    top: 1px;
-}
-ul#Themen #SelectedLayer .layer-settings .transparency .badge {
-    top: -2px;
-    position: relative;
-}
-ul#Themen #SelectedLayer .layer-settings .transparency .glyphicon {
-    padding-left: 0px;
-}
 ul#Themen .SelectedLayer .layer-selection-save {
     font-size: 11px;
     font-weight: 400;
     cursor: pointer;
+}
+
+.dropdown-folder .glyphicon {
+    font-size: 12px;
 }
