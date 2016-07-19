@@ -145,6 +145,10 @@ ul#Themen ul{
     max-width:  500px;
 }
 
+ul#Themen .glyphicon {
+    cursor: pointer;
+}
+
 ul#Themen #SelectedLayer li {
     overflow: auto;
     padding: 5px 4px 7px 2px;
