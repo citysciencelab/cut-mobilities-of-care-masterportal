@@ -14,11 +14,10 @@ define([
         ListView;
 
     ListView = Backbone.View.extend({
-        collection: new List(),
+        collection: {},
         className: "breadcrumb-mobile",
         targetElement: "div.collapse.navbar-collapse",
         template: _.template(Template),
-        subviews: [],
         events: {
             "click ul.back-item": "removeLastItem"
         },
@@ -27,6 +26,7 @@ define([
          * Registriert die Listener und ruft die render-Funktion auf
          */
         initialize: function () {
+            this.collection = new List();
             this.listenTo(Radio.channel("MenuBar"), {
                 // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
                 "switchedMenu": this.render
@@ -56,7 +56,6 @@ define([
         addViews: function (model) {
             var breadCrumbView = new View({model: model});
 
-            this.subviews.push(breadCrumbView);
             $(".breadcrumb-mobile > .breadcrumb").append(breadCrumbView.render().el);
         },
 
@@ -68,9 +67,8 @@ define([
             this.collection.removeLastItem();
         },
         removeView: function () {
-            while (this.subviews.length) {
-                this.subviews.pop().remove();
-            }
+            this.collection = {};
+
             this.remove();
         }
     });

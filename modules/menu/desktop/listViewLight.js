@@ -32,8 +32,8 @@ define([
             },
             addViews: function (models) {
                 _.each(models, function (model) {
-                    new DesktopLayerViewLight({model: model});
-                });
+                     new DesktopLayerViewLight({model: model});
+                }, this);
             }
         });
         return Menu;

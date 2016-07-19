@@ -25,7 +25,6 @@ define([
             collection: {},
             el: "nav#main-nav",
             attributes: {role: "navigation"},
-            subviews: [],
             breadCrumbListView: {},
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
@@ -83,7 +82,7 @@ define([
                 this.addViews(models);
             },
             renderSelection: function (withAnimation) {
-                var models = this.collection.where({isSelected: true});
+                var models = this.collection.where({isSelected: true, type: "layer"});
 
                 models = _.sortBy(models, function (layer) {
                         return layer.getSelectionIDX();
@@ -161,7 +160,6 @@ define([
                             break;
                         }
                     }
-                    this.subviews.push(nodeView);
                     $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
                 }, this);
             },
@@ -172,10 +170,8 @@ define([
                 this.$el.find("ul.nav-menu").html("");
 
                 this.breadCrumbListView.removeView();
-                while (this.subviews.length) {
-                    this.subviews.pop().remove();
-                }
                 this.remove();
+                this.collection.setAllModelsInvisible();
                 $("body").append(this.el);
             }
         });
