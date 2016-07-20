@@ -119,7 +119,7 @@ define([
         getLayerID: function () {
             return this.get("layerId");
         },
-        setTransparency function (value) {
+        setTransparency: function (value) {
             this.set("transparency", value);
         },
         getTransparence: function () {
