@@ -37,7 +37,7 @@ define(function () {
         isMenubarVisible: true,
         menu: {
             viewerName: "Bohrdatenportal",
-            searchBar: true,
+            //searchBar: true,
             layerTree: true,
             helpButton: false,
             contact: {
@@ -80,13 +80,18 @@ define(function () {
         startUpModul: "",
         searchBar: {
             placeholder: "Suche Adresse, Thema",
-            gazetteerURL: function () {
-                return "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0";
+            minChars: 3,
+            gazetteer: {
+                minChars: 3,
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                searchStreets: true,
+                searchHouseNumbers: true,
+                searchDistricts: true,
+                searchParcels: true
             },
             tree: {
                 minChars: 3
-            },
-            geoLocateHit: true
+            }
         },
         tools: {
             gfi: {
