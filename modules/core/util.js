@@ -23,7 +23,6 @@ define([
             else{
                 return false;
             }
-//            return navigator.userAgent.match(/Chrome/i);
         },
         isAny: function () {
             return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
