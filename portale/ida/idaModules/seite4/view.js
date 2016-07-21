@@ -28,6 +28,7 @@ define([
             new Seite5();
         },
         show: function () {
+            $("#seite_zwei").hide();
             $("#seite_drei").hide();
             $("#seite_fuenf").hide();
             $("#seite_vier").show();
