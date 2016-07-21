@@ -3,8 +3,9 @@ define([
     "text!modules/controls/orientation/template.html",
     "modules/controls/orientation/model",
     "config",
-    "eventbus"
-], function (Backbone, OrientationTemplate, OrientationModel, Config, EventBus) {
+    "eventbus",
+    "modules/core/util"
+], function (Backbone, OrientationTemplate, OrientationModel, Config, EventBus, Util) {
     "use strict";
     var OrientationView = Backbone.View.extend({
         className: "row",
@@ -15,22 +16,26 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
-            this.listenTo(EventBus, {
-                "layerlist:sendVisibleWFSlayerList":this.checkWFS
-            });
-            this.model.set("zoomMode", Config.controls.orientation);
-
-            if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
-                require(["modules/controls/orientation/poi/view", "modules/controls/orientation/poi/feature/view"], function (PoiView, FeatureView) {
-                    new PoiView();
+            // Chrome erlaubt nur bei https-Seiten die Lokalisierung (stand: 20.07.2016).
+            // Deshalb nehmen wir bei Chrome die Lokalisierung raus, da unsere Portale auf http laufen und die Dienste auch.
+            if (!(Util.isChrome() === true && window.location.protocol === "http:")) {// wenn es nicht Chrome UND http ist, Lokalisierung und InMeinerNähe initialisieren
+                this.listenTo(EventBus, {
+                    "layerlist:sendVisibleWFSlayerList":this.checkWFS
                 });
+                this.model.set("zoomMode", Config.controls.orientation);
+
+                if (_.has(Config.controls, "poi") === true && Config.controls.poi === true) {
+                    require(["modules/controls/orientation/poi/view", "modules/controls/orientation/poi/feature/view"], function (PoiView, FeatureView) {
+                        new PoiView();
+                    });
+                }
+                this.listenTo(this.model, {
+                    "change:tracking": this.trackingChanged
+                }, this);
+                this.render();
+                // erst nach render kann auf document.getElementById zugegriffen werden
+                this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
             }
-            this.listenTo(this.model, {
-                "change:tracking": this.trackingChanged
-            }, this);
-            this.render();
-            // erst nach render kann auf document.getElementById zugegriffen werden
-            this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
         },
         /*
         * Steuert die Darstellung des Geolocate-buttons
