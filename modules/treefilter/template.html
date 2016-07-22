@@ -99,6 +99,12 @@
             </div>
         </div>
     </form>
-<div class="text-right">
+<% if (filterHits === "" || filterHits === "222667") { %>
+<div class="text-right"><% console.log(filterHits) %>
+    Gesamtzahl Straßenbäume: <strong>222.667</strong>
+</div>
+<% } else  { %>
+<div class="text-right"><% console.log(filterHits) %>
     Anzahl der gefilterten Bäume: <strong id="treeCounter"><%= filterHits %></strong>
 </div>
+<% } %>

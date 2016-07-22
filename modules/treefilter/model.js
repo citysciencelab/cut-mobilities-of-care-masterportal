@@ -284,7 +284,7 @@ define([
             this.set("treeType", "");
             // this.set("yearMax", "2014");
             this.setYearMax("2015");
-            this.setYearMin("1");
+            this.setYearMin("0");
             // this.set("yearMin", "0");
             this.setDiamterMax("50");
             this.setDiameterMin("0");
