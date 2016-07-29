@@ -33,15 +33,17 @@ define(function () {
             orientation: false,
             poi: true
         },
+        footer: true,
+        quickHelp: true,
         layerConf: "../components/lgv-config/services-verkehrsmodell.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
+        proxyURL: "/cgi-bin/proxy.cgi",
         print: {
             printID: "99999",
             title: "Verkehrsmodell",
             gfi: false
         },
-        proxyURL: "/cgi-bin/proxy.cgi",
         menubar: true,
         mouseHover: true,
         scaleLine: true,
