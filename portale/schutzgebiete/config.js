@@ -11,7 +11,7 @@ define(function () {
                 {id: "1994", visibility: true, "name" : "Vogelschutzgebiete"},
                 {id: "1999", visibility: true}, //Naturdenkmal
                 {id: "1998", visibility: true}, //Landschaftschtutzgeb.
-                {id: "1992", visibility: true}  //Naturschutzgebiete
+                {id: "1992", visibility: true, transparence: "50"}  //Naturschutzgebiete
             ]
         },
         simpleMap: false,
