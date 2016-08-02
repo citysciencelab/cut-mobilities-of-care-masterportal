@@ -128,8 +128,18 @@ define([
                     break;
                 }
                 case "Thema": {
-                    Radio.trigger("ModelList", "showModelInTree", hit.id);
-                    //EventBus.trigger("showLayerInTree", hit.id); // den Tree gibt es nur zusammen mit Karte
+                    var isMobile = Radio.request("Util", "isViewMobile");
+
+                    // desktop - Themenbaum wird aufgeklappt
+                    if (isMobile === false) {
+                        Radio.trigger("ModelList", "showModelInTree", hit.id);
+                    }
+                    // mobil
+                    else {
+                        // Fügt das Model zur Liste hinzu, falls noch nicht vorhanden
+                        Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
+                        Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
+                    }
                     break;
                 }
                 case "Olympiastandort": {

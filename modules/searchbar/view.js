@@ -253,6 +253,7 @@ define([
             // 3. Zoome ggf. auf Ergebnis
             EventBus.trigger("mapHandler:zoomTo", hit);
             // 4. Triggere Treffer über Eventbus
+            // wird nicht mehr benötigt??? SD 02.08.2016
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
             if (evt){
