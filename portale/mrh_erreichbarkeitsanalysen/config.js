@@ -11,14 +11,23 @@ define(function () {
                 {id: "53", visibility: false}, // WebAtlas_grau
                 {id: "55", visibility: false}, // Luftbilder
                 {id: "57", visibility: false}, // 1:5000
-                {id: "4441", visibility: true, styleable: true, geomType: "Polygon", attributesToStyle: ["AP30Sum", "AP60Sum"]}
-                 // Erreichbarkeitsanalysen
+                {id: "4646", visibility: false}, // Gewässer Erreichbarkeitsanalysen
+                {id: "4748", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["EntfernungbiszumnaechstenBahnhof"]}, // Erreichbarkeitsanalysen
+                {id: "4749", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["ZeitmitdemRadbiszurnaechstenGrundschule"]}, // Erreichbarkeitsanalysen
+                {id: "4750", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["EntfernungbiszumnaechstenRadschnellweg"]}, // Erreichbarkeitsanalysen
+                {id: "4751", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["ErreichbareArbeitsplaetzein60Min"]}, // Erreichbarkeitsanalysen
+                {id: "4752", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["ErreichbareArbeitsplaetzein30Min"]}, // Erreichbarkeitsanalysen
+                {id: "4753", visibility: false, styleable: true, geomType: "Polygon", attributesToStyle: ["ErreichbareArbeitsplaetzeohneUmstieg"]}, // Erreichbarkeitsanalysen
+                {id: "4643", visibility: false}, // Bahnnetz Erreichbarkeitsanalysen
+                {id: "4642", visibility: false}, // Bahnstationen Erreichbarkeitsanalysen
+                {id: "4647", visibility: false}, // Grenze der Metropolregion Erreichbarkeitsanalysen
+                {id: "4648", visibility: false} // Grundschule Erreichbarkeitsanalysen
             ]
         },
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true
+            orientation: "once"
         },
         attributions: true,
         footer: {
@@ -124,7 +133,7 @@ define(function () {
             wfsFeatureFilter: false,
             legend: true,
             routing: false,
-            addWMS: true
+            addWMS: false
         },
         menuItems: {
             tree: {
@@ -143,10 +152,6 @@ define(function () {
                 title: "Kontakt",
                 glyphicon: "glyphicon-envelope",
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            },
-            addWMS: {
-                title: "WMS hinzufügen",
-                glyphicon: "glyphicon-plus"
             }
         },
         startUpModul: "",
