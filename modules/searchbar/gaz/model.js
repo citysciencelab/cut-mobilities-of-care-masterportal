@@ -126,6 +126,7 @@ define([
                 var splitInitString = searchString.split(",");
 
                 this.set("onlyOneStreetName", splitInitString[0]);
+                searchString = searchString.replace(/\ /g, "");
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/\,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false);
                 this.searchInHouseNumbers();
