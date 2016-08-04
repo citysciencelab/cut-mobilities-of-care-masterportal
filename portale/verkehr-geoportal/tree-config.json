@@ -99,6 +99,33 @@
         },
         {
           "Titel": "ÖV-Netze",
+            "Ordner": [
+            {
+              "Titel": "Einzugsbereiche von HVV-Haltestellen",
+              "Layer": [
+                {
+                  "id": "4624",
+                  "visibility": false
+                },
+                {
+                  "id": "4625",
+                  "visibility": false
+                },
+                {
+                  "id": "4626",
+                  "visibility": false
+                },
+                {
+                  "id": "4627",
+                  "visibility": false
+                },
+                {
+                  "id": "4628",
+                  "visibility": false
+                }
+              ]
+            }
+                ],
           "Layer": [
             {
               "id": "1935",
@@ -114,7 +141,7 @@
               "name": ["Haltestellen"],
               "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
             },
-             {
+            {
               "id": "2679",
               "visible": false,
               "name" : "Schienenverkehrsnetz MRH",
@@ -227,21 +254,28 @@
               "Layer": [
                 {
                   "id": "2157",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Kfz-Bedarfszählstellen",
+                  "metaName": "Kfz-Bedarfszählstellen"
                 },
                 {
                   "id": "2158",
                   "visibility": false,
-                  "name" : "Kfz Dauerzählstelle",
-                  "metaName": "Kfz Dauerzählstelle"
+                  "name" : "Kfz-Dauerzählstellen",
+                  "metaName": "Kfz-Dauerzählstellen"
                 },
                 {
                   "id": "2159",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Kfz-Jährliche Zählstellen",
+                  "metaName": "Kfz-Jährliche Zählstellen"
                 },
                 {
                   "id": "2160",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Kfz-Pegel",
+                  "metaName": "Kfz-Pegel"
+                
                 }
               ]
             },
@@ -250,14 +284,27 @@
               "Layer": [
                 {
                   "id": "1587",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Rad-Bedarfszählstellen",
+                  "metaName": "Rad-Bedarfszählstellen"
                 },
                 {
                   "id": "1588",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Rad-Jährliche Zählstellen",
+                  "metaName": "Rad-Jährliche Zählstellen"
                 },
                 {
                   "id": "2918",
+                  "visibility": false
+                }
+              ]
+            },
+            {
+              "Titel": "Zählstellen - Fussgänger",
+              "Layer": [
+                {
+                  "id": "4622",
                   "visibility": false
                 }
               ]
