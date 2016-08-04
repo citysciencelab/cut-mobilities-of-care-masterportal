@@ -130,145 +130,8 @@ define([
              */
             if (_.has(result, "LAYERIDS") && result.LAYERIDS.length > 0) {
                 this.createLayerParams();
-//                 var valuesString = _.values(_.pick(result, "LAYERIDS"))[0],
-//                     visibilityListString = _.values(_.pick(result, "VISIBILITY"))[0],
-//                     transparencyListString = _.values(_.pick(result, "TRANSPARENCY"))[0],
-//                     values = [],
-//                     vis = [],
-//                     trans = [];
-// // console.log(visibilityListString);
-//                 if (valuesString.indexOf(",") !== -1) {
-//                     values = valuesString.split(",");
-//                     vis = visibilityListString.split(",");
-//                     trans = transparencyListString.split(",");
-//                 }
-//                 else {
-//                     values.push(valuesString);
-//                 }
-//                 console.log(values);
-//                 _.each(values, function (val, index) {//console.log(val + " " + vis[index] + " " + typeof vis[index] + " " + trans[index]);
-//                     Radio.trigger("ModelList", "addModelsByAttributes", {id: val});
-//                     Radio.trigger("ModelList", "setModelAttributesById", val, {isSelected: true, transparency: trans[index]});
-//                     if (vis[index] === "TRUE") {
-//                         Radio.trigger("ModelList", "setModelAttributesById", val, {isVisibleInMap: true});
-//                     }
-//                     else {
-//                         Radio.trigger("ModelList", "setModelAttributesById", val, {isVisibleInMap: false});
-//                     }
-//                 });
-
-                // if (_.has(result, "VISIBILITY")) {
-                //     if (visibilityListString && visibilityListString.indexOf(",") !== -1) {
-                //         visibilityList = visibilityListString.split(",");
-                //     }
-                //     else {
-                //         visibilityList.push(visibilityListString);
-                //     }
-                // }
-                // if (_.has(result, "transparency")) {
-                //     if (transparencyListString && transparencyListString.indexOf(",") !== -1) {
-                //         transparencyList = transparencyListString.split(",");
-                //     }
-                //     else {
-                //         transparencyList.push(transparencyListString);
-                //     }
-                // }
-                // if (Config.tree.type === "light" || Config.tree.type === "custom") {
-                //     var params = [],
-                //         visibilitycheck = false;
-                //
-                //     if (visibilityListString) {
-                //         // für alle Layerid-parameter visible-parameter enthalten?
-                //         visibilitycheck = (visibilityList.length === values.length);
-                //     }
-                //     // Layer-ID-Objekt aus Url-Params erstellen
-                //     _.each(values, function (k, i) {
-                //         // wenn für alle Layerid-parameter visible-parameter enthalten sind.
-                //         if (visibilitycheck === true) {
-                //             var visibleParam = (visibilityList[i] === "TRUE");
-                //
-                //             params.push({
-                //                 id: values[i],
-                //                 visibility: visibleParam,
-                //                 transparency: transparencyList[i]
-                //             });
-                //         }
-                //         // wenn nicht, alle defaultmäßig "true"setzen
-                //         else {
-                //             params.push({
-                //                 id: values[i],
-                //                 visibility: true
-                //                 });
-                //             }
-                //     });
-                //     // Wenn Layer nicht im tree.layer enthalten ist, diesen hinzufügen
-                //     if (_.has(Config.tree, "layer") === false) {
-                //          Config.tree.layer = [];
-                //     }
-                //     _.each(params, function (param) {
-                //         var layer = _.find(Config.tree.layer, function (layer) {
-                //             var layerid = "";
-                //             // Gruppenlayer
-                //             if (_.isObject(layer.id)) {
-                //                 _.each (layer.id, function (obj) {
-                //                     layerid += obj.id + "_";
-                //                 });
-                //                 layerid = layerid.substring(0, layerid.length - 1);
-                //             }
-                //             // Singlelayer
-                //             else {
-                //                 layerid = layer.id;
-                //             }
-                //             return layerid === param.id;
-                //         });
-                //
-                //         if (!layer) {
-                //             Config.tree.layer.push({
-                //                 id: param.id,
-                //                 visibility: false,
-                //                 transparency: param.transparency
-                //             });
-                //         }
-                //     });
-                //     // Layersichtbarkeit schalten
-                //     _.each(Config.tree.layer, function (layer) {
-                //         var layerid = "";
-                //
-                //         // Gruppenlayer
-                //         if (_.isObject(layer.id)) {
-                //             _.each (layer.id, function (obj) {
-                //                 layerid += obj.id + "_";
-                //             });
-                //             layerid = layerid.substring(0, layerid.length - 1);
-                //         }
-                //         // Singlelayer
-                //         else {
-                //             layerid = layer.id;
-                //         }
-                //         var param = _.find(params, function (par) {
-                //             return par.id === layerid;
-                //         });
-                //
-                //         if (param && param.visibility === true) {
-                //             layer.visibility = true;
-                //         }
-                //         else {
-                //             layer.visibility = false;
-                //         }
-                //     });
-                // }
-                // else if (Config.tree.type === "default" && visibilityListString) {
-                //     Config.tree.layerIDsToSelect = [];
-                //     _.each(values, function (value, index) {
-                //         if (visibilityList[index] === "TRUE") {
-                //             Config.tree.layerIDsToSelect.push({id: value, visibility: true, transparency: transparencyList[index]});
-                //         }
-                //         else {
-                //             Config.tree.layerIDsToSelect.push({id: value, visibility: false, transparency: transparencyList[index]});
-                //         }
-                //     });
-                // }
             }
+
             if (_.has(result, "FEATUREID")) {
                 var id = _.values(_.pick(result, "FEATUREID"))[0];
 
@@ -316,10 +179,33 @@ define([
             *
             */
             if (_.has(result, "QUERY")) {
-                var value = _.values(_.pick(result, "QUERY"))[0];
+                var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
+                    initString = "";
 
-                value = value.substring(0, 1) + value.substring(1).toLowerCase();
-                Config.searchBar.initString = value;
+                // Bei " " oder "-" im Suchstring
+                if (value.includes(" ") || value.includes("-")) {
+
+                    // nach " " splitten
+                    var split = value.split(" ");
+
+                    _.each (split, function (splitpart) {
+                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
+                    });
+                    initString = initString.substring(0, initString.length - 1);
+
+                    // nach "-" splitten
+                    split = "";
+                    split = initString.split("-");
+                    initString = "";
+                    _.each (split, function (splitpart) {
+                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
+                    });
+                    initString = initString.substring(0, initString.length - 1);
+                }
+                else {
+                    initString = value.substring(0, 1).toUpperCase() + value.substring(1);
+                }
+                Config.searchBar.initString = initString;
             }
 
             /**
