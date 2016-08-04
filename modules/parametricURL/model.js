@@ -241,10 +241,33 @@ define([
             *
             */
             if (_.has(result, "QUERY")) {
-                var value = _.values(_.pick(result, "QUERY"))[0];
-
-                value = value.substring(0, 1) + value.substring(1).toLowerCase();
-                Config.searchBar.initString = value;
+                var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
+                    initString = "";
+                
+                // Bei " " oder "-" im Suchstring
+                if (value.includes(" ") || value.includes("-")) {
+                    
+                    // nach " " splitten
+                    var split = value.split(" ");
+                    
+                    _.each (split, function(splitpart) {
+                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
+                    });
+                    initString = initString.substring(0,initString.length-1);
+                    
+                    // nach "-" splitten
+                    split = "";
+                    split = initString.split("-");
+                    initString = "";
+                    _.each (split, function(splitpart) {
+                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
+                    });
+                    initString = initString.substring(0,initString.length-1);
+                }
+                else {
+                    initString = value.substring(0, 1).toUpperCase() + value.substring(1);
+                }
+                Config.searchBar.initString = initString;
             }
 
             /**
