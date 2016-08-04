@@ -16,6 +16,10 @@
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search"
           },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
