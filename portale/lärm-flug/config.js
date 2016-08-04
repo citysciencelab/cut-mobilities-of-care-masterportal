@@ -13,7 +13,7 @@ define(function () {
 
         view: {
             center: [565686, 5942986], //Flughafen
-            resolution: 15.874991427504629, //1.60.00
+            resolution: 15.874991427504629, //1:60 000
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
@@ -25,12 +25,10 @@ define(function () {
         },
         footer: true,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-
-
 //        attributions: true,
         menubar: true,
         scaleLine: true,
