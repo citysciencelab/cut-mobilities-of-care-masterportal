@@ -37,13 +37,13 @@
             {
              "id": "368",
              "visible": false,
-             "name": "ALKIS farbig (ab 1:10.000)",
+             "name": "ALKIS farbig (ab 1: 10 000)",
              "maxScale": "10000"
             },
             {
              "id": "149",
              "visible": false,
-             "name": "ALKIS grau-blau (ab 1:10.000)",
+             "name": "ALKIS grau-blau (ab 1: 10 000)",
              "maxScale": "10000"
             }
       ]
@@ -155,37 +155,37 @@
             {
               "id": "1932",
               "visibility": false,
-              "name" : "StadtRAD-Stationen (ab 1.40 000)",
-              "metaName": "StadtRAD-Stationen (ab 1.40 000)"
+              "name" : "StadtRAD-Stationen (ab 1: 40 000)",
+              "metaName": "StadtRAD-Stationen (ab 1: 40 000)"
               },
             {
-              "id": "1007",
+              "id": "4866",
               "visibility": false
             },
             {
-              "id": "979",
+              "id": "4850",
               "visibility": false
             },
             {
-              "id": "1011",
+              "id": "4870",
               "visibility": false
             },
             {
-              "id": "1014",
+              "id": "4873",
               "visibility": false,
               "name" : "Nordseeküstenradweg",
               "metaName": "Nordseeküstenradweg"
             },
             {
-              "id": "1016",
+              "id": "4875",
               "visibility": false
             },
             {
-              "id": "1018",
+              "id": "4877",
               "visibility": false
             },
             {
-              "id": "1013",
+              "id": "4872",
               "visibility": false
             }
           ]
@@ -232,8 +232,8 @@
             {
               "id": "1578",
               "visibility": false,
-              "name" : "Parkuhren (ab 1:2.500)",
-              "metaName": "Parkuhren (ab 1:2.500)"
+              "name" : "Parkuhren (ab 1: 2500)",
+              "metaName": "Parkuhren (ab 1: 2500)"
             },
             {
               "id": "943",
@@ -441,8 +441,8 @@
             {
               "id": "538,539,540",
               "visibility": false,
-              "name" : "Kreuzungsskizzen (ab 1:5.000)",
-              "metaName": "Kreuzungsskizzen (ab 1:5.000)"
+              "name" : "Kreuzungsskizzen (ab 1: 5000)",
+              "metaName": "Kreuzungsskizzen (ab 1: 5000)"
             }
           ]
         },
@@ -483,8 +483,8 @@
               "id": "2834",
               "visibility": false,
               "maxScale": "40000",
-              "name" : "Hamburger Wohnlagenverzeichnis (ab 1:40.000)",
-              "metaName": "Hamburger Wohnlagenverzeichnis (ab 1:40.000)"
+              "name" : "Hamburger Wohnlagenverzeichnis (ab 1 : 40 000)",
+              "metaName": "Hamburger Wohnlagenverzeichnis (ab 1: 40 000)"
             },
             {
                 "id": "4409,4410,4411,4412,4413,4414",
@@ -510,15 +510,15 @@
               "id": "2444",
               "visibility": false,
               "maxScale": "2500",
-              "name" : "ALKIS - Gebäudeflächen (ab 1:2.500)",
-              "metaName": "ALKIS - Gebäudeflächen (ab 1:2.500)"
+              "name" : "ALKIS - Gebäudeflächen (ab 1: 2500)",
+              "metaName": "ALKIS - Gebäudeflächen (ab 1: 2500)"
             },
             {
               "id": "2439,2440,2441,2442",
               "visibility": false,
               "maxScale": "10000",
-              "name" : "ALKIS -  tatsächliche Nutzung (ab 1:10.000)",
-              "metaName": "ALKIS -  tatsächliche Nutzung (ab 1:10.000)"
+              "name" : "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)",
+              "metaName": "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)"
             },
             {
               "id": "1201,1202,1203,1204,1205,1206,1207,1208,1209,1210,1211,1212",
@@ -529,20 +529,20 @@
             {
               "id": "1423,1425,1426,1427,1428,1429,1430,1431,1433,1434,1436,1437,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1448,1449,1450",
               "visibility": false,
-                "name" : "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1:20.000)",
-                "metaName": "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1:20.000)"
+                "name" : "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1: 20 000)",
+                "metaName": "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1: 20 000)"
             },
             {
               "id": "2810,2811,2812,2813,2814,2815,2816,2817,2818,2819",
               "visibility": false,
-                  "name" : "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1:20.000)",
-                "metaName": "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1:20.000)"
+                  "name" : "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1: 20 000)",
+                "metaName": "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1: 20 000)"
             },
             {
               "id": "40",
               "visibility": false,
-              "name" : "Rasterplan Bebauungsplänge im FHHNet (ab 1:20.000)",
-              "metaName": "Rasterplan Bebauungsplänge im FHHNet (ab 1:20.000)"
+              "name" : "Rasterplan Bebauungsplänge im FHHNet (ab 1: 20 000)",
+              "metaName": "Rasterplan Bebauungsplänge im FHHNet (ab 1: 20 000)"
             },
             {
               "id": "1170,1171",
