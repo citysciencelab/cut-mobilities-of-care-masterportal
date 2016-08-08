@@ -18,14 +18,16 @@ define([
             initialize: function () {
                  this.collection = Radio.request("ModelList", "getCollection");
 
-                this.listenTo(this.collection,
-                {
+                this.listenTo(this.collection, {
                     "updateOverlayerView": function (parentId) {
                         this.updateOverlayer(parentId);
                     },
                     "updateSelection": function (model) {
                         this.trigger("updateLightTree");
                         this.renderSelectedList(model);
+                    },
+                    "renderTree": function () {
+                        this.render();
                     }
                 });
                 this.renderMain();

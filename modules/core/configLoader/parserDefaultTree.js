@@ -99,7 +99,7 @@ define([
                     layer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
                 }
                 else {
-                    layer =  _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
+                    layer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
                 }
                 this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, layer));
             }, this);
@@ -140,10 +140,19 @@ define([
          */
         groupDefaultTreeOverlays: function (overlays) {
             var tree = {},
-                // Gruppierung nach Opendatakategorie
                 categoryGroups = _.groupBy(overlays, function (layer) {
-                return layer.datasets[0].kategorie_opendata[0];
-            });
+                    // Gruppierung nach Opendatakategorie
+                    if (this.get("category") === "Opendata") {
+                        return layer.datasets[0].kategorie_opendata[0];
+                    }
+                    // Gruppierung nach Inspirekategorie
+                    else if (this.get("category") === "Inspire") {
+                        return layer.datasets[0].kategorie_inspire[0];
+                    }
+                    else if (this.get("category") === "Behörde") {
+                        return layer.datasets[0].kategorie_organisation;
+                    }
+                }, this);
            // Gruppierung nach MetaName
             _.each(categoryGroups, function (group, name) {
                 var metaNameGroups = _.groupBy(group, function (layer) {

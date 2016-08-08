@@ -16,6 +16,21 @@
         <span class="glyphicon glyphicon-pushpin rotate-pin-back" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
     <span>
 <% } %>
+<% if (id === "Overlayer" && treeType === "default") { %>
+        <form class="form-inline pull-right">
+            <div class="form-group catalog-selection">
+                <span class="control-label">Kategorie</span>
+                <select class="form-control">
+                    <% _.each(categories, function (cat) { %>
+                        <% if (cat === category) { %>
+                            <option <% print ("SELECTED") %>><%= cat %></option>
+                        <% } else { %>
+                            <option><%= cat %></option>
+                    <% }}); %>
+                </select>
+            </div>
+        </form>
+<% } %>
 <% if (id === "SelectedLayer") { %>
         <% if (true) { %>
         <div class="layer-selection-save pull-right">
@@ -26,4 +41,3 @@
 <% } %>
     </div>
     <ul id="<%= id %>"></ul>
-

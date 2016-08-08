@@ -35,6 +35,7 @@ define([
 
                 channel.on({
                     "setModelAttributesById": this.setModelAttributesById,
+                    "removeModelsByParentId": this.removeModelsByParentId,
                     // Initial sichtbare Layer etc.
                     "addInitialyNeededModels": this.addInitialyNeededModels,
                     "addModelsByAttributes": this.addModelsByAttributes,
@@ -42,7 +43,10 @@ define([
                     "setIsSelectedOnParent": this.setIsSelectedOnParent,
                     "showModelInTree": this.showModelInTree,
                     "closeAllExpandedFolder": this.closeExpandedFolder,
-                    "setAllDescendantsInvisible": this.setAllDescendantsInvisible
+                    "setAllDescendantsInvisible": this.setAllDescendantsInvisible,
+                    "renderTree": function () {
+                        this.trigger("renderTree");
+                    }
                }, this);
 
                this.listenTo(this, {
@@ -390,7 +394,7 @@ define([
 
                 this.add(lightSiblingsModels);
                 // Abbruchbedingung
-                if (parentModel.id !== "Themen") {
+                if (_.isUndefined(parentModel) === false && parentModel.id !== "Themen") {
                     this.addAndExpandModelsRecursive(parentModel.parentId);
                     this.get(parentModel.id).setIsExpanded(true);
                 }
@@ -406,6 +410,25 @@ define([
 
             getModelByFeatureId: function (id) {
                 console.log(id);
+            },
+
+            /**
+             * [removeModelsByParentId description]
+             * @param  {[type]} parentId [description]
+             * @return {[type]}          [description]
+             */
+            removeModelsByParentId: function (parentId) {
+                _.each(this.where({parentId: parentId}), function (model) {
+                    if (model.getType() === "folder") {
+                        this.removeModelsByParentId(model.getId());
+                    }
+                    if (model.getType() === "layer" && model.getIsVisibleInMap() === true) {
+                        model.setIsVisibleInMap(false);
+                    }
+                    model.setIsVisibleInTree(false);
+
+                    this.remove(model);
+                }, this);
             }
     });
 

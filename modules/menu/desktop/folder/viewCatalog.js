@@ -12,6 +12,7 @@ define([
             className: "layer-catalog",
             template: _.template(Template),
             events: {
+                "change select": "setSelection",
                 "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
                 // "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
                 "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
@@ -45,6 +46,9 @@ define([
             render: function () {
                 var attr = this.model.toJSON();
 
+                attr.treeType = Radio.request("Parser", "getTreeType");
+                attr.category = Radio.request("Parser", "getCategory");
+                attr.categories = Radio.request("Parser", "getCategories");
                 this.$el.find(".header").toggleClass("closed");
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
             },
@@ -88,6 +92,9 @@ define([
             },
             helpForFixing: function (evt) {
                 evt.stopPropagation();
+            },
+            setSelection: function (evt) {
+                Radio.trigger("Parser", "setCategory", evt.currentTarget.value);
             }
         });
 

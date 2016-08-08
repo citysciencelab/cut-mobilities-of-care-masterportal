@@ -21,6 +21,10 @@ define([
             portalConfig: {},
             // Baumtyp
             treeType: "",
+            // Fachdaten Kategorien für DefaultTree
+            categories: ["Opendata", "Inspire", "Behörde"],
+            // Aktuelle Kategorie
+            category: "Opendata",
             // Nur für Lighttree: Index der zuletzt eingefügten Layer,
             // wird für die Sortierung/das Verschieben benötigt
             selectionIDX: -1
@@ -32,9 +36,25 @@ define([
             channel.reply({
                 "getItemByAttributes": this.getItemByAttributes,
                 "getItemsByAttributes": this.getItemsByAttributes,
-                "getTreeType": this.getTreeType
+                "getTreeType": this.getTreeType,
+                "getCategory": this.getCategory,
+                "getCategories": this.getCategories
             }, this);
 
+            channel.on({
+                "setCategory": this.setCategory
+            }, this);
+
+            this.listenTo(this, {
+                "change:category": function () {
+                    this.setItemList([]);
+                    this.addTreeMenuItems();
+                    this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
+                    Radio.trigger("ModelList", "removeModelsByParentId", "Themen");
+                    Radio.trigger("ModelList", "renderTree");
+                    Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
+                }
+            });
             this.parseMenu(this.get("portalConfig").menu, "root");
             this.parseControls(this.get("portalConfig").controls);
 
@@ -123,6 +143,13 @@ define([
         },
 
         /**
+         * Setter für Attribut "itemList"
+         */
+        setItemList: function (value) {
+            this.set("itemList", value);
+        },
+
+        /**
          * Getter für das Attribut "itemList"
          * @return {Array}
          */
@@ -173,6 +200,30 @@ define([
           */
         setTreeType: function (value) {
              return this.set("treeType", value);
+        },
+
+        /**
+          * Getter für Attribut "category"
+          * @return {String}
+          */
+        getCategory: function () {
+             return this.get("category");
+        },
+
+        /**
+          * Getter für Attribut "categories"
+          * @return {String[]}
+          */
+        getCategories: function () {
+            return this.get("categories");
+        },
+
+        /**
+          * Getter für Attribut "category"
+          * @return {String}
+          */
+        setCategory: function (value) {
+             return this.set("category", value);
         },
 
         /**
