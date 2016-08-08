@@ -33,6 +33,7 @@
       ]
     }
   ],
+    
   "Fachdaten": [
     {
       "Ordner": [
@@ -81,6 +82,7 @@
             }
           ]
         },
+          
         {
           "Titel": "ÖV-Netze",
             "Ordner": [
@@ -133,6 +135,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
@@ -174,6 +177,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -183,6 +187,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Parken",
 
@@ -228,7 +233,6 @@
 
           ]
         },
-
 
          {
           "Titel": "Verkehrszählungen",
@@ -296,7 +300,6 @@
           ]
         },
 
-
         {
           "Titel": "Verkehrslage",
           "Layer": [
@@ -318,6 +321,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -333,6 +337,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -348,6 +353,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -357,6 +363,7 @@
             }
           ]
         },
+          
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -386,6 +393,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -430,6 +438,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Umwelt",
           "Layer": [
@@ -447,6 +456,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -456,6 +466,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -509,49 +520,11 @@
               "visibility": false,
               "name" : "Digitales Informationssystem Planrecht",
               "metaName": "Digitales Informationssystem Planrecht"
-            },
-            {
-              "id": "1423,1425,1426,1427,1428,1429,1430,1431,1433,1434,1436,1437,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1448,1449,1450",
-              "visibility": false,
-                "name" : "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1: 20 000)",
-                "metaName": "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1: 20 000)"
-            },
-            {
-              "id": "2810,2811,2812,2813,2814,2815,2816,2817,2818,2819",
-              "visibility": false,
-                  "name" : "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1: 20 000)",
-                "metaName": "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1: 20 000)"
-            },
-            {
-              "id": "40",
-              "visibility": false,
-              "name" : "Rasterplan Bebauungsplänge im FHHNet (ab 1: 20 000)",
-              "metaName": "Rasterplan Bebauungsplänge im FHHNet (ab 1: 20 000)"
-            },
-            {
-              "id": "1170,1171",
-              "visibility": false
             }
           ]
         },
-        {
-          "Titel": "Soziales",
-          "Layer": [
-            {
-              "id": "682,683",
-              "visibility": false
-            }
-          ]
-        },
-        {
-          "Titel": "Bildung",
-          "Layer": [
-            {
-              "id": "1585",
-              "visibility": false
-            }
-          ]
-        },
+          
+          
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [
@@ -580,7 +553,7 @@
               "visibility": false
             },
             {
-              "id": "2935",
+              "id": "216",
               "visibility": false
             },
             {

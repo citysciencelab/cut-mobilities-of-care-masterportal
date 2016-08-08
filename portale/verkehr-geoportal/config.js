@@ -79,7 +79,7 @@ define(function () {
         customModules: ["../portale/verkehr-geoportal/verkehrsfunctions"],
         footer: false,
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
 
