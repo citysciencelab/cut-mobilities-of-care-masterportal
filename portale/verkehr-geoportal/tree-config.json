@@ -101,7 +101,7 @@
           "Titel": "ÖV-Netze",
             "Ordner": [
             {
-              "Titel": "Einzugsbereiche von HVV-Haltestellen",
+                "Titel": "Einzugsbereiche von HVV-Haltestellen",
               "Layer": [
                 {
                   "id": "4624",
@@ -149,6 +149,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
@@ -187,9 +188,14 @@
             {
               "id": "4872",
               "visibility": false
+            },
+              {
+              "id": "1627",
+              "visibility": false
             }
           ]
         },
+          
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -198,7 +204,8 @@
               "visibility": false
             }
           ]
-        },
+        }
+          ,
         {
           "Titel": "Parken",
 
@@ -244,7 +251,6 @@
 
           ]
         },
-
 
          {
           "Titel": "Verkehrszählungen",
@@ -312,7 +318,6 @@
           ]
         },
 
-
         {
           "Titel": "Verkehrslage",
           "Layer": [
@@ -334,6 +339,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -349,6 +355,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -364,6 +371,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -373,6 +381,7 @@
             }
           ]
         },
+          
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -402,6 +411,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -446,6 +456,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Umwelt",
           "Layer": [
@@ -463,6 +474,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -472,6 +484,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -550,6 +563,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Soziales",
           "Layer": [
@@ -568,6 +582,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [
@@ -608,7 +623,6 @@
               "visibility": false,
               "name" : "Polizeikommissariate",
               "metaName": "Polizeikommissariate"
-
             },
             {
               "id": "2071",
