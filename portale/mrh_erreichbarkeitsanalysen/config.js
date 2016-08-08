@@ -1,5 +1,9 @@
 define(function () {
     var config = {
+        title: "Erreichbarkeitsanalysen",
+        logo: "../img/Logo_MRH_93x36.png",
+        logoLink: "http://metropolregion.hamburg.de/",
+        logoTooltip: "Metropolregion Hamburg",
         tree: {
             type: "custom"
         },
@@ -39,7 +43,7 @@ define(function () {
             center: [565874, 5934140]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         menubar: true,
         scaleLine: true,

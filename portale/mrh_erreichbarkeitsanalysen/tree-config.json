@@ -54,14 +54,6 @@
           "Titel": "Verkehrsinfrastruktur",
           "Layer": [
             {
-              "id": "4642",
-              "visibility": false
-            },
-            {
-              "id": "4643",
-              "visibility": false
-            },
-            {
               "id": "4748",
               "visibility": false,
               "styleable": true,
@@ -74,22 +66,35 @@
               "styleable": true,
               "geomType": "Polygon",
               "attributesToStyle": ["EntfernungbiszumnaechstenRadschnellweg"]
+            },
+            {
+              "id": "4638",
+              "visibility": false
+            },
+			{
+              "id": "4643",
+              "visibility": false
+            },
+            {
+              "id": "4642",
+              "visibility": false
             }
+
           ]
         },
         {
           "Titel": "Bildung",
           "Layer": [
             {
-              "id": "4648",
-              "visibility": false
-            },
-            {
               "id": "4749",
               "visibility": false,
               "styleable": true,
               "geomType": "Polygon",
               "attributesToStyle": ["ZeitmitdemRadbiszurnaechstenGrundschule"]
+            },
+			{
+              "id": "4648",
+              "visibility": false
             }
           ]
             },
