@@ -131,7 +131,7 @@
         },
         {
           "id": "4639",
-          "visibility": true,
+          "visibility": false,
           "styleable": true,
           "geomType": "Polygon",
           "attributesToStyle": ["AP30Sum", "AP60Sum"]
@@ -145,7 +145,7 @@
           "id": "1711",
           "visibility": true,
           "attributions": "<span>Attributierung für Fachlayer</span>",
-          "mouseHoverField": "name",
+          "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
           "filterOptions": [
             {
@@ -164,7 +164,7 @@
         },
         {
           "id": "753",
-          "visibility": false,
+          "visibility": true,
           "mouseHoverField": "Name",
           "filterOptions": [
             {
