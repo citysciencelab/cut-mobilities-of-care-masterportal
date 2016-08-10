@@ -184,7 +184,7 @@ define([
                     var featureProperties = element.feature.getProperties(),
                         featureGeometry = element.feature.getGeometry(),
                         listEintrag = _.find(wfsList, function (ele) {
-                            return ele.layerId = element.layerId;
+                            return ele.layerId === element.layerId;
                     });
 
                     if (listEintrag) {
