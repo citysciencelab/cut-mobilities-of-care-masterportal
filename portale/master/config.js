@@ -115,6 +115,13 @@ define(function () {
         },
         /**
         * @memberof config
+        * @type {String}
+        * @desc Titel des Portals
+        * @example title: "FHH - Atlas"
+        */
+        title: "Master",
+        /**
+        * @memberof config
         * @type {Boolean}
         * @desc Erstellt einen SimpleMap-Link (Nur die Karte mit Layern ohne Menü).
         * @example simpleMap: true
