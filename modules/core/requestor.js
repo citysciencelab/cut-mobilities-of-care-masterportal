@@ -60,7 +60,7 @@ define([
                         param.url=param.url.concat(featurecount);
                     }
                     if (param.ol_layer.id === "2407" || param.ol_layer.id === "4423") {
-                        window.open(param.url, "_blank");
+                        window.open(param.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
                     }
                     else {
                         var gfiFeatures = {"html": param.url};
