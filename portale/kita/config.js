@@ -7,7 +7,7 @@ define(function () {
                 {id: "452", visible: false},
                 //{id: "682", visible: true},
                 //{id: "683", visible: false},
-                {id: "753", name: "Kita Einrichtung", visibility: true, style: "753", clusterDistance: 0,  searchField: "name", mouseHoverField: ["Name"], 
+                {id: "753", name: "Kita Einrichtung", visibility: true, style: "753", clusterDistance: 0, searchField: "name", mouseHoverField: ["Name"], 
                     filterOptions: [
                         {
                             fieldName: "Bezirk",
@@ -15,7 +15,7 @@ define(function () {
                             filterName: "Bezirk",
                             filterString: ["*", "Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Harburg", "Wandsbek"]
                         }
-                    ], styleLabelField: "", styleField: "Leistungsarten"}
+                    ], styleLabelField: "", styleField: ""}
             ]
         },
         simpleMap: false,
@@ -67,8 +67,8 @@ define(function () {
             contact: {
                 title: "Kontakt",
                 glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            }       
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"            
+            }      
         },
         startUpModul: "",
         searchBar: {
