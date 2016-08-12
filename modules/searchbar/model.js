@@ -89,6 +89,7 @@ define([
                         if (_.contains(usedNumbers, randomNumber) === false) {
                             singleTypes.push(hitList[randomNumber]);
                             usedNumbers.push(randomNumber);
+                            singleTypes = _.uniq(singleTypes);
                         }
                     }
                     recommendedList = singleTypes;
