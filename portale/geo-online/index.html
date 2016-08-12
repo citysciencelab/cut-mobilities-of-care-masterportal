@@ -85,48 +85,6 @@
     </style>
 </head>
 <body>
-    <div id= "myModal" class="modal bs-example-modal-lg fade in" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content ">
-          <div class="modal-header changelog-header">
-            <span class="modal-title">Wilkommen beim neuen Geo-Online</span>
-            <span class="geoOnlineModal glyphicon glyphicon-remove pull-right changelog-remove" data-toggle="tooltip" data-placement="bottom" title="Schließen"></span>
-          </div>
-          <div class="modal-body">
-            <dt>Sehr geehrte Anwenderin,</dt>
-            <dt>sehr geehrter Anwender,</dt>
-            </br>
-            <dd>willkommen beim neuen Geo-Online. Geo-Online wurde grundlegend überarbeitet im Design, in den Funktionen und dem Themenbaum mit seiner Vielfalt an Themen.</dd>
-            </br>
-            <dt>Responsive Layout oder Geo-Online Mobil</dt>
-            <dd>Eine  der wichtigsten Neuerungen an Geo-Online ist wohl sein neues Design mit der Möglichkeit das Portal sowohl auf dem Desktop-PC, als auch unterwegs und überall auf dem SmartPhone verwenden zu können. Um das mobile Interesse zu unterstützen wurde zudem ein Icon am rechten Kartenrand für die Verortung des Standpunktes hinzugefügt. Des Weiteren passt sich das Layout von Geo-Online an das jeweilige Benutzergerät des Anwenders an. Dies ist vor allem beim Themenbaum zu sehen in der Navigation durch die Themen.</dd>
-            </br>
-            <dt>Themenbaum</dt>
-            <dd>Der Themenbaum wird wie bisher auch über die Open Data-Kategorien der Datensätze aus dem <a href="http://metaver.de/startseite" target="_blank">MetaVer </a> automatisiert befüllt. Dies basiert darauf, dass Geo-Online als Kartenclient für das <a href="http://transparenz.hamburg.de/" target="_blank">Transparenzportal </a> dient und im Transparenzportal die Open Data-Kategorien verwendet werden. Sie können die Sortierung des Themenbaums jedoch auch ändern und den INSPIRE-Kategorien anpassen. Zu jeder Kartenebene kann über den Infobutton der zugehörige Datensatzeintrag aus dem MetaVer aufgerufen werden.
-            <br>
-            Im Themenbaum haben sie zudem die Möglichkeit den Hintergrund der Karte von grau auf weiß zu stellen. Sie können über die Checkboxen im Themenbaum an den Ordnern alle Kartenebenen innerhalb des Ordners sichtbar schalten und einzelnen ausgewählten Kartenebenen transparent schalten. Die von Ihnen erzeugte Kartenansicht können Sie sich über „Auswahl speichern“ in Form eines Links sichern. Bei Bedarf können Sie über den Link Ihr erstelltes Kartenbild mit den ausgewählten Kartenebenen wiederherstellen oder anderen zur Verfügung stellen.
-            <br>
-            In der oberen rechten Ecke finden Sie unser Suchfeld. Über dieses Suchfeld können Sie wie gewohnt die Adresse suchen. Zudem bieten wir Ihnen aber auch an hier direkt Flurstücke über den Gemarkungsschlüssel zu finden, Stadtteile zu suchen oder aber Themen aus dem Themenbaum sichtbar zu schalten.</dd>
-            </br>
-            <dt>Werkzeuge</dt>
-            <dd>Geo-Online hat zum einen seine wichtigsten Werkzeuge wie Maßstabsanzeige, Navigationselemente auf der Karte, Koordinatenanzeige, Kontakt oder Legende auf der Karte behalten. Dafür sind andere Werkzeuge in den Bereich „Werkzeuge“ in der Menüleiste verschoben worden wie z.B. „Informationen abfragen“, „Koordinate abfragen“ oder die Flurstückssuche.
-            <br>
-            Weitere Werkzeuge wurden überarbeitet wie „Strecke/Fläche messen“ oder „Karte drucken“. Das Druckmodul bietet Ihnen nun die Möglichkeit eine Voransicht des Drucks zu sehen, einen eigenen Titel anzugeben und den Druckmaßstab ändern zu können. Als neues Werkzeug ist die Koordinatensuche hinzugekommen. Mittels Koordinateneingabe können Sie den Punkt in der Karte lokalisieren.
-            <br>
-            Dieses Informationsfenster dient nur der Erstinformation aller Nutzer und wird nach einiger Zeit wieder verschwinden und durch eine Infobox auf der Karte ersetzt mit den wichtigsten Neuerungen.</dd>
-            </br>
-            <dd>Bei Fragen und Anmerkungen können Sie sich gerne über den Kontakt-Button an uns wenden.</dd>
-            </br>
-            <dd>Das alte Geo-Online finden Sie für eine Übergangszeit
-                <a href="http://geoportal-hamburg.de/Geoportal/Geo-Online_alt/">hier.</a>
-            </dd>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default geoOnline" data-dismiss="modal">Schließen</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
     <div id="loader"><img src="../../img/ajax-loader.gif"></div>
     <!-- Hack um die Bildschirmauflösung zu bekommen -->
     <div id="dpidiv" style="height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;"></div>
@@ -228,26 +186,5 @@
             </p>
         </div>
     </div>
-
-    <script type="text/javascript">
-// Get the <span> element that closes the modal
-// Get the modal
-    var modal = document.getElementById("myModal"),
-    span = document.getElementsByClassName("geoOnlineModal")[0],
-    btn = document.getElementsByClassName("btn btn-default geoOnline")[0];
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    };
-    btn.onclick = function () {
-            modal.style.display = "none";
-    };
-// When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-    </script>
     </body>
 </html>
