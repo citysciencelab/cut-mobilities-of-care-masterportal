@@ -18,8 +18,7 @@ define([
                 "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
                     Radio.trigger("Quickhelp", "showWindowHelp", "tree");
                 },
-                "click .rotate-adjust": "greyBackground",
-                "click .rotate-adjust-back": "whiteBackground",
+                "click .glyphicon-adjust": "toggleBackground",
                 "click .rotate-pin": "unfixTree",
                 "click .rotate-pin-back": "fixTree",
                 "click .layer-selection-save": function () {
@@ -67,16 +66,10 @@ define([
                    elem.addClass("glyphicon-minus-sign");
                 }
             },
-            whiteBackground: function () {
-                this.model.set("defaultBackground", $("#map").css("background"));
-                $("#map").css("background", "white");
-                $(".glyphicon-adjust").addClass("rotate-adjust");
-                $(".glyphicon-adjust").removeClass("rotate-adjust-back");
-            },
-            greyBackground: function () {
-                $("#map").css("background", this.model.get("defaultBackground"));
-                $(".glyphicon-adjust").removeClass("rotate-adjust");
-                $(".glyphicon-adjust").addClass("rotate-adjust-back");
+            toggleBackground: function () {
+                Radio.trigger("MapView", "toggleBackground");
+                $(".glyphicon-adjust").toggleClass("rotate-adjust");
+                $(".glyphicon-adjust").toggleClass("rotate-adjust-back");
             },
             fixTree: function () {
                 $("body").on("click", "#map", this.helpForFixing);

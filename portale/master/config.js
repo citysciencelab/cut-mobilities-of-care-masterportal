@@ -156,7 +156,7 @@ define(function () {
             url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
             version: "2.0.0",
             typename: "app:hamburgconvention",
-            valuereference:"app:flaechenid",
+            valuereference: "app:flaechenid",
             imglink: "../img/location_eventlotse.svg",
             layerid: "4426"
         },
@@ -165,6 +165,7 @@ define(function () {
         * @type {Object}
         * @desc Optionale Konfigurations-Einstellungen für die Map View
         * @property {Object} [view] - Das Konfigurationsobjekt zur View-Definition.
+        * @property {String} [view.background] - Kartenhintergrund, mögliche Werte "white" oder "default".
         * @property {Array} [view.center=[565874, 5934140]] - Die initiale Zentrumskoordinate.
         * @property {Number} [view.resolution=15.874991427504629] - Die initale Resolution der Karte.
         * @property {Array} [view.extent=[510000.0, 5850000.0, 625000.4, 6000000.0]] - Die Ausdehnung der Karte.
@@ -172,6 +173,7 @@ define(function () {
         * @property {Array} [view.epsg=EPSG:25832] - Der EPSG-Code.
         */
         view: {
+            background: "white"
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
