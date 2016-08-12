@@ -175,9 +175,15 @@ define("app",
                     });
                     break;
                 }
-                case "contact" : {
+                case "contact": {
                     require(["modules/contact/view"], function (Contact) {
                         new Contact();
+                    });
+                    break;
+                }
+                case "addWMS": {
+                    require(["modules/tools/addwms/view"], function (AddWMSView) {
+                        new AddWMSView();
                     });
                     break;
                 }

@@ -42,7 +42,9 @@ define([
             }, this);
 
             channel.on({
-                "setCategory": this.setCategory
+                "setCategory": this.setCategory,
+                "addItem": this.addItem,
+                "addItems": this.addItems
             }, this);
 
             this.listenTo(this, {
