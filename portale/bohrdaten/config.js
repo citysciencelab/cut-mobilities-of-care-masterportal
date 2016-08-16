@@ -8,16 +8,10 @@ define(function () {
             fullScreen: true,
             orientation: "once"
         },
-        wfsImgPath: "..components/lgv-config/img",
+        quickHelp: true,
         allowParametricURL: true,
         tree: {
-            type: "custom",
-            orderBy: "bohrdaten",
-            customConfig: "../components/lgv-config/tree-config/bohrdaten.json",
-            baseLayer: [
-                {id: "453", visibility: true},
-                {id: "452", visibility: false}
-            ]
+            type: "custom"
         },
         view: {
             center: [565874, 5934140] // Rathausmarkt
@@ -37,7 +31,6 @@ define(function () {
         isMenubarVisible: true,
         menu: {
             viewerName: "Bohrdatenportal",
-            //searchBar: true,
             layerTree: true,
             helpButton: false,
             contact: {
@@ -56,12 +49,7 @@ define(function () {
                 subject: "",
                 textPlaceholder: "",
                 includeSystemInfo: true
-            },
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+            }
         },
         menuItems: {
             tree: {

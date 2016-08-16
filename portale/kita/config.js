@@ -7,7 +7,15 @@ define(function () {
                 {id: "452", visible: false},
                 //{id: "682", visible: true},
                 //{id: "683", visible: false},
-                {id: "753", name: "Kita Einrichtung", visibility: true, style: "753", searchField: "name", mouseHoverField: ["Name"]}
+                {id: "753", name: "Kita Einrichtung", visibility: true, style: "753", clusterDistance: 0, searchField: "name", mouseHoverField: ["Name"], 
+                    filterOptions: [
+                        {
+                            fieldName: "Bezirk",
+                            filterType: "combo",
+                            filterName: "Bezirk",
+                            filterString: ["*", "Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Harburg", "Wandsbek"]
+                        }
+                    ], styleLabelField: "", styleField: ""}
             ]
         },
         simpleMap: false,
@@ -23,7 +31,8 @@ define(function () {
             zoom: true,
             toggleMenu: true,
             orientation: "once",
-            poi: true
+            poi: true,
+            wfsFeatureFilter: true
         },
         customModules: [],
         footer: false,
@@ -31,7 +40,6 @@ define(function () {
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 
         attributions: true,
@@ -48,6 +56,10 @@ define(function () {
                 title: "Werkzeuge",
                 glyphicon: "glyphicon-wrench"
             },
+            wfsFeatureFilter: {
+                title: "Filter öffnen",
+                glyphicon: "glyphicon-filter"
+            },
             legend: {
                 title: "Legende",
                 glyphicon: "glyphicon-book"
@@ -55,16 +67,11 @@ define(function () {
             contact: {
                 title: "Kontakt",
                 glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            },
-            routing: {
-                title: "Routenplaner",
-                glyphicon: "glyphicon-road"
-            }
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"            
+            }      
         },
         startUpModul: "",
         searchBar: {
-            minChars: 3,
             gazetteer: {
                 minChars: 3,
                 url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
@@ -74,20 +81,18 @@ define(function () {
                 searchParcels: true
             },
             specialWFS: {
-                minChar: 3,
+                minChar: 2,
                 definitions: [
                     {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_kitaeinrichtung?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeName=app:KitaEinrichtungen",
+                        url: "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name,app:geom",
                         name: "kita"
                     }
                 ]
             },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse oder Kita-Namen",
-            geoLocateHit: true
+            placeholder: "Suche nach Adresse, Stadtteil oder Kita-Namen",
+            geoLocateHit: true,
+            minChars: 3
         },
         print: {
             printID: "99999",
@@ -95,7 +100,11 @@ define(function () {
             gfi: false
         },
 
-         tools: {
+        tools: {
+            parcelSearch: {
+                title: "Flurstückssuche",
+                glyphicon: "glyphicon-search"
+            },
             gfi: {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",
@@ -106,8 +115,9 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         },
-         geoAPI: false,
+        geoAPI: false,
         clickCounter: {},
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;
