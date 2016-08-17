@@ -101,8 +101,12 @@ define([
             },
             descentInTree: function (model) {
                 var models = [],
-                    lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()});
-                models = this.collection.add(lightModels);
+                    lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}),
+                    onlyDesktopModels = _.reject(lightModels, function (lightModel) {
+                        return lightModel.onlyDesktop === true;
+                    });
+
+                models = this.collection.add(onlyDesktopModels);
                 if (model.getIsLeafFolder()) {
                     models.push(model);
                 }
@@ -131,8 +135,8 @@ define([
                     function () {
                         that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
                         // Folder zuerst zeichnen
-                        var groupedModels = _.groupBy(modelsToShow, function  (model) {
-                            return (model.getType() === "folder"? "folder" : "other");
+                        var groupedModels = _.groupBy(modelsToShow, function (model) {
+                            return (model.getType() === "folder" ? "folder" : "other");
                         }) ;
 
                         that.addViews(groupedModels.folder);
