@@ -73,7 +73,7 @@ define([
         },
 
         toggle: function () {
-            if (this.model.getIsVisible() === true) {
+            if (this.model.getIsVisibleInTree() === true) {
                 this.$el.show();
             }
             else {

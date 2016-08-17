@@ -4,24 +4,32 @@ define([
     "openlayers",
     "proj4",
     "modules/layer/wfsStyle/list",
-    "config"
-], function (Backbone, EventBus, ol, proj4, StyleList, Config) {
-    "use strict";
+    "config",
+    "backbone.radio"
+], function (Backbone, EventBus, ol, proj4, StyleList, Config, Radio) {
+
     var OrientationModel = Backbone.Model.extend({
         defaults: {
-            "zoomMode": "once", // once oder allways entsprechend Config
-            "counter": 0, // Counter der Standortbestimmung
-            "marker": new ol.Overlay({
+            zoomMode: "once", // once oder allways entsprechend Config
+            counter: 0, // Counter der Standortbestimmung
+            marker: new ol.Overlay({
                 positioning: "center-center",
                 stopEvent: false
             }),
-            "tracking": false, // Flag, ob derzeit getrackt wird.
-            "geolocation": null // ol.geolocation wird bei erstmaliger Nutzung initiiert.
+            isPoiOn: false,
+            tracking: false, // Flag, ob derzeit getrackt wird.
+            geolocation: null // ol.geolocation wird bei erstmaliger Nutzung initiiert.
         },
         initialize: function () {
+            this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
+            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
+                this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
+            }
+            this.listenTo(Radio.channel("ModelList"), {
+                "updateVisibleInMapList": this.checkWFS
+            });
             EventBus.on("setOrientation", this.track, this);
             EventBus.on("getPOI", this.getPOI, this);
-            EventBus.on("layerlist:sendVisiblePOIlayerList", this.getPOIParams, this);
             EventBus.on("orientation:removeOverlay", this.removeOverlay, this);
         },
         removeOverlay: function () {
@@ -37,15 +45,15 @@ define([
             this.removeOverlay();
         },
         track: function () {
+            var geolocation;
+
             EventBus.trigger("addOverlay", this.get("marker"));
             if (this.get("geolocation") === null) {
-                var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
-
+                geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
             }
             else {
-                var geolocation = this.get("geolocation");
-
+                geolocation = this.get("geolocation");
                 this.positioning();
             }
             this.set("tracking", true);
@@ -103,15 +111,15 @@ define([
             $("#loader").hide();
         },
         trackPOI: function () {
+            var geolocation;
+
             EventBus.trigger("addOverlay", this.get("marker"));
             if (this.get("geolocation") === null) {
-                var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
-
+                geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
             }
             else {
-                var geolocation = this.get("geolocation");
-
+                geolocation = this.get("geolocation");
                 this.callGetPOI();
             }
             geolocation.once ("change", this.callGetPOI, this);
@@ -139,19 +147,37 @@ define([
                 circleExtent = circle.getExtent();
 
             this.set("circleExtent", circleExtent);
-            EventBus.trigger("layerlist:getVisiblePOIlayerList", this);
+            this.getPOIParams();
         },
         getPOIParams: function (visibleWFSLayers) {
+            var visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+
             if (this.get("circleExtent") && visibleWFSLayers) {
                 _.each(visibleWFSLayers, function (layer) {
-                    if (layer.has("source") === true) {
-                        layer.get("source").forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
+                    if (layer.has("layerSource") === true) {
+                        layer.get("layer").getSource().forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
                             EventBus.trigger("setModel", feature, StyleList, this.get("distance"), this.get("newCenter"), layer);
                         }, this);
                     }
                 }, this);
                 EventBus.trigger("showPOIModal");
             }
+        },
+
+        /**
+         * Setter Methode für das Attribut zoomMode
+         * @param {String} value - once oder allways
+         */
+        setZoomMode: function (value) {
+            this.set("zoomMode", value);
+        },
+
+        /**
+         * Setter Methode für das Attribut isPoiOn
+         * @param {bool} value
+         */
+        setIsPoiOn: function (value) {
+            this.set("isPoiOn", value);
         }
     });
 

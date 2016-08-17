@@ -6,7 +6,6 @@ define([
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        EventBus = require("eventbus"),
         StyleWMS;
 
     StyleWMS = Backbone.Model.extend({
@@ -36,18 +35,17 @@ define([
          * Registriert Listener auf sich selbst und den EventBus
          */
         initialize: function () {
+            var channel = Radio.channel("StyleWMS");
 
-            // Listener auf den EventBus
-            this.listenTo(EventBus, {
-                "winParams": this.checkStatus
-            });
+            channel.on({
+                "openStyleWMS": function (model) {
+                    this.setModel(model);
+                    this.trigger("sync");
+                }
+            }, this);
 
             // Eigene Listener
             this.listenTo(this, {
-                // ändert sich die ModelId, wird das entsprechende Model dessen Layer gestylt werden soll, aus der Layerlist geholt
-                "change:modelId": function () {
-                    this.setModel(Radio.request("LayerList", "getLayerFindWhere", {id: this.getModelId()}));
-                },
                 // ändert sich das Model, wird der entsprechende Geometrietyp gesetzt
                 // und der Attributname zurückgesetzt
                 "change:model": function (model, value) {
@@ -60,7 +58,7 @@ define([
                 },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
-                    EventBus.trigger("layerlist:setAttributionsByID", this.getModelId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
+                    Radio.trigger("ModelList", "setModelAttributesById", this.getModel().getId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
                 }
             });
         },
@@ -123,21 +121,6 @@ define([
         },
 
         /**
-         * Prüft ob dieses Tool aktiviert ist und ob das Fenster minimiert ist
-         * @param {Array} args - args[0] = true|false, args[1] = true|false, args[2] = ToolId
-         */
-        checkStatus: function (args) {
-            if (args[2] === "styleWMS") {
-                this.setModelId(args[3]);
-                this.setIsCollapsed(args[1]);
-                this.setIsCurrentWin(args[0]);
-            }
-            else {
-                this.setIsCurrentWin(false);
-            }
-        },
-
-        /**
          * Prüft ob die Style-Klassen valide sind. Wenn ja, wird das SLD erstellt und gesetzt
          */
         createSLD: function () {
@@ -164,7 +147,7 @@ define([
          */
         createAndGetNamedLayer: function () {
             return "<sld:NamedLayer>" +
-                       "<sld:Name>" + this.getModel().getTitle() + "</sld:Name>" +
+                       "<sld:Name>" + this.getModel().get("layers") + "</sld:Name>" +
                        this.createAndGetUserStyle() +
                    "</sld:NamedLayer>";
         },
@@ -273,14 +256,6 @@ define([
         },
 
         /**
-         * Setter für das Attribut modelId
-         * @param {string} value
-         */
-        setModelId: function (value) {
-            this.set("modelId", value);
-        },
-
-        /**
          * Setter für das Attribut model
          * @param {Backbone.Model} value
          */
@@ -350,14 +325,6 @@ define([
          */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
-        },
-
-        /**
-         * Getter für das Attribut modelId
-         * @return {string}
-         */
-        getModelId: function () {
-            return this.get("modelId");
         },
 
         /**

@@ -3,7 +3,7 @@ define([
     "backbone.radio",
     "modules/tree/selection/list",
     "modules/tree/selection/view",
-    "jqueryui/sortable"
+    "jqueryui/widgets/sortable"
 ], function (Backbone, Radio, List, View) {
 
     var listView = Backbone.View.extend({

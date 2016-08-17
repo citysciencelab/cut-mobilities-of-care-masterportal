@@ -1,9 +1,10 @@
 define([
     "backbone",
     "eventbus",
+    "backbone.radio",
     "config",
     "modules/core/util"
-], function (Backbone, EventBus, Config, Util) {
+], function (Backbone, EventBus, Radio, Config, Util) {
 
     var ParcelSearch = Backbone.Model.extend({
         defaults: {
@@ -13,9 +14,10 @@ define([
         },
         url: Util.getPath(Config.gemarkungen),
         initialize: function () {
-            this.listenTo(EventBus, {
+            this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
+
             this.fetch();
         },
         validate: function (attributes) {
@@ -29,7 +31,7 @@ define([
             }
         },
         setStatus: function (args) {
-            if (args[2] === "parcelSearch") {
+            if (args[2].getId() === "parcelSearch") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

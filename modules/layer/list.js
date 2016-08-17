@@ -182,7 +182,7 @@ define([
                     EventBus.trigger("layerlist:sendBaselayerList");
                 }
             });
-            this.fetchLayer();
+            // this.fetchLayer();
         },
 
         fetchLayer: function () {

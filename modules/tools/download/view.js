@@ -26,7 +26,7 @@ define([
          * Startet das Download modul
          * @param  {ol.feature} features die Features die heruntergeladen werden sollen
          */
-        start: function (features) {
+        start: function (features) {console.log(434);
             if (features.data.length === 0) {
                 EventBus.trigger("alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
                 return;
@@ -34,7 +34,12 @@ define([
             this.model.setData(features.data);
             this.model.setFormats(features.formats);
             this.model.setCaller(features.caller);
-            EventBus.trigger("toggleWin", ["download", "Download", "glyphicon-plus"]);
+            this.model.set("id", "download");
+            this.model.set("title", "Download");
+            this.model.set("glyphicon", "glyphicon-plus");
+
+            Radio.trigger("Window", "toggleWin", this.model);
+            // Radio.trigger("Window", "toggleWin", ["download", "Download", "glyphicon-plus"]);
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat

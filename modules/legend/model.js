@@ -1,9 +1,9 @@
 define([
     "backbone",
     "modules/layer/wfsStyle/list",
-    "eventbus",
+    "backbone.radio",
     "bootstrap/modal"
-], function (Backbone, StyleList, EventBus) {
+], function (Backbone, StyleList, Radio) {
 
     var Legend = Backbone.Model.extend({
 
@@ -14,11 +14,9 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(EventBus, {
-                "layerlist:sendVisiblelayerList": this.setLayerList,
-                "toggleLegendWin": function () {
-                    EventBus.trigger("layerlist:getVisiblelayerList");
-                }
+
+            this.listenTo(Radio.channel("ModelList"), {
+                "updatedSelectedLayerList": this.setLayerList
             });
 
             this.listenTo(this, {
@@ -26,8 +24,6 @@ define([
                 "change:wfsLayerList": this.setLegendParamsFromWFS,
                 "change:groupLayerList": this.setLegendParamsFromGROUP
             });
-
-            EventBus.trigger("layerlist:getVisiblelayerList");
         },
 
         createLegend: function () {
@@ -89,7 +85,7 @@ define([
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         img: layer.get("legendURL"),
-                        typ: "WMS"
+                        typ: "WFS"
                     });
                 }
                 else {
@@ -97,7 +93,7 @@ define([
                         name = [],
                         styleList;
 
-                    styleList = StyleList.returnAllModelsById(layer.get("styleId"));
+                    styleList = StyleList.returnAllModelsById(layer.getId());
                     if (styleList.length > 1) {
                         _.each(styleList, function (style) {
                             image.push(style.getSimpleStyle()[0].getImage().getSrc());
@@ -128,32 +124,11 @@ define([
         // HVV-Quatsch funktioniert noch nicht richtig
         setLegendParamsFromGROUP: function () {
             _.each(this.get("groupLayerList"), function (layer) {
-                _.each(layer.get("backbonelayers"), function (element) {
-                    var legendURL = [];
-                    // GetLegendGraphic wenn keine URL hinterlegt ist
-                    if (element.get("legendURL") === "" || element.get("legendURL") === undefined) {
-                        var layerNames = element.get("layers").split(",");
-
-                        if (layerNames.length === 1) {
-                            legendURL.push(element.get("url") + this.get("getLegendURLParams") + element.get("layers"));
-                        }
-                        else if (layerNames.length > 1) {
-                            _.each(layerNames, function (layerName) {
-                                legendURL.push(element.get("url") + this.get("getLegendURLParams") + layerName);
-                            }, this);
-                        }
-                    }
-                    // Wenn eine URL hinterlegt ist
-                    else {
-                        legendURL = element.get("legendURL");
-                    }
-
-                    this.push("tempArray", {
-                        layername: element.get("name"),
-                        img: legendURL,
-                        typ: "WMS"
-                    });
-                }, this);
+                this.push("tempArray", {
+                    layername: layer.get("name"),
+                    img: layer.get("legendURL"),
+                    typ: "WMS"
+                });
             }, this);
         },
 

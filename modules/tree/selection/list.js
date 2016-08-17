@@ -91,7 +91,7 @@ define([
                     _.each(layers, function (layer) {
                         Radio.trigger("LayerList", "addModel", layer);
                         Radio.trigger("LayerList", "setAttributionsByID", layer.id, {"selected": true});
-                    })
+                    });
                 });
             }
             // Über die Konfiguration sichtbar geschaltete Hintergrundkarten

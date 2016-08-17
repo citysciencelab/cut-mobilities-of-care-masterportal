@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "config",
     "eventbus"
-], function (Backbone, Config, EventBus) {
+], function (Backbone, Radio, Config, EventBus) {
 
         var Window = Backbone.Model.extend({
             defaults: {
@@ -12,16 +13,15 @@ define([
                 maxPosTop: "10px"
             },
             initialize: function () {
-                if (Config.tree.type === "light") {
-                    this.set("marginBottom", "0");
-                }
-                else {
-                    this.set("marginBottom", "24px");
-                }
-                EventBus.on("toggleWin", this.setParams, this);
+                // EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
+                var channel = Radio.channel("Window");
+
+                channel.on({
+                    "toggleWin": this.setParams
+                }, this);
             },
             collapseWindow: function () {
                 this.setCollapse(true);
@@ -35,22 +35,21 @@ define([
             setVisible: function (value) {
                 this.set("isVisible", value);
             },
-            setParams: function (args) {
-                if (_.isUndefined(args[3]) === false) {
-                    this.set("modelId", args[3]);
-                }
-                this.set("title", args[1]);
-                this.set("icon", args[2]);
-                this.set("winType", args[0]);
+            setParams: function (value, modelId) {
+                this.setTool(value);
+                this.set("title", value.getName());
+                this.set("icon", value.getGlyphicon());
+                this.set("winType", value.getId());
                 this.set("isVisible", true);
             },
             sendParamsToWinCotent: function () {
-                if (this.has("modelId")) {
-                    EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType"), this.get("modelId")]);
-                }
-                else {
-                    EventBus.trigger("winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("winType")]);
-                }
+                Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
+            },
+            setTool: function (value) {
+                this.set("tool", value);
+            },
+            getTool: function () {
+                return this.get("tool");
             }
         });
 

@@ -3,17 +3,8 @@ define(function () {
     var config = {
        wfsImgPath: "..components/lgv-config/img",
        allowParametricURL: true,
-       tree: {
-           type: "custom"
-        },
        view: {
            center: [565874, 5934140] // Rathausmarkt
-       },
-       controls: {
-           zoom: true,
-           toggleMenu: true,
-           orientation: "once",
-           poi: true
        },
        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
        restConf: "../components/lgv-config/rest-services-fhhnet.json",
@@ -24,33 +15,14 @@ define(function () {
            gfi: false
        },
        proxyURL: "/cgi-bin/proxy.cgi",
-       menubar: true,
        mouseHover: true,
        scaleLine: true,
-       isMenubarVisible: true,
-       menuItems: {
-           tree: {
-               title: "Themen",
-               glyphicon: "glyphicon-list"
-           },
-           tools: {
-               title: "Werkzeuge",
-               glyphicon: "glyphicon-wrench"
-           },
-           legend: {
-               title: "Legende",
-               glyphicon: "glyphicon-book"
-           },
-           contact: {
-               title: "Kontakt",
-               glyphicon: "glyphicon-envelope"
-           }
-       },
        startUpModul: "",
        searchBar: {
-           gazetteer: {
+            minChars: 3,
+            gazetteer: {
                minChars: 3,
-               url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+               url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                searchStreets: true,
                searchHouseNumbers: true,
                searchDistricts: true,
@@ -69,13 +41,13 @@ define(function () {
                minChar: 3,
                definitions: [
                    {
-                       url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
+                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                       data: "typeNames=prosin_festgestellt&propertyName=planrecht",
                        name: "bplan"
                    },
                    {
-                       url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=imverfahren&propertyName=plan",
+                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                       data: "typeNames=prosin_imverfahren&propertyName=plan",
                        name: "bplan"
                    }
                ]
@@ -83,28 +55,13 @@ define(function () {
            visibleWFS: {
                minChars: 3
            },
+           tree: {
+               minChars: 3
+           },
            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan",
            geoLocateHit: true
        },
-       tools: {
-           gfi: {
-               title: "Informationen abfragen",
-               glyphicon: "glyphicon-info-sign",
-               isActive: true
-           },
-           print: {
-               title: "Karte drucken",
-               glyphicon: "glyphicon-print"
-           },
-           coord: {
-               title: "Koordinate abfragen",
-               glyphicon: "glyphicon-screenshot"
-           },
-           measure: {
-               title: "Strecke / Fläche messen",
-               glyphicon: "glyphicon-resize-full"
-           }
-       }
+       gemarkungen: "../components/lgv-config/gemarkung.json"
    };
 
    return config;

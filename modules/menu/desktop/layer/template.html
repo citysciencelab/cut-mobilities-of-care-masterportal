@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<% if (typeof treeType === "undefined") { %>
+<div class="layer-info-item pull-right">
+    <span class="glyphicon glyphicon-info-sign" title="Informationen und Legende"></span>
+</div>
+<% } else { %>
+<div class="layer-info-item pull-right">
+    <span class="glyphicon glyphicon-cog rotate"></span>
+</div>
+<% } %>
+<div class="layer-item">
+    <% if (isSelected) { %>
+        <span class="glyphicon glyphicon-check" title="Layer entfernen"></span>
+    <% } else { %>
+        <span class="glyphicon glyphicon-unchecked" title="Layer hinzufügen"></span>
+    <% } %>
+    <span class="title" title="<%= name %>"><%= name %></span>
+</div>

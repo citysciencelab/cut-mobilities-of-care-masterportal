@@ -17,12 +17,14 @@ define([
             // download button selector
             dlBtnSel: "a.download",
             initialize: function () {
-                 EventBus.on("winParams", this.setStatus, this);
+                this.listenTo(Radio.channel("Window"), {
+                    "winParams": this.setStatus
+                });
             },
             setStatus: function (args) { // Fenstermanagement
-                if (args[2] === "download") {
-                    this.set("isCurrentWin", args[0]);
+                if (args[2].getId() === "download") {
                     this.set("isCollapsed", args[1]);
+                    this.set("isCurrentWin", args[0]);
                 }
                 else {
                     this.set("isCurrentWin", false);
@@ -419,8 +421,20 @@ define([
                     sourceProj: proj4(sourceProj),
                     destProj: proj4(destProj)
                 };
+            },
+
+            getId: function () {
+                return this.get("id");
+            },
+
+            getName: function () {
+                return this.get("title");
+            },
+
+            getGlyphicon: function () {
+                return this.get("glyphicon");
             }
-            });
+        });
 
     return new Download;
  });

@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "modules/core/requestor"
-], function (Backbone, EventBus, Config, Requestor) {
+], function (Backbone, Radio, EventBus, Config, Requestor) {
 
     var FeatureListerModel = Backbone.Model.extend({
         defaults: {
@@ -19,11 +20,11 @@ define([
             prevStyleScale: 1
         },
         initialize: function () {
-            if(_.has(Config.menuItems.featureLister,"lister") === true) {
-                this.set("maxFeatures", Config.menuItems.featureLister.lister);
-            }
-
-            EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
+            // if(_.has(Config.menuItems.featureLister,"lister") === true) {
+            //     this.set("maxFeatures", Config.menuItems.featureLister.lister);
+            // }
+            Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
+            // EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
             EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
@@ -99,9 +100,9 @@ define([
             style = layer.style(feature.feature)[0],
             image = style.getImage();
 
-            this.set("prevStyleScale",image.getScale())
-            this.set("prevFeatureId",id);
-            image.setScale(image.getScale()*1.5);
+            this.set("prevStyleScale", image.getScale());
+            this.set("prevFeatureId", id);
+            image.setScale(image.getScale() * 1.5);
             feature.feature.setStyle(style);
         },
         /*
@@ -144,13 +145,14 @@ define([
         /*
         * Werter Layerlist aus und übernimmt neue Layer
         */
-        checkVisibleLayer: function (layers) {
+        checkVisibleLayer: function () {
             var layerlist = this.get("layerlist"),
+                modelList = Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, typ: "WFS"}),
                 activeLayerId = this.get("layerid");
 
             // entferne nicht mehr sichtbare Layer
             _.each(layerlist, function (layer) {
-                var tester = _.filter(layers, function (lay) {
+                var tester = _.filter(modelList, function (lay) {
                     return lay.id === layer.id;
                 });
 
@@ -165,7 +167,7 @@ define([
                 }
             }, this);
             // füge neue Layer hinzu
-            _.each(layers, function (layer) {
+            _.each(modelList, function (layer) {
                 var tester = _.filter(layerlist, function (lay) {
                     return lay.id === layer.id;
                 });
