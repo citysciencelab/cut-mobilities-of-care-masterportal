@@ -102,11 +102,8 @@ define([
             descentInTree: function (model) {
                 var models = [],
                     lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}),
-                    onlyDesktopModels = _.reject(lightModels, function (lightModel) {
-                        return lightModel.onlyDesktop === true;
-                    });
 
-                models = this.collection.add(onlyDesktopModels);
+                models = this.collection.add(lightModels);
                 if (model.getIsLeafFolder()) {
                     models.push(model);
                 }
@@ -148,7 +145,11 @@ define([
             addViews: function (models) {
                 var nodeView, treeType = Radio.request("Parser", "getTreeType");
 
-                _.each(models, function (model) {
+                models = _.reject(models, function (model) {
+                    return model.get("onlyDesktop") === true;
+                });
+
+                _.each(models, function (model) {console.log(model.get("onlyDesktop"));
                     model.setIsVisibleInTree(true);
                     switch (model.getType()){
                         case "folder": {

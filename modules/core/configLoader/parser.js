@@ -81,7 +81,7 @@ define([
          */
         parseMenu: function (items, parentId) {
 
-            _.each(items, function (value, key) {
+            _.each(items, function (value, key) {console.log(value);
                 if (_.has(value, "children") || key === "tree") {
                     var item = {
                         type: "folder",
@@ -89,6 +89,7 @@ define([
                         glyphicon: value.glyphicon,
                         name: value.name,
                         id: value.name,
+                        onlyDesktop: value.onlyDesktop,
                         treeType: this.getTreeType()
                     };
 
