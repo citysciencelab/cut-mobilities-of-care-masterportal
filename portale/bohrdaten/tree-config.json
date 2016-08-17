@@ -9,8 +9,6 @@
         {
           "id": "452",
           "visibility": false,
-          "test": "test",
-          "hier": "dore"
         }
       ]
     }
@@ -21,30 +19,11 @@
               "Layer": [
                 {
                   "id": "2407",
-                  "visibility": false
+                  "visibility": false,
+        				  "infoFormat": "text/html",
+        				  "name": "Bohrdaten GLA (ab 1:5 000)"
                 }
               ]
-        },
-          {
-          "Titel": "Geologie",
-          "Layer": [
-            {
-              "id": "649",
-              "visibility": false
-            },
-            {
-              "id": "650",
-              "visibility": false
-            },
-            {
-              "id": "646",
-              "visibility": false
-            },
-            {
-              "id": "647",
-              "visibility": false
-            }
-          ]
         },
         {
           "Titel": "Geothermie",
@@ -75,7 +54,9 @@
             },
             {
               "id": "4423",
-              "visibility": false
+              "visibility": false,
+				      "infoFormat": "text/html",
+				      "name": "Bohrdaten GLA (ab 1:5 000)"
             }
           ]
         },
@@ -100,5 +81,5 @@
             }
           ]
         }
-      ]
-    }
+  ]
+}

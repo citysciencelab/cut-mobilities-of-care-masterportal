@@ -163,8 +163,8 @@ function (Backbone, EventBus) {
                if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
                     position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                     coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:name, name")[0] !== undefined) {
-                        hitName = $(hit).find("app\\:name, name")[0].textContent;
+                    if ($(hit).find("app\\:Name, Name")[0] !== undefined) {
+                        hitName = $(hit).find("app\\:Name, Name")[0].textContent;
                         this.get("kita").push({
                             name: hitName,
                             type: "Kita",

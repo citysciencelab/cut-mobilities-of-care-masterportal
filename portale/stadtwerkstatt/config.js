@@ -27,7 +27,35 @@ define(function () {
             scale: 60000, // für print.js benötigt
             extent: [454591, 5809000, 700000, 6075769]
         },
-        footer: true,
+        controls: {
+             zoom: true,
+             toggleMenu: true,
+             orientation: "once",
+             poi: false,
+             fullScreen: false
+         },
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "SDP"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
@@ -59,15 +87,17 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
             },
-            placeholder: "Suche nach Adresse, Stadtteil"
+
+            placeholder: "Suche nach Adresse / Stadtteil"
         },
         print: {
             printID: "99999",
@@ -85,14 +115,6 @@ define(function () {
                  title: "Strecke / Fläche messen",
                  glyphicon: "glyphicon-resize-full"
              }
-         },
-
-         controls: {
-             zoom: true,
-             toggleMenu: true,
-             orientation: "once",
-             poi: false,
-             fullScreen: false
          }
     };
 

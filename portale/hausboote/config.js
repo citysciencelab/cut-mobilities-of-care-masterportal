@@ -57,7 +57,7 @@ define(function () {
                 title: "Kontakt",
                 glyphicon: "glyphicon-envelope",
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            },            
+            },
             routing: {
                 title: "Routenplaner",
                 glyphicon: "glyphicon-road"
@@ -98,7 +98,7 @@ define(function () {
             gfi: false
         },
         tools: {
-            
+
             gfi: {
                 title: "Informationen abfragen",
                 glyphicon: "glyphicon-info-sign",

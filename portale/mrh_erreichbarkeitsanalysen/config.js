@@ -5,20 +5,13 @@ define(function () {
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
         tree: {
-            type: "light",
-            layer: [
-                {id: "51", visibility: true}, // WebAtlas
-                {id: "53", visibility: false}, // WebAtlas_grau
-                {id: "55", visibility: false}, // Luftbilder
-                {id: "57", visibility: false}, // 1:5000
-                {id: "4441", visibility: true, styleable: true, geomType: "Polygon", attributesToStyle: ["AP30Sum", "AP60Sum"]}
-                 // Erreichbarkeitsanalysen
-            ]
+            type: "custom"
         },
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true
+            orientation: "once",
+            poi: true
         },
         attributions: true,
         footer: {
@@ -47,66 +40,7 @@ define(function () {
         quickHelp: false,
         allowParametricURL: true,
         view: {
-            center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
-            resolution: 76.43718115953851,
-            options: [
-                {
-                    resolution: 611.4974492763076,
-                    scale: "2311167",
-                    zoomLevel: 0
-                },
-                {
-                    resolution: 305.7487246381551,
-                    scale: "1155583",
-                    zoomLevel: 1
-                },
-                {
-                    resolution: 152.87436231907702,
-                    scale: "577791",
-                    zoomLevel: 2
-                },
-                {
-                    resolution: 76.43718115953851,
-                    scale: "288896",
-                    zoomLevel: 3
-                },
-                {
-                    resolution: 38.21859057976939,
-                    scale: "144448",
-                    zoomLevel: 4
-                },
-                {
-                    resolution: 19.109295289884642,
-                    scale: "72223",
-                    zoomLevel: 5
-                },
-                {
-                    resolution: 9.554647644942321,
-                    scale: "36112",
-                    zoomLevel: 6
-                },
-                {
-                    resolution: 4.7773238224711605,
-                    scale: "18056",
-                    zoomLevel: 7
-                },
-                {
-                    resolution: 2.3886619112355802,
-                    scale: "9028",
-                    zoomLevel: 8
-                },
-                {
-                    resolution: 1.1943309556178034,
-                    scale: "4514",
-                    zoomLevel: 9
-                },
-                {
-                    resolution: 0.5971654778089017,
-                    scale: "2257",
-                    zoomLevel: 10
-                }
-            ]
+            center: [565874, 5934140]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
@@ -114,18 +48,6 @@ define(function () {
         menubar: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "Geoportal GDI-MRH",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: true
-        },
         menuItems: {
             tree: {
                 title: "Themen",
@@ -141,25 +63,24 @@ define(function () {
             },
             contact: {
                 title: "Kontakt",
-                glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            },
-            addWMS: {
-                title: "WMS hinzufügen",
-                glyphicon: "glyphicon-plus"
+                glyphicon: "glyphicon-envelope"
             }
         },
         startUpModul: "",
         searchBar: {
-            placeholder: "Suchen nach Adresse, Thema",
             bkg: {
+                minChars: 3,
                 bkgSuggestURL: "/bkg_suggest",
                 bkgSearchURL: "/bkg_geosearch",
-                suggestCount: 100
+                extent: [454591, 5809000, 700000, 6075769],
+                epsg: "EPSG:25832",
+                filter: "filter=(typ:*)",
+                score: 0.6
             },
-            tree: {
+            visibleWFS: {
                 minChars: 3
             },
+            placeholder: "Suche nach Adresse",
             geoLocateHit: true
         },
         tools: {

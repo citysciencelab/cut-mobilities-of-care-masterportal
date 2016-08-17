@@ -29,18 +29,18 @@ define([
             else {
                 this.undelegateEvents();
             }
-           
+
         },
-        
+
         importKML: function () {
             this.model.importKML();
         },
-        
+
         setText: function (evt) {
-            var reader = null;
-            var file = evt.target.files[0];
-            var reader = new FileReader();
-            
+            var reader = null,
+                file = evt.target.files[0],
+                reader = new FileReader();
+
             $("#fakebutton").toggleClass("btn-primary");
 
             if ($("#fakebutton").hasClass("btn-primary") === true) {
@@ -49,12 +49,13 @@ define([
             else {
                 $("#btn_import").prop("disabled", true);
             }
+
             reader.onload = (function () {
                 var fakeBtnTxt = $("#kmlinput").val(),
                 test = fakeBtnTxt.slice(12);
-                
+
                 this.model.setText(reader.result);
-                $("#fakebutton").html("Datei: " + 
+                $("#fakebutton").html("Datei: " +
                 test);
             }).bind(this);
             reader.readAsText(file);

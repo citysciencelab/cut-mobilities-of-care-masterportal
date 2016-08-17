@@ -11,24 +11,24 @@ define(function () {
                 {id: "1994", visibility: true, "name" : "Vogelschutzgebiete"},
                 {id: "1999", visibility: true}, //Naturdenkmal
                 {id: "1998", visibility: true}, //Landschaftschtutzgeb.
-                {id: "1992", visibility: true}  //Naturschutzgebiete
+                {id: "1992", visibility: true, transparence: "40"}  //Naturschutzgebiete
             ]
         },
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         view: {
-           center: [565874, 5934140],
+            center: [565874, 5934140],
             resolution: 66.14579761460263,
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
-            
+
         },
         controls: {
             zoom: true,
             toggleMenu: true,
             orientation: "once",
-            poi: true,
+            poi: false,
             fullScreen: true
         },
         footer: {
@@ -54,11 +54,11 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         menubar: true,
         scaleLine: true,
@@ -83,19 +83,19 @@ define(function () {
                 email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
             }
         },
-        
+
         startUpModul: "",
         searchBar: {
             minChars: 3,
             gazetteer: {
                 minChars: 3,
-               url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
             },
-           
+
             placeholder: "Suche nach Adresse / Stadtteil"
         },
         print: {

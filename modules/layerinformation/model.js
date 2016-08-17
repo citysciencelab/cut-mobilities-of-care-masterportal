@@ -76,20 +76,33 @@ define([
                     }
                 }(),
                 "date": function () {
-                    var dates = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", xmlDoc),
-                        dateTime;
 
+                    var dates = $("gmd\\:CI_Date,CI_Date", xmlDoc),
+                    datetype,revisionDateTime,publicationDateTime,
+                    dateTime;
                     if (dates.length === 1) {
                         dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[0].textContent;
                     }
                     else {
                         dates.each(function (index, element) {
-                            if ($(element).attr("codeListValue") === "revision") {
-                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[index].textContent;
+                            datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
+                            if ($(datetype).attr("codeListValue") === "revision") {
+                                revisionDateTime = $("gco\\:DateTime,DateTime", element)[0].textContent;
+                            }
+                            else if ($(datetype).attr("codeListValue") === "publication") {
+                                publicationDateTime = $("gco\\:DateTime,DateTime", element)[0].textContent;
+                            }
+                            else{
+                                dateTime = $("gco\\:DateTime,DateTime", element)[0].textContent;
                             }
                         });
                     }
-
+                    if (revisionDateTime){
+                        dateTime=revisionDateTime;
+                    }
+                    else if (publicationDateTime) {
+                        dateTime=publicationDateTime;
+                    }
                     return moment(dateTime).format("DD.MM.YYYY");
                 }()
             };

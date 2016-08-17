@@ -18,6 +18,9 @@ define([
 
             this.fetch({
                 cache: false,
+                success: function () {
+                    channel.trigger("isReady", true);
+                },
                 error: function () {
                     EventBus.trigger("alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.restConf),

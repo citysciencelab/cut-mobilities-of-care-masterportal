@@ -259,7 +259,6 @@ define([
             if (evt){
                 evt.stopPropagation();
             }
-
         },
         navigateList: function (e) {
             var selected = {},

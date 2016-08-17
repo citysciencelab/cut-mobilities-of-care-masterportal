@@ -54,45 +54,50 @@ define([
             var element = this.get("gfiContent"),
                 children = [];
 
-            _.each(element, function (val, key) {
-                if (key === "Bild") {
-                    var imgView = new ImgView(val);
+            if (_.isString(element) && element.match(/content="text\/html/g)) {
+                children.push(element);
+            }
+            else {
+                _.each(element, function (val, key) {
+                    if (key === "Bild") {
+                        var imgView = new ImgView(val);
 
-                    element[key] = "#";
-                    children.push({
-                        key: imgView.model.get("id"),
-                        val: imgView
-                    });
-                }
-                else if (key === "video" && Util.isAny() === null) {
-                    var videoView = new VideoView(val);
-
-                    element[key] = "#";
-                    children.push({
-                        key: videoView.model.get("id"),
-                        val: videoView
-                    });
-                    if (_.has(element, "mobil_video")) {
-                        element.mobil_video = "#";
+                        element[key] = "#";
+                        children.push({
+                            key: imgView.model.get("id"),
+                            val: imgView
+                        });
                     }
-                }
-                else if (key === "mobil_video" && Util.isAny()) {
-                    var videoView = new VideoView(val);
+                    else if (key === "video" && Util.isAny() === null) {
+                        var videoView = new VideoView(val);
 
-                    element[key] = "#";
-                    children.push({
-                        key: videoView.model.get("id"),
-                        val: videoView
-                    });
-                    if (_.has(element, "video")) {
-                        element.video = "#";
+                        element[key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView
+                        });
+                        if (_.has(element, "mobil_video")) {
+                            element.mobil_video = "#";
+                        }
                     }
-                }
-                // lösche leere Dummy-Einträge wieder raus.
-                element = _.omit(element, function (value) {
-                    return value === "#";
-                });
-            }, this);
+                    else if (key === "mobil_video" && Util.isAny()) {
+                        var videoView = new VideoView(val);
+
+                        element[key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView
+                        });
+                        if (_.has(element, "video")) {
+                            element.video = "#";
+                        }
+                    }
+                    // lösche leere Dummy-Einträge wieder raus.
+                    element = _.omit(element, function (value) {
+                        return value === "#";
+                    });
+                }, this);
+            }
             if (children.length > 0) {
                 this.set("children", children);
             }

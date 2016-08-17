@@ -9,7 +9,7 @@
         {
           "id": "8",
           "visibility": false
-        },  
+        },
         {
           "id": "713",
           "visibility": false,
@@ -37,13 +37,13 @@
             {
              "id": "368",
              "visible": false,
-             "name": "ALKIS farbig (ab 1:10.000)",
+             "name": "ALKIS farbig (ab 1: 10 000)",
              "maxScale": "10000"
             },
             {
              "id": "149",
              "visible": false,
-             "name": "ALKIS grau-blau (ab 1:10.000)",
+             "name": "ALKIS grau-blau (ab 1: 10 000)",
              "maxScale": "10000"
             }
       ]
@@ -96,9 +96,36 @@
               "visibility": false
             }
           ]
-        }, 
+        },
         {
           "Titel": "ÖV-Netze",
+            "Ordner": [
+            {
+                "Titel": "Einzugsbereiche von HVV-Haltestellen",
+              "Layer": [
+                {
+                  "id": "4624",
+                  "visibility": false
+                },
+                {
+                  "id": "4625",
+                  "visibility": false
+                },
+                {
+                  "id": "4626",
+                  "visibility": false
+                },
+                {
+                  "id": "4627",
+                  "visibility": false
+                },
+                {
+                  "id": "4628",
+                  "visibility": false
+                }
+              ]
+            }
+                ],
           "Layer": [
             {
               "id": "1935",
@@ -114,7 +141,7 @@
               "name": ["Haltestellen"],
               "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
             },
-             {
+            {
               "id": "2679",
               "visible": false,
               "name" : "Schienenverkehrsnetz MRH",
@@ -122,47 +149,53 @@
             }
           ]
         },
+          
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
             {
               "id": "1932",
               "visibility": false,
-              "name" : "StadtRAD-Stationen (ab 1.40 000)",
-              "metaName": "StadtRAD-Stationen (ab 1.40 000)"
+              "name" : "StadtRAD-Stationen (ab 1: 40 000)",
+              "metaName": "StadtRAD-Stationen (ab 1: 40 000)"
               },
             {
-              "id": "1007",
+              "id": "4866",
               "visibility": false
             },
             {
-              "id": "979",
+              "id": "4850",
               "visibility": false
             },
             {
-              "id": "1011",
+              "id": "4870",
               "visibility": false
             },
             {
-              "id": "1014",
+              "id": "4873",
               "visibility": false,
               "name" : "Nordseeküstenradweg",
               "metaName": "Nordseeküstenradweg"
             },
             {
-              "id": "1016",
+              "id": "4875",
               "visibility": false
             },
             {
-              "id": "1018",
+              "id": "4877",
               "visibility": false
             },
             {
-              "id": "1013",
+              "id": "4872",
+              "visibility": false
+            },
+              {
+              "id": "1627",
               "visibility": false
             }
           ]
         },
+          
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -171,10 +204,11 @@
               "visibility": false
             }
           ]
-        },
+        }
+          ,
         {
           "Titel": "Parken",
-            
+
           "Layer": [
             {
               "id": "945",
@@ -205,8 +239,8 @@
             {
               "id": "1578",
               "visibility": false,
-              "name" : "Parkuhren (ab 1:2.500)",
-              "metaName": "Parkuhren (ab 1:2.500)"
+              "name" : "Parkuhren (ab 1: 2500)",
+              "metaName": "Parkuhren (ab 1: 2500)"
             },
             {
               "id": "943",
@@ -214,11 +248,10 @@
               "name" : "Bike und Ride HVV",
               "metaName": "Bike und Ride HVV"
             }
-            
+
           ]
         },
-        
-          
+
          {
           "Titel": "Verkehrszählungen",
           "Ordner": [
@@ -227,21 +260,28 @@
               "Layer": [
                 {
                   "id": "2157",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Kfz-Bedarfszählstellen",
+                  "metaName": "Kfz-Bedarfszählstellen"
                 },
                 {
                   "id": "2158",
                   "visibility": false,
-                  "name" : "Kfz Dauerzählstelle",
-                  "metaName": "Kfz Dauerzählstelle"
+                  "name" : "Kfz-Dauerzählstellen",
+                  "metaName": "Kfz-Dauerzählstellen"
                 },
                 {
                   "id": "2159",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Kfz-Jährliche Zählstellen",
+                  "metaName": "Kfz-Jährliche Zählstellen"
                 },
                 {
                   "id": "2160",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Kfz-Pegel",
+                  "metaName": "Kfz-Pegel"
+                
                 }
               ]
             },
@@ -250,22 +290,34 @@
               "Layer": [
                 {
                   "id": "1587",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Rad-Bedarfszählstellen",
+                  "metaName": "Rad-Bedarfszählstellen"
                 },
                 {
                   "id": "1588",
-                  "visibility": false
+                  "visibility": false,
+                  "name" : "Rad-Jährliche Zählstellen",
+                  "metaName": "Rad-Jährliche Zählstellen"
                 },
                 {
                   "id": "2918",
                   "visibility": false
                 }
               ]
-            }              
+            },
+            {
+              "Titel": "Zählstellen - Fussgänger",
+              "Layer": [
+                {
+                  "id": "4622",
+                  "visibility": false
+                }
+              ]
+            }
           ]
-        }, 
-          
-          
+        },
+
         {
           "Titel": "Verkehrslage",
           "Layer": [
@@ -287,6 +339,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -302,6 +355,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -317,6 +371,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -326,6 +381,7 @@
             }
           ]
         },
+          
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -355,6 +411,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -394,11 +451,12 @@
             {
               "id": "538,539,540",
               "visibility": false,
-              "name" : "Kreuzungsskizzen (ab 1:5.000)",
-              "metaName": "Kreuzungsskizzen (ab 1:5.000)"
+              "name" : "Kreuzungsskizzen (ab 1: 5000)",
+              "metaName": "Kreuzungsskizzen (ab 1: 5000)"
             }
           ]
         },
+          
         {
           "Titel": "Umwelt",
           "Layer": [
@@ -416,6 +474,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -425,6 +484,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -436,8 +496,8 @@
               "id": "2834",
               "visibility": false,
               "maxScale": "40000",
-              "name" : "Hamburger Wohnlagenverzeichnis (ab 1:40.000)",
-              "metaName": "Hamburger Wohnlagenverzeichnis (ab 1:40.000)"
+              "name" : "Hamburger Wohnlagenverzeichnis (ab 1 : 40 000)",
+              "metaName": "Hamburger Wohnlagenverzeichnis (ab 1: 40 000)"
             },
             {
                 "id": "4409,4410,4411,4412,4413,4414",
@@ -463,15 +523,15 @@
               "id": "2444",
               "visibility": false,
               "maxScale": "2500",
-              "name" : "ALKIS - Gebäudeflächen (ab 1:2.500)",
-              "metaName": "ALKIS - Gebäudeflächen (ab 1:2.500)"
+              "name" : "ALKIS - Gebäudeflächen (ab 1: 2500)",
+              "metaName": "ALKIS - Gebäudeflächen (ab 1: 2500)"
             },
             {
               "id": "2439,2440,2441,2442",
               "visibility": false,
               "maxScale": "10000",
-              "name" : "ALKIS -  tatsächliche Nutzung (ab 1:10.000)",
-              "metaName": "ALKIS -  tatsächliche Nutzung (ab 1:10.000)"
+              "name" : "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)",
+              "metaName": "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)"
             },
             {
               "id": "1201,1202,1203,1204,1205,1206,1207,1208,1209,1210,1211,1212",
@@ -482,20 +542,20 @@
             {
               "id": "1423,1425,1426,1427,1428,1429,1430,1431,1433,1434,1436,1437,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1448,1449,1450",
               "visibility": false,
-                "name" : "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1:20.000)",
-                "metaName": "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1:20.000)"
+                "name" : "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1: 20 000)",
+                "metaName": "Landesgrundbesitzverzeichnis - Teil Aufgliederung (ab 1: 20 000)"
             },
             {
               "id": "2810,2811,2812,2813,2814,2815,2816,2817,2818,2819",
               "visibility": false,
-                  "name" : "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1:20.000)",
-                "metaName": "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1:20.000)"
+                  "name" : "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1: 20 000)",
+                "metaName": "Landesgrundbesitzverzeichnis - Übergeordnete Vermögensarten (ab 1: 20 000)"
             },
             {
               "id": "40",
               "visibility": false,
-              "name" : "Rasterplan Bebauungsplänge im FHHNet (ab 1:20.000)",
-              "metaName": "Rasterplan Bebauungsplänge im FHHNet (ab 1:20.000)"
+              "name" : "Rasterplan Bebauungsplänge im FHHNet (ab 1: 20 000)",
+              "metaName": "Rasterplan Bebauungsplänge im FHHNet (ab 1: 20 000)"
             },
             {
               "id": "1170,1171",
@@ -503,6 +563,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Soziales",
           "Layer": [
@@ -521,6 +582,7 @@
             }
           ]
         },
+          
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [
@@ -561,7 +623,6 @@
               "visibility": false,
               "name" : "Polizeikommissariate",
               "metaName": "Polizeikommissariate"
-
             },
             {
               "id": "2071",
@@ -581,7 +642,7 @@
             }
           ]
         }
-          
+
       ]
     }
   ]
