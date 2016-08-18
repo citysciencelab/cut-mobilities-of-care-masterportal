@@ -85,10 +85,10 @@
       "toggleMenu": true,
       "orientation": "once",
       "poi": true,
+      "mousePosition": true,
       "fullScreen": true,
       "attributions": true
     },
-    "scaleLine": true,
     "Baumtyp": "default"
   },
   "Themenconfig":

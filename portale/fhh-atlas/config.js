@@ -53,6 +53,7 @@ define(function () {
         csw: {
             id: "1"
         },
+        scaleLine: true,
         attributions: true,
         footer: {
             visibility: true,
