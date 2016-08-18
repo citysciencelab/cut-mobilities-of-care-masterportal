@@ -35,6 +35,7 @@ define([
             },
             render: function () {
                 $("#" + "Themen").html("");
+                // Eine Themenebene rendern
                 this.renderSubTree("Themen", 0, 0);
                 $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             },
@@ -80,8 +81,8 @@ define([
                         return item.getName();
                     });
                 }
-                // Notwendig, da jQuery.after() benutzt werden muss, um den Layern auf allen Ebenen die volle Breite des Baumes zu geben
-                // Mit append würden sie als unter Element immer mit dem Eltern elemnt zusammen eingerückt werden
+                // Notwendig, da jQuery.after() benutzt werden muss wenn die Layer in den Baum gezeichnet werden, um den Layern auf allen Ebenen die volle Breite des Baumes zu geben
+                // Mit jQuery.append würden sie ab der 2. ebene immer mit dem Eltern element zusammen eingerückt werden
                 layer.reverse();
 
                 this.addOverlayViews(layer);
