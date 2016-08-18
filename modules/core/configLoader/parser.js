@@ -253,7 +253,7 @@ define([
         createModelList: function () {
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
-                    model.parentId === "Werkzeuge";
+                    model.parentId === "Werkzeuge" || model.parentId === "Info";
             }));
         },
 

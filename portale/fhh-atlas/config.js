@@ -4,25 +4,8 @@ define(function () {
         logo: "../img/hh-logo.png",
         simpleMap: true,
         tree: {
-            type: "default",
             orderBy: "opendata",
-            // saveSelection: true,
-            baseLayer: [
-                {id: "453", minScale: "500"},
-                {id: "8"},
-                {id: "717", visibility: true, minScale: "1000", name: "Geobasiskarten (farbig)"},
-                {id: "713", minScale: "1000", name: "Geobasiskarten (schwarz-weiß)"},
-                {id: "1043", minScale: "1000", name: "Geobasiskarten (grau-blau)"},
-                {id: "368", name: "ALKIS farbig", maxScale: "10000"},
-                {id: "149", name: "ALKIS grau-blau", maxScale: "10000"}
-            ],
-            // layerIDsToMerge: [
-            //     ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
-            //     ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
-            //     ["717", "718", "719", "720"],
-            //     ["713", "714", "715", "716"],
-            //     ["1043", "1044", "1045", "1046"]
-            // ],
+            saveSelection: true,
             layerIDsToIgnore: [
                 "1912", "1913", "1914", "1915", "1916", "1917", // UESG
                 "1791" // nachträgliche Bodenrichtwerte lagetypisch 1964
@@ -67,12 +50,6 @@ define(function () {
                 "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71" // Bodenrichtwerte für Hamburg
             ]
         },
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            mousePosition: true,
-            fullScreen: true
-        },
         csw: {
             id: "1"
         },
@@ -95,11 +72,6 @@ define(function () {
                     "bezeichnung": "",
                     "url": "http://www.hamburg.de/bsu/timonline",
                     "alias": "Kartenunstimmigkeit"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/fhh-atlas_alt/",
-                    "alias": "Zum alten FHH-Atlas"
                 }
             ]
         },
@@ -111,42 +83,8 @@ define(function () {
         },
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        categoryConf: "../components/lgv-config/category.json",
         styleConf: "../components/lgv-config/style.json",
-        menubar: false,
-        scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            // viewerName: "FHH - Atlas",
-            // searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
-        },
-        menuItems: {
-            tree: {
-                title: "Themen",
-                glyphicon: "glyphicon-list"
-            },
-            tools: {
-                title: "Werkzeuge",
-                glyphicon: "glyphicon-wrench"
-            },
-            legend: {
-                title: "Legende",
-                glyphicon: "glyphicon-book"
-            },
-            contact: {
-                title: "Kontakt",
-                glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            }
-        },
         startUpModul: "",
         searchBar: {
             minChars: 3,
@@ -161,41 +99,6 @@ define(function () {
             },
             tree: {
                 minChars: 3
-            }
-        },
-        tools: {
-            parcelSearch: {
-                title: "Flurstückssuche",
-                glyphicon: "glyphicon-search"
-            },
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-record"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            },
-            draw: {
-                title: "Zeichnen / Schreiben",
-                glyphicon: "glyphicon-pencil"
-            },
-            kmlimport: {
-                title: "KML Import",
-                glyphicon: "glyphicon-import"
             }
         },
         gemarkungen: "../components/lgv-config/gemarkung.json",
