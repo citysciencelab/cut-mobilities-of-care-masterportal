@@ -39,23 +39,31 @@ define([
 
                 this.$el.attr("id", this.model.getId());
 
-                var selector = "";
 
-                if (this.model.getParentId() === "Baselayer") {
-                    selector = "#Baselayer";
-                }
-                else {
-                   selector = "#Overlayer";
-                }
                 var attr = this.model.toJSON();
 
-                if (this.model.getLevel() > 0) {
-                    $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
+                // external Folder
+                if (this.model.getParentId() === "ExternalLayer") {
+                        $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
                 }
                 else {
-                    $(selector).append(this.$el.html(this.template(attr)));
+                    // Folder auf der ersten Ebene
+                    if (this.model.getLevel() > 0) {
+                        $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
+                    }
+                    else {
+                        var selector = "";
+
+                        if (this.model.getParentId() === "Baselayer") {
+                            selector = "#Baselayer";
+                        }
+                        else {
+                           selector = "#Overlayer";
+                        }
+                        $(selector).append(this.$el.html(this.template(attr)));
+                    }
+                    $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
             }
 
         },
