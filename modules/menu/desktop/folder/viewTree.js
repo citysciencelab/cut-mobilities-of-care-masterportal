@@ -49,7 +49,7 @@ define([
                 }
                 var attr = this.model.toJSON();
 
-                if (this.model.getLevel() > 0) {
+                if (this.model.getLevel() > 0 || this.model.getParentId() === "ExternalLayer") {
                     $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
                 }
                 else {
