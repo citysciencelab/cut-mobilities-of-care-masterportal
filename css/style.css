@@ -13,12 +13,9 @@
 @import "../modules/viomRouting/style.css";
 @import "../modules/window/style.css";
 @import "../modules/scaleline/style.css";
-/*@import "../modules/menubar/style.css";*/
 @import "../modules/footer/style.css";
 @import "../modules/quickhelp/style.css";
 @import "../modules/title/style.css";
-/*@import "../modules/tree/style.css";*/
-/*@import "../modules/treeLight/style.css";*/
 @import "../modules/treefilter/style.css";
 @import "../modules/coordpopup/style.css";
 @import "../modules/legend/style.css";
@@ -37,8 +34,6 @@
 @import "../modules/controls/mousePosition/style.css";
 @import "../modules/contact/style.css";
 @import "../modules/tools/saveSelection/style.css";
-@import "../modules/menu/mobile/breadCrumb/style.css";
-@import "../modules/menu/mobile/style.css";
 @import "../modules/tools/download/style.css";
 @import "../modules/tools/kmlimport/style.css";
 @import "../modules/menu/style.css";
