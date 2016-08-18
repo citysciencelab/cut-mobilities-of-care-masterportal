@@ -74,7 +74,7 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.get("brwList") .length > 0) {
+            if (this.model.get("brwList").length > 0) {
                 $("#StadtteilName").val(this.model.get("brwList")[0].brwLage.stadtteil);
                 $("#StadtteilNameDiv").hide();
             }
