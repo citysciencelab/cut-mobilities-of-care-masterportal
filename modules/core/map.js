@@ -2,13 +2,20 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "config",
     "modules/core/mapView",
     "eventbus",
-     "modules/core/util"
-], function (Backbone, Radio, ol, Config, MapView, EventBus, Util) {
+    "modules/core/util"
+], function () {
 
-    var Map = Backbone.Model.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        MapView = require("modules/core/mapView"),
+        EventBus = require("eventbus"),
+        Util = require("modules/core/util"),
+        Map;
+
+     Map = Backbone.Model.extend({
 
         /**
          *
@@ -25,13 +32,11 @@ define([
              var channel = Radio.channel("Map");
 
             channel.reply({
-                "getView": MapView.get("view")
-            }, this);
-            channel.reply({
                 "getMap": function () {
                     return this.get("map");
                 }
             }, this);
+
             channel.on({
                 "setBBox": this.setBBox,
                 "addLayer": this.addLayer,
@@ -42,19 +47,15 @@ define([
             EventBus.on("activateClick", this.activateClick, this);
             EventBus.on("addLayer", this.addLayer, this);
             EventBus.on("removeLayer", this.removeLayer, this);
-            EventBus.on("removeLastLayer", this.removeLastLayer, this);
             EventBus.on("addOverlay", this.addOverlay, this);
             EventBus.on("removeOverlay", this.removeOverlay, this);
             EventBus.on("addControl", this.addControl, this);
             EventBus.on("removeControl", this.removeControl, this);
             EventBus.on("addInteraction", this.addInteraction, this);
             EventBus.on("removeInteraction", this.removeInteraction, this);
-            EventBus.on("moveLayer", this.moveLayer, this);
-            EventBus.on("addLayerToIndex", this.addLayerToIndex, this);
             EventBus.on("zoomToExtent", this.zoomToExtent, this);
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
             EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
-            EventBus.on("setMeasurePopup", this.setMeasurePopup, this); // warte auf Fertigstellung des MeasurePopup für Übergabe
 
             this.set("view", MapView.get("view"));
 
@@ -182,13 +183,7 @@ define([
                 this.get("map").getLayers().push(layer);
             }
         },
-        /**
-        */
-        removeLastLayer: function () {
-            var layer = this.get("map").getLayers().getArray()[this.get("map").getLayers().getArray().length - 1];
 
-            this.get("map").removeLayer(layer);
-        },
         /**
         */
         removeLayer: function (layer) {

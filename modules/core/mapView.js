@@ -5,9 +5,17 @@ define([
     "config",
     "eventbus",
     "proj4"
-], function (Backbone, Radio, ol, Config, EventBus, proj4) {
-    "use strict";
-    var MapView = Backbone.Model.extend({
+], function () {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Config = require("config"),
+        EventBus = require("eventbus"),
+        proj4 = require("proj4"),
+        MapView;
+
+    MapView = Backbone.Model.extend({
         /**
          *
          */
@@ -102,9 +110,6 @@ define([
             }, this);
 
             this.listenTo(EventBus, {
-                "mapView:getResolutions": function () {
-                    EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
-                },
                 "mapView:getMinResolution": this.sendMinResolution,
                 "mapView:getMaxResolution": function (scale) {
                     EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
