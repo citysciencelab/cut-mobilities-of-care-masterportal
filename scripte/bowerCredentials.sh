@@ -1,7 +1,7 @@
 #!/bin/bash
 
-NAME="coderwelsch"
-PWD="trivial!Bitbucket"
+NAME=""
+PWD=""
 
 function addCredentials () {
     sed -i "s/bitbucket/${NAME}\:${PWD}@bitbucket/g" bower.json
