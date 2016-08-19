@@ -23,7 +23,22 @@ define([
                 value = target.checked ? true : false;
             }
             else {
-                value = target.value;
+                var mincheck = true,
+                    maxcheck = true;
+
+                if (target.min && target.value < target.min) {
+                    mincheck = false;
+                }
+                if (target.max && target.value > target.max) {
+                    maxcheck = false;
+                }
+                if (mincheck === true && maxcheck === true) {
+                    value = target.value;
+                    this.trigger("switchToValid", target);
+                }
+                else {
+                    this.trigger("switchToInvalid", target);
+                }
             }
             this.set("params", _.extend(attrObj, _.object([id], [value])));
         },

@@ -48,6 +48,8 @@ define([
             this.model.set("produkt", produkt),
             this.model.set("jahr", jahr),
             this.model.set("brwList", brwList);
+            this.listenTo(this.model, {"switchToInvalid": this.switchToInvalid});
+            this.listenTo(this.model, {"switchToValid": this.switchToValid});
 
             if (_.contains(params, true) === true) {
                 this.show();
@@ -55,6 +57,12 @@ define([
             else {
                 this.weiter();
             }
+        },
+        switchToValid: function (target) {
+            $(target).parent().removeClass("has-error");
+        },
+        switchToInvalid: function (target) {
+            $(target).parent().addClass("has-error");
         },
         paramChanged: function (evt) {
             this.model.paramChanged(evt.target);
