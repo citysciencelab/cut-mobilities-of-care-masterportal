@@ -37,13 +37,17 @@ define([
             var result = this.model.get("result"),
                 filepath = this.model.get("filepath");
 
-            $("#ok_p").append(result);
+            $("#result_p").addClass("bg-success");
+            $("#result_p").text(result);
             $("#ok_ref").attr("href", "https://geoportal-hamburg.de/ida/results/" + filepath);
+            $("#ok_ref").addClass("btn-success");
         },
         refreshError: function () {
             var error = this.model.get("error");
 
-            $("#fehler_p").append(error);
+            $("#result_p").addClass("bg-danger");
+            $("#result_p").text(error);
+            $("#ok_ref").addClass("disabled btn-danger");
         }
     });
 
