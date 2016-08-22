@@ -4,6 +4,7 @@ define(function () {
     var config = {
         restConf: "../../components/lgv-config/rest-services-fhhnet.json",
         proxyURL: "/cgi-bin/proxy.cgi",
+        netcheckerURL: "/wfalgqw001/ida/netchecker.php",
         wpsID: "1001",
         minJahr: 1974,
         maxJahr: 2015,

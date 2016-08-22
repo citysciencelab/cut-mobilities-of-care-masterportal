@@ -1,16 +1,15 @@
 define([
     "backbone",
     "eventbus",
-    "idaModules/seite4/model"/*,
-    "idaModules/seite5/view"*/
+    "idaModules/4_summary/model",
+    "idaModules/5_netchecker/model"
 ], function (Backbone, EventBus, Model, Seite5) {
     "use strict";
-    var Seite4View = Backbone.View.extend({
+    var SummaryView = Backbone.View.extend({
         el: "#seite_vier",
         model: Model,
         events: {
-            "click #seite3_weiter": "weiter",
-            "change #requestedParamsListe": "paramChanged"
+            "click #seite4_weiter": "weiter"
         },
         initialize: function (params, brwList, nutzung, produkt, jahr, lage) {
             this.listenTo(this.model, "change:result", this.refreshResult),
@@ -25,7 +24,7 @@ define([
             this.show();
         },
         weiter: function () {
-            new Seite5();
+            new Seite5(this.model.get("filepath"));
         },
         show: function () {
             $("#seite_zwei").hide();
@@ -34,22 +33,20 @@ define([
             $("#seite_vier").show();
         },
         refreshResult: function () {
-            var result = this.model.get("result"),
-                filepath = this.model.get("filepath");
+            var result = this.model.get("result");
 
             $("#result_p").addClass("bg-success");
             $("#result_p").text(result);
-            $("#ok_ref").attr("href", "https://geoportal-hamburg.de/ida/results/" + filepath);
-            $("#ok_ref").addClass("btn-success");
+            $("#seite4_weiter").prop("disabled", false);
         },
         refreshError: function () {
             var error = this.model.get("error");
 
             $("#result_p").addClass("bg-danger");
             $("#result_p").text(error);
-            $("#ok_ref").addClass("disabled btn-danger");
+            $("#seite4_weiter").prop("disabled", true);
         }
     });
 
-    return Seite4View;
+    return SummaryView;
 });

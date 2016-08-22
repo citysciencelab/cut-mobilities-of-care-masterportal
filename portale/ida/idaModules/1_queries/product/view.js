@@ -1,11 +1,11 @@
 define([
     "jquery",
     "backbone",
-    "idaModules/seite1_produkt/model",
+    "idaModules/1_queries/product/model",
     "idaModules/wps/model"
 ], function ($, Backbone, Model, WPS) {
     "use strict";
-    var Seite1NutzungView = Backbone.View.extend({
+    var ProductView = Backbone.View.extend({
         el: "#produkt",
         model: Model,
         events: {
@@ -18,5 +18,5 @@ define([
         }
     });
 
-    return new Seite1NutzungView;
+    return new ProductView;
 });

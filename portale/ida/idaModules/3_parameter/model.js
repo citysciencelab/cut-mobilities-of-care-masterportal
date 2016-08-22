@@ -3,7 +3,7 @@ define([
     "eventbus"
 ], function (Backbone, EventBus) {
     "use strict";
-    var Seite3Model = Backbone.Model.extend({
+    var ParameterModel = Backbone.Model.extend({
         defaults: {
             brwList: [],
             requestedParams: {},
@@ -89,5 +89,5 @@ define([
         }
     });
 
-    return new Seite3Model();
+    return new ParameterModel();
 });

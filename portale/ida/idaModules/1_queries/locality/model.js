@@ -3,7 +3,7 @@ define([
     "eventbus"
 ], function (Backbone, EventBus) {
     "use strict";
-    var Seite1LageModel = Backbone.Model.extend({
+    var LocalityModel = Backbone.Model.extend({
         defaults: {
             strschl: "",
             strName: "",
@@ -74,5 +74,5 @@ define([
         }
     });
 
-    return new Seite1LageModel();
+    return new LocalityModel();
 });

@@ -4,7 +4,7 @@ define([
     "eventbus"
 ], function (_, Backbone, EventBus) {
     "use strict";
-    var Seite1NutzungModel = Backbone.Model.extend({
+    var UseModel = Backbone.Model.extend({
         defaults: {
             nutzung: ""
         },
@@ -16,5 +16,5 @@ define([
         }
     });
 
-    return new Seite1NutzungModel();
+    return new UseModel();
 });

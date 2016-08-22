@@ -1,12 +1,12 @@
 define([
     "backbone",
     "eventbus",
-    "idaModules/seite3/model",
-    "text!idaModules/seite3/template.html",
-    "idaModules/seite4/view"
+    "idaModules/3_parameter/model",
+    "text!idaModules/3_parameter/template.html",
+    "idaModules/4_summary/view"
 ], function (Backbone, EventBus, Model, Template, Seite4) {
     "use strict";
-    var Seite3View = Backbone.View.extend({
+    var ParameterView = Backbone.View.extend({
         el: "#seite_drei",
         model: Model,
         template: _.template(Template),
@@ -89,5 +89,5 @@ define([
         }
     });
 
-    return Seite3View;
+    return ParameterView;
 });

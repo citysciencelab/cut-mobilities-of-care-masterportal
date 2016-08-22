@@ -3,7 +3,7 @@ define([
     "eventbus"
 ], function (Backbone, EventBus) {
     "use strict";
-    var Seite2Model = Backbone.Model.extend({
+    var BRWModel = Backbone.Model.extend({
         defaults: {
             jahr: "", // Benutzereingabe
             nutzung: "", // Benutzereingabe
@@ -343,5 +343,5 @@ define([
         }
     });
 
-    return new Seite2Model();
+    return new BRWModel();
 });

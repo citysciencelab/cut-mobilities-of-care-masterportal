@@ -1,11 +1,11 @@
 define([
     "jquery",
     "backbone",
-    "idaModules/seite2_brwmanuell/model",
-    "text!idaModules/seite2_brwmanuell/template.html"
+    "idaModules/2_brw/manually/model",
+    "text!idaModules/2_brw/manually/template.html"
 ], function ($, Backbone, Model, Template) {
     "use strict";
-    var Seite2BRWView = Backbone.View.extend({
+    var ManuallyView = Backbone.View.extend({
         el: "#brwliste",
         model: Model,
         template: _.template(Template),
@@ -43,5 +43,5 @@ define([
         }
     });
 
-    return new Seite2BRWView();
+    return new ManuallyView();
 });

@@ -5,7 +5,7 @@ define([
     "config"
 ], function (_, Backbone, EventBus, Config) {
     "use strict";
-    var Seite1JahrModel = Backbone.Model.extend({
+    var YearModel = Backbone.Model.extend({
         defaults: {
             maxJahr: "",
             minJahr: "",
@@ -42,5 +42,5 @@ define([
         }
     });
 
-    return new Seite1JahrModel();
+    return new YearModel();
 });

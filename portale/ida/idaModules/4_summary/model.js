@@ -3,7 +3,7 @@ define([
     "eventbus"
 ], function (Backbone, EventBus) {
     "use strict";
-    var Seite4Model = Backbone.Model.extend({
+    var SummaryModel = Backbone.Model.extend({
         defaults: {
             params: {},
             brwList: "", // default !== [], damit startCalculation auch checkResponseReceived ausführen läßt
@@ -299,11 +299,12 @@ define([
         handleIDAResponse: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameIDAUmrechnung")) {
                 var result = $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent,
+                    error = $(obj.data).find("wps\\:ErrorOccured,ErrorOccured")[0].textContent,
                     filepath = $(obj.data).find("wps\\:filepath,filepath")[0],
                     params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0],
                     html = "";
 
-                if (filepath) {
+                if (error === "No") {
                     this.set("filepath", filepath.textContent);
                     this.set("result", result);
                 }
@@ -314,5 +315,5 @@ define([
         }
     });
 
-    return new Seite4Model();
+    return new SummaryModel();
 });

@@ -4,7 +4,7 @@ define([
     "modules/alerting/view"
 ], function (Backbone, EventBus) {
     "use strict";
-    var Seite2BRWModel = Backbone.Model.extend({
+    var ManuallyModel = Backbone.Model.extend({
         defaults: {
             brwList: [],
             wpsWorkbenchnameWNUM: "IDABRWByWNUM"
@@ -153,5 +153,5 @@ define([
         }
     });
 
-    return new Seite2BRWModel();
+    return new ManuallyModel();
 });

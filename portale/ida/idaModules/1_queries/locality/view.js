@@ -2,11 +2,11 @@ define([
     "jquery",
     "backbone",
     "config",
-    "idaModules/seite1_lage/model",
+    "idaModules/1_queries/locality/model",
     "modules/searchbar/view"
 ], function ($, Backbone, Config, Model, Searchbar) {
     "use strict";
-    var Seite1LageView = Backbone.View.extend({
+    var LocalityView = Backbone.View.extend({
         el: "#lage",
         model: Model,
         events: {
@@ -41,5 +41,5 @@ define([
         }
     });
 
-    return new Seite1LageView;
+    return new LocalityView;
 });

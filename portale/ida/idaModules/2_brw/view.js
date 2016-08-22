@@ -2,12 +2,12 @@ define([
     "jquery",
     "backbone",
     "eventbus",
-    "idaModules/seite2/model",
-    "idaModules/seite2_brwmanuell/view",
-    "idaModules/seite3/view"
+    "idaModules/2_brw/model",
+    "idaModules/2_brw/manually/view",
+    "idaModules/3_parameter/view"
 ], function ($, Backbone, EventBus, Model, BRWManuellView, Seite3) {
     "use strict";
-    var Seite2View = Backbone.View.extend({
+    var BRWView = Backbone.View.extend({
         el: "#seite_zwei",
         model: Model,
         events: {
@@ -33,5 +33,5 @@ define([
         }
     });
 
-    return Seite2View;
+    return BRWView;
 });

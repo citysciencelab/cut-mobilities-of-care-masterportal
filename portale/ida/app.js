@@ -4,7 +4,7 @@ define("app", ["jquery", "backbone.radio", "modules/restReader/collection"], fun
 
     channel.on({
         "isReady": function () {
-            require(["idaModules/seite1/view"]);
+            require(["idaModules/0_checkURL/model"]);
         }
     }, this);
 });

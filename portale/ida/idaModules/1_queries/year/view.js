@@ -1,10 +1,10 @@
 define([
     "jquery",
     "backbone",
-    "idaModules/seite1_jahr/model"
+    "idaModules/1_queries/year/model"
 ], function ($, Backbone, Model) {
     "use strict";
-    var Seite1JahrView = Backbone.View.extend({
+    var YearView = Backbone.View.extend({
         el: "#jahr",
         model: Model,
         events: {
@@ -24,5 +24,5 @@ define([
         }
     });
 
-    return new Seite1JahrView;
+    return new YearView;
 });

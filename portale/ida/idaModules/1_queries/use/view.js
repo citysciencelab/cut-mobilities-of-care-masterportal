@@ -1,10 +1,10 @@
 define([
     "jquery",
     "backbone",
-    "idaModules/seite1_nutzung/model"
+    "idaModules/1_queries/use/model"
 ], function ($, Backbone, Model) {
     "use strict";
-    var Seite1NutzungView = Backbone.View.extend({
+    var UseView = Backbone.View.extend({
         el: "#nutzung",
         model: Model,
         events: {
@@ -17,5 +17,5 @@ define([
         }
     });
 
-    return new Seite1NutzungView;
+    return new UseView;
 });

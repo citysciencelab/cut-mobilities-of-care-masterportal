@@ -3,7 +3,7 @@ define([
     "eventbus"
 ], function (Backbone, EventBus) {
     "use strict";
-    var Seite1Model = Backbone.Model.extend({
+    var QueriesModel = Backbone.Model.extend({
         defaults: {
             jahr: "",
             nutzung: "",
@@ -39,5 +39,5 @@ define([
         }
     });
 
-    return new Seite1Model();
+    return new QueriesModel();
 });
