@@ -35,8 +35,8 @@ define([
             if (obj.request.workbenchname === this.get("wpsIDADownload")) {
                 var result = $(obj.data).find("wps\\:ergebnis,ergebnis") ? $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent : "",
                     fehlermeldung = $(obj.data).find("wps\\:Fehlermeldung,Fehlermeldung")[0] ? $(obj.data).find("wps\\:Fehlermeldung,Fehlermeldung")[0].textContent : "",
-                    filepath = $(obj.data).find("wps\\:filepath,filepath") ? $(obj.data).find("wps\\:filepath,filepath")[0].textContent : "",
-                    params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter") ? $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0] : "";
+                    filepath = $(obj.data).find("wps\\:filepath,filepath")[0] ? $(obj.data).find("wps\\:filepath,filepath")[0].textContent : "",
+                    params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0] ? $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0] : "";
 
                 if (result !== "") {
                     this.set("downloadpath", filepath);
