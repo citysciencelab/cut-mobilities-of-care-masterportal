@@ -1,27 +1,18 @@
 define(function () {
     var config = {
-        tree: {
-            type: "light",
-            layer: [
-                {id: "453", visible: true, legendUrl: "ignore"},
-                {id: "452", visible: false},
-                {id: "95", visible: false, name: "Lärm Straßenverkehr Nacht 2012"}, // Lärm_night_2012
-                {id: "96", visible: false, name: "Lärm Straßenverkehr Tag 2012"} // Lärm_den_2012
-            ]
-        },
+        title: "Lärmkarte-Straßenverkehr",
+        simpleMap: false,
+        wfsImgPath: "../components/lgv-config/img/",
+        allowParametricURL: true,
+        
         view: {
-            center: [565874, 5934140], // Rathaus
-            resolution: 15.874991427504629, // 1:60 000
-            scale: 60000, // für print.js benötigt
-            extent: [454591, 5809000, 700000, 6075769]
+            background: "white"
+           /* center: [565874, 5934140],
+            extent: [454591, 5809000, 700000, 6075769],
+            epsg: "EPSG:25832"
+            */
         },
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: "allways",
-            poi: false
-        },
-
+       // customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
             urls: [
@@ -45,35 +36,23 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
-        menubar: true,
+        /**
+        * @memberof config
+        * @type {Boolean}
+        * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
+        * @default [false]
+        */
+        // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-        menuItems: {
-            tree: {
-                title: "Themen",
-                glyphicon: "glyphicon-list"
-            },
-            tools: {
-                title: "Werkzeuge",
-                glyphicon: "glyphicon-wrench"
-            },
-            legend: {
-                title: "Legende",
-                glyphicon: "glyphicon-book"
-            },
-            contact: {
-                title: "Kontakt",
-                glyphicon: "glyphicon-envelope",
-                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
-            }
-        },
         startUpModul: "",
+        
         searchBar: {
             minChars: 3,
             gazetteer: {
@@ -84,28 +63,23 @@ define(function () {
                 searchDistricts: true,
                 searchParcels: true
             },
-            placeholder: "Suche nach Adresse, Stadtteil",
-            geoLocateHit: true
+       
+            visibleWFS: {
+                minChars: 3
+            },
+            // layer: {
+            //     minChar: 3
+            // },
+            placeholder: "Suche nach Adresse/Stadtteil"
         },
         print: {
             printID: "99999",
             title: "Lärmkarte-Straßenverkehr",
             gfi: false
         },
-        tools: {
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            }
-        }
+        geoAPI: false,
+        clickCounter: {},
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;
