@@ -299,12 +299,10 @@ define([
         handleIDAResponse: function (obj) {
             if (obj.request.workbenchname === this.get("wpsWorkbenchnameIDAUmrechnung")) {
                 var result = $(obj.data).find("wps\\:ergebnis,ergebnis")[0].textContent,
-                    error = $(obj.data).find("wps\\:ErrorOccured,ErrorOccured")[0].textContent,
-                    filepath = $(obj.data).find("wps\\:filepath,filepath")[0],
-                    params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0],
-                    html = "";
+                    filepath = $(obj.data).find("wps\\:filepath,filepath") ? $(obj.data).find("wps\\:filepath,filepath")[0].textContent : "",
+                    params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0];
 
-                if (error === "No") {
+                if (filepath !== "") {
                     this.set("filepath", filepath.textContent);
                     this.set("result", result);
                 }
