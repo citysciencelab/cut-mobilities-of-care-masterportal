@@ -303,7 +303,7 @@ define([
                     params = $(obj.data).find("wps\\:eingabeparameter,eingabeparameter")[0];
 
                 if (filepath !== "") {
-                    this.set("filepath", filepath.textContent);
+                    this.set("filepath", filepath);
                     this.set("result", result);
                 }
                 else {
