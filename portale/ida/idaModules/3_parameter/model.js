@@ -26,10 +26,10 @@ define([
                 var mincheck = true,
                     maxcheck = true;
 
-                if (target.min && target.value < target.min) {
+                if (target.min && Number(target.value) < Number(target.min)) {
                     mincheck = false;
                 }
-                if (target.max && target.value > target.max) {
+                if (target.max && Number(target.value) > Number(target.max)) {
                     maxcheck = false;
                 }
                 if (mincheck === true && maxcheck === true) {
