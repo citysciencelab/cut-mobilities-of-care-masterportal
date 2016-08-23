@@ -15,15 +15,15 @@
     </div>
     <%if (this.model.get("coordSystem") === "ETRS89") { %>
         <div class="form-group form-group-sm">
-            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Hochwert</label>
-            <div class="col-md-7 col-sm-7">
-                <input type="text" class="form-control" id="coordinatesNorthingField"  placeholder="Bsp: 5935103.67">
-            </div>
-        </div>
-        <div class="form-group form-group-sm">
             <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Rechtswert</label>
             <div class="col-md-7 col-sm-7">
                 <input type="text" class="form-control" id="coordinatesEastingField" placeholder="Bsp: 564459.13">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Hochwert</label>
+            <div class="col-md-7 col-sm-7">
+                <input type="text" class="form-control" id="coordinatesNorthingField"  placeholder="Bsp: 5935103.67">
             </div>
         </div>
     <% }
