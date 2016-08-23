@@ -16,7 +16,8 @@ define([
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
-            scale: {}
+            scale: {},
+            layerToPrint: []
         },
 
         //
@@ -63,10 +64,10 @@ define([
                 }
             });
 
-            EventBus.on("winParams", this.setStatus, this);
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
+            });
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
-            EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
-            EventBus.on("sendDrawLayer", this.setDrawLayer, this);
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
@@ -104,7 +105,7 @@ define([
 
         //
         setStatus: function (args) {
-            if (args[2] === "print") {
+            if (args[2].getId() === "print") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -141,9 +142,10 @@ define([
         *
         */
         setLayerToPrint: function (layers) {
-            if (Config.tree.type === "light") {
-                layers = layers.reverse();
-            }
+            // eventuell TODO
+            // if (Config.tree.type === "light") {
+            //     layers = layers.reverse();
+            // }
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},
@@ -255,6 +257,8 @@ define([
          *
          */
         setSpecification: function () {
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+            this.setDrawLayer(Radio.request("draw", "getLayer"));
             var specification = {
                 layout: $("#layoutField option:selected").html(),
                 srs: Config.view.epsg,

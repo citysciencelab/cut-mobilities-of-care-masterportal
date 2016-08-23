@@ -5,13 +5,22 @@ define([
     "config",
     "eventbus",
     "proj4"
-], function (Backbone, Radio, ol, Config, EventBus, proj4) {
-    "use strict";
-    var MapView = Backbone.Model.extend({
+], function () {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Config = require("config"),
+        EventBus = require("eventbus"),
+        proj4 = require("proj4"),
+        MapView;
+
+    MapView = Backbone.Model.extend({
         /**
          *
          */
         defaults: {
+            background: "default",
             startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
             options: [
                 {
@@ -89,17 +98,18 @@ define([
                 },
                 "getZoomLevel": function () {
                     return this.getZoom();
+                },
+                "getResolutions": function () {
+                    return this.getResolutions();
                 }
             }, this);
 
             channel.on({
-                "setCenter": this.setCenter
+                "setCenter": this.setCenter,
+                "toggleBackground": this.toggleBackground
             }, this);
 
             this.listenTo(EventBus, {
-                "mapView:getResolutions": function () {
-                    EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
-                },
                 "mapView:getMinResolution": this.sendMinResolution,
                 "mapView:getMaxResolution": function (scale) {
                     EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
@@ -129,9 +139,18 @@ define([
 
                     this.set("resolution", params.resolution);
                     this.get("view").setResolution(this.get("resolution"));
+                },
+                "change:background": function (model, value) {
+                    if (value === "default") {
+                        $("#map").css("background", "url('../../img/backgroundCanvas.jpeg') repeat scroll 0 0 rgba(0, 0, 0, 0)");
+                    }
+                    else if (value === "white") {
+                        $("#map").css("background", "white");
+                    }
                 }
             });
 
+            this.checkConfig();
             this.setOptions();
             this.setScales();
             this.setResolutions();
@@ -152,6 +171,29 @@ define([
                 this.set("center", this.get("view").getCenter());
                 channel.trigger("changedCenter", this.getCenter());
             }, this);
+        },
+
+        checkConfig: function () {
+            if (_.has(Config.view, "background") === true) {
+                this.setBackground(Config.view.background);
+            }
+        },
+
+        setBackground: function (value) {
+            this.set("background", value);
+        },
+
+        getBackground: function () {
+            return this.get("background");
+        },
+
+        toggleBackground: function () {
+            if (this.getBackground() === "white") {
+                this.setBackground("default");
+            }
+            else {
+                this.setBackground("white");
+            }
         },
 
         setOptions: function () {
@@ -300,6 +342,10 @@ define([
                 resolution = scale / (mpu * 39.37 * dpi);
 
             return resolution;
+        },
+
+        getResolutions: function () {
+            return this.get("resolutions");
         },
 
         /**

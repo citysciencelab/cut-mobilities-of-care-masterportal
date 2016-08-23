@@ -1,0 +1,86 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": true,
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          }
+        }
+      },
+      "treeFilter": {
+        "name": "Filter",
+        "glyphicon": "glyphicon-leaf"
+      },
+      "contact": {
+        "name": "Kontakt",
+        "glyphicon": "glyphicon-envelope",
+        "email": "LGVGeoPortal-Hilfe@gv.hamburg.de"
+      }
+    },
+    "controls": {
+      "zoom": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "452"
+        },
+        {
+          "id": "453"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+          "id": "36",
+          "visibility": true,
+          "gfiAttributes": "ignore",
+          "transparency": "50"
+        },
+        {
+          "id": "2298",
+          "displayInTree": false,
+          "styles": ["strassenbaumkataster_grau"]
+        },
+        {
+          "id": "182",
+          "visibility": true,
+          "displayInTree": false
+        },
+        {
+          "id": "2297",
+          "visibility": true,
+          "name": "Straßenbaumkataster"
+        }
+      ]
+    }
+  }
+}

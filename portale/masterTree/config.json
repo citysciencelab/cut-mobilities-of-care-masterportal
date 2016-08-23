@@ -1,82 +1,180 @@
 {
-  "Portalconfig": [
+  "Portalconfig":
     {
       "PortalTitle": "GeoViewer",
-      "menubar": true,
-      "menu": [{
-        "searchBar": true,
-        "tools": true,
-        "legend": true,
-        "routing": true,
-        "addWMS": true
-      }],
-      "tools": [{
-        "parcelSearch": true,
-        "gfi": true,
-        "print": true,
-        "coord": true,
-        "measure": true,
-        "draw": true,
-        "searchByCoord": true
-      }],
-      "controls": [{
+      "searchBar": true,
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+            "parcelSearch": {
+              "name": "Flurstückssuche",
+              "glyphicon": "glyphicon-search"
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "kmlimport": {
+              "name": "KML Import",
+              "glyphicon": "glyphicon-import"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            },
+            "addWMS": {
+              "name": "WMS hinzufügen",
+              "glyphicon": "glyphicon-plus"
+            },
+            "routing": {
+              "name": "Routenplaner",
+              "glyphicon": "glyphicon-road",
+              "viomRouting": "3"
+            }
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+        "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80001",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "subject": "",
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+        }
+      },
+      "controls": {
         "zoom": true,
-        "toggleMenu": true,
         "orientation": "once",
         "poi": true,
-        "fullScreen": true
-      }],
-      "scaleLine": true
-    }
-  ],
-  "Themenconfig": [
+        "fullScreen": true,
+        "mousePosition": true
+      },
+      "scaleLine": true,
+      "Baumtyp": "custom"
+    },
+  "Themenconfig":
     {
-      "Hintergrundkarten": [
+      "Hintergrundkarten":
         {
           "Layer": [
             {
-              "id": "149",
-              "visibility": false,
-              "name": "Liegenschaftskataster (Grau / Blau) - ab 1:5000 bis 1:500"
+              "id": ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
+              "name": "ALKIS grau-blau"
             },
             {
-              "id": "368",
-              "visibility": false,
-              "name": "Liegenschaftskataster (farbig) - ab 1:5000 bis 1:500"
+              "id": ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
+              "name": "ALKIS farbig"
             },
             {
-              "id": "94",
-              "visibility": false,
-              "name": "Luftbilder DOP 20 (unbelaubt)"
+              "id": "8"
             },
             {
-              "id": "756",
-              "visibility": false,
-              "name": "Luftbilder DOP 20 (belaubt)"
+              "id": ["713", "714", "715", "716"],
+              "name": "Geobasiskarten (schwarz-weiß)"
             },
             {
-              "id": "713",
-              "visibility": false,
-              "name": "Stadtplan (Schwarz/Weiß)"
+              "id": ["1043", "1044", "1045", "1046"],
+              "name": "Geobasiskarten (grau-blau)"
             },
             {
-              "id": "1043",
+              "id": ["717", "718", "719", "720"],
               "visibility": true,
-              "name": "Stadtplan (Grau)"
+              "name": "Geobasiskarten (farbig)"
             },
             {
-              "id": "717",
-              "visibility": false,
-              "name": "Stadtplan (farbig)"
+              "id": "453"
             }
           ]
-        }
-      ],
-      "Fachdaten": [
+        },
+      "Fachdaten":
         {
           "Ordner": [
             {
               "Titel": "Lage und Gebietszugehörigkeit",
+              "Ordner": [
+                {
+                  "Titel": "Überschwemmungsgebiete",
+                  "Ordner": [
+                    {
+                      "Titel": "Überschwemmungsgebiete",
+                      "Layer": [
+                        {
+                          "id": "1103",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1104",
+                          "visibility": false
+                        }
+                      ]
+                    }
+                  ],
+                  "Layer": [
+                    {
+                      "id": "684",
+                      "visibility": false
+                    },
+                    {
+                      "id": "685",
+                      "visibility": false
+                    },
+                    {
+                      "id": "4639",
+                      "visibility": true,
+                      "styleable": true,
+                      "geomType": "Polygon",
+                      "attributesToStyle": ["AP30Sum", "AP60Sum"]
+                    }
+                  ]
+                }
+              ],
               "Layer": [
                 {
                   "id": "2427",
@@ -138,7 +236,7 @@
                 },
                 {
                   "id": "1562",
-                  "visibility": false,
+                  "visibility": true,
                   "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
                   "metaName": "Bebauungspläne im Verfahren (§ 2 BauGB)"
                 },
@@ -284,7 +382,7 @@
               "Titel": "Luftverkehr",
               "Layer": [
                 {
-                  "id": "412,413,414,415,416,417,418,419,420,421,423,424,425,426,427,428,429,430,431",
+                  "id": ["412","413","414","415","416","417","418","419","420","421","423","424","425","426","427","428","429","430","431"],
                   "visibility": false,
                   "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
                   "metaName": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
@@ -394,7 +492,5 @@
             }
           ]
         }
-      ]
     }
-  ]
 }

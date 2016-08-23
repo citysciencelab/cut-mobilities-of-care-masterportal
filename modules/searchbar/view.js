@@ -67,10 +67,11 @@ define([
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
             });
-
-            this.listenTo(Radio.channel("MenuBar"), {
-                "switchedMenu": this.render
-            });
+            Radio.on("Util", {
+                "isViewMobileChanged": function () {
+                    this.render();
+                }
+            }, this);
 
             this.render();
 
@@ -246,17 +247,13 @@ define([
                 //Radio.trigger("LayerList", "addModelById", hitID);
             }
             // 1. Schreibe Text in Searchbar
-            if (_.has(hit, "model") && hit.model.type === "nodeLayer") {
-                this.setSearchbarString(hit.metaName);
-            }
-            else {
-                this.setSearchbarString(hit.name);
-            }
+            this.setSearchbarString(hit.name);
             // 2. Verberge Suchmenü
             this.hideMenu();
             // 3. Zoome ggf. auf Ergebnis
             EventBus.trigger("mapHandler:zoomTo", hit);
             // 4. Triggere Treffer über Eventbus
+            // wird nicht mehr benötigt??? SD 02.08.2016
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
             if (evt){

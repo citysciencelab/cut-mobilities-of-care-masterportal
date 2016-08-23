@@ -1,12 +1,13 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/quickhelp/templateSearch.html",
     "text!modules/quickhelp/templateTree.html",
     "text!modules/quickhelp/templateMeasureTool.html",
     "eventbus",
     "modules/core/util",
-    "jqueryui/draggable"
-], function (Backbone, TemplateSearch, TemplateTree, TemplateMeasureTool, EventBus, Util) {
+    "jqueryui/widgets/draggable"
+], function (Backbone, Radio, TemplateSearch, TemplateTree, TemplateMeasureTool, EventBus, Util) {
 
     var view = Backbone.View.extend({
         templateSearch: _.template(TemplateSearch),
@@ -18,6 +19,11 @@ define([
             "click .glyphicon-print": "printHelp"
         },
         initialize: function () {
+            var channel = Radio.channel("Quickhelp");
+
+            channel.on({
+                "showWindowHelp": this.showWindow
+            }, this);
             this.render();
             EventBus.on("showWindowHelp", this.showWindow, this);
             this.$el.draggable({

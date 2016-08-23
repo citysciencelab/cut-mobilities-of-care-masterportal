@@ -12,6 +12,7 @@ define(function () {
                 {id: "1999", visibility: true}, //Naturdenkmal
                 {id: "1998", visibility: true}, //Landschaftschtutzgeb.
                 {id: "1992", visibility: true, transparence: "40"}  //Naturschutzgebiete
+            
             ]
         },
         simpleMap: false,

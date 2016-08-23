@@ -34,14 +34,14 @@ define([
                 }
             }, this);
 
-            this.listenTo(EventBus, {
+            this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
             Radio.trigger("draw", "getSource");
         },
 
         setStatus: function (args) {
-            if (args[2] === "kmlimport" && args[0] === true) {
+            if (args[2].getId() === "kmlimport") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
