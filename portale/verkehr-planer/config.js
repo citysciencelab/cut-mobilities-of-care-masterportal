@@ -1,7 +1,7 @@
 define(function () {
 
     var config = {
-        title: "Planerportal Verkehr",
+        title: "Planerportal-Verkehr",
         logo: "../img/hh-logo.png",
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
