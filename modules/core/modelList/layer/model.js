@@ -39,7 +39,10 @@ define([
                     }
                     this.createLayer();
                 },
-                "change:layer": this.createLegendURL
+                "change:layer": function () {
+                    this.createLegendURL();
+                    this.updateLayerTransparency();
+                }
             });
 
             this.listenTo(this, {
