@@ -17,11 +17,6 @@
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
           },
-          "gfi": {
-            "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign",
-            "isActive": true
-          },
           "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
