@@ -61,15 +61,16 @@ define([
         renderSetting: function () {
             var attr = this.model.toJSON();
 
-            // Animation Zahnrad
-            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
             if (this.model.getIsSettingVisible() === false) {
+                // Animation Zahnrad
+                this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
                 this.$el.find(".layer-settings").slideUp("slow", function () {
-                    this.remove();
+                    $(this).remove();
                 });
             }
             else {
+                this.$(".glyphicon-cog").toggleClass("rotate-back rotate");
                 this.$el.append(this.templateSettings(attr));
                 this.$el.find(".layer-settings").hide();
                 this.$el.find(".layer-settings").slideDown();
