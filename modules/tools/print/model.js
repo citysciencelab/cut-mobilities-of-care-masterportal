@@ -184,73 +184,75 @@ define([
          *
          */
         setDrawLayer: function (layer) {
-            var features = [],
-                circleFeatures = [], // Kreise können nicht gedruckt werden
-                featureStyles = {};
+            if (!_.isUndefined()) {
+                var features = [],
+                    circleFeatures = [], // Kreise können nicht gedruckt werden
+                    featureStyles = {};
 
-            // Alle features die eine Kreis-Geometrie haben
-            _.each(layer.getSource().getFeatures(), function (feature) {
-                if (feature.getGeometry() instanceof ol.geom.Circle) {
-                    circleFeatures.push(feature);
-                }
-            });
+                // Alle features die eine Kreis-Geometrie haben
+                _.each(layer.getSource().getFeatures(), function (feature) {
+                    if (feature.getGeometry() instanceof ol.geom.Circle) {
+                        circleFeatures.push(feature);
+                    }
+                });
 
-            _.each(layer.getSource().getFeatures(), function (feature, index) {
-                // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
-                if (_.contains(circleFeatures, feature) === false) {
-                    features.push({
-                        type: "Feature",
-                        properties: {
-                            _style: index
-                        },
-                        geometry: {
-                            coordinates: feature.getGeometry().getCoordinates(),
-                            type: feature.getGeometry().getType()
+                _.each(layer.getSource().getFeatures(), function (feature, index) {
+                    // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
+                    if (_.contains(circleFeatures, feature) === false) {
+                        features.push({
+                            type: "Feature",
+                            properties: {
+                                _style: index
+                            },
+                            geometry: {
+                                coordinates: feature.getGeometry().getCoordinates(),
+                                type: feature.getGeometry().getType()
+                            }
+                        });
+
+                        var type = feature.getGeometry().getType(),
+                            styles = feature.getStyleFunction().call(feature),
+                            style = styles[0];
+                        // Punkte
+                        if (type === "Point") {
+                            // Punkte ohne Text
+                            if (style.getText() === null) {
+                                featureStyles[index] = {
+                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                                pointRadius: style.getImage().getRadius(),
+                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                                };
+                            }
+                            // Texte
+                            else {
+                                featureStyles[index] = {
+                                    label: style.getText().getText(),
+                                    fontColor: this.getColor(style.getText().getFill().getColor()).color
+                                };
+                            }
                         }
-                    });
-
-                    var type = feature.getGeometry().getType(),
-                        styles = feature.getStyleFunction().call(feature),
-                        style = styles[0];
-                    // Punkte
-                    if (type === "Point") {
-                        // Punkte ohne Text
-                        if (style.getText() === null) {
-                            featureStyles[index] = {
-                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                            pointRadius: style.getImage().getRadius(),
-                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                            };
-                        }
-                        // Texte
+                        // Polygone oder Linestrings
                         else {
                             featureStyles[index] = {
-                                label: style.getText().getText(),
-                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                                fillColor: this.getColor(style.getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                                strokeColor: this.getColor(style.getStroke().getColor()).color,
+                                strokeWidth: style.getStroke().getWidth()
                             };
                         }
                     }
-                    // Polygone oder Linestrings
-                    else {
-                        featureStyles[index] = {
-                            fillColor: this.getColor(style.getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
-                            strokeColor: this.getColor(style.getStroke().getColor()).color,
-                            strokeWidth: style.getStroke().getWidth()
-                        };
+                }, this);
+                this.push("layerToPrint", {
+                    type: "Vector",
+                    styles: featureStyles,
+                    geoJson: {
+                        type: "FeatureCollection",
+                        features: features
                     }
-                }
-            }, this);
-            this.push("layerToPrint", {
-                type: "Vector",
-                styles: featureStyles,
-                geoJson: {
-                    type: "FeatureCollection",
-                    features: features
-                }
-            });
+                });
+            }
         },
 
         /**
