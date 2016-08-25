@@ -11,7 +11,7 @@
         <label for="layoutField" class="col-md-3 col-sm-3 control-label">Layout</label>
         <div class="col-md-9 col-sm-9">
             <select class="form-control input-sm" id="layoutField">
-                <% console.log(layouts);_.each(layouts, function(element, index) { %>
+                <% _.each(layouts, function(element, index) { %>
                     <% if (element.name == layout.name) { %>
                         <option value=<%= _.toArray(element.map) %> SELECTED><%= element.name %></option>
                     <% } else { %>

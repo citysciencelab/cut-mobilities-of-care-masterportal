@@ -82,6 +82,10 @@ define([
             this.set("layout", this.get("layouts")[index]);
         },
 
+        getLayout: function () {
+            return this.get("layout");
+        },
+
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
             var scaleval = this.get("scales")[index].value;
@@ -173,7 +177,7 @@ define([
                     layers: layer.get("layers").split(),
                     baseURL: layerURL,
                     format: "image/png",
-                    opacity: layer.get("opacity"),
+                    opacity: (100 - layer.get("transparency")) / 100,
                     customParams: params,
                     styles: style
                 });
@@ -262,7 +266,8 @@ define([
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setDrawLayer(Radio.request("draw", "getLayer"));
             var specification = {
-                layout: $("#layoutField option:selected").html(),
+                // layout: $("#layoutField option:selected").html(),
+                layout: this.getLayout().name,
                 srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
@@ -356,8 +361,11 @@ define([
                 this.set("gfiTitle", gfis[1]);
                 this.set("printGFIPosition", gfis[2]);
                 // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0 && _.has(Config.print, "configYAML") === false) {
                     this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
+                }
+                else if (_.has(Config.print, "configYAML") === true && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
                 }
                 else {
                     if (_.has(Config.print, "configYAML") === true) {
