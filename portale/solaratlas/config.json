@@ -69,7 +69,7 @@
       "zoom": true,
       "toggleMenu": true,
       "orientation": "once",
-      "poi": true,
+      "poi": false,
       "fullScreen": true,
       "attributions": true
     },

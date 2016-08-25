@@ -5,10 +5,7 @@ define(function () {
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-        zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version: "2.0.0"
-        },
+       
         view: {
             background: "white",
             resolution: 66.14579761460263 // 1: 250 000
@@ -17,7 +14,7 @@ define(function () {
             epsg: "EPSG:25832"
             */
         },
-        customModules: ["../portale/master/verkehrsfunctions"],
+       // customModules: [" "],
         footer: {
             visibility: true,
             urls: [
@@ -58,6 +55,7 @@ define(function () {
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
+        
         searchBar: {
             minChars: 3,
             gazetteer: {

@@ -12,7 +12,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
+          
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -78,27 +78,44 @@
     {
       "Layer": [
         {
-          "id": "453",  
+          "id": "453",
           "visibility": true
         },
         {
           "id": "452"
-        } 
+        },
+        {
+          "id": "713", 
+          "visibility": false, 
+          "name" : "Stadtplan S-W"
+        }  
       ]
     },
     "Fachdaten":
     {
       "Layer": [
-        
         {
-          "id": "96", 
-          "visibility": true, 
-          "name": "Lärm Straßenverkehr Tag 2012"
+         "id": "1992",
+         "visibility": true,
+         "transparency": 40
         },
         {
-          "id": "95",
-          "visibility": false,
-          "name": "Lärm Straßenverkehr Nacht 2012"
+         "id": "1998", 
+         "visibility": true
+        },
+        {
+         "id": "1999", 
+         "visibility": true
+        },
+        {
+         "id": "1994", 
+         "visibility": true, 
+         "name": "Vogelschutzgebiete"
+        },
+        {
+         "id": "1993", 
+         "visibility": true, 
+         "name": "Fauna-Flora-Habitat-Gebiete"
         }
       ]
     }
