@@ -4,14 +4,6 @@ define(function () {
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-        zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version: "2.0.0",
-            typename: "app:hamburgconvention",
-            valuereference: "app:flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
-        },
         view: {
             background: "white",
             resolution: 66.14579761460263
@@ -77,7 +69,7 @@ define(function () {
         print: {
             printID: "99999",
             title: "Schutzgebietskarte",
-            gfi: true
+            gfi: false
         },
         geoAPI: false,
         clickCounter: {},

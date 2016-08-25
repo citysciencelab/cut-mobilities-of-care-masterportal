@@ -13,14 +13,14 @@
         "glyphicon": "glyphicon-wrench",
         "children": {
           
-          "measure": {
-            "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
-          },
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
           },
           "print": {
             "name": "Karte drucken",
@@ -63,7 +63,7 @@
     },
     "controls": {
       "zoom": true,
-      "toggleMenu": true,
+      "toggleMenu": false,
       "orientation": "once",
       "poi": true,
       "fullScreen": true,
