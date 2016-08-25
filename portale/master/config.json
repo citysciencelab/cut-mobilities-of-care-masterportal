@@ -137,6 +137,12 @@
           "attributesToStyle": ["AP30Sum", "AP60Sum"]
         },
         {
+          "id": "2003",
+          "visibility": false,
+          "style": "2003",
+          "mouseHoverField": "GEBIETSNAME"
+        },
+        {
           "id": "45",
           "clusterDistance": 50,
           "routable": true
