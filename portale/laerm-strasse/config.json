@@ -58,7 +58,7 @@
     },
     "controls": {
       "zoom": true,
-      "toggleMenu": true,
+      "toggleMenu": false,
       "orientation": "once",
       "poi": true,
       "fullScreen": true,
