@@ -62,7 +62,7 @@ define(function () {
                 {id: "1748", visibility: false},
                 {id: "1562", visibility: false},
                 {id: "1561", visibility: false, featureCount: 10},
-                {id: "2003", visibility: false, style: "2003"},
+                {id: "2003", visibility: false, style: "2003", mouseHoverField: "GEBIETSNAME"},
                 {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
                 {id:
                  [

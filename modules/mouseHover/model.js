@@ -198,7 +198,12 @@ define([
                             if (_.has(featureProperties, mouseHoverField)) {
                                 value = value + _.values(_.pick(featureProperties, mouseHoverField))[0];
                                 if (!coord) {
-                                    coord = featureGeometry.getCoordinates();
+                                    if (featureGeometry.getType() === "MultiPolygon" || featureGeometry.getType() === "Polygon") {
+                                        coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
+                                    }
+                                    else {
+                                        coord = featureGeometry.getCoordinates();
+                                    }
                                 }
                             }
                         }
