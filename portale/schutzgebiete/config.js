@@ -77,7 +77,7 @@ define(function () {
         print: {
             printID: "99999",
             title: "Schutzgebietskarte",
-            gfi: false
+            gfi: true
         },
         geoAPI: false,
         clickCounter: {},
