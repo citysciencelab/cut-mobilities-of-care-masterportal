@@ -48,15 +48,15 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
-        menubar: true,
+        // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-       
+
         menu: {
-            
+
             formular: {}
         },
         startUpModul: "",
@@ -73,9 +73,10 @@ define(function () {
             placeholder: "Suche nach Adresse"
         },
         print: {
-            printID: "99999",
+            printID: "printqs",
             title: "Solaratlas",
-            gfi: true
+            gfi: true,
+            configYAML: "solar_atlas"
         },
 
         geoAPI: false,

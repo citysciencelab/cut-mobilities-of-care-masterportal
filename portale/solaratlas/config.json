@@ -12,7 +12,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -73,7 +73,6 @@
       "fullScreen": true,
       "attributions": true
     },
-    "scaleLine": true,
     "Baumtyp": "light"
   },
   "Themenconfig":
@@ -100,9 +99,6 @@
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung ab 1: 5000 </span>"
         }
-        
-        
-        
       ]
     }
   }
