@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "config",
-    "eventbus",
     "modules/core/util"
-], function (Backbone, Radio, Config, EventBus, Util) {
+], function (Backbone, Radio, Config, Util) {
     "use strict";
     var RestList = Backbone.Collection.extend({
         url: Util.getPath(Config.restConf),
@@ -22,7 +21,7 @@ define([
                     channel.trigger("isReady", true);
                 },
                 error: function () {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.restConf),
                         kategorie: "alert-warning"
                     });
