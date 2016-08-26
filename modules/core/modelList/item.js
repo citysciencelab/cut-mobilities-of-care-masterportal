@@ -1,10 +1,8 @@
 define([
-    "backbone",
-    "backbone.radio"
+    "backbone"
 ], function () {
 
     var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
         Item;
 
     Item = Backbone.Model.extend({
@@ -13,7 +11,7 @@ define([
             id: "",
             parentId: "",
             type: "", // welcher Node-Type - folder/layer/tool ...
-            title: "test", //angezeigter Titel
+            title: "test", // angezeigter Titel
             glyphicon: "", // Bootstrap Glyphicon Class,
             isInThemen: false,
             level: 0,

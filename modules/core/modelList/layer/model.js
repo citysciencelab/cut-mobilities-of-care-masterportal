@@ -1,7 +1,4 @@
-define([
-    "modules/core/modelList/item",
-    "backbone.radio"
-], function () {
+define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
@@ -9,28 +6,20 @@ define([
 
     Layer = Item.extend({
         defaults: {
-            // true wenn der Layer sichtbar ist
+            // ist der Layer (ol.layer) in der Karte sichtbar
             isVisibleInMap: false,
-            // welcher Node-Type - folder/layer/item
-            type: "",
-            // true wenn die Node sichtbar ist
-           // isVisible: false,
-            // true wenn die Node "gechecked" ist
+            // ist das Model im Baum selektiert
             isSelected: false,
-            // die ID der Parent-Node
-            parentId: "",
-            // Layer Name
-            name: "",
-            // true wenn die Einstellungen (Transparenz etc.) sichtbar sind
+            // sind die Einstellungen (Transparenz etc.) vom Model im Baum sichtbar
             isSettingVisible: false,
-            // die Transparenz des Layers
+            // Transparenz in %
             transparency: 0,
-            // der Index der die Reihenfolge beim Zeichnen der ausgewählten Layer bestimmt
+            // der Index der die Reihenfolge der selektierten Models beim Zeichnen in "Auswahl der Themen" bestimmt
             selectionIDX: 0
         },
         initialize: function () {
             this.listenToOnce(this, {
-                // Die LayerSource wird beim ersten Aktivieren einmalig erstellt
+                // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,
                 // Anschließend evt. die ClusterSource und der Layer
                 "change:layerSource": function () {
@@ -52,6 +41,17 @@ define([
                 },
                 "change:transparency": this.updateLayerTransparency,
                 "change:SLDBody": this.updateSourceSLDBody
+            });
+
+            this.listenTo(Radio.channel("MapView"), {
+                "changedOptions": function (options) {
+                    if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
+                        this.setIsOutOfScale(true);
+                    }
+                    else {
+                        this.setIsOutOfScale(false);
+                    }
+                }
             });
 
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
@@ -125,6 +125,11 @@ define([
         setTransparency: function (value) {
             this.set("transparency", value);
         },
+
+        setIsOutOfScale: function (value) {
+            this.set("isOutOfScale", value);
+        },
+
         /**
          * Getter für Attribut "layerSource"
          * @return {ol.source}
@@ -179,6 +184,10 @@ define([
          */
         getAttributions: function () {
             return this.get("attributions");
+        },
+
+        getIsOutOfScale: function () {
+            return this.get("isOutOfScale");
         },
 
         incTransparency: function () {

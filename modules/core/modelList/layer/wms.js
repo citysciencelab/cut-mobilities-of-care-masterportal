@@ -1,8 +1,4 @@
-define([
-    "modules/core/modelList/layer/model",
-    "backbone.radio",
-    "openlayers"
-], function () {
+define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
         Radio = require("backbone.radio"),
@@ -58,7 +54,7 @@ define([
                     context.set("tileloaderror", true);
                     if (!navigator.cookieEnabled) {
                         if (context.get("url").indexOf("wms_webatlasde") !== -1) {
-                            EventBus.trigger("alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
+                            Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
                         }
                     }
                   }
@@ -71,10 +67,10 @@ define([
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
-                    params: params,
-                    resolutions: Radio.request("MapView", "getResolutions")
+                    params: params
                 }));
             }
+            this.registerErrorListener();
         },
 
         /**
@@ -121,6 +117,27 @@ define([
                 }
                 this.set("legendURL", legendURL);
             }
+        },
+
+        registerErrorListener: function () {
+            if (this.getLayerSource() instanceof ol.source.TileWMS) {
+                this.registerTileloadError();
+            }
+            else if (this.getLayerSource() instanceof ol.source.ImageWMS) {
+                this.registerImageloadError();
+            }
+        },
+
+        registerTileloadError: function () {
+            this.getLayerSource().on("tileloaderror", function () {
+                console.log("tileloaderror");
+            }, this);
+        },
+
+        registerImageloadError: function () {
+            this.getLayerSource().on("imageloaderror", function () {
+                console.log("imageloaderror");
+            }, this);
         },
 
         updateSourceSLDBody: function () {
