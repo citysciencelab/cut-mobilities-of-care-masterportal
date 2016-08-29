@@ -40,9 +40,6 @@ define([
             this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
             this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
             this.render();
-            if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
-                this.toggle();
-            }
         },
         /*
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.

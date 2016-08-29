@@ -176,13 +176,7 @@ define([
             *
             */
             if (_.has(result, "STARTUPMODUL")) {
-                var value = _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase();
-
-                // alte config.js
-                Config.startUpModul = value;
-
-                //neue config.json
-                this.set("startUpModul", value);
+                this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
             }
             else {
                 this.set("startUpModul", "");
