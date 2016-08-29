@@ -32,6 +32,15 @@ define([
                 this.addFolderViews(folder);
 
                 this.addToolViews(this.collection.where({type: "tool"}));
+                this.autostartTool();
+            },
+            /**
+            * Startet alle Tools aus config.json mit "autostart:true"
+            */
+            autostartTool: function () {
+                _.each(this.collection.where({type: "tool"} && {autostart: true}), function (model) {
+                    model.setIsActive(true);
+                });
             },
             addFolderViews: function (models) {
                 _.each(models, function (model) {
