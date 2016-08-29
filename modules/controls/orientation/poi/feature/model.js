@@ -1,8 +1,8 @@
 define([
     "backbone",
-    "openlayers",
-    "eventbus"
-], function (Backbone, ol, EventBus) {
+    "backbone.radio",
+    "openlayers"
+], function (Backbone, Radio, ol) {
 
     var PointOfInterest = Backbone.Model.extend({
         initialize: function () {
@@ -19,8 +19,8 @@ define([
             else {
                 zoom = 7;
             }
-            EventBus.trigger("hidePOIModal");
-            EventBus.trigger("mapView:setCenter", [parseInt(this.get("xCoord"), 10), parseInt(this.get("yCoord"), 10)], zoom);
+            Radio.trigger("poi", "hidePOIModal");
+            Radio.trigger("MapView", "setCenter", [parseInt(this.get("xCoord"), 10), parseInt(this.get("yCoord"), 10)], zoom);
         }
     });
 

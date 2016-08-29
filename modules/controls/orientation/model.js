@@ -173,7 +173,7 @@ define([
                         }, this);
                     }
                 }, this);
-                EventBus.trigger("showPOIModal");
+                Radio.trigger("poi", "showPOIModal");
             }
         },
 
