@@ -33,16 +33,26 @@ define([
 
             var channel = Radio.channel("geolocation");
 
-            channel.reply({
-                "getPosition": function () {
-                    return this.get("position");
-                }
-            }, this);
-
             channel.on({
                 "removeOverlay": this.removeOverlay,
-                "getPOI": this.getPOI
+                "getPOI": this.getPOI,
+                "sendPosition": this.sendPosition
             }, this);
+        },
+        /*
+        * Triggert die Standpunktkoordinate auf Radio
+        */
+        sendPosition: function () {
+            if (this.get("tracking") === false) {
+                this.listenToOnce(this, "change:position", function () {
+                    Radio.trigger("geolocation", "position", this.get("position"));
+                    this.untrack();
+                });
+                this.track();
+            }
+            else {
+                Radio.trigger("geolocation", "position", this.get("position"));
+            }
         },
         removeOverlay: function () {
             EventBus.trigger("removeOverlay", this.get("marker"));
