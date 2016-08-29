@@ -13,7 +13,8 @@ define(function () {
             layerid: "4426"
         },
         view: {
-            background: "white"
+            background: "white",
+            resolution: 26.458319045841044
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
@@ -44,19 +45,19 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
-        menubar: true,
+        // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-       
+
         menu: {
-            
+
             formular: {}
         },
         startUpModul: "",
@@ -75,7 +76,8 @@ define(function () {
         print: {
             printID: "99999",
             title: "Solaratlas",
-            gfi: true
+            gfi: true,
+            configYAML: "solar_atlas"
         },
 
         geoAPI: false,

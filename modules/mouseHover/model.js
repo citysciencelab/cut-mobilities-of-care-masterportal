@@ -176,7 +176,12 @@ define([
                             });
                         }
                         if (!coord) {
-                            coord = featureGeometry.getCoordinates();
+                            if (featureGeometry.getType() === "MultiPolygon" || featureGeometry.getType() === "Polygon") {
+                                coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
+                            }
+                            else {
+                                coord = featureGeometry.getCoordinates();
+                            }
                         }
                     }
                 }, this);

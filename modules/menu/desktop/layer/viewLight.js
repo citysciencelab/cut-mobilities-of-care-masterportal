@@ -31,7 +31,8 @@ define([
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender,
                 "change:isSettingVisible": this.renderSetting,
-                "change:transparency": this.rerender
+                "change:transparency": this.rerender,
+                "change:isOutOfScale": this.toggleColor
             });
 
             this.$el.on({
@@ -116,7 +117,21 @@ define([
         openStyleWMS: function () {
             Radio.trigger("StyleWMS", "openStyleWMS", this.model);
             $(".nav li:first-child").removeClass("open");
-         }
+        },
+
+        /**
+         * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die Schrift ausgegraut
+         */
+        toggleColor: function (model, value) {
+            if (model.has("minScale") === true) {
+                if (value === false) {
+                    this.$el.css("color", "#ededed");
+                }
+                else {
+                    this.$el.css("color", "rgb(85, 85, 85)");
+                }
+            }
+        }
     });
 
     return LayerView;

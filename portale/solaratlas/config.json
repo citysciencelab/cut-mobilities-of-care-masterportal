@@ -12,7 +12,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -21,10 +21,6 @@
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
-          },
-          "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print"
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -40,6 +36,10 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
       "contact": {
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
@@ -69,11 +69,10 @@
       "zoom": true,
       "toggleMenu": true,
       "orientation": "once",
-      "poi": true,
+      "poi": false,
       "fullScreen": true,
       "attributions": true
     },
-    "scaleLine": true,
     "Baumtyp": "light"
   },
   "Themenconfig":
@@ -98,11 +97,8 @@
           "name": "Eignungsflächen",
           "visibility": true,
           "gfiTheme": "solaratlas",
-          "attributions": "<span>Darstellung ab 1: 5000 </span>"
+          "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
         }
-        
-        
-        
       ]
     }
   }

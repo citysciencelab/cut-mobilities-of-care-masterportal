@@ -24,12 +24,12 @@ define([
             if ($(".controls-view").css("top") === "0px") {
                 $(".controls-view").css("top", "50px");
                 $(".toggleButton").attr("title", "Menü ausblenden");
-                Radio.trigger("MenuBar", "setVisible", true);
+                $("nav").show();
             }
             else {
                 $(".controls-view").css("top", "0px");
                 $(".toggleButton").attr("title", "Menü einblenden");
-                Radio.trigger("MenuBar", "setVisible", false);
+                $("nav").hide();
             }
         }
     });
