@@ -58,7 +58,7 @@
     },
     "controls": {
       "zoom": true,
-      "toggleMenu": false,
+      "toggleMenu": true,
       "orientation": "once",
       "poi": true,
       "fullScreen": true,
@@ -88,12 +88,15 @@
         {
           "id": "96", 
           "visibility": true, 
-          "name": "Lärm Straßenverkehr Tag 2012"
+          "name": "Lärm Straßenverkehr Tag 2012",
+          "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
+
         },
         {
           "id": "95",
           "visibility": false,
-          "name": "Lärm Straßenverkehr Nacht 2012"
+          "name": "Lärm Straßenverkehr Nacht 2012",
+          "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
         }
       ]
     }
