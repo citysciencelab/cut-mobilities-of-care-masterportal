@@ -114,11 +114,11 @@ define([
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
                 if ($(window).width() >= 768) {
-                    $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
+                    $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
                 }
             });
             if ($(window).width() >= 768) {
-                $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
+                $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
             }
         },
         events: {
