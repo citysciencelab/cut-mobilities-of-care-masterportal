@@ -125,7 +125,7 @@
       "Fachdaten":
         {
           "Ordner": [
-              
+
         {
           "Titel": "Straßennetze",
           "Layer": [
@@ -171,7 +171,7 @@
             }
           ]
         },
-              
+
           {
           "Titel": "ÖV-Netze",
             "Ordner": [
@@ -206,13 +206,13 @@
               "id": "1935",
               "visibility": false,
               "styles": [
-                  "geofox_Faehre", 
-                  "geofox-bahn", "geofox-bus", 
+                  "geofox_Faehre",
+                  "geofox-bahn", "geofox-bus",
                   "geofox_BusName"
                         ],
               "name": [
-                  "Fährverbindungen", 
-                  "Bahnlinien", "Buslinien", 
+                  "Fährverbindungen",
+                  "Bahnlinien", "Buslinien",
                   "Busliniennummern"
                       ],
               "legendURL": [
@@ -240,7 +240,7 @@
             }
           ]
         },
-              
+
           {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
@@ -281,8 +281,8 @@
               "visibility": false
             }
           ]
-        },    
-              
+        },
+
            {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -292,7 +292,7 @@
             }
           ]
         },
-              
+
             {
           "Titel": "Parken",
 
@@ -337,8 +337,8 @@
             }
 
           ]
-        },   
-            
+        },
+
            {
           "Titel": "Verkehrszählungen",
           "Ordner": [
@@ -368,7 +368,7 @@
                   "visibility": false,
                   "name" : "Kfz-Pegel",
                   "metaName": "Kfz-Pegel"
-                
+
                 }
               ]
             },
@@ -404,7 +404,7 @@
             }
           ]
         },
-               
+
           {
           "Titel": "Verkehrslage",
           "Layer": [
@@ -414,14 +414,16 @@
               "name" : "Verkehrslage auf Autobahnen",
               "metaName": "Verkehrslage auf Autobahnen",
               "attributions": {
+                "text": "",
+                "channel": "Verkehrsfunctions",
                 "eventname": "aktualisiereverkehrsnetz",
-                 "timeout": 600000
-               }
+                "timeout": 60000
+              }
             }
               
           ]
-        },     
-              
+        },
+
           {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -437,7 +439,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -453,7 +455,7 @@
             }
           ]
         },
-              
+
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -463,7 +465,7 @@
             }
           ]
         },
-              
+
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -492,8 +494,8 @@
               "visibility": false
             }
           ]
-        },         
-              
+        },
+
          {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -537,8 +539,8 @@
               "metaName": "Kreuzungsskizzen (ab 1: 5000)"
             }
           ]
-        },      
-              
+        },
+
          {
           "Titel": "Umwelt",
           "Layer": [
@@ -556,7 +558,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -565,8 +567,8 @@
               "visibility": false
             }
           ]
-        },     
-              
+        },
+
          {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -622,8 +624,8 @@
               "metaName": "Digitales Informationssystem Planrecht"
             }
           ]
-        },     
-              
+        },
+
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [
@@ -668,20 +670,20 @@
               "id": "2071",
               "visibility": false
             },
-              
-              
+
+
             {
               "id": "2073",
               "visibility": false
             },
-              
-              
+
+
             {
               "id": "2876",
               "visibility": false
             }
           ]
-        }  
+        }
           ]
         }
     }

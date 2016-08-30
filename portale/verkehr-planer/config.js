@@ -17,6 +17,7 @@ define(function () {
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: true,
        scaleLine: true,
+       customModules: ["../portale/verkehr-planer/verkehrsfunctions"],
        startUpModul: "",
        searchBar: {
             minChars: 3,
@@ -28,7 +29,7 @@ define(function () {
                searchDistricts: true,
                searchParcels: true
            },
-           
+
            specialWFS: {
                minChar: 3,
                definitions: [
