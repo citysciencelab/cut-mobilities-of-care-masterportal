@@ -228,6 +228,8 @@
               "name": [
                   "Haltestellen"
                       ],
+             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",   
+                
               "legendURL": [
                   "http://87.106.16.168/legende_mrh/hvv-bus.png"
                             ]
@@ -247,8 +249,9 @@
             {
               "id": "1932",
               "visibility": false,
-              "name" : "StadtRAD-Stationen (ab 1: 40 000)",
-              "metaName": "StadtRAD-Stationen (ab 1: 40 000)"
+              "name" : "StadtRAD-Stationen",
+              "metaName": "StadtRAD-Stationen",
+              "attributions": "<span>Darstellung ab Maßstab 1: 40 000</span>"
               },
             {
               "id": "4866",
@@ -326,8 +329,9 @@
             {
               "id": "1578",
               "visibility": false,
-              "name" : "Parkuhren (ab 1: 2500)",
-              "metaName": "Parkuhren (ab 1: 2500)"
+              "name" : "Parkuhren",
+              "metaName": "Parkuhren",
+              "attributions": "<span>Darstellung ab Maßstab 1: 2500</span>"
             },
             {
               "id": "943",
@@ -419,7 +423,14 @@
                 "eventname": "aktualisiereverkehrsnetz",
                 "timeout": 60000
               }
-            }
+            },
+            {
+              "id": "2092",
+              "visibility": false,
+              "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH",
+              "metaName": "Verkehrslage Norddeutschland/Stadtgebiet HH",
+              "attributions": "<span>Verkehrslage der HERE Europe B.V bereitgestellt, aufbereitet und angepasst durch die VIOM GmbH, Berlin © 2015</span>"
+            } 
               
           ]
         },
@@ -535,26 +546,52 @@
             {
               "id": ["538","539","540"],
               "visibility": false,
-              "name" : "Kreuzungsskizzen (ab 1: 5000)",
-              "metaName": "Kreuzungsskizzen (ab 1: 5000)"
+              "name" : "Kreuzungsskizzen",
+              "metaName": "Kreuzungsskizzen",
+              "attributions": "<span>Darstellung ab Maßstab 1: 5000</span>"
             }
           ]
         },
-
-         {
-          "Titel": "Umwelt",
-          "Layer": [
+         
+        {
+        "Titel": "Umwelt",
+        "Ordner": [
             {
-              "id": ["95","96"],
-              "visibility": false,
-              "name" : "Lärmkarten - Straßenverkehr",
-              "metaName": "Lärmkarten - Straßenverkehr"
+              "Titel": "Lärmkarten - Straßenverkehr",
+              "Layer": [
+                 {
+                    "id": "96", 
+                    "visibility": false, 
+                    "name": "Lärm Straßenverkehr Tag 2012",
+                    "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
+                },
+                {
+                    "id": "95",
+                    "visibility": false,
+                    "name": "Lärm Straßenverkehr Nacht 2012",
+                    "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
+                }
+              ]
             },
             {
-              "id": ["2412","2413","2414","2415","2416"],
-              "visibility": false,
-              "name" : "Lärmkarten - Flugverkehr",
-              "metaName": "Lärmkarten - Flugverkehr"
+              "Titel": "Lärmkarten - Flugverkehr",
+              "Layer": [
+                {
+                    "id": ["2413","2415"], 
+                    "visibility": false, 
+                    "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
+                },
+                {
+                    "id": ["2412","2415"], 
+                    "visibility": false, 
+                    "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)"
+                },
+                {
+                    "id": ["2414","2416"], 
+                    "visibility": false, 
+                    "name": "Nacht-Schutzzonen mit Isolinien LAeq in dB(A)"
+                }
+              ]
             }
           ]
         },
@@ -580,8 +617,9 @@
               "id": "2834",
               "visibility": false,
               "maxScale": "40000",
-              "name" : "Hamburger Wohnlagenverzeichnis (ab 1 : 40 000)",
-              "metaName": "Hamburger Wohnlagenverzeichnis (ab 1: 40 000)"
+              "name" : "Hamburger Wohnlagenverzeichnis",
+              "metaName": "Hamburger Wohnlagenverzeichnis",
+              "attributions": "<span>Darstellung ab Maßstab 1: 40 000</span>"
             },
             {
               "id": ["4409","4410","4411","4412","4413","4414"],
@@ -601,21 +639,25 @@
             },
             {
               "id": ["2429","2430","2431","2432","2433","2434","2435","2436","2437","2438","2459"],
-              "visibility": false
+              "visibility": false,
+              "name" : "ALKIS - Festlegungen",
+              "metaName": "ALKIS -  Festlegungen"
             },
             {
               "id": "2444",
               "visibility": false,
               "maxScale": "2500",
-              "name" : "ALKIS - Gebäudeflächen (ab 1: 2500)",
-              "metaName": "ALKIS - Gebäudeflächen (ab 1: 2500)"
+              "name" : "ALKIS - Gebäudeflächen",
+              "metaName": "ALKIS - Gebäudeflächen",
+              "attributions": "<span>Darstellung ab Maßstab 1: 2500</span>"
             },
             {
               "id": ["2439","2440","2441","2442"],
               "visibility": false,
               "maxScale": "10000",
-              "name" : "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)",
-              "metaName": "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)"
+              "name" : "ALKIS -  Tatsächliche Nutzung",
+              "metaName": "ALKIS -  Tatsächliche Nutzung",
+              "attributions": "<span>Darstellung ab Maßstab 1: 10 000</span>"
             },
             {
               "id": ["1201","1202","1203","1204","1205","1206","1207","1208","1209","1210","1211","1212"],
