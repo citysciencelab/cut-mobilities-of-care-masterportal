@@ -1,6 +1,8 @@
 define(function () {
 
     var config = {
+        title: "Planerportal-Verkehr",
+        logo: "../img/hh-logo.png",
        wfsImgPath: "..components/lgv-config/img",
        allowParametricURL: true,
        view: {
@@ -29,22 +31,7 @@ define(function () {
                searchDistricts: true,
                searchParcels: true
            },
-
-           specialWFS: {
-               minChar: 3,
-               definitions: [
-                   {
-                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=prosin_festgestellt&propertyName=planrecht",
-                       name: "bplan"
-                   },
-                   {
-                       url: "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                       data: "typeNames=prosin_imverfahren&propertyName=plan",
-                       name: "bplan"
-                   }
-               ]
-           },
+          
            visibleWFS: {
                minChars: 3
            },
