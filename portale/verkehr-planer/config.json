@@ -87,10 +87,10 @@
       },
       "controls": {
         "zoom": true,
-        "toggleMenu": true,
         "orientation": "once",
         "poi": true,
         "fullScreen": true,
+        "mousePosition": true,
         "attributions": true
       },
       "scaleLine": true,
@@ -101,7 +101,6 @@
       "Hintergrundkarten":
         {
           "Layer": [
-            
             {
               "id": ["717", "718", "719", "720"],
               "visibility": true,
@@ -126,9 +125,8 @@
       "Fachdaten":
         {
           "Ordner": [
-            
               
-            {
+        {
           "Titel": "Straßennetze",
           "Layer": [
             {
@@ -173,7 +171,8 @@
             }
           ]
         },
-            {
+              
+          {
           "Titel": "ÖV-Netze",
             "Ordner": [
             {
@@ -242,7 +241,7 @@
           ]
         },
               
-        {
+          {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
             {
@@ -282,9 +281,9 @@
               "visibility": false
             }
           ]
-        },
+        },    
               
-        {
+           {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
             {
@@ -338,9 +337,9 @@
             }
 
           ]
-        },
-              
-            {
+        },   
+            
+           {
           "Titel": "Verkehrszählungen",
           "Ordner": [
             {
@@ -405,8 +404,8 @@
             }
           ]
         },
-              
-        {
+               
+          {
           "Titel": "Verkehrslage",
           "Layer": [
             {
@@ -418,18 +417,12 @@
                 "eventname": "aktualisiereverkehrsnetz",
                  "timeout": 600000
                }
-            },
-            {
-              "id": "2092",
-              "visibility": false,
-              "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH",
-              "metaName": "Verkehrslage Norddeutschland/Stadtgebiet HH",
-              "attributions": "<span>Verkehrslage der HERE Europe B.V bereitgestellt, aufbereitet und angepasst durch die VIOM GmbH, Berlin © 2015</span>"
             }
-          ]
-        },
               
-            {
+          ]
+        },     
+              
+          {
           "Titel": "Verkehrskameras",
           "Layer": [
             {
@@ -470,8 +463,8 @@
             }
           ]
         },
-          
-        {
+              
+         {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
             {
@@ -499,9 +492,9 @@
               "visibility": false
             }
           ]
-        },     
-            
-        {
+        },         
+              
+         {
           "Titel": "Planungsinformationen",
           "Ordner": [
             {
@@ -544,9 +537,9 @@
               "metaName": "Kreuzungsskizzen (ab 1: 5000)"
             }
           ]
-        }, 
+        },      
               
-        {
+         {
           "Titel": "Umwelt",
           "Layer": [
             {
@@ -572,9 +565,9 @@
               "visibility": false
             }
           ]
-        },
+        },     
               
-        {
+         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
             {
@@ -629,15 +622,14 @@
               "metaName": "Digitales Informationssystem Planrecht"
             }
           ]
-        },
-                
+        },     
+              
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [
             {
               "id": "2427",
               "visibility": false,
-              "name" : "Hamburg-Grenzen",
               "metaName": "Hamburg-Grenzen"
             },
             {
@@ -676,21 +668,21 @@
               "id": "2071",
               "visibility": false
             },
-            {
-              "id": "2874",
-              "visibility": false
-            },
-            {
-              "id": "2876",
-              "visibility": false
-            },
+              
+              
             {
               "id": "2073",
               "visibility": false
+            },
+              
+              
+            {
+              "id": "2876",
+              "visibility": false
             }
           ]
+        }  
+          ]
         }
-       ]
-      }
     }
 }
