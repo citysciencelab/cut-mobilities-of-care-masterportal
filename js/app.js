@@ -276,6 +276,12 @@ define("app",
             new StyleWMSView();
         });
 
+        if (_.has(Config, "title") === true) {
+            require(["modules/title/view"], function (TitleView) {
+                new TitleView();
+            });
+        }
+
 //        if (Config.menubar === true) {
 //            require(["modules/menubar/view"], function () {
 //                if ($.isArray(Config.menuItems.formular)) {
