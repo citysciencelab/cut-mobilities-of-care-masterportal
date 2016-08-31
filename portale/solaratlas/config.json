@@ -12,15 +12,15 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-
-          "measure": {
-            "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
-          },
+            
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -85,6 +85,10 @@
           "visibility": true
         },
         {
+          "id": "1119",
+          "maxScale":10000
+        }, 
+        {
           "id": "452"
         }
       ]
@@ -96,6 +100,7 @@
           "id": ["4537", "4538"],
           "name": "Eignungsflächen",
           "visibility": true,
+            "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
         }
