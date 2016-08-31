@@ -23,10 +23,10 @@ define([
             this.model.on("invalid", this.showValidity, this);
         },
         events: {
-            "focusout #contactName": "focusout",
-            "focusout #contactEmail": "focusout",
-            "focusout #contactTel": "focusout",
-            "focusout #contactText": "focusout",
+            "keyup #contactName": "focusout",
+            "keyup #contactEmail": "focusout",
+            "keyup #contactTel": "focusout",
+            "keyup #contactText": "focusout",
             "click .contactButton": "send"
         },
         render: function () {
