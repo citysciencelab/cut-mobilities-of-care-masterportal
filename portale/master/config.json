@@ -3,7 +3,7 @@
   {
     "PortalTitle": "GeoViewer",
     "mapView": {
-        "backgroundImage": "../components/lgv-config/img/backgroundCanvas.jpg"
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
     },
     "searchBar": true,
     "menu": {
