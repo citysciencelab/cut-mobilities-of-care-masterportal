@@ -286,7 +286,7 @@ define([
                 parentId: "Themen",
                 isLeafFolder: true,
                 isInThemen: true,
-                isExpanded: false,
+                isExpanded: true,
                 level: 0
             });
         },

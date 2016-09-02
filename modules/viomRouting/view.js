@@ -1,11 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/viomRouting/template.html",
     "modules/viomRouting/model",
     "eventbus",
-    "config",
     "modules/controls/orientation/model"
-], function (Backbone, RoutingWin, RoutingModel, EventBus, Config) {
+], function (Backbone, Radio, RoutingWin, RoutingModel, EventBus) {
 
     var RoutingView = Backbone.View.extend({
         model: RoutingModel,
@@ -14,6 +14,7 @@ define([
         template: _.template(RoutingWin),
         initialize: function () {
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+
             this.listenTo(this.model, "change:fromCoord", this.coord_change);
             this.listenTo(this.model, "change:toCoord", this.coord_change);
             this.listenTo(this.model, "change:description", this.toggleSwitcher);
@@ -24,9 +25,6 @@ define([
             EventBus.on("setGeolocation", this.setGeolocation, this);
             EventBus.on("setRoutingDestination", this.setRoutingDestination, this);
             EventBus.on("deleteRoute", this.deleteRoute, this);
-            if (Config.startUpModul.toUpperCase() === "ROUTING") {
-                EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
-            }
             EventBus.trigger("registerRoutingClickInClickCounter", this.$el);
         },
         events: {
@@ -218,24 +216,6 @@ define([
                 this.model.suggestByBKG(value, target);
             }
         },
-        setGeolocation: function (geoloc) {
-            // nur wenn noch keine Startkoordinate geseetzt wurde und RoutingWin geöffnet ist, wird geolocation übernommen
-            if ($("#RoutingWin").length > 0 && $("#RoutingWin").is(":visible") && this.model.get("fromCoord") === "") {
-                EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
-                if (_.isArray(geoloc) && geoloc.length === 2) {
-                    this.model.set("fromCoord", geoloc[0]);
-                    this.model.set("startAdresse", "aktueller Standpunkt");
-                    EventBus.trigger("showGeolocationMarker", this);
-                }
-            }
-        },
-        startAdressePosition: function () {
-            // lösche erst die Startkoordinate, damit setGeolocation den Start übernehmen kann
-            this.model.set("fromCoord", "");
-            this.model.set("startAdresse", "");
-            EventBus.trigger("setOrientation", this);
-            EventBus.trigger("showGeolocationMarker", this);
-        },
         changedRoutingTime: function () {
             var rt = $("#timeButton").val(),
                 rd = $("#dayOfWeekButton").val();
@@ -259,7 +239,7 @@ define([
                 if ($("#geolocate").length > 0) {
                     $("#startAdressePositionSpan").show();
                     if (this.model.get("fromCoord") === "") {
-                        this.startAdressePosition();
+                        Radio.trigger("geolocation", "sendPosition");
                     }
                 }
                 else {

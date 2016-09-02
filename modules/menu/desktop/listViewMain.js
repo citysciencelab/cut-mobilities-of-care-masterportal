@@ -7,6 +7,7 @@ define([
     ],
     function () {
         var Backbone = require("backbone"),
+            Radio = require("backbone.radio"),
             DesktopToolView = require("modules/menu/desktop/tool/view"),
             DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
             Menu;
@@ -32,6 +33,19 @@ define([
                 this.addFolderViews(folder);
 
                 this.addToolViews(this.collection.where({type: "tool"}));
+                this.autostartTool();
+            },
+            /**
+            * Startet alle Tools aus config.json mit "autostart:true"
+            */
+            autostartTool: function () {
+                var startUpModul = Radio.request("ParametricURL", "getStartUpModul");
+
+                _.each(this.collection.where({type: "tool"}), function (model) {
+                    if (model.get("autostart") === true || model.get("id").toUpperCase() === startUpModul) {
+                        model.setIsActive(true);
+                    }
+                });
             },
             addFolderViews: function (models) {
                 _.each(models, function (model) {

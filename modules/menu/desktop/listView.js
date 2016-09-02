@@ -32,11 +32,12 @@ define([
                 });
                 this.renderMain();
                 this.render();
+                this.renderSelectedList();
             },
             render: function () {
                 $("#" + "Themen").html("");
                 // Eine Themenebene rendern
-                this.renderSubTree("Themen", 0, 0);
+                this.renderSubTree("Themen", 0, 0, true);
                 $("ul#Themen ul#Overlayer").css("max-height", "80vh");
             },
             /**
@@ -59,7 +60,7 @@ define([
             /**
             * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
              */
-            renderSubTree: function (parentId, level, levelLimit) {
+            renderSubTree: function (parentId, level, levelLimit, firstTime) {
                 if (level > levelLimit) {
                     return;
                 }
@@ -67,7 +68,7 @@ define([
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
                     models = this.collection.add(lightModels);
 
-                if (level === 0) {
+                if (level === 0 && firstTime !== true) {
                     this.collection.setVisibleByParentIsExpanded(parentId);
                 }
 
@@ -94,11 +95,11 @@ define([
                 this.addOverlayViews(folder);
 
                 _.each(folder, function (folder) {
-                    this.renderSubTree(folder.getId(), level + 1, levelLimit);
+                    this.renderSubTree(folder.getId(), level + 1, levelLimit, false);
                 }, this);
             },
             updateOverlayer: function (parentId) {
-                this.renderSubTree(parentId, 0, 0);
+                this.renderSubTree(parentId, 0, 0, false);
             },
             addViewsToItemsOfType: function (type, items, parentId) {
                 items = _.filter(items, function (model) {
