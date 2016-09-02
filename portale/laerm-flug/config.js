@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Lärmschutzbereiche Flughafen Hamburg",
+        //title: "Lärmschutzbereiche Flughafen Hamburg",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
@@ -71,7 +71,7 @@ define(function () {
             // layer: {
             //     minChar: 3
             // },
-            placeholder: "Suche nach Adresse/Stadtteil"
+            placeholder: "Suche nach Adresse/ Stadtteil"
         },
         print: {
             printID: "99999",
