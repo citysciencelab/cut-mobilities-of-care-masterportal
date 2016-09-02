@@ -1,0 +1,36 @@
+nach 53:       
+        {
+            "id": "2404",
+            "visibility": false, 
+            "style": "45", 
+            "clusterDistance": 40, 
+            "routable": true
+        },
+        {
+            "id": "2403", 
+            "visibility": false, 
+            "style": "51", 
+            "clusterDistance": 40, 
+            "routable": true
+        }
+        
+nach 2156:        
+        {
+            "id": "2714", 
+            "gfiTheme": "reisezeiten", 
+            "visibility": false, 
+            "style": "2119", 
+        },
+        
+        
+nach 2132:
+        {
+            "id": "2713", 
+            "visibility": false, 
+            "displayInTree": false
+        },
+        {
+            "id": "2715", 
+            "visibility": false,
+            "displayInTree": false
+        }

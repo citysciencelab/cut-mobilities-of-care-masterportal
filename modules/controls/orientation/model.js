@@ -1,24 +1,26 @@
 define([
     "backbone",
     "eventbus",
+    "backbone.radio",
     "openlayers",
     "proj4",
     "modules/layer/wfsStyle/list",
     "config",
     "backbone.radio"
-], function (Backbone, EventBus, ol, proj4, StyleList, Config, Radio) {
+], function (Backbone, EventBus, Radio, ol, proj4, StyleList, Config, Radio) {
 
     var OrientationModel = Backbone.Model.extend({
         defaults: {
             zoomMode: "once", // once oder allways entsprechend Config
-            counter: 0, // Counter der Standortbestimmung
+            firstGeolocation: true, // Flag, ob es sich um die erste geolocation handelt, damit "once" abgebildet werden kann.
             marker: new ol.Overlay({
                 positioning: "center-center",
                 stopEvent: false
             }),
             isPoiOn: false,
             tracking: false, // Flag, ob derzeit getrackt wird.
-            geolocation: null // ol.geolocation wird bei erstmaliger Nutzung initiiert.
+            geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
+            position: ""
         },
         initialize: function () {
             this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
@@ -28,9 +30,29 @@ define([
             this.listenTo(Radio.channel("ModelList"), {
                 "updateVisibleInMapList": this.checkWFS
             });
-            EventBus.on("setOrientation", this.track, this);
-            EventBus.on("getPOI", this.getPOI, this);
-            EventBus.on("orientation:removeOverlay", this.removeOverlay, this);
+
+            var channel = Radio.channel("geolocation");
+
+            channel.on({
+                "removeOverlay": this.removeOverlay,
+                "getPOI": this.getPOI,
+                "sendPosition": this.sendPosition
+            }, this);
+        },
+        /*
+        * Triggert die Standpunktkoordinate auf Radio
+        */
+        sendPosition: function () {
+            if (this.get("tracking") === false) {
+                this.listenToOnce(this, "change:position", function () {
+                    Radio.trigger("geolocation", "position", this.get("position"));
+                    this.untrack();
+                });
+                this.track();
+            }
+            else {
+                Radio.trigger("geolocation", "position", this.get("position"));
+            }
         },
         removeOverlay: function () {
             EventBus.trigger("removeOverlay", this.get("marker"));
@@ -40,7 +62,7 @@ define([
 
             geolocation.un ("change", this.positioning, this);
             geolocation.un ("error", this.onError, this);
-            this.set("counter", 0);
+            this.set("firstGeolocation", true);
             this.set("tracking", false);
             this.removeOverlay();
         },
@@ -73,17 +95,19 @@ define([
         positioning: function () {
             var geolocation = this.get("geolocation"),
                 position = geolocation.getPosition(),
-                counter = this.get("counter") + 1,
+                firstGeolocation = this.get("firstGeolocation"),
                 zoomMode = this.get("zoomMode"),
                 centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
 
-            // Setze evt. Routing-Start
-            EventBus.trigger("setGeolocation", [centerPosition, position]);
+            // speichere Position
+            this.set("position", centerPosition);
 
+            // Bildschirmnavigation
             if (zoomMode === "once") {
-                if (counter === 1) {
+                if (firstGeolocation === true) {
                     this.positionMarker(centerPosition);
                     this.zoomAndCenter(centerPosition);
+                    this.set("firstGeolocation", false);
                 }
                 else {
                     this.positionMarker(centerPosition);
@@ -93,7 +117,6 @@ define([
                 this.positionMarker(centerPosition);
                 this.zoomAndCenter(centerPosition);
             }
-            this.set("counter", counter);
         },
         onError: function (evt) {
             EventBus.trigger("alert", {
@@ -160,7 +183,7 @@ define([
                         }, this);
                     }
                 }, this);
-                EventBus.trigger("showPOIModal");
+                Radio.trigger("poi", "showPOIModal");
             }
         },
 

@@ -41,7 +41,9 @@ define([
                 "setBBox": this.setBBox,
                 "addLayer": this.addLayer,
                 "addLayerToIndex": this.addLayerToIndex,
-                "removeLayer": this.removeLayer
+                "removeLayer": this.removeLayer,
+                "removeOverlay": this.removeOverlay,
+                "addOverlay": this.addOverlay
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
