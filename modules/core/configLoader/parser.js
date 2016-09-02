@@ -81,7 +81,7 @@ define([
          */
         parseMenu: function (items, parentId) {
 
-            _.each(items, function (value, key) {console.log(value);
+            _.each(items, function (value, key) {
                 if (_.has(value, "children") || key === "tree") {
                     var item = {
                         type: "folder",
