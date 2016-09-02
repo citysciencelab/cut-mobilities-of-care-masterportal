@@ -92,8 +92,8 @@ define([
                     var image = [],
                         name = [],
                         styleList;
-
-                    styleList = StyleList.returnAllModelsById(layer.getId());
+console.log(layer);
+                    styleList = StyleList.returnAllModelsById(layer.getStyleId());
                     if (styleList.length > 1) {
                         _.each(styleList, function (style) {
                             image.push(style.getSimpleStyle()[0].getImage().getSrc());
