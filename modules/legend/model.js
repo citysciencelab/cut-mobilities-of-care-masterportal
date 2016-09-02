@@ -92,7 +92,7 @@ define([
                     var image = [],
                         name = [],
                         styleList;
-console.log(layer);
+
                     styleList = StyleList.returnAllModelsById(layer.getStyleId());
                     if (styleList.length > 1) {
                         _.each(styleList, function (style) {
