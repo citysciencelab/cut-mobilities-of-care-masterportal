@@ -29,7 +29,6 @@ define(function (require) {
                     this.createLayer();
                 },
                 "change:layer": function () {
-                    this.createLegendURL();
                     this.updateLayerTransparency();
                 }
             });
@@ -68,11 +67,13 @@ define(function (require) {
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
+            this.createLegendURL();
         },
 
         /**
          * abstrakte Funktionen die in den Subclasses überschrieben werden
          */
+        createLegendURL: function () {},
         createLayerSource: function () {},
         createLayer: function () {},
 
@@ -289,14 +290,12 @@ define(function (require) {
             }
         },
         showLayerInformation: function () {
-                Radio.trigger("LayerInformation", "add", {
-                    "id": this.getId(),
-                    "legendURL": this.get("legendURL"),
-                    // "metaURL": this.get("dt"),
-                    "metaID": this.get("datasets")[0].md_id,
-                    "name": this.get("datasets")[0].md_name
-                });
-                // window.open(this.get("metaURL"), "_blank");
+            Radio.trigger("LayerInformation", "add", {
+                "id": this.getId(),
+                "legendURL": this.get("legendURL"),
+                "metaID": this.get("datasets")[0].md_id,
+                "name": this.get("datasets")[0].md_name
+            });
         },
         setSelectionIDX: function (idx) {
             this.set("selectionIDX", idx);
