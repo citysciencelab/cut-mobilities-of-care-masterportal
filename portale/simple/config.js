@@ -18,22 +18,6 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
         quickHelp: true,
         scaleLine: true,
-        searchBar: {
-            minChars: 3,
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse, Ort"
-        },
         view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
