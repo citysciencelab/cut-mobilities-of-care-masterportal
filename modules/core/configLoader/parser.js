@@ -59,6 +59,7 @@ define([
             });
             this.parseMenu(this.get("portalConfig").menu, "root");
             this.parseControls(this.get("portalConfig").controls);
+            this.parseSearchBar(this.get("portalConfig").searchBar);
 
             if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
@@ -105,6 +106,18 @@ define([
                     this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
                 }
             }, this);
+        },
+
+        /**
+         * [parseSearchBar description]
+         * @param  {[type]} items [description]
+         * @return {[type]}       [description]
+         */
+        parseSearchBar: function (searchbarConfig) {
+            this.addItem({
+                type: "searchBar",
+                attr: searchbarConfig
+            });
         },
 
         /**

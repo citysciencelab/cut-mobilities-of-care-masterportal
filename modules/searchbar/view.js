@@ -16,20 +16,42 @@ define([
         searchbarKeyNavSelector: "#searchInputUL",
         template: _.template(SearchbarTemplate),
         /**
-        * @description View der Searchbar
-        * @param {Object} config - Das Konfigurationsobjekt der Searchbar
-        * @param {Object} [config.gazetteer] - Das Konfigurationsobjekt der Gazetteersuche.
-        * @param {Object} [config.specialWFS] - Das Konfigurationsobjekt der speziellen WFS.
-        * @param {Object} [config.visibleWFS] - Das Konfigurationsobjekt sichtbaren WFS Suche.
-        * @param {Object} [config.bkg] - Das Konfigurationsobjekt der BKG Suggest Suche.
-        * @param {Object} [config.tree] - Das Konfigurationsobjekt der Suche im Tree.
-        * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
-        * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
-        * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
-        * @param {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
-        * @param {string} [initialQuery] - Initiale Suche.
+        * @memberof config
+        * @type {Object}
+        * @description Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
+        * @property {Object} [visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
+        * @property {integer} [visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object} [tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
+        * @property {integer} [tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Objekt} [specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
+        * @property {integer} [specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object[]} specialWFS.definitions - Definitionen der SpecialWFS.
+        * @property {Object} specialWFS.definitions[].definition - Definition eines SpecialWFS.
+        * @property {string} specialWFS.definitions[].definition.url - Die URL, des WFS
+        * @property {string} specialWFS.definitions[].definition.data - Query string des WFS-Request
+        * @property {string} specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @property {Object} bkg - Das Konfigurationsobjet der BKG Suche.
+        * @property {integer} [bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
+        * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
+        * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @property {integer} [bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
+        * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
+        * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
+        * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @property {Object} [gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
+        * @property {string} gazetteer.url - Die URL.
+        * @property {boolean} [gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @property {boolean} [gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @property {boolean} [gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @property {boolean} [gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
+        * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @property {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
+        * @property {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
+        * @property {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
+        * @property {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
         */
-        initialize: function (config, querySearchString) {
+        initialize: function (config) {
             // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
             // var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
             //     mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
@@ -47,6 +69,8 @@ define([
             // mediaQueryMaxWidth.addListener(function () {
             //     that.render();
             // });
+
+            var querySearchString = Radio.request("ParametricURL", "getInitString");
 
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);

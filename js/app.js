@@ -268,7 +268,9 @@ define("app",
 
         if (_.has(Config, "searchBar") === true) {
             require(["modules/searchbar/view"], function (SearchbarView) {
-                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                var config = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+
+                new SearchbarView(config);
             });
         }
 
