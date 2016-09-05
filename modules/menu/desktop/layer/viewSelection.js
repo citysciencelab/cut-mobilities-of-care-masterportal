@@ -129,6 +129,7 @@ define([
                     this.$el.addClass("disabled");
                     this.$el.find("*").css("pointer-events","none");
                     this.$el.find("*").css("cursor","not-allowed");
+                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
                 }
                 else {
 //                    this.$el.css("color", "rgb(85, 85, 85)");
