@@ -5,9 +5,8 @@ define([
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
     "eventbus",
-    "config",
     "backbone.radio"
-], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config, Radio) {
+], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Radio) {
     "use strict";
     return Backbone.View.extend({
         model: Searchbar,
@@ -77,6 +76,9 @@ define([
             }
             if (config.recommandedListLength) {
                 this.model.set("recommandedListLength", config.recommandedListLength);
+            }
+            if (config.quickHelp) {
+                this.model.set("quickHelp", config.quickHelp);
             }
             if (config.placeholder) {
                 this.model.set("placeholder", config.placeholder);
@@ -264,11 +266,6 @@ define([
             }
             else {
                 hit = this.model.get("hitList")[0];
-            }
-            // 0. Füge Layer ggf. zum Themenbaum hinzu
-            if (_.isUndefined(hitID) === false && Config.tree && Config.tree.type === "light" && hit.type === "Thema") {
-                // noch fehlerhaft
-                //Radio.trigger("LayerList", "addModelById", hitID);
             }
             // 1. Schreibe Text in Searchbar
             this.setSearchbarString(hit.name);
