@@ -59,6 +59,7 @@ define([
             });
             this.parseMenu(this.get("portalConfig").menu, "root");
             this.parseControls(this.get("portalConfig").controls);
+            this.parseMapView(this.get("portalConfig").mapView);
 
             if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
@@ -104,6 +105,21 @@ define([
                 else {
                     this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
                 }
+            }, this);
+        },
+
+        /**
+         * [parseMapView description]
+         * @param  {[type]} items [description]
+         * @return {[type]}       [description]
+         */
+        parseMapView: function (items) {
+            _.each(items, function (value, key) {
+                this.addItem({
+                    type: "mapView",
+                    id: key,
+                    attr: value
+                });
             }, this);
         },
 

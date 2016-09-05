@@ -29,7 +29,10 @@ define([
         *
         */
         initialize: function () {
-             var channel = Radio.channel("Map");
+            // Finalisiere MapView
+            Radio.trigger("MapView", "setConfig");
+
+            var channel = Radio.channel("Map");
 
             channel.reply({
                 "getMap": function () {
