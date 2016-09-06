@@ -21,7 +21,8 @@
           },
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
           },
           "gfi": {
             "name": "Informationen abfragen",

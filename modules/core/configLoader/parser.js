@@ -90,6 +90,7 @@ define([
                         glyphicon: value.glyphicon,
                         name: value.name,
                         id: value.name,
+                        onlyDesktop: value.onlyDesktop,
                         treeType: this.getTreeType()
                     };
 
