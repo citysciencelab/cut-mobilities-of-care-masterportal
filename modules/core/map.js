@@ -29,10 +29,9 @@ define([
         *
         */
         initialize: function () {
-            // Finalisiere MapView
-            Radio.trigger("MapView", "setConfig");
 
-            var channel = Radio.channel("Map");
+            var channel = Radio.channel("Map"),
+                mapView = new MapView ();
 
             channel.reply({
                 "getMap": function () {
@@ -62,7 +61,7 @@ define([
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
             EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
 
-            this.set("view", MapView.get("view"));
+            this.set("view", mapView.get("view"));
 
             this.set("map", new ol.Map({
                 logo: null,

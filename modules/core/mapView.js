@@ -107,8 +107,8 @@ define([
 
             channel.on({
                 "setCenter": this.setCenter,
-                "toggleBackground": this.toggleBackground,
-                "setConfig": this.setConfig
+                "toggleBackground": this.toggleBackground
+                // "setConfig": this.setConfig
             }, this);
 
             this.listenTo(EventBus, {
@@ -152,6 +152,7 @@ define([
                 }
             });
 
+            this.setConfig();
             this.setOptions();
             this.setScales();
             this.setResolutions();
@@ -392,5 +393,5 @@ define([
         }
     });
 
-    return new MapView();
+    return MapView;
 });
