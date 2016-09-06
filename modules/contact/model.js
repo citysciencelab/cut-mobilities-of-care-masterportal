@@ -1,10 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
-    "config",
     "modules/core/util"
-], function (Backbone, Radio, EventBus, Config, Util) {
+], function (Backbone, Radio, Util) {
     "use strict";
     var ContactModel = Backbone.Model.extend({
         defaults: {
@@ -107,20 +105,20 @@ define([
                 complete: function (jqXHR) {
                     Util.hideLoader();
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        EventBus.trigger("alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+                        Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
                     }
                 },
                 success: function (data) {
                     if (data.success === false) {
-                        EventBus.trigger("alert", {text: data.message, kategorie: "alert-warning"});
+                        Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
                     }
                     else {
-                        EventBus.trigger("alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
+                        Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
                     }
                 }
             });
         }
     });
 
-    return new ContactModel();
+    return ContactModel;
 });
