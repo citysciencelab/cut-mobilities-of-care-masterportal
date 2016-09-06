@@ -43,5 +43,6 @@ define([
             }
         }, this);
     };
+
     return MenuLoader;
 });

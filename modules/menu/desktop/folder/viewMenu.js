@@ -11,9 +11,9 @@ define([
         tagName: "li",
         className: "dropdown dropdown-folder",
         template: _.template(Template),
-        events: {
-            "click .folder-item": ""
-        },
+        // events: {
+        //     "click .folder-item": ""
+        // },
         initialize: function () {
             this.render();
         },
@@ -22,10 +22,10 @@ define([
 
             $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
 
-        },
-        toggleIsChecked: function () {
-            this.model.toggleIsChecked();
         }
+        // toggleIsChecked: function () {
+        //     this.model.toggleIsChecked();
+        // }
     });
 
     return FolderView;

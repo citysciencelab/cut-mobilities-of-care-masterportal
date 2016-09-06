@@ -1,8 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
-    "config"
-], function (Backbone, Radio, Config) {
+    "config",
+    "modules/core/configLoader/preparser"
+], function (Backbone, Radio, Config, Preparser) {
 
     var ParametricURL = Backbone.Model.extend({
 
@@ -11,7 +12,8 @@ define([
 
             channel.reply({
                 "getResult": this.getResult,
-                "getLayerParams": this.getLayerParams
+                "getLayerParams": this.getLayerParams,
+                "getStartUpModul": this.getStartUpModul
             }, this);
 
             this.parseURL();
@@ -31,6 +33,10 @@ define([
 
         getLayerParams: function () {
             return this.get("layerParams");
+        },
+
+        getStartUpModul: function () {
+            return this.get("startUpModul");
         },
 
         createLayerParams: function () {
@@ -170,9 +176,10 @@ define([
             *
             */
             if (_.has(result, "STARTUPMODUL")) {
-                var value = _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase();
-
-                Config.startUpModul = value;
+                this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+            }
+            else {
+                this.set("startUpModul", "");
             }
 
             /**

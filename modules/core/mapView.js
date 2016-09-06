@@ -20,7 +20,8 @@ define([
          *
          */
         defaults: {
-            background: "default",
+            background: "",
+            backgroundImage: "",
             startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
             options: [
                 {
@@ -107,6 +108,7 @@ define([
             channel.on({
                 "setCenter": this.setCenter,
                 "toggleBackground": this.toggleBackground
+                // "setConfig": this.setConfig
             }, this);
 
             this.listenTo(EventBus, {
@@ -141,16 +143,16 @@ define([
                     this.get("view").setResolution(this.get("resolution"));
                 },
                 "change:background": function (model, value) {
-                    if (value === "default") {
-                        $("#map").css("background", "url('../../img/backgroundCanvas.jpeg') repeat scroll 0 0 rgba(0, 0, 0, 0)");
-                    }
-                    else if (value === "white") {
+                    if (value === "white") {
                         $("#map").css("background", "white");
+                    }
+                    else {
+                        $("#map").css("background", "url('" + value + "') repeat scroll 0 0 rgba(0, 0, 0, 0)");
                     }
                 }
             });
 
-            this.checkConfig();
+            this.setConfig();
             this.setOptions();
             this.setScales();
             this.setResolutions();
@@ -173,10 +175,20 @@ define([
             }, this);
         },
 
-        checkConfig: function () {
-            if (_.has(Config.view, "background") === true) {
-                this.setBackground(Config.view.background);
-            }
+        /*
+        * Finalisierung der Initialisierung für config.json
+        */
+        setConfig: function () {
+            _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
+                switch (setting.id) {
+                case "backgroundImage": {
+                    this.set("backgroundImage", setting.attr);
+
+                    this.setBackground(setting.attr);
+                    break;
+                }
+                }
+            }, this);
         },
 
         setBackground: function (value) {
@@ -189,7 +201,7 @@ define([
 
         toggleBackground: function () {
             if (this.getBackground() === "white") {
-                this.setBackground("default");
+                this.setBackground(this.get("backgroundImage"));
             }
             else {
                 this.setBackground("white");
@@ -381,5 +393,5 @@ define([
         }
     });
 
-    return new MapView();
+    return MapView;
 });

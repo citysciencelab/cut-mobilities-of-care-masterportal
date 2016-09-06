@@ -1,0 +1,214 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": true,
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+    "routing": {
+        "name": "Routenplaner",
+        "glyphicon": "glyphicon-road",
+        "viomRoutingID": "3",
+        "bkgSuggestID": "4",
+        "bkgGeosearchID": "5",
+        "autostart": false
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "michael.bieler@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "toggleMenu": true,
+      "orientation": "allways",
+      "poi": true,
+      "fullScreen": true,
+      "attributions": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+            "id": "2092"
+        },
+        {
+          "id":[{"id": "946"
+            },
+            {
+              "id": "947"
+            }
+          ],
+          "name": "Verkehrslage auf Autobahnen",
+          "attributions": {
+            "text": "",
+            "channel": "Verkehrsfunctions",
+            "eventname": "aktualisiereverkehrsnetz",
+            "timeout": 60000
+          },
+          "visibility": false
+        },
+        {
+          "id": "1935",
+          "visibility": false,
+          "styles": [
+            "geofox_Faehre",
+            "geofox-bahn",
+            "geofox-bus",
+            "geofox_BusName"
+          ],
+          "name": [
+            "Fährverbindungen",
+            "Bahnlinien",
+            "Buslinien",
+            "Busliniennummern"
+          ],
+          "legendURL": [
+            "http://87.106.16.168/legende_mrh/hvv-faehre.png",
+            "http://87.106.16.168/legende_mrh/hvv-bahn.png",
+            "http://87.106.16.168/legende_mrh/hvv-bus.png",
+            "http://87.106.16.168/legende_mrh/hvv-bus.png"
+          ]
+        },
+        {
+          "id": "1933",
+          "visibility": false,
+          "styles": [
+            "geofox_stations"
+          ],
+          "name": [
+            "Haltestellen"
+          ],
+          "legendURL": [
+            "http://87.106.16.168/legende_mrh/hvv-bus.png"
+          ]
+        },
+        {
+            "id": "676",
+            "name": "Positivnetz Lang-LKW"
+        },
+        {
+            "id": "46",
+            "visibility": false,
+            "style": "46",
+            "clusterDistance": 60,
+            "routable": true
+        },
+        {
+            "id": "48",
+            "style": "48",
+            "clusterDistance": 40,
+            "routable": true
+        },
+        {
+            "id": "50",
+            "visibility": false,
+            "style": "50",
+            "clusterDistance": 40,
+            "routable": true
+        },
+        {
+            "id": "53",
+            "visibility": false,
+            "style": "53",
+            "clusterDistance": 40,
+            "routable": true
+        },
+        {
+            "id": "52",
+            "visibility": false,
+            "style": "52",
+            "clusterDistance": 30,
+            "styleField": "situation",
+            "routable": true
+        },
+        {
+            "id": "2128",
+            "visibility": false,
+            "style": "2128",
+            "clusterDistance": 0
+        },
+        {
+            "id": "47",
+            "visibility": true,
+            "style": "47",
+            "styleLabelField": "id_kost",
+            "styleField": "typ",
+            "routable": false
+        },
+        {
+            "id": "2156",
+            "visibility": true,
+            "style": "2156",
+            "styleField": "name",
+            "routable": false
+        },
+        {
+            "id": "2132",
+            "visibility": false,
+            "style": "2132"
+        }
+      ]
+    }
+  }
+}
