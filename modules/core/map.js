@@ -37,7 +37,8 @@ define([
             channel.reply({
                 "getMap": function () {
                     return this.get("map");
-                }
+                },
+                "getLayers": this.getLayers
             }, this);
 
             channel.on({
@@ -85,6 +86,10 @@ define([
 
         },
 
+        getLayers: function() {
+            return this.get("map").getLayers();
+        },
+         
         setBBox: function (bbox) {
             this.set("bbox", bbox);
             this.BBoxToMap(this.get("bbox"));
@@ -207,6 +212,7 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
+            this.setImportDrawMeasureLayersOnTop(layersCollection); 
 
             // Laden des Layers überwachen
             if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
@@ -214,6 +220,25 @@ define([
             }
 
         },
+        
+        // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw) 
+        setImportDrawMeasureLayersOnTop: function (layers){
+            var layersOnTop = [];
+            
+            for(var i = layers.getLength(); i >= 0; i--){
+                var layer = layers.item(i);
+                
+                if(!_.isUndefined(layer) && layer.get("alwaysOnTop")){
+                    layers.removeAt(i);
+                    layersOnTop.push(layer);
+                }
+            }
+            
+            _.each(layersOnTop, function(layer){
+                layers.push(layer);
+            });
+        },
+         
         // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
         // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
         getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
