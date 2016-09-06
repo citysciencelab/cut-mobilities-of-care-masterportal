@@ -143,16 +143,19 @@
         {
           "id": "2003",
           "visibility": false,
-          "style": "2003",
+          "styleId": "2003",
           "mouseHoverField": "GEBIETSNAME"
         },
         {
-          "id": "45",
-          "clusterDistance": 50,
-          "routable": true
-        },
+           "id": "2404",
+           "visibility": false,
+           "styleId": "45",
+           "clusterDistance": 40,
+           "routable": true
+       },
         {
           "id": "1711",
+          "styleId": "1711",
           "visibility": true,
           "attributions": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
@@ -174,6 +177,7 @@
         },
         {
           "id": "753",
+          "styleId": "753",
           "visibility": true,
           "mouseHoverField": "Name",
           "filterOptions": [
