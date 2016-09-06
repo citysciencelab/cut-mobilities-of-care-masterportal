@@ -67,11 +67,20 @@ define([
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
             });
-            Radio.on("Util", {
+
+            this.listenTo(Radio.channel("MenuLoader"), {
+                "ready": function () {
+                    if ($(window).width() >= 768) {
+                        $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
+                    }
+                }
+            });
+
+            this.listenTo(Radio.channel("Util"), {
                 "isViewMobileChanged": function () {
                     this.render();
                 }
-            }, this);
+            });
 
             this.render();
 
@@ -256,7 +265,7 @@ define([
             // wird nicht mehr benötigt??? SD 02.08.2016
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
-            if (evt){
+            if (evt) {
                 evt.stopPropagation();
             }
         },
