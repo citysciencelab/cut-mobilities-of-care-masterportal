@@ -1,10 +1,9 @@
 define([
     'jquery',
-    'underscore',
     'backbone',
     'modules/cookie/model',
     'text!modules/cookie/template.html'
-], function ($, _, Backbone, cookieModel, cookieTemplate) {
+], function ($, Backbone, cookieModel, cookieTemplate) {
 
     var cookieView = Backbone.View.extend({
         model: cookieModel,

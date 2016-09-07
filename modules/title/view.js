@@ -1,10 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "text!modules/title/template.html",
     "config",
     "modules/core/util"
-], function (_, Backbone, TitleTemplate, Config, Util) {
+], function (Backbone, TitleTemplate, Config, Util) {
 
     var TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",

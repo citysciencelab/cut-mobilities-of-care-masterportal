@@ -1,12 +1,11 @@
 define([
     "jquery",
-    "underscore",
     "backbone",
     "text!modules/tools/download/template.html",
     "modules/tools/download/model",
     "backbone.radio",
     "eventbus"
-], function ($, _, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
+], function ($, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
     var DownloadView = Backbone.View.extend({
         model: DownloadModel,
         template: _.template(DownloadWin),
