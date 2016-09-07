@@ -1,12 +1,11 @@
 define([
     "jquery",
-    "underscore",
     "backbone",
     "text!modules/tools/download/template.html",
     "modules/tools/download/model",
     "backbone.radio",
     "eventbus"
-], function ($, _, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
+], function ($, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
     var DownloadView = Backbone.View.extend({
         model: DownloadModel,
         template: _.template(DownloadWin),
@@ -26,7 +25,7 @@ define([
          * Startet das Download modul
          * @param  {ol.feature} features die Features die heruntergeladen werden sollen
          */
-        start: function (features) {console.log(434);
+        start: function (features) {
             if (features.data.length === 0) {
                 EventBus.trigger("alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
                 return;

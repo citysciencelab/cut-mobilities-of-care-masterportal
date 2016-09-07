@@ -107,24 +107,24 @@ define([
                     break;
                 }
                 case "Parcel": {
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, 7);
                     this.showMarker(hit.coordinate);
                     break;
                 }
                 case "Krankenhaus": {
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, 5);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, 5);
                     break;
                 }
                 case "Adresse": {
                     zoomLevel = 7;
                     this.showMarker(hit.coordinate);
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
                     break;
                 }
                 case "Stadtteil": {
                     zoomLevel = 4;
                     this.showMarker(hit.coordinate);
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
                     break;
                 }
                 case "Thema": {
@@ -145,13 +145,13 @@ define([
                 case "Olympiastandort": {
                     zoomLevel = 5;
                     this.showMarker(hit.coordinate);
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
                     break;
                 }
                 case "Paralympiastandort": {
                     zoomLevel = 5;
                     this.showMarker(hit.coordinate);
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
                     break;
                 }
                 case "festgestellt": {
@@ -163,7 +163,7 @@ define([
                     break;
                 }
                 case "SearchByCoord": {
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, 7);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, 7);
                     this.showMarker(hit.coordinate);
                     break;
                 }
@@ -178,7 +178,7 @@ define([
                 case "Kita": {
                     zoomLevel = 8;
                     this.showMarker(hit.coordinate);
-                    EventBus.trigger("mapView:setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
                     break;
                 }
             }
@@ -204,7 +204,7 @@ define([
         */
         zoomToBKGSearchResult: function (data) {
             if (data.features[0].properties.bbox.type === "Point") {
-                EventBus.trigger("mapView:setCenter", data.features[0].properties.bbox.coordinates, 5);
+                Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, 5);
                 this.showMarker(data.features[0].properties.bbox.coordinates);
             }
             else if (data.features[0].properties.bbox.type === "Polygon") {

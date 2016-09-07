@@ -45,9 +45,9 @@ define([
                 "change:isCurrentWin": this.setActive
             });
 
-            this.listenTo(EventBus, {
-                "mapView:sendCenter": this.setCenter,
-                "mapView:sendOptions": this.setScaleByMapView
+            this.listenTo(Radio.channel("MapView"), {
+                "changedOptions": this.setScaleByMapView,
+                "changedCenter": this.setCenter
             });
 
             // get print config (info.json)
@@ -60,7 +60,7 @@ define([
                         scale.name = "1: " + scaletext;
                     });
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
-                    EventBus.trigger("mapView:getOptions");
+                    model.setScaleByMapView();
                 }
             });
 
@@ -90,13 +90,13 @@ define([
         setScale: function (index) {
             var scaleval = this.get("scales")[index].value;
 
-            EventBus.trigger("mapView:setScale", scaleval);
+            Radio.trigger("MapView", "setScale", scaleval);
         },
 
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
-        setScaleByMapView: function (obj) {
+        setScaleByMapView: function () {
             var scale = _.find(this.get("scales"), function (scale) {
-                return scale.value === obj.scale;
+                return scale.value === Radio.request("MapView", "getOptions").scale;
             });
 
             this.set("scale", scale);
@@ -131,12 +131,12 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
-                EventBus.trigger("getSelectedVisibleWMSLayer");
-            }
-            else {
-                EventBus.trigger("layerlist:getVisibleWMSlayerList");
-            }
+            // if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
+                // EventBus.trigger("getSelectedVisibleWMSLayer");
+            // }
+            // else {
+                // EventBus.trigger("layerlist:getVisibleWMSlayerList");
+            // }
             if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
