@@ -34,7 +34,7 @@ define(function () {
             center: [565874, 5934140]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         scaleLine: true,
         isMenubarVisible: true,
@@ -50,18 +50,13 @@ define(function () {
                 filter: "filter=(typ:*)",
                 score: 0.6
             },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse",
-            geoLocateHit: true
+            placeholder: "Suche nach Adresse"
         },
         print: {
-            printID: "99999",
+            printID: "printqs",
             title: "Geoportal der Metropolregion Hamburg",
-            outputFilename: "Ausdruck Geoportal GDI-MRH",
             gfi: false,
-            configYAML: "gdimrh"
+            configYAML: "master"
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };
