@@ -393,17 +393,7 @@
             {
               "Titel": "Emissionen",
               "Ordner": [
-                {
-                  "Titel": "Störfallbetriebe",
-                  "Layer": [
-                    {
-                      "id": "1659",
-                      "visibility": false,
-                      "name": "Lage von Störfallbetrieben (§ 3 Abs. 5a BImSchG)",
-                      "metaName": "Lage von Störfallbetrieben (§ 3 Abs. 5a BImSchG)"
-                    }
-                  ]
-                },
+
                 {
                   "Titel": "Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
                   "Layer": [
