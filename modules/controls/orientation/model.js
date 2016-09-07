@@ -90,7 +90,7 @@ define([
             }
         },
         zoomAndCenter: function (position) {
-            EventBus.trigger("mapView:setCenter", position, 6);
+            Radio.trigger("MapView", "setCenter", position, 6);
         },
         positioning: function () {
             var geolocation = this.get("geolocation"),

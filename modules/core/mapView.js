@@ -3,7 +3,6 @@ define([
     "backbone.radio",
     "openlayers",
     "config",
-    "eventbus",
     "proj4"
 ], function () {
 
@@ -11,7 +10,6 @@ define([
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
         Config = require("config"),
-        EventBus = require("eventbus"),
         proj4 = require("proj4"),
         MapView;
 
@@ -107,34 +105,18 @@ define([
 
             channel.on({
                 "setCenter": this.setCenter,
-                "toggleBackground": this.toggleBackground
-                // "setConfig": this.setConfig
+                "toggleBackground": this.toggleBackground,
+                "setZoomLevelUp": this.setZoomLevelUp,
+                "setZoomLevelDown": this.setZoomLevelDown,
+                "setScale": this.setScale
             }, this);
-
-            this.listenTo(EventBus, {
-                "mapView:getMinResolution": this.sendMinResolution,
-                "mapView:getMaxResolution": function (scale) {
-                    EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
-                },
-                "mapView:getOptions": function () {
-                    EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
-                },
-                "mapView:getCenterAndZoom": function () {
-                    EventBus.trigger("mapView:sendCenterAndZoom", this.getCenter(), this.getZoom());
-                },
-                "mapView:setScale": this.setScale,
-                "mapView:setZoomLevelUp": this.setZoomLevelUp,
-                "mapView:setZoomLevelDown": this.setZoomLevelDown,
-                "mapView:setCenter": this.setCenter
-            });
 
             this.listenTo(this, {
                 "change:resolution": function () {
-                    EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                     channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
-                    EventBus.trigger("mapView:sendCenter", this.get("center"));
+                    channel.trigger("changedCenter", this.getCenter());
                 },
                 "change:scale": function () {
                     var params = _.findWhere(this.get("options"), {scale: this.get("scale")});
@@ -171,7 +153,6 @@ define([
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
-                channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
 
@@ -366,23 +347,6 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
-        },
-
-        sendMinResolution: function (minScale) {
-            if (_.contains(this.get("scales"), minScale)) {
-                EventBus.trigger("mapView:sendMinResolution", _.findWhere(this.get("options"), {scale: minScale}).resolution);
-            }
-            else if (minScale !== "0") {
-                var scales = _.union([minScale], this.get("scales"));
-
-                scales = _.sortBy(scales, function (scale) {
-                    return parseInt(scale, 10);
-                }).reverse();
-                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[_.indexOf(scales, minScale) - 1]);
-            }
-            else {
-                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[this.get("resolutions").length - 1]);
-            }
         },
 
         pushHits: function (attribute, value) {
