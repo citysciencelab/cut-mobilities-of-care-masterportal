@@ -162,8 +162,7 @@ define([
         * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
         */
         isResolutionInRange: function () {
-            var visibility = this.get("visibility"),
-                layerMaxScale = parseFloat(this.get("maxScale")),
+            var layerMaxScale = parseFloat(this.get("maxScale")),
                 layerMinScale = parseFloat(this.get("minScale")),
                 mapOptions = Radio.request("MapView", "getOptions"),
                 mapScale = parseFloat(mapOptions.scale);
@@ -241,7 +240,7 @@ define([
             }
         },
         setSimpleCustomLabeledStyle: function () {
-            var styleId = this.getId(),
+            var styleId = this.getStyleId(),
                 styleLabelField = this.get("styleLabelField");
 
             this.set("style", function (feature) {
@@ -252,7 +251,7 @@ define([
             });
         },
         setSimpleStyleForStyleField: function () {
-            var styleId = this.getId(),
+            var styleId = this.getStyleId(),
                 styleField = this.get("styleField");
 
             this.set("style", function (feature) {
@@ -263,7 +262,7 @@ define([
             });
         },
         setSimpleStyleForStyleFieldAndLabel: function () {
-            var styleId = this.getId(),
+            var styleId = this.getStyleId(),
                 styleLabelField = this.get("styleLabelField"),
                 styleField = this.get("styleField");
 
@@ -276,7 +275,7 @@ define([
             });
         },
         setClusterStyleForStyleField: function () {
-            var styleId = this.getId(),
+            var styleId = this.getStyleId(),
                 styleField = this.get("styleField");
 
             this.set("style", function (feature) {
@@ -295,13 +294,13 @@ define([
             });
         },
         setSimpleStyle: function () {
-            var styleId = this.getId(),
+            var styleId = this.getStyleId(),
                 stylelistmodel = StyleList.returnModelById(styleId);
 
             this.set("style", stylelistmodel.getSimpleStyle());
         },
         setClusterStyle: function () {
-            var styleId = this.getId(),
+            var styleId = this.getStyleId(),
                 stylelistmodel = StyleList.returnModelById(styleId);
 
             this.set("style", function (feature) {
@@ -335,10 +334,15 @@ define([
         setProjection: function (proj) {
             this.set("projection", proj);
         },
+
+        getStyleId: function () {
+            return this.get("styleId");
+        },
+
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
             if (!this.get("legendURL").length) {
-                var style = StyleList.returnModelById(this.getId());
+                var style = StyleList.returnModelById(this.getStyleId());
 
                 this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
             }

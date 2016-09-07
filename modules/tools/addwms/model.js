@@ -124,6 +124,7 @@ define([
                 transparent: true,
                 tilesize: "512",
                 gutter: "0",
+                featureCount: 3,
                 minScale: "0",
                 maxScale: "350000",
                 gfiAttributes: "showAll",
