@@ -12,7 +12,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
+          
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -26,9 +26,14 @@
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
           },
-          "coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
           }
         }
       },
@@ -36,6 +41,10 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
+          "wfsFeatureFilter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter"
+          },
       "contact": {
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
@@ -65,7 +74,7 @@
       "zoom": true,
       "toggleMenu": true,
       "orientation": "once",
-      "poi": true,
+      "poi": false,
       "fullScreen": true,
       "attributions": true
     },
@@ -78,27 +87,52 @@
     {
       "Layer": [
         {
-          "id": "453",  
-          "visibility": true
+          "id": "453",
+           "visibility": true
         },
         {
           "id": "452"
-        } 
+        }
       ]
     },
     "Fachdaten":
     {
       "Layer": [
-        
         {
-          "id": "96", 
-          "visibility": true, 
-          "name": "Lärm Straßenverkehr Tag 2012"
+          "id": "1711",
+          "visibility": false,
+          "attributions": "<span>Attributierung für Fachlayer</span>",
+          "mouseHoverField": ["name", "strasse"],
+          "searchField": "name",
+          "filterOptions": [
+            {
+              "fieldName": "teilnahme_geburtsklinik",
+              "filterType": "combo",
+              "filterName": "Geburtsklinik",
+              "filterString": ["*", "Ja", "Nein"]
+            },
+            {
+              "fieldName": "teilnahme_notversorgung",
+              "filterType": "combo",
+              "filterName": "Not- und Unfallversorgung",
+              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+            }
+          ]
         },
         {
-          "id": "95",
-          "visibility": false,
-          "name": "Lärm Straßenverkehr Nacht 2012"
+          "id": "753",
+          "name": "Kita Einrichtung",
+          "visibility": true,
+          "style": "753",
+          "mouseHoverField": "Name",
+          "filterOptions": [
+            {
+              "fieldName": "Bezirk",
+              "filterType": "combo",
+              "filterName": "Bezirk",
+              "filterString": ["*", "Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Harburg", "Wandsbek"]
+            }
+          ]
         }
       ]
     }

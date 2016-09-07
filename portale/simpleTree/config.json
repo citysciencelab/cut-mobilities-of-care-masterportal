@@ -1,0 +1,266 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": true,
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "kmlimport": {
+            "name": "KML Import",
+            "glyphicon": "glyphicon-import"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "addWMS": {
+            "name": "WMS hinzufügen",
+            "glyphicon": "glyphicon-plus"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "toggleMenu": true,
+      "orientation": "allways",
+      "poi": true,
+      "fullScreen": true,
+      "attributions": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "custom"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "39",
+          "visibility": true
+        },
+        {
+          "id": "487",
+          "visibility": false
+        }
+      ]
+    },
+    "Fachdaten":
+      {
+        "Ordner": [
+          {
+            "Titel": "Überschwemmungsgebiete",
+            "Ordner": [
+              {
+                "Titel": "Überschwemmungsgebiete",
+                "Ordner": [
+                  {
+                    "Titel": "Überschwemmungsgebiete",
+                    "Layer": [
+                      {
+                        "id": "1103",
+                        "visibility": false
+                      },
+                      {
+                        "id": "1104",
+                        "visibility": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Titel": "Wasserwirtschaft",
+            "Ordner": [
+              {
+                "Titel": "Überschwemmungsgebiete",
+                "Layer": [
+                  {
+                    "id": "1103",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1104",
+                    "visibility": false
+                  }
+                ]
+              }
+            ],
+            "Layer": [
+              {
+                "id": "1918",
+                "visibility": false
+              },
+              {
+                "id": "1919",
+                "visibility": false
+              },
+              {
+                "id": "1920",
+                "visibility": false
+              },
+              {
+                "id": "1921",
+                "visibility": false
+              },
+              {
+                "id": "1922",
+                "visibility": false
+              },
+              {
+                "id": "1923",
+                "visibility": false
+              },
+              {
+                "id": "685",
+                "visibility": true
+              }
+            ]
+          },
+          {
+            "Titel": "Schützenswerte Böden",
+            "Layer": [
+              {
+                "id": "1568",
+                "visibility": false
+              },
+              {
+                "id": "1569",
+                "visibility": false
+              },
+              {
+                "id": "1570",
+                "visibility": false
+              }
+            ]
+          },
+          {
+            "Titel": "Naturschutz",
+            "Ordner": [
+              {
+                "Titel": "Schutzgebiete",
+                "Layer": [
+                  {
+                    "id": "1992",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1993",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1994",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1995",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1997",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1998",
+                    "visibility": false
+                  },
+                  {
+                    "id": "1999",
+                    "visibility": false
+                  }
+                ]
+              },
+              {
+                "Titel": "Gesetzlich geschützte Biotope",
+                "Layer": [
+                  {
+                    "id": "2922",
+                    "visibility": false
+                  },
+                  {
+                    "id": "2923",
+                    "visibility": false
+                  },
+                  {
+                    "id": "2924",
+                    "visibility": false
+                  },
+                  {
+                    "id": "2925",
+                    "visibility": false
+                  },
+                  {
+                    "id": "2926",
+                    "visibility": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+  }
+}

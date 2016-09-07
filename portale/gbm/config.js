@@ -1,8 +1,6 @@
 define(function () {
 
     var config = {
-        title: "Planerportal-Verkehr",
-        logo: "../img/hh-logo.png",
        wfsImgPath: "..components/lgv-config/img",
        allowParametricURL: true,
        view: {
@@ -13,13 +11,12 @@ define(function () {
        styleConf: "../components/lgv-config/style.json",
        print: {
            printID: "99999",
-           title: "Planerportal-Verkehr",
+           title: "Master-Portal",
            gfi: false
        },
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: true,
        scaleLine: true,
-       customModules: ["../portale/verkehr-planer/verkehrsfunctions"],
        startUpModul: "",
        searchBar: {
             minChars: 3,
@@ -31,15 +28,7 @@ define(function () {
                searchDistricts: true,
                searchParcels: true
            },
-          
-           visibleWFS: {
-               minChars: 3
-           },
-           tree: {
-               minChars: 3
-           },
-           placeholder: "Suche nach Adresse/ Stadtteil/ Thema",
-           geoLocateHit: true
+           placeholder: "Suche nach Adresse/Stadtteil"
        },
        gemarkungen: "../components/lgv-config/gemarkung.json"
    };

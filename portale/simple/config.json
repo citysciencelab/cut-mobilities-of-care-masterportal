@@ -12,10 +12,14 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
           },
           "print": {
             "name": "Karte drucken",
@@ -24,6 +28,22 @@
           "coord": {
             "name": "Koordinaten abfragen",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "kmlimport": {
+            "name": "KML Import",
+            "glyphicon": "glyphicon-import"
+          },
+          "wfsFeatureFilter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
           }
         }
       },
@@ -59,7 +79,7 @@
     "controls": {
       "zoom": true,
       "toggleMenu": true,
-      "orientation": "once",
+      "orientation": "allways",
       "poi": true,
       "fullScreen": true,
       "attributions": true
@@ -73,30 +93,45 @@
     {
       "Layer": [
         {
-          "id": "453",  
-          "visibility": true
-        },
-        {
-          "id": "452"
-        } 
+          "id": "39",
+          "visibility": true,
+          "gfiAttributes": "ignore"
+        }
       ]
     },
     "Fachdaten":
     {
       "Layer": [
-        
         {
-          "id": "96", 
-          "visibility": true, 
-          "name": "Lärm Straßenverkehr Tag 2012",
-          "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
-
+          "id": "39"
         },
         {
-          "id": "95",
-          "visibility": false,
-          "name": "Lärm Straßenverkehr Nacht 2012",
-          "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
+          "id": "45",
+          "clusterDistance": 50
+        },
+        {
+          "id": "1561"
+        },
+        {
+          "id": "1711",
+          "visibility": true,
+          "attributions": "<span>Attributierung für Fachlayer</span>",
+          "mouseHoverField": ["name", "strasse"],
+          "searchField": "name",
+          "filterOptions": [
+            {
+              "fieldName": "teilnahme_geburtsklinik",
+              "filterType": "combo",
+              "filterName": "Geburtsklinik",
+              "filterString": ["*", "Ja", "Nein"]
+            },
+            {
+              "fieldName": "teilnahme_notversorgung",
+              "filterType": "combo",
+              "filterName": "Not- und Unfallversorgung",
+              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+            }
+          ]
         }
       ]
     }

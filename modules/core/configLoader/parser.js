@@ -59,6 +59,7 @@ define([
             });
             this.parseMenu(this.get("portalConfig").menu, "root");
             this.parseControls(this.get("portalConfig").controls);
+            this.parseMapView(this.get("portalConfig").mapView);
 
             if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
@@ -89,6 +90,7 @@ define([
                         glyphicon: value.glyphicon,
                         name: value.name,
                         id: value.name,
+                        onlyDesktop: value.onlyDesktop,
                         treeType: this.getTreeType()
                     };
 
@@ -104,6 +106,21 @@ define([
                 else {
                     this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
                 }
+            }, this);
+        },
+
+        /**
+         * [parseMapView description]
+         * @param  {[type]} items [description]
+         * @return {[type]}       [description]
+         */
+        parseMapView: function (items) {
+            _.each(items, function (value, key) {
+                this.addItem({
+                    type: "mapView",
+                    id: key,
+                    attr: value
+                });
             }, this);
         },
 
@@ -286,7 +303,7 @@ define([
                 parentId: "Themen",
                 isLeafFolder: true,
                 isInThemen: true,
-                isExpanded: false,
+                isExpanded: true,
                 level: 0
             });
         },

@@ -29,7 +29,9 @@ define([
         *
         */
         initialize: function () {
-             var channel = Radio.channel("Map");
+
+            var channel = Radio.channel("Map"),
+                mapView = new MapView ();
 
             channel.reply({
                 "getMap": function () {
@@ -41,7 +43,9 @@ define([
                 "setBBox": this.setBBox,
                 "addLayer": this.addLayer,
                 "addLayerToIndex": this.addLayerToIndex,
-                "removeLayer": this.removeLayer
+                "removeLayer": this.removeLayer,
+                "removeOverlay": this.removeOverlay,
+                "addOverlay": this.addOverlay
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
@@ -57,7 +61,7 @@ define([
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
             EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
 
-            this.set("view", MapView.get("view"));
+            this.set("view", mapView.get("view"));
 
             this.set("map", new ol.Map({
                 logo: null,
@@ -280,7 +284,8 @@ define([
                 visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GeoJSON"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
                 gfiParams = [],
-                scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale,
+                scale = Radio.request("MapView", "getOptions").scale,
+                // scale = _.findWhere(Radio.request("MapView", "getOptions"), {resolution: this.get("view").getResolution()}).scale,
                 eventPixel = this.get("map").getEventPixel(evt.originalEvent),
                 isFeatureAtPixel = this.get("map").hasFeatureAtPixel(eventPixel),
                 resolution = this.get("view").getResolution(),

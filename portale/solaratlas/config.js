@@ -4,16 +4,9 @@ define(function () {
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version: "2.0.0",
-            typename: "app:hamburgconvention",
-            valuereference: "app:flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
-        },
         view: {
-            background: "white"
+            background: "white",
+            resolution: 26.458319045841044
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
@@ -48,15 +41,15 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
-        menubar: true,
+        // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-       
+
         menu: {
-            
+
             formular: {}
         },
         startUpModul: "",
@@ -75,7 +68,8 @@ define(function () {
         print: {
             printID: "99999",
             title: "Solaratlas",
-            gfi: true
+            gfi: true,
+            configYAML: "solar_atlas"
         },
 
         geoAPI: false,

@@ -110,12 +110,12 @@ define([
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
             layerModels = _.uniq(layerModels, function (model) {
-                return model.name + model.datasets[0].md_id;
+                return model.name + model.id;
             });
             _.each(layerModels, function (model) {
                 this.get("layers").push({
                     name: model.name,
-                    metaName: model.datasets[0].md_name,
+                    metaName: (_.has(model.datasets[0], "md_name")) ? model.datasets[0].md_name : model.name,
                     type: "Thema",
                     glyphicon: "glyphicon-list",
                     id: model.id

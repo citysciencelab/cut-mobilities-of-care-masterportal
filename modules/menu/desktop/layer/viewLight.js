@@ -13,7 +13,7 @@ define([
 
     LayerView = Backbone.View.extend({
         tagName: "li",
-        className: "layer",
+        className: "layer list-group-item",
         template: _.template(Template),
         templateSettings: _.template(TemplateSettings),
         events: {
@@ -31,7 +31,8 @@ define([
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender,
                 "change:isSettingVisible": this.renderSetting,
-                "change:transparency": this.rerender
+                "change:transparency": this.rerender,
+                "change:isOutOfScale": this.toggleColor
             });
 
             this.$el.on({
@@ -40,7 +41,10 @@ define([
                 }
             });
 
+
             this.render();
+
+            this.toggleColor(this.model,this.model.getIsOutOfScale());
         },
 
         render: function () {
@@ -116,7 +120,28 @@ define([
         openStyleWMS: function () {
             Radio.trigger("StyleWMS", "openStyleWMS", this.model);
             $(".nav li:first-child").removeClass("open");
-         }
+        },
+
+        /**
+         * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die Schrift ausgegraut
+         */
+        toggleColor: function (model, value) {
+            if (model.has("minScale") === true) {
+                if (value === false) {
+                    //this.$el.css("color", "#ededed");
+                    this.$el.addClass("disabled");
+                    this.$el.find("*").css("pointer-events","none");
+                    this.$el.find("*").css("cursor","not-allowed");
+                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
+                }
+                else {
+                    //this.$el.css("color", "rgb(85, 85, 85)");
+                    this.$el.removeClass("disabled");
+                    this.$el.find("*").css("pointer-events","auto");
+                    this.$el.find("*").css("cursor","pointer");
+                }
+            }
+        }
     });
 
     return LayerView;

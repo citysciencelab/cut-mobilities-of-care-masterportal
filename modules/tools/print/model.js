@@ -82,6 +82,10 @@ define([
             this.set("layout", this.get("layouts")[index]);
         },
 
+        getLayout: function () {
+            return this.get("layout");
+        },
+
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
             var scaleval = this.get("scales")[index].value;
@@ -173,7 +177,7 @@ define([
                     layers: layer.get("layers").split(),
                     baseURL: layerURL,
                     format: "image/png",
-                    opacity: layer.get("opacity"),
+                    opacity: (100 - layer.get("transparency")) / 100,
                     customParams: params,
                     styles: style
                 });
@@ -184,73 +188,75 @@ define([
          *
          */
         setDrawLayer: function (layer) {
-            var features = [],
-                circleFeatures = [], // Kreise können nicht gedruckt werden
-                featureStyles = {};
+            if (!_.isUndefined()) {
+                var features = [],
+                    circleFeatures = [], // Kreise können nicht gedruckt werden
+                    featureStyles = {};
 
-            // Alle features die eine Kreis-Geometrie haben
-            _.each(layer.getSource().getFeatures(), function (feature) {
-                if (feature.getGeometry() instanceof ol.geom.Circle) {
-                    circleFeatures.push(feature);
-                }
-            });
+                // Alle features die eine Kreis-Geometrie haben
+                _.each(layer.getSource().getFeatures(), function (feature) {
+                    if (feature.getGeometry() instanceof ol.geom.Circle) {
+                        circleFeatures.push(feature);
+                    }
+                });
 
-            _.each(layer.getSource().getFeatures(), function (feature, index) {
-                // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
-                if (_.contains(circleFeatures, feature) === false) {
-                    features.push({
-                        type: "Feature",
-                        properties: {
-                            _style: index
-                        },
-                        geometry: {
-                            coordinates: feature.getGeometry().getCoordinates(),
-                            type: feature.getGeometry().getType()
+                _.each(layer.getSource().getFeatures(), function (feature, index) {
+                    // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
+                    if (_.contains(circleFeatures, feature) === false) {
+                        features.push({
+                            type: "Feature",
+                            properties: {
+                                _style: index
+                            },
+                            geometry: {
+                                coordinates: feature.getGeometry().getCoordinates(),
+                                type: feature.getGeometry().getType()
+                            }
+                        });
+
+                        var type = feature.getGeometry().getType(),
+                            styles = feature.getStyleFunction().call(feature),
+                            style = styles[0];
+                        // Punkte
+                        if (type === "Point") {
+                            // Punkte ohne Text
+                            if (style.getText() === null) {
+                                featureStyles[index] = {
+                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                                pointRadius: style.getImage().getRadius(),
+                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                                };
+                            }
+                            // Texte
+                            else {
+                                featureStyles[index] = {
+                                    label: style.getText().getText(),
+                                    fontColor: this.getColor(style.getText().getFill().getColor()).color
+                                };
+                            }
                         }
-                    });
-
-                    var type = feature.getGeometry().getType(),
-                        styles = feature.getStyleFunction().call(feature),
-                        style = styles[0];
-                    // Punkte
-                    if (type === "Point") {
-                        // Punkte ohne Text
-                        if (style.getText() === null) {
-                            featureStyles[index] = {
-                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                            pointRadius: style.getImage().getRadius(),
-                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                            };
-                        }
-                        // Texte
+                        // Polygone oder Linestrings
                         else {
                             featureStyles[index] = {
-                                label: style.getText().getText(),
-                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                                fillColor: this.getColor(style.getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                                strokeColor: this.getColor(style.getStroke().getColor()).color,
+                                strokeWidth: style.getStroke().getWidth()
                             };
                         }
                     }
-                    // Polygone oder Linestrings
-                    else {
-                        featureStyles[index] = {
-                            fillColor: this.getColor(style.getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
-                            strokeColor: this.getColor(style.getStroke().getColor()).color,
-                            strokeWidth: style.getStroke().getWidth()
-                        };
+                }, this);
+                this.push("layerToPrint", {
+                    type: "Vector",
+                    styles: featureStyles,
+                    geoJson: {
+                        type: "FeatureCollection",
+                        features: features
                     }
-                }
-            }, this);
-            this.push("layerToPrint", {
-                type: "Vector",
-                styles: featureStyles,
-                geoJson: {
-                    type: "FeatureCollection",
-                    features: features
-                }
-            });
+                });
+            }
         },
 
         /**
@@ -260,7 +266,8 @@ define([
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setDrawLayer(Radio.request("draw", "getLayer"));
             var specification = {
-                layout: $("#layoutField option:selected").html(),
+                // layout: $("#layoutField option:selected").html(),
+                layout: this.getLayout().name,
                 srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
@@ -354,8 +361,11 @@ define([
                 this.set("gfiTitle", gfis[1]);
                 this.set("printGFIPosition", gfis[2]);
                 // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0 && _.has(Config.print, "configYAML") === false) {
                     this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
+                }
+                else if (_.has(Config.print, "configYAML") === true && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
                 }
                 else {
                     if (_.has(Config.print, "configYAML") === true) {

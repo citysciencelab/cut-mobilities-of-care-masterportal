@@ -7,7 +7,8 @@ define("app",
     "modules/restReader/collection",
     "modules/core/configLoader/preparser",
     "modules/core/map",
-    "modules/core/parametricURL"
+    "modules/core/parametricURL",
+    "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
 
     // Core laden
@@ -20,7 +21,6 @@ define("app",
     require(["modules/menu/menuLoader"], function (MenuLoader) {
         new MenuLoader();
     });
-    require(["modules/alerting/view"]);
     new RestReaderList();
 
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
@@ -275,6 +275,12 @@ define("app",
         require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
             new StyleWMSView();
         });
+
+        if (_.has(Config, "title") === true) {
+            require(["modules/title/view"], function (TitleView) {
+                new TitleView();
+            });
+        }
 
 //        if (Config.menubar === true) {
 //            require(["modules/menubar/view"], function () {
