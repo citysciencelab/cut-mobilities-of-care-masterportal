@@ -50,11 +50,14 @@ define([
 
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source"),
-                style: this.get("style")
+                style: this.get("style"),
+                name: "measure_layer",
+                alwaysOnTop: true
             }));
-
-            EventBus.trigger("addLayer", this.get("layer"));
-
+            
+            var layers = Radio.request("Map","getLayers");
+            Radio.trigger("Map","addLayerToIndex",[this.get("layer"),layers.getArray().length]);
+            
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
             }
@@ -307,5 +310,5 @@ define([
         }
     });
 
-    return new Measure();
+    return Measure;
 });
