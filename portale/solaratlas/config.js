@@ -37,8 +37,8 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 

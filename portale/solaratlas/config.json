@@ -81,13 +81,10 @@
     {
       "Layer": [
         {
-          "id": "453",
+          "id": ["717", "718", "719", "720"],
+          "name": "Geobasiskarten",
           "visibility": true
         },
-        {
-          "id": "1119",
-          "maxScale":10000
-        }, 
         {
           "id": "452"
         }
