@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Lärmkarte-Straßenverkehr",
+        //title: "Lärmkarte-Straßenverkehr",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
