@@ -25,12 +25,12 @@ define([
             });
             this.createLayerIfNotExists();
         },
-        
+
         // Prüft ob import_draw_layer schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
         createLayerIfNotExists: function(){
             var layers = Radio.request("Map","getLayers"),
                 found = false;
-            
+
             _.each(layers.getArray(),function(layer){
                 if(layer.get("name") === "import_draw_layer"){
                     found = true;
@@ -38,7 +38,7 @@ define([
                     this.set("source",layer.getSource());
                 }
             },this);
-            
+
             if(!found){
                 this.set("source",new ol.source.Vector({useSpatialIndex: false}));
                 var layer = new ol.layer.Vector({

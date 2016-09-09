@@ -266,9 +266,11 @@ define("app",
             new MapMarkerView();
         });
 
-        if (_.has(Config, "searchBar") === true) {
+        var sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+
+        if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
-                new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                new SearchbarView(sbconfig);
             });
         }
 

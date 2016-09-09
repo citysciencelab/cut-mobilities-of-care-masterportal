@@ -88,34 +88,6 @@ define(function () {
         * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
         * @property {string} [initialQuery] - Initialer Suchstring.
         */
-        searchBar: {
-            minChars: 3,
-            gazetteer: {
-                minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            specialWFS: {
-                minChar: 2,
-                definitions: [
-                    {
-                        url: "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
-                        data: "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name,app:geom",
-                        name: "kita"
-                    }
-                ]
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            // layer: {
-            //     minChar: 3
-            // },
-            placeholder: "Suche nach Adresse/Stadtteil/Kita-Namen"
-        },
         print: {
             printID: "99999",
             title: "Master",

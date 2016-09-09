@@ -10,7 +10,7 @@ define([
         defaults: {
             "districtNumber": "0601",
             "parcelNumber": "",
-            "gazetteerURL": Config.searchBar.gazetteer.url
+            "gazetteerURL": Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr.gazetteer.url
         },
         url: Util.getPath(Config.gemarkungen),
         initialize: function () {
