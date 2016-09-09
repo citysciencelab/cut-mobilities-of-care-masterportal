@@ -1,8 +1,7 @@
 define([
-    'underscore',
     'backbone',
     'config',
-], function (_, Backbone, Config) {
+], function (Backbone, Config) {
 
     var ClickCounter = Backbone.Model.extend({
         defaults: {

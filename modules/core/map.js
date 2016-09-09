@@ -29,12 +29,15 @@ define([
         *
         */
         initialize: function () {
-             var channel = Radio.channel("Map");
+
+            var channel = Radio.channel("Map"),
+                mapView = new MapView ();
 
             channel.reply({
                 "getMap": function () {
                     return this.get("map");
-                }
+                },
+                "getLayers": this.getLayers
             }, this);
 
             channel.on({
@@ -59,7 +62,7 @@ define([
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
             EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
 
-            this.set("view", MapView.get("view"));
+            this.set("view", mapView.get("view"));
 
             this.set("map", new ol.Map({
                 logo: null,
@@ -80,6 +83,10 @@ define([
                 this.activateClick(activeItem.id);
             }
 
+        },
+
+        getLayers: function() {
+            return this.get("map").getLayers();
         },
 
         setBBox: function (bbox) {
@@ -204,6 +211,7 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
+            this.setImportDrawMeasureLayersOnTop(layersCollection);
 
             // Laden des Layers überwachen
             if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
@@ -211,6 +219,25 @@ define([
             }
 
         },
+
+        // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
+        setImportDrawMeasureLayersOnTop: function (layers){
+            var layersOnTop = [];
+
+            for(var i = layers.getLength(); i >= 0; i--){
+                var layer = layers.item(i);
+
+                if(!_.isUndefined(layer) && layer.get("alwaysOnTop")){
+                    layers.removeAt(i);
+                    layersOnTop.push(layer);
+                }
+            }
+
+            _.each(layersOnTop, function(layer){
+                layers.push(layer);
+            });
+        },
+
         // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
         // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
         getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
@@ -282,7 +309,8 @@ define([
                 visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GeoJSON"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
                 gfiParams = [],
-                scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale,
+                scale = Radio.request("MapView", "getOptions").scale,
+                // scale = _.findWhere(Radio.request("MapView", "getOptions"), {resolution: this.get("view").getResolution()}).scale,
                 eventPixel = this.get("map").getEventPixel(evt.originalEvent),
                 isFeatureAtPixel = this.get("map").hasFeatureAtPixel(eventPixel),
                 resolution = this.get("view").getResolution(),

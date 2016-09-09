@@ -45,14 +45,11 @@ define(function (require) {
 
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": function (options) {
-                    if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
-                        this.setIsOutOfScale(true);
-                    }
-                    else {
-                        this.setIsOutOfScale(false);
-                    }
+                    this.checkForScale(options);
                 }
             });
+
+            this.checkForScale(Radio.request("MapView", "getOptions"));
 
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
@@ -67,6 +64,18 @@ define(function (require) {
 
                 this.createLayerSource();
                 this.toggleLayerOnMap();
+            }
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        **/
+        checkForScale: function(options) {
+            if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfScale(true);
+            }
+            else {
+                this.setIsOutOfScale(false);
             }
         },
 

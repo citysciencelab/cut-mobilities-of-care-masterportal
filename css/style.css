@@ -41,3 +41,5 @@
 @import "../modules/tools/styleWMS/style.css";
 @import "../modules/menu/desktop/layer/style.css";
 @import "../modules/core/style.css";
+@import "../modules/menu/mobile/breadCrumb/style.css";
+@import "../modules/menu/mobile/style.css";

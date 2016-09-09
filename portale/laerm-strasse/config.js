@@ -1,10 +1,10 @@
 define(function () {
     var config = {
-        title: "Lärmkarte-Straßenverkehr",
+        // title: "Lärmkarte-Straßenverkehr",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-        
+
         view: {
             background: "white"
            /* center: [565874, 5934140],
@@ -36,8 +36,8 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
@@ -55,7 +55,8 @@ define(function () {
         print: {
             printID: "99999",
             title: "Lärmkarte-Straßenverkehr",
-            gfi: false
+            gfi: false,
+            configYAML: "laerm_strasse"
         },
         geoAPI: false,
         clickCounter: {},

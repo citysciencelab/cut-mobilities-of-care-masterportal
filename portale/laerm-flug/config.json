@@ -101,7 +101,7 @@
         
         {
          "id": ["2413","2415"], 
-         "visibility": false, 
+         "visibility": true,
          "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
         },
         {
