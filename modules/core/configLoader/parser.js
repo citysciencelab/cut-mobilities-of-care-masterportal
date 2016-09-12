@@ -59,6 +59,7 @@ define([
             });
             this.parseMenu(this.get("portalConfig").menu, "root");
             this.parseControls(this.get("portalConfig").controls);
+            this.parseSearchBar(this.get("portalConfig").searchBar);
             this.parseMapView(this.get("portalConfig").mapView);
 
             if (this.getTreeType() === "light") {
@@ -110,7 +111,18 @@ define([
         },
 
         /**
-         * [parseMapView description]
+         * [parseSearchBar description]
+         * @param  {[type]} items [description]
+         * @return {[type]}       [description]
+         */
+        parseSearchBar: function (searchbarConfig) {
+            this.addItem({
+                type: "searchBar",
+                attr: searchbarConfig
+            });
+        },
+
+         /** [parseMapView description]
          * @param  {[type]} items [description]
          * @return {[type]}       [description]
          */

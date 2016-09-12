@@ -37,8 +37,8 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 
@@ -53,18 +53,6 @@ define(function () {
             formular: {}
         },
         startUpModul: "",
-        searchBar: {
-            minChars: 3,
-            gazetteer: {
-                minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: false,
-                searchParcels: false
-            },
-            placeholder: "Suche nach Adresse"
-        },
         print: {
             printID: "99999",
             title: "Solaratlas",

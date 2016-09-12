@@ -87,21 +87,6 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         isMenubarVisible: true,
         startUpModul: "",
-        searchBar: {
-            minChars: 3,
-            placeholder: "Suche Adresse, Stadtteil, Themen, Flurstück",
-            gazetteer: {
-                minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            tree: {
-                minChars: 3
-            }
-        },
         gemarkungen: "../components/lgv-config/gemarkung.json",
         print: {
             printID: "99999",

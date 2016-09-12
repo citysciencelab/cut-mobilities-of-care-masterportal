@@ -2,7 +2,40 @@
   "Portalconfig":
     {
       "PortalTitle": "GeoViewer",
-      "searchBar": true,
+      "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+           "minChars": 3,
+           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "searchStreets": true,
+           "searchHouseNumbers": true,
+           "searchDistricts": true,
+           "searchParcels": true
+       },
+       "specialWFS": {
+           "minChar": 3,
+           "definitions": [
+               {
+                   "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                   "data": "typeNames=prosin_festgestellt&propertyName=planrecht",
+                   "name": "bplan"
+               },
+               {
+                   "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                   "data": "typeNames=prosin_imverfahren&propertyName=plan",
+                   "name": "bplan"
+               }
+           ]
+       },
+       "visibleWFS": {
+           "minChars": 3
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche Adresse/ Stadtteil/ Thema",
+       "geoLocateHit": true
+   },
       "menu": {
         "tree": {
           "name": "Themen",
@@ -77,7 +110,9 @@
           "Layer": [
             {
               "id": ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
-              "name": "Liegenschaftskataster (Grau / Blau) - ab 1: 5000 bis 1: 500"
+              "legendUrl": "ignore",
+              "name": "Liegenschaftskataster (Grau / Blau) - ab 1: 5000 bis 1: 500",
+                "maxScale":5000
             },
             {
               "id": ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],

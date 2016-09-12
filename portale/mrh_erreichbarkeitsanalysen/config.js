@@ -34,29 +34,17 @@ define(function () {
             center: [565874, 5934140]
         },
         layerConf: "../components/lgv-config/services-mrh.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         scaleLine: true,
         isMenubarVisible: true,
         startUpModul: "",
-        searchBar: {
-            minChars: 3,
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            placeholder: "Suche nach Adresse"
-        },
         print: {
-            printID: "printqs",
+            printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
+            outputFilename: "Ausdruck Geoportal GDI-MRH",
             gfi: false,
-            configYAML: "master"
+            configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi"
     };

@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        //title: "Lärmschutzbereiche Flughafen Hamburg",
+        // title: "Lärmschutzbereiche Flughafen Hamburg",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
@@ -20,7 +20,7 @@ define(function () {
             epsg: "EPSG:25832"
             */
         },
-        //customModules: ["../portale/master/verkehrsfunctions"],
+        // customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
             urls: [
@@ -48,31 +48,11 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
         attributions: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-        
-        searchBar: {
-            minChars: 3,
-            gazetteer: {
-                minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            // layer: {
-            //     minChar: 3
-            // },
-            placeholder: "Suche nach Adresse/ Stadtteil"
-        },
         print: {
             printID: "99999",
             title: "Lärmschutzbereiche Flughafen Hamburg",

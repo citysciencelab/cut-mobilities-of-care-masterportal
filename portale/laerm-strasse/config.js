@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Lärmkarte-Straßenverkehr",
+        // title: "Lärmkarte-Straßenverkehr",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
@@ -52,26 +52,6 @@ define(function () {
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-
-        searchBar: {
-            minChars: 3,
-            gazetteer: {
-                minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-
-            visibleWFS: {
-                minChars: 3
-            },
-            // layer: {
-            //     minChar: 3
-            // },
-            placeholder: "Suche nach Adresse/Stadtteil"
-        },
         print: {
             printID: "99999",
             title: "Lärmkarte-Straßenverkehr",
