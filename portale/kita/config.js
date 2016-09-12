@@ -114,11 +114,11 @@ define(function () {
             // layer: {
             //     minChar: 3
             // },
-            placeholder: "Suche nach Adresse/Stadtteil/Kita-Namen"
+            placeholder: "Suche nach Adresse/ Stadtteil/ Kita-Namen"
         },
         print: {
             printID: "99999",
-            title: "Master",
+            title: "Kita-Stadtplan",
             gfi: false
         },
         geoAPI: false,
