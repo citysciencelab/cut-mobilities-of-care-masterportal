@@ -48,7 +48,7 @@ define([
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
          */
         toggleColor: function (model, value) {
-            if (this.model.has("minScale") === true) {
+            if (model.has("minScale") === true) {
                 if (value === false) {
                     //this.$el.css("color", "#ededed");
                     this.$el.addClass("disabled");

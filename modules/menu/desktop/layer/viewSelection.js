@@ -36,7 +36,7 @@ define([
                 "change:isOutOfScale": this.toggleColor
             });
             this.render();
-            this.toggleColor(this.model,this.model.getIsOutOfScale());
+            this.toggleColor(this.model, this.model.getIsOutOfScale());
         },
 
         render: function () {
