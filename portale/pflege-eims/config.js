@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        title: "Gesundheits- und Pflegekonferenz Eimsbüttel",
+        //title: "Gesundheits- und Pflegekonferenz Eimsbüttel",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,

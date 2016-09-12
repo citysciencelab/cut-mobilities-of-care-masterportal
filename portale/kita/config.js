@@ -55,43 +55,11 @@ define(function () {
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-        /**
-        * @memberof config
-        * @type {Object}
-        * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @property {Object} [visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
-        * @property {integer} [visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Object} [tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
-        * @property {integer} [tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Objekt} [specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
-        * @property {integer} [specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Object[]} specialWFS.definitions - Definitionen der SpecialWFS.
-        * @property {Object} specialWFS.definitions[].definition - Definition eines SpecialWFS.
-        * @property {string} specialWFS.definitions[].definition.url - Die URL, des WFS
-        * @property {string} specialWFS.definitions[].definition.data - Query string des WFS-Request
-        * @property {string} specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @property {Object} bkg - Das Konfigurationsobjet der BKG Suche.
-        * @property {integer} [bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
-        * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
-        * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @property {integer} [bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
-        * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
-        * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
-        * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @property {Object} [gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
-        * @property {string} gazetteer.url - Die URL.
-        * @property {boolean} [gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @property {boolean} [gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @property {boolean} [gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @property {boolean} [gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
-        * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @property {string} [initialQuery] - Initialer Suchstring.
-        */
+      
         print: {
             printID: "99999",
-            title: "Master",
-            gfi: false
+            title: "Kita-Stadtplan",
+            gfi: true
         },
         geoAPI: false,
         clickCounter: {},
