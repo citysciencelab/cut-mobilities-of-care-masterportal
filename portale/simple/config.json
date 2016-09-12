@@ -122,6 +122,7 @@
         },
         {
           "id": "45",
+          "styleId": "45",
           "clusterDistance": 50
         },
         {
@@ -129,6 +130,7 @@
         },
         {
           "id": "1711",
+          "styleId": "1711",
           "visibility": true,
           "attributions": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],

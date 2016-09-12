@@ -249,31 +249,6 @@
                     "visibility": false
                   }
                 ]
-              },
-              {
-                "Titel": "Gesetzlich geschützte Biotope",
-                "Layer": [
-                  {
-                    "id": "2922",
-                    "visibility": false
-                  },
-                  {
-                    "id": "2923",
-                    "visibility": false
-                  },
-                  {
-                    "id": "2924",
-                    "visibility": false
-                  },
-                  {
-                    "id": "2925",
-                    "visibility": false
-                  },
-                  {
-                    "id": "2926",
-                    "visibility": false
-                  }
-                ]
               }
             ]
           }
