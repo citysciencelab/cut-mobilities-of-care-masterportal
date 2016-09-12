@@ -22,6 +22,9 @@ define("app",
         new MenuLoader();
     });
     new RestReaderList();
+    require(["modules/remoteinterface/model"], function (RI) {
+        new RI();
+    });
 
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {

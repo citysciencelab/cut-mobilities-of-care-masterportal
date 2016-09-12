@@ -45,7 +45,8 @@ define([
                 "addLayerToIndex": this.addLayerToIndex,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
-                "addOverlay": this.addOverlay
+                "addOverlay": this.addOverlay,
+                "addFeatureToLayer": this.addFeatureToLayer
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
@@ -83,7 +84,16 @@ define([
             }
 
         },
-
+        addFeatureToLayer: function (feature, layerName) {
+            var layer = this.getLayerByName(layerName);
+            layer.getSource().addFeature(feature);
+        },
+        getLayerByName: function (layerName) {
+            var layers = layerList = this.get("map").getLayers().getArray();
+            return _.findWhere(layers, function (layer) {
+                return layer.values_.name === layerName;
+            });
+        },
         setBBox: function (bbox) {
             this.set("bbox", bbox);
             this.BBoxToMap(this.get("bbox"));
