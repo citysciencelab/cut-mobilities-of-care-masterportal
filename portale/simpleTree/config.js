@@ -17,24 +17,6 @@ define(function() {
         quickHelp: true,
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         scaleLine: true,
-        searchBar: {
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            tree: {
-              minChars: 3
-            },
-            placeholder: "Suche nach Adresse, Ort"
-        },
         simpleMap: true,
         styleConf: "../components/lgv-config/style.json",
         view: {

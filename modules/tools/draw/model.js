@@ -126,7 +126,7 @@ define([
                     this.set("source",layer.getSource());
                 }
             },this);
-            
+
             if(!found){
                 this.set("source",new ol.source.Vector({useSpatialIndex: false}));
                 var layer = new ol.layer.Vector({
@@ -138,7 +138,7 @@ define([
                 Radio.trigger("Map","addLayerToIndex",[layer,layers.getArray().length]);
             }
         },
-        
+
         setStatus: function (args) {
             if (args[2].getId() === "draw") {
                 this.set("isCollapsed", args[1]);

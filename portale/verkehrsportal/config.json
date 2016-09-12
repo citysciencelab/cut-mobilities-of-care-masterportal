@@ -2,7 +2,20 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
-    "searchBar": true,
+    "searchBar": {
+        "minChars": 3,
+        "bkg": {
+            "minChars": 3,
+            "bkgSuggestURL": "/bkg_suggest",
+            "bkgSearchURL": "/bkg_geosearch",
+            "extent": [454591, 5809000, 700000, 6075769],
+            "epsg": "EPSG:25832",
+            "filter": "filter=(typ:*)",
+            "score": 0.6
+        },
+        "placeholder": "Suche nach Adresse",
+        "geoLocateHit": true
+    },
     "menu": {
       "tree": {
         "name": "Themen",
@@ -150,34 +163,48 @@
         {
             "id": "46",
             "visibility": false,
-            "style": "46",
+            "styleId": "46",
             "clusterDistance": 60,
             "routable": true
         },
         {
             "id": "48",
-            "style": "48",
+            "styleId": "48",
             "clusterDistance": 40,
             "routable": true
         },
         {
             "id": "50",
             "visibility": false,
-            "style": "50",
+            "styleId": "50",
             "clusterDistance": 40,
             "routable": true
         },
         {
             "id": "53",
             "visibility": false,
-            "style": "53",
+            "styleId": "53",
+            "clusterDistance": 40,
+            "routable": true
+        },
+        {
+            "id": "2404",
+            "visibility": false,
+            "styleId": "45",
+            "clusterDistance": 40,
+            "routable": true
+        },
+        {
+            "id": "2403",
+            "visibility": false,
+            "styleId": "51",
             "clusterDistance": 40,
             "routable": true
         },
         {
             "id": "52",
             "visibility": false,
-            "style": "52",
+            "styleId": "52",
             "clusterDistance": 30,
             "styleField": "situation",
             "routable": true
@@ -185,13 +212,13 @@
         {
             "id": "2128",
             "visibility": false,
-            "style": "2128",
+            "styleId": "2128",
             "clusterDistance": 0
         },
         {
             "id": "47",
             "visibility": true,
-            "style": "47",
+            "styleId": "47",
             "styleLabelField": "id_kost",
             "styleField": "typ",
             "routable": false
@@ -199,14 +226,20 @@
         {
             "id": "2156",
             "visibility": true,
-            "style": "2156",
+            "styleId": "2156",
             "styleField": "name",
             "routable": false
         },
         {
+            "id": "2714",
+            "gfiTheme": "reisezeiten",
+            "visibility": false,
+            "styleId": "2119"
+        },
+        {
             "id": "2132",
             "visibility": false,
-            "style": "2132"
+            "styleId": "2132"
         }
       ]
     }

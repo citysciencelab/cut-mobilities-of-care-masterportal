@@ -88,6 +88,7 @@ define(function () {
         * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
         * @property {string} [initialQuery] - Initialer Suchstring.
         */
+<<<<<<< HEAD
         searchBar: {
             minChars: 3,
             gazetteer: {
@@ -116,6 +117,8 @@ define(function () {
             // },
             placeholder: "Suche nach Adresse/ Stadtteil/ Kita-Namen"
         },
+=======
+>>>>>>> 6a7e48d97d85e6ddabbe38e62a3565c9642909ba
         print: {
             printID: "99999",
             title: "Kita-Stadtplan",

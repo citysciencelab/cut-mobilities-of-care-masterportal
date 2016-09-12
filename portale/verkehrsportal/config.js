@@ -59,20 +59,6 @@ define(function () {
             desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html",
             mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
         },
-        searchBar: {
-            minChars: 3,
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            placeholder: "Suche nach Adresse",
-            geoLocateHit: true
-        },
         print: {
             printID: "99999",
             title: "Ausdruck aus dem Verkehrsportal",

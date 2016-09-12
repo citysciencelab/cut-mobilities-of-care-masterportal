@@ -1,8 +1,7 @@
 define([
     "backbone",
-    "eventbus",
-    "config"
-], function (Backbone, EventBus, Config) {
+    "eventbus"
+], function (Backbone, EventBus) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
@@ -10,16 +9,14 @@ define([
             recommandedListLength: 5,
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
-            hitList: []
+            hitList: [],
+            minChars: ""
             // isHitListReady: true
         },
         /**
         *
         */
         initialize: function () {
-            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-                this.set("quickHelp", true);
-            }
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
             EventBus.on("searchbar:pushHits", this.pushHits, this);
         },
@@ -30,25 +27,20 @@ define([
         setSearchString: function (value, eventType) {
             var splitAdress = value.split(" ");
 
-            if (value.length >= Config.searchBar.minChars) {
-                // für Copy/Paste bei Adressen
-                if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
-                    var houseNumber = splitAdress[splitAdress.length - 1],
-                        streetName = value.substr(0, value.length - houseNumber.length - 1);
+            // für Copy/Paste bei Adressen
+            if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
+                var houseNumber = splitAdress[splitAdress.length - 1],
+                    streetName = value.substr(0, value.length - houseNumber.length - 1);
 
-                    this.set("searchString", streetName);
-                    EventBus.trigger("setPastedHouseNumber", houseNumber);
-                }
-                else {
-                    this.set("searchString", value);
-                }
-                this.set("hitList", []);
-                EventBus.trigger("searchbar:search", this.get("searchString"));
-                $(".dropdown-menu-search").show();
+                this.set("searchString", streetName);
+                EventBus.trigger("setPastedHouseNumber", houseNumber);
             }
             else {
-                $(".dropdown-menu-search").hide();
+                this.set("searchString", value);
             }
+            this.set("hitList", []);
+            EventBus.trigger("searchbar:search", this.get("searchString"));
+            $(".dropdown-menu-search").show();
         },
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
