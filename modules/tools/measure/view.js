@@ -6,7 +6,7 @@ define([
 ], function (Backbone, MeasureTemplate, Measure, EventBus) {
 
     var MeasureView = Backbone.View.extend({
-        model: Measure,
+        model: new Measure(),
         className: "win-body",
         template: _.template(MeasureTemplate),
         events: {

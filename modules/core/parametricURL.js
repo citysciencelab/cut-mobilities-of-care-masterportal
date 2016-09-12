@@ -13,7 +13,8 @@ define([
             channel.reply({
                 "getResult": this.getResult,
                 "getLayerParams": this.getLayerParams,
-                "getStartUpModul": this.getStartUpModul
+                "getStartUpModul": this.getStartUpModul,
+                "getInitString": this.getInitString
             }, this);
 
             this.parseURL();
@@ -39,6 +40,9 @@ define([
             return this.get("startUpModul");
         },
 
+        getInitString: function () {
+            return this.get("initString");
+        },
         createLayerParams: function () {
             var layerIdString = _.values(_.pick(this.getResult(), "LAYERIDS"))[0],
                 visibilityListString = "",
@@ -212,7 +216,10 @@ define([
                 else {
                     initString = value.substring(0, 1).toUpperCase() + value.substring(1);
                 }
-                Config.searchBar.initString = initString;
+                this.set("initString", initString);
+            }
+            else {
+                this.set("initString", "");
             }
 
             /**

@@ -65,18 +65,6 @@ define(function () {
             // }
         // },
         startUpModul: "",
-        searchBar: {
-            placeholder: "Suche nach Straße oder Krankenhausname",
-            gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            geoLocateHit: true
-        },
         print: {
             printID: "99999",
             title: "Krankenhäuser in Hamburg",

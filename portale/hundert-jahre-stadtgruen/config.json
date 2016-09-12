@@ -2,21 +2,10 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
-    "searchBar": {
-        "minChars": 3,
-        "gazetteer": {
-            "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-            "searchStreets": true,
-            "searchHouseNumbers": true,
-            "searchDistricts": true,
-            "searchParcels": true
-        },
-        "visibleWFS": {
-            "minChars": 3
-        },
-        "placeholder": "Suche nach Adresse/Stadtteil"
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
     },
+    "searchBar": true,
     "menu": {
       "tree": {
         "name": "Themen",
@@ -26,26 +15,31 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
+            
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
           },
-          "coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
           },
-          "searchByCoord": {
-            "name": "Koordinatensuche",
-            "glyphicon": "glyphicon-record"
-          }
-        }
-      },
-      "print": {
+          "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
           },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
       "contact": {
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
@@ -100,16 +94,20 @@
     {
       "Layer": [
         {
-          "id": "3322",
+          "id": "1132", 
+          "styleId": "1132",
+          "name": "Icon",
+          "visibility": true,
+          "mouseHoverField": "titel"
+        },
+        {
+          "id": "628",
+          "name": "Strecken",
           "visibility": true
         },
         {
-          "id": "3323", 
-          "visibility": true
-        },
-        {
-          "id": ["3318", "3319", "3320", "3321", "4571"],
-          "name": "Vorjahreskampangen",
+          "id": "629",
+          "name": "Umring",
           "visibility": false
         }
       ]

@@ -19,25 +19,6 @@ define(function () {
        mouseHover: true,
        scaleLine: true,
        startUpModul: "",
-       searchBar: {
-            minChars: 3,
-            gazetteer: {
-               minChars: 3,
-               url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-               searchStreets: true,
-               searchHouseNumbers: true,
-               searchDistricts: true,
-               searchParcels: true
-           },
-           visibleWFS: {
-               minChars: 3
-           },
-           tree: {
-               minChars: 3
-           },
-           placeholder: "Suche nach Adresse/Stadtteil",
-           geoLocateHit: true
-       },
        gemarkungen: "../components/lgv-config/gemarkung.json"
    };
 

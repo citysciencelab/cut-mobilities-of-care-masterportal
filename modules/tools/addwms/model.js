@@ -58,7 +58,7 @@ define([
                             capability = parser.read(data);
 
                         this.setWMSVersion(capability.version);
-                        this.setWMSUrl(capability.Service.OnlineResource);
+                        this.setWMSUrl(Util.getProxyURL(url));
                         if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
                             this.addFolder("Externe Fachdaten", "ExternalLayer", "Themen", 0);
                             Radio.trigger("ModelList", "renderTree");

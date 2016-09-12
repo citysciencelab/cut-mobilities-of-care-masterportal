@@ -2,7 +2,34 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
-    "searchBar": true,
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        
+        "specialWFS": {
+            "minChar": 3,
+            "definitions": [
+                {
+                        "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+                        "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name,app:geom",
+                        "name": "kita"
+                    }
+            ]
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "placeholder": "Suche nach Adresse/ Stadtteil/ Kita-Namen"
+    },
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+    },
     "menu": {
       "tree": {
         "name": "Themen",
@@ -15,7 +42,8 @@
           
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
           },
           "gfi": {
             "name": "Informationen abfragen",
@@ -25,15 +53,6 @@
           "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
-          },
-          "draw": {
-            "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
-          },
-          "featureLister": {
-              "name": "Liste",
-              "glyphicon": "glyphicon-menu-hamburger",
-              "lister": 10
           }
         }
       },
@@ -41,7 +60,7 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
-          "wfsFeatureFilter": {
+       "wfsFeatureFilter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter"
           },
@@ -74,7 +93,7 @@
       "zoom": true,
       "toggleMenu": true,
       "orientation": "once",
-      "poi": false,
+      "poi": true,
       "fullScreen": true,
       "attributions": true
     },
@@ -88,7 +107,7 @@
       "Layer": [
         {
           "id": "453",
-           "visibility": true
+          "visibility": true
         },
         {
           "id": "452"
@@ -98,32 +117,11 @@
     "Fachdaten":
     {
       "Layer": [
-        {
-          "id": "1711",
-          "visibility": false,
-          "attributions": "<span>Attributierung für Fachlayer</span>",
-          "mouseHoverField": ["name", "strasse"],
-          "searchField": "name",
-          "filterOptions": [
-            {
-              "fieldName": "teilnahme_geburtsklinik",
-              "filterType": "combo",
-              "filterName": "Geburtsklinik",
-              "filterString": ["*", "Ja", "Nein"]
-            },
-            {
-              "fieldName": "teilnahme_notversorgung",
-              "filterType": "combo",
-              "filterName": "Not- und Unfallversorgung",
-              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-            }
-          ]
-        },
+        
         {
           "id": "753",
-          "name": "Kita Einrichtung",
+          "styleId": "753",
           "visibility": true,
-          "style": "753",
           "mouseHoverField": "Name",
           "filterOptions": [
             {
@@ -134,6 +132,7 @@
             }
           ]
         }
+        
       ]
     }
   }
