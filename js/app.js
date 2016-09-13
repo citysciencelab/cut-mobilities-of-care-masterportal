@@ -103,6 +103,12 @@ define("app",
         // Tools
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
+                case "animation": {
+                    require(["modules/tools/animation/view"], function (AnimationView) {
+                        new AnimationView();
+                    });
+                    break;
+                }
                 case "gfi": {
                     require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
                         new GFIPopupView();
