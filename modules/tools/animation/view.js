@@ -9,8 +9,8 @@ define(function (require) {
         model: new Animation(),
         template: _.template(AnimationTemplate),
         events: {
-            "click .play": "play",
-            "click .break": "break"
+            "click .start": "start",
+            "click .stop": "stop"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -29,10 +29,10 @@ define(function (require) {
                 this.undelegateEvents();
             }
         },
-        play: function () {
-            this.model.play();
+        start: function () {
+            this.model.startAnimation();
         },
-        break: function () {
+        stop: function () {
             this.model.stopAnimation();
         }
     });
