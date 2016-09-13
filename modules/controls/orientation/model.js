@@ -69,7 +69,7 @@ define([
         track: function () {
             var geolocation;
 
-            EventBus.trigger("addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
             if (this.get("geolocation") === null) {
                 geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
@@ -136,7 +136,7 @@ define([
         trackPOI: function () {
             var geolocation;
 
-            EventBus.trigger("addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
             if (this.get("geolocation") === null) {
                 geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);

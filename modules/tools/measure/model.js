@@ -116,7 +116,7 @@ define([
             });
             this.set("measureTooltipElement", measureTooltipElement);
             this.set("measureTooltip", measureTooltip);
-            EventBus.trigger("addOverlay", measureTooltip, "measure");
+            Radio.trigger("Map", "addOverlay", measureTooltip, "measure");
             this.get("measureTooltips").push(measureTooltip);
         },
 

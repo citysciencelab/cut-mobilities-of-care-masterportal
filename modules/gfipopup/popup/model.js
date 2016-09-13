@@ -41,7 +41,7 @@ define([
 
             this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
 
-            EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
+            Radio.trigger("Map", "addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
             EventBus.on("renderResults", this.getThemes, this);

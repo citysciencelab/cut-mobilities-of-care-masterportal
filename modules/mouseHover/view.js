@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/mouseHover/model",
     "eventbus"
-], function (Backbone, MouseHoverPopup, EventBus) {
+], function (Backbone, Radio, MouseHoverPopup, EventBus) {
 
     var MouseHoverPopupView = Backbone.View.extend({
         model: MouseHoverPopup,
@@ -10,7 +11,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, "change:mhpresult", this.render);
             EventBus.on("closeMouseHoverPopup", this.destroy, this);
-            EventBus.trigger("addOverlay", this.model.get("mhpOverlay"));
+            Radio.trigger("Map", "addOverlay", this.model.get("mhpOverlay"));
         },
         /**
         * html = true damit </br> korrekt bei cluster

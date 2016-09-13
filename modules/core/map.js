@@ -1,11 +1,4 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "modules/core/mapView",
-    "eventbus",
-    "modules/core/util"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
@@ -44,23 +37,17 @@ define([
                 "setBBox": this.setBBox,
                 "addLayer": this.addLayer,
                 "addLayerToIndex": this.addLayerToIndex,
+                "addControl": this.addControl,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
                 "addOverlay": this.addOverlay
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
-            EventBus.on("addLayer", this.addLayer, this);
-            EventBus.on("removeLayer", this.removeLayer, this);
-            EventBus.on("addOverlay", this.addOverlay, this);
-            EventBus.on("removeOverlay", this.removeOverlay, this);
-            EventBus.on("addControl", this.addControl, this);
-            EventBus.on("removeControl", this.removeControl, this);
             EventBus.on("addInteraction", this.addInteraction, this);
             EventBus.on("removeInteraction", this.removeInteraction, this);
             EventBus.on("zoomToExtent", this.zoomToExtent, this);
             EventBus.on("updatePrintPage", this.updatePrintPage, this);
-            EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
 
             this.set("view", mapView.get("view"));
 
@@ -109,7 +96,7 @@ define([
         },
 
         getMap: function () {
-            EventBus.trigger("setMap", this.get("map"));
+            return this.get("map");
         },
 
         activateClick: function (tool) {
@@ -281,7 +268,7 @@ define([
             //     return;
             // }
             // else {
-                EventBus.trigger("setPositionCoordPopup", evt.coordinate);
+                Radio.trigger("Map", "setPositionCoordPopup", evt.coordinate);
             // }
         },
         /**

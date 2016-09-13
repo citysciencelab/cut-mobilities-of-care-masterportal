@@ -21,7 +21,7 @@ define([
         })
     });
 
-    EventBus.trigger("addLayer", searchVector);
+    Radio.trigger("Map", "addLayer", searchVector);
 
     return Backbone.View.extend({
         model: MapHandlerModel,

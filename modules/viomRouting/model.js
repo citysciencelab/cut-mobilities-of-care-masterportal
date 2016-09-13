@@ -270,7 +270,7 @@ define([
             $("#map").append(html);
             this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")[0]}));
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
-            EventBus.trigger("addOverlay", this.get("mhpOverlay"));
+            Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         }
     });
 

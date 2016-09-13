@@ -431,7 +431,7 @@ define([
             });
             this.set("circleTooltipElement", circleTooltipElement);
             this.set("circleTooltip", circleTooltip);
-            EventBus.trigger("addOverlay", circleTooltip, "circle");
+            Radio.trigger("Map", "addOverlay", circleTooltip, "circle");
             this.get("circleTooltips").push(circleTooltip);
         },
         placecircleTooltip: function (evt) {
