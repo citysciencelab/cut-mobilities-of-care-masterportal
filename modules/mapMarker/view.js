@@ -111,7 +111,6 @@ define([
                     break;
                 }
                 case "Krankenhaus": {
-                    console.log(this.model.get("zoomLevelAdresse"));
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
