@@ -50,17 +50,16 @@ define([
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
                 if (value === false) {
-                    //this.$el.css("color", "#ededed");
                     this.$el.addClass("disabled");
                     this.$el.find("*").css("pointer-events","none");
                     this.$el.find("*").css("cursor","not-allowed");
                     this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
                 }
                 else {
-                    //this.$el.css("color", "rgb(85, 85, 85)");
                     this.$el.removeClass("disabled");
                     this.$el.find("*").css("pointer-events","auto");
                     this.$el.find("*").css("cursor","pointer");
+                    this.$el.attr("title","");
                 }
             }
         },

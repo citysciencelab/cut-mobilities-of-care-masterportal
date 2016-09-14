@@ -149,7 +149,7 @@ define([
                     return model.get("onlyDesktop") === true;
                 });
 
-                _.each(models, function (model) {console.log(model.get("onlyDesktop"));
+                _.each(models, function (model) {
                     model.setIsVisibleInTree(true);
                     switch (model.getType()){
                         case "folder": {
