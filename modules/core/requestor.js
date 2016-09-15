@@ -37,6 +37,9 @@ define([
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
+                    case "WMS": {
+
+                    }
                 }
             }, this);
             var containsWMS = false;
@@ -48,7 +51,11 @@ define([
              });
              if (containsWMS === true) {
                 // Hier wird sortedParams gefiltert nach dem infoFormat text/html in dem Attribut url.
-                 var paramList = _.groupBy(sortedParams, function (param) {
+
+                sortedParams = _.filter(sortedParams, function (param) {
+                    return param.typ === "WMS";
+                });
+                var paramList = _.groupBy(sortedParams, function (param) {
                      return param.url.match(/INFO_FORMAT=text%2Fhtml/g) ? "html" : "xml";
                  });
                 // Die Layer mit dem InfoFormat text/html werden hier separat behandelt.
