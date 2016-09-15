@@ -236,7 +236,7 @@
             }
           ],
           "name": "Verkehrslage auf Autobahnen",
-          "attributions": {
+          "layerAttribution": {
             "text": "",
             "channel": "Verkehrsfunctions",
             "eventname": "aktualisiereverkehrsnetz",

@@ -270,7 +270,7 @@ define(function (require) {
          * Wird für die Verkehrslage auf den Autobahnen genutzt
          */
         toggleAttributionsInterval: function () {
-            if (this.has("attributions") && _.isObject(this.getAttributions())) {
+            if (this.has("layerAttribution") && _.isObject(this.getAttributions())) {
                 var channelName = this.getAttributions().channel,
                     eventName = this.getAttributions().eventname,
                     timeout = this.getAttributions().timeout;
