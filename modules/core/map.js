@@ -394,8 +394,8 @@ define(function (require) {
             }, this);
             EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
         },
-        zoomToExtent: function (extent) {
-            this.get("view").fit(extent, this.get("map").getSize());
+        zoomToExtent: function (extent, options) {
+            this.get("view").fit(extent, this.get("map").getSize(), options);
         },
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);
