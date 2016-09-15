@@ -40,7 +40,10 @@ define(function (require) {
                 "addControl": this.addControl,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
-                "addOverlay": this.addOverlay
+                "addOverlay": this.addOverlay,
+                "render": this.render,
+                "registerPostCompose": this.registerPostCompose,
+                "unregisterPostCompose": this.unregisterPostCompose
             }, this);
 
             EventBus.on("activateClick", this.activateClick, this);
@@ -74,6 +77,10 @@ define(function (require) {
 
         getLayers: function() {
             return this.get("map").getLayers();
+        },
+
+        render: function () {
+            this.get("map").render();
         },
 
         setBBox: function (bbox) {
@@ -120,6 +127,14 @@ define(function (require) {
                 this.get("map").un("click", this.setGFIParams, this);
                 // this.get("map").un("pointermove", this.pointerMoveOnMap);
             }
+        },
+
+        registerPostCompose: function (callback, context) {
+            this.get("map").on("postcompose", callback, context);
+        },
+
+        unregisterPostCompose: function (callback) {
+            this.get("map").un("postcompose", callback);
         },
 
         pointerMoveOnMap: function (evt) {
