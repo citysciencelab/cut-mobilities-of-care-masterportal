@@ -30,10 +30,28 @@ define([
             this.listenTo(this.model, {
                  "change:isSelected change:isVisibleInMap": this.render,
                  "change:isSettingVisible": this.renderSetting,
-                 "change:isVisibleInTree": this.removeIfNotVisible
+                 "change:isVisibleInTree": this.removeIfNotVisible,
+                "change:isOutOfScale": this.toggleColor
             });
+            this.toggleColor(this.model, this.model.getIsOutOfScale());
         },
-
+        
+        /**
+         * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         */
+        toggleColor: function (model, value) {
+            if (model.has("minScale") === true) {
+                if (value === false) {
+                    this.$el.addClass("disabled");
+                    this.$el.find("*").css("pointer-events","none");
+                }
+                else {
+                    this.$el.removeClass("disabled");
+                    this.$el.find("*").css("pointer-events","auto");
+                }
+            }
+        },
+        
         render: function () {
             var attr = this.model.toJSON();
 

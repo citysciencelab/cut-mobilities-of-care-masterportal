@@ -39,6 +39,7 @@
         "visibleWFS": {
             "minChars": 3
         },
+        "zoomLevel": 9,
         "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "mapView": {

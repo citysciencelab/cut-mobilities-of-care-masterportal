@@ -15,7 +15,8 @@ define([
             }),
             wkt: "",
             markers:[],
-            source: new ol.source.Vector()
+            source: new ol.source.Vector(),
+            zoomLevel: 7
         },
         initialize: function () {
 //            this.set("layer", new ol.layer.Vector({
@@ -26,6 +27,11 @@ define([
             this.listenTo(EventBus, {
                 "layerlist:sendVisiblelayerList": this.checkLayer
             });
+            var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+
+            if(_.has(searchConf, "zoomLevel")){
+                this.set("zoomLevel", searchConf.zoomLevel);
+            }
         },
 
         getExtentFromString: function () {
