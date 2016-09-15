@@ -240,7 +240,7 @@ define([
 //                    this.get("map").addLayer(vectorlayer);
                     this.set("endDescription", olFeature.get("EndDescription"));
                     this.set("description", olFeature.get("RouteDescription"));
-                    EventBus.trigger("zoomToExtent", olFeature.getGeometry().getExtent());
+                    Radio.trigger("Map", "zoomToExtent", olFeature.getGeometry().getExtent());
                     this.addOverlay(olFeature);
                 },
                 error: function (data) {
@@ -256,7 +256,7 @@ define([
         },
         removeOverlay: function () {
             if (this.get("mhpOverlay") !== "") {
-                EventBus.trigger("removeOverlay", this.get("mhpOverlay"));
+                Radio.trigger("Map", "removeOverlay", this.get("mhpOverlay"));
                 this.set("mhpOverlay", "");
             }
         },

@@ -141,7 +141,7 @@ define([
 
                 _.each(markers, function (marker) {
                     if (layer === undefined) {
-                        EventBus.trigger("removeOverlay", marker);
+                        Radio.trigger("Map", "removeOverlay", marker);
                     }
                     else {
                         Radio.trigger("Map", "addOverlay", marker);

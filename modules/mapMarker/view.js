@@ -106,7 +106,7 @@ define([
                     var resolutions = Radio.request("MapView", "getResolutions"),
                         index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
+                    Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     break;
                 }
                 case "Parcel": {
@@ -171,7 +171,7 @@ define([
                     break;
                 }
                 case "Feature-Lister-Click": {
-                    EventBus.trigger("zoomToExtent", hit.coordinate);
+                    Radio.trigger("Map", "zoomToExtent", hit.coordinate);
                     break;
                 }
                 case "Kita": {
@@ -194,7 +194,7 @@ define([
             extent = feature.getGeometry().getExtent();
             searchVector.getSource().addFeature(feature);
             searchVector.setVisible(true);
-            EventBus.trigger("zoomToExtent", extent);
+            Radio.trigger("Map", "zoomToExtent", extent);
         },
         /*
         * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
@@ -212,7 +212,7 @@ define([
                     coordinates += point[0] + " " + point[1] + " ";
                 });
                 this.model.getWKTFromString("POLYGON", coordinates.trim());
-                EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
+                Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
             }
         },
         /**

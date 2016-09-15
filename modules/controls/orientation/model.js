@@ -55,7 +55,7 @@ define([
             }
         },
         removeOverlay: function () {
-            EventBus.trigger("removeOverlay", this.get("marker"));
+            Radio.trigger("Map", "removeOverlay", this.get("marker"));
         },
         untrack: function () {
             var geolocation = this.get("geolocation");

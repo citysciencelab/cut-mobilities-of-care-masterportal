@@ -112,7 +112,7 @@ define([
             this.createLayerIfNotExists();
 
             this.get("selectClick").setActive(false);
-            EventBus.trigger("addInteraction", this.get("selectClick"));
+            Radio.trigger("Map", "addInteraction", this.get("selectClick"));
         },
 
         // Prüft ob import_draw_layer schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
@@ -147,13 +147,13 @@ define([
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
                 this.get("selectClick").setActive(false);
             }
         },
 
         createInteraction: function () {
-            EventBus.trigger("removeInteraction", this.get("draw"));
+            Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("selectedType"),
@@ -161,7 +161,7 @@ define([
             }));
             if (this.get("selectedType") === "Circle") {
                 this.get("draw").on("drawstart", function (evt) {
-                    this.listenTo(EventBus, {
+                    this.listenTo(Radio.channel("Map"), {
                         "pointerMoveOnMap": this.placecircleTooltip
                     });
                     this.set("sketch", evt.feature);
@@ -172,11 +172,11 @@ define([
                 this.setDrawendCoords(evt.feature.getGeometry());
                 evt.feature.setStyle(this.get("style"));
                 _.each(this.get("circleTooltips"), function (tooltip) {
-                    EventBus.trigger("removeOverlay", tooltip, "circle");
+                    Radio.trigger("Map", "removeOverlay", tooltip, "circle");
                 });
-                this.stopListening(EventBus, "pointerMoveOnMap");
+                this.stopListening(Radio.channel("Map"), "pointerMoveOnMap");
             }, this);
-            EventBus.trigger("addInteraction", this.get("draw"));
+            Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
 
         /**
@@ -323,7 +323,7 @@ define([
             this.get("source").clear();
             // lösche alle Overlays (Tooltips)
             _.each(this.get("circleTooltips"), function (tooltip) {
-                EventBus.trigger("removeOverlay", tooltip, "circle");
+                Radio.trigger("Map", "removeOverlay", tooltip, "circle");
             });
             this.set("circleTooltips", []);
         },
@@ -339,10 +339,10 @@ define([
                 $("#map").off("mousemove");
                 this.setGlyphToCursor("glyphicon glyphicon-pencil");
 
-                EventBus.trigger("removeInteraction", this.get("modify"));
+                Radio.trigger("Map", "removeInteraction", this.get("modify"));
             }
             else {
-                EventBus.trigger("removeInteraction", this.get("modify"));
+                Radio.trigger("Map", "removeInteraction", this.get("modify"));
                 this.set("modify", new ol.interaction.Modify({
                     features: this.get("source").getFeaturesCollection()
                 }));
@@ -353,7 +353,7 @@ define([
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
                 this.setGlyphToCursor("glyphicon glyphicon-wrench");
-                EventBus.trigger("addInteraction", this.get("modify"));
+                Radio.trigger("Map", "addInteraction", this.get("modify"));
             }
         },
         // Erstellt ein HTML-Element, legt dort das Glyphicon rein und klebt es an den Cursor
