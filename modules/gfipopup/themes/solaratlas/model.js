@@ -6,7 +6,7 @@ define([
     "modules/gfipopup/gfiObjects/routable/view"
 ], function (Backbone, Config, ImgView, VideoView, RoutableView) {
     "use strict";
-    var GFIContentTrinkwasserModel = Backbone.Model.extend({
+    var GFIContentSolaratlasModel = Backbone.Model.extend({
         /**
          *
          */
@@ -18,7 +18,6 @@ define([
          *
          */
         initialize: function (layer, content, position) {
-            console.log(content);
             this.set("id", _.uniqueId("trinkwasserTheme"));
             this.set("layer", layer);
             this.set("gfiContent", content);
@@ -104,5 +103,5 @@ define([
         }
     });
 
-    return GFIContentTrinkwasserModel;
+    return GFIContentSolaratlasModel;
 });

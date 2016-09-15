@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "proj4"
-], function (Backbone, ol, EventBus, proj4) {
+], function (Backbone, Radio, ol, EventBus, proj4) {
 
     var SearchByCoord = Backbone.Model.extend({
 
@@ -15,7 +16,7 @@ define([
         },
         initialize: function () {
 
-            this.listenTo(EventBus, {
+            this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
         },
@@ -147,7 +148,7 @@ define([
             }
         },
         setStatus: function (args) {
-            if (args[2] === "searchByCoord") {
+            if (args[2].getId() === "searchByCoord") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

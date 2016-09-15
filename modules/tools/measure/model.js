@@ -37,8 +37,11 @@ define([
 
         initialize: function () {
             this.listenTo(EventBus, {
-                "winParams": this.setStatus,
                 "pointerMoveOnMap": this.placeMeasureTooltip
+            });
+
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
             this.listenTo(this, {
@@ -47,17 +50,20 @@ define([
 
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source"),
-                style: this.get("style")
+                style: this.get("style"),
+                name: "measure_layer",
+                alwaysOnTop: true
             }));
 
-            EventBus.trigger("addLayer", this.get("layer"));
+            var layers = Radio.request("Map","getLayers");
+            Radio.trigger("Map","addLayerToIndex",[this.get("layer"),layers.getArray().length]);
 
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
             }
         },
         setStatus: function (args) {
-            if (args[2] === "measure" && args[0] === true) {
+            if (args[2].getId() === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();
@@ -110,7 +116,7 @@ define([
             });
             this.set("measureTooltipElement", measureTooltipElement);
             this.set("measureTooltip", measureTooltip);
-            EventBus.trigger("addOverlay", measureTooltip, "measure");
+            Radio.trigger("Map", "addOverlay", measureTooltip, "measure");
             this.get("measureTooltips").push(measureTooltip);
         },
 
@@ -304,5 +310,5 @@ define([
         }
     });
 
-    return new Measure();
+    return Measure;
 });

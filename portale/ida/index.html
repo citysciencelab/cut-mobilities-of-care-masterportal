@@ -272,21 +272,29 @@
 		<div id="seite_drei" style="display:none"></div>
 
 		<div id="seite_vier" style="display:none">
-			<div id="fehler_p" align="center" style="display:block">
-				<h2 style="color:red"> </h2>
+            <h2>Immobilienwertauskunft <small>Prozessierung abgeschlossen</small></h2>
+            <blockquote>
+                <p>Anhand der eingegebenen Daten wurde eine Vorprozessierung vorgenommen, um die Validität der Eingabedaten zu verifizieren. Gleichzeitig wurde Ihr Produkt in einem geschützten Bereich zur Abholung bereitgelegt. Bitte nehmen Sie ggf. folgende Hinweise zur Kenntnis und bestätigen mit "Weiter", um das Produkt zu beziehen.</p>
+            </blockquote>
+			<div class="text-center">
+                <p id="result_p" class=""></p></br>
 			</div>
-			<div id="ok_p" align="center" style="display:block">
-				<h2 style="color:green">Ihre Daten sind in Ordnung!</h2>
-                <div align="center">
-                    <a id="ok_ref" href="" target="_blank" class="btn btn-primary" role="button">Ergebnis als PDF hier herunterladen</a>
-                </div>
-			</div>
+            <div style="float:right; margin-right:20px">
+                <input id="seite4_weiter" type="button" value="Weiter" class="btn btn-primary" disabled="disabled"/>
+            </div>
 		</div>
 
-		<div id="seite_fuenf" style="display:none">
-			<div id="ende" align="center" style="display:block">
-				<h2>Vielen Dank!</h2>
+		<div id="downloadpage" style="display:none">
+            <h2>Immobilienwertauskunft <small>herunterladen</small></h2>
+            <blockquote>
+                <p>Ihr Produkt liegt zum Download auf unseren Servern bereit. Sie können das PDF innerhalb einer Frist von einem Monat herunterladen. Nach Ablauf der Frist wird das PDF von unseren Servern automatisch gelöscht. Sie benötigen für die Anzeige eines PDF gegebenenfall den Adobe Acrobat Reader, den Sie <a target="_blank" href="https://get.adobe.com/de/reader">hier</a> kostenfrei herunterladen können. </p>
+            </blockquote>
+            <div class="text-center">
+                <p id="downloadresult" class=""></p></br>
 			</div>
+            <div style="float:right; margin-right:20px">
+                <input id="downloadbutton" type="button" value="PDF jetzt herunterladen" class="btn btn-primary" disabled="disabled"/>
+            </div>
 		</div>
 	</body>
 </html>

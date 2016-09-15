@@ -33,15 +33,17 @@ define(function () {
             orientation: false,
             poi: true
         },
+        footer: true,
+        quickHelp: true,
         layerConf: "../components/lgv-config/services-verkehrsmodell.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
+        proxyURL: "/cgi-bin/proxy.cgi",
         print: {
             printID: "99999",
             title: "Verkehrsmodell",
             gfi: false
         },
-        proxyURL: "/cgi-bin/proxy.cgi",
         menubar: true,
         mouseHover: true,
         scaleLine: true,
@@ -61,17 +63,16 @@ define(function () {
             }
         },
         startUpModul: "",
-        searchBar: {
+         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
-            },
-             visibleWFS: {
-                minChars: 3
+
             },
             placeholder: "Suche nach Adresse, Stadtteil",
             geoLocateHit: true

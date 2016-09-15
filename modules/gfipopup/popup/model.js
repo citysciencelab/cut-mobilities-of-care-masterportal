@@ -41,7 +41,7 @@ define([
 
             this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
 
-            EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
+            Radio.trigger("Map", "addOverlay", this.get("gfiOverlay")); // listnener in map.js
             EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
             EventBus.on("renderResults", this.getThemes, this);
@@ -72,10 +72,10 @@ define([
             $("#popovermin").fadeOut(500, function () {
                 $("#popovermin").remove();
             });
-            // Für Straßenbaumkataster
-            if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
-                 Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
-            }
+            // Für Straßenbaumkataster TODO
+            // if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
+            //      Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
+            // }
             $(this.getElement()).popover("show");
             this.set("isPopupVisible", true);
         },

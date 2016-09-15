@@ -51,7 +51,7 @@ define([
                 source: this.get("source"),
                 name: "grenznachweisDraw"
             }));
-            EventBus.trigger("addLayer", this.get("layer"));
+            Radio.trigger("Map", "addLayer", this.get("layer"));
             // Cookie lesen
             if (cookie.model.hasItem() === true) {
                 this.readCookie();

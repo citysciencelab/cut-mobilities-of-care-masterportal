@@ -17,10 +17,6 @@
     color: rgb(255, 255, 255);
 }
 
-.dropdown-menu {
-    padding: 6px 0;
-}
-
 .dropdown-menu > li > a {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     font-size: 12px;

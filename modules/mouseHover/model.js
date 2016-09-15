@@ -3,9 +3,8 @@ define([
     "backbone.radio",
     "openlayers",
     "eventbus",
-    "config",
     "bootstrap/popover"
-], function (Backbone, Radio, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
@@ -21,58 +20,33 @@ define([
             this.set("mhpOverlay", new ol.Overlay({
                 element: $("#mousehoverpopup")[0]
             }));
+
+            this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
-            EventBus.on("newMouseHover", this.checkForEachFeatureAtPixel, this); // MouseHover auslösen. Trigger von mouseHoverCollection-Funktion
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            this.checkLayersAndRegisterEvent(Radio.request("map", "getMap"));
+            EventBus.on("pointerMoveOnMap", this.checkForEachFeatureAtPixel, this);
         },
-        GFIPopupVisibility: function (GFIPopupVisibility) {
-            this.set("GFIPopupVisibility", GFIPopupVisibility);
-        },
-        checkLayersAndRegisterEvent: function (map) {
-            // Lese Config-Optionen ein
-            var layerIDs = Config.tree.layer,
-                wfsList = [];
 
-            _.each(layerIDs, function (element) {
+        filterWFSList: function () {
+            var wfsList = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
+                wfsListFiltered = [];
+
+            _.each(wfsList, function (element) {
                 if (_.has(element, "mouseHoverField")) {
-                    var id = element.id,
-                        mhf = element.mouseHoverField;
-
-                    wfsList.push({
-                        layerId: id,
-                        fieldname: mhf
+                    wfsListFiltered.push({
+                        layerId: element.id,
+                        fieldname: element.mouseHoverField
                     });
                 }
             });
-            // speichere Ergebnisse in wfsList
-            this.set("wfsList", wfsList);
-            if (wfsList && wfsList.length > 0) {
-                map.on("pointermove", function (evt) {
-                    if (this.get("GFIPopupVisibility") === false) {
-                        EventBus.trigger("newMouseHover", evt, map);
-                    }
-                }, this);
-                /**
-                 * FEHLER: map.addInteraction() bewirkt zwar das hinzufügen der Interaction, fortan kann die map aber nicht mehr
-                 * verschoben werden. Weder hier noch in map.js läßt sich addInteraction() erfolgreich ausführen.
-                 * Weder über addInteraction noch über interactios:ol.interaction.defaults().extend([])
-                 * Ursache: ol.events.condition.mouseMove ist experimental. Mit ol.events.condition.click klappt es.
-                 * Bug #2666
-                 */
-                /*var selectMouseMove = new ol.interaction.Select({
-                    condition: ol.events.condition.mouseMove
-                });
-                map.getInteractions().forEach(function(interaction){
-                    console.log(interaction);
-                }, this);
-                map.addInteraction(selectMouseMove);
-                var mouseHoverCollection = selectMouseMove.getFeatures();
-                mouseHoverCollection.on("add", function(ele) {
-                    EventBus.trigger("newMouseHover", ele);
-                });*/
-            }
+
+            this.set("wfsList", wfsListFiltered);
         },
+
+        GFIPopupVisibility: function (GFIPopupVisibility) {
+            this.set("GFIPopupVisibility", GFIPopupVisibility);
+        },
+
         /**
          * Vernichtet das Popup.
          */
@@ -98,7 +72,8 @@ define([
         * Selektion angestpßen.
         */
         checkForEachFeatureAtPixel: function (evt, map) {
-            var pFeatureArray = [],
+            var map = Radio.request("Map", "getMap"),
+                pFeatureArray = [],
                 featuresAtPixel = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                     return {
                         feature: feature,
@@ -115,14 +90,14 @@ define([
                     _.each(list, function (element) {
                         pFeatureArray.push({
                             feature: element,
-                            layerId: featuresAtPixel.layer.id
+                            layerId: featuresAtPixel.layer.get("id")
                         });
                     });
                 }
                 else {
                     pFeatureArray.push({
                         feature: selFeature,
-                        layerId: featuresAtPixel.layer.id
+                        layerId: featuresAtPixel.layer.get("id")
                     });
                 }
                 if (pFeatureArray.length > 0) {
@@ -184,7 +159,7 @@ define([
                     var featureProperties = element.feature.getProperties(),
                         featureGeometry = element.feature.getGeometry(),
                         listEintrag = _.find(wfsList, function (ele) {
-                            return ele.layerId = element.layerId;
+                            return ele.layerId === element.layerId;
                     });
 
                     if (listEintrag) {
@@ -201,7 +176,12 @@ define([
                             });
                         }
                         if (!coord) {
-                            coord = featureGeometry.getCoordinates();
+                            if (featureGeometry.getType() === "MultiPolygon" || featureGeometry.getType() === "Polygon") {
+                                coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
+                            }
+                            else {
+                                coord = featureGeometry.getCoordinates();
+                            }
                         }
                     }
                 }, this);

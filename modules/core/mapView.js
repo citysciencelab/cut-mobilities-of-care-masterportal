@@ -3,15 +3,23 @@ define([
     "backbone.radio",
     "openlayers",
     "config",
-    "eventbus",
     "proj4"
-], function (Backbone, Radio, ol, Config, EventBus, proj4) {
-    "use strict";
-    var MapView = Backbone.Model.extend({
+], function () {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Config = require("config"),
+        proj4 = require("proj4"),
+        MapView;
+
+    MapView = Backbone.Model.extend({
         /**
          *
          */
         defaults: {
+            background: "",
+            backgroundImage: "",
             startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
             options: [
                 {
@@ -89,49 +97,44 @@ define([
                 },
                 "getZoomLevel": function () {
                     return this.getZoom();
+                },
+                "getResolutions": function () {
+                    return this.getResolutions();
                 }
             }, this);
 
             channel.on({
-                "setCenter": this.setCenter
+                "setCenter": this.setCenter,
+                "toggleBackground": this.toggleBackground,
+                "setZoomLevelUp": this.setZoomLevelUp,
+                "setZoomLevelDown": this.setZoomLevelDown,
+                "setScale": this.setScale
             }, this);
-
-            this.listenTo(EventBus, {
-                "mapView:getResolutions": function () {
-                    EventBus.trigger("mapView:sendResolutions", this.get("resolutions"));
-                },
-                "mapView:getMinResolution": this.sendMinResolution,
-                "mapView:getMaxResolution": function (scale) {
-                    EventBus.trigger("mapView:sendMaxResolution", this.getResolution(scale));
-                },
-                "mapView:getOptions": function () {
-                    EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
-                },
-                "mapView:getCenterAndZoom": function () {
-                    EventBus.trigger("mapView:sendCenterAndZoom", this.getCenter(), this.getZoom());
-                },
-                "mapView:setScale": this.setScale,
-                "mapView:setZoomLevelUp": this.setZoomLevelUp,
-                "mapView:setZoomLevelDown": this.setZoomLevelDown,
-                "mapView:setCenter": this.setCenter
-            });
 
             this.listenTo(this, {
                 "change:resolution": function () {
-                    EventBus.trigger("mapView:sendOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                     channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
                 },
                 "change:center": function () {
-                    EventBus.trigger("mapView:sendCenter", this.get("center"));
+                    channel.trigger("changedCenter", this.getCenter());
                 },
                 "change:scale": function () {
                     var params = _.findWhere(this.get("options"), {scale: this.get("scale")});
 
                     this.set("resolution", params.resolution);
                     this.get("view").setResolution(this.get("resolution"));
+                },
+                "change:background": function (model, value) {
+                    if (value === "white") {
+                        $("#map").css("background", "white");
+                    }
+                    else {
+                        $("#map").css("background", "url('" + value + "') repeat scroll 0 0 rgba(0, 0, 0, 0)");
+                    }
                 }
             });
 
+            this.setConfig();
             this.setOptions();
             this.setScales();
             this.setResolutions();
@@ -150,8 +153,40 @@ define([
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
-                channel.trigger("changedCenter", this.getCenter());
             }, this);
+        },
+
+        /*
+        * Finalisierung der Initialisierung für config.json
+        */
+        setConfig: function () {
+            _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
+                switch (setting.id) {
+                case "backgroundImage": {
+                    this.set("backgroundImage", setting.attr);
+
+                    this.setBackground(setting.attr);
+                    break;
+                }
+                }
+            }, this);
+        },
+
+        setBackground: function (value) {
+            this.set("background", value);
+        },
+
+        getBackground: function () {
+            return this.get("background");
+        },
+
+        toggleBackground: function () {
+            if (this.getBackground() === "white") {
+                this.setBackground(this.get("backgroundImage"));
+            }
+            else {
+                this.setBackground("white");
+            }
         },
 
         setOptions: function () {
@@ -223,8 +258,13 @@ define([
                     proj4.defs("EPSG:25833", "+proj=utm +zone=33 +ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
                     break;
                 }
+                case "EPSG:31468": {
+                    proj4.defs("EPSG:31468", "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs ");
+                    break;
+                }
                 default: {
                     proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+                    break;
                 }
             }
 
@@ -297,29 +337,16 @@ define([
             return resolution;
         },
 
+        getResolutions: function () {
+            return this.get("resolutions");
+        },
+
         /**
          *
          * @return {[type]} [description]
          */
         getZoom: function () {
             return this.get("view").getZoom();
-        },
-
-        sendMinResolution: function (minScale) {
-            if (_.contains(this.get("scales"), minScale)) {
-                EventBus.trigger("mapView:sendMinResolution", _.findWhere(this.get("options"), {scale: minScale}).resolution);
-            }
-            else if (minScale !== "0") {
-                var scales = _.union([minScale], this.get("scales"));
-
-                scales = _.sortBy(scales, function (scale) {
-                    return parseInt(scale, 10);
-                }).reverse();
-                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[_.indexOf(scales, minScale) - 1]);
-            }
-            else {
-                EventBus.trigger("mapView:sendMinResolution", this.get("resolutions")[this.get("resolutions").length - 1]);
-            }
         },
 
         pushHits: function (attribute, value) {
@@ -330,5 +357,5 @@ define([
         }
     });
 
-    return new MapView();
+    return MapView;
 });

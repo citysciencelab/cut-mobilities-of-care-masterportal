@@ -85,7 +85,6 @@ define([
                 if (layer.metaName !== null) {
                     metaName = layer.metaName.replace(/ /g, "");
                     if (metaName.search(searchStringRegExp) !== -1 && metaName === layerName) {
-                        layer.typ = "nodeLayer";
                         EventBus.trigger("searchbar:pushHits", "hitList", layer);
                     }
                     else if (metaName.search(searchStringRegExp) !== -1 || layerName.search(searchStringRegExp) !== -1) {
@@ -104,26 +103,22 @@ define([
          *
          */
         getLayerForSearch: function () {
-            var layerModels = Radio.request("LayerList", "getResponse");
+            // lightModels aus der itemList im Parser
+            var layerModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
             this.set("layers", []);
             // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
             // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
-            // layerModels = _.uniq(layerModels, function (model) {
-            //     return model.name + model.datasets[0].md_id;
-            //     // return model.get("name") + model.get("metaID");
-            // });
+            layerModels = _.uniq(layerModels, function (model) {
+                return model.name + model.id;
+            });
             _.each(layerModels, function (model) {
                 this.get("layers").push({
-                    // name: model.get("name"),
                     name: model.name,
-                    // metaName: model.get("metaName"),
-                    metaName: model.datasets[0].md_name,
+                    metaName: (_.has(model.datasets[0], "md_name")) ? model.datasets[0].md_name : model.name,
                     type: "Thema",
                     glyphicon: "glyphicon-list",
-                    // id: model.get("id"),
-                    id: model.id,
-                    model: model
+                    id: model.id
                 });
             }, this);
         }

@@ -3,27 +3,10 @@ define(function () {
     var config = {
         allowParametricURL: true,
         attributions: true,
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: "allways",
-            poi: true
-        },
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        menu: {
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "mail@domain.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            featureLister: 20
-        },
-        menubar: true,
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        styleConf: "../components/lgv-config/style.json",
         mouseHover: true,
         print: {
             printID: "99999",
@@ -34,57 +17,7 @@ define(function () {
         },
         proxyURL: "/cgi-bin/proxy.cgi",
         quickHelp: true,
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         scaleLine: true,
-        searchBar: {
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse, Ort",
-            geoLocateHit: true
-        },
-        styleConf: "../components/lgv-config/style.json",
-        tools: {
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            },
-            draw: {
-                title: "Zeichnen / Schreiben",
-                glyphicon: "glyphicon-pencil"
-            },
-            searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-search"
-            }
-        },
-        tree: {
-            type: "light",
-            layer: [
-                {id: "39", visible: false},
-                {id: "2625", visible: false},
-                {id: "1711", visible: false, style: "1711", name: "Krankenhäuser WFS", searchField: "name"},
-                {id: "1561", visible: true}
-            ]
-        },
         view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst

@@ -75,6 +75,6 @@
 
 .win-body {
     padding: 20px;
-    overflow: auto;
+    /*overflow: auto;*/
     background-color: rgb(255, 255, 255);
 }

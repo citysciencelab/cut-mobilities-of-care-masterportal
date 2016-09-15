@@ -1,37 +1,28 @@
 define([
     "backbone",
-    "eventbus",
-    "config",
     "modules/contact/model",
     "text!modules/contact/template.html"
-], function (Backbone, EventBus, Config, Model, Template) {
-    "use strict";
+], function (Backbone, ContactModel, Template) {
+
     var formularView = Backbone.View.extend({
         className: "win-body",
-        model: Model,
+        model: new ContactModel(),
         template: _.template(Template),
         initialize: function () {
-            EventBus.trigger("appendItemToMenubar", {
-                title: "Kontakt",
-                symbol: "glyphicon glyphicon-envelope hidden-sm",
-                classname: "contact",
-                clickFunction: function () {
-                    EventBus.trigger("toggleWin", ["contact", "Kontakt", "glyphicon glyphicon-envelope"]);
-                }
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render,
+                "invalid": this.showValidity
             });
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this);
-            this.model.on("invalid", this.showValidity, this);
         },
         events: {
-            "focusout #contactName": "focusout",
-            "focusout #contactEmail": "focusout",
-            "focusout #contactTel": "focusout",
-            "focusout #contactText": "focusout",
+            "keyup #contactName": "setAttributes",
+            "keyup #contactEmail": "setAttributes",
+            "keyup #contactTel": "setAttributes",
+            "keyup #contactText": "setAttributes",
             "click .contactButton": "send"
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
                 var attr = this.model.toJSON();
 
                 this.$el.html("");
@@ -46,7 +37,7 @@ define([
             $(".win-body").css("max-height", height);
             $(".win-body").css("max-width", 400);
         },
-        focusout: function (evt) {
+        setAttributes: function (evt) {
             switch (evt.target.id) {
                 case "contactEmail": {
                     this.model.set("userEmail", evt.target.value);

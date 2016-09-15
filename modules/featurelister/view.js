@@ -4,10 +4,8 @@ define([
     "config",
     "text!modules/featurelister/template.html",
     "modules/featurelister/model",
-    "modules/core/util",
-    "modules/menubar/view",
-    "jqueryui/draggable"
-], function (Backbone, EventBus, Config, Template, Model, Util) {
+    "jqueryui/widgets/draggable"
+], function (Backbone, EventBus, Config, Template, Model) {
 
     var FeatureLister = Backbone.View.extend({
         model: Model,
@@ -42,9 +40,6 @@ define([
             this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
             this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
             this.render();
-            if (Config.startUpModul.toUpperCase() === "FEATURELIST") {
-                this.toggle();
-            }
         },
         /*
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
@@ -346,6 +341,7 @@ define([
             this.$el.toggle();
             if ($(this.$el).is(":visible") === true) {
                 this.updateVisibleLayer();
+                this.model.checkVisibleLayer();
                 // wenn nur ein Layer gefunden, lade diesen sofort
                 if (this.model.get("layerlist").length === 1) {
                     this.model.set("layerid", this.model.get("layerlist")[0].id);

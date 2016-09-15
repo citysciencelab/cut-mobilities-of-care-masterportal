@@ -1,12 +1,12 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/controls/orientation/poi/template.html",
     "modules/controls/orientation/poi/collection",
     "modules/controls/orientation/poi/feature/view",
-    "eventbus",
     "bootstrap/tab",
     "bootstrap/modal"
-], function (Backbone, PointOfInterestListTemplate, PointOfInterestList, PointOfInterestView, EventBus) {
+], function (Backbone, Radio, PointOfInterestListTemplate, PointOfInterestList, PointOfInterestView) {
 
     var PointOfInterestListView = Backbone.View.extend({
         collection: PointOfInterestList,
@@ -21,8 +21,13 @@ define([
             "click #tablePOI": "destroy"
         },
         initialize: function () {
-            EventBus.on("showPOIModal", this.show, this);
-            EventBus.on("hidePOIModal", this.hide, this);
+            var channel = Radio.channel("poi");
+
+            channel.on({
+                "showPOIModal": this.show,
+                "hidePOIModal": this.hide
+            }, this);
+
             this.listenTo(this.collection, "sort", this.addPOIS);
             this.render();
         },
@@ -54,19 +59,19 @@ define([
             this.$el.modal("hide");
         },
         onClick500m: function () {
-            EventBus.trigger("getPOI", 500);
+            Radio.trigger("geolocation", "getPOI", 500);
             $("#500m a[href='#500Meter']").tab("show");
         },
         onClick1000m: function () {
-            EventBus.trigger("getPOI", 1000);
+            Radio.trigger("geolocation", "getPOI", 1000);
             $("#1000m a[href='#1000Meter']").tab("show");
         },
         onClick2000m: function () {
-            EventBus.trigger("getPOI", 2000);
+            Radio.trigger("geolocation", "getPOI", 2000);
             $("#2000m a[href='#2000Meter']").tab("show");
         },
         destroy: function () {
-            EventBus.trigger("orientation:removeOverlay", this);
+            Radio.trigger("geolocation", "removeOverlay");
         }
     });
 

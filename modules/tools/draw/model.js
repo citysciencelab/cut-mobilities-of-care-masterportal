@@ -13,7 +13,6 @@ define([
     DrawTool = Backbone.Model.extend({
         defaults: {
             selectClick: new ol.interaction.Select(),
-            source: new ol.source.Vector({useSpatialIndex: false}),
             interactions: [
                 { text: "Punkt zeichnen", type: "Point", name: "drawPoint" },
                 { text: "Linie zeichnen", type: "LineString", name: "drawLine" },
@@ -86,25 +85,8 @@ define([
         },
 
         initialize: function () {
-            var channel = Radio.channel("draw");
-
-            channel.on({
-                "setSource": function (source) {
-                    EventBus.trigger("removeLayer", this.get("layer"));
-                    this.setSource(source);
-                    this.set("layer", new ol.layer.Vector({
-                        source: this.get("source")
-                    }));
-                    EventBus.trigger("addLayer", this.get("layer"));
-                },
-                "getSource": function () {
-                    Radio.trigger("kmlimport", "setSource", this.getSource());
-                }
-            }, this);
-
-            this.listenTo(EventBus, {
-                "winParams": this.setStatus,
-                "getDrawlayer": this.getLayer
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
             this.listenTo(this, {
@@ -115,11 +97,6 @@ define([
                 "change:selectedColor change:radius change:selectedStrokeWidth change:selectedOpacity": this.setStyle,
                 "change:drawendCoords": this.triggerDrawendCoords
             });
-
-            this.set("layer", new ol.layer.Vector({
-                source: this.get("source")
-            }));
-            EventBus.trigger("addLayer", this.get("layer"));
 
             this.get("selectClick").on("select", function (evt) {
                 var feature = evt.target.getFeatures().getArray()[0];
@@ -132,24 +109,38 @@ define([
                     evt.target.getFeatures().clear();
                 }
             }, this);
+            this.createLayerIfNotExists();
 
             this.get("selectClick").setActive(false);
             EventBus.trigger("addInteraction", this.get("selectClick"));
-            Radio.trigger("kmlimport", "getSource");
         },
 
-        setSource: function (value) {
-            this.set("source", value);
-            var layer = this.get("layer");
+        // Prüft ob import_draw_layer schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
+        createLayerIfNotExists: function(){
+            var layers = Radio.request("Map","getLayers");
+            var found = false;
+            _.each(layers.getArray(),function(layer){
+                if(layer.get("name") === "import_draw_layer"){
+                    found = true;
+                    this.set("layer",layer);
+                    this.set("source",layer.getSource());
+                }
+            },this);
 
-            layer.setSource(value);
-            this.set("layer", layer);
+            if(!found){
+                this.set("source",new ol.source.Vector({useSpatialIndex: false}));
+                var layer = new ol.layer.Vector({
+                    name: "import_draw_layer",
+                    source: this.get("source"),
+                    alwaysOnTop: true
+                });
+                this.set("layer",layer);
+                Radio.trigger("Map","addLayerToIndex",[layer,layers.getArray().length]);
+            }
         },
-        getSource: function () {
-            return this.get("source");
-        },
+
         setStatus: function (args) {
-            if (args[2] === "draw" && args[0] === true) {
+            if (args[2].getId() === "draw") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.setStyle();
@@ -440,7 +431,7 @@ define([
             });
             this.set("circleTooltipElement", circleTooltipElement);
             this.set("circleTooltip", circleTooltip);
-            EventBus.trigger("addOverlay", circleTooltip, "circle");
+            Radio.trigger("Map", "addOverlay", circleTooltip, "circle");
             this.get("circleTooltips").push(circleTooltip);
         },
         placecircleTooltip: function (evt) {

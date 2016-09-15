@@ -1,11 +1,8 @@
 define([
-    "jquery",
-    "underscore",
     "backbone",
     "text!modules/controls/orientation/poi/feature/template.html",
-    "modules/controls/orientation/poi/feature/model",
-    "eventbus"
-], function ($, _, Backbone, PointOfInterestTemplate, PointOfInterest, EventBus) {
+    "modules/controls/orientation/poi/feature/model"
+], function (Backbone, PointOfInterestTemplate, PointOfInterest) {
 
     var PointOfInterestView = Backbone.View.extend({
         model: PointOfInterest,

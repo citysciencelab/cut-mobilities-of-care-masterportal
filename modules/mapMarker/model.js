@@ -22,7 +22,7 @@ define([
 //                source: this.get("source")
 //            }));
 //            EventBus.trigger("addLayer", this.get("layer"));
-            EventBus.trigger("addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
             this.listenTo(EventBus, {
                 "layerlist:sendVisiblelayerList": this.checkLayer
             });
@@ -120,7 +120,7 @@ define([
                     var markers = this.get("markers");
                     markers.push(marker);
                     this.set("markers", markers);
-                    EventBus.trigger("addOverlay", marker);
+                    Radio.trigger("Map", "addOverlay", marker);
 
                 },this);
                 EventBus.trigger("layerlist:getVisiblelayerList");
@@ -138,7 +138,7 @@ define([
                         EventBus.trigger("removeOverlay", marker);
                     }
                     else {
-                        EventBus.trigger("addOverlay", marker);
+                        Radio.trigger("Map", "addOverlay", marker);
                     }
                 });
             }

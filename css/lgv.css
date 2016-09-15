@@ -10,11 +10,7 @@ label {
     border-radius: 0 !important;
 }
 
-#map {
-    height: 100%;
-    width: 100%;
-    background: url("../img/backgroundCanvas.jpeg") repeat scroll 0 0 rgba(0, 0, 0, 0);
-}
+
 #cursorGlyph {
     position: absolute;
     z-index: 1000;

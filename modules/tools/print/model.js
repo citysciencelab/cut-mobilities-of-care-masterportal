@@ -16,7 +16,8 @@ define([
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
-            scale: {}
+            scale: {},
+            layerToPrint: []
         },
 
         //
@@ -44,9 +45,9 @@ define([
                 "change:isCurrentWin": this.setActive
             });
 
-            this.listenTo(EventBus, {
-                "mapView:sendCenter": this.setCenter,
-                "mapView:sendOptions": this.setScaleByMapView
+            this.listenTo(Radio.channel("MapView"), {
+                "changedOptions": this.setScaleByMapView,
+                "changedCenter": this.setCenter
             });
 
             // get print config (info.json)
@@ -59,14 +60,14 @@ define([
                         scale.name = "1: " + scaletext;
                     });
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
-                    EventBus.trigger("mapView:getOptions");
+                    model.setScaleByMapView();
                 }
             });
 
-            EventBus.on("winParams", this.setStatus, this);
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
+            });
             EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
-            EventBus.on("layerlist:sendVisibleWMSlayerList", this.setLayerToPrint, this);
-            EventBus.on("sendDrawLayer", this.setDrawLayer, this);
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
@@ -81,17 +82,21 @@ define([
             this.set("layout", this.get("layouts")[index]);
         },
 
+        getLayout: function () {
+            return this.get("layout");
+        },
+
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
             var scaleval = this.get("scales")[index].value;
 
-            EventBus.trigger("mapView:setScale", scaleval);
+            Radio.trigger("MapView", "setScale", scaleval);
         },
 
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
-        setScaleByMapView: function (obj) {
+        setScaleByMapView: function () {
             var scale = _.find(this.get("scales"), function (scale) {
-                return scale.value === obj.scale;
+                return scale.value === Radio.request("MapView", "getOptions").scale;
             });
 
             this.set("scale", scale);
@@ -104,7 +109,7 @@ define([
 
         //
         setStatus: function (args) {
-            if (args[2] === "print") {
+            if (args[2].getId() === "print") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -126,12 +131,12 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
-                EventBus.trigger("getSelectedVisibleWMSLayer");
-            }
-            else {
-                EventBus.trigger("layerlist:getVisibleWMSlayerList");
-            }
+            // if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
+                // EventBus.trigger("getSelectedVisibleWMSLayer");
+            // }
+            // else {
+                // EventBus.trigger("layerlist:getVisibleWMSlayerList");
+            // }
             if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
@@ -141,9 +146,10 @@ define([
         *
         */
         setLayerToPrint: function (layers) {
-            if (Config.tree.type === "light") {
-                layers = layers.reverse();
-            }
+            // eventuell TODO
+            // if (Config.tree.type === "light") {
+            //     layers = layers.reverse();
+            // }
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},
@@ -171,7 +177,7 @@ define([
                     layers: layer.get("layers").split(),
                     baseURL: layerURL,
                     format: "image/png",
-                    opacity: layer.get("opacity"),
+                    opacity: (100 - layer.get("transparency")) / 100,
                     customParams: params,
                     styles: style
                 });
@@ -182,81 +188,86 @@ define([
          *
          */
         setDrawLayer: function (layer) {
-            var features = [],
-                circleFeatures = [], // Kreise können nicht gedruckt werden
-                featureStyles = {};
+            if (!_.isUndefined()) {
+                var features = [],
+                    circleFeatures = [], // Kreise können nicht gedruckt werden
+                    featureStyles = {};
 
-            // Alle features die eine Kreis-Geometrie haben
-            _.each(layer.getSource().getFeatures(), function (feature) {
-                if (feature.getGeometry() instanceof ol.geom.Circle) {
-                    circleFeatures.push(feature);
-                }
-            });
+                // Alle features die eine Kreis-Geometrie haben
+                _.each(layer.getSource().getFeatures(), function (feature) {
+                    if (feature.getGeometry() instanceof ol.geom.Circle) {
+                        circleFeatures.push(feature);
+                    }
+                });
 
-            _.each(layer.getSource().getFeatures(), function (feature, index) {
-                // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
-                if (_.contains(circleFeatures, feature) === false) {
-                    features.push({
-                        type: "Feature",
-                        properties: {
-                            _style: index
-                        },
-                        geometry: {
-                            coordinates: feature.getGeometry().getCoordinates(),
-                            type: feature.getGeometry().getType()
+                _.each(layer.getSource().getFeatures(), function (feature, index) {
+                    // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
+                    if (_.contains(circleFeatures, feature) === false) {
+                        features.push({
+                            type: "Feature",
+                            properties: {
+                                _style: index
+                            },
+                            geometry: {
+                                coordinates: feature.getGeometry().getCoordinates(),
+                                type: feature.getGeometry().getType()
+                            }
+                        });
+
+                        var type = feature.getGeometry().getType(),
+                            styles = feature.getStyleFunction().call(feature),
+                            style = styles[0];
+                        // Punkte
+                        if (type === "Point") {
+                            // Punkte ohne Text
+                            if (style.getText() === null) {
+                                featureStyles[index] = {
+                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                                pointRadius: style.getImage().getRadius(),
+                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                                };
+                            }
+                            // Texte
+                            else {
+                                featureStyles[index] = {
+                                    label: style.getText().getText(),
+                                    fontColor: this.getColor(style.getText().getFill().getColor()).color
+                                };
+                            }
                         }
-                    });
-
-                    var type = feature.getGeometry().getType(),
-                        styles = feature.getStyleFunction().call(feature),
-                        style = styles[0];
-                    // Punkte
-                    if (type === "Point") {
-                        // Punkte ohne Text
-                        if (style.getText() === null) {
-                            featureStyles[index] = {
-                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                            pointRadius: style.getImage().getRadius(),
-                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                            };
-                        }
-                        // Texte
+                        // Polygone oder Linestrings
                         else {
                             featureStyles[index] = {
-                                label: style.getText().getText(),
-                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                                fillColor: this.getColor(style.getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                                strokeColor: this.getColor(style.getStroke().getColor()).color,
+                                strokeWidth: style.getStroke().getWidth()
                             };
                         }
                     }
-                    // Polygone oder Linestrings
-                    else {
-                        featureStyles[index] = {
-                            fillColor: this.getColor(style.getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
-                            strokeColor: this.getColor(style.getStroke().getColor()).color,
-                            strokeWidth: style.getStroke().getWidth()
-                        };
+                }, this);
+                this.push("layerToPrint", {
+                    type: "Vector",
+                    styles: featureStyles,
+                    geoJson: {
+                        type: "FeatureCollection",
+                        features: features
                     }
-                }
-            }, this);
-            this.push("layerToPrint", {
-                type: "Vector",
-                styles: featureStyles,
-                geoJson: {
-                    type: "FeatureCollection",
-                    features: features
-                }
-            });
+                });
+            }
         },
 
         /**
          *
          */
         setSpecification: function () {
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+            this.setDrawLayer(Radio.request("draw", "getLayer"));
             var specification = {
-                layout: $("#layoutField option:selected").html(),
+                // layout: $("#layoutField option:selected").html(),
+                layout: this.getLayout().name,
                 srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
@@ -350,8 +361,11 @@ define([
                 this.set("gfiTitle", gfis[1]);
                 this.set("printGFIPosition", gfis[2]);
                 // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0 && _.has(Config.print, "configYAML") === false) {
                     this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
+                }
+                else if (_.has(Config.print, "configYAML") === true && Config.print.gfi === true && this.get("gfiParams").length > 0) {
+                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
                 }
                 else {
                     if (_.has(Config.print, "configYAML") === true) {

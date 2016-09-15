@@ -1,17 +1,16 @@
 define([
     "backbone",
-    "eventbus",
     "modules/scaleline/model",
     "text!modules/scaleline/template.html",
     "config"
-], function (Backbone, EventBus, ScaleLine, ScaleLineTemplate, Config) {
+], function (Backbone, ScaleLine, ScaleLineTemplate, Config) {
 
     var ScaleLineView = Backbone.View.extend({
         model: ScaleLine,
         className: "scale-line",
         template: _.template(ScaleLineTemplate),
         initialize: function () {
-            this.listenTo(this.model, "change:reflength", this.render);
+            this.listenTo(this.model, "change:scaleLineValue", this.render);
             this.render();
         },
         render: function () {

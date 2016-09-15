@@ -8,6 +8,10 @@ define([
 
     var RoutingModel = Backbone.Model.extend({
         defaults: {
+            bkgSuggestURL: "",
+            bkgGeosearchURL: "",
+            viomRoutingURL: "",
+            viomProviderID: "",
             description: "",
             endDescription: "",
             routingtime: "",
@@ -18,41 +22,65 @@ define([
             toList: [],
             startAdresse: "",
             zielAdresse: "",
-            bbox: ""
+            bbox: "",
+            routelayer: "",
+            mhpOverlay: ""
         },
         initialize: function () {
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
                 this.set("bbox", "&bbox=" + Config.view.extent[0] + "," + Config.view.extent[1] + "," + Config.view.extent[2] + "," + Config.view.extent[3] + "&srsName=" + Config.view.epsg);
             }
-            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
-            EventBus.on("setMap", this.setMap, this);
-            EventBus.trigger("getMap", this);
+//            EventBus.on("setMap", this.setMap, this);
+//            EventBus.trigger("getMap", this);
+            Radio.on("Window", "winParams", this.setStatus, this);
+            Radio.on("geolocation", "position", this.position, this);
+        },
+        /*
+        * Übernimmt die über Radio übermittelte Koordinate
+        */
+        position: function (geoloc) {
+            if (this.get("fromCoord") === "") {
+                this.set("fromCoord", geoloc[0]);
+                this.set("startAdresse", "aktueller Standpunkt");
+            }
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "routing") {
+            if (args[2].getId() === "routing") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
+                var viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID")),
+                    bkgSuggestID = Radio.request("RestReader", "getServiceById", args[2].get("bkgSuggestID")),
+                    bkgGeosearchID = Radio.request("RestReader", "getServiceById", args[2].get("bkgGeosearchID"));
+
+                this.set("bkgSuggestURL", bkgSuggestID[0].get("url"));
+                this.set("bkgGeosearchURL", bkgGeosearchID[0].get("url"));
+                this.set("viomRoutingURL", viomRoutingID[0].get("url"));
+                this.set("viomProviderID", viomRoutingID[0].get("providerID"));
             }
             else {
                 this.set("isCurrentWin", false);
             }
         },
-        setMap: function (map) {
-            this.set("map", map);
-        },
+//        setMap: function (map) {
+//            this.set("map", map);
+//        },
         deleteRouteFromMap: function () {
-            var map = this.get("map");
-
             this.removeOverlay();
-            _.each(map.getLayers(), function (layer) {
-                if (_.isArray(layer)) {
-                    _.each(layer, function (childlayer) {
-                        if (childlayer.id && childlayer.id === "routenplanerroute") {
-                             map.removeLayer(childlayer);
-                        }
-                    });
-                }
-            });
+            Radio.trigger("Map", "removeLayer", this.get("routelayer"));
+            this.set("routelayer", "");
+//            var map = this.get("map");
+//
+//            this.removeOverlay();
+//            var layer = Radio.trigger("map", )
+//            _.each(map.getLayers(), function (layer) {
+//                if (_.isArray(layer)) {
+//                    _.each(layer, function (childlayer) {
+//                        if (childlayer.id && childlayer.id === "routenplanerroute") {
+//                             map.removeLayer(childlayer);
+//                        }
+//                    });
+//                }
+//            });
         },
         suggestByBKG: function (value, target) {
             if (value.length < 4) {
@@ -92,7 +120,7 @@ define([
                 }
             }
             $.ajax({
-                url: "/bkg_suggest",
+                url: this.get("bkgSuggestURL"),
                 data: "count=15&query=" + value,
                 context: this, // das Model
                 async: true,
@@ -129,7 +157,7 @@ define([
         },
         geosearchByBKG: function (value, target) {
             $.ajax({
-                url: "/bkg_geosearch",
+                url: this.get("bkgGeosearchURL"),
                 data: "srsName=" + Config.view.epsg + "&count=1&outputformat=json&query=" + value,
                 context: this, // das model
                 async: true,
@@ -172,14 +200,7 @@ define([
             });
         },
         requestRoute: function () {
-            var id = Config.menu.viomRouting,
-            providerid = Radio.request("RestReader", "getServiceById", id),
-            viomurl = "";
-
-            viomurl = providerid[0].attributes.url;
-            providerid = providerid[0].attributes.providerID;
-
-            var request = "PROVIDERID=" + providerid + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
+            var request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]
             *  routingdate [yyyy-mm-dd]
@@ -193,7 +214,7 @@ define([
             }
             $("#loader").show();
             $.ajax({
-                url: viomurl,
+                url: this.get("viomRoutingURL"),
                 data: request,
                 async: true,
                 context: this,
@@ -214,7 +235,9 @@ define([
                         });
 
                     vectorlayer.id = "routenplanerroute";
-                    this.get("map").addLayer(vectorlayer);
+                    this.set("routelayer", vectorlayer);
+                    Radio.trigger("Map", "addLayer", vectorlayer);
+//                    this.get("map").addLayer(vectorlayer);
                     this.set("endDescription", olFeature.get("EndDescription"));
                     this.set("description", olFeature.get("RouteDescription"));
                     EventBus.trigger("zoomToExtent", olFeature.getGeometry().getExtent());
@@ -232,8 +255,9 @@ define([
             });
         },
         removeOverlay: function () {
-            if (this.get("mhpOverlay")) {
+            if (this.get("mhpOverlay") !== "") {
                 EventBus.trigger("removeOverlay", this.get("mhpOverlay"));
+                this.set("mhpOverlay", "");
             }
         },
         addOverlay: function (olFeature) {
@@ -246,7 +270,7 @@ define([
             $("#map").append(html);
             this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")[0]}));
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
-            EventBus.trigger("addOverlay", this.get("mhpOverlay"));
+            Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         }
     });
 

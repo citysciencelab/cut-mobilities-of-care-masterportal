@@ -1,7 +1,7 @@
 define(function () {
 
     var config = {
-         title: "Mobilitätsportal-Verkehr",
+        title: "Mobilitätsportal-Verkehr",
         logo: "../img/hh-logo.png",
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
@@ -9,13 +9,13 @@ define(function () {
             type: "custom",
             saveSelection: true,
             layerIDsToMerge: [
-               ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
+                ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
                 ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
                 ["713", "714", "715", "716"],
                 ["717", "718", "719", "720"],
                 ["1043", "1044", "1045", "1046"],
-                ["2709","2885","2890","2900"]
-              ],
+                ["2709", "2885", "2890", "2900"]
+            ],
             layerIDsToStyle: [
                 {
                     "id": "1935",
@@ -27,7 +27,7 @@ define(function () {
                 {
                     "id": "1933",
                     "styles": "geofox_stations",
-                    "name": "USAR-Stationen (ab 1:40.000), Bus-Haltestellen, Fähr-Stationen (ab 1:20.000)",
+                    "name": "USAR-Stationen (ab 1: 40 000), Bus-Haltestellen, Fähr-Stationen (ab 1: 20 000)",
                     "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-faehre.png"]
                 }
             ],
@@ -50,12 +50,12 @@ define(function () {
                         }
                     ],
                     name: "Verkehrslage auf Autobahnen", visibility: false
-                },
+                    },
                 {id: "717", visibility: true}, // geobasiskarten farbig
-                {id: "1043", visibility: false}, // geobasiskarten grau-blau
-                {id: "368", visibility: false}, // aLKIS farbig
-                {id: "149", visibility: false} // aLKIS grau-blau
-            ],
+                {id: "1043", visibility: false} // geobasiskarten grau-blau
+               // {id: "368", visibility: false}, // aLKIS farbig
+               // {id: "149", visibility: false} // aLKIS grau-blau
+            ]
 
         },
         controls: {
@@ -77,10 +77,31 @@ define(function () {
             epsg: "EPSG:25832"
         },
         customModules: ["../portale/verkehr-mobilitaet/verkehrsfunctions"],
-        footer: false,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "SDP"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
 
         print: {
@@ -115,10 +136,6 @@ define(function () {
             routing: {
                 title: "Routenplaner",
                 glyphicon: "glyphicon-road"
-            },
-            addWMS: {
-                title: "WMS hinzufügen",
-                glyphicon: "glyphicon-plus"
             }
         },
         menu: {
@@ -184,9 +201,7 @@ define(function () {
                 glyphicon: "glyphicon-search"
             }
         },
-        gemarkungen: "../components/lgv-config/gemarkung.json",
-        orientation: false,
-        poi: false
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;

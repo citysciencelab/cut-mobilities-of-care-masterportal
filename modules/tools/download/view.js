@@ -1,12 +1,11 @@
 define([
     "jquery",
-    "underscore",
     "backbone",
     "text!modules/tools/download/template.html",
     "modules/tools/download/model",
     "backbone.radio",
     "eventbus"
-], function ($, _, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
+], function ($, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
     var DownloadView = Backbone.View.extend({
         model: DownloadModel,
         template: _.template(DownloadWin),
@@ -34,7 +33,12 @@ define([
             this.model.setData(features.data);
             this.model.setFormats(features.formats);
             this.model.setCaller(features.caller);
-            EventBus.trigger("toggleWin", ["download", "Download", "glyphicon-plus"]);
+            this.model.set("id", "download");
+            this.model.set("title", "Download");
+            this.model.set("glyphicon", "glyphicon-plus");
+
+            Radio.trigger("Window", "toggleWin", this.model);
+            // Radio.trigger("Window", "toggleWin", ["download", "Download", "glyphicon-plus"]);
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat

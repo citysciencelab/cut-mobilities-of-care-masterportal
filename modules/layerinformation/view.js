@@ -1,7 +1,8 @@
 define([
     "backbone",
     "modules/layerinformation/model",
-    "text!modules/layerinformation/template.html"
+    "text!modules/layerinformation/template.html",
+    "jqueryui/widgets/draggable"
 ], function (Backbone, Layerinformation, LayerInformationTemplate) {
 
     var LayerInformationView = Backbone.View.extend({
