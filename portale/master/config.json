@@ -174,7 +174,7 @@
         },
         {
           "id": "1562",
-          "attributions": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
+          "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "4639",
@@ -199,8 +199,8 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": false,
-          "attributions": "<span>Attributierung für Fachlayer</span>",
+          "visibility": true,
+          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
           "filterOptions": [
@@ -240,7 +240,7 @@
             }
           ],
           "name": "Verkehrslage auf Autobahnen",
-          "attributions": {
+          "layerAttribution": {
             "text": "",
             "channel": "Verkehrsfunctions",
             "eventname": "aktualisiereverkehrsnetz",
