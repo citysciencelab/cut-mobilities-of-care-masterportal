@@ -193,7 +193,7 @@ define(function (require) {
          * @return {String|Object}
          */
         getAttributions: function () {
-            return this.get("attributions");
+            return this.get("layerAttribution");
         },
 
         getIsOutOfScale: function () {

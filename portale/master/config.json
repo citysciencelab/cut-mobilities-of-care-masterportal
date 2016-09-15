@@ -170,7 +170,7 @@
         },
         {
           "id": "1562",
-          "attributions": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
+          "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "4639",
@@ -196,7 +196,7 @@
           "id": "1711",
           "styleId": "1711",
           "visibility": true,
-          "attributions": "<span>Attributierung für Fachlayer</span>",
+          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
           "filterOptions": [
