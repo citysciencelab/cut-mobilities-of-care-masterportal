@@ -192,6 +192,11 @@
            "clusterDistance": 40,
            "routable": true
        },
+       {
+          "id": "2407",
+          "visibility": false,
+          "infoFormat": "text/html"
+      },
         {
           "id": "1711",
           "styleId": "1711",
@@ -217,7 +222,7 @@
         {
           "id": "753",
           "styleId": "753",
-          "visibility": true,
+          "visibility": false,
           "mouseHoverField": "Name",
           "filterOptions": [
             {
