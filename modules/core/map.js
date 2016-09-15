@@ -72,7 +72,7 @@ define(function (require) {
 
         },
 
-        getLayers: function() {
+        getLayers: function () {
             return this.get("map").getLayers();
         },
 
@@ -208,19 +208,19 @@ define(function (require) {
         },
 
         // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
-        setImportDrawMeasureLayersOnTop: function (layers){
+        setImportDrawMeasureLayersOnTop: function (layers) {
             var layersOnTop = [];
 
-            for(var i = layers.getLength(); i >= 0; i--){
+            for (var i = layers.getLength(); i >= 0; i--) {
                 var layer = layers.item(i);
 
-                if(!_.isUndefined(layer) && layer.get("alwaysOnTop")){
+                if (!_.isUndefined(layer) && layer.get("alwaysOnTop")) {
                     layers.removeAt(i);
                     layersOnTop.push(layer);
                 }
             }
 
-            _.each(layersOnTop, function(layer){
+            _.each(layersOnTop, function (layer) {
                 layers.push(layer);
             });
         },
@@ -346,11 +346,12 @@ define(function (require) {
                         if (element.get("typ") === "WMS") {
                             var gfiURL = element.getLayerSource().getGetFeatureInfoUrl(
                                 coordinate, resolution, projection,
-                                {INFO_FORMAT: element.get("infoFormat") || "text/xml"}
+                                {INFO_FORMAT: element.getInfoFormat()}
                             );
 
                             gfiParams.push({
                                 typ: "WMS",
+                                infoFormat: element.getInfoFormat(),
                                 scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
@@ -377,11 +378,12 @@ define(function (require) {
                             if (layer.get("typ") === "WMS") {
                                 var gfiURL = layer.getLayerSource().getGetFeatureInfoUrl(
                                     coordinate, resolution, projection,
-                                    {INFO_FORMAT: layer.get("infoFormat") || "text/xml"}
+                                    {INFO_FORMAT: layer.getInfoFormat()}
                                 );
 
                                 gfiParams.push({
                                     typ: "WMS",
+                                    infoFormat: layer.getInfoFormat(),
                                     // scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),

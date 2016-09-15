@@ -64,6 +64,7 @@ define(function (require) {
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
+            this.setAttributes();
             this.createLegendURL();
         },
 
@@ -85,6 +86,7 @@ define(function (require) {
         createLegendURL: function () {},
         createLayerSource: function () {},
         createLayer: function () {},
+        setAttributes: function () {},
 
         /**
          * Setter für Attribut "layerSource"

@@ -38,60 +38,43 @@ define([
                         break;
                     }
                     case "WMS": {
+                        if (visibleLayer.infoFormat === "text/html") {
+                            // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
+                            if (visibleLayer.ol_layer.get("featureCount")) {
+                                var featurecount = "&FEATURE_COUNT=";
 
+                                featurecount = featurecount.concat(visibleLayer.ol_layer.get("featureCount").toString());
+                                visibleLayer.url = visibleLayer.url.concat(featurecount);
+                            }
+                            if (visibleLayer.ol_layer.id === "2407" || visibleLayer.ol_layer.id === "4423") {
+                                window.open(visibleLayer.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+                            }
+                            else {
+                                var gfiFeatures = {"html": visibleLayer.url};
+
+                                $.ajax({
+                                    url: Util.getProxyURL(visibleLayer.url),
+                                    async: false,
+                                    type: "GET",
+                                    context: this,
+                                    success: function (data) {
+                                        if ($(data).find("tbody").children().length > 1 === true) {
+                                            this.pushGFIContent([gfiFeatures], visibleLayer);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            this.set("typ", visibleLayer.ol_layer.get("typ"));
+                            gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
+                            this.pushGFIContent(gfiContent, visibleLayer);
+                        }
+                        break;
                     }
                 }
             }, this);
-            var containsWMS = false;
-
-            _.each(sortedParams, function (visibleLayer) {
-                if (visibleLayer.ol_layer.get("typ") === "WMS") {
-                    containsWMS = true;
-                }
-             });
-             if (containsWMS === true) {
-                // Hier wird sortedParams gefiltert nach dem infoFormat text/html in dem Attribut url.
-
-                sortedParams = _.filter(sortedParams, function (param) {
-                    return param.typ === "WMS";
-                });
-                var paramList = _.groupBy(sortedParams, function (param) {
-                     return param.url.match(/INFO_FORMAT=text%2Fhtml/g) ? "html" : "xml";
-                 });
-                // Die Layer mit dem InfoFormat text/html werden hier separat behandelt.
-                // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
-                _.each(paramList.html, function (param) {
-                    if (param.ol_layer.get("featureCount")) {
-                        var featurecount = "&FEATURE_COUNT=";
-                        featurecount= featurecount.concat(param.ol_layer.get("featureCount").toString());
-                        param.url=param.url.concat(featurecount);
-                    }
-                    if (param.ol_layer.id === "2407" || param.ol_layer.id === "4423") {
-                        window.open(param.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
-                    }
-                    else {
-                        var gfiFeatures = {"html": param.url};
-
-                        this.pushGFIContent([gfiFeatures], param);
-                    }
-                }, this);
-                // Wenn keine weiteren Layer im xml Format abgefragt werden wird hier das template gebaut.
-                if (_.isUndefined(paramList.xml)) {
-                    this.buildTemplate(positionGFI);
-                }
-                else {
-                    _.each(paramList.xml, function (param) {
-
-                        if (param.ol_layer.get("typ") === "WMS") {
-                                this.set("typ", param.ol_layer.get("typ"));
-                                gfiContent = this.setWMSPopupContent(param, positionGFI);
-                            }
-                    }, this);
-                }
-            }
-            else {
-                this.buildTemplate(positionGFI);
-            }
+            this.buildTemplate(positionGFI);
 
             Util.hideLoader();
             return [this.pContent, positionGFI];
