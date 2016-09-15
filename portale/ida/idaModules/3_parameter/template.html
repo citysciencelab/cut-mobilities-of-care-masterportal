@@ -130,7 +130,7 @@
         <% if (requestedParams.FLAE === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Grundstücksgröße [m²]</h5>
-            <input id="FLAE" class="form-control" type="number" min="150" max="10000" value="<%= defaultFlae %>" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="FLAE" class="form-control" type="number" value="<%= defaultFlae %>" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.BAUW === true) { %>
@@ -174,61 +174,61 @@
         <% if (requestedParams.BAUJ === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Baujahr (Bezugsfertigstellung der wesentlichen Gebäudeteile)</h5>
-            <input id="BAUJ" class="form-control" type="number" min="1700" max="<%= jahr %>" value="1950" pattern="[0-9]"/>
+            <input id="BAUJ" class="form-control" type="number" min="1700" max="<%= jahr %>" value="<%= jahr %>" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.WOFL === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Wohnfläche in m²</h5>
-            <input id="WOFL" class="form-control" type="number" min="0" max="2400" value="100" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="WOFL" class="form-control" type="number" min="0" value="0" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.ZAWO === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Anzahl Wohnungen</h5>
-            <input id="ZAWO" class="form-control" type="number" min="0" max="50" value="1" pattern="[0-9]"/>
+            <input id="ZAWO" class="form-control" type="number" min="0" value="0" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.GARI === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Anzahl Tiefgaragenstellplätze</h5>
-            <input id="GARI" class="form-control" type="number" min="0" max="5" value="0" pattern="[0-9]"/>
+            <input id="GARI" class="form-control" type="number" min="0" value="0" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.GARA === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Anzahl Einzelgaragen</h5>
-            <input id="GARA" class="form-control" type="number" min="0" max="5" value="0" pattern="[0-9]"/>
+            <input id="GARA" class="form-control" type="number" min="0" value="0" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.STEA === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Anzahl offene Stellplätze</h5>
-            <input id="STEA" class="form-control" type="number" min="0" max="5" value="0" pattern="[0-9]"/>
+            <input id="STEA" class="form-control" type="number" min="0" value="0" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.EGFL === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Gewerbliche Nutzfläche im Erdgeschoss in m²</h5>
-            <input id="EGFL" class="form-control" type="number" min="0" max="10000" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="EGFL" class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.OGFL === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Gewerbliche Nutzfläche in den Obergeschossen in m²</h5>
-            <input id="OGFL" class="form-control" type="number" min="0" max="5000" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="OGFL" class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.WONKM === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Jahresnettokaltmiete für Wohnungen in DM (bis 31.12.2001) bzw. Euro (ab 1.1.2002)</h5>
-            <input id="WONKM" class="form-control" type="number" min="0" max="25" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="WONKM" class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.SONKM === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Jahresnettokaltmiete für Sonstiges / Gewerbe in DM (bis 31.12.2001) bzw. Euro (ab 1.1.2002)</h5>
-            <input id="SONKM" class="form-control" type="number" min="0" max="2400" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="SONKM" class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.RLZ === true) { %>
@@ -240,31 +240,31 @@
         <% if (requestedParams.JEZ === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Erbbauzins / Jahr in Euro</h5>
-            <input id="JEZ" class="form-control" type="number" min="0" max="" value="0" step="0.01" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="JEZ" class="form-control" type="number" min="0" value="0" step="0.01" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.STST === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Standardstufe nach Sachwert-Richtlinie (ab 2011)</h5>
-            <input id="STST" class="form-control" type="number" min="0" max="100000" value="0" step="1" pattern="[0-9]"/>
+            <input id="STST" class="form-control" type="number" min="1" max="5" value="4" step="1" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.FKWERT === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Feuerkassenwert bzw. Neuherstellungskosten in Mark 1914</h5>
-            <input id="FKWERT" class="form-control" type="number" min="30" max="150" value="30" step="1" pattern="[0-9]"/>
+            <input id="FKWERT" class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.SACH === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Vorläufiger Sachwert in DM (bis 31.12.2001) bzw. Euro (ab 1.1.2002)</h5>
-            <input id="SACH" class="form-control" type="number" min="500" max="4000" value="500" step="1" pattern="[0-9]"/>
+            <input id="SACH" class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.ENER === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Endenergiebedarf in kWh / m² a</h5>
-            <input id="ENER" class="form-control" type="number" min="30" max="250" value="30" step="0.1" pattern="[0-9]"/>
+            <input id="ENER" class="form-control" type="number" min="0" value="0" step="0.1" pattern="[0-9]"/>
         </div>
         <% } %>
         <% if (requestedParams.MODG === true) { %>
@@ -272,8 +272,8 @@
             <h5 class="control-label">Modernisierungsgrad des Gebäudes</h5>
             <div class="input-group">
                 <div id="MODG" class="btn-group" role="group" aria-label="Modernisierungsgrad des Gebäudes">
-                    <button type="button" class="btn btn-default active" value="21">Erstbezug / Neubau</button>
-                    <button type="button" class="btn btn-default" value="0">nicht modernisiert</button>
+                    <button type="button" class="btn btn-default" value="21">Erstbezug / Neubau</button>
+                    <button type="button" class="btn btn-default active" value="0">Bestandsimmobilie</button>
                 </div>
             </div>
         </div>
@@ -283,8 +283,8 @@
             <h5 class="control-label">Keller vorhanden</h5>
             <div class="input-group">
                 <div id="KELL" class="btn-group" role="group" aria-label="Keller vorhanden ja oder nein">
-                    <button type="button" class="btn btn-default" value="true"> Ja </button>
-                    <button type="button" class="btn btn-default active" value="false">Nein</button>
+                    <button type="button" class="btn btn-default active" value="true"> Ja </button>
+                    <button type="button" class="btn btn-default" value="false">Nein</button>
                 </div>
             </div>
         </div>
@@ -315,10 +315,10 @@
         <div class="form-group col-md-6">
             <h5 class="control-label">Miteigentumsanteil der Eigentumswohnung</h5>
             <div class="input-group">
-                <input id="MEAN" class="form-control" type="number" min="1" max="2500000" value="1" step="1" pattern="[0-9]"/>
+                <input id="MEAN" class="form-control" type="number" min="1" max="1000000" value="1" step="1" pattern="[0-9]"/>
                 <span class="input-group-addon">/</span>
-                <input id="MEAZ" class="form-control" type="number" min="1" max="2500000" value="1" step="1" pattern="[0-9]"/>
-                <span class="input-group-addon" id="mea-addon" title="Bitte geben Sie hier den Miteigentumsanteil laut Grundbuchblatt mit Dividend und Divisor an.">
+                <input id="MEAZ" class="form-control" type="number" min="1" max="1000000" value="1" step="1" pattern="[0-9]"/>
+                <span class="input-group-addon" id="mea-addon" title="Bitte geben Sie hier den Miteigentumsanteil laut Grundbuchblatt mit Zähler und Nenner an.">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                 </span>
             </div>
