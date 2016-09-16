@@ -36,25 +36,20 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-All.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
-        * @default [false]
-        */
+        
         // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
         print: {
-            printID: "99999",
-            title: "Lärmkarte-Straßenverkehr",
+            printID: "printqs",
+            title: "Lärmkarte-Straßenverkehr - 2012",
             gfi: false,
             configYAML: "laerm_strasse"
         },
