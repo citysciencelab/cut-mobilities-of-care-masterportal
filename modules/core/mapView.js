@@ -330,8 +330,8 @@ define([
         },
 
         /**
-         * [getResoByScale description]
-         * @param  {String|number} scale -
+         * Gibt zur Scale die entsprechende Resolution zurück.
+         * @param  {String|number} scale
          * @param  {String} scaleType - min oder max
          * @return {number} resolution
          */
