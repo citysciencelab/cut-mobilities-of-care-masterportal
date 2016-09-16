@@ -23,6 +23,10 @@ ul#Themen .glyphicon-info-sign {
     padding-right: 6px;
 }
 
+ul#Themen ul#Overlayer {
+    max-height: calc(100vH - 177px);
+}
+
 /* ----------------------Themenbaum light -----------------------------*/
 ul#Themen.light {
     font-size: 12px;
