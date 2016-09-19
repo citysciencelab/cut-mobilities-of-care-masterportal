@@ -81,10 +81,10 @@
         }
       },
       "controls": {
-        "zoom": true,
         "toggleMenu": true,
-        "orientation": "once",
         "fullScreen": true,
+        "zoom": true,
+        "orientation": "once",
         "mousePosition": true
       },
       "scaleLine": true,
@@ -120,6 +120,39 @@
             ]
           },
           {
+            "Titel": "Geologie",
+            "Layer": [
+              {
+                "id": "1032",
+                "visibility": false
+              },
+              {
+                "id": "1030",
+                "visibility": false
+              },
+              {
+                "id": "1033",
+                "visibility": false
+              },
+              {
+                "id": "1031",
+                "visibility": false
+              },
+              {
+                "id": "1029",
+                "visibility": false
+              },
+              {
+                "id": "2199",
+                "visibility": false
+              },
+              {
+                "id": "4885",
+                "visibility": false
+              }
+            ]
+          },
+          {
             "Titel": "Geothermie",
             "Layer": [
               {
@@ -151,39 +184,6 @@
                 "visibility": false,
                 "infoFormat": "text/html",
                 "name": "Bohrdaten GLA (ab 1:5 000)"
-              }
-            ]
-          },
-          {
-            "Titel": "Geologie",
-            "Layer": [
-              {
-                "id": "1029",
-                "visibility": false
-              },
-              {
-                "id": "2199",
-                "visibility": false
-              },
-              {
-                "id": "1033",
-                "visibility": false
-              },
-              {
-                "id": "1031",
-                "visibility": false
-              },
-              {
-                "id": "1030",
-                "visibility": false
-              },
-              {
-                "id": "1032",
-                "visibility": false
-              },
-              {
-                "id": "4885",
-                "visibility": false
               }
             ]
           },
