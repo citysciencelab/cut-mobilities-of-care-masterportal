@@ -45,7 +45,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $(".controls-view").append(this.$el.html(this.template(attr)));
+            this.$el.html(this.template(attr));
         },
         /*
         * schaltet POI-Control un-/sichtbar

@@ -7,6 +7,7 @@ define([
         className: "container-fluid controls-view",
         initialize: function () {
             this.render();
+
             this.$el.on({
                 click: function (e) {
                     e.stopPropagation();
@@ -19,6 +20,10 @@ define([
             if (!_.has(result, "STYLE") || _.values(_.pick(result, "STYLE"))[0].toUpperCase() !== "SIMPLE") {
                 $(".navbar").after(this.$el);
             }
+        },
+        addRow: function (id) {
+            this.$el.append("<div class='row' id='" + id + "'></div>");
+            return this.$el.children().last();
         }
     });
 
