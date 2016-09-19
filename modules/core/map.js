@@ -86,11 +86,12 @@ define([
 
         },
         addFeatureToLayer: function (feature, layerName) {
+
             var layer = this.getLayerByName(layerName);
             layer.getSource().addFeature(feature);
         },
         getLayerByName: function (layerName) {
-            var layers = layerList = this.get("map").getLayers().getArray();
+            var layers = this.get("map").getLayers().getArray();
             return _.findWhere(layers, function (layer) {
                 return layer.values_.name === layerName;
             });

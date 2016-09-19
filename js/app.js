@@ -10,7 +10,6 @@ define("app",
     "modules/core/parametricURL",
     "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
-
     // Core laden
     new RawLayerList();
     new Preparser();
