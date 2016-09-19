@@ -4,7 +4,6 @@ define(function (require) {
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
         MapView = require("modules/core/mapView"),
-        EventBus = require("eventbus"),
         Util = require("modules/core/util"),
         Map;
 
@@ -22,9 +21,8 @@ define(function (require) {
         *
         */
         initialize: function () {
-
             var channel = Radio.channel("Map"),
-                mapView = new MapView ();
+                mapView = new MapView();
 
             channel.reply({
                 "getMap": function () {
@@ -34,20 +32,22 @@ define(function (require) {
             }, this);
 
             channel.on({
-                "setBBox": this.setBBox,
                 "addLayer": this.addLayer,
                 "addLayerToIndex": this.addLayerToIndex,
+                "addOverlay": this.addOverlay,
+                "addInteraction": this.addInteraction,
                 "addControl": this.addControl,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
-                "addOverlay": this.addOverlay
+                "removeInteraction": this.removeInteraction,
+                "setBBox": this.setBBox,
+                "render": this.render,
+                "registerPostCompose": this.registerPostCompose,
+                "unregisterPostCompose": this.unregisterPostCompose,
+                "zoomToExtent": this.zoomToExtent,
+                "updatePrintPage": this.updatePrintPage,
+                "activateClick": this.activateClick
             }, this);
-
-            EventBus.on("activateClick", this.activateClick, this);
-            EventBus.on("addInteraction", this.addInteraction, this);
-            EventBus.on("removeInteraction", this.removeInteraction, this);
-            EventBus.on("zoomToExtent", this.zoomToExtent, this);
-            EventBus.on("updatePrintPage", this.updatePrintPage, this);
 
             this.set("view", mapView.get("view"));
 
@@ -60,7 +60,7 @@ define(function (require) {
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
-            this.get("map").on("pointermove", this.pointerMoveOnMap);
+            this.registerPointerMove();
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
@@ -74,6 +74,10 @@ define(function (require) {
 
         getLayers: function() {
             return this.get("map").getLayers();
+        },
+
+        render: function () {
+            this.get("map").render();
         },
 
         setBBox: function (bbox) {
@@ -103,27 +107,37 @@ define(function (require) {
             if (tool === "coord") {
                 this.get("map").un("click", this.setGFIParams, this);
                 this.get("map").on("click", this.setPositionCoordPopup, this);
-                // this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.registerPointerMove);
             }
             else if (tool === "gfi") {
                 this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").on("click", this.setGFIParams, this);
-                // this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.registerPointerMove);
             }
             else if (tool === "measure") {
                 this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").un("click", this.setGFIParams, this);
-                // this.get("map").on("pointermove", this.pointerMoveOnMap);
+                // this.get("map").on("pointermove", this.registerPointerMove);
             }
             else if (tool === "draw" || tool === "record") {
                 this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").un("click", this.setGFIParams, this);
-                // this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.registerPointerMove);
             }
         },
 
-        pointerMoveOnMap: function (evt) {
-            EventBus.trigger("pointerMoveOnMap", evt);
+        registerPostCompose: function (callback, context) {
+            this.get("map").on("postcompose", callback, context);
+        },
+
+        unregisterPostCompose: function (callback) {
+            this.get("map").un("postcompose", callback);
+        },
+
+        registerPointerMove: function () {
+            this.get("map").on("pointermove", function (evt) {
+                Radio.trigger("Map", "pointerMoveOnMap", evt);
+            });
         },
 
         /**
@@ -392,10 +406,10 @@ define(function (require) {
                     });
                 }
             }, this);
-            EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
+            Radio.trigger("Map", "setGFIParams", [gfiParams, coordinate]);
         },
-        zoomToExtent: function (extent) {
-            this.get("view").fit(extent, this.get("map").getSize());
+        zoomToExtent: function (extent, options) {
+            this.get("view").fit(extent, this.get("map").getSize(), options);
         },
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);

@@ -3,9 +3,8 @@ define([
     "backbone",
     "text!modules/tools/download/template.html",
     "modules/tools/download/model",
-    "backbone.radio",
-    "eventbus"
-], function ($, Backbone, DownloadWin, DownloadModel, Radio, EventBus) {
+    "backbone.radio"
+], function ($, Backbone, DownloadWin, DownloadModel, Radio) {
     var DownloadView = Backbone.View.extend({
         model: DownloadModel,
         template: _.template(DownloadWin),
@@ -27,7 +26,7 @@ define([
          */
         start: function (features) {
             if (features.data.length === 0) {
-                EventBus.trigger("alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
+                Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
                 return;
             }
             this.model.setData(features.data);
@@ -38,13 +37,12 @@ define([
             this.model.set("glyphicon", "glyphicon-plus");
 
             Radio.trigger("Window", "toggleWin", this.model);
-            // Radio.trigger("Window", "toggleWin", ["download", "Download", "glyphicon-plus"]);
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat
          */
         back: function () {
-            EventBus.trigger("toggleWin", [this.model.getCaller().name, "Zeichnen / Schreiben", "glyphicon-pencil"]);
+            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "draw"}));
         },
         /**
          *

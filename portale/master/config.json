@@ -39,6 +39,7 @@
         "visibleWFS": {
             "minChars": 3
         },
+        "zoomLevel": 9,
         "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "mapView": {
@@ -100,6 +101,10 @@
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
               "lister": 10
+          },
+          "animation": {
+            "name": "Animation",
+            "glyphicon": "glyphicon-play-circle"
           }
         }
       },
@@ -169,7 +174,7 @@
         },
         {
           "id": "1562",
-          "attributions": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
+          "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "4639",
@@ -195,7 +200,7 @@
           "id": "1711",
           "styleId": "1711",
           "visibility": true,
-          "attributions": "<span>Attributierung für Fachlayer</span>",
+          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
           "filterOptions": [
@@ -216,7 +221,7 @@
         {
           "id": "753",
           "styleId": "753",
-          "visibility": true,
+          "visibility": false,
           "mouseHoverField": "Name",
           "filterOptions": [
             {
@@ -235,7 +240,7 @@
             }
           ],
           "name": "Verkehrslage auf Autobahnen",
-          "attributions": {
+          "layerAttribution": {
             "text": "",
             "channel": "Verkehrsfunctions",
             "eventname": "aktualisiereverkehrsnetz",

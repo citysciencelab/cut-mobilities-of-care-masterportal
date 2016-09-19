@@ -25,7 +25,7 @@ define([
             // }
             Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
             // EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
-            EventBus.on("setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
+            Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
         },

@@ -3,7 +3,6 @@
   {
     "PortalTitle": "GeoViewer",
     "searchBar": {
-        "minChars": 3,
         "gazetteer": {
             "minChars": 3,
             "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
@@ -12,10 +11,24 @@
             "searchDistricts": true,
             "searchParcels": true
         },
+         "specialWFS": {
+            "minChar": 3,
+            "definitions": [
+                {
+                        "url": "/geodienste.hamburg.de/HH_WFS_Schulen",
+                        "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:hh_schulen_dwh&propertyName=app:Name,app:geom",
+                        "name": "schule"
+                    }
+            ]
+        },
+        
         "visibleWFS": {
             "minChars": 3
         },
-        "placeholder": "Suche nach Adresse/Stadtteil"
+        "placeholder": "Suche nach Adresse"
+    },
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
     },
     "menu": {
       "tree": {
@@ -26,18 +39,29 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
+          
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
           },
           "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
           },
-          "coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
           }
         }
       },
@@ -76,7 +100,7 @@
       "orientation": "once",
       "poi": true,
       "fullScreen": true,
-      "attributions": true
+      "attributions": false
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -87,12 +111,12 @@
     {
       "Layer": [
         {
-          "id": "453",  
+          "id": "453",
           "visibility": true
         },
         {
           "id": "452"
-        } 
+        }
       ]
     },
     "Fachdaten":
@@ -100,18 +124,12 @@
       "Layer": [
         
         {
-          "id": "96", 
-          "visibility": true, 
-          "name": "Lärm Straßenverkehr Tag 2012",
-          "attributions": "<span>Die Karte 'Lärm Straßenverkehr Tag' ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
-
-        },
-        {
-          "id": "95",
-          "visibility": false,
-          "name": "Lärm Straßenverkehr Nacht 2012",
-          "attributions": "<span>Die Karte 'Lärm Straßenverkehr Nacht' ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
+          "id": "1732",
+          "styleId": "753",
+          "visibility": true,
+          "mouseHoverField": "Name"
         }
+        
       ]
     }
   }
