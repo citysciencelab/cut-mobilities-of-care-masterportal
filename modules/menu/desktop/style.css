@@ -23,7 +23,7 @@ ul#Themen .glyphicon-info-sign {
     padding-right: 6px;
 }
 
-ul#Themen ul#Overlayer {
+.LayerListMaxHeight {
     max-height: calc(100vH - 177px);
 }
 
