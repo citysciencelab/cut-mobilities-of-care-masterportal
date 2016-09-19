@@ -294,7 +294,7 @@ define([
                 id: "Baselayer",
                 parentId: "Themen",
                 isInThemen: true,
-                isExpanded: false,
+                isInitiallyExpanded: false,
                 level: 0
             });
             this.addItem({
@@ -304,7 +304,7 @@ define([
                 id: "Overlayer",
                 parentId: "Themen",
                 isInThemen: true,
-                isExpanded: false,
+                isInitiallyExpanded: false,
                 level: 0
             });
             this.addItem({
@@ -315,7 +315,7 @@ define([
                 parentId: "Themen",
                 isLeafFolder: true,
                 isInThemen: true,
-                isExpanded: true,
+                isInitiallyExpanded: true,
                 level: 0
             });
         },

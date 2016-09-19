@@ -65,8 +65,18 @@ define([
                     return;
                 }
 
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                    models = this.collection.add(lightModels);
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
+
+                var models = this.collection.add(lightModels);
+
+                // Ordner öffnen, die initial geöffnet sein sollen
+                if (parentId === "Themen") {
+                     _.each(models, function (model) {
+                        if (model.getType() === "folder" && model.getIsInitiallyExpanded()) {
+                            model.setIsExpanded(true);
+                        }
+                    });
+                }
 
                 if (level === 0 && firstTime !== true) {
                     this.collection.setVisibleByParentIsExpanded(parentId);
