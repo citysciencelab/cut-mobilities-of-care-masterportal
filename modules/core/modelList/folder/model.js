@@ -11,6 +11,7 @@ define([
             isRoot: false,
             // true wenn der Inhalt(Kinder) der Node angezeigt wird
             isExpanded: false,
+            isInitiallyExpanded: false,
             // true wenn alle Kinder ausgewöhlt sind
             isSelected: false,
             // welcher Node-Type - folder/layer/item
@@ -93,6 +94,9 @@ define([
             if (this.getParentId() === "Themen") {
                 this.collection.toggleCatalogs(this.getId());
             }
+        },
+        getIsInitiallyExpanded: function () {
+            return this.get("isInitiallyExpanded");
         },
         setSelectAllGlyphicon: function (value) {
             this.set("selectAllGlyphicon", value);
