@@ -16,14 +16,7 @@ define([
         render: function () {
             var result = Radio.request("ParametricURL", "getResult");
 
-            if (_.has(result, "STYLE")) {
-                var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
-
-                if (value === "SIMPLE") {
-                    this.$el.hide();
-                }
-            }
-            else {
+            if (!_.has(result, "STYLE") || _.values(_.pick(result, "STYLE"))[0].toUpperCase() !== "SIMPLE") {
                 $(".navbar").after(this.$el);
             }
         }
