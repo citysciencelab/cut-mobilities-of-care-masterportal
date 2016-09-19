@@ -2,15 +2,13 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "config",
-    "proj4"
+    "config"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
         Config = require("config"),
-        proj4 = require("proj4"),
         MapView;
 
     MapView = Backbone.Model.extend({
@@ -269,24 +267,17 @@ define([
          *
          */
         setProjection: function () {
-            // supported projections
-            switch (Config.view.epsg){
-                case "EPSG:25833": {
-                    proj4.defs("EPSG:25833", "+proj=utm +zone=33 +ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
-                    break;
-                }
-                case "EPSG:31468": {
-                    proj4.defs("EPSG:31468", "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs ");
-                    break;
-                }
-                default: {
-                    proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-                    break;
-                }
+            // check for crs
+            var epsgCode = Config.view.epsg ? Config.view.epsg : "EPSG:25832",
+                proj = Radio.request("CRS", "getProjection", epsgCode);
+
+            if (!proj) {
+                alert("Unknown CRS " + epsgCode + ". Can't set projection.");
+                return;
             }
 
             var proj = new ol.proj.Projection({
-                code: Config.view.epsg || "EPSG:25832",
+                code: epsgCode,
                 units: this.get("units"),
                 extent: this.get("extent"),
                 axisOrientation: "enu",
