@@ -29,6 +29,11 @@ define([
                 this.render();
                 // erst nach render kann auf document.getElementById zugegriffen werden
                 this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
+                if (this.model.get("isPoiOn")) {
+                    require(["modules/controls/orientation/poi/view"], function (POIView) {
+                        new POIView();
+                    });
+                }
             }
         },
         /*
@@ -45,7 +50,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $(".controls-view").append(this.$el.html(this.template(attr)));
+            this.$el.html(this.template(attr));
         },
         /*
         * schaltet POI-Control un-/sichtbar
