@@ -1,0 +1,60 @@
+<% if (wfsList.length > 0) { %>
+<div class="panel panel-default" style="margin: 0px;">
+<% _.each(wfsList, function (wfslayer) { %>
+    <div id="<%= wfslayer.id %>" class="panel-heading">
+        <p class="buttons pull-right">
+            <span id="extendedfilter_resizemarker" class="glyphicon glyphicon-resize-full" title="Ein- und ausklappen"></span>
+        </p>
+        <span style="font-size: 14px; "><%=wfslayer.name %></span>
+    </div>
+
+<% if (wfslayer.filterOptions==="extended") { %>
+    <div class="panel-body" id="">
+
+     <div class="input-group">
+         <div class="input-group-btn">
+            <button id="addattrbutton" title="Attribut zum Filter zufügen" class="btn btn-panel-submit" type="button">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+         </div> <!--/btn-group -->
+         <select class="form-control input-sm" id="addattrselect">
+             <option title='Attribut auswählen'>Attribut auswählen</option>
+            <% _.each(wfslayer.attributes, function (attr) {%>
+            <option title="<%=attr.attr%>"><%=attr.attr%></option>
+            <% });%>
+        </select>
+    </div><!-- /input-group -->
+
+
+    </div>
+    <div class="panel-body" id="attributepanel">
+    </div>
+
+
+ <% } else {%>
+
+<% _.each(wfslayer.filterOptions, function (filter) { if (filter.filterType === 'combo') { %>
+    <div class="panel-body <%= wfslayer.id %>_wfs_panel">
+        <label for="" class="control-label"><%=filter.filterName%></label>
+        <select class="form-control input-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
+<% _.each(filter.filterString, function (value) { if (value === '*') { %>
+            <option title="keine Filterung der Elemente auf dieses Attribut">*</option>
+<% } else { %>
+            <option title='nur Elemente mit "<%=value%>" darstellen'><%=value%></option>
+<% } }); %>
+        </select>
+<% } else { %>
+        <label for="" class="control-label">Unbekannter Filtertyp.</label>
+<% } %>
+
+   </div>
+<% });} });%>
+    <div class="panel-footer">
+        <button id="filterbutton" title="Nur Elemente mit diesen Filtereinstellungen anzeigen." class="btn btn-panel-submit" type="button">Filter anwenden</button>
+    </div>
+</div>
+<% } else { %>
+<div class="extendedfilter-body">
+    <label class=".text-center h4">Keine Themen sichtbar.</label>
+</div>
+<% } %>

@@ -88,6 +88,10 @@
             "name": "Filter",
             "glyphicon": "glyphicon-filter"
           },
+          "extendedFilter": {
+            "name": "ExtendedFilter",
+            "glyphicon": "glyphicon-filter"
+          },
           "routing": {
             "name": "Routenplaner",
             "glyphicon": "glyphicon-road",
@@ -203,20 +207,7 @@
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
-          "filterOptions": [
-            {
-              "fieldName": "teilnahme_geburtsklinik",
-              "filterType": "combo",
-              "filterName": "Geburtsklinik",
-              "filterString": ["*", "Ja", "Nein"]
-            },
-            {
-              "fieldName": "teilnahme_notversorgung",
-              "filterType": "combo",
-              "filterName": "Not- und Unfallversorgung",
-              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-            }
-          ]
+          "filterOptions": "extended"
         },
         {
           "id": "753",
