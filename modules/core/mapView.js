@@ -142,8 +142,8 @@ define([
 
             this.setExtent();
             this.setResolution();
-            this.setStartCenter();
             this.setProjection();
+            this.setStartCenter();
             this.setView();
 
             // Listener für ol.View
@@ -243,8 +243,25 @@ define([
          *
          */
         setStartCenter: function () {
-            if (Config.view.center && _.isArray(Config.view.center)) {
-                this.set("startCenter", Config.view.center);
+            var center = Radio.request("ParametricURL", "getCenter");
+
+            if (center) {
+                var fromCRSName = center.crs,
+                    position = [center.x, center.y],
+                    toCRSName = this.get("projection").getCode();
+
+                if (fromCRSName !== "" && fromCRSName !== toCRSName) {
+                    // transform
+                    var fromCRS = Radio.request("CRS", "getProjection", fromCRSName);
+
+                    if (!fromCRS) {
+                        Radio.trigger("Alert", "alert", {text: "<strong>" + fromCRSName + " des <i>CENTER</i>-Parameters unbekannt.</strong> Default wird verwendet.", kategorie: "alert-info"});
+                    }
+                    else {
+                        position = Radio.request("CRS", "transform", {fromCRS: fromCRSName, toCRS: toCRSName, point: position});
+                    }
+                }
+                this.set("startCenter", position);
             }
         },
 
