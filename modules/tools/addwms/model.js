@@ -106,6 +106,8 @@ define([
             };
 
             Radio.trigger("Parser", "addItem", folder);
+            $("ul#Themen ul#ExternalLayer").addClass("LayerListMaxHeight");
+            $('.LayerListMaxHeight').css("max-height","calc(100vH - 212px)");
         },
 
         addLayer: function (name, id, parentId, level, layers) {
