@@ -24,52 +24,52 @@ define([
             options: [
                 {
                     resolution: 66.14579761460263,
-                    scale: "250000",
+                    scale: 250000,
                     zoomLevel: 0
                 },
                 {
                     resolution: 26.458319045841044,
-                    scale: "100000",
+                    scale: 100000,
                     zoomLevel: 1
                 },
                 {
                     resolution: 15.874991427504629,
-                    scale: "60000",
+                    scale: 60000,
                     zoomLevel: 2
                 },
                 {
                     resolution: 10.583327618336419,
-                    scale: "40000",
+                    scale: 40000,
                     zoomLevel: 3
                 },
                 {
                     resolution: 5.2916638091682096,
-                    scale: "20000",
+                    scale: 20000,
                     zoomLevel: 4
                 },
                 {
                     resolution: 2.6458319045841048,
-                    scale: "10000",
+                    scale: 10000,
                     zoomLevel: 5
                 },
                 {
                     resolution: 1.3229159522920524,
-                    scale: "5000",
+                    scale: 5000,
                     zoomLevel: 6
                 },
                 {
                     resolution: 0.6614579761460262,
-                    scale: "2500",
+                    scale: 2500,
                     zoomLevel: 7
                 },
                 {
                     resolution: 0.2645831904584105,
-                    scale: "1000",
+                    scale: 1000,
                     zoomLevel: 8
                 },
                 {
                     resolution: 0.13229159522920521,
-                    scale: "500",
+                    scale: 500,
                     zoomLevel: 9
                 }
             ],
@@ -100,7 +100,8 @@ define([
                 },
                 "getResolutions": function () {
                     return this.getResolutions();
-                }
+                },
+                "getResoByScale": this.getResoByScale
             }, this);
 
             channel.on({
@@ -200,6 +201,10 @@ define([
 
         setScales: function () {
             this.set("scales", _.pluck(this.get("options"), "scale"));
+        },
+
+        getScales: function () {
+            return this.get("scales");
         },
 
         setResolutions: function () {
@@ -322,6 +327,43 @@ define([
          */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
+        },
+
+        /**
+         * Gibt zur Scale die entsprechende Resolution zurück.
+         * @param  {String|number} scale
+         * @param  {String} scaleType - min oder max
+         * @return {number} resolution
+         */
+        getResoByScale: function (scale, scaleType) {
+            var mapViewScales = _.union(this.getScales(), [parseInt(scale, 10)]),
+                index;
+
+            mapViewScales = _.sortBy(mapViewScales, function (num) {
+                return -num;
+            });
+            index = _.indexOf(mapViewScales, parseInt(scale, 10));
+            if (mapViewScales.length === this.getScales().length) {
+                if (scaleType === "max") {
+                    return this.getResolutions()[index];
+                }
+                else if (scaleType === "min") {
+                    return this.getResolutions()[index];
+                }
+            }
+            else {
+                if (scaleType === "max") {
+                    if (index === 0) {
+                        return this.getResolutions()[index];
+                    }
+                    else {
+                        return this.getResolutions()[index - 1];
+                    }
+                }
+                else if (scaleType === "min") {
+                    return this.getResolutions()[index - 1];
+                }
+            }
         },
 
         getCenter: function () {

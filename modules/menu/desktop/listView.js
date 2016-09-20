@@ -38,7 +38,9 @@ define([
                 $("#" + "Themen").html("");
                 // Eine Themenebene rendern
                 this.renderSubTree("Themen", 0, 0, true);
-                $("ul#Themen ul#Overlayer").css("max-height", "80vh");
+                $("ul#Themen ul#Overlayer").addClass("LayerListMaxHeight");
+                $("ul#Themen ul#SelectedLayer").addClass("LayerListMaxHeight");
+                $("ul#Themen ul#Baselayer").addClass("LayerListMaxHeight");
             },
             /**
              * Rendert die  Auswahlliste
