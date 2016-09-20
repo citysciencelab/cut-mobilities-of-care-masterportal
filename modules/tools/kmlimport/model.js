@@ -274,7 +274,7 @@ define([
 
             source.addFeatures(features);
             layer.setSource(source);
-            EventBus.trigger("addLayer", layer);
+            Radio.trigger("Map", "addLayer", layer);
 
         }
 

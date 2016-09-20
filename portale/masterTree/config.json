@@ -209,7 +209,7 @@
                     },
                     {
                       "id": "4639",
-                      "visibility": true,
+                      "visibility": false,
                       "styleable": true,
                       "geomType": "Polygon",
                       "attributesToStyle": ["AP30Sum", "AP60Sum"]
@@ -278,7 +278,7 @@
                 },
                 {
                   "id": "1562",
-                  "visibility": true,
+                  "visibility": false,
                   "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
                   "metaName": "Bebauungspläne im Verfahren (§ 2 BauGB)"
                 },

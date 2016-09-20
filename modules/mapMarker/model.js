@@ -15,17 +15,23 @@ define([
             }),
             wkt: "",
             markers:[],
-            source: new ol.source.Vector()
+            source: new ol.source.Vector(),
+            zoomLevel: 7
         },
         initialize: function () {
 //            this.set("layer", new ol.layer.Vector({
 //                source: this.get("source")
 //            }));
 //            EventBus.trigger("addLayer", this.get("layer"));
-            EventBus.trigger("addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
             this.listenTo(EventBus, {
                 "layerlist:sendVisiblelayerList": this.checkLayer
             });
+            var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+
+            if(_.has(searchConf, "zoomLevel")){
+                this.set("zoomLevel", searchConf.zoomLevel);
+            }
         },
 
         getExtentFromString: function () {
@@ -120,7 +126,7 @@ define([
                     var markers = this.get("markers");
                     markers.push(marker);
                     this.set("markers", markers);
-                    EventBus.trigger("addOverlay", marker);
+                    Radio.trigger("Map", "addOverlay", marker);
 
                 },this);
                 EventBus.trigger("layerlist:getVisiblelayerList");
@@ -135,10 +141,10 @@ define([
 
                 _.each(markers, function (marker) {
                     if (layer === undefined) {
-                        EventBus.trigger("removeOverlay", marker);
+                        Radio.trigger("Map", "removeOverlay", marker);
                     }
                     else {
-                        EventBus.trigger("addOverlay", marker);
+                        Radio.trigger("Map", "addOverlay", marker);
                     }
                 });
             }

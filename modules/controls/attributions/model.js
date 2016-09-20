@@ -35,7 +35,6 @@ define([
                 haveModelsAttributions = _.some(modelList, function (model) {
                     return model.getAttributions();
                 });
-
             this.setIsVisibleInMap(haveModelsAttributions);
             this.setIsContentVisible(haveModelsAttributions);
             if (haveModelsAttributions === true) {
@@ -51,7 +50,7 @@ define([
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true});
 
             modelList = _.filter(modelList, function (model) {
-                return model.has("attributions");
+                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
             });
 
             this.setModelList(modelList);

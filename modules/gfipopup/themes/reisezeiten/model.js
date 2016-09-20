@@ -1,11 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
-    "modules/layer/list",
     "modules/core/util",
     "config"
-], function (Backbone, ol, EventBus, LayerList, Util, Config) {
+], function (Backbone, Radio, ol, EventBus, Util, Config) {
     "use strict";
     var RoutingModel = Backbone.Model.extend({
         /**
@@ -25,12 +25,8 @@ define([
         initialize: function (response) {
             this.set("id", _.uniqueId("reisezeiten"));
 
-            this.set("routenLayer", _.find(LayerList.models, function (layer) {
-                return layer.id === "2713";
-            }));
-            this.set("verkehrslagelayer", _.find(LayerList.models, function (layer) {
-                return layer.id === "2715";
-            }));
+            this.set("routenLayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2713"}));
+            this.set("verkehrslagelayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2715"}));
             this.set("standort", response.Standort);
             if (this.get("standort") !== "" && this.get("routenLayer") !== "" && this.get("verkehrslagelayer") !== "") {
                 this.requestRouten();
@@ -114,7 +110,7 @@ define([
         removeRouteLayer: function () {
             if (this.get("routeLayer")) {
                 this.get("routeLayer").getSource().clear();
-                EventBus.trigger("removeLayer", this.get("routeLayer"));
+                Radio.trigger("Map", "removeLayer", this.get("routeLayer"));
                 this.set("routeLayer", "");
             }
         },
@@ -208,8 +204,8 @@ define([
             });
             this.get("routeLayer").setSource(source);
             this.get("routeLayer").setStyle(null);
-            EventBus.trigger("addLayer", this.get("routeLayer"));
-            EventBus.trigger("zoomToExtent", source.getExtent());
+            Radio.trigger("Map", "addLayer", this.get("routeLayer"));
+            Radio.trigger("Map", "zoomToExtent", source.getExtent());
         },
         /*
          * Zerstört das Modul vollständig.

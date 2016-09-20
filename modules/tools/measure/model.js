@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "eventbus",
     "config"
-], function (Backbone, Radio, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, Config) {
 
     var Measure = Backbone.Model.extend({
         defaults: {
@@ -36,7 +35,7 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(EventBus, {
+            this.listenTo(Radio.channel("Map"), {
                 "pointerMoveOnMap": this.placeMeasureTooltip
             });
 
@@ -70,19 +69,19 @@ define([
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
             }
         },
 
         createInteraction: function () {
-            EventBus.trigger("removeInteraction", this.get("draw"));
+            Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("type"),
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
-                this.listenTo(EventBus, {
+                this.listenTo(Radio.channel("Map"), {
                     "pointerMoveOnMap": this.placeMeasureTooltip
                 });
                 this.set("sketch", evt.feature);
@@ -95,9 +94,9 @@ define([
                 this.get("sketch", null);
                 // unset tooltip so that a new one can be created
                 this.get("measureTooltipElement", null);
-                this.stopListening(EventBus, "pointerMoveOnMap");
+                this.stopListening(Radio.channel("Map"), "pointerMoveOnMap");
             }, this);
-            EventBus.trigger("addInteraction", this.get("draw"));
+            Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
 
         createMeasureTooltip: function () {
@@ -116,7 +115,7 @@ define([
             });
             this.set("measureTooltipElement", measureTooltipElement);
             this.set("measureTooltip", measureTooltip);
-            EventBus.trigger("addOverlay", measureTooltip, "measure");
+            Radio.trigger("Map", "addOverlay", measureTooltip, "measure");
             this.get("measureTooltips").push(measureTooltip);
         },
 
@@ -177,7 +176,7 @@ define([
             this.get("source").clear();
             // lösche alle Overlays (Tooltips)
             _.each(this.get("measureTooltips"), function (tooltip) {
-                EventBus.trigger("removeOverlay", tooltip, "measure");
+                Radio.trigger("Map", "removeOverlay", tooltip, "measure");
             });
             this.set("measureTooltips", []);
         },

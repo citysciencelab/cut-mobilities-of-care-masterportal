@@ -15,6 +15,10 @@ define([
             GFIPopupVisibility: false
         },
         initialize: function () {
+            this.listenTo(Radio.channel("Map"), {
+                "pointerMoveOnMap": this.checkForEachFeatureAtPixel
+            });
+
             $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
 
             this.set("mhpOverlay", new ol.Overlay({
@@ -24,7 +28,6 @@ define([
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            EventBus.on("pointerMoveOnMap", this.checkForEachFeatureAtPixel, this);
         },
 
         filterWFSList: function () {

@@ -38,7 +38,7 @@ define([
         activateTool: function () {
             if (this.getIsActive() === true) {
                 this.collection.setActiveToolToFalse(this);
-                EventBus.trigger("activateClick", this.getId());
+                Radio.trigger("Map", "activateClick", this.getId());
                 if (this.getId() === "legend") {
                     EventBus.trigger("toggleLegendWin");
                 }

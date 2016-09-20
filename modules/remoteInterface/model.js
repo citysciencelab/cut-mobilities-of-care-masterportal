@@ -11,7 +11,9 @@ define(function (require) {
 
             channel.on({
                 "addFeature": this.addFeature,
-                "setCenter": this.setCenterToFeature
+                "centerFeature": this.centerFeature,
+                "zoomToFeature": this.zoomToFeature,
+                "resetView": this.resetView
             }, this);
             Radio.trigger("Map", "addLayerToIndex", [this.createLayer(), 0]);
             //Radio.trigger("remoteInterface", "addFeature", {});
@@ -36,13 +38,22 @@ define(function (require) {
 
             return layer;
         },
-        setCenterToFeature: function (coords) {
-            debugger;
+        centerFeature: function (coords) {
             var feature = new OL.Feature(new OL.geom.Polygon([coords])),
                 extent = feature.getGeometry().getExtent(),
                 center = OL.extent.getCenter(extent);
+                Radio.trigger("MapView", "setCenter", center);
 
-            Radio.trigger("MapView", "setCenter", center);
+        },
+        zoomToFeature: function (coords) {
+             var feature = new OL.Feature(new OL.geom.Polygon([coords])),
+                extent = feature.getGeometry().getExtent();
+
+            Radio.trigger("Map", "zoomToExtent", extent);
+
+        },
+        resetView: function () {
+            Radio.trigger("MapView", "resetView");
         }
     });
 

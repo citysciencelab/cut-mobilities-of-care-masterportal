@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
     "config"
-], function (Backbone, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
 
     var Attribution = Backbone.Model.extend({
         defaults: {
@@ -103,7 +104,7 @@ define([
                     tipLabel: ""
                 });
 
-                EventBus.trigger("addControl", attribution);
+                Radio.trigger("Map", "addControl", attribution);
                 this.set("alreadySet", true);
                 this.set("attribution", attribution);
             }

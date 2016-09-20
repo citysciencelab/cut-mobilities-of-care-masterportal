@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/tools/measure/template.html",
     "modules/tools/measure/model",
     "eventbus"
-], function (Backbone, MeasureTemplate, Measure, EventBus) {
+], function (Backbone, Radio, MeasureTemplate, Measure, EventBus) {
 
     var MeasureView = Backbone.View.extend({
         model: new Measure(),
@@ -39,7 +40,7 @@ define([
 
         setGeometryType: function (evt) {
             this.model.setGeometryType(evt.target.value);
-            EventBus.trigger("activateClick", "measure");
+            Radio.trigger("Map", "activateClick", "measure");
         },
 
         setUnit: function (evt) {

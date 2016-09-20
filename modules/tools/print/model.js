@@ -122,7 +122,7 @@ define([
         },
         updatePrintPage: function () {
             if (this.has("scale")) {
-                EventBus.trigger("updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
+                Radio.trigger("Map", "updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
             }
         },
 

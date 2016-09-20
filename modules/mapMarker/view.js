@@ -21,7 +21,7 @@ define([
         })
     });
 
-    EventBus.trigger("addLayer", searchVector);
+    Radio.trigger("Map", "addLayer", searchVector);
 
     return Backbone.View.extend({
         model: MapHandlerModel,
@@ -93,7 +93,6 @@ define([
         * @param {Object} hit - Treffer der Searchbar
         */
         zoomTo: function (hit) {
-            var zoomLevel;
 
             this.clearMarker();
             switch (hit.type) {
@@ -103,28 +102,30 @@ define([
                 }
                 case "Straße": {
                     this.model.getWKTFromString("POLYGON", hit.coordinate);
-                    EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
+                    // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
+                    var resolutions = Radio.request("MapView", "getResolutions"),
+                        index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
+
+                    Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     break;
                 }
                 case "Parcel": {
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, 7);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     this.showMarker(hit.coordinate);
                     break;
                 }
                 case "Krankenhaus": {
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, 5);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Adresse": {
-                    zoomLevel = 7;
                     this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Stadtteil": {
-                    zoomLevel = 4;
                     this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Thema": {
@@ -143,15 +144,13 @@ define([
                     break;
                 }
                 case "Olympiastandort": {
-                    zoomLevel = 5;
                     this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Paralympiastandort": {
-                    zoomLevel = 5;
                     this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
                 case "festgestellt": {
@@ -163,7 +162,7 @@ define([
                     break;
                 }
                 case "SearchByCoord": {
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, 7);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     this.showMarker(hit.coordinate);
                     break;
                 }
@@ -172,13 +171,12 @@ define([
                     break;
                 }
                 case "Feature-Lister-Click": {
-                    EventBus.trigger("zoomToExtent", hit.coordinate);
+                    Radio.trigger("Map", "zoomToExtent", hit.coordinate);
                     break;
                 }
                 case "Kita": {
-                    zoomLevel = 8;
                     this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
             }
@@ -196,7 +194,7 @@ define([
             extent = feature.getGeometry().getExtent();
             searchVector.getSource().addFeature(feature);
             searchVector.setVisible(true);
-            EventBus.trigger("zoomToExtent", extent);
+            Radio.trigger("Map", "zoomToExtent", extent);
         },
         /*
         * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
@@ -204,7 +202,7 @@ define([
         */
         zoomToBKGSearchResult: function (data) {
             if (data.features[0].properties.bbox.type === "Point") {
-                Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, 5);
+                Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, this.model.get("zoomLevel"));
                 this.showMarker(data.features[0].properties.bbox.coordinates);
             }
             else if (data.features[0].properties.bbox.type === "Polygon") {
@@ -214,7 +212,7 @@ define([
                     coordinates += point[0] + " " + point[1] + " ";
                 });
                 this.model.getWKTFromString("POLYGON", coordinates.trim());
-                EventBus.trigger("zoomToExtent", this.model.getExtentFromString());
+                Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
             }
         },
         /**

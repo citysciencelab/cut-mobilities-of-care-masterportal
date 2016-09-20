@@ -108,7 +108,8 @@ define([
                 "toggleBackground": this.toggleBackground,
                 "setZoomLevelUp": this.setZoomLevelUp,
                 "setZoomLevelDown": this.setZoomLevelDown,
-                "setScale": this.setScale
+                "setScale": this.setScale,
+                "resetView": this.resetView
             }, this);
 
             this.listenTo(this, {
@@ -154,6 +155,10 @@ define([
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
             }, this);
+        },
+        resetView: function () {
+            this.get("view").setCenter(this.get("startCenter"));
+            this.get("view").setZoom(2);
         },
 
         /*

@@ -28,8 +28,7 @@ define([
         },
         render: function () {
             var attr = this.model.toJSON();
-
-            if (this.model.getIsExpanded() === true) {
+            if (this.model.getIsExpanded() === true && this.model.getParentId() !== "Themen") {
                 this.$el.html(this.templateLeaf(attr));
             }
             else {

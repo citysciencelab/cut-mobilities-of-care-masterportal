@@ -1,18 +1,18 @@
 define(function () {
     var config = {
-        // title: "Lärmkarte-Straßenverkehr",
+        title: "Schulbau-Portal",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-
         view: {
-            background: "white"
+            background: "white",
+           //center: [565874, 5934140],
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
             */
         },
-       // customModules: ["../portale/master/verkehrsfunctions"],
+        // customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
             urls: [
@@ -36,22 +36,19 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet-All.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-internet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
-        
-        // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
         print: {
-            printID: "printqs",
-            title: "Lärmkarte-Straßenverkehr - 2012",
-            gfi: false,
-            configYAML: "laerm_strasse"
+            printID: "99999",
+            title: "Schulbau-Portal",
+            gfi: false
         },
         geoAPI: false,
         clickCounter: {},
