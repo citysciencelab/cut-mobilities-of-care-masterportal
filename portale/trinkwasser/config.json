@@ -86,10 +86,10 @@
         }
       },
       "controls": {
-        "zoom": true,
         "toggleMenu": true,
-        "orientation": "once",
         "fullScreen": true,
+        "zoom": true,
+        "orientation": "once",
         "mousePosition": true
       },
       "scaleLine": true,
