@@ -95,7 +95,7 @@ define(function () {
                 glyphicon: "glyphicon-pencil"
             }
         },
-        gemarkungen: "../components/lgv-config/gemarkung.json",
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;
