@@ -1,27 +1,25 @@
 define(function (require) {
     var Radio = require("backbone.radio"),
-        MasterRadio,
         Backbone = require("backbone"),
         OL = require("openlayers"),
         RemoteInterface;
 
     RemoteInterface = Backbone.Model.extend({
         initialize: function () {
-            var channel = Radio.channel("RemoteInterface"),
-            context = this;
+            parent.Backbone.MBARadio = Radio;
+            var channel = Radio.channel("RemoteInterface");
 
             channel.on({
-                "addFeature": function (f) {
-                    this.addFeature(f);
-                }
-            });
+                "addFeature": this.addFeature,
+                "setCenter": this.setCenterToFeature
+            }, this);
             Radio.trigger("Map", "addLayerToIndex", [this.createLayer(), 0]);
             //Radio.trigger("remoteInterface", "addFeature", {});
 
-           window.onmessage = function(e){
+         /*  window.onmessage = function(e){
                     context.addFeature(e.data);
                     parent.postMessage('featureAdded', '*');
-            };
+            };*/
         },
         addFeature: function (coords) {
             var feature = new OL.Feature(new OL.geom.Polygon([coords]));
@@ -37,6 +35,14 @@ define(function (require) {
             });
 
             return layer;
+        },
+        setCenterToFeature: function (coords) {
+            debugger;
+            var feature = new OL.Feature(new OL.geom.Polygon([coords])),
+                extent = feature.getGeometry().getExtent(),
+                center = OL.extent.getCenter(extent);
+
+            Radio.trigger("MapView", "setCenter", center);
         }
     });
 
