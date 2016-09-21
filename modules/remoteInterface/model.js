@@ -6,7 +6,9 @@ define(function (require) {
 
     RemoteInterface = Backbone.Model.extend({
         initialize: function () {
-            parent.Backbone.MBARadio = Radio;
+            parent.Backbone.MasterRadio = Radio;
+            parent.postMessage("ready", "*");
+
             var channel = Radio.channel("RemoteInterface");
 
             channel.on({

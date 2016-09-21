@@ -42,7 +42,7 @@
        "tree": {
            "minChars": 3
        },
-       "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan",
+       "placeholder": "Adresssuche",
        "geoLocateHit": true
    },
       "menu": {
