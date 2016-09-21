@@ -15,7 +15,8 @@ define([
         events: {
             "click #filterbutton": "getFilterInfos",
             "click #addattrbutton": "addAttributeToFilter",
-            "click .panel-heading": "toggleHeading"
+            "click .panel-heading": "toggleHeading",
+            "click .btn-default": "removeDiv"
         },
         toggleHeading: function (evt) {
             var id = $(evt.currentTarget)[0].id;
@@ -36,17 +37,31 @@ define([
         addAttributeToFilter: function () {
             var attr = $("#addattrselect").val(),
                 select = "",
-                attrToFilter = this.model.get("attributesToFilter");
-
+                selectRadio = "",
+                attrToFilter = this.model.get("attributesToFilter"),
+                counter = this.model.get("logExpCounter");
+            
+            counter ++;
+            this.model.set("logExpCounter", counter);
             attrToFilter.push(attr);
             this.model.set("attributesToFilter", attrToFilter);
 
-            _.each(this.model.get("wfsList"), function (layer) {
-
-                $("#attributepanel").append("<label for='' class='control-label'>" + attr + "</label>");
-                select += "<select class='form-control input-sm' id='" + layer.id + "_" + attr + "'>";
+            _.each(this.model.get("wfsList"), function (layer) {                
+                select += "<div class='' id='all_" + layer.id + "_" + attr + "'>";
+                if (counter === 1) {
+                }
+                else {
+                    select += "<div class='input-group' id='radio_" + layer.id + "_" + attr + "'>";
+                    select += "<span class='input-group-addon'>";
+                    select += "<input type='radio' checked='true' name='andor_" + attr + "' id='" + counter + "_AND'>AND";
+                    select += "<input type='radio' name='andor_" + attr + "' id='" + counter + "_OR'>OR";
+                    select += "</span>";
+                    select += "</div>";                
+                }
+                select += "<label for='' id='label_" + layer.id + "_" + attr + " ' class='control-label'>" + attr + "</label>";
+                select += "<div class='input-group'id='div_" + layer.id + "_" + attr + "'>";
+                select += "<select class='form-control input' id='" + layer.id + "_" + attr + "'>";
                 select += "<option title='Nicht filtern'>*</option>";
-
                 _.each(layer.attributes, function (attribute) {
                     if (attribute.attr === attr) {
                         _.each(attribute.values, function (value) {
@@ -54,16 +69,35 @@ define([
                         });
                    }
                 });
-
-                select += "</select>";
-                select += "<div class='input-group'>";
-                select += "<input type='radio' checked='true' name='andor_" + attr + "' id='" + layer.id + "_" + attr + "_AND'>AND";
-                select += "<input type='radio' name='andor_" + attr + "' id='" + layer.id + "_" + attr + "_OR'>OR";
+                select += "</select><br>";
+                select += "<div class='input-group-btn'>";
+                select += "<button id='btnremove_"+layer.id+"_"+attr+"' title='Attribut vom Filter entfernen' class='btn btn-default' type='button'><span class='glyphicon glyphicon-minus-sign'></span></button>";
                 select += "</div>";
-
+                select += "</div>";
+                select += "</div>";
                 $("#attributepanel").append(select);
-            });
+            },this);
+        },
+        removeDiv: function (btn_remove){
+            var id = btn_remove.currentTarget.id,
+                attr = id.split("_")[2],
+                counter = this.model.get("logExpCounter"),
+                attrToFilter = this.model.get("attributesToFilter");
+            
+            for (var i=attrToFilter.length-1; i>=0; i--) {
+                if (attrToFilter[i] === attr) {
+                    attrToFilter.splice(i, 1);
+                    break;
+                }
+            }
+            this.model.set("attributesToFilter",attrToFilter);
+            
+            
+            id = id.replace("btnremove_","all_");
+            $("#"+id).remove();
 
+            counter--;
+            this.model.set("logExpCounter",counter);
         },
 
         getFilterInfos: function () {
@@ -77,24 +111,28 @@ define([
             _.each(wfsList, function (layer) {
 
                     if (layer.filterOptions === "extended") {
-                        _.each(this.model.get("attributesToFilter"), function (fieldName) {
+                        // counter entspricht dem Zähler der Logischen Ausdrücke (AND/OR)
+                        _.each(this.model.get("attributesToFilter"), function (fieldName,counter) {
+
                             id = "#" + layer.id + "_" + fieldName;
                             value = $(id).val();
                             and_or = "";
 
-                            if ($("#" + layer.id + "_" + fieldName + "_AND").prop("checked")) {
+                            if ($("#" + counter + "_AND").prop("checked")) {
                                 and_or = "AND";
                             }
-                            else if ($("#" + layer.id + "_" + fieldName + "_OR").prop("checked")) {
+                            else if ($("#" + counter + "_OR").prop("checked")) {    
                                 and_or = "OR";
                             }
                             else {
-                                console.log("ERROR");
+                                //sonderfall 1.attribut. Da kein radioBtn gesetzt ist, kann er nicht abgefragt werden. Er wird hier gesetzt. 
+                                and_or = "AND";
                             }
-
+                            
+                            
                             filters.push ({
                                 id: id,
-                                filtertype: and_or,
+                                filterType: and_or,
                                 fieldName: fieldName,
                                 fieldValue: value
                             });
@@ -108,7 +146,7 @@ define([
                                 filters.push(
                                     {
                                         id: id,
-                                        filtertype: filter.filterType,
+                                        filterType: filter.filterType,
                                         fieldName: filter.fieldName,
                                         fieldValue: value
                                     }
@@ -161,45 +199,42 @@ define([
                         layer.defaultStyle = layer.getStyle();
                         layer.setStyle(null);
                     }
-                    var and_or = true,
-                        and_or_filter;
 
-                    _.each(layerfilter.filter, function (elementfilter) {
-                            and_or_filter = elementfilter.filtertype;
-                            if (and_or_filter !== "AND") {
-                                and_or = false;
-                            }
-
-                        });
-                    // einfachster Fall, alle Filtertypes sind auf AND
-                    if (and_or === true) {
-                        features.forEach(function (feature) {
+                    features.forEach(function (feature) {
                         var featuredarstellen = true,
+                            preVal = true,
                             attributname,
                             attributvalue,
-                            featurevalue0,
-                            featurevalue;
+                            filtertype;
 
-                            // Prüfung, ob Feature dargestellt werden soll
-                            _.each(layerfilter.filter, function (elementfilter) {
-                                attributname = elementfilter.fieldName;
-                                attributvalue = elementfilter.fieldValue;
+                        // Prüfung, ob Feature dargestellt werden soll
+                        _.each(layerfilter.filter, function (elementfilter) {
+                            attributname = elementfilter.fieldName;
+                            attributvalue = elementfilter.fieldValue;
+                            filtertype = elementfilter.filterType;
 
-                                if (attributvalue !== "*") {
-                                    var featureattribute = _.pick(feature.getProperties(), attributname);
-
-                                    if (featureattribute && !_.isNull(featureattribute)) {
-                                        featurevalue0 = _.values(featureattribute)[0];
-                                        if (featurevalue0) {
-                                            featurevalue = featurevalue0.trim();
-                                            if (featurevalue !== attributvalue) {
-                                                featuredarstellen = false;
-                                            }
-                                        }
-                                    }
+                            if(filtertype ==="OR"){
+                                featuredarstellen = this.checkFeatureForFilter(feature,elementfilter);
+                                if(preVal === true || featuredarstellen === true){
+                                    featuredarstellen = true;
+                                    preVal = true;
                                 }
-                            });
-
+                                else{
+                                    featuredarstellen = false;
+                                    preVal = false;
+                                }
+                            }
+                            else{
+                                featuredarstellen = this.checkFeatureForFilter(feature,elementfilter);
+                                if(preVal === true && featuredarstellen === true){
+                                    featuredarstellen = true;
+                                    preVal = true;
+                                }
+                                else{
+                                    featuredarstellen = false;
+                                    preVal = false;
+                                }
+                            }
                             if (featuredarstellen === true) {
                                 if (feature.defaultStyle) {
                                     feature.setStyle(feature.defaultStyle);
@@ -212,16 +247,37 @@ define([
                             else if (featuredarstellen === false) {
                                 feature.setStyle(null);
                             }
-                        });
-                    }
-                    // Es wird auch nach OR gefiltert
-                    else {
-                        console.log("mist");
-                    }
+                        },this);
+                    },this);
                 }
             }, this);
+            
             this.model.set("layerfilters", layerfilters);
         },
+        
+        checkFeatureForFilter: function(feature, elementfilter){
+            var featuredarstellen = true,
+                attributname = elementfilter.fieldName,
+                attributvalue = elementfilter.fieldValue,
+                featurevalue0,
+                featurevalue;
+
+            if (attributvalue !== "*") {
+                var featureattribute = _.pick(feature.getProperties(), attributname);
+
+                if (featureattribute && !_.isNull(featureattribute)) {
+                    featurevalue0 = _.values(featureattribute)[0];
+                    if (featurevalue0) {
+                        featurevalue = featurevalue0.trim();
+                        if (featurevalue !== attributvalue) {
+                            featuredarstellen = false;
+                        }
+                    }
+                }
+            }
+            return featuredarstellen;
+        },
+        
         render: function () {
             var attr,
                 layerfilters = this.model.get("layerfilters");

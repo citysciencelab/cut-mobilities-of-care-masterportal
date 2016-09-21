@@ -9,21 +9,25 @@
     </div>
 
 <% if (wfslayer.filterOptions==="extended") { %>
-    <div class="panel-body" id="">
+    <div class="panel-body">
 
      <div class="input-group">
+         
          <div class="input-group-btn">
-            <button id="addattrbutton" title="Attribut zum Filter zufügen" class="btn btn-panel-submit" type="button">
+            <button id="addattrbutton" title="Attribut zum Filter zufügen" class="btn btn-btn-default" type="button">
                 <span class="glyphicon glyphicon-plus"></span>
             </button>
-         </div> <!--/btn-group -->
-         <select class="form-control input-sm" id="addattrselect">
+         </div> 
+        
+         <select class="form-control input" id="addattrselect">
              <option title='Attribut auswählen'>Attribut auswählen</option>
             <% _.each(wfslayer.attributes, function (attr) {%>
             <option title="<%=attr.attr%>"><%=attr.attr%></option>
             <% });%>
         </select>
-    </div><!-- /input-group -->
+    </div>
+             
+
 
 
     </div>
