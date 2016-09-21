@@ -15,6 +15,7 @@ define([
         events: {
             "click #filterbutton": "getFilterInfos",
             "click #addattrbutton": "addAttributeToFilter",
+            "click #addorbutton": "addOrToFilter",
             "click .panel-heading": "toggleHeading",
             "click .btn-default": "removeDiv"
         },
@@ -45,19 +46,9 @@ define([
             this.model.set("logExpCounter", counter);
             attrToFilter.push(attr);
             this.model.set("attributesToFilter", attrToFilter);
-
+            
             _.each(this.model.get("wfsList"), function (layer) {                
                 select += "<div class='' id='all_" + layer.id + "_" + attr + "'>";
-                if (counter === 1) {
-                }
-                else {
-                    select += "<div class='input-group' id='radio_" + layer.id + "_" + attr + "'>";
-                    select += "<span class='input-group-addon'>";
-                    select += "<input type='radio' checked='true' name='andor_" + attr + "' id='" + counter + "_AND'>AND";
-                    select += "<input type='radio' name='andor_" + attr + "' id='" + counter + "_OR'>OR";
-                    select += "</span>";
-                    select += "</div>";                
-                }
                 select += "<label for='' id='label_" + layer.id + "_" + attr + " ' class='control-label'>" + attr + "</label>";
                 select += "<div class='input-group'id='div_" + layer.id + "_" + attr + "'>";
                 select += "<select class='form-control input' id='" + layer.id + "_" + attr + "'>";
@@ -74,9 +65,22 @@ define([
                 select += "<button id='btnremove_"+layer.id+"_"+attr+"' title='Attribut vom Filter entfernen' class='btn btn-default' type='button'><span class='glyphicon glyphicon-minus-sign'></span></button>";
                 select += "</div>";
                 select += "</div>";
-                select += "</div>";
+                select += "</div><br>";
                 $("#attributepanel").append(select);
             },this);
+        },
+        addOrToFilter: function () {
+            var select = "",
+                attrToFilter = this.model.get("attributesToFilter");
+            
+            attrToFilter.push ("OR");
+            this.model.set("attributesToFilter",attrToFilter);
+            
+            select += "<div class='input-group-addon'>";
+            select += "<span>OR</span>";
+            select += "</div><br>";
+            
+            $("#attributepanel").append(select);
         },
         removeDiv: function (btn_remove){
             var id = btn_remove.currentTarget.id,
@@ -92,7 +96,6 @@ define([
             }
             this.model.set("attributesToFilter",attrToFilter);
             
-            
             id = id.replace("btnremove_","all_");
             $("#"+id).remove();
 
@@ -105,37 +108,30 @@ define([
                 layerfilters = [],
                 filters = [],
                 id,
-                value,
-                and_or;
+                value;
 
             _.each(wfsList, function (layer) {
-
                     if (layer.filterOptions === "extended") {
-                        // counter entspricht dem Zähler der Logischen Ausdrücke (AND/OR)
-                        _.each(this.model.get("attributesToFilter"), function (fieldName,counter) {
-
-                            id = "#" + layer.id + "_" + fieldName;
-                            value = $(id).val();
-                            and_or = "";
-
-                            if ($("#" + counter + "_AND").prop("checked")) {
-                                and_or = "AND";
-                            }
-                            else if ($("#" + counter + "_OR").prop("checked")) {    
-                                and_or = "OR";
-                            }
-                            else {
-                                //sonderfall 1.attribut. Da kein radioBtn gesetzt ist, kann er nicht abgefragt werden. Er wird hier gesetzt. 
-                                and_or = "AND";
-                            }
+                        _.each(this.model.get("attributesToFilter"), function (fieldName) {
                             
-                            
-                            filters.push ({
-                                id: id,
-                                filterType: and_or,
-                                fieldName: fieldName,
-                                fieldValue: value
-                            });
+                            if(fieldName==="OR"){
+                                filters.push ({
+                                    id: "none",
+                                    filterType: "OR",
+                                    fieldName: "none",
+                                    fieldValue: "none"
+                                });
+                            }
+                            else{
+                                id = "#" + layer.id + "_" + fieldName;
+                                value = $(id).val();
+                                filters.push ({
+                                    id: id,
+                                    filterType: "AND",
+                                    fieldName: fieldName,
+                                    fieldValue: value
+                                });
+                            }
                         }, this);
 
                     }
@@ -199,32 +195,42 @@ define([
                         layer.defaultStyle = layer.getStyle();
                         layer.setStyle(null);
                     }
-
-                    features.forEach(function (feature) {
-                        var featuredarstellen = true,
-                            preVal = true,
-                            attributname,
-                            attributvalue,
-                            filtertype;
-
-                        // Prüfung, ob Feature dargestellt werden soll
-                        _.each(layerfilter.filter, function (elementfilter) {
-                            attributname = elementfilter.fieldName;
-                            attributvalue = elementfilter.fieldValue;
-                            filtertype = elementfilter.filterType;
-
-                            if(filtertype ==="OR"){
-                                featuredarstellen = this.checkFeatureForFilter(feature,elementfilter);
-                                if(preVal === true || featuredarstellen === true){
-                                    featuredarstellen = true;
-                                    preVal = true;
-                                }
-                                else{
-                                    featuredarstellen = false;
-                                    preVal = false;
+                    var attrToFilter = this.model.get("attributesToFilter"),
+                        newAttrToFilter = [];
+                    for (var i=layerfilter.filter.length-1; i>=0; i--) {
+                        if (layerfilter.filter[i].filterType === "OR") {
+                            newAttrToFilter.push(layerfilter.filter.splice(i,layerfilter.filter.length-1));
+                        }
+                    }
+                    newAttrToFilter.push(layerfilter.filter);
+                    
+                    // alle Objecte mit filterType OR herauslöschen
+                    _.each(newAttrToFilter,function(t1,index){
+                       _.each(t1,function(t2,index2){
+                            if(t2 !== undefined){
+                                if(t2.filterType==="OR"){
+                                t1.splice(index2,1);
                                 }
                             }
-                            else{
+                           
+                       });
+                    });
+                    
+                    console.log(newAttrToFilter);
+                    
+                    
+                    
+                    features.forEach(function (feature) {
+                        var featuredarstellen2 = true,
+                            preVal2 = false;
+
+                        // Prüfung, ob Feature dargestellt werden soll
+                        _.each(newAttrToFilter, function(arrayWithAnds) {
+                            var featuredarstellen = true,
+                                preVal = true;
+                            
+                            _.each(arrayWithAnds, function (elementfilter) {
+
                                 featuredarstellen = this.checkFeatureForFilter(feature,elementfilter);
                                 if(preVal === true && featuredarstellen === true){
                                     featuredarstellen = true;
@@ -234,20 +240,32 @@ define([
                                     featuredarstellen = false;
                                     preVal = false;
                                 }
+                               
+                            },this);
+                            
+                            if(preVal2 === true || featuredarstellen === true){
+                                featuredarstellen2 = true;
+                                preVal2 = true;
                             }
-                            if (featuredarstellen === true) {
-                                if (feature.defaultStyle) {
-                                    feature.setStyle(feature.defaultStyle);
-                                    delete feature.defaultStyle;
-                                }
-                                else {
-                                    feature.setStyle(layer.defaultStyle);
-                                }
+                            else{
+                                featuredarstellen2 = false;
+                                preVal2 = false;
                             }
-                            else if (featuredarstellen === false) {
-                                feature.setStyle(null);
-                            }
+                            
                         },this);
+                        if (featuredarstellen2 === true) {
+                            if (feature.defaultStyle) {
+                                feature.setStyle(feature.defaultStyle);
+                                delete feature.defaultStyle;
+                            }
+                            else {
+                                feature.setStyle(layer.defaultStyle);
+                            }
+                        }
+                        else if (featuredarstellen2 === false) {
+                            feature.setStyle(null);
+                        }
+                        
                     },this);
                 }
             }, this);
