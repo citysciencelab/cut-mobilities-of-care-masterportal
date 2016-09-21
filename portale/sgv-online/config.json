@@ -1,0 +1,132 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "url": "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        "specialWFS": {
+            "minChar": 3,
+            "definitions": [
+                
+                        ]
+                    },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse/ Stadtteil/ Flursrück(0123/1234)"
+    },
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "parcelSearch": {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search"
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "wfsFeatureFilter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "toggleMenu": true,
+      "zoom": true,
+      "attributions": false,
+      "fullScreen": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        
+        
+        
+                ]
+    }
+  }
+}
