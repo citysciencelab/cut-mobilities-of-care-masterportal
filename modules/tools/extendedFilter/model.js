@@ -7,7 +7,8 @@ define([
         defaults: {
             wfsList: [],
             attributesToFilter: [],
-            logExpCounter:0
+            attrCounter:0,
+            orCounter:0
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -29,7 +30,8 @@ define([
                     return layer.get("layer").getSource().getFeatures().length > 0;
                 }),
                 filterLayers = _.filter(featureLayers, function (layer) {
-                    return layer.get("filterOptions") && layer.get("filterOptions").length > 0;
+//                    return layer.get("filterOptions") && layer.get("filterOptions").length > 0;
+                    return layer.get("extendedFilter");
                 }),
                 wfsList = [],
                 attributes = [],
@@ -47,9 +49,7 @@ define([
                     _.each(layer.get("layer").getSource().getFeatures(), function(feature){
                         values.push(feature.get(attr));
                     });
-
-
-
+                    
                     attributes_with_values.push({
                         attr : attr,
                         values : _.uniq(values)
@@ -61,7 +61,8 @@ define([
                 wfsList.push({
                     id: layer.id,
                     name: layer.get("name"),
-                    filterOptions: layer.get("filterOptions"),
+//                    filterOptions: layer.get("filterOptions"),
+                    extendedFilter: layer.get("extendedFilter"),
                     layer: layer.get("layer"),
                     attributes: attributes_with_values
                 });

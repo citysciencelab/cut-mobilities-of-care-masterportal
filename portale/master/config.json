@@ -207,13 +207,28 @@
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
-          "filterOptions": "extended"
+          "extendedFilter": true,
+          "filterOptions": [
+            {
+              "fieldName": "teilnahme_geburtsklinik",
+              "filterType": "combo",
+              "filterName": "Geburtsklinik",
+              "filterString": ["*", "Ja", "Nein"]
+            },
+            {
+              "fieldName": "teilnahme_notversorgung",
+              "filterType": "combo",
+              "filterName": "Not- und Unfallversorgung",
+              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+            }
+          ]
         },
         {
           "id": "753",
           "styleId": "753",
-          "visibility": false,
+          "visibility": true,
           "mouseHoverField": "Name",
+          "extendedFilter": true,
           "filterOptions": [
             {
               "fieldName": "Bezirk",

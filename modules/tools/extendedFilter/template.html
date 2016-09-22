@@ -8,7 +8,6 @@
         <span style="font-size: 14px; "><%=wfslayer.name %></span>
     </div>
 
-<% if (wfslayer.filterOptions==="extended") { %>
     <div class="panel-body">
 
      <div class="input-group">
@@ -25,42 +24,27 @@
             <option title="<%=attr.attr%>"><%=attr.attr%></option>
             <% });%>
         </select>
-        <div class="input-group-btn">
-            <button id="addorbutton" title="OR zum Filter zufügen" class="btn btn-btn-default" type="button">
-                OR
-            </button>
-         </div>       
     </div>
-             
-
+    <br>         
+      <div class="input-group-btn">
+        <button id="addorbutton" title="Füge einen weiteren Filter hinzu" class="btn btn-btn-default" type="button">
+            Weiteren Filter hinzufügen
+        </button>
+     </div>    
+    
 
 
     </div>
     <div class="panel-body" id="attributepanel">
+        <div class="input-group-addon" id="or__init">
+            <span>Zeige alle Objekte mit folgenden Eigenschaften an:</span>
+        </div><br> 
     </div>
+<% }); %>
 
-
- <% } else {%>
-
-<% _.each(wfslayer.filterOptions, function (filter) { if (filter.filterType === 'combo') { %>
-    <div class="panel-body <%= wfslayer.id %>_wfs_panel">
-        <label for="" class="control-label"><%=filter.filterName%></label>
-        <select class="form-control input-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
-<% _.each(filter.filterString, function (value) { if (value === '*') { %>
-            <option title="keine Filterung der Elemente auf dieses Attribut">*</option>
-<% } else { %>
-            <option title='nur Elemente mit "<%=value%>" darstellen'><%=value%></option>
-<% } }); %>
-        </select>
-<% } else { %>
-        <label for="" class="control-label">Unbekannter Filtertyp.</label>
-<% } %>
-
-   </div>
-<% });} });%>
-    <div class="panel-footer">
-        <button id="filterbutton" title="Nur Elemente mit diesen Filtereinstellungen anzeigen." class="btn btn-panel-submit" type="button">Filter anwenden</button>
-    </div>
+</div>    
+<div class="panel-footer">
+    <button id="filterbutton" title="Nur Elemente mit diesen Filtereinstellungen anzeigen." class="btn btn-panel-submit" type="button">Filter anwenden</button>
 </div>
 <% } else { %>
 <div class="extendedfilter-body">
