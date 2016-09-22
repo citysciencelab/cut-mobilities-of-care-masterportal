@@ -77,6 +77,7 @@ define(function (require) {
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
+            this.setAttributes();
             this.createLegendURL();
         },
 
@@ -98,6 +99,7 @@ define(function (require) {
         createLegendURL: function () {},
         createLayerSource: function () {},
         createLayer: function () {},
+        setAttributes: function () {},
 
         getResolutions: function () {
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
