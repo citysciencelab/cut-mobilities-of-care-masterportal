@@ -7,6 +7,12 @@ define(function (require) {
 
     WMSLayer = Layer.extend({
 
+        setAttributes: function () {
+            if (_.isUndefined(this.getInfoFormat()) === true) {
+                this.setInfoFormat("text/xml");
+            }
+        },
+
         /**
          * [createLayerSource description]
          * @return {[type]} [description]
@@ -144,6 +150,10 @@ define(function (require) {
             this.getLayerSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
+        setInfoFormat: function (value) {
+            this.set("infoFormat", value);
+        },
+
         /**
          * [getLayers description]
          * @return {[type]} [description]
@@ -154,6 +164,10 @@ define(function (require) {
 
         getSingleTile: function () {
             return this.get("singleTile");
+        },
+
+        getInfoFormat: function () {
+            return this.get("infoFormat");
         }
     });
 
