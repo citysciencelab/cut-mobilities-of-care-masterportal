@@ -101,7 +101,8 @@ define([
                 "getResolutions": function () {
                     return this.getResolutions();
                 },
-                "getResoByScale": this.getResoByScale
+                "getResoByScale": this.getResoByScale,
+                "getScales": this.getScales
             }, this);
 
             channel.on({

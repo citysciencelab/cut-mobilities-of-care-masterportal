@@ -48,6 +48,18 @@ define(function (require) {
                     this.checkForScale(options);
                 }
             });
+            // Default min/max Resolutions für WFS setzen
+            if (this.get("typ") === "WFS") {
+                var resolutions = Radio.request("MapView", "getScales");
+                if (!_.isUndefined(resolutions) && resolutions.length > 0) {
+                    if (_.isUndefined(this.attributes.minScale)) {
+                        this.attributes.minScale = resolutions[resolutions.length - 1];
+                    }
+                    if (_.isUndefined(this.attributes.maxScale)) {
+                        this.attributes.maxScale = resolutions[0];
+                    }
+                }
+            }
 
             this.checkForScale(Radio.request("MapView", "getOptions"));
 
