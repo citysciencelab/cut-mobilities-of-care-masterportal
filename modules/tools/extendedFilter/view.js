@@ -15,8 +15,8 @@ define([
         },
         events: {
             "click #filterbutton": "getFilterInfos",
-            "click #addattrbutton": "addAttributeToFilter",
-            "click #addorbutton": "addOrToFilter",
+            "click .addattrbutton": "addAttributeToFilter",
+            "click .addorbutton": "addOrToFilter",
             "click .panel-heading": "toggleHeading",
             "click .btn-default": "removeDiv"
         },
@@ -39,71 +39,162 @@ define([
         /*
         * erstellt das Attribut dropdown für den Filter
         */
-        addAttributeToFilter: function () {
-            var attr = $("#addattrselect").val(),
+        addAttributeToFilter: function (idlayer) {
+            var layer,
+                idlayer = idlayer.currentTarget.id.split("__")[0],
+                attr,
                 select = "",
-                attrToFilter = this.model.get("attributesToFilter"),
-                counter = this.model.get("attrCounter");
+                attrToFilterObjs,
+                attrToFilterObj,
+                attrCounterObjs,
+                attrCounterObj,
+                counter,
+                index;
+            
+            layer = _.find(this.model.get("wfsList"),function(layer){
+                if(layer.id=idlayer){
+                    return layer
+                }
+            });
+                
+            attr = $("#"+layer.id+"_addattrselect").val();
+            select = "";
+            attrToFilterObjs = this.model.get("attrToFilter");
+            attrCounterObjs = this.model.get("attrCounter");
+
             if(attr === "Attribut auswählen"){
                 EventBus.trigger("alert", "Bitte geben Sie ein Attribut zum Filtern ein!");
             }
             else{
-                attr=attr+"__"+counter;
-                attrToFilter.push(attr);
-                this.model.set("attributesToFilter", attrToFilter);
+                
+                // erstelle für den aktuellen layer ein objekt mit layerid und counter, wenn nicht schon eins existiert. Wenn eins existiert, zähle counter hoch. 
+                attrCounterObj = _.findWhere(attrCounterObjs,{layerid:layer.id});
+                index = _.indexOf(attrCounterObjs,attrCounterObj);
 
-                _.each(this.model.get("wfsList"), function (layer) {
-                    select += "<div class='' id='all__" + layer.id + "__" + attr + "'>";
-                    select += "<label for='' id='label__" + layer.id + "__" + attr + "' class='control-label'>" + attr.split("__")[0] + "</label>";
-                    select += "<div class='input-group'id='div__" + layer.id + "__" + attr + "'>";
-                    select += "<select class='form-control input' id='" + layer.id + "__" + attr + "'>";
-                    select += "<option title='Nicht filtern'>*</option>";
-                    _.each(layer.attributes, function (attribute) {
-                        if (attribute.attr === attr.split("__")[0]) {
-                            _.each(attribute.values, function (value) {
-                                select += "<option title='" + value + "'>" + value + "</option>";
-                            });
-                       }
+                if(index !== -1){
+                    counter = attrCounterObj.counter;
+                    counter ++;
+                    attrCounterObjs.splice(index, 1);
+                    attrCounterObjs.push({
+                        layerid: layer.id,
+                        counter: counter
                     });
-                    select += "</select><br>";
-                    select += "<div class='input-group-btn'>";
-                    select += "<button id='btnremove__" + layer.id + "__" + attr + "' title='Attribut vom Filter entfernen' class='btn btn-default' type='button'><span class='glyphicon glyphicon-minus-sign'></span></button>";
-                    select += "</div>";
-                    select += "</div>";
-                    select += "</div><br>";
-                    $("#attributepanel").append(select);
-                },this);
+                    this.model.set("attrCounter",attrCounterObjs);
+                }
+                else{
+                    counter = 0;
+                    attrCounterObjs.push({
+                        layerid: layer.id,
+                        counter: counter
+                    });
+                    this.model.set("attrCounter",attrCounterObjs);
+                }
+                
+                
+                // erstelle für den aktuellen layer ein objekt mit layerid und attributen-array, wenn nicht schon eins existiert. Wenn eins existiert, füge attribut hinzu. 
+                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer.id});
+                index = _.indexOf(attrToFilterObjs,attrToFilterObj);
+                
+                attr=attr+"__"+counter;
+                
+                if(index !== -1){
+                    var array = attrToFilterObj.attributes;
+                    
+                    attrToFilterObjs.splice(index, 1);
+                    array.push(attr);
+                    attrToFilterObjs.push({
+                        layerid: layer.id,
+                        attributes: array
+                    });
+                    this.model.set("attrToFilter",attrToFilterObjs);
+                }
+                else{
+                    var array = [];
+                    
+                    array.push(attr);
+                    attrToFilterObjs.push({
+                        layerid: layer.id,
+                        attributes: array
+                    });
+                    this.model.set("attrToFilter",attrToFilterObjs);
+                }
 
-                counter ++;
-                this.model.set("attrCounter", counter);
+                select += "<div class='' id='all__" + layer.id + "__" + attr + "'>";
+                select += "<label for='' id='label__" + layer.id + "__" + attr + "' class='control-label'>" + attr.split("__")[0] + "</label>";
+                select += "<div class='input-group'id='div__" + layer.id + "__" + attr + "'>";
+                select += "<select class='form-control input' id='" + layer.id + "__" + attr + "'>";
+                select += "<option title='Nicht filtern'>*</option>";
+                _.each(layer.attributes, function (attribute) {
+                    if (attribute.attr === attr.split("__")[0]) {
+                        _.each(attribute.values, function (value) {
+                            select += "<option title='" + value + "'>" + value + "</option>";
+                        });
+                   }
+                });
+                select += "</select><br>";
+                select += "<div class='input-group-btn'>";
+                select += "<button id='btnremove__" + layer.id + "__" + attr + "' title='Attribut vom Filter entfernen' class='btn btn-default' type='button'><span class='glyphicon glyphicon-minus-sign'></span></button>";
+                select += "</div>";
+                select += "</div>";
+                select += "</div><br>";
+                $("#"+layer.id+"__attributepanel").append(select);
             }
         },
         /*
         * added den Trenner OR
         */
-        addOrToFilter: function () {
+        addOrToFilter: function (layer) {
             var select = "",
-                attrToFilter = this.model.get("attributesToFilter"),
-                counter = this.model.get("orCounter");
+                idlayer = layer.currentTarget.id.split("__")[0],
+                attrToFilterObjs = this.model.get("attrToFilter"),
+                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:idlayer}),
+                attributeArray = attrToFilterObj.attributes,
+                orCounterObjs = this.model.get("orCounter"),
+                orCounterObj,
+                index,
             
-            if(attrToFilter.length===0){
+                counter = 0;
+            
+           
+            
+            if(attributeArray.length===0){
                  EventBus.trigger("alert", "Bitte geben Sie zuerst mindestens ein Attribut zum Filtern ein!");
             }
-            else if(attrToFilter[attrToFilter.length-1]==="OR"){
+            else if(attributeArray[attributeArray.length-1]==="OR"){
                 EventBus.trigger("alert", "Bitte geben Sie zuerst mindestens ein Attribut zum Filtern ein!");
             }
             else{
-                attrToFilter.push ("OR");
-                this.model.set("attributesToFilter",attrToFilter);
+                attributeArray.push ("OR");
+                
+                // erstelle für den aktuellen layer ein objekt mit layerid und OR counter, wenn nicht schon eins existiert. Wenn eins existiert, zähle counter hoch. 
+                orCounterObj = _.findWhere(orCounterObjs,{layerid:idlayer});
+                index = _.indexOf(orCounterObjs,orCounterObj);
+                
+                if(index !== -1){
+                    counter = orCounterObj.counter;
+                    counter ++;
+                    orCounterObjs.splice(index, 1);
+                    orCounterObjs.push({
+                        layerid: idlayer,
+                        counter: counter
+                    });
+                    this.model.set("orCounter",orCounterObjs);
+                }
+                else{
+                    counter = 0;
+                    orCounterObjs.push({
+                        layerid: idlayer,
+                        counter: counter
+                    });
+                    this.model.set("orCounter",orCounterObjs);
+                }
 
-                select += "<div class='input-group-addon'id='or"+ "__" + counter + "'>";
+                select += "<div class='input-group-addon'id='" + idlayer + "__" + "or" + "__" + counter + "'>";
                 select += "<span>Und zeige alle Objekte mit folgenden Eigenschaften an:</span>";
                 select += "</div><br>";
 
-                $("#attributepanel").append(select);
+                $("#" + idlayer + "__" + "attributepanel").append(select);
 
-                counter++;
-                this.model.set("orCounter",counter);
             }
             
         },
@@ -112,19 +203,34 @@ define([
         */
         removeDiv: function (btn_remove){
             var id = btn_remove.currentTarget.id,
+                layer =id.split("__")[1], 
                 attr = id.split("__")[2],
                 nummer = id.split("__")[3],
-                counter = this.model.get("attrCounter"),
-                attrToFilter = this.model.get("attributesToFilter");
+                attrCounterObjs = this.model.get("attrCounter"),
+                attrCounterObj = _.findWhere(attrCounterObjs,{layerid:layer}),
+                counter = attrCounterObj.counter,
+                attrToFilterObjs = this.model.get("attrToFilter"),
+                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer}),
+                attributeArray = attrToFilterObj.attributes;
             
             attr = attr+"__"+nummer;
-            for (var i=attrToFilter.length-1; i>=0; i--) {
-                if (attrToFilter[i] === attr) {
-                    attrToFilter.splice(i, 1);
+            for (var i=attributeArray.length-1; i>=0; i--) {
+                if (attributeArray[i] === attr) {
+                    attributeArray.splice(i, 1);
                     break;
                 }
             }
-            this.model.set("attributesToFilter",attrToFilter);
+            attrToFilterObj.attributes= attributeArray;
+            
+            for (var i=attrToFilterObjs.length-1; i>=0; i--) {
+                if (attrToFilterObjs[i].layerid === layer) {
+                    attrToFilterObjs.splice(i, 1);
+                    break;
+                }
+            }
+            attrToFilterObjs.push(attrToFilterObj);
+            this.model.set("attrToFilter",attrToFilterObjs);
+            
             
             id = id.replace("btnremove__","all__");
             $("#"+id).prev().remove();
@@ -132,7 +238,15 @@ define([
             $("#"+id).remove();
 
             counter--;
-            this.model.set("attrCounter",counter);
+            attrCounterObj.counter = counter;
+            for (var i=attrCounterObjs.length-1; i>=0; i--) {
+                if (attrCounterObjs[i].layerid === layer) {
+                    attrCounterObjs.splice(i, 1);
+                    break;
+                }
+            }
+            attrCounterObjs.push(attrCounterObj);
+            this.model.set("attrCounter",attrCounterObjs);
             this.removeOrIfNecessary();
         },
 

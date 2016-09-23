@@ -6,9 +6,9 @@ define([
     var extendedFilter = Backbone.Model.extend({
         defaults: {
             wfsList: [],
-            attributesToFilter: [],
-            attrCounter:0,
-            orCounter:0
+            attrToFilter: [],
+            attrCounter: [],
+            orCounter: []
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
