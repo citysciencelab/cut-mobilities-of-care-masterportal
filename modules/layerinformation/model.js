@@ -87,13 +87,13 @@ define([
                         dates.each(function (index, element) {
                             datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
                             if ($(datetype).attr("codeListValue") === "revision") {
-                                revisionDateTime = $("gco\\:DateTime,DateTime", element)[0].textContent;
+                                revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
                             else if ($(datetype).attr("codeListValue") === "publication") {
-                                publicationDateTime = $("gco\\:DateTime,DateTime", element)[0].textContent;
+                                publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
                             else{
-                                dateTime = $("gco\\:DateTime,DateTime", element)[0].textContent;
+                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
                         });
                     }
@@ -111,6 +111,9 @@ define([
         setMetadataURL: function () {
             if (this.url().search("metaver") !== -1) {
                 this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            }
+            else if (this.url().search("geodatenmv.de") !== -1) {
+                this.set("metaURL", "http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=" + this.get("metaID"));
             }
             else {
                 this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
