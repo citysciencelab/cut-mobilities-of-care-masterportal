@@ -87,11 +87,11 @@ define([
             _.each(brwList, function (brw) {
                 switch (brw.art) {
                     case "Akt.BRW": {
-                        this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE);
+                        this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE, brw.nutzung);
                         break;
                     }
                     case "Norm.BRW": {
-                        this.requestBRW(brw, "F", "eh", 1, 1000); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
+                        this.requestBRW(brw, "F", "eh", 1, 1000, brw.nutzung); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
                         break;
                     }
                 }
@@ -100,10 +100,9 @@ define([
         /*
         * stellt Requests zur Abfrage der einzelnen BRW zusammen. Die Abfrage erfolgt immer in EUR, Rückgabe ist entsprechend auch in EUR.
         */
-        requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE) {
+        requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE, ZNUTA) {
             var stichtag = brw.stichtag.split("."),
-                dataInputs = "<wps:DataInputs>",
-                znuta = brw.brwValues.ergnuta && brw.brwValues.ergnuta !== "" ? brw.brwValues.ergnuta : brw.brwValues.nuta;
+                dataInputs = "<wps:DataInputs>";
 
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ExtID", brw.id, "string")); // Externer Identifikator des WPS-Prozesses, wird mit ausgegeben.
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BRW", brw.brwValues.brw, "float"));
@@ -121,7 +120,7 @@ define([
             }
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZENTW", brw.brwValues.entw, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBEIT", brw.brwValues.beit, "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", znuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", ZNUTA, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBAUW", BAUW, "string"));
             if (ZWGFZ !== "") {
                 dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZWGFZ", ZWGFZ, "float"));
