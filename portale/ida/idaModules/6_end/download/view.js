@@ -8,7 +8,8 @@ define([
         el: "#downloadpage",
         model: Model,
         events: {
-            "click #downloadbutton": "initDownload"
+            "click #downloadbutton": "initDownload",
+            "click #refreshbutton": "reload"
         },
         initialize: function (fileid) {
             this.listenTo(this.model, "change:downloadpath", this.setDownloadpath),
@@ -31,7 +32,13 @@ define([
             $("#downloadpage").show();
         },
         initDownload: function () {
+            $("#refreshbutton").prop("disabled", false);
             window.open(this.model.get("downloadpath"));
+        },
+        reload: function () {
+            var path = window.location.origin + window.location.pathname;
+
+            window.location.href = path;
         },
         setResult: function () {
             $("#downloadresult").addClass("bg-success");
