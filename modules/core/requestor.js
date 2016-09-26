@@ -198,9 +198,6 @@ define([
         isValidKey: function (key) {
             var ignoredKeys = Config.ignoredKeys;
             
-            if(key==="Shape"){
-                console.log(key);
-            }
             if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
                 return false;
             }
