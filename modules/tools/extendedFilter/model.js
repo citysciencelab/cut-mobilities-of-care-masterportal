@@ -30,20 +30,17 @@ define([
                     return layer.get("layer").getSource().getFeatures().length > 0;
                 }),
                 filterLayers = _.filter(featureLayers, function (layer) {
-//                    return layer.get("filterOptions") && layer.get("filterOptions").length > 0;
                     return layer.get("extendedFilter");
                 }),
                 wfsList = [],
                 attributes = [],
                 attributes_with_values = [],
                 values = [];
-
-
+            
             _.each (filterLayers, function (layer) {
                 _.each(layer.get("layer").getSource().getFeatures() [0].getKeys(), function(key){
                     attributes.push(key);
                 });
-
                 _.each(attributes, function (attr) {
 
                     _.each(layer.get("layer").getSource().getFeatures(), function(feature){
@@ -57,17 +54,15 @@ define([
                     values=[];
 
                 });
-
                 wfsList.push({
                     id: layer.id,
                     name: layer.get("name"),
-//                    filterOptions: layer.get("filterOptions"),
                     extendedFilter: layer.get("extendedFilter"),
                     layer: layer.get("layer"),
                     attributes: attributes_with_values
                 });
-
-
+                attributes = [];
+                attributes_with_values = [];  
 
             });
             this.set("wfsList", wfsList);

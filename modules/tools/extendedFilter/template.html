@@ -3,12 +3,12 @@
 <% _.each(wfsList, function (wfslayer) { %>
     <div id="<%= wfslayer.id %>" class="panel-heading">
         <p class="buttons pull-right">
-            <span id="extendedfilter_resizemarker" class="glyphicon glyphicon-resize-full" title="Ein- und ausklappen"></span>
+            <span id="<%= wfslayer.id + '__extendedfilter_resizemarker'%>" class="glyphicon glyphicon-resize-full" title="Ein- und ausklappen"></span>
         </p>
         <span style="font-size: 14px; "><%=wfslayer.name %></span>
     </div>
 
-    <div class="panel-body">
+    <div class="panel-body" id = "<%= wfslayer.id + '__attributepanel0'%>">
 
      <div class="input-group">
          
@@ -18,7 +18,7 @@
             </button>
          </div> 
         
-         <select class="form-control input addattrselect" id="<%= wfslayer.id + '_addattrselect'%>">
+         <select class="form-control input addattrselect" id="<%= wfslayer.id + '__addattrselect'%>">
              <option title='Attribut auswählen'>Attribut auswählen</option>
             <% _.each(wfslayer.attributes, function (attr) {%>
             <option title="<%=attr.attr%>"><%=attr.attr%></option>

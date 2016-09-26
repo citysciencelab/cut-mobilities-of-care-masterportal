@@ -21,27 +21,27 @@ define([
             "click .btn-default": "removeDiv"
         },
         toggleHeading: function (evt) {
-            var id = $(evt.currentTarget)[0].id;
+            var id = evt.currentTarget.id;
 
-            $("." + id + "_wfs_panel").each(function (index, ele) {
-                $(ele).toggle();
-            });
-            if ($("#extendedfilter_resizemarker").hasClass("glyphicon-resize-small")) {
-                $("#extendedfilter_resizemarker").removeClass("glyphicon-resize-small");
-                $("#extendedfilter_resizemarker").addClass("glyphicon-resize-full");
+            $("#"+id+"__attributepanel0").toggle();
+            $("#"+id+"__attributepanel").toggle();
+            
+            if ($("#"+id+"__extendedfilter_resizemarker").hasClass("glyphicon-resize-small")) {
+                $("#"+id+"__extendedfilter_resizemarker").removeClass("glyphicon-resize-small");
+                $("#"+id+"__extendedfilter_resizemarker").addClass("glyphicon-resize-full");
             }
             else {
-                $("#extendedfilter_resizemarker").addClass("glyphicon-resize-small");
-                $("#extendedfilter_resizemarker").removeClass("glyphicon-resize-full");
+                $("#"+id+"__extendedfilter_resizemarker").addClass("glyphicon-resize-small");
+                $("#"+id+"__extendedfilter_resizemarker").removeClass("glyphicon-resize-full");
             }
         },
 
         /*
         * erstellt das Attribut dropdown für den Filter
         */
-        addAttributeToFilter: function (idlayer) {
+        addAttributeToFilter: function (layerid) {
             var layer,
-                idlayer = idlayer.currentTarget.id.split("__")[0],
+                idlayer = layerid.currentTarget.id.split("__")[0],
                 attr,
                 select = "",
                 attrToFilterObjs,
@@ -51,13 +51,8 @@ define([
                 counter,
                 index;
             
-            layer = _.find(this.model.get("wfsList"),function(layer){
-                if(layer.id=idlayer){
-                    return layer
-                }
-            });
-                
-            attr = $("#"+layer.id+"_addattrselect").val();
+            layer = _.findWhere(this.model.get("wfsList"),{id:idlayer});  
+            attr = $("#"+layer.id+"__addattrselect").val();
             select = "";
             attrToFilterObjs = this.model.get("attrToFilter");
             attrCounterObjs = this.model.get("attrCounter");
@@ -206,9 +201,6 @@ define([
                 layer =id.split("__")[1], 
                 attr = id.split("__")[2],
                 nummer = id.split("__")[3],
-                attrCounterObjs = this.model.get("attrCounter"),
-                attrCounterObj = _.findWhere(attrCounterObjs,{layerid:layer}),
-                counter = attrCounterObj.counter,
                 attrToFilterObjs = this.model.get("attrToFilter"),
                 attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer}),
                 attributeArray = attrToFilterObj.attributes;
@@ -237,43 +229,54 @@ define([
             
             $("#"+id).remove();
 
-            counter--;
-            attrCounterObj.counter = counter;
-            for (var i=attrCounterObjs.length-1; i>=0; i--) {
-                if (attrCounterObjs[i].layerid === layer) {
-                    attrCounterObjs.splice(i, 1);
-                    break;
-                }
-            }
-            attrCounterObjs.push(attrCounterObj);
-            this.model.set("attrCounter",attrCounterObjs);
-            this.removeOrIfNecessary();
+            this.removeOrIfNecessary(layer);
         },
 
         /*
         * prüft ob das ODER-element gelöscht werden muss oder nicht
         */
-        removeOrIfNecessary: function(){
-            var counter = this.model.get("orCounter"),
-                attrToFilter = this.model.get("attributesToFilter");
+        removeOrIfNecessary: function(layer){
+            var orCounterObjs = this.model.get("orCounter"),
+                orCounterObj = _.findWhere(orCounterObjs,{layerid:layer}),
+                counter,
+                attrToFilterObjs = this.model.get("attrToFilter"),
+                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer}),
+                attributeArray = attrToFilterObj.attributes;
             
-            for(var i=0;i<counter;i++){
-                if($("#or__"+i).next().next().length===0 || $("#or__"+i).next().next()[0].id.split("__")[0]=== "or"){
-                    $("#or__"+i).next().remove();
-                    $("#or__"+i).remove();
-                }
-                if($("#or__"+i).prev().prev().length===0 || $("#or__"+i).prev().prev()[0].id.split("__")[0]=== "or"){
-                    $("#or__"+i).prev().remove();
-                    $("#or__"+i).remove();
-                }
-            }
-            for (var i=attrToFilter.length-1; i>=0; i--) {
-                if (attrToFilter[i] === "OR") {
-                    attrToFilter.splice(i, 1);
+            if(!_.isUndefined(orCounterObj)){
+                counter = orCounterObj.counter;
+                
+                for(var i=0;i<=counter;i++){
+                    if($("#"+layer+"__"+"or__"+i).next().next().length === 0 || $("#"+layer+"__"+"or__"+i).next().next()[0].id.split("__")[1]=== "or"){
+                        $("#"+layer+"__"+"or__"+i).next().remove();
+                        $("#"+layer+"__"+"or__"+i).remove();
+                    }
+                    if($("#"+layer+"__"+"or__"+i).prev().prev().length === 0 || $("#"+layer+"__"+"or__"+i).prev().prev()[0].id.split("__")[1]=== "or"){
+                        $("#"+layer+"__"+"or__"+i).prev().remove();
+                        $("#"+layer+"__"+"or__"+i).remove();
+                    }
                     
                 }
+                for (var i=attributeArray.length-1; i>=0; i--) {
+                    if (attributeArray[i] === "OR" && attributeArray[i-1] === "OR") {
+                        attributeArray.splice(i, 1);
+                    }
+                }
+                if(attributeArray[attributeArray.length-1] === "OR"){
+                     attributeArray.splice(attributeArray.length-1, 1);
+                }
+            
+                attrToFilterObj.attributes= attributeArray;
+            
+                for (var i=attrToFilterObjs.length-1; i>=0; i--) {
+                    if (attrToFilterObjs[i].layerid === layer) {
+                        attrToFilterObjs.splice(i, 1);
+                        break;
+                    }
+                }
+                attrToFilterObjs.push(attrToFilterObj);
+                this.model.set("attrToFilter",attrToFilterObjs);
             }
-            this.model.set("attributesToFilter",attrToFilter);
         },
         /*
         * sammelt die Filter und führt dann die Filter-funktion durch
@@ -284,12 +287,21 @@ define([
                 filters = [],
                 id,
                 value;
-
+            
             _.each(wfsList, function (layer) {
-//                    if (layer.filterOptions === "extended") {
-                    if (layer.extendedFilter === true) {
-                        var iterator=0;
-                        _.each(this.model.get("attributesToFilter"), function (fieldName) {
+                if (layer.extendedFilter === true) {
+                    
+                    var iterator=0,
+                        attrToFilterObjs = this.model.get("attrToFilter"),
+                        attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer.id}),
+                        attributeArray;
+                    
+                    if(!_.isUndefined(attrToFilterObj)){
+                        attributeArray = attrToFilterObj.attributes;
+                        
+                        _.each(attributeArray, function (fieldName) {
+                            id = "#" + layer.id + "__" + fieldName;
+
                             if(fieldName==="OR"){
                                 iterator++;
                                 filters.push ({
@@ -300,7 +312,6 @@ define([
                                 });
                             }
                             else{
-                                id = "#" + layer.id + "__" + fieldName;
                                 value = $(id).val();
                                 filters.push ({
                                     id: id,
@@ -311,19 +322,22 @@ define([
                             }
                         }, this);
 
+
+
+                        layerfilters.push(
+                            {
+                                layerId: layer.id,
+                                filter: filters
+                            }
+                        );
+                        if (layerfilters.length > 0) {
+                            this.filterLayers(layerfilters);
+                        }
+                        layerfilters = [];
                     }
-                   
-                layerfilters.push(
-                    {
-                        layerId: layer.id,
-                        filter: filters
-                    }
-                );
+                }
             }, this);
             
-            if (layerfilters.length > 0) {
-                this.filterLayers(layerfilters);
-            }
         },
         /*
         * iteriert über jedes feature und prüft ob es nach dem Filter dargestellt wird oder nicht. 
@@ -363,28 +377,29 @@ define([
                         layer.defaultStyle = layer.getStyle();
                         layer.setStyle(null);
                     }
-                    var attrToFilter = this.model.get("attributesToFilter"),
-                        newAttrToFilter = [];
+//                    var attrToFilter = this.model.get("attrToFilter"),
+                    var newAttrToFilter = [];
+                    
+                    
                     for (var i=layerfilter.filter.length-1; i>=0; i--) {
-                        
                         if (layerfilter.filter[i].filterType === "OR") {
                             newAttrToFilter.push(layerfilter.filter.splice(i,layerfilter.filter.length-1));
                         }
                     }
+                    
+                    
+                    
                     newAttrToFilter.push(layerfilter.filter);
-                    
-                    attrToFilter=[];
-                    
-                    // alle Objecte mit filterType !OR in attrToFilter schreiben
+                    var attrToFilter=[];
+
                     _.each(newAttrToFilter,function(t1){
-                        
-                       _.each(t1,function(t2,index2){
-                            if(t2 !== undefined){
-                                if(t2.filterType!=="OR"){
-                                    attrToFilter.push(t1.splice(index2,1));
-                                }
+                        var test = _.filter(t1,function(filter){
+                            if(filter.filterType !== "OR"){
+                                return filter;
                             }
-                       });  
+                        });
+                        attrToFilter.push(test);
+                       
                     });
 
                     features.forEach(function (feature) {
