@@ -11,6 +11,7 @@ define([
         response: [],
         pContent: [],
         typ: "",
+
         /**
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
@@ -195,9 +196,12 @@ define([
                 EventBus.trigger("renderResults", [this.pContent, positionGFI]);
         },
         isValidKey: function (key) {
-            var invalidKeys = ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH"];
-
-            if (_.indexOf(invalidKeys, key.toUpperCase()) !== -1) {
+            var ignoredKeys = Config.ignoredKeys;
+            
+            if(key==="Shape"){
+                console.log(key);
+            }
+            if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
                 return false;
             }
             return true;

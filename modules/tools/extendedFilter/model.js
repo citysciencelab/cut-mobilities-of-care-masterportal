@@ -1,14 +1,16 @@
 define([
     "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
+    "backbone.radio",
+    "config"
+], function (Backbone, Radio, Config) {
     "use strict";
     var extendedFilter = Backbone.Model.extend({
         defaults: {
             wfsList: [],
             attrToFilter: [],
             attrCounter: [],
-            orCounter: []
+            orCounter: [],
+            ignoredKeys: Config.ignoredKeys
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -39,20 +41,19 @@ define([
             
             _.each (filterLayers, function (layer) {
                 _.each(layer.get("layer").getSource().getFeatures() [0].getKeys(), function(key){
-                    attributes.push(key);
-                });
+                    if (!_.contains(this.get("ignoredKeys"),key.toUpperCase())) {
+                        attributes.push(key);
+                    }
+                },this);
                 _.each(attributes, function (attr) {
-
                     _.each(layer.get("layer").getSource().getFeatures(), function(feature){
                         values.push(feature.get(attr));
                     });
-                    
                     attributes_with_values.push({
                         attr : attr,
                         values : _.uniq(values)
                     });
                     values=[];
-
                 });
                 wfsList.push({
                     id: layer.id,
@@ -64,7 +65,7 @@ define([
                 attributes = [];
                 attributes_with_values = [];  
 
-            });
+            },this);
             this.set("wfsList", wfsList);
         }
     });
