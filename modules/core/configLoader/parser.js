@@ -327,13 +327,13 @@ define([
          * @return {Object[]} layerlist - Objekte aus der services.json
          */
         mergeObjectsByIds: function (ids, layerlist) {
-            var objectsByIds,
+            var objectsByIds = [],
                 newObject;
-
                 // Objekte die gruppiert werden
-                objectsByIds = _.filter(layerlist, function (object) {
-                    return _.contains(ids, object.id);
+                _.each(ids, function (id) {
+                    objectsByIds.push(_.findWhere(layerlist, {id: id}));
                 });
+
                 // Das erste Objekt wird kopiert
                 newObject = _.clone(objectsByIds[0]);
                 // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
@@ -362,13 +362,6 @@ define([
             value = value.replace(/[^a-zA-Z0-9]/g, "");
 
             return _.uniqueId(value);
-        },
-        getNextSelectionIDX: function () {
-            var idx = this.get("selectionIDX");
-
-            this.set("selectionIDX", idx + 1);
-
-            return idx + 1;
         }
     });
 
