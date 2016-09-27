@@ -41,13 +41,8 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
+        
         attributions: true,
-        /**
-        * @memberof config
-        * @type {Boolean}
-        * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
-        * @default [false]
-        */
         // menubar: true,
         scaleLine: true,
         mouseHover: true,
@@ -57,7 +52,7 @@ define(function () {
         
         print: {
             printID: "99999",
-            title: "Hundert-Jahre-Stadtgrün",
+            title: "100 Jahre Stadtgrün",
             gfi: false
         },
         geoAPI: false,
