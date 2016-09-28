@@ -2,7 +2,36 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
-  
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        "specialWFS": {
+            "minChar": 3,
+            "definitions": [
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+                    "name": "bplan"
+                },
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+                    "name": "bplan"
+                }
+            ]
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse"
+    },
     "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
     },
@@ -12,23 +41,13 @@
         "glyphicon": "glyphicon-list"
       },
       "tools": {
-        "name": "Werkzeuge",
-        "glyphicon": "glyphicon-wrench",
+        
         "children": {
           
-          "measure": {
-            "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full",
-            "onlyDesktop": true
-          },
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
-          },
-          "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print"
           }
         }
       },
@@ -36,10 +55,6 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
-       "wfsFeatureFilter": {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter"
-          },
       "contact": {
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
@@ -66,12 +81,12 @@
       }
     },
     "controls": {
-      "zoom": true,
       "toggleMenu": true,
-      "orientation": "once",
-      "poi": true,
       "fullScreen": true,
-      "attributions": true
+      "zoom": true,
+      "orientation": "once",
+      "poi": true
+      
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -93,25 +108,27 @@
     "Fachdaten":
     {
       "Layer": [
-        
-       {
-          "id": "1132", 
+        {
+          "id": "639",
+          "name": "Parkanlagen",
           "styleId": "1132",
-          "name": "Attraktionen",
           "visibility": true,
-          "mouseHoverField": "titel"
+          "mouseHoverField": "name"
         },
-          {
-          "id": "628"
+        {
+          "id": "641",
+          "name": "Plätze",
+          "styleId": "1132",
+          "visibility": true,
+          "mouseHoverField": "name"
         },
-          {
-          "id": "629"
+        {
+          "id": "640",
+          "name": "Spielplätze",
+          "styleId": "1132",
+          "visibility": true,
+          "mouseHoverField": "name"
         }
-        
-
-
-        
-        
       ]
     }
   }

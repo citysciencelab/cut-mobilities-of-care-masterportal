@@ -76,7 +76,7 @@ define(function () {
             // resolution: 26.458319045841044,
             epsg: "EPSG:25832"
         },
-        customModules: ["../portale/verkehr-geoportal/verkehrsfunctions"],
+        customModules: ["../portale/verkehr-geoportal/verkehrsfunctions.js"],
         footer: false,
         quickHelp: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",

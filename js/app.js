@@ -8,12 +8,14 @@ define("app",
     "modules/core/configLoader/preparser",
     "modules/core/map",
     "modules/core/parametricURL",
+    "modules/core/crs",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
     // Core laden
     new RawLayerList();
     new Preparser();
     new ParametricURL();
+    new CRS();
     new Map();
 
     // Module laden
@@ -219,56 +221,59 @@ define("app",
             }
         });
 
-        require(["modules/controls/view"], function (ControlsView) {
-            new ControlsView();
-        });
-
         // controls
-        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "control"}), function (control) {
-            switch (control.id) {
-                case "toggleMenu": {
-                    require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                        new ToggleMenuControlView();
-                    });
-                    break;
+        require(["modules/controls/view"], function (ControlsView) {
+            var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
+                controlsView = new ControlsView();
+
+            _.each(controls, function (control, index) {
+                switch (control.id) {
+                    case "toggleMenu": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                            new ToggleMenuControlView({el: el});
+                        });
+                        break;
+                    }
+                    case "zoom": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                            new ZoomControlView({el: el});
+                        });
+                        break;
+                    }
+                    case "orientation": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/orientation/view"], function (OrientationView) {
+                            new OrientationView({el: el});
+                        });
+                        break;
+                    }
+                    case "mousePosition": {
+                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                            new MousePositionView();
+                        });
+                        break;
+                    }
+                    case "fullScreen": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                            new FullScreenView({el: el});
+                        });
+                        break;
+                    }
+                    case "attributions": {
+                        require(["modules/controls/attributions/view"], function (AttributionsView) {
+                            new AttributionsView();
+                        });
+                        break;
+                    }
                 }
-                case "zoom": {
-                    require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                        new ZoomControlView();
-                    });
-                    break;
-                }
-                case "orientation": {
-                    require(["modules/controls/orientation/view"], function (OrientationView) {
-                        new OrientationView();
-                    });
-                    break;
-                }
-                case "poi": {
-                    require(["modules/controls/orientation/poi/view"], function (PoiView) {
-                        new PoiView();
-                    });
-                    break;
-                }
-                case "mousePosition": {
-                    require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                        new MousePositionView();
-                    });
-                    break;
-                }
-                case "fullScreen": {
-                    require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                        new FullScreenView();
-                    });
-                    break;
-                }
-                case "attributions": {
-                    require(["modules/controls/attributions/view"], function (AttributionsView) {
-                        new AttributionsView();
-                    });
-                    break;
-                }
-            }
+            });
         });
 
         require(["modules/mapMarker/view"], function (MapMarkerView) {

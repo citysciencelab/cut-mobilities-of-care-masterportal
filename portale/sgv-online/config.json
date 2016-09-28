@@ -2,7 +2,27 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
-  
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "url": "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        "specialWFS": {
+            "minChar": 3,
+            "definitions": [
+                
+                        ]
+                    },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse/ Stadtteil/ Flursrück(0123/1234)"
+    },
     "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
     },
@@ -15,7 +35,10 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+          "parcelSearch": {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search"
+          },
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
@@ -29,6 +52,19 @@
           "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
+          },
+          "wfsFeatureFilter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
           }
         }
       },
@@ -36,10 +72,6 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
-       "wfsFeatureFilter": {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter"
-          },
       "contact": {
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
@@ -66,12 +98,10 @@
       }
     },
     "controls": {
-      "zoom": true,
       "toggleMenu": true,
-      "orientation": "once",
-      "poi": true,
-      "fullScreen": true,
-      "attributions": true
+      "zoom": true,
+      "attributions": false,
+      "fullScreen": true
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -94,25 +124,9 @@
     {
       "Layer": [
         
-       {
-          "id": "1132", 
-          "styleId": "1132",
-          "name": "Attraktionen",
-          "visibility": true,
-          "mouseHoverField": "titel"
-        },
-          {
-          "id": "628"
-        },
-          {
-          "id": "629"
-        }
-        
-
-
         
         
-      ]
+                ]
     }
   }
 }

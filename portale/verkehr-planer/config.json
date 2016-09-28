@@ -265,13 +265,6 @@
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
             {
-              "id": "1932",
-              "visibility": false,
-              "name" : "StadtRAD-Stationen",
-              "metaName": "StadtRAD-Stationen",
-              "attributions": "<span>Darstellung ab Maßstab 1: 40 000</span>"
-              },
-            {
               "id": "4866",
               "visibility": false
             },
@@ -595,7 +588,7 @@
               "Titel": "Lärmkarten - Flugverkehr",
               "Layer": [
                 {
-                    "id": ["2413","2415"], 
+                    "id": ["2415","2413"], 
                     "visibility": false, 
                     "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
                 },

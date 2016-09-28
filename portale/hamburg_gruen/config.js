@@ -1,19 +1,26 @@
 define(function () {
     var config = {
-        //title: "Hundert-Jahre-Stadtgrün",
+        title: "Hamburgs Grün",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-
+        zoomtofeature: {
+            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            version: "2.0.0",
+            typename: "app:hamburgconvention",
+            valuereference: "app:flaechenid",
+            imglink: "../img/location_eventlotse.svg",
+            layerid: "4426"
+        },
         view: {
             background: "white",
-            resolution: 2.6458319045841048,
-            center: [567360, 5939010],
-            /* extent: [454591, 5809000, 700000, 6075769],
+            resolution: 26.458319045841044 // 1: 100 000
+           /* center: [565874, 5934140],
+            extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
             */
         },
-       // customModules: ["../portale/master/verkehrsfunctions"],
+        customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
             urls: [
@@ -42,17 +49,15 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         
-        attributions: true,
+        //attributions: true,
         // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-
-        
         print: {
             printID: "99999",
-            title: "100 Jahre Stadtgrün",
+            title: "Master",
             gfi: false
         },
         geoAPI: false,

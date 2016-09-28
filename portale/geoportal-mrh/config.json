@@ -93,10 +93,10 @@
         }
       },
       "controls": {
-        "zoom": true,
         "toggleMenu": true,
-        "orientation": "once",
         "fullScreen": true,
+        "zoom": true,
+        "orientation": "once",
         "mousePosition": true,
         "attributions": true
       },
@@ -119,7 +119,8 @@
              "id": "55"
             },
             {
-             "id": "57"
+             "id": "57",
+             "maxScale": 5000
             }
           ]
         },
@@ -203,7 +204,8 @@
                   "Titel": "Raumordnung",
                   "Layer": [
                     {
-                      "id": "269"
+                      "id": "269",
+                      "maxScale": 20000
                     },
                     {
                       "id": "265"
@@ -217,16 +219,24 @@
                   "Titel": "Raumentwicklungsprogramm Mecklenburg-Vorpommern",
                   "Layer": [
                     {
-                      "id": "305"
+                      "id": "305",
+                      "maxScale": 300000,
+                      "minScale": 63000
                     },
                     {
-                      "id": "307"
+                      "id": "307",
+                      "maxScale": 300000,
+                      "minScale": 63000
                     },
                     {
-                      "id": "309"
+                      "id": "309",
+                      "maxScale": 300000,
+                      "minScale": 63000
                     },
                     {
-                      "id": "311"
+                      "id": "311",
+                      "maxScale": 150000,
+                      "minScale": 63000
                     }
                   ]
                 },
@@ -243,7 +253,8 @@
                       "id": "295"
                     },
                     {
-                      "id": "297"
+                      "id": "297",
+                      "maxScale": 280000
                     },
                     {
                       "id": "299"
@@ -443,6 +454,9 @@
                 },
                 {
                   "id": "131"
+                },
+                {
+                  "id": ["365","364"]
                 },
                 {
                   "id": "133"

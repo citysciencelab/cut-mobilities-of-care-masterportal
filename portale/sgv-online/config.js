@@ -1,38 +1,35 @@
 define(function () {
     var config = {
-        //title: "Hundert-Jahre-Stadtgrün",
+        title: "HH Straßen- und Gebietsauskunft",
+        logo: "../img/stano.png",
+        logoLink: "http://www.statistik-nord.de/",
+        logoTooltip: "Statistikamt Nord",
+        
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
-
         view: {
-            background: "white",
-            resolution: 2.6458319045841048,
-            center: [567360, 5939010],
-            /* extent: [454591, 5809000, 700000, 6075769],
+            background: "white"
+           /* center: [565874, 5934140],
+            extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
             */
         },
-       // customModules: ["../portale/master/verkehrsfunctions"],
+        customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
             urls: [
+                {
+                    "bezeichnung": "Impressum: ",
+                    "url": "http://www.statistik-nord.de/impressum/",
+                    "alias": "Statistikamt Nord",
+                    "alias_mobil": "StaNo"
+                },
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",
                     "url": "http://www.geoinfo.hamburg.de/",
                     "alias": "Landesbetrieb Geoniformation und Vermessung",
                     "alias_mobil": "LGV"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download",
-                    "alias_mobil": "SDP"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
                 }
             ]
         },
@@ -48,11 +45,9 @@ define(function () {
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-
-        
         print: {
             printID: "99999",
-            title: "100 Jahre Stadtgrün",
+            title: "Hamburger Straßen- und Gebietsauskunft",
             gfi: false
         },
         geoAPI: false,

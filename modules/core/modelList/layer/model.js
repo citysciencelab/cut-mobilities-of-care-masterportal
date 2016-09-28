@@ -30,6 +30,7 @@ define(function (require) {
                 },
                 "change:layer": function () {
                     this.updateLayerTransparency();
+                    this.getResolutions();
                 }
             });
 
@@ -47,6 +48,18 @@ define(function (require) {
                     this.checkForScale(options);
                 }
             });
+            // Default min/max Resolutions für WFS setzen
+            if (this.get("typ") === "WFS") {
+                var resolutions = Radio.request("MapView", "getScales");
+                if (!_.isUndefined(resolutions) && resolutions.length > 0) {
+                    if (_.isUndefined(this.attributes.minScale)) {
+                        this.attributes.minScale = resolutions[resolutions.length - 1];
+                    }
+                    if (_.isUndefined(this.attributes.maxScale)) {
+                        this.attributes.maxScale = resolutions[0];
+                    }
+                }
+            }
 
             this.checkForScale(Radio.request("MapView", "getOptions"));
 
@@ -64,13 +77,14 @@ define(function (require) {
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
+            this.setAttributes();
             this.createLegendURL();
         },
 
         /**
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
         **/
-        checkForScale: function(options) {
+        checkForScale: function (options) {
             if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
                 this.setIsOutOfScale(true);
             }
@@ -85,6 +99,15 @@ define(function (require) {
         createLegendURL: function () {},
         createLayerSource: function () {},
         createLayer: function () {},
+        setAttributes: function () {},
+
+        getResolutions: function () {
+            var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
+                resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
+
+            this.setMaxResolution(resoByMaxScale + 1);
+            this.setMinResolution(resoByMinScale);
+        },
 
         /**
          * Setter für Attribut "layerSource"
@@ -138,6 +161,14 @@ define(function (require) {
 
         setIsOutOfScale: function (value) {
             this.set("isOutOfScale", value);
+        },
+
+        setMaxResolution: function (value) {
+            this.getLayer().setMaxResolution(value);
+        },
+
+        setMinResolution: function (value) {
+            this.getLayer().setMinResolution(value);
         },
 
         /**
@@ -198,6 +229,14 @@ define(function (require) {
 
         getIsOutOfScale: function () {
             return this.get("isOutOfScale");
+        },
+
+        getMaxScale: function () {
+            return this.get("maxScale");
+        },
+
+        getMinScale: function () {
+            return this.get("minScale");
         },
 
         incTransparency: function () {

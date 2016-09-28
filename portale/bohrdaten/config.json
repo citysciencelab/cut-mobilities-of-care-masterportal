@@ -4,13 +4,16 @@
       "PortalTitle": "GeoViewer",
       "searchBar": {
           "gazetteer": {
-              "url": "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+              "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
               "searchStreets": true,
               "searchHouseNumbers": true,
               "searchDistricts": true,
               "searchParcels": true
           },
-          "placeholder": "Adresssuche"
+          "placeholder": "Suche Adress und Themen",
+          "tree": {
+              "minChars": 3
+          }
       },
       "mapView": {
           "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
@@ -78,10 +81,10 @@
         }
       },
       "controls": {
-        "zoom": true,
         "toggleMenu": true,
-        "orientation": "once",
         "fullScreen": true,
+        "zoom": true,
+        "orientation": "once",
         "mousePosition": true
       },
       "scaleLine": true,
@@ -117,6 +120,39 @@
             ]
           },
           {
+            "Titel": "Geologie",
+            "Layer": [
+              {
+                "id": "1032",
+                "visibility": false
+              },
+              {
+                "id": "1030",
+                "visibility": false
+              },
+              {
+                "id": "1033",
+                "visibility": false
+              },
+              {
+                "id": "1031",
+                "visibility": false
+              },
+              {
+                "id": "1029",
+                "visibility": false
+              },
+              {
+                "id": "2199",
+                "visibility": false
+              },
+              {
+                "id": "4885",
+                "visibility": false
+              }
+            ]
+          },
+          {
             "Titel": "Geothermie",
             "Layer": [
               {
@@ -146,41 +182,7 @@
               {
                 "id": "4423",
                 "visibility": false,
-                "infoFormat": "text/html",
-                "name": "Bohrdaten GLA (ab 1:5 000)"
-              }
-            ]
-          },
-          {
-            "Titel": "Geologie",
-            "Layer": [
-              {
-                "id": "1029",
-                "visibility": false
-              },
-              {
-                "id": "2199",
-                "visibility": false
-              },
-              {
-                "id": "1033",
-                "visibility": false
-              },
-              {
-                "id": "1031",
-                "visibility": false
-              },
-              {
-                "id": "1030",
-                "visibility": false
-              },
-              {
-                "id": "1032",
-                "visibility": false
-              },
-              {
-                "id": "4885",
-                "visibility": false
+                "infoFormat": "text/html"
               }
             ]
           },

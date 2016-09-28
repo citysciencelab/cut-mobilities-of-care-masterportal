@@ -17,7 +17,7 @@ define([
             EventBus.trigger("registerZoomButtonsInClickCounter", this.$el);
         },
         render: function () {
-            $(".controls-view").append(this.$el.html(this.template));
+            this.$el.html(this.template);
         },
         setZoomLevelUp: function () {
             Radio.trigger("MapView", "setZoomLevelUp");
