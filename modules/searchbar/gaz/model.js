@@ -16,6 +16,7 @@ define([
             searchHouseNumbers: false,
             searchDistricts: false,
             searchParcels: false,
+            searchStreetKey: false,
             onlyOneStreetName: "",
             searchStringRegExp: "",
             houseNumbers: []
@@ -50,6 +51,9 @@ define([
             }
             if (config.searchParcels) {
                 this.set("searchParcels", config.searchParcels);
+            }
+            if (config.searchStreetKey) {
+                this.set("searchStreetKey", config.searchStreetKey);
             }
             if (config.minChars) {
                 this.set("minChars", config.minChars);
@@ -95,6 +99,11 @@ define([
                         this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                     }
                 }
+                if (this.get("searchStreetKey") === true) {
+                    if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                    }
+                }
             }
         },
         /**
@@ -135,6 +144,11 @@ define([
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.set("onlyOneStreetName", "");
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
+            }
+            if (this.get("searchStreetKey") === true) {
+                if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                }
             }
             $("#searchInput").val(searchString);
             EventBus.trigger("createRecommendedList");
@@ -314,6 +328,28 @@ define([
                     glyphicon: "glyphicon-map-marker",
                     geom: "geom",
                     id: "Parcel"
+                });
+            }, this);
+            EventBus.trigger("createRecommendedList");
+        },
+        /**
+         *
+         */
+        getStreetKey: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                coordinates,
+                hitName;
+
+            _.each(hits, function (hit) {
+                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                // "Hitlist-Objekte"
+                EventBus.trigger("searchbar:pushHits", "hitList", {
+                    name: hitName,
+                    type: "Straße",
+                    coordinate: coordinates,
+                    glyphicon: "glyphicon-road",
+                    id: hitName.replace(/ /g, "") + "Straße"
                 });
             }, this);
             EventBus.trigger("createRecommendedList");
