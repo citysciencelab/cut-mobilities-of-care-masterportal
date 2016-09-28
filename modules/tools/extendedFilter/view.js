@@ -517,7 +517,8 @@ define([
             var maxHeight = $(window).height() - 160;
 
             $("#wfsFilterWin").css("max-height", maxHeight);
-            $("#wfsFilterWin").css("overflow", "scroll");
+            $("#wfsFilterWin").css("overflow-y", "auto");
+            $("#wfsFilterWin").css("overflow-x", "hidden");
         }
     });
 
