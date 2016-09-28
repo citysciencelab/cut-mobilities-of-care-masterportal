@@ -8,13 +8,15 @@ define("app",
     "modules/core/configLoader/preparser",
     "modules/core/map",
     "modules/core/parametricURL",
+    "modules/core/crs",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
 
     // Core laden
     new RawLayerList();
     new Preparser();
     new ParametricURL();
+    new CRS();
     new Map();
 
     // Module laden
