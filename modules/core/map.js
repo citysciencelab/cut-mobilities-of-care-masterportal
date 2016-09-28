@@ -73,7 +73,22 @@ define(function (require) {
 
         },
         addFeatureToLayer: function (feature, layerName) {
-            var layer = this.getLayerByName(layerName);
+            var layer = this.getLayerByName(layerName),
+             fill = new ol.style.Fill({
+               color: "#f88699"
+             }),
+             stroke = new ol.style.Stroke({
+               color: "#000",
+               width: 1.25
+             }),
+             styles = [
+               new ol.style.Style({
+                 fill: fill,
+                 stroke: stroke
+               })
+             ];
+
+            layer.setStyle(styles);
             layer.getSource().addFeature(feature);
         },
         getLayerByName: function (layerName) {
