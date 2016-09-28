@@ -8,7 +8,9 @@ define(function (require) {
         initialize: function () {
 
             var channel = Radio.channel("RemoteInterface");
-
+            channel.reply({
+                "getMapState": this.getMapState
+            }, this);
             channel.on({
                 "addFeature": this.addFeature,
                 "addFeatures": this.addFeatures,
@@ -85,6 +87,9 @@ define(function (require) {
                     geometry: geom
                 });
                 return feature;
+        },
+        getMapState: function () {
+            return Radio.request("SaveSelection", "getMapState");
         }
     });
 
