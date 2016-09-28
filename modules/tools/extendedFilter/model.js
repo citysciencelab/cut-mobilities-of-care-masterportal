@@ -10,6 +10,7 @@ define([
             attrToFilter: [],
             attrCounter: [],
             orCounter: [],
+            layerfilters : [],
             ignoredKeys: Config.ignoredKeys
         },
         initialize: function () {

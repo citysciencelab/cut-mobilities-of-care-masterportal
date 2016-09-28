@@ -89,7 +89,7 @@
             "glyphicon": "glyphicon-filter"
           },
           "extendedFilter": {
-            "name": "ExtendedFilter",
+            "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter"
           },
           "routing": {

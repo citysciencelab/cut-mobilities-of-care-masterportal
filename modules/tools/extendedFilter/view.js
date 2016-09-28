@@ -451,7 +451,9 @@ define([
                     },this);
                 }
             }, this);
-            
+            this.model.set("attrToFilter",[]);
+            this.model.set("attrCounter",[]);
+            this.model.set("orCounter",[]);
             this.model.set("layerfilters", layerfilters);
         },
         
@@ -488,13 +490,14 @@ define([
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.setMaxHeight();
-                if (layerfilters) {
-                    _.each(layerfilters, function (layerfilter) {
-                        _.each(layerfilter.filter, function (filter) {
-                            $(filter.id).val(filter.fieldValue);
-                        });
-                    });
-                }
+//                if (layerfilters) {
+//                    _.each(layerfilters, function (layerfilter) {
+//                        _.each(layerfilter.filter, function (filter) {
+//                            $(filter.id).val(filter.fieldValue);
+//                        });
+//                    });
+//                }
+                this.delegateEvents();
             }
             else if (this.model.get("isCurrentWin") === false) {
                 if (layerfilters) {
@@ -506,11 +509,15 @@ define([
                     this.filterLayers(layerfilters);
                 }
             }
+            else{
+                this.undelegateEvents();
+            }
         },
         setMaxHeight: function () {
             var maxHeight = $(window).height() - 160;
 
             $("#wfsFilterWin").css("max-height", maxHeight);
+            $("#wfsFilterWin").css("overflow", "scroll");
         }
     });
 
