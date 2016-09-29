@@ -2,6 +2,7 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
+    "PortalLogo": "none",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,

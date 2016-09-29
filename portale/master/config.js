@@ -19,6 +19,13 @@ define(function () {
         title: "Master",
         /**
         * @memberof config
+        * @type {String}
+        * @desc Logo des Portals, wenn kein Logo gewünscht: "none", wenn logo nicht gesetzt ist, wird das "hh-logo.png" verwendet.
+        * @example logo: "../img/hh-logo.png"
+        */
+//        logo: "none",
+        /**
+        * @memberof config
         * @type {Boolean}
         * @desc Erstellt einen SimpleMap-Link (Nur die Karte mit Layern ohne Menü).
         * @example simpleMap: true
