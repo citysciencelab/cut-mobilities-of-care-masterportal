@@ -2,9 +2,8 @@ define([
     "backbone",
     "modules/controls/orientation/poi/feature/model",
     "eventbus",
-    "config",
     "openlayers"
-], function (Backbone, PointOfInterest, EventBus, Config, ol) {
+], function (Backbone, PointOfInterest, EventBus, ol) {
 
     var PointOfInterestList = Backbone.Collection.extend({
         initialize: function () {
