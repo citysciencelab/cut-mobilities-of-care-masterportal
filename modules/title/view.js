@@ -9,12 +9,13 @@ define([
     var TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",
         template: _.template(TitleTemplate),
-        initialize: function () {
-            this.render();
+        initialize: function (title) {
+            this.setLogo();
+            this.render(title);
         },
-        render: function () {
+        render: function (portalTitle) {
             this.$el.html(this.template( {
-                title: Config.title,
+                title: portalTitle,
                 util: Util,
                 logo: this.getLogo(),
                 logoLink: Config.logoLink || "http://geoinfo.hamburg.de",
@@ -23,16 +24,22 @@ define([
             $(".navbar-collapse").append(this.$el);
         },
         
-        getLogo: function(){
-            if(Config.logo === "none"){
-               return null;
+        setLogo: function(){
+            var logo = Radio.request("Parser","getPortalConfig").PortalLogo;
+            var result = "";
+            if(logo === "none"){
+               result = null;
             }
-            else if (_.isUndefined(Config.logo)){
-                return "../img/hh-logo.png";
+            else if (_.isUndefined(logo)){
+                result = "../img/hh-logo.png";
             }
             else{
-               return Config.logo;
+               result = logo;
             }
+            this.logo = result;
+        },
+        getLogo: function (){
+            return this.logo;
         }
     });
     return TitleView;
