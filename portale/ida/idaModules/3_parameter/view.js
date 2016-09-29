@@ -12,7 +12,7 @@ define([
         template: _.template(Template),
         events: {
             "click #seite3_weiter": "weiter",
-            "change #requestedParamsListe": "paramChanged",
+            "change .param": "paramChanged",
             "change #WGFZ": "commaChanger",
             "change #FLAE": "commaChanger",
             "change #WOFL": "commaChanger",
@@ -21,9 +21,35 @@ define([
             "change #WONKM": "commaChanger",
             "change #SONKM": "commaChanger",
             "change #JEZ": "commaChanger",
-            "click .btn-group": "buttonChanger"
+            "click .btn-group": "buttonChanged",
+            "click .waehrung": "waehrungChanged",
+            "change .waehrung": "waehrungChanged"
         },
-        buttonChanger: function (evt) {
+        waehrungChanged: function (evt) {
+            if (evt.target.type === "button") {
+                $(evt.currentTarget).find("button").each(function () {
+                    if ($(this).hasClass("active") === true) {
+                        $(this).removeClass("active");
+                    }
+                    else {
+                        $(this).addClass("active");
+                        $(evt.currentTarget).find("span").text($(this).val());
+                    }
+                });
+            }
+
+            var obj = {
+                id: evt.currentTarget.id,
+                value: $(evt.currentTarget).find("input").val(),
+                type: "number",
+                minCheck: null,
+                maxCheck: null,
+                waehrung: $(evt.currentTarget).find(".active").val()
+            };
+
+            this.model.paramChanged(obj);
+        },
+        buttonChanged: function (evt) {
             $(evt.currentTarget).find("button").each(function () {
                 if ($(this).hasClass("active") === true) {
                     $(this).removeClass("active");
@@ -32,8 +58,17 @@ define([
                     $(this).addClass("active");
                 }
             });
-            evt.target.id = evt.currentTarget.id;
-            this.model.paramChanged(evt.target);
+
+            var obj = {
+                id: evt.currentTarget.id,
+                value: evt.target.value,
+                type: evt.target.type,
+                minCheck: null,
+                maxCheck: null,
+                waehrung: null
+            };
+
+            this.model.paramChanged(obj);
         },
         commaChanger: function (evt) {
             var id = evt.target.id,
@@ -58,14 +93,23 @@ define([
                 this.weiter();
             }
         },
-        switchToValid: function (target) {
-            $(target).parent().removeClass("has-error");
+        switchToValid: function (id) {
+            $("#" + id).parent().removeClass("has-error");
         },
-        switchToInvalid: function (target) {
-            $(target).parent().addClass("has-error");
+        switchToInvalid: function (id) {
+            $("#" + id).parent().addClass("has-error");
         },
         paramChanged: function (evt) {
-            this.model.paramChanged(evt.target);
+            var obj = {
+                id: evt.currentTarget.id,
+                value: evt.currentTarget.value,
+                type: evt.currentTarget.type,
+                minCheck: evt.currentTarget.min ? evt.currentTarget.min : null,
+                maxCheck: evt.currentTarget.max ? evt.currentTarget.max : null,
+                waehrung: null
+            };
+
+            this.model.paramChanged(obj);
         },
         weiter: function () {
             new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"), this.model.get("lage"));
