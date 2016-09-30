@@ -26,8 +26,25 @@ define([
             "click .waehrung": "waehrungChanged",
             "change .waehrung": "waehrungChanged"
         },
+        initialize: function (lage, params, nutzung, produkt, brwList, jahr) {
+            this.model.set("lage", lage),
+            this.model.set("requestedParams", params),
+            this.model.set("nutzung", nutzung),
+            this.model.set("produkt", produkt),
+            this.model.set("jahr", jahr),
+            this.model.set("brwList", brwList);
+            this.listenTo(this.model, {"switchToInvalid": this.switchToInvalid});
+            this.listenTo(this.model, {"switchToValid": this.switchToValid});
+
+            if (_.contains(params, true) === true) {
+                this.show();
+            }
+            else {
+                this.weiter();
+            }
+        },
         waehrungChanged: function (evt) {
-            if (evt.target.type === "button") {
+            if ($(evt.target).attr("type") === "button") {
                 $(evt.currentTarget).find("button").each(function () {
                     if ($(this).hasClass("active") === true) {
                         $(this).removeClass("active");
@@ -40,7 +57,7 @@ define([
             }
 
             var obj = {
-                id: evt.currentTarget.id,
+                id: $(evt.currentTarget).attr("id"),
                 value: $(evt.currentTarget).find("input").val(),
                 type: "number",
                 minCheck: null,
@@ -61,9 +78,9 @@ define([
             });
 
             var obj = {
-                id: evt.currentTarget.id,
-                value: evt.target.value,
-                type: evt.target.type,
+                id: $(evt.currentTarget).attr("id"),
+                value: $(evt.target).attr("value"),
+                type: $(evt.target).attr("type"),
                 minCheck: null,
                 maxCheck: null,
                 waehrung: null
@@ -76,23 +93,6 @@ define([
                 value = evt.target.value.replace(",", ".");
 
             $("#" + id).val(value);
-        },
-        initialize: function (lage, params, nutzung, produkt, brwList, jahr) {
-            this.model.set("lage", lage),
-            this.model.set("requestedParams", params),
-            this.model.set("nutzung", nutzung),
-            this.model.set("produkt", produkt),
-            this.model.set("jahr", jahr),
-            this.model.set("brwList", brwList);
-            this.listenTo(this.model, {"switchToInvalid": this.switchToInvalid});
-            this.listenTo(this.model, {"switchToValid": this.switchToValid});
-
-            if (_.contains(params, true) === true) {
-                this.show();
-            }
-            else {
-                this.weiter();
-            }
         },
         switchToValid: function (id) {
             $("#" + id).parent().removeClass("has-error");
