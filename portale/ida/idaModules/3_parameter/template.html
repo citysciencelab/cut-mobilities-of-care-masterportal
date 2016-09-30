@@ -130,7 +130,7 @@
         <% if (requestedParams.FLAE === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Grundstücksgröße [m²]</h5>
-            <input id="FLAE" class="param form-control" type="number" value="<%= defaultFlae %>" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="FLAE" class="param form-control" type="number" min="0" value="<%= defaultFlae %>" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.BAUW === true) { %>
