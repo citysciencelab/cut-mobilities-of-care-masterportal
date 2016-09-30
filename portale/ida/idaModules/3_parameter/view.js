@@ -12,6 +12,7 @@ define([
         template: _.template(Template),
         events: {
             "click #seite3_weiter": "weiter",
+            "click #seite3_back": "zurueck",
             "change .param": "paramChanged",
             "change #WGFZ": "commaChanger",
             "change #FLAE": "commaChanger",
@@ -112,8 +113,11 @@ define([
             this.model.paramChanged(obj);
         },
         weiter: function () {
-            console.log(this.model.get("params"));
             new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"), this.model.get("lage"));
+        },
+        zurueck: function () {
+            $("#seite_drei").hide();
+            $("#seite_eins").show();
         },
         show: function () {
             this.model.calcDefaultsForTemplate();
@@ -131,7 +135,6 @@ define([
         },
         checkStadtteilName: function () {
             if (this.model.get("brwList").length > 0) {
-                console.log(this.model.get("brwList")[0].brwLage.stadtteil);
                 $("#StadtteilName").val(this.model.get("brwList")[0].brwLage.stadtteil);
                 $("#StadtteilNameDiv").hide();
             }
