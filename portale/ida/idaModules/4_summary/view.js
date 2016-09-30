@@ -9,7 +9,8 @@ define([
         el: "#seite_vier",
         model: Model,
         events: {
-            "click #seite4_weiter": "weiter"
+            "click #seite4_weiter": "weiter",
+            "click #seite4_back": "zurueck"
         },
         initialize: function (params, brwList, nutzung, produkt, jahr, lage) {
             this.listenTo(this.model, "change:result", this.refreshResult),
@@ -26,6 +27,10 @@ define([
         weiter: function () {
             new Seite5(this.model.get("filepath"));
         },
+        zurueck: function () {
+            $("#seite_drei").show();
+            $("#seite_vier").hide();
+        },
         show: function () {
             $("#seite_zwei").hide();
             $("#seite_drei").hide();
@@ -36,6 +41,7 @@ define([
             var result = this.model.get("result");
 
             $("#result_p").addClass("bg-success");
+            $("#result_p").removeClass("bg-danger");
             $("#result_p").text(result);
             $("#seite4_weiter").prop("disabled", false);
         },
@@ -43,6 +49,7 @@ define([
             var error = this.model.get("error");
 
             $("#result_p").addClass("bg-danger");
+            $("#result_p").removeClass("bg-success");
             $("#result_p").text(error);
             $("#seite4_weiter").prop("disabled", true);
         }
