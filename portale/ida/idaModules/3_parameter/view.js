@@ -118,6 +118,7 @@ define([
         zurueck: function () {
             $("#seite_drei").hide();
             $("#seite_eins").show();
+            this.remove();
         },
         show: function () {
             this.model.calcDefaultsForTemplate();

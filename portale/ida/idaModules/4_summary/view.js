@@ -30,6 +30,7 @@ define([
         zurueck: function () {
             $("#seite_drei").show();
             $("#seite_vier").hide();
+            this.remove();
         },
         show: function () {
             $("#seite_zwei").hide();

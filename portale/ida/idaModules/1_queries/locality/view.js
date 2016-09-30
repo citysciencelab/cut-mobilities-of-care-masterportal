@@ -1,14 +1,16 @@
 define([
     "jquery",
     "backbone",
+    "text!idaModules/1_queries/locality/template.html",
     "config",
     "idaModules/1_queries/locality/model",
     "modules/searchbar/view"
-], function ($, Backbone, Config, Model, Searchbar) {
+], function ($, Backbone, Template, Config, Model, Searchbar) {
     "use strict";
     var LocalityView = Backbone.View.extend({
         el: "#lage",
         model: Model,
+        template: _.template(Template),
         events: {
             "change input[type=radio]": "switchLage", // 'click .toggleRoutingOptions': 'toggleRoutingOptions',
             "change #gemarkungsnummer": "setGemarkungsnummer",
@@ -16,6 +18,7 @@ define([
             "keyup #flurstuecksstrasse": "setFlurstuecksstrasse"
         },
         initialize: function () {
+            this.render();
             new Searchbar(Config.searchBar);
         },
         switchLage: function (evt) {
@@ -38,8 +41,13 @@ define([
         },
         setFlurstuecksstrasse: function (evt) {
             this.model.set("flurStrasse", evt.currentTarget.value);
+        },
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
         }
     });
 
-    return new LocalityView;
+    return LocalityView;
 });
