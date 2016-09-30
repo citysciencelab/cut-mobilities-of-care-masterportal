@@ -43,40 +43,6 @@ define([
             this.set("defaultFlae", defaultFlae);
             this.set("defaultBauw", defaultBauw);
             this.set("defaultWGFZ", defaultWGFZ);
-        },
-        setInitialParams: function (liste) {
-            var params = {};
-
-            liste.find("div[class=btn-group]").each(function (num, input) {
-                $(input).find("button").each(function (num2, button) {
-                    if ($(button).hasClass("active") === true) {
-                        var id = input.id,
-                            val = button.value;
-
-                        params = _.extend(params, _.object([id], [val]));
-                    }
-                });
-            });
-            liste.find("input[type=number]").each(function (num, input) {
-                var id = input.id,
-                    val = input.value;
-
-                params = _.extend(params, _.object([id], [val]));
-            });
-            liste.find("input[type=checkbox]").each(function (num, input) {
-                var id = input.id,
-                    val = input.checked;
-
-                params = _.extend(params, _.object([id], [val]));
-            });
-            liste.find(":selected").each(function (num, selected, bla) {
-                var parent = $(selected).parent()[0],
-                    id = parent.id,
-                    val = selected.value;
-
-                params = _.extend(params, _.object([id], [val]));
-            });
-            this.set("params", params);
         }
     });
 
