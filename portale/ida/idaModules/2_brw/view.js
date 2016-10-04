@@ -9,7 +9,6 @@ define([
 ], function ($, Backbone, EventBus, Model, BRWManuellView, Seite3, Template) {
     "use strict";
     var BRWView = Backbone.View.extend({
-//        el: "#seite_zwei",
         id: "seite_zwei",
         template: _.template(Template),
         model: Model,
