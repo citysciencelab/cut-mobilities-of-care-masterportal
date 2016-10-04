@@ -93,7 +93,6 @@ define([
             dataInputs += "</wps:Data>";
             dataInputs += "</wps:Input>";
             dataInputs += "</wps:DataInputs>";
-            this.set("brwList", []);
             EventBus.trigger("wps:request", {
                 workbenchname: this.get("wpsWorkbenchnameListe"),
                 dataInputs: dataInputs
