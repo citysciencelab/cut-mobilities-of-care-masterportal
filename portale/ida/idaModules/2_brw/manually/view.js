@@ -43,5 +43,5 @@ define([
         }
     });
 
-    return new ManuallyView();
+    return ManuallyView;
 });
