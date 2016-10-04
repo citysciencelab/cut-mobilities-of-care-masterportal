@@ -1,10 +1,9 @@
 define([
-    "underscore",
     "backbone",
     "text!modules/title/template.html",
     "config",
     "modules/core/util"
-], function (_, Backbone, TitleTemplate, Config, Util) {
+], function (Backbone, TitleTemplate, Config, Util) {
 
     var TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",
@@ -20,7 +19,7 @@ define([
                 logoLink: Config.logoLink || "http://geoinfo.hamburg.de",
                 logoTooltip: Config.logoTooltip || "Landesbetrieb Geoinformation und Vermessung"
             } ));
-            $(".nav").append(this.$el);
+            $(".navbar-collapse").append(this.$el);
         }
     });
     return TitleView;

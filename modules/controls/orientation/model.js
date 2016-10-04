@@ -1,51 +1,81 @@
 define([
     "backbone",
     "eventbus",
+    "backbone.radio",
     "openlayers",
     "proj4",
     "modules/layer/wfsStyle/list",
-    "config"
-], function (Backbone, EventBus, ol, proj4, StyleList, Config) {
-    "use strict";
+    "config",
+    "backbone.radio"
+], function (Backbone, EventBus, Radio, ol, proj4, StyleList, Config, Radio) {
+
     var OrientationModel = Backbone.Model.extend({
         defaults: {
-            "zoomMode": "once", // once oder allways entsprechend Config
-            "counter": 0, // Counter der Standortbestimmung
-            "marker": new ol.Overlay({
+            zoomMode: "once", // once oder allways entsprechend Config
+            firstGeolocation: true, // Flag, ob es sich um die erste geolocation handelt, damit "once" abgebildet werden kann.
+            marker: new ol.Overlay({
                 positioning: "center-center",
                 stopEvent: false
             }),
-            "tracking": false, // Flag, ob derzeit getrackt wird.
-            "geolocation": null // ol.geolocation wird bei erstmaliger Nutzung initiiert.
+            isPoiOn: false,
+            tracking: false, // Flag, ob derzeit getrackt wird.
+            geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
+            position: ""
         },
         initialize: function () {
-            EventBus.on("setOrientation", this.track, this);
-            EventBus.on("getPOI", this.getPOI, this);
-            EventBus.on("layerlist:sendVisiblePOIlayerList", this.getPOIParams, this);
-            EventBus.on("orientation:removeOverlay", this.removeOverlay, this);
+            this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
+            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
+                this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
+            }
+            this.listenTo(Radio.channel("ModelList"), {
+                "updateVisibleInMapList": this.checkWFS
+            });
+
+            var channel = Radio.channel("geolocation");
+
+            channel.on({
+                "removeOverlay": this.removeOverlay,
+                "getPOI": this.getPOI,
+                "sendPosition": this.sendPosition
+            }, this);
+        },
+        /*
+        * Triggert die Standpunktkoordinate auf Radio
+        */
+        sendPosition: function () {
+            if (this.get("tracking") === false) {
+                this.listenToOnce(this, "change:position", function () {
+                    Radio.trigger("geolocation", "position", this.get("position"));
+                    this.untrack();
+                });
+                this.track();
+            }
+            else {
+                Radio.trigger("geolocation", "position", this.get("position"));
+            }
         },
         removeOverlay: function () {
-            EventBus.trigger("removeOverlay", this.get("marker"));
+            Radio.trigger("Map", "removeOverlay", this.get("marker"));
         },
         untrack: function () {
             var geolocation = this.get("geolocation");
 
             geolocation.un ("change", this.positioning, this);
             geolocation.un ("error", this.onError, this);
-            this.set("counter", 0);
+            this.set("firstGeolocation", true);
             this.set("tracking", false);
             this.removeOverlay();
         },
         track: function () {
-            EventBus.trigger("addOverlay", this.get("marker"));
-            if (this.get("geolocation") === null) {
-                var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
+            var geolocation;
 
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            if (this.get("geolocation") === null) {
+                geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
             }
             else {
-                var geolocation = this.get("geolocation");
-
+                geolocation = this.get("geolocation");
                 this.positioning();
             }
             this.set("tracking", true);
@@ -60,22 +90,24 @@ define([
             }
         },
         zoomAndCenter: function (position) {
-            EventBus.trigger("mapView:setCenter", position, 6);
+            Radio.trigger("MapView", "setCenter", position, 6);
         },
         positioning: function () {
             var geolocation = this.get("geolocation"),
                 position = geolocation.getPosition(),
-                counter = this.get("counter") + 1,
+                firstGeolocation = this.get("firstGeolocation"),
                 zoomMode = this.get("zoomMode"),
                 centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
 
-            // Setze evt. Routing-Start
-            EventBus.trigger("setGeolocation", [centerPosition, position]);
+            // speichere Position
+            this.set("position", centerPosition);
 
+            // Bildschirmnavigation
             if (zoomMode === "once") {
-                if (counter === 1) {
+                if (firstGeolocation === true) {
                     this.positionMarker(centerPosition);
                     this.zoomAndCenter(centerPosition);
+                    this.set("firstGeolocation", false);
                 }
                 else {
                     this.positionMarker(centerPosition);
@@ -85,7 +117,6 @@ define([
                 this.positionMarker(centerPosition);
                 this.zoomAndCenter(centerPosition);
             }
-            this.set("counter", counter);
         },
         onError: function (evt) {
             EventBus.trigger("alert", {
@@ -103,15 +134,15 @@ define([
             $("#loader").hide();
         },
         trackPOI: function () {
-            EventBus.trigger("addOverlay", this.get("marker"));
-            if (this.get("geolocation") === null) {
-                var geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
+            var geolocation;
 
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            if (this.get("geolocation") === null) {
+                geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
             }
             else {
-                var geolocation = this.get("geolocation");
-
+                geolocation = this.get("geolocation");
                 this.callGetPOI();
             }
             geolocation.once ("change", this.callGetPOI, this);
@@ -139,19 +170,37 @@ define([
                 circleExtent = circle.getExtent();
 
             this.set("circleExtent", circleExtent);
-            EventBus.trigger("layerlist:getVisiblePOIlayerList", this);
+            this.getPOIParams();
         },
         getPOIParams: function (visibleWFSLayers) {
+            var visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+
             if (this.get("circleExtent") && visibleWFSLayers) {
                 _.each(visibleWFSLayers, function (layer) {
-                    if (layer.has("source") === true) {
-                        layer.get("source").forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
+                    if (layer.has("layerSource") === true) {
+                        layer.get("layer").getSource().forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
                             EventBus.trigger("setModel", feature, StyleList, this.get("distance"), this.get("newCenter"), layer);
                         }, this);
                     }
                 }, this);
-                EventBus.trigger("showPOIModal");
+                Radio.trigger("poi", "showPOIModal");
             }
+        },
+
+        /**
+         * Setter Methode für das Attribut zoomMode
+         * @param {String} value - once oder allways
+         */
+        setZoomMode: function (value) {
+            this.set("zoomMode", value);
+        },
+
+        /**
+         * Setter Methode für das Attribut isPoiOn
+         * @param {bool} value
+         */
+        setIsPoiOn: function (value) {
+            this.set("isPoiOn", value);
         }
     });
 

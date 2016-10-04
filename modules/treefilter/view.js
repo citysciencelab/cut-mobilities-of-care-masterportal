@@ -13,7 +13,7 @@ define([
         initialize: function () {
             // this.render();
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.model.on("change:filterHits invalid change:treeType change:errors", this.render, this);
+            this.model.on("change:filterHits invalid change:errors", this.render, this);
             this.model.on("change:categoryArray", this.render, this);
             this.model.on("change:typeArray", this.render, this);
             EventBus.on("toggleFilterTreeWin", this.toggleFilterTreeWin, this);
@@ -47,8 +47,11 @@ define([
             });
             $(document.body).on("hidden.bs.dropdown", "#typeToggle", this, function (evt) {
                 if (_.contains(evt.data.model.get("typeArray"), $("#typeInput").val()) === false && $("#typeInput").val() !== "") {
-                    $(".dropdown-toggle-type").dropdown("toggle");
-                    evt.data.focusOnEnd($("#typeInput"));
+                    // $(".dropdown-toggle-type").dropdown("toggle");
+                    // evt.data.focusOnEnd($("#typeInput"));
+                }
+                else if ($("#typeInput").val() === "") {
+                    evt.data.model.setType();
                 }
             });
         },

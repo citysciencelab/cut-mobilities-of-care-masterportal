@@ -56,6 +56,75 @@
     }
 }
 
+/***** FullScreen *****/
+.full-screen-button {
+    margin-top: 20px;
+}
+
+.full-screen-button > .glyphicon {
+    font-size: 20px;
+    padding: 7px 6px 6px 7px;
+}
+
+@media (max-width: 767px) {
+    .full-screen-button {
+        display: none;
+    }
+}
+
+/***** Attributions *****/
+.attributions-view {
+    cursor: pointer;
+    position: absolute;
+    bottom: 30px;
+    right: 12px;
+    padding: 6px;
+}
+
+.attributions-view dt {
+    color: rgb(182, 0, 0);
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.attributions-view dl {
+    margin-bottom: 0;
+    font-size: 12px;
+    max-width: calc(100vw - 410px);
+}
+
+.attributions-view dd {
+    margin-bottom: 8px;
+}
+
+.attributions-view .glyphicon {
+    color: #f3f3f3;
+    font-size: 22px;
+    background-color: rgb(182, 0, 0);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+}
+
+.attributions-view .glyphicon-info-sign {
+    padding: 6px;
+}
+
+.attributions-view .glyphicon-forward {
+    padding: 6px 4px 6px 8px;
+}
+
+.attributions-background-color {
+    background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+@media (max-width: 767px) {
+    .attributions-view dl {
+        max-width: calc(100vw - 35px);
+    }
+}
 /***** OrientationControl *****/
 .orientationButtons {
     margin-top: 30px;

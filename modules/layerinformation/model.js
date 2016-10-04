@@ -1,11 +1,11 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
-    "modules/restReader/collection",
     "moment",
     "modules/core/util"
-], function (Backbone, EventBus, Config, RestReader, moment, Util) {
+], function (Backbone, Radio, EventBus, Config, moment, Util) {
 
     var LayerInformation = Backbone.Model.extend({
         defaults: {
@@ -16,10 +16,10 @@ define([
             var resp;
 
             if (_.has(Config, "csw")) {
-                resp = RestReader.getServiceById(Config.csw.id);
+                resp = Radio.request("RestReader", "getServiceById", Config.csw.id);
             }
             else {
-                resp = RestReader.getServiceById(this.get("cswID"));
+                resp = Radio.request("RestReader", "getServiceById", this.get("cswID"));
             }
 
             if (resp[0] && resp[0].get("url")) {
@@ -27,13 +27,16 @@ define([
             }
         },
         initialize: function () {
-            this.listenTo(EventBus, {
-                "layerinformation:add": this.setAttributes
-            });
+            var channel = Radio.channel("LayerInformation");
+
+            channel.on({
+                "add": this.setAttributes
+            }, this);
         },
 
         setAttributes: function (attrs) {
             this.set(attrs);
+            this.setMetadataURL();
             if (!_.isUndefined(this.get("metaID"))) {
                 this.fetchData({id: this.get("metaID")});
             }
@@ -73,23 +76,48 @@ define([
                     }
                 }(),
                 "date": function () {
-                    var dates = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", xmlDoc),
-                        dateTime;
 
+                    var dates = $("gmd\\:CI_Date,CI_Date", xmlDoc),
+                    datetype,revisionDateTime,publicationDateTime,
+                    dateTime;
                     if (dates.length === 1) {
                         dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[0].textContent;
                     }
                     else {
                         dates.each(function (index, element) {
-                            if ($(element).attr("codeListValue") === "revision") {
-                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[index].textContent;
+                            datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
+                            if ($(datetype).attr("codeListValue") === "revision") {
+                                revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                            }
+                            else if ($(datetype).attr("codeListValue") === "publication") {
+                                publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                            }
+                            else{
+                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
                         });
                     }
-
+                    if (revisionDateTime){
+                        dateTime=revisionDateTime;
+                    }
+                    else if (publicationDateTime) {
+                        dateTime=publicationDateTime;
+                    }
                     return moment(dateTime).format("DD.MM.YYYY");
                 }()
             };
+        },
+
+        setMetadataURL: function () {
+            if (this.url().search("metaver") !== -1) {
+                this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            }
+            else if (this.url().search("geodatenmv.de") !== -1) {
+                this.set("metaURL", "http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=" + this.get("metaID"));
+            }
+            else {
+                this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
+            }
         }
     });
 

@@ -1,8 +1,0 @@
-ul.layer-extern-list {
-    padding-left: 0px;
-}
-.layer-extern-list {
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: 300px;
-}

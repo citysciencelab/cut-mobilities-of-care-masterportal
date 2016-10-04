@@ -31,13 +31,18 @@ define([
         initialize: function () {
             var channel = Radio.channel("GFIPopup");
 
-            this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
             channel.on({
                 "themeLoaded": this.themeLoaded
             }, this);
 
-            EventBus.trigger("addOverlay", this.get("gfiOverlay")); // listnener in map.js
-            EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
+            channel.reply({
+                "getGFIForPrint": this.getGFIForPrint
+            }, this);
+
+            this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
+
+            Radio.trigger("Map", "addOverlay", this.get("gfiOverlay")); // listnener in map.js
+            Radio.on("Map", "setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
             EventBus.on("renderResults", this.getThemes, this);
         },
@@ -67,10 +72,10 @@ define([
             $("#popovermin").fadeOut(500, function () {
                 $("#popovermin").remove();
             });
-            // Für Straßenbaumkataster
-            if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
-                 Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
-            }
+            // Für Straßenbaumkataster TODO
+            // if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
+            //      Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
+            // }
             $(this.getElement()).popover("show");
             this.set("isPopupVisible", true);
         },
@@ -81,10 +86,7 @@ define([
         getThemes: function (response) {
             var features = response[0],
                 coordinate = response[1],
-                pContent = [],
-                pTitles = [],
-                templateView,
-                that = this;
+                templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer) {
                 _.each(layer.content, function (content) {
@@ -106,6 +108,13 @@ define([
                         }
                         case "trinkwasser": {
                             require(["modules/gfipopup/themes/trinkwasser/view", "backbone.radio"], function (TrinkwasserTheme, Radio) {
+                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                            });
+                            break;
+                        }
+                        case "solaratlas": {
+                            require(["modules/gfipopup/themes/solaratlas/view"], function (TrinkwasserTheme) {
                                 templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
                                 Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
                             });
@@ -142,16 +151,16 @@ define([
         /*
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
-        sendGFIForPrint: function () {
+        getGFIForPrint: function () {
             if (this.get("isPopupVisible") === true) {
                 var printContent = this.get("gfiContent")[this.get("gfiCounter") - 1].model.returnPrintContent(),
                     attr = printContent[0],
                     title = printContent[1];
 
-                EventBus.trigger("receiveGFIForPrint", [attr, title, this.get("coordinate")]);
+                return [attr, title, this.get("coordinate")];
             }
             else {
-                EventBus.trigger("receiveGFIForPrint", [null, null, null]);
+                return undefined;
             }
         },
         /**

@@ -10,6 +10,7 @@ define([
         requestCount: 0,
         response: [],
         pContent: [],
+        typ: "",
         /**
          * params: [0] = Objekt mit name und url; [1] = Koordinate
          */
@@ -25,34 +26,55 @@ define([
                 gfiContent = null;
                 switch (visibleLayer.ol_layer.get("typ")) {
                     case "WFS": {
+                        this.set("typ", visibleLayer.ol_layer.get("typ"));
                         gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                     case "GeoJSON": {
+                        this.set("typ", visibleLayer.ol_layer.get("typ"));
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
+                    case "WMS": {
+                        if (visibleLayer.infoFormat === "text/html") {
+                            // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
+                            if (visibleLayer.ol_layer.get("featureCount")) {
+                                var featurecount = "&FEATURE_COUNT=";
+
+                                featurecount = featurecount.concat(visibleLayer.ol_layer.get("featureCount").toString());
+                                visibleLayer.url = visibleLayer.url.concat(featurecount);
+                            }
+                            if (visibleLayer.ol_layer.id === "2407" || visibleLayer.ol_layer.id === "4423") {
+                                window.open(visibleLayer.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+                            }
+                            else {
+                                var gfiFeatures = {"html": visibleLayer.url};
+
+                                $.ajax({
+                                    url: Util.getProxyURL(visibleLayer.url),
+                                    async: false,
+                                    type: "GET",
+                                    context: this,
+                                    success: function (data) {
+                                        if ($(data).find("tbody").children().length > 1 === true) {
+                                            this.pushGFIContent([gfiFeatures], visibleLayer);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            this.set("typ", visibleLayer.ol_layer.get("typ"));
+                            gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
+                            this.pushGFIContent(gfiContent, visibleLayer);
+                        }
+                        break;
+                    }
                 }
             }, this);
-            var containsWMS = false;
-
-            _.each(sortedParams, function (visibleLayer) {
-                if (visibleLayer.ol_layer.get("typ") === "WMS") {
-                    containsWMS = true;
-                }
-             });
-             if (containsWMS === true) {
-                _.each(sortedParams, function (visibleLayer) {
-                    if (visibleLayer.ol_layer.get("typ") === "WMS") {
-                            gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
-                        }
-                }, this);
-            }
-            else {
-                this.buildTemplate(positionGFI);
-            }
+            this.buildTemplate(positionGFI);
 
             Util.hideLoader();
             return [this.pContent, positionGFI];
@@ -182,7 +204,8 @@ define([
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
         translateGFI: function (gfiList, gfiAttributes) {
-            var pgfi = [];
+            var pgfi = [],
+                typ = this.get("typ");
 
             _.each(gfiList, function (element) {
                 var preGfi = {},
@@ -202,13 +225,33 @@ define([
                         key = this.beautifyString(key);
                         gfi[key] = value;
                     }, this);
+                    // im IE müssen die Attribute für WMS umgedreht werden
+                 if (Util.isInternetExplorer() !== false && typ !== "WFS") {
+                        var keys = [],
+                            values = [];
+
+                        _.each (gfi, function (value, key) {
+                            keys.push(key);
+                            values.push(value);
+                        }, this);
+                        keys.reverse();
+                        values.reverse();
+                        gfi = _.object(keys, values);
+                     }
                 }
                 else {
                     // map object keys to gfiAttributes from layer model
-                    _.each(preGfi, function (value, key) {
-                        key = gfiAttributes[key];
+
+//                    _.each(preGfi, function (value, key) {
+//                        key = gfiAttributes[key];
+//                        if (key) {
+//                            gfi[key] = value;
+//                        }
+//                    });
+                    _.each(gfiAttributes, function (value, key) {
+                        key = preGfi[key];
                         if (key) {
-                            gfi[key] = value;
+                            gfi[value] = key;
                         }
                     });
                 }

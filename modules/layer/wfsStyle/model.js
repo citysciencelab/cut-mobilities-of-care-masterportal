@@ -62,9 +62,8 @@ define([
             var mycoll = new ol.Collection(feature.get("features")),
                 size = mycoll.getLength(),
                 style = this.get("styleCache")[size];
-
             if (!style) {
-                if (size !== "1") {
+                if (size !== 1) {
                     style = this.getClusterSymbol(size);
                 }
                 else {

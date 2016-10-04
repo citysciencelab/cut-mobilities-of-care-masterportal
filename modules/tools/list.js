@@ -1,13 +1,20 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/tools/model",
     "eventbus",
     "config"
-], function (Backbone, Tool, EventBus, Config) {
+], function (Backbone, Radio, Tool, EventBus, Config) {
 
     var ToolList = Backbone.Collection.extend({
         model: Tool,
         initialize: function () {
+            var channel = Radio.channel("ToolList");
+
+            channel.on({
+                "setActiveByName": this.setActiveByName
+            }, this);
+
             this.listenTo(EventBus, {
                 // wird getriggert, wenn das Tool-Fenster (z.B. Print) geschlossen wird
                 "onlyActivateGFI": this.activateGFI
@@ -31,6 +38,12 @@ define([
         // Aktiviert das GFI-Tool
         activateGFI: function () {
             var model = this.findWhere({name: "gfi"});
+
+            model.set("isActive", true);
+            this.setActiveToFalse(model);
+        },
+        setActiveByName: function (value) {
+            var model = this.findWhere({name: value});
 
             model.set("isActive", true);
             this.setActiveToFalse(model);

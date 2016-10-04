@@ -31,7 +31,7 @@ define([
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"), // Erst join dann als regulärer Ausdruck
-                    layers = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"}),
+                    layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
                     featureLayers = _.filter(layers, function (layer) {
                         return layer.get("layer").getSource().getFeatures().length > 0;
                     }),

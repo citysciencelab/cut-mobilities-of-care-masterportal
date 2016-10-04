@@ -1,0 +1,111 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+           "minChars": 3,
+           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "searchStreets": true,
+           "searchHouseNumbers": true,
+           "searchDistricts": true,
+           "searchParcels": true
+       },
+       "placeholder": "Suche nach Adresse/Stadtteil"
+   },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "parcelSearch": {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search"
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "kmlimport": {
+            "name": "KML Import",
+            "glyphicon": "glyphicon-import"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "toggleMenu": true,
+      "attributions": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "8"
+        },
+        {
+          "id": ["717", "718", "719", "720"],
+          "name": "Geobasiskarten",
+          "visibility": true
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+          "id": ["758", "759"],
+          "name": "Störfallbetriebe mit Abstandszonen"
+        },
+        {
+          "id": "1747"
+        },
+        {
+          "id": "1561"
+        },
+        {
+          "id": "1562"
+        },
+        {
+          "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
+          "name": "Digitales Informationssystem Planrecht (DIP)"
+        },
+        {
+          "id": "1749"
+        }
+      ]
+    }
+  }
+}

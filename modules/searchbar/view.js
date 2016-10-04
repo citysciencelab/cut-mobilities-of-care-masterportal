@@ -5,9 +5,8 @@ define([
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
     "eventbus",
-    "config",
     "backbone.radio"
-], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Config, Radio) {
+], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Radio) {
     "use strict";
     return Backbone.View.extend({
         model: Searchbar,
@@ -16,20 +15,42 @@ define([
         searchbarKeyNavSelector: "#searchInputUL",
         template: _.template(SearchbarTemplate),
         /**
-        * @description View der Searchbar
-        * @param {Object} config - Das Konfigurationsobjekt der Searchbar
-        * @param {Object} [config.gazetteer] - Das Konfigurationsobjekt der Gazetteersuche.
-        * @param {Object} [config.specialWFS] - Das Konfigurationsobjekt der speziellen WFS.
-        * @param {Object} [config.visibleWFS] - Das Konfigurationsobjekt sichtbaren WFS Suche.
-        * @param {Object} [config.bkg] - Das Konfigurationsobjekt der BKG Suggest Suche.
-        * @param {Object} [config.tree] - Das Konfigurationsobjekt der Suche im Tree.
-        * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
-        * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
-        * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
-        * @param {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
-        * @param {string} [initialQuery] - Initiale Suche.
+        * @memberof config
+        * @type {Object}
+        * @description Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
+        * @property {Object} [visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
+        * @property {integer} [visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object} [tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
+        * @property {integer} [tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Objekt} [specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
+        * @property {integer} [specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {Object[]} specialWFS.definitions - Definitionen der SpecialWFS.
+        * @property {Object} specialWFS.definitions[].definition - Definition eines SpecialWFS.
+        * @property {string} specialWFS.definitions[].definition.url - Die URL, des WFS
+        * @property {string} specialWFS.definitions[].definition.data - Query string des WFS-Request
+        * @property {string} specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @property {Object} bkg - Das Konfigurationsobjet der BKG Suche.
+        * @property {integer} [bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
+        * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
+        * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @property {integer} [bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
+        * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
+        * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
+        * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @property {Object} [gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
+        * @property {string} gazetteer.url - Die URL.
+        * @property {boolean} [gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @property {boolean} [gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @property {boolean} [gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @property {boolean} [gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
+        * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @property {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
+        * @property {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
+        * @property {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
+        * @property {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
         */
-        initialize: function (config, querySearchString) {
+        initialize: function (config) {
             // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
             // var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
             //     mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
@@ -48,11 +69,16 @@ define([
             //     that.render();
             // });
 
+            var querySearchString = Radio.request("ParametricURL", "getInitString");
+
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
             if (config.recommandedListLength) {
                 this.model.set("recommandedListLength", config.recommandedListLength);
+            }
+            if (config.quickHelp) {
+                this.model.set("quickHelp", config.quickHelp);
             }
             if (config.placeholder) {
                 this.model.set("placeholder", config.placeholder);
@@ -66,6 +92,20 @@ define([
             // this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
+            });
+
+            this.listenTo(Radio.channel("MenuLoader"), {
+                "ready": function () {
+                    if ($(window).width() >= 768) {
+                        $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
+                    }
+                }
+            });
+
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": function () {
+                    this.render();
+                }
             });
 
             this.render();
@@ -109,11 +149,11 @@ define([
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
                 if ($(window).width() >= 768) {
-                    $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
+                    $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
                 }
             });
             if ($(window).width() >= 768) {
-                $("#searchInput").width($(window).width() - $(".menubarlgv").width() - 150);
+                $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
             }
         },
         events: {
@@ -127,7 +167,10 @@ define([
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": function () {
+            "click .list-group-item.type": function (e) {
+                // fix für Firefox
+                var event = e || window.event;
+
                 this.collapseHits($(event.target));
             },
             "click .btn-search-question": function () {
@@ -156,6 +199,7 @@ define([
             if (this.model.get("searchString").length !== 0) {
                 $("#searchInput:focus").css("border-right-width", "0");
             }
+            this.delegateEvents(this.events);
         },
         /**
         * @description Methode, um den Searchstring über den Eventbus zu steuern ohne Event auszulösen
@@ -232,29 +276,25 @@ define([
             else {
                 hit = this.model.get("hitList")[0];
             }
-            // 0. Füge Layer ggf. zum Themenbaum hinzu
-            if (_.isUndefined(hitID) === false && Config.tree && Config.tree.type === "light" && hit.type === "Thema") {
-                Radio.trigger("RawLayerList", "addModelToLayerListById", hitID);
-            }
             // 1. Schreibe Text in Searchbar
-            if (_.has(hit, "model") && hit.model.get("type") === "nodeLayer") {
-                this.setSearchbarString(hit.metaName);
-            }
-            else {
-                this.setSearchbarString(hit.name);
-            }
+            this.setSearchbarString(hit.name);
             // 2. Verberge Suchmenü
             this.hideMenu();
             // 3. Zoome ggf. auf Ergebnis
             EventBus.trigger("mapHandler:zoomTo", hit);
             // 4. Triggere Treffer über Eventbus
+            // wird nicht mehr benötigt??? SD 02.08.2016
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
-            evt.stopPropagation();
+            if (evt) {
+                evt.stopPropagation();
+            }
         },
-        navigateList: function () {
+        navigateList: function (e) {
             var selected = {},
-            firstListElement = {};
+            firstListElement = {},
+            // fix für Firefox
+            event = e || window.event;
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
                 var selected = this.getSelectedElement(),

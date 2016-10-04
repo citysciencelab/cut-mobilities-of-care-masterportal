@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "modules/core/util"
-], function (Backbone, EventBus, Config, Util) {
+], function (Backbone, Radio, EventBus, Config, Util) {
 
     var TreeFilter = Backbone.Model.extend({
         defaults: {
@@ -24,9 +25,18 @@ define([
         },
         url: Util.getPath(Config.treeConf),
         initialize: function () {
-            EventBus.on("winParams", this.setStatus, this), // Fenstermanagement
-            EventBus.once("layerlist:sendLayerByID", this.setListenerForVisibility, this);
-            EventBus.trigger("layerlist:getLayerByID", "182");
+            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
+            // EventBus.once("layerlist:sendLayerByID", this.setListenerForVisibility, this);
+            // EventBus.trigger("layerlist:getLayerByID", "182");
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
+
+            if (!_.isUndefined(model)) {
+                this.setListenerForVisibility(model);
+            }
+            else {
+                Radio.trigger("Alert", "alert", "Layer 182 (Straßenbäume) nicht definiert");
+            }
+            // var t = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
             this.listenTo(this, "change:searchCategoryString", this.setCategoryArray);
             this.listenTo(this, "change:treeCategory", this.setTypeArray);
             this.listenTo(this, "change:searchTypeString", this.setTypeArray);
@@ -52,7 +62,7 @@ define([
             });
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "treefilter") {
+            if (args[2] === "treeFilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 $("#window").css("max-width", "420px");
@@ -63,8 +73,8 @@ define([
             }
         },
         setListenerForVisibility: function (model) {
-            model.listenTo(model, "change:visibility", function () {
-                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": model.get("visibility")});
+            model.listenTo(model, "change:visibleInMap", function () {
+                Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibleInMap": model.get("visibleInMap")});
             });
         },
         parse: function (response) {
@@ -209,7 +219,7 @@ define([
         },
         setSearchTypeString: function (value) {
             this.set("searchTypeString", value);
-            // $("#typeInput").val(this.get("searchTypeString"));
+            $("#typeInput").val(this.get("searchTypeString"));
         },
         setTypeArray: function () {
             var typeArray = [],
@@ -262,16 +272,23 @@ define([
             }
         },
         updateStyleByID: function () {
-            EventBus.trigger("layerlist:setAttributionsByID", "182", {"SLDBody": this.get("SLDBody")});
+            Radio.trigger("ModelList", "setModelAttributesById", "182", {"SLDBody": this.get("SLDBody")});
+            // EventBus.trigger("layerlist:setAttributionsByID", "182", {"SLDBody": this.get("SLDBody")});
             if (this.get("isFilter") === true) {
-                EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": false, "visibility": false});
-                EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": true, "visibility": true});
-                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": true});
+                Radio.trigger("ModelList", "setModelAttributesById", "2297", {"displayInTree": false, "visibility": false});
+                Radio.trigger("ModelList", "setModelAttributesById", "182", {"displayInTree": true, "visibility": true});
+                Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibility": true});
+                // EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": false, "visibility": false});
+                // EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": true, "visibility": true});
+                // EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": true});
             }
             else {
-                EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": true, "visibility": true});
-                EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": false, "visibility": false});
-                EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": false});
+                Radio.trigger("ModelList", "setModelAttributesById", "2297", {"displayInTree": true, "visibility": true});
+                Radio.trigger("ModelList", "setModelAttributesById", "182", {"displayInTree": false, "visibility": false});
+                Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibility": false});
+                // EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": true, "visibility": true});
+                // EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": false, "visibility": false});
+                // EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": false});
             }
         },
         removeFilter: function () {
@@ -343,7 +360,7 @@ define([
         getFilterHits: function () {
             $("#loader").show();
             $.ajax({
-                url: "/geodienste-hamburg/HH_WFS_Strassenbaumkataster",
+                url: "/geodienste_hamburg_de/HH_WFS_Strassenbaumkataster",
                 data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' resultType='hits' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:strassenbaumkataster'>" + this.get("filter") + "</wfs:Query></wfs:GetFeature>",
                 type: "POST",
                 context: this, // model

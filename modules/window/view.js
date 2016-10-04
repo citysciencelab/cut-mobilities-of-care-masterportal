@@ -1,11 +1,12 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/window/model",
     "text!modules/window/templateMax.html",
     "text!modules/window/templateMin.html",
     "eventbus",
-    "jqueryui/draggable"
-], function (Backbone, Window, templateMax, templateMin, EventBus) {
+    "jqueryui/widgets/draggable"
+], function (Backbone, Radio, Window, templateMax, templateMin, EventBus) {
 
     var WindowView = Backbone.View.extend({
         id: "window",
@@ -17,7 +18,10 @@ define([
             this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             this.$el.draggable({
                 containment: "#map",
-                handle: ".header"
+                handle: ".header",
+                stop: function (event, ui) {
+                    ui.helper.css({"height": "", "width": ""});
+                }
             });
             this.$el.css({
                 "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
@@ -61,8 +65,16 @@ define([
             this.model.setCollapse(false);
         },
         hide: function () {
+            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
+
+            if (toolModel) {
+                toolModel.setIsActive(false);
+            }
             if (this.model.get("winType") === "routing") {
                 EventBus.trigger("deleteRoute", this);
+            }
+            else if (this.model.get("winType") === "download") {
+                Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
             }
             this.$el.hide("slow");
             this.model.setVisible(false);

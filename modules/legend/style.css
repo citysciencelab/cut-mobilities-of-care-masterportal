@@ -20,6 +20,7 @@
 
 .legend-win > .legend-win-content {
     overflow-y: auto;
+    background-color: rgb(255, 255, 255);
 }
 
 .legend-win-header {

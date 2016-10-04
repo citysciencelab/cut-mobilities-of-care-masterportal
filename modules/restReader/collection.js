@@ -1,25 +1,30 @@
 define([
     "backbone",
+    "backbone.radio",
     "config",
-    "eventbus",
-    "modules/core/util",
-    "modules/restReader/model",
-    ], function (Backbone, Config, EventBus, Util, Model) {
+    "modules/core/util"
+], function (Backbone, Radio, Config, Util) {
     "use strict";
     var RestList = Backbone.Collection.extend({
         url: Util.getPath(Config.restConf),
-        model: Model,
         initialize: function () {
+            var channel = Radio.channel("RestReader");
+
+            channel.reply({
+                "getAllServices": this.getAllServices,
+                "getServiceById": this.getServiceById
+            }, this);
+
             this.fetch({
                 cache: false,
-                async: false,
+                success: function () {
+                    channel.trigger("isReady", true);
+                },
                 error: function () {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Fehler beim Laden von: " + Util.getPath(Config.restConf),
                         kategorie: "alert-warning"
                     });
-                },
-                success: function (collection) {
                 }
             });
         },
@@ -31,5 +36,5 @@ define([
         }
     });
 
-    return new RestList();
+    return RestList;
 });

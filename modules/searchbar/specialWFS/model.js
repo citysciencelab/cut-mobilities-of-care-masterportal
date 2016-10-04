@@ -2,8 +2,7 @@ define([
     "backbone",
     "eventbus",
     "modules/searchbar/model"],
-    function (Backbone, EventBus)
-       {
+function (Backbone, EventBus) {
         "use strict";
         return Backbone.Model.extend({
         /**
@@ -13,7 +12,6 @@ define([
                 inUse: false,
                 minChars: 3,
                 bPlans: [],
-                olympia: [],
                 kita: [],
                 bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
             },
@@ -25,7 +23,7 @@ define([
          * @param {Object} config.definitions[].definition - Definition eines SpecialWFS.
          * @param {string} config.definitions[].definition.url - Die URL, des WFS
          * @param {string} config.definitions[].definition.data - Query string des WFS-Request
-         * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+         * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|kita)
          * @param {string} [initialQuery] - Initialer Suchstring.
          */
         initialize: function (config, initialQuery) {
@@ -33,13 +31,7 @@ define([
                 this.set("minChars", config.minChars);
             }
             _.each(config.definitions, function (element) {
-                if (element.name === "olympia") {
-                    this.sendRequest(element.url, element.data, this.getFeaturesForOlympia, false);
-                }
-                else if (element.name === "paralympia") {
-                    this.sendRequest(element.url, element.data, this.getFeaturesForParalympia, false);
-                }
-                else if (element.name === "bplan") {
+                if (element.name === "bplan") {
                     this.set("bplanURL", element.url);
                     this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
                 }
@@ -61,17 +53,15 @@ define([
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
+                searchString = searchString.replace(/[()]/g, '\\$&');
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
-                if (this.get("olympia").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInOlympiaFeatures(searchStringRegExp);
-                }
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInBPlans(searchStringRegExp);
+                    this.searchInBPlans(searchString);
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
-                }                
+                }
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
             }
@@ -81,7 +71,7 @@ define([
          * @param {string} type - Der ausgewählte BPlan-Typ, der abgefragt werden soll.
         */
         requestbplan: function (type, name) {
-            var typeName = (type === "festgestellt") ? "hh_hh_planung_festgestellt" : "imverfahren",
+            var typeName = (type === "festgestellt") ? "prosin_festgestellt" : "prosin_imverfahren",
                 propertyName = (type === "festgestellt") ? "planrecht" : "plan",
                 data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
@@ -108,36 +98,22 @@ define([
         /**
         *
         */
-        searchInBPlans: function (searchStringRegExp) {
+        searchInBPlans: function (searchString) {
             _.each(this.get("bPlans"), function (bPlan) {
+                searchString = searchString.replace(/ö/g, "oe");
+                searchString = searchString.replace(/ä/g, "ae");
+                searchString = searchString.replace(/ü/g, "ue");
+                searchString = searchString.replace(/ß/g, "ss");
+                var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (bPlan.name.search(searchStringRegExp) !== -1) {
+                 if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
                     EventBus.trigger("searchbar:pushHits", "hitList", bPlan);
                 }
             }, this);
         },
+
         /**
-        *
-        */
-        searchInOlympiaFeatures: function (searchStringRegExp) {
-            _.each(this.get("olympia"), function (feature) {
-                _.each(feature.name.split(","), function (ele) {
-                    var eleName = ele.replace(/ /g, "");
-                    // Prüft ob der Suchstring ein Teilstring vom Feature ist
-                    if (eleName.search(searchStringRegExp) !== -1) {
-                        EventBus.trigger("searchbar:pushHits", "hitList", {
-                            name: ele,
-                            type: feature.type,
-                            coordinate: feature.coordinate,
-                            glyphicon: "glyphicon-fire",
-                            id: feature.id
-                        });
-                    }
-                }, this);
-            }, this);
-        },
-        /**
-         * success-Funktion für die Olympiastandorte. Schreibt Ergebnisse in "bplan".
+         *Schreibt Ergebnisse in "bplan".
          * @param  {xml} data - getFeature-Request
          */
         getFeaturesForBPlan: function (data) {
@@ -146,84 +122,33 @@ define([
                 type;
 
             _.each(hits, function (hit) {
-                if ($(hit).find("app\\:planrecht, planrecht")[0] !== undefined) {
+                if (!_.isUndefined($(hit).find("app\\:planrecht, planrecht")[0])) {
                     name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
                     type = "festgestellt";
+                    // BPlan-Objekte
+                    this.get("bPlans").push({
+                        name: name.trim(),
+                        type: type,
+                        glyphicon: "glyphicon-picture",
+                        id: name.replace(/ /g, "") + "BPlan"
+                    });
                 }
                 else {
-                    name = $(hit).find("app\\:plan, plan")[0].textContent;
-                    type = "im Verfahren";
+                    if (!_.isUndefined($(hit).find("app\\:plan, plan")[0])) {
+                        name = $(hit).find("app\\:plan, plan")[0].textContent;
+                        type = "im Verfahren";
+                        // BPlan-Objekte
+                        this.get("bPlans").push({
+                            name: name.trim(),
+                            type: type,
+                            glyphicon: "glyphicon-picture",
+                            id: name.replace(/ /g, "") + "BPlan"
+                        });
+                    }
                 }
-                // BPlan-Objekte
-                this.get("bPlans").push({
-                    name: name.trim(),
-                    type: type,
-                    glyphicon: "glyphicon-picture",
-                    id: name.replace(/ /g, "") + "BPlan"
-                });
             }, this);
         },
-        /**
-         * success-Funktion für die Olympiastandorte. Schreibt Ergebnisse in "olypia".
-         * @param  {xml} data - getFeature-Request
-         */
-        getFeaturesForOlympia: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                coordinate,
-                position,
-                hitType,
-                hitName;
 
-            _.each(hits, function (hit) {
-               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                        hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
-                        hitType = $(hit).find("app\\:staette, staette")[0].textContent;
-                        // Olympia-Objekte
-                        this.get("olympia").push({
-                            name: hitName,
-                            type: "Olympiastandort",
-                            coordinate: coordinate,
-                            glyphicon: "glyphicon-fire",
-                            id: hitName.replace(/ /g, "") + "Olympia"
-                        });
-                    }
-               }
-            }, this);
-        },
-        /**
-         * success-Funktion für die Paralympiastandorte. Schreibt Ergebnisse in "olypia".
-         * @param  {xml} data - getFeature-Request
-         */
-        getFeaturesForParalympia: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                coordinate,
-                position,
-                hitType,
-                hitName;
-
-            _.each(hits, function (hit) {
-               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:piktogramm, piktogramm")[0] !== undefined && $(hit).find("app\\:art,art")[0].textContent !== "Umring") {
-                        hitName = $(hit).find("app\\:piktogramm, piktogramm")[0].textContent;
-                        hitType = $(hit).find("app\\:staette, staette")[0].textContent;
-                        // Olympia-Objekte
-                        this.get("olympia").push({
-                            name: hitName,
-                            type: "Paralympiastandort",
-                            coordinate: coordinate,
-                            glyphicon: "glyphicon-fire",
-                            id: hitName.replace(/ /g, "") + "Paralympia"
-                        });
-                    }
-               }
-            }, this);
-        },
-            
         /**
          * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
          * @param  {xml} data - getFeature-Request
@@ -232,15 +157,14 @@ define([
             var hits = $("wfs\\:member,member", data),
                 coordinate,
                 position,
-                hitType,
                 hitName;
 
             _.each(hits, function (hit) {
                if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
                     position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                     coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:name, name")[0] !== undefined) {
-                        hitName = $(hit).find("app\\:name, name")[0].textContent;
+                    if ($(hit).find("app\\:Name, Name")[0] !== undefined) {
+                        hitName = $(hit).find("app\\:Name, Name")[0].textContent;
                         this.get("kita").push({
                             name: hitName,
                             type: "Kita",

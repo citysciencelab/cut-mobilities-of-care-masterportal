@@ -4,101 +4,7 @@ define(function () {
         logo: "../img/Logo_MRH_93x36.png",
         logoLink: "http://metropolregion.hamburg.de/",
         logoTooltip: "Metropolregion Hamburg",
-        tree: {
-            type: "custom",
-            customConfig: "../components/lgv-config/tree-config/geoportal-mrh.json",
-            baseLayer: [
-                {id: "51", visibility: true}, // WebAtlas
-                {id: "53", visibility: false}, // WebAtlas_grau
-                {id: "55", visibility: false}, // Luftbilder
-                {id: "57", visibility: false} // 1:5000
-            ],
-            layerIDsToStyle: [
-                {
-                    "id": "223",
-                    "styles": "geofox_stations",
-                    "name": "HVV-Haltestellen",
-                    "legendURL": "http://87.106.16.168/legende_mrh/hvv-bus.png"
-                },
-                {
-                    "id": "221",
-                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["HVV-Fährverbindungen", "HVV-Bahnlinien", "HVV-Buslinien", "HVV-Busliniennummern"],
-                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
-                }
-            ]
-        },
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: true
-        },
-        feature_count: [
-            {
-                id: 73,
-                count: 10
-            },
-			{
-                id: 77,
-                count: 10
-            },
-			{
-                id: 79,
-                count: 10
-            },
-			{
-                id: 81,
-                count: 10
-            },
-			{
-                id: 83,
-                count: 10
-            },
-			{
-                id: 85,
-                count: 10
-            },
-			{
-                id: 87,
-                count: 10
-            },
-			{
-                id: 89,
-                count: 10
-            },
-			{
-                id: 91,
-                count: 10
-            },
-			{
-                id: 93,
-                count: 10
-            },
-			{
-                id: 95,
-                count: 10
-            },
-			{
-                id: 97,
-                count: 10
-            },
-			{
-                id: 99,
-                count: 100
-            },
-			{
-                id: 101,
-                count: 10
-            },
-			{
-                id: 103,
-                count: 10
-            },
-			{
-                id: 105,
-                count: 10
-            }
-        ],
+        simpleMap: true,
         attributions: true,
         footer: {
             visibility: true,
@@ -129,7 +35,6 @@ define(function () {
                     }
             ]
         },
-        quickHelp: false,
         allowParametricURL: true,
         view: {
             center: [565874, 5934140],
@@ -196,62 +101,8 @@ define(function () {
         layerConf: "../components/lgv-config/services-mrh.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
-        menubar: true,
         scaleLine: true,
-        isMenubarVisible: true,
-        menu: {
-            viewerName: "Geoportal GDI-MRH",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: true
-        },
         startUpModul: "",
-        searchBar: {
-            placeholder: "Suchen nach Adresse, Thema",
-            bkg: {
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                suggestCount: 100
-            },
-            tree: {
-                minChars: 3
-            },
-            geoLocateHit: true
-        },
-        tools: {
-            gfi: {
-              title: "Informationen abfragen",
-               glyphicon: "glyphicon-info-sign",
-               isActive: true
-            },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
-            coord: {
-               title: "Koordinate abfragen",
-               glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            },
-            draw: {
-                title: "Zeichnen",
-                glyphicon: "glyphicon-pencil"
-            },
-            searchByCoord: {
-               title: "Koordinatensuche",
-               glyphicon: "glyphicon-search"
-            }
-        },
         print: {
             printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
