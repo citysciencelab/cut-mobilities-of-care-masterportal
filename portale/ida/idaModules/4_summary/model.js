@@ -57,8 +57,8 @@ define([
                 params = this.get("params"),
                 STRL = _.has(params, "STRL") === true ? params.STRL : "",
                 BAUW = _.has(params, "BAUW") === true ? params.BAUW : "",
-                ZWGFZ = "",
-                ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : "";
+                ZWGFZ = 0,
+                ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : 0;
 
             // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern.
             // Für den Miteigentumsanteil MEA wird der Quotient von MEAN / MEAZ verwendet.
@@ -88,12 +88,7 @@ define([
             _.each(brwList, function (brw) {
                 switch (brw.art) {
                     case "Akt.BRW": {
-                        if (ZWGFZ > 0) {
-                            this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE, brw.nutzung);
-                        }
-                        else {
-                            this.set("error", "Fehlende Parameter für WGFZ-Berechnung.");
-                        }
+                        this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE, brw.nutzung);
                         break;
                     }
                     case "Norm.BRW": {
