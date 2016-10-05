@@ -1,12 +1,14 @@
 define([
     "backbone",
     "eventbus",
-    "idaModules/6_end/download/model"
-], function (Backbone, EventBus, Model) {
+    "idaModules/6_end/download/model",
+    "text!idaModules/6_end/download/template.html"
+], function (Backbone, EventBus, Model, Template) {
     "use strict";
     var DownloadView = Backbone.View.extend({
-        el: "#downloadpage",
+        id: "download",
         model: Model,
+        template: _.template(Template),
         events: {
             "click #downloadbutton": "initDownload",
             "click #refreshbutton": "reload"
@@ -19,17 +21,16 @@ define([
             this.model.set("fileid", fileid);
 
             this.model.copyPDF();
-            this.show();
+            this.render();
         },/*
         weiter: function () {
             new Seite5(this.model.get("filepath"));
         },*/
-        show: function () {
-            $("#queries").hide();
-            $("#seite_zwei").hide();
-            $("#seite_drei").hide();
-            $("#seite_vier").hide();
-            $("#downloadpage").show();
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+            $("section").append(this.$el.html(this.template(attr)));
         },
         initDownload: function () {
             $("#refreshbutton").prop("disabled", false);
