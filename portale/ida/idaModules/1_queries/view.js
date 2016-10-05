@@ -40,10 +40,13 @@ define([
             $("#seite1_weiter").prop("disabled", true);
             if (this.model.get("lage") !== "") {
                 this.panelPrimary("jahr");
+                $("#jahresfeld").focus();
                 if (this.model.get("jahr") !== "") {
                     this.panelPrimary("nutzung");
+                    $("#nutzungdropdown").focus();
                     if (this.model.get("nutzung") !== "") {
                         this.panelPrimary("produkt");
+                        $("#produktdropdown").focus();
                         if (this.model.get("produkt") !== "") {
                             $("#seite1_weiter").prop("disabled", false);
                         }
