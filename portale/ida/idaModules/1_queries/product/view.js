@@ -15,7 +15,14 @@ define([
             "change #produktdropdown": "checkProdukt"
         },
         initialize: function () {
+            this.listenTo(this.model, "change:header", this.setHeader);
+
             this.render();
+        },
+        setHeader: function () {
+            var header = this.model.get("header");
+
+            $("#productheaderSuffix").text(header);
         },
         checkProdukt: function (evt) {
             this.model.setProdukt(evt.target.value);
