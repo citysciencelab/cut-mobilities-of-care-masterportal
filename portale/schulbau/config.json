@@ -18,7 +18,7 @@
                         "url": "/geodienste.hamburg.de/HH_WFS_Schulen",
                         "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:hh_schulen_dwh&propertyName=app:Name,app:geom",
                         "name": "schule"
-                    }
+                }
             ]
         },
         
