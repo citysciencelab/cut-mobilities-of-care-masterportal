@@ -209,7 +209,7 @@
                     },
                     {
                       "id": "4639",
-                      "visibility": true,
+                      "visibility": false,
                       "styleable": true,
                       "geomType": "Polygon",
                       "attributesToStyle": ["AP30Sum", "AP60Sum"]
