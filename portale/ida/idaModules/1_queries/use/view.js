@@ -14,7 +14,14 @@ define([
             "change #nutzungdropdown": "checkNutzung"
         },
         initialize: function () {
+            this.listenTo(this.model, "change:header", this.setHeader);
+
             this.render();
+        },
+        setHeader: function () {
+            var header = this.model.get("header");
+
+            $("#useheaderSuffix").text(header);
         },
         checkNutzung: function (evt) {
             this.model.setNutzung(evt.target.value);
