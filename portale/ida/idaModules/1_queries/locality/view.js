@@ -15,7 +15,7 @@ define([
             "change input[type=radio]": "switchLage", // 'click .toggleRoutingOptions': 'toggleRoutingOptions',
             "change #gemarkungsnummer": "setGemarkungsnummer",
             "keyup #flurstuecksnummer": "setFlurstuecksnummer",
-            "keyup #flurstuecksstrasse": "setFlurstuecksstrasse"
+            "blur #flurstuecksstrasse": "setFlurstuecksstrasse"
         },
         initialize: function () {
             this.render();
