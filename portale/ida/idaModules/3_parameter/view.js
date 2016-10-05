@@ -33,6 +33,7 @@ define([
             this.model.set("produkt", produkt),
             this.model.set("jahr", jahr),
             this.model.set("brwList", brwList);
+
             this.listenTo(this.model, {"switchToInvalid": this.switchToInvalid});
             this.listenTo(this.model, {"switchToValid": this.switchToValid});
 
@@ -117,7 +118,7 @@ define([
         },
         zurueck: function () {
             $("#seite_eins").show();
-            $("#seite_zwei").remove();
+            this.trigger("removeBRWDiv", this);
             this.remove();
         },
         show: function () {
@@ -129,8 +130,8 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            $("#seite_zwei").after(this.$el.html(this.template(attr)));
-            $("#seite_zwei").hide();
+            $("#bodenrichtwerte").after(this.$el.html(this.template(attr)));
+            $("#bodenrichtwerte").hide();
         },
         setInitialParams: function () {
             _.each($("#requestedParamsListe").children(), function (par) {

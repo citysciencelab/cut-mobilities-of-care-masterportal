@@ -9,7 +9,7 @@ define([
 ], function ($, Backbone, EventBus, Model, BRWManuellView, Seite3, Template) {
     "use strict";
     var BRWView = Backbone.View.extend({
-        id: "seite_zwei",
+        id: "bodenrichtwerte",
         template: _.template(Template),
         model: Model,
         events: {
@@ -17,17 +17,21 @@ define([
         },
         initialize: function (jahr, nutzung, produkt, lage) {
             this.listenTo(this.model, "change:complete", this.weiter);
+            this.listenTo(this, "remove", this.test);
 
             this.model.set("jahr", jahr);
             this.model.set("nutzung", nutzung);
             this.model.set("produkt", produkt);
             this.model.set("lage", lage);
             this.show();
-            new BRWManuellView();
+            this.BRWManuellView = new BRWManuellView();
             this.model.requestNecessaryData();
         },
         weiter: function () {
-            new Seite3(this.model.get("lage"), this.model.get("params"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("brwList"), this.model.get("jahr"));
+            this.listenTo(new Seite3(this.model.get("lage"), this.model.get("params"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("brwList"), this.model.get("jahr")), "removeBRWDiv", function () {
+                this.BRWManuellView.remove();
+                this.remove();
+            });
         },
         show: function () {
             var attr = this.model.toJSON();
