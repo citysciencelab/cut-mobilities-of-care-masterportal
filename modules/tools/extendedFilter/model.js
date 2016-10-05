@@ -8,14 +8,14 @@ define(function (require){
         defaults:{
             currentContent:{
                 step: 1,
-                name: "Bitte Wählen",
+                name: "Bitte wählen Sie die Filteroption",
                 layername: undefined,
                 filtername: undefined,
                 attribute: undefined,
-                options: ["Neuer Filter"]
+                options: ["Neuen Filter erstellen"]
             },
             wfsList: [],
-            currentFilterType: "Neuer Filter",
+            currentFilterType: "Neuen Filter erstellen",
             currentFilters:[],
             ignoredKeys : Config.ignoredKeys,
             filterCounter: 0

@@ -1,4 +1,8 @@
-<label><%="Schritt: " + currentContent.step %></label>
+<%if (currentContent.step > 1){%>
+    <label><%="Schritt: " + currentContent.step + " " + currentFilterType %></label>
+<%}else{%>
+    <label><%="Schritt: " + currentContent.step %></label>
+<%}%>
 <select class="form-control input" id="dropdown">
      <option title="<%=currentContent.name %>"><%=currentContent.name %></option>
     <% _.each(currentContent.options, function (option,i) {%>

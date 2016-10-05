@@ -76,6 +76,7 @@ define(function (require){
 
                 counter--;
                 this.model.setFilterCounter(counter);
+                this.showLayer(filterToUpdate.layername.split(" ")[2]);
             }
             else{
                 currentFilters.push({
@@ -88,12 +89,25 @@ define(function (require){
             if(currentFilters.length === 0){
                 var content = this.getDefaultContent();
 
-                content.options = ["Neuer Filter"];
+                content.options = ["Neuen Filter erstellen"];
                 this.model.setCurrentContent(content);
             }
             this.render();
+            
+            this.filterLayers();
         },
 
+        showLayer: function (layername){
+            var layers = this.model.getWfsList(),
+                wfslayer = _.find(layers, function (layer) {
+                    return layer.name === layername;
+                }),
+                layer = wfslayer.layer;
+            
+            layer.setStyle(layer.defaultStyle);
+            
+        },
+        
         nextStep: function(evt) {
             var id = evt.currentTarget.id,
                 val = $("#"+id).val(),
@@ -120,26 +134,15 @@ define(function (require){
             this.render();
         },
 
-        filterLayers: function () {
-            this.model.getLayers();
-
-            var currentFilters = this.model.getCurrentFilters(),
-                wfsList = this.model.getWfsList();
-            _.each(wfsList,function(wfsLayer){
-
-            });
-
-
-        },
         getDefaultContent: function () {
             var content;
 
             content = {step: 1,
-                       name: "Bitte wählen",
+                       name: "Bitte wählen Sie die Filteroption",
                        layername: undefined,
                        filtername: undefined,
                        attribute: undefined,
-                       options: ["Neuer Filter","Filter verfeinern"]
+                       options: ["Neuen Filter erstellen","Bestehenden Filter verfeinern"]
                       }
             return content;
         },
@@ -152,25 +155,27 @@ define(function (require){
                 currentFilters = [];
 
             newStep++;
-            if(val === "Neuer Filter"){
+            if(val === "Neuen Filter erstellen"){
+                this.model.setCurrentFilterType("Neuen Filter erstellen");
                 this.model.getLayers();
                 wfsList = this.model.getWfsList();
                 _.each(wfsList,function(layer){
                     options.push(layer.name);
                 });
                 content = {step: newStep,
-                          name: "Layer wählen",
+                          name: "Bitte wählen Sie einen Layer",
                           layername: undefined,
                           attribute: undefined,
                           options: options}
             }
             else { //Filter erweitern
+                this.model.setCurrentFilterType("Bestehenden Filter verfeinern");
                 currentFilters = this.model.getCurrentFilters();
                 _.each(currentFilters,function(filter){
                     options.push(filter.layername)
                 });
                 content = {step: newStep,
-                          name: "Filter verfeinern",
+                          name: "Bitte wählen Sie einen Filter zum Verfeinern",
                           layername: undefined,
                           attribute: undefined,
                           options: options}
@@ -192,11 +197,11 @@ define(function (require){
             this.model.getLayers();
 
             if(val.split(" ")[0] !== "Filter"){
-                this.model.setCurrentFilterType("Neuer Filter");
+                this.model.setCurrentFilterType("Neuen Filter erstellen");
                 layer = _.findWhere(wfsList,{name : val});
             }
             else{
-                this.model.setCurrentFilterType("Filter verfeinern");
+                this.model.setCurrentFilterType("Bestehenden Filter verfeinern");
                 layer = _.findWhere(wfsList,{name : val.split(" ")[2]});
 
             }
@@ -205,7 +210,7 @@ define(function (require){
                 options.push(attribute.attr);
             });
             content = {step: newStep,
-                        name: "Attribut wählen",
+                        name: "Bitte wählen Sie ein Attribut",
                         layername: layer.name,
                         filtername: val,
                         attribute: undefined,
@@ -231,7 +236,7 @@ define(function (require){
                 options.push(value);
             });
             content = {step: newStep,
-                        name: "Wert wählen",
+                        name: "Bitte wählen Sie einen Wert",
                         layername: layer.name,
                         filtername: filtername,
                         attribute: val,
@@ -247,7 +252,7 @@ define(function (require){
                 filtercounter = this.model.getFilterCounter(),
                 attributesArray = [];
 
-            if(currentFilterType==="Neuer Filter"){
+            if(currentFilterType === "Neuen Filter erstellen"){
                 attributesArray = [];
                 attributesArray.push({attribute:attribute,
                                      value: val});
@@ -280,26 +285,57 @@ define(function (require){
             this.model.setCurrentFilters(currentFilters);
             this.filterLayers();
         },
+        
         filterLayers: function () {
             var currentFilters =  this.model.getCurrentFilters(),
                 layername,
-                layers = this.model.get("wfsList"),
+                layers = this.model.getWfsList(),
                 wfslayer,
                 layer,
-                features,
-                featuredarstellen = true,
-                preVal = true;
+                features;
             
-            _.each(currentFilters,function(filter){
-                layername = filter.layername.split(" ")[2];
-                wfslayer = _.find(layers, function (layer) {
-                    return layer.name === layername;
-                });
+            _.each(layers,function(wfslayer){
                 layer = wfslayer.layer;
-                features = layer.getFeatures();
-            });
+                features = layer.getSource().getFeatures();
+                
+                if (layer.getStyle()) {
+                    layer.defaultStyle = layer.getStyle();
+                    layer.setStyle(null);
+                }
+                
+                
+                features.forEach(function(feature){
+                    var featuredarstellen2 = true,
+                        preVal2 = true;
+                    
+                });
+                    
+            }, this);
             
         },
+        
+        checkFeatureForFilter: function(feature, attr){
+            var featuredarstellen = true,
+                attributname = attr.attribute,
+                attributvalue = attr.value,
+                featurevalue0,
+                featurevalue;
+
+            var featureattribute = _.pick(feature.getProperties(), attributname);
+
+            if (featureattribute && !_.isNull(featureattribute)) {
+                featurevalue0 = _.values(featureattribute)[0];
+                if (featurevalue0) {
+                    featurevalue = featurevalue0.trim();
+                    if (featurevalue !== attributvalue) {
+                        featuredarstellen = false;
+                    }
+                }
+            }
+            
+            return featuredarstellen;
+        },
+        
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
 
