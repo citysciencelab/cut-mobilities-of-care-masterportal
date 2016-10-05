@@ -1,526 +1,318 @@
-define([
-    "backbone",
-    "eventbus",
-    "text!modules/tools/extendedFilter/template.html",
-    "modules/tools/extendedFilter/model"
-], function (Backbone, EventBus, ExtendedFilterTemplate, ExtendedFilter) {
-    "use strict";
-    var extendedFilterView = Backbone.View.extend({
-        model: ExtendedFilter,
-        id: "wfsFilterWin",
-        className: "win-body",
-        template: _.template(ExtendedFilterTemplate),
+define(function (require){
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Model = require("modules/tools/extendedfilter/model"),
+        Template = require("text!modules/tools/extendedFilter/template.html"),
+        ExtendedFilterView;
+
+    ExtendedFilterView = Backbone.View.extend({
+        model: new Model(),
+        template:_.template(Template),
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.listenTo(this.model,{
+                "change:isCollapsed, change:isCurrentWin": this.render
+            }, this); // Fenstermanagement
+
         },
         events: {
-            "click #filterbutton": "getFilterInfos",
-            "click .addattrbutton": "addAttributeToFilter",
-            "click .addorbutton": "addOrToFilter",
-            "click .panel-heading": "toggleHeading",
-            "click .btn-default": "removeDiv"
+            "change #dropdown": "nextStep",
+            "click .btn_remove": "removeAttrFromFilter",
+            "click #btn_back": "previousStep"
         },
-        toggleHeading: function (evt) {
-            var id = evt.currentTarget.id;
 
-            $("#"+id+"__attributepanel0").toggle();
-            $("#"+id+"__attributepanel").toggle();
-            
-            if ($("#"+id+"__extendedfilter_resizemarker").hasClass("glyphicon-resize-small")) {
-                $("#"+id+"__extendedfilter_resizemarker").removeClass("glyphicon-resize-small");
-                $("#"+id+"__extendedfilter_resizemarker").addClass("glyphicon-resize-full");
+        previousStep: function () {
+            var currentContent = this.model.getCurrentContent(),
+                step = currentContent.step,
+                name = currentContent.name,
+                layername = currentContent.layername,
+                filtername = currentContent.filtername,
+                attribute = currentContent.attribute,
+                options = currentContent.options,
+                currentFilterType = this.model.getCurrentFilterType(),
+                content;
+
+            if(step === 2){
+                content = this.getDefaultContent();
+
+            }
+            else if (step === 3){
+                step = step-2;
+                content = this.step2(currentFilterType,step);
+            }
+            else if (step === 4){
+                step = step-2;
+
+                content = this.step3(layername,step);
+            }
+            this.model.setCurrentContent(content);
+            this.render();
+        },
+        removeAttrFromFilter: function (evt) {
+            var id = evt.currentTarget.id,
+                filtername = id.split("__")[0],
+                attr = id.split("__")[1],
+                val = id.split("__")[2],
+                currentFilters = this.model.getCurrentFilters(),
+                filterToUpdate,
+                attributesArray;
+
+            for (var i=currentFilters.length-1; i>=0; i--) {
+                if (currentFilters[i].layername === filtername) {
+                    filterToUpdate = currentFilters.splice(i, 1)[0];
+                    break;
+                }
+            }
+
+            attributesArray = filterToUpdate.attributes;
+
+            for (var i=attributesArray.length-1; i>=0; i--) {
+                if (attributesArray[i].attribute === attr && attributesArray[i].value === val) {
+                    attributesArray.splice(i, 1)[0];
+                    break;
+                }
+            }
+            if(attributesArray.length === 0){
+                var counter = this.model.getFilterCounter();
+
+                counter--;
+                this.model.setFilterCounter(counter);
+            }
+            else{
+                currentFilters.push({
+                    layername: filtername,
+                    attributes: attributesArray
+                });
+            }
+            this.model.setCurrentFilters(currentFilters);
+
+            if(currentFilters.length === 0){
+                var content = this.getDefaultContent();
+
+                content.options = ["Neuer Filter"];
+                this.model.setCurrentContent(content);
+            }
+            this.render();
+        },
+
+        nextStep: function(evt) {
+            var id = evt.currentTarget.id,
+                val = $("#"+id).val(),
+                currentContent = this.model.getCurrentContent(),
+                step = currentContent.step,
+                newContent;
+
+            if(step === 1){ //Layer wählen oder Filter wählen
+                newContent = this.step2(val, step);
+            }
+            else if (step === 2){ //Attribut wählen
+                newContent = this.step3(val, step);
+            }
+            else if (step === 3){ //Wert wählen
+                newContent = this.step4(val, step, currentContent.layername,currentContent.filtername);
+            }
+            else if (step === 4){ //auf default zurücksetzen
+                newContent = this.getDefaultContent();
+                this.setFilter(val, currentContent.layername ,currentContent.attribute,currentContent.filtername);
+                this.filterLayers();
+            }
+
+            this.model.setCurrentContent(newContent);
+            this.render();
+        },
+
+        filterLayers: function () {
+            this.model.getLayers();
+
+            var currentFilters = this.model.getCurrentFilters(),
+                wfsList = this.model.getWfsList();
+            _.each(wfsList,function(wfsLayer){
+
+            });
+
+
+        },
+        getDefaultContent: function () {
+            var content;
+
+            content = {step: 1,
+                       name: "Bitte wählen",
+                       layername: undefined,
+                       filtername: undefined,
+                       attribute: undefined,
+                       options: ["Neuer Filter","Filter verfeinern"]
+                      }
+            return content;
+        },
+
+        step2: function (val, step) {
+            var content,
+                newStep = step,
+                wfsList,
+                options = [],
+                currentFilters = [];
+
+            newStep++;
+            if(val === "Neuer Filter"){
+                this.model.getLayers();
+                wfsList = this.model.getWfsList();
+                _.each(wfsList,function(layer){
+                    options.push(layer.name);
+                });
+                content = {step: newStep,
+                          name: "Layer wählen",
+                          layername: undefined,
+                          attribute: undefined,
+                          options: options}
+            }
+            else { //Filter erweitern
+                currentFilters = this.model.getCurrentFilters();
+                _.each(currentFilters,function(filter){
+                    options.push(filter.layername)
+                });
+                content = {step: newStep,
+                          name: "Filter verfeinern",
+                          layername: undefined,
+                          attribute: undefined,
+                          options: options}
+
+            }
+            return content;
+        },
+
+        step3: function (val, step) {
+            var content,
+                newStep = step,
+                wfsList = this.model.getWfsList(),
+                currentFilters = this.model.getCurrentFilters(),
+                currentFilter,
+                options = [],
+                layer;
+
+            newStep++;
+            this.model.getLayers();
+
+            if(val.split(" ")[0] !== "Filter"){
+                this.model.setCurrentFilterType("Neuer Filter");
+                layer = _.findWhere(wfsList,{name : val});
+            }
+            else{
+                this.model.setCurrentFilterType("Filter verfeinern");
+                layer = _.findWhere(wfsList,{name : val.split(" ")[2]});
+
+            }
+
+            _.each(layer.attributes,function(attribute){
+                options.push(attribute.attr);
+            });
+            content = {step: newStep,
+                        name: "Attribut wählen",
+                        layername: layer.name,
+                        filtername: val,
+                        attribute: undefined,
+                        options: options};
+
+            return content;
+        },
+
+        step4: function (val, step, layername, filtername) {
+            var content,
+                newStep = step,
+                wfsList = this.model.getWfsList(),
+                options = [],
+                layer,
+                attribute;
+
+            newStep++;
+            this.model.getLayers();
+            layer = _.findWhere(wfsList,{name : layername});
+            attribute = _.findWhere(layer.attributes,{attr: val});
+
+            _.each(attribute.values,function(value){
+                options.push(value);
+            });
+            content = {step: newStep,
+                        name: "Wert wählen",
+                        layername: layer.name,
+                        filtername: filtername,
+                        attribute: val,
+                        options: options}
+
+            return content;
+        },
+
+        setFilter: function (val,layername, attribute, filtername) {
+            var currentFilters = this.model.getCurrentFilters(),
+                filterToUpdate,
+                currentFilterType = this.model.getCurrentFilterType(),
+                filtercounter = this.model.getFilterCounter(),
+                attributesArray = [];
+
+            if(currentFilterType==="Neuer Filter"){
+                attributesArray = [];
+                attributesArray.push({attribute:attribute,
+                                     value: val});
+
+                currentFilters.push({
+                    layername:"Filter" + " " + filtercounter + " " + layername,
+                    attributes: attributesArray
+                });
+
+                filtercounter++;
             }
             else {
-                $("#"+id+"__extendedfilter_resizemarker").addClass("glyphicon-resize-small");
-                $("#"+id+"__extendedfilter_resizemarker").removeClass("glyphicon-resize-full");
-            }
-        },
-
-        /*
-        * erstellt das Attribut dropdown für den Filter
-        */
-        addAttributeToFilter: function (layerid) {
-            var layer,
-                idlayer = layerid.currentTarget.id.split("__")[0],
-                attr,
-                select = "",
-                attrToFilterObjs,
-                attrToFilterObj,
-                attrCounterObjs,
-                attrCounterObj,
-                counter,
-                index;
-            
-            layer = _.findWhere(this.model.get("wfsList"),{id:idlayer});  
-            attr = $("#"+layer.id+"__addattrselect").val();
-            select = "";
-            attrToFilterObjs = this.model.get("attrToFilter");
-            attrCounterObjs = this.model.get("attrCounter");
-
-            if(attr === "Attribut auswählen"){
-                EventBus.trigger("alert", "Bitte geben Sie ein Attribut zum Filtern ein!");
-            }
-            else{
-                
-                // erstelle für den aktuellen layer ein objekt mit layerid und counter, wenn nicht schon eins existiert. Wenn eins existiert, zähle counter hoch. 
-                attrCounterObj = _.findWhere(attrCounterObjs,{layerid:layer.id});
-                index = _.indexOf(attrCounterObjs,attrCounterObj);
-
-                if(index !== -1){
-                    counter = attrCounterObj.counter;
-                    counter ++;
-                    attrCounterObjs.splice(index, 1);
-                    attrCounterObjs.push({
-                        layerid: layer.id,
-                        counter: counter
-                    });
-                    this.model.set("attrCounter",attrCounterObjs);
-                }
-                else{
-                    counter = 0;
-                    attrCounterObjs.push({
-                        layerid: layer.id,
-                        counter: counter
-                    });
-                    this.model.set("attrCounter",attrCounterObjs);
-                }
-                
-                
-                // erstelle für den aktuellen layer ein objekt mit layerid und attributen-array, wenn nicht schon eins existiert. Wenn eins existiert, füge attribut hinzu. 
-                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer.id});
-                index = _.indexOf(attrToFilterObjs,attrToFilterObj);
-                
-                attr=attr+"__"+counter;
-                
-                if(index !== -1){
-                    var array = attrToFilterObj.attributes;
-                    
-                    attrToFilterObjs.splice(index, 1);
-                    array.push(attr);
-                    attrToFilterObjs.push({
-                        layerid: layer.id,
-                        attributes: array
-                    });
-                    this.model.set("attrToFilter",attrToFilterObjs);
-                }
-                else{
-                    var array = [];
-                    
-                    array.push(attr);
-                    attrToFilterObjs.push({
-                        layerid: layer.id,
-                        attributes: array
-                    });
-                    this.model.set("attrToFilter",attrToFilterObjs);
-                }
-
-                select += "<div class='' id='all__" + layer.id + "__" + attr + "'>";
-                select += "<label for='' id='label__" + layer.id + "__" + attr + "' class='control-label'>" + attr.split("__")[0] + "</label>";
-                select += "<div class='input-group'id='div__" + layer.id + "__" + attr + "'>";
-                select += "<select class='form-control input' id='" + layer.id + "__" + attr + "'>";
-                select += "<option title='Nicht filtern'>*</option>";
-                _.each(layer.attributes, function (attribute) {
-                    if (attribute.attr === attr.split("__")[0]) {
-                        _.each(attribute.values, function (value) {
-                            select += "<option title='" + value + "'>" + value + "</option>";
-                        });
-                   }
-                });
-                select += "</select><br>";
-                select += "<div class='input-group-btn'>";
-                select += "<button id='btnremove__" + layer.id + "__" + attr + "' title='Attribut vom Filter entfernen' class='btn btn-default' type='button'><span class='glyphicon glyphicon-minus-sign'></span></button>";
-                select += "</div>";
-                select += "</div>";
-                select += "</div><br>";
-                $("#"+layer.id+"__attributepanel").append(select);
-            }
-        },
-        /*
-        * added den Trenner OR
-        */
-        addOrToFilter: function (layer) {
-            var select = "",
-                idlayer = layer.currentTarget.id.split("__")[0],
-                attrToFilterObjs = this.model.get("attrToFilter"),
-                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:idlayer}),
-                attributeArray = attrToFilterObj.attributes,
-                orCounterObjs = this.model.get("orCounter"),
-                orCounterObj,
-                index,
-            
-                counter = 0;
-            
-           
-            
-            if(attributeArray.length===0){
-                 EventBus.trigger("alert", "Bitte geben Sie zuerst mindestens ein Attribut zum Filtern ein!");
-            }
-            else if(attributeArray[attributeArray.length-1]==="OR"){
-                EventBus.trigger("alert", "Bitte geben Sie zuerst mindestens ein Attribut zum Filtern ein!");
-            }
-            else{
-                attributeArray.push ("OR");
-                
-                // erstelle für den aktuellen layer ein objekt mit layerid und OR counter, wenn nicht schon eins existiert. Wenn eins existiert, zähle counter hoch. 
-                orCounterObj = _.findWhere(orCounterObjs,{layerid:idlayer});
-                index = _.indexOf(orCounterObjs,orCounterObj);
-                
-                if(index !== -1){
-                    counter = orCounterObj.counter;
-                    counter ++;
-                    orCounterObjs.splice(index, 1);
-                    orCounterObjs.push({
-                        layerid: idlayer,
-                        counter: counter
-                    });
-                    this.model.set("orCounter",orCounterObjs);
-                }
-                else{
-                    counter = 0;
-                    orCounterObjs.push({
-                        layerid: idlayer,
-                        counter: counter
-                    });
-                    this.model.set("orCounter",orCounterObjs);
-                }
-
-                select += "<div class='input-group-addon'id='" + idlayer + "__" + "or" + "__" + counter + "'>";
-                select += "<span>Und zeige alle Objekte mit folgenden Eigenschaften an:</span>";
-                select += "</div><br>";
-
-                $("#" + idlayer + "__" + "attributepanel").append(select);
-
-            }
-            
-        },
-        /*
-        * löscht das attribut als Filter
-        */
-        removeDiv: function (btn_remove){
-            var id = btn_remove.currentTarget.id,
-                layer =id.split("__")[1], 
-                attr = id.split("__")[2],
-                nummer = id.split("__")[3],
-                attrToFilterObjs = this.model.get("attrToFilter"),
-                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer}),
-                attributeArray = attrToFilterObj.attributes;
-            
-            attr = attr+"__"+nummer;
-            for (var i=attributeArray.length-1; i>=0; i--) {
-                if (attributeArray[i] === attr) {
-                    attributeArray.splice(i, 1);
-                    break;
-                }
-            }
-            attrToFilterObj.attributes= attributeArray;
-            
-            for (var i=attrToFilterObjs.length-1; i>=0; i--) {
-                if (attrToFilterObjs[i].layerid === layer) {
-                    attrToFilterObjs.splice(i, 1);
-                    break;
-                }
-            }
-            attrToFilterObjs.push(attrToFilterObj);
-            this.model.set("attrToFilter",attrToFilterObjs);
-            
-            
-            id = id.replace("btnremove__","all__");
-            $("#"+id).prev().remove();
-            
-            $("#"+id).remove();
-
-            this.removeOrIfNecessary(layer);
-        },
-
-        /*
-        * prüft ob das ODER-element gelöscht werden muss oder nicht
-        */
-        removeOrIfNecessary: function(layer){
-            var orCounterObjs = this.model.get("orCounter"),
-                orCounterObj = _.findWhere(orCounterObjs,{layerid:layer}),
-                counter,
-                attrToFilterObjs = this.model.get("attrToFilter"),
-                attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer}),
-                attributeArray = attrToFilterObj.attributes;
-            
-            if(!_.isUndefined(orCounterObj)){
-                counter = orCounterObj.counter;
-                
-                for(var i=0;i<=counter;i++){
-                    if($("#"+layer+"__"+"or__"+i).next().next().length === 0 || $("#"+layer+"__"+"or__"+i).next().next()[0].id.split("__")[1]=== "or"){
-                        $("#"+layer+"__"+"or__"+i).next().remove();
-                        $("#"+layer+"__"+"or__"+i).remove();
-                    }
-                    if($("#"+layer+"__"+"or__"+i).prev().prev().length === 0 || $("#"+layer+"__"+"or__"+i).prev().prev()[0].id.split("__")[1]=== "or"){
-                        $("#"+layer+"__"+"or__"+i).prev().remove();
-                        $("#"+layer+"__"+"or__"+i).remove();
-                    }
-                    
-                }
-                for (var i=attributeArray.length-1; i>=0; i--) {
-                    if (attributeArray[i] === "OR" && attributeArray[i-1] === "OR") {
-                        attributeArray.splice(i, 1);
-                    }
-                }
-                if(attributeArray[attributeArray.length-1] === "OR"){
-                     attributeArray.splice(attributeArray.length-1, 1);
-                }
-            
-                attrToFilterObj.attributes= attributeArray;
-            
-                for (var i=attrToFilterObjs.length-1; i>=0; i--) {
-                    if (attrToFilterObjs[i].layerid === layer) {
-                        attrToFilterObjs.splice(i, 1);
+                for (var i=currentFilters.length-1; i>=0; i--) {
+                    if (currentFilters[i].layername === filtername) {
+                        filterToUpdate = currentFilters.splice(i, 1)[0];
                         break;
                     }
                 }
-                attrToFilterObjs.push(attrToFilterObj);
-                this.model.set("attrToFilter",attrToFilterObjs);
-            }
-        },
-        /*
-        * sammelt die Filter und führt dann die Filter-funktion durch
-        */
-        getFilterInfos: function () {
-            var wfsList = this.model.get("wfsList"),
-                layerfilters = [],
-                filters = [],
-                id,
-                value;
-            
-            _.each(wfsList, function (layer) {
-                if (layer.extendedFilter === true) {
-                    
-                    var iterator=0,
-                        attrToFilterObjs = this.model.get("attrToFilter"),
-                        attrToFilterObj = _.findWhere(attrToFilterObjs,{layerid:layer.id}),
-                        attributeArray;
-                    
-                    if(!_.isUndefined(attrToFilterObj)){
-                        attributeArray = attrToFilterObj.attributes;
-                        
-                        _.each(attributeArray, function (fieldName) {
-                            id = "#" + layer.id + "__" + fieldName;
 
-                            if(fieldName==="OR"){
-                                iterator++;
-                                filters.push ({
-                                    id: "none",
-                                    filterType: "OR",
-                                    fieldName: "none",
-                                    fieldValue: "none"
-                                });
-                            }
-                            else{
-                                value = $(id).val();
-                                filters.push ({
-                                    id: id,
-                                    filterType: "AND",
-                                    fieldName: fieldName.split("__")[0],
-                                    fieldValue: value
-                                });
-                            }
-                        }, this);
+                attributesArray = filterToUpdate.attributes;
+                attributesArray.push({attribute:attribute,
+                                     value: val});
 
-
-
-                        layerfilters.push(
-                            {
-                                layerId: layer.id,
-                                filter: filters
-                            }
-                        );
-                        if (layerfilters.length > 0) {
-                            this.filterLayers(layerfilters);
-                        }
-                        layerfilters = [];
-                    }
-                }
-            }, this);
-            
-        },
-        /*
-        * iteriert über jedes feature und prüft ob es nach dem Filter dargestellt wird oder nicht. 
-        */
-        filterLayers: function (layerfilters) {
-
-            _.each(layerfilters, function (layerfilter) {
-                // Prüfe, ob alle Filter des Layers auf * stehen, damit evtl. der defaultStyle geladen werden kann
-                var showall = true,
-                    layers = this.model.get("wfsList"),
-                    wfslayer = _.find(layers, function (layer) {
-                        return layer.id === layerfilter.layerId;
-                    }),
-                    layer = wfslayer.layer,
-                    features = layer.getSource().getFeatures();
-
-                _.each(layerfilter.filter, function (filter) {
-                    if (filter.fieldValue !== "*") {
-                        showall = false;
-                    }
+                currentFilters.push({
+                    layername: filtername,
+                    attributes: attributesArray
                 });
-
-                if (showall === true) {
-                    if (layer.defaultStyle) {
-                        layer.setStyle(layer.defaultStyle);
-                        delete layer.defaultStyle;
-                        layer.getSource().getFeatures().forEach(function (feature) {
-                            if (feature.defaultStyle) {
-                                feature.setStyle(feature.defaultStyle);
-                                delete feature.defaultStyle;
-                            }
-                        });
-                    }
-                }
-                else { // Falls Layer gestyled wurde, speichere den Style und schalte unsichtbar
-                    if (layer.getStyle()) {
-                        layer.defaultStyle = layer.getStyle();
-                        layer.setStyle(null);
-                    }
-//                    var attrToFilter = this.model.get("attrToFilter"),
-                    var newAttrToFilter = [];
-                    
-                    
-                    for (var i=layerfilter.filter.length-1; i>=0; i--) {
-                        if (layerfilter.filter[i].filterType === "OR") {
-                            newAttrToFilter.push(layerfilter.filter.splice(i,layerfilter.filter.length-1));
-                        }
-                    }
-                    
-                    
-                    
-                    newAttrToFilter.push(layerfilter.filter);
-                    var attrToFilter=[];
-
-                    _.each(newAttrToFilter,function(t1){
-                        var test = _.filter(t1,function(filter){
-                            if(filter.filterType !== "OR"){
-                                return filter;
-                            }
-                        });
-                        attrToFilter.push(test);
-                       
-                    });
-
-                    features.forEach(function (feature) {
-                        var featuredarstellen2 = true,
-                            preVal2 = false;
-
-                        // Prüfung, ob Feature dargestellt werden soll
-                        _.each(attrToFilter, function(arrayWithAnds) {
-                            var featuredarstellen = true,
-                                preVal = true;
-                            
-                            _.each(arrayWithAnds, function (elementfilter) {
-
-                                featuredarstellen = this.checkFeatureForFilter(feature,elementfilter);
-                                if(preVal === true && featuredarstellen === true){
-                                    featuredarstellen = true;
-                                    preVal = true;
-                                }
-                                else{
-                                    featuredarstellen = false;
-                                    preVal = false;
-                                }
-                               
-                            },this);
-                            
-                            if(preVal2 === true || featuredarstellen === true){
-                                featuredarstellen2 = true;
-                                preVal2 = true;
-                            }
-                            else{
-                                featuredarstellen2 = false;
-                                preVal2 = false;
-                            }
-                            
-                        },this);
-                        if (featuredarstellen2 === true) {
-                            if (feature.defaultStyle) {
-                                feature.setStyle(feature.defaultStyle);
-                                delete feature.defaultStyle;
-                            }
-                            else {
-                                feature.setStyle(layer.defaultStyle);
-                            }
-                        }
-                        else if (featuredarstellen2 === false) {
-                            feature.setStyle(null);
-                        }
-                        
-                    },this);
-                }
-            }, this);
-            this.model.set("attrToFilter",[]);
-            this.model.set("attrCounter",[]);
-            this.model.set("orCounter",[]);
-            this.model.set("layerfilters", layerfilters);
-        },
-        
-        checkFeatureForFilter: function(feature, elementfilter){
-            var featuredarstellen = true,
-                attributname = elementfilter.fieldName,
-                attributvalue = elementfilter.fieldValue,
-                featurevalue0,
-                featurevalue;
-
-            if (attributvalue !== "*") {
-                var featureattribute = _.pick(feature.getProperties(), attributname);
-
-                if (featureattribute && !_.isNull(featureattribute)) {
-                    featurevalue0 = _.values(featureattribute)[0];
-                    if (featurevalue0) {
-                        featurevalue = featurevalue0.trim();
-                        if (featurevalue !== attributvalue) {
-                            featuredarstellen = false;
-                        }
-                    }
-                }
             }
-            return featuredarstellen;
+            this.model.setFilterCounter(filtercounter);
+            this.model.setCurrentFilters(currentFilters);
+            this.filterLayers();
         },
-        
+        filterLayers: function () {
+            var currentFilters =  this.model.getCurrentFilters(),
+                layername,
+                layers = this.model.get("wfsList"),
+                wfslayer,
+                layer,
+                features,
+                featuredarstellen = true,
+                preVal = true;
+            
+            _.each(currentFilters,function(filter){
+                layername = filter.layername.split(" ")[2];
+                wfslayer = _.find(layers, function (layer) {
+                    return layer.name === layername;
+                });
+                layer = wfslayer.layer;
+                features = layer.getFeatures();
+            });
+            
+        },
         render: function () {
-            var attr,
-                layerfilters = this.model.get("layerfilters");
-
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.model.getLayers();
-                attr = this.model.toJSON();
+
+                var attr = this.model.toJSON();
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.setMaxHeight();
-//                if (layerfilters) {
-//                    _.each(layerfilters, function (layerfilter) {
-//                        _.each(layerfilter.filter, function (filter) {
-//                            $(filter.id).val(filter.fieldValue);
-//                        });
-//                    });
-//                }
+
                 this.delegateEvents();
-            }
-            else if (this.model.get("isCurrentWin") === false) {
-                if (layerfilters) {
-                    _.each(layerfilters, function (layerfilter) {
-                        _.each(layerfilter.filter, function (filter) {
-                            filter.fieldValue = "*";
-                        });
-                    });
-                    this.filterLayers(layerfilters);
-                }
             }
             else{
                 this.undelegateEvents();
             }
-        },
-        setMaxHeight: function () {
-            var maxHeight = $(window).height() - 160;
-
-            $("#wfsFilterWin").css("max-height", maxHeight);
-            $("#wfsFilterWin").css("overflow-y", "auto");
-            $("#wfsFilterWin").css("overflow-x", "hidden");
         }
     });
-
-    return extendedFilterView;
+    return ExtendedFilterView;
 });

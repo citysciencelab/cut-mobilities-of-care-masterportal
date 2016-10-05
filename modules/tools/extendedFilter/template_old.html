@@ -1,0 +1,53 @@
+<% if (wfsList.length > 0) { %>
+<div class="panel panel-default" style="margin: 0px;">
+<% _.each(wfsList, function (wfslayer) { %>
+    <div id="<%= wfslayer.id %>" class="panel-heading">
+        <p class="buttons pull-right">
+            <span id="<%= wfslayer.id + '__extendedfilter_resizemarker'%>" class="glyphicon glyphicon-resize-full" title="Ein- und ausklappen"></span>
+        </p>
+        <span style="font-size: 14px; "><%=wfslayer.name %></span>
+    </div>
+
+    <div class="panel-body" id = "<%= wfslayer.id + '__attributepanel0'%>">
+
+     <div class="input-group">
+         
+         <div class="input-group-btn">
+            <button id="<%= wfslayer.id + '__addattrbutton'%>" title="Attribut zum Filter zufügen" class="btn btn-btn-default addattrbutton" type="button">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+         </div> 
+        
+         <select class="form-control input addattrselect" id="<%= wfslayer.id + '__addattrselect'%>">
+             <option title='Attribut auswählen'>Attribut auswählen</option>
+            <% _.each(wfslayer.attributes, function (attr) {%>
+            <option title="<%=attr.attr%>"><%=attr.attr%></option>
+            <% });%>
+        </select>
+    </div>
+    <br>         
+      <div class="input-group-btn">
+        <button id="<%= wfslayer.id + '__addorbutton'%>" title="Füge einen weiteren Filter hinzu" class="btn btn-btn-default addorbutton" type="button">
+            Weiteren Filter hinzufügen
+        </button>
+     </div>    
+    
+
+
+    </div>
+    <div class="panel-body" id="<%= wfslayer.id + '__attributepanel'%>">
+        <div class="input-group-addon" id="or__init">
+            <span>Zeige alle Objekte mit folgenden Eigenschaften an:</span>
+        </div><br> 
+    </div>
+<% }); %>
+
+</div>    
+<div class="panel-footer">
+    <button id="filterbutton" title="Nur Elemente mit diesen Filtereinstellungen anzeigen." class="btn btn-panel-submit" type="button">Filter anwenden</button>
+</div>
+<% } else { %>
+<div class="extendedfilter-body">
+    <label class=".text-center h4">Keine Themen sichtbar.</label>
+</div>
+<% } %>

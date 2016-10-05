@@ -1,62 +1,22 @@
-define(function (require){
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
-        ExtendedFilter;
-
-    ExtendedFilter = Backbone.Model.extend({
-        defaults:{
-            currentContent:{
-                step: 1,
-                name: "Bitte Wählen",
-                layername: undefined,
-                filtername: undefined,
-                attribute: undefined,
-                options: ["Neuer Filter"]
-            },
+define([
+    "backbone",
+    "backbone.radio",
+    "config"
+], function (Backbone, Radio, Config) {
+    "use strict";
+    var extendedFilter = Backbone.Model.extend({
+        defaults: {
             wfsList: [],
-            currentFilterType: "Neuer Filter",
-            currentFilters:[],
-            ignoredKeys : Config.ignoredKeys,
-            filterCounter: 0
+            attrToFilter: [],
+            attrCounter: [],
+            orCounter: [],
+            layerfilters : [],
+            ignoredKeys: Config.ignoredKeys
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.checkStatus
             });
-        },
-        getDefaultContent: function () {
-            return this.get("defaultContent");
-        },
-        getCurrentContent: function () {
-            return this.get("currentContent");
-        },
-        setCurrentContent: function (val) {
-            this.set("currentContent", val);
-        },
-        getCurrentFilterType: function () {
-            return this.get("currentFilterType");
-        },
-        setCurrentFilterType: function (val) {
-            this.set("currentFilterType", val);
-        },
-        getCurrentFilters: function () {
-            return this.get("currentFilters");
-        },
-        setCurrentFilters: function (val) {
-            this.set("currentFilters", val);
-        },
-        getFilterCounter: function () {
-            return this.get("filterCounter");
-        },
-        setFilterCounter: function (val) {
-            this.set("filterCounter", val);
-        },
-        getWfsList: function () {
-            return this.get("wfsList");
-        },
-        setWfsList: function (val) {
-            return this.set("wfsList", val);
         },
         checkStatus: function (args) {   // Fenstermanagement
             if (args[2].getId() === "extendedFilter") {
@@ -79,7 +39,7 @@ define(function (require){
                 attributes = [],
                 attributes_with_values = [],
                 values = [];
-
+            
             _.each (filterLayers, function (layer) {
                 _.each(layer.get("layer").getSource().getFeatures() [0].getKeys(), function(key){
                     if (!_.contains(this.get("ignoredKeys"),key.toUpperCase())) {
@@ -99,15 +59,16 @@ define(function (require){
                 wfsList.push({
                     id: layer.id,
                     name: layer.get("name"),
+                    extendedFilter: layer.get("extendedFilter"),
                     layer: layer.get("layer"),
                     attributes: attributes_with_values
                 });
                 attributes = [];
-                attributes_with_values = [];
+                attributes_with_values = [];  
 
             },this);
             this.set("wfsList", wfsList);
         }
     });
-    return ExtendedFilter;
+    return new extendedFilter();
 });
