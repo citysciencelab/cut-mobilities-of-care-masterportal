@@ -14,10 +14,16 @@ define([
             "keyup input[type=number]": "checkJahr"
         },
         initialize: function () {
+            this.listenTo(this.model, "change:header", this.setHeader);
             this.listenTo(this.model, "change:jahr", this.changeJahr);
 
             this.render();
             this.setJahre();
+        },
+        setHeader: function () {
+            var header = this.model.get("header");
+
+            $("#yearheaderSuffix").text(header);
         },
         setJahre: function () {
             this.model.set("minJahr", Config.minJahr);

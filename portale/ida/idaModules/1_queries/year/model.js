@@ -19,10 +19,12 @@ define([
                 this.unset("jahr", {silent: true});
                 this.set("jahr", jahr);
                 EventBus.trigger("seite1_jahr:newJahr", jahr);
+                this.set("header", jahr);
             }
             else {
                 this.set("jahr", "");
                 EventBus.trigger("seite1_jahr:newJahr", "");
+                this.set("header", "");
             }
         }
     });
