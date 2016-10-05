@@ -2,12 +2,14 @@ define([
     "backbone",
     "eventbus",
     "idaModules/4_summary/model",
+    "text!idaModules/4_summary/template.html",
     "idaModules/5_netchecker/model"
-], function (Backbone, EventBus, Model, Seite5) {
+], function (Backbone, EventBus, Model, Template, Seite5) {
     "use strict";
     var SummaryView = Backbone.View.extend({
-        el: "#seite_vier",
+        id: "summary",
         model: Model,
+        template: _.template(Template),
         events: {
             "click #seite4_weiter": "weiter",
             "click #seite4_back": "zurueck"
@@ -21,22 +23,24 @@ define([
             this.model.set("produkt", produkt);
             this.model.set("jahr", jahr);
             this.model.set("lage", lage);
+            this.model.set("result", "");
+            this.model.set("error", "");
             this.model.startCalculation(brwList);
-            this.show();
+            this.render();
         },
         weiter: function () {
             new Seite5(this.model.get("filepath"));
         },
         zurueck: function () {
-            $("#seite_drei").show();
-            $("#seite_vier").hide();
+            $("#parameter").show();
             this.remove();
         },
-        show: function () {
-            $("#seite_zwei").hide();
-            $("#seite_drei").hide();
-            $("#seite_fuenf").hide();
-            $("#seite_vier").show();
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+            $("#parameter").after(this.$el.html(this.template(attr)));
+            $("#parameter").hide();
         },
         refreshResult: function () {
             var result = this.model.get("result");

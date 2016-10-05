@@ -14,6 +14,8 @@ define([
             jahr: "",
             lage: "",
             page: "",
+            result: "",
+            error: "",
             wpsWorkbenchnameBRW: "BRWUmrechnungHH",
             wpsWorkbenchnameIDAUmrechnung: "IDABerechnungHH"
         },
