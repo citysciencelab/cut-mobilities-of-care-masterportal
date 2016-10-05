@@ -29,17 +29,21 @@ define([
                     flurstueck: this.get("flurFlurstueck"),
                     strassendefinition: this.get("flurStrasse")
                 });
+                this.set("header", this.get("flurGemarkung") + "/" + this.get("flurFlurstueck") + "(" + this.get("flurStrasse") + ")");
             }
             else {
                 EventBus.trigger("seite1_lage:newLage", "");
+                this.set("header", "");
             }
         },
         searchbarhit: function (hit) {
             if (hit.type === "Adresse") {
                 EventBus.trigger("gaz:adressSearch", hit.adress);
+                this.set("header", hit.adress.streetname + " " + hit.adress.housenumber + hit.adress.affix);
             }
             else {
                 EventBus.trigger("seite1_lage:newLage", "");
+                this.set("header", "");
             }
         },
         adressHit: function (data) {

@@ -18,6 +18,8 @@ define([
             "blur #flurstuecksstrasse": "setFlurstuecksstrasse"
         },
         initialize: function () {
+            this.listenTo(this.model, "change:header", this.setHeader);
+
             this.render();
             new Searchbar(Config.searchBar);
             $("#searchInput").focus();
@@ -33,6 +35,11 @@ define([
                 $("#gemarkung").show();
                 $("#adresse").hide();
             }
+        },
+        setHeader: function () {
+            var header = this.model.get("header");
+
+            $("#lageheaderSuffix").text(header);
         },
         setGemarkungsnummer: function (evt) {
             this.model.set("flurGemarkung", evt.currentTarget.value);
