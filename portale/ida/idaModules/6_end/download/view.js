@@ -25,7 +25,7 @@ define([
             new Seite5(this.model.get("filepath"));
         },*/
         show: function () {
-            $("#seite_eins").hide();
+            $("#queries").hide();
             $("#seite_zwei").hide();
             $("#seite_drei").hide();
             $("#seite_vier").hide();

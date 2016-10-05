@@ -37,8 +37,8 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            $("#seite_eins").after(this.$el.html(this.template(attr)));
-            $("#seite_eins").hide();
+            $("#queries").after(this.$el.html(this.template(attr)));
+            $("#queries").hide();
         }
     });
 

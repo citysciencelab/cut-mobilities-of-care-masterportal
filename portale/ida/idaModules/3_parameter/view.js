@@ -117,7 +117,7 @@ define([
             new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"), this.model.get("lage"));
         },
         zurueck: function () {
-            $("#seite_eins").show();
+            $("#queries").show();
             this.trigger("removeBRWDiv", this);
             this.remove();
         },

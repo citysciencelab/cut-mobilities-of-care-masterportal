@@ -12,7 +12,7 @@ define([
 ], function ($, Backbone, Template, Model, Seite2, Locality, Year, Use, Product) {
     "use strict";
     var QueriesView = Backbone.View.extend({
-        el: "#seite_eins",
+        el: "#queries",
         model: Model,
         template: _.template(Template),
         events: {
