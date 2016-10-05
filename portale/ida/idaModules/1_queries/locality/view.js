@@ -20,6 +20,7 @@ define([
         initialize: function () {
             this.render();
             new Searchbar(Config.searchBar);
+            $("#searchInput").focus();
         },
         switchLage: function (evt) {
             if (evt.target.value === "radio1") {
