@@ -35,7 +35,6 @@ define([
             this.$el.html(this.template(attr));
             $("#seite_eins").after(this.$el.html(this.template(attr)));
             $("#seite_eins").hide();
-            $("#seite_drei").hide();
         }
     });
 

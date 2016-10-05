@@ -36,11 +36,13 @@ define([
         calcDefaultsForTemplate: function () {
             var brwList = this.get("brwList"),
                 aktBRW = _.filter(brwList, {art: "Akt.BRW"})[0],
-                defaultFlae = aktBRW && aktBRW.flae ? aktBRW.flae : 1000,
-                defaultBauw = aktBRW && aktBRW.bauw ? aktBRW.bauw : "eh",
-                defaultWGFZ = aktBRW && aktBRW.wgfz ? aktBRW.wgfz : 1.0;
+                defaultFlae = aktBRW && aktBRW.brwValues.flae ? aktBRW.brwValues.flae : 1000,
+                defaultBauw = aktBRW && aktBRW.brwValues.bauw ? aktBRW.brwValues.bauw : "",
+                defaultWGFZ = aktBRW && aktBRW.brwValues.wgfz ? aktBRW.brwValues.wgfz : 1.0,
+                defaultStadtteil = this.get("brwList").length > 0 ? this.get("brwList")[0].brwLage.stadtteil : "";
 
             this.set("defaultFlae", defaultFlae);
+            this.set("defaultStadtteil", defaultStadtteil);
             this.set("defaultBauw", defaultBauw);
             this.set("defaultWGFZ", defaultWGFZ);
         }

@@ -7,7 +7,7 @@ define([
 ], function (Backbone, EventBus, Model, Template, Seite4) {
     "use strict";
     var ParameterView = Backbone.View.extend({
-        el: "#seite_drei",
+        id: "parameter",
         model: Model,
         template: _.template(Template),
         events: {
@@ -116,7 +116,6 @@ define([
             new Seite4(this.model.get("params"), this.model.get("brwList"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("jahr"), this.model.get("lage"));
         },
         zurueck: function () {
-            $("#seite_drei").hide();
             $("#seite_eins").show();
             $("#seite_zwei").remove();
             this.remove();
@@ -124,22 +123,14 @@ define([
         show: function () {
             this.model.calcDefaultsForTemplate();
             this.render();
-            this.checkStadtteilName();
-            $("#seite_drei").show();
-            $("#seite_zwei").hide();
-            $("#seite_vier").hide();
             this.setInitialParams();
         },
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-        },
-        checkStadtteilName: function () {
-            if (this.model.get("brwList").length > 0) {
-                $("#StadtteilName").val(this.model.get("brwList")[0].brwLage.stadtteil);
-                $("#StadtteilNameDiv").hide();
-            }
+            $("#seite_zwei").after(this.$el.html(this.template(attr)));
+            $("#seite_zwei").hide();
         },
         setInitialParams: function () {
             _.each($("#requestedParamsListe").children(), function (par) {
@@ -172,6 +163,9 @@ define([
                         maxCheck: null,
                         waehrung: null
                     });
+                    if ($(par).attr("id") === "StadtteilNameDiv" && $(par.children[1]).val() !== null) {
+                        $(par).hide();
+                    }
                 }
                 else if ($(par.children[1].children[0]).is("div[class=btn-group]")) {
                     this.model.paramChanged({
