@@ -13,11 +13,9 @@ define([
         template: _.template(Template),
         model: Model,
         events: {
-            "click #seite2_weiter": "weiter"
         },
         initialize: function (jahr, nutzung, produkt, lage) {
             this.listenTo(this.model, "change:complete", this.weiter);
-            this.listenTo(this, "remove", this.test);
 
             this.model.set("jahr", jahr);
             this.model.set("nutzung", nutzung);
