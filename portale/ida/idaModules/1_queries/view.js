@@ -74,7 +74,7 @@ define([
                 _.each(this.$el.find(".panel-default"), function (div) {
                     this.panelCollapse($(div).children()[1].id, "hide");
                 }, this);
-            }.bind(this), 10000);
+            }.bind(this), 5000);
         },
         panelClick: function (evt) {
             this.panelPrimary(evt.currentTarget.id);
