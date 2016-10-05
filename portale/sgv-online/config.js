@@ -1,7 +1,6 @@
 define(function () {
     var config = {
-        title: "HH Straßen- und Gebietsauskunft",
-        logo: "../img/stano.png",
+       
         logoLink: "http://www.statistik-nord.de/",
         logoTooltip: "Statistikamt Nord",
         
@@ -15,6 +14,10 @@ define(function () {
             epsg: "EPSG:25832"
             */
         },
+        namedProjections: [
+            // ETRS89 UTM
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
+        ],  
         customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,

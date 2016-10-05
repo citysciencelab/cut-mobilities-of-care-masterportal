@@ -1,7 +1,8 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle":"HH Straßen- u. Gebietsauskunft",
+    "PortalLogo":"../img/stano.png",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
