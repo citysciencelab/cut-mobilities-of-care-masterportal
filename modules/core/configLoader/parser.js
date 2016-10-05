@@ -38,7 +38,8 @@ define([
                 "getItemsByAttributes": this.getItemsByAttributes,
                 "getTreeType": this.getTreeType,
                 "getCategory": this.getCategory,
-                "getCategories": this.getCategories
+                "getCategories": this.getCategories,
+                "getPortalConfig": this.getPortalConfig
             }, this);
 
             channel.on({
@@ -57,10 +58,10 @@ define([
                     Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
                 }
             });
-            this.parseMenu(this.get("portalConfig").menu, "root");
-            this.parseControls(this.get("portalConfig").controls);
-            this.parseSearchBar(this.get("portalConfig").searchBar);
-            this.parseMapView(this.get("portalConfig").mapView);
+            this.parseMenu(this.getPortalConfig().menu, "root");
+            this.parseControls(this.getPortalConfig().controls);
+            this.parseSearchBar(this.getPortalConfig().searchBar);
+            this.parseMapView(this.getPortalConfig().mapView);
 
             if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
@@ -78,6 +79,10 @@ define([
             this.createModelList();
         },
 
+        
+        getPortalConfig: function(){
+            return this.get("portalConfig");  
+        },
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */

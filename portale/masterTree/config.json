@@ -1,7 +1,8 @@
 {
   "Portalconfig":
     {
-      "PortalTitle": "GeoViewer",
+      "PortalTitle": "MasterTree",
+      "PortalLogo": "../img/hh-logo.png",
       "searchBar": {
         "minChars": 3,
         "gazetteer": {
