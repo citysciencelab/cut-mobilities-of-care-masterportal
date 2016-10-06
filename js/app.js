@@ -295,20 +295,6 @@ define("app",
                 new TitleView(title);
             });
         }
-
-//        if (Config.menubar === true) {
-//            require(["modules/menubar/view"], function () {
-//                if ($.isArray(Config.menuItems.formular)) {
-//                    $.each(Config.menuItems.formular, function (name, obj) {
-//                        if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
-//                            require(["modules/formular/view"], function (FormularView) {
-//                                new FormularView(obj.modelname, obj.title, obj.symbol);
-//                            });
-//                        }
-//                    });
-//                }
-//            });
-//        }
     });
     Util.hideLoader();
 });
