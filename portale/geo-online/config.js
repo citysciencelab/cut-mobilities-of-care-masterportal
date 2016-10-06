@@ -100,11 +100,7 @@ define(function () {
                 printID: "99999",
                 title: "Geo-Online",
                 gfi: true
-            },
-            proxyURL: "/cgi-bin/proxy.cgi",
-            mouseHover: true,
-            startUpModul: "",
-            gemarkungen: "../components/lgv-config/gemarkung.json"
+            }
         };
 
     return config;
