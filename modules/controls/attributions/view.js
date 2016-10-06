@@ -35,14 +35,13 @@ define([
                 "change:modelList": this.renderAttributions,
                 "change:isVisibleInMap": this.toggleIsVisibleInMap
             });
-            
+
             this.render();
-            
+
             if(Util.isAny()){
-                console.log(Util.isAny());
                 this.toggleIsContentVisible();
             }
-            
+
         },
 
         render: function () {
