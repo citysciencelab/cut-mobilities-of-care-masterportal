@@ -30,7 +30,6 @@ define(function (require) {
         }
     },
     checkIfMobile: function () {
-        console.log("checkIfMobile");
         var isMobile = Radio.request("Util", "isViewMobile"),
             context = this;
 
