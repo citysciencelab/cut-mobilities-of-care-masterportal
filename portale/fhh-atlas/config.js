@@ -82,6 +82,10 @@ define(function () {
             center: [565874, 5934140],
             extent: [442800, 5809000, 738000, 6102200]
         },
+        namedProjections: [
+            // ETRS89 UTM
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
+        ],
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
