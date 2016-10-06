@@ -3,7 +3,8 @@ define([
     "text!modules/controls/attributions/templateShow.html",
     "text!modules/controls/attributions/templateHide.html",
     "modules/controls/attributions/model",
-    "backbone.radio"
+    "backbone.radio",
+    "modules/core/util"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -11,6 +12,7 @@ define([
         TemplateHide = require("text!modules/controls/attributions/templateHide.html"),
         Attributions = require("modules/controls/attributions/model"),
         Radio = require("backbone.radio"),
+        Util = require("modules/core/util"),
         AttributionsView;
 
     AttributionsView = Backbone.View.extend({
@@ -33,8 +35,14 @@ define([
                 "change:modelList": this.renderAttributions,
                 "change:isVisibleInMap": this.toggleIsVisibleInMap
             });
-
+            
             this.render();
+            
+            if(Util.isAny()){
+                console.log(Util.isAny());
+                this.toggleIsContentVisible();
+            }
+            
         },
 
         render: function () {
