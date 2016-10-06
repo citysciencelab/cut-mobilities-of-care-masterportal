@@ -20,6 +20,7 @@ define(function (require){
         },
     removeAttrFromFilter: function (evt) {
         this.model.removeAttrFromFilter(evt);
+        this.render();
     },
         
     nextStep: function (evt) {
