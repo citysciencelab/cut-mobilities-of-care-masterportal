@@ -111,11 +111,10 @@ define("app",
                     });
                     break;
                 }
-                case "gfi": {
-                    require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
-                        new GFIPopupView();
+                case "gfi":{
+                    require(["modules/gfipopup/popup/popupLoader"], function (PopupLoader) {
+                        new PopupLoader();
                     });
-                    break;
                 }
                 case "coord": {
                     require(["modules/coordpopup/view"], function (CoordPopupView) {
