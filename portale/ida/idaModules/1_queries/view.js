@@ -81,14 +81,21 @@ define([
             evt.stopPropagation();
         },
         panelPrimary: function (id) {
-            _.each(this.$el.find(".panel-primary"), function (div) {
-                $(div).removeClass("panel-primary");
-                $(div).addClass("panel-default");
-            }, this);
-            _.each(this.$el.find("#" + id), function (div) {
-                $(div).addClass("panel-primary");
-                $(div).removeClass("panel-default");
-                this.panelCollapse($("#" + id).children()[1].id, "show");
+            _.each(this.$el.find(".panel"), function (panel) {
+                if (id === $(panel).attr("id")) {
+                    if ($(panel).hasClass("panel-primary") === false) {
+                        $(panel).addClass("panel-primary");
+                        $(panel).removeClass("panel-default");
+                    }
+                    this.panelCollapse($(panel).children()[1].id, "show");
+                }
+                else {
+                    if ($(panel).hasClass("panel-primary") !== false) {
+                        $(panel).removeClass("panel-primary");
+                        $(panel).addClass("panel-default");
+                        this.panelCollapse($(panel).children()[1].id, "hide");
+                    }
+                }
             }, this);
         },
         panelCollapse: function (id, status) {
