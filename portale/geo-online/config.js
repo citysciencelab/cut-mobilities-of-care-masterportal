@@ -60,7 +60,7 @@ define(function () {
                 id: "1"
             },
             scaleLine: true,
-            attributions: true,
+         
             footer: {
                 visibility: true,
                 urls: [

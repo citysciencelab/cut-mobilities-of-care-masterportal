@@ -3,9 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Geo-Online</title>
 
     <link rel="stylesheet" href="../../css/style.css">
@@ -86,7 +84,6 @@
         }
     </style>
 </head>
-    
 <body>
     <div id="loader"><img src="../../img/ajax-loader.gif"></div>
     <!-- Hack um die Bildschirmauflösung zu bekommen -->
@@ -113,7 +110,7 @@
         </div>
     </nav>
     <!-- <div id="searchMarker" class="glyphicon glyphicon-map-marker"><span class="glyphicon glyphicon-remove"></span></div> -->
-    <div class="changelog-window hide hidden-xs">
+    <div class="changelog-window">
         <div class="changelog-header">
             <span class="changelog-title" data-toggle="tooltip" data-placement="bottom" title="Die wichtigsten Neuerungen auf einen Blick">Die wichtigsten Neuerungen auf einen Blick</span>
             <span class="glyphicon glyphicon-remove pull-right changelog-remove" onclick="hideWindow();" data-toggle="tooltip" data-placement="bottom" title="Schließen"></span>
@@ -121,6 +118,27 @@
             <span class="glyphicon glyphicon-minus pull-right changelog-min" onclick="minimizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Minimieren"></span>
         </div>
         <div class="changelog-content">
+            <p>
+                <h4>Achtung Vorankündigung - aktualisiertes Höhenbezugssystem ab 01.12.2016!</h4>
+                Aufgrund des Beschlusses der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland (AdV) wird in der Zeit vom 01.12.2016 bis zum 30.06.2017 deutschlandweit der „Einheitlich Integrierte Raumbezug“ eingeführt. Im täglichen Vermessungsgeschäft ist dabei insbesondere von Bedeutung, dass sich mit dieser Einführung der Höhenhorizont in Hamburg verändern wird. Die neuen Höhenangaben für die Höhenfestpunkte werden zwischen 14 und 17 mm niedriger liegen als bisher. Auf den Auszügen aus dem Amtlichen Festpunktinformationssystem (AFIS®) kann im Bereich des Feldes „Höhe“ abgelesen werden, in welchem Bezugssystem die Höhe gegeben ist. Der Höhenstatus wird unter dem Begriff „System“ oberhalb der angegebenen Höhe ausgewiesen. Die alten Höhen haben den Höhenstatus DE_DHHN92_NH. Die neuen Höhen werden den Höhenstatus DE_DHHN2016_NH haben.
+                Der Austausch der Höhendaten wird voraussichtlich am 01.12.2016 durchgeführt. Weitergehende Informationen werden an dieser Stelle folgen und sind auf den Seiten des LGV im Internet sowie AdV-online.de zu erhalten.
+            </p>
+            <p>
+                <h4>Update 20.07.2016</h4>
+                <dl>
+                    <dt>Zeichnen / Schreiben</dt>
+                    <dd>Das Werkzeug wurde um drei Funktionen erweitert:<br>
+                        - Zeichnungen können nächträglich bearbeitet werden<br>
+                        - Löschen einzelner Zeichnungen<br>
+                        - Zeichnungen können als KML-Datei heruntergeladen werden</dd>
+                    <dt>KML Import</dt>
+                    <dd>Als neues Werkzeug ist der KML Import dazugekommen. Dadurch können z.B. heruntergeladene Zeichnungen wieder importiert werden</dd>
+                    <dt>Auswahl speichern</dt>
+                    <dd>Zusätzlich wird die aktuelle Transparenz der Layer gespeichert.</dd>
+                    <dt>Vollbild</dt>
+                    <dd>Über den Fullscreen Button ( <span class="glyphicon glyphicon-fullscreen"></span> rechte Seite), wird der Vollbild-Modus aktiviert. Über den gleichen Button kann dieser Modus wieder verlassen werden.</dd>
+                </dl>
+            </p>
             <p>
                 <h4>Update 07.03.2016</h4>
                 <dl>
@@ -172,7 +190,7 @@
             </p>
             <hr>
             <p>
-                <h4>Das neue Geo-Online</h4>
+                <h4>Der neue FHH - Atlas 16.09.2015</h4>
                 <dl>
                     <dt>Suchmaske</dt>
                     <dd>In den dargestellten Kartenebenen (Layern) kann im Suchefeld oben rechts gesucht werden. Dort kann auch nach Stadtteilen, Straßen, Adressen und Flurstücken gesucht werden </dd>
@@ -201,9 +219,9 @@
                     Wir haben uns für die Open Data-Kategorien entschieden, da die Daten im Transparenzportal ebenfalls nach diesen Kategorien geordnet werden und viele Datensätze schon entsprechend kategorisiert sind.
                 </p>
             </p>
-            
         </div>
     </div>
-    </body>
+</body>
 </html>
+
 
