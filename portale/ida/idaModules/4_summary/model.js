@@ -65,10 +65,12 @@ define([
             // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern.
             // Für den Miteigentumsanteil MEA wird der Quotient von MEAN / MEAZ verwendet.
             if (_.has(params, "WGFZ") === false) {
-                var WOFL = _.has(params, "WOFL") === true && Number(params.WOFL.replace(/,/, ".").trim()) > 0 ? Number(params.WOFL.replace(/,/, ".").trim()) : null,
-                    FLAE = _.has(params, "FLAE") === true && Number(params.FLAE.replace(/,/, ".").trim()) > 0 ? Number(params.FLAE.replace(/,/, ".").trim()) : null;
+                var WOFL = _.has(params, "WOFL") === true && Number(params.WOFL.replace(/,/, ".").trim()) > 0 ? Number(params.WOFL.replace(/,/, ".").trim()) : 0,
+                    FLAE = _.has(params, "FLAE") === true && Number(params.FLAE.replace(/,/, ".").trim()) > 0 ? Number(params.FLAE.replace(/,/, ".").trim()) : 0,
+                    EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
+                    OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0;
 
-                if (WOFL && FLAE) {
+                if (FLAE > 0) {
                     var EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
                         OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
                         MEA = _.has(params, "MEAN") === true && _.has(params, "MEAZ") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
