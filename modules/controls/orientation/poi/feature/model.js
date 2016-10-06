@@ -20,6 +20,7 @@ define([
                 zoom = 7;
             }
             Radio.trigger("poi", "hidePOIModal");
+            Radio.trigger("orientation", "untrack");
             Radio.trigger("MapView", "setCenter", [parseInt(this.get("xCoord"), 10), parseInt(this.get("yCoord"), 10)], zoom);
         }
     });
