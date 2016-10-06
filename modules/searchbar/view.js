@@ -440,34 +440,40 @@ define([
         *
         */
         setSearchString: function (evt) {
-            if (evt.type === "paste") {
-                var that = this;
-
-                // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
-                setTimeout(function () {
-                    that.model.setSearchString(evt.target.value, evt.type);
-                }, 0);
-            }
-            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
-                if (evt.key === "Enter" || evt.keyCode === 13) {
-                    if (this.model.get("hitList").length === 1) {
-                        this.hitSelected(); // erster und einziger Eintrag in Liste
-                    }
-                    else {
-                        this.renderHitList();
-                    }
-                }
-                else {
-                    this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
-                }
-            }
-
-            // Der "x-Button" in der Suchleiste
-            if (evt.target.value.length > 0) {
-                $("#searchInput + span").show();
+            if (evt.target.value.length === 0) {
+                // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
+                this.deleteSearchString();
             }
             else {
-                $("#searchInput + span").hide();
+                if (evt.type === "paste") {
+                    var that = this;
+
+                    // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+                    setTimeout(function () {
+                        that.model.setSearchString(evt.target.value, evt.type);
+                    }, 0);
+                }
+                else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
+                    if (evt.key === "Enter" || evt.keyCode === 13) {
+                        if (this.model.get("hitList").length === 1) {
+                            this.hitSelected(); // erster und einziger Eintrag in Liste
+                        }
+                        else {
+                            this.renderHitList();
+                        }
+                    }
+                    else {
+                        this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
+                    }
+                }
+
+                // Der "x-Button" in der Suchleiste
+                if (evt.target.value.length > 0) {
+                    $("#searchInput + span").show();
+                }
+                else {
+                    $("#searchInput + span").hide();
+                }
             }
         },
         collapseHits: function (target) {
@@ -509,6 +515,7 @@ define([
         deleteSearchString: function () {
             this.model.setSearchString("");
             $("#searchInput").val("");
+            $("#searchInputUL").html("");
             $("#searchInput + span").hide();
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
