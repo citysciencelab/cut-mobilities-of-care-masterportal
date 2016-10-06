@@ -12,15 +12,7 @@
            "searchDistricts": true,
            "searchParcels": true
        },
-       "bkg": {
-           "minChars": 3,
-           "bkgSuggestURL": "/bkg_suggest",
-           "bkgSearchURL": "/bkg_geosearch",
-           "extent": [454591, 5809000, 700000, 6075769],
-           "epsg": "EPSG:25832",
-           "filter": "filter=(typ:*)",
-           "score": 0.6
-       },
+       
        "specialWFS": {
            "minChar": 3,
            "definitions": [
@@ -210,7 +202,7 @@
                     {
                       "id": "4639",
                       "visibility": true,
-                      "styleable": true,
+                      "styleable": false,
                       "geomType": "Polygon",
                       "attributesToStyle": ["AP30Sum", "AP60Sum"]
                     }
