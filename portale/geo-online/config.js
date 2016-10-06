@@ -88,14 +88,16 @@ define(function () {
                 center: [565874, 5934140],
                 extent: [442800, 5809000, 738000, 6102200]
             },
+            proxyURL: "/cgi-bin/proxy.cgi",
             namedProjections: [
             // ETRS89 UTM
                 ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
             ],
-            layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
-            restConf: "../components/lgv-config/rest-services-fhhnet.json",
+            layerConf: "../components/lgv-config/services-internet.json",
+            restConf: "../components/lgv-config/rest-services-internet.json",
             styleConf: "../components/lgv-config/style.json",
             isMenubarVisible: true,
+            gemarkungen: "../components/lgv-config/gemarkung.json",
             print: {
                 printID: "99999",
                 title: "Geo-Online",

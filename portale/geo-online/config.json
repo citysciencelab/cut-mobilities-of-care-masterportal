@@ -100,12 +100,12 @@
         }
       },
       "controls": {
-        "zoom": true,
         "toggleMenu": true,
-        "orientation": "once",
         "poi": true,
+        "zoom": true,
         "fullScreen": true,
-        "mousePosition": true
+        "mousePosition": true,
+        "attributions": true
       },
       "Baumtyp": "default"
     },
