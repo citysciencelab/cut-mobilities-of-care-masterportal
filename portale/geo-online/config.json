@@ -107,7 +107,7 @@
         "fullScreen": true,
         "mousePosition": true
       },
-      "Baumtyp": "custom"
+      "Baumtyp": "default"
     },
     "Themenconfig":
     {
