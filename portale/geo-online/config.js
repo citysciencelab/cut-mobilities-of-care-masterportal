@@ -5,7 +5,7 @@ define(function () {
             tree: {
                 orderBy: "opendata",
                 saveSelection: true,
-            
+
                 layerIDsToMerge: [
                     ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
                     ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
@@ -94,14 +94,14 @@ define(function () {
                 ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
             ],
             layerConf: "../components/lgv-config/services-internet.json",
-            restConf: "../components/lgv-config/rest-services-internet.json",
+            restConf: "../components/lgv-config/rest-services-fhhnet.json",
             styleConf: "../components/lgv-config/style.json",
             isMenubarVisible: true,
             gemarkungen: "../components/lgv-config/gemarkung.json",
             print: {
                 printID: "99999",
                 title: "Geo-Online",
-                gfi: true
+                gfi: false
             }
         };
 
