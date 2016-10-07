@@ -23,7 +23,6 @@ define([
         //
         url: function () {
             var resp;
-
             resp = Radio.request("RestReader", "getServiceById", Config.print.printID);
             if (resp[0] && resp[0].get("url")) {
                 this.set("printurl", resp[0].get("url"));
@@ -49,7 +48,6 @@ define([
                 "changedOptions": this.setScaleByMapView,
                 "changedCenter": this.setCenter
             });
-
             // get print config (info.json)
             this.fetch({
                 cache: false,
@@ -58,6 +56,7 @@ define([
                         var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
 
                         scale.name = "1: " + scaletext;
+                        scale.value = parseInt(scale.value);
                     });
                     model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                     model.setScaleByMapView();
