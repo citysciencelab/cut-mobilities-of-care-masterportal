@@ -101,7 +101,7 @@ define(function () {
             print: {
                 printID: "99999",
                 title: "Geo-Online",
-                gfi: true
+                gfi: false
             }
         };
 
