@@ -170,6 +170,12 @@ define("app",
                     });
                     break;
                 }
+                case "extendedFilter": {
+                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                        new ExtendedFilterView();
+                    });
+                    break;
+                }
                 case "treeFilter": {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();

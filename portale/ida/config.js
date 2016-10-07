@@ -2,6 +2,7 @@
 define(function () {
 
     var config = {
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         restConf: "../../components/lgv-config/rest-services-fhhnet.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         netcheckerURL: "/wfalgqw001/ida/netchecker.php",
