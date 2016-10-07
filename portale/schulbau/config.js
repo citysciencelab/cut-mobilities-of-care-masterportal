@@ -40,7 +40,6 @@ define(function () {
             ]
         },
         quickHelp: true,
-//        layerConf: "../components/lgv-config/services-internet.json",
         layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
