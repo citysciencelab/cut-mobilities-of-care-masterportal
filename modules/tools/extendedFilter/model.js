@@ -18,7 +18,7 @@ define(function (require){
             currentFilterType: "Neuen Filter erstellen",
             currentFilters:[],
             ignoredKeys : Config.ignoredKeys,
-            filterCounter: 0
+            filterCounter: 1
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -108,7 +108,7 @@ define(function (require){
             },this);
             this.set("wfsList", wfsList);
         },
-        
+
         previousStep: function () {
             var currentContent = this.getCurrentContent(),
                 step = currentContent.step,
@@ -175,10 +175,10 @@ define(function (require){
                 content.options = ["Neuen Filter erstellen"];
                 this.setCurrentContent(content);
             }
-            
+
             this.filterLayers();
         },
-        
+
         nextStep: function(evt) {
             var id = evt.currentTarget.id,
                 val = $("#"+id).val(),
@@ -223,7 +223,7 @@ define(function (require){
                 wfsList,
                 options = [],
                 currentFilters = [];
-            
+
             newStep++;
             if(val === "Neuen Filter erstellen"){
                 this.setCurrentFilterType("Neuen Filter erstellen");
@@ -353,31 +353,31 @@ define(function (require){
             this.setCurrentFilters(currentFilters);
             this.filterLayers();
         },
-        
+
         filterLayers: function () {
             var currentFilters =  this.getCurrentFilters(),
                 layers = this.getWfsList(),
                 layer,
                 features;
-            
+
             _.each(layers,function(wfslayer){
                 layer = wfslayer.layer;
                 features = layer.getSource().getFeatures();
-                
+
                 if (layer.getStyle()) {
                     layer.defaultStyle = layer.getStyle();
                     layer.setStyle(null);
                 }
-                
-                
+
+
                 features.forEach(function(feature){
                     var featuredarstellen2 = true,
                         preVal2 = false;
-                    
+
                     _.each(currentFilters, function (filter){
                         var featuredarstellen = true,
                         preVal = true;
-                        
+
                         if(filter.layername.split(" ")[2] === wfslayer.name){
                             _.each(filter.attributes, function (attribute){
                                 featuredarstellen = this.checkFeatureForFilter(feature, attribute);
@@ -401,7 +401,7 @@ define(function (require){
                             }
                         }
                     } ,this);
-                    
+
                     if (featuredarstellen2 === true) {
                         if (feature.defaultStyle) {
                             feature.setStyle(feature.defaultStyle);
@@ -413,13 +413,13 @@ define(function (require){
                     }
                     else if (featuredarstellen2 === false) {
                         feature.setStyle(null);
-                    } 
+                    }
                 }, this);
-                    
+
             }, this);
-            
+
         },
-        
+
         checkFeatureForFilter: function(feature, attr){
             var featuredarstellen = true,
                 attributname = attr.attribute,
@@ -428,7 +428,7 @@ define(function (require){
                 featurevalue;
 
             var featureattribute = _.pick(feature.getProperties(), attributname);
-            
+
             if (featureattribute && !_.isNull(featureattribute)) {
                 featurevalue0 = _.values(featureattribute)[0];
                 if (featurevalue0) {

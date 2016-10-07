@@ -22,19 +22,19 @@ define(function (require){
         this.model.removeAttrFromFilter(evt);
         this.render();
     },
-        
+
     nextStep: function (evt) {
-        this.model.nextStep(evt);  
+        this.model.nextStep(evt);
         this.render();
     },
     previousStep: function (evt) {
-        this.model.previousStep(evt);  
+        this.model.previousStep(evt);
         this.render();
     },
 
     render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                
+
                 var attr = this.model.toJSON();
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
