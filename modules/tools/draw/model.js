@@ -152,7 +152,6 @@ define([
                 Radio.trigger("Map", "removeInteraction", this.get("draw"));
                 Radio.trigger("Map", "addInteraction", this.get("selectClick"));
                 this.get("selectClick").setActive(false);
-                Radio.trigger("Map", "activateClick", "gfi");
             }
         },
 

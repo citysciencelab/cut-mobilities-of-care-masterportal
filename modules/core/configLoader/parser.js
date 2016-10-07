@@ -1,12 +1,14 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/modellist/list"
+    "modules/core/modellist/list",
+    "modules/core/util"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ModelList = require("modules/core/modellist/list"),
+        Util = require("modules/core/util"),
         Parser;
 
     Parser = Backbone.Model.extend({
@@ -105,7 +107,15 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
+                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                    if (toolitem.id === "measure" || toolitem.id === "draw"){
+                        if (!Util.isApple() && !Util.isAndroid()){
+                             this.addItem(toolitem);
+                         }
+                    }
+                    else {
+                        this.addItem(toolitem);
+                    }
                 }
             }, this);
         },
