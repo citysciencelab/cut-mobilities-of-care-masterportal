@@ -63,10 +63,6 @@
             "saveSelection": {
               "name": "Auswahl speichern",
               "glyphicon": "glyphicon-share"
-            },
-            "addWMS": {
-              "name": "WMS hinzufügen",
-              "glyphicon": "glyphicon-plus"
             }
           }
         },
