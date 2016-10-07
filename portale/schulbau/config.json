@@ -21,7 +21,7 @@
                 }
             ]
         },
-        
+
         "visibleWFS": {
             "minChars": 3
         },
@@ -39,7 +39,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
@@ -62,6 +62,10 @@
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
               "lister": 10
+          },
+          "extendedFilter":{
+            "name": "Erweiterter Filter",
+            "glyphicon": "glyphicon-filter"
           }
         }
       },
@@ -122,14 +126,21 @@
     "Fachdaten":
     {
       "Layer": [
-        
+
         {
           "id": "1732",
           "styleId": "753",
           "visibility": true,
           "mouseHoverField": "Name"
+        },
+        {
+          "id": "4972",
+          "styleId": "4972",
+          "visibility": true,
+          "mouseHoverField": ["schulname","gebaeudebezeichnung"],
+          "extendedFilter": true
         }
-        
+
       ]
     }
   }
