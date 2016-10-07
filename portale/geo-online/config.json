@@ -97,9 +97,9 @@
       },
       "controls": {
         "toggleMenu": true,
-        "poi": true,
-        "zoom": true,
         "fullScreen": true,
+        "zoom": true,
+        "orientation": true,
         "mousePosition": true,
         "attributions": true
       },
