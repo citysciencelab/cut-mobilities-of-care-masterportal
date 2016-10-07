@@ -96,6 +96,7 @@ define([
             this.$el.modal("hide");
             this.model.set("isPopupVisible", false);
             this.model.unset("coordinate", {silent: true});
+            this.model.destroyPopup();
         },
         /**
          *
