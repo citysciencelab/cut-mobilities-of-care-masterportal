@@ -18,7 +18,7 @@ define([
         initialize: function () {
             // Chrome erlaubt nur bei https-Seiten die Lokalisierung (stand: 20.07.2016).
             // Deshalb nehmen wir bei Chrome die Lokalisierung raus, da unsere Portale auf http laufen und die Dienste auch.
-            if (!(Util.isChrome() === true && Util.isApple() && window.location.protocol === "http:")) {// wenn es nicht Chrome UND http ist, Lokalisierung und InMeinerNähe initialisieren
+            if (!(Util.isChrome() === true || Util.isApple() && window.location.protocol === "http:")) {// wenn es nicht Chrome UND http ist, Lokalisierung und InMeinerNähe initialisieren
 
                 var channel = Radio.channel("orientation");
 
