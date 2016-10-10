@@ -24,7 +24,6 @@ define([
             $(".navbar-collapse").append(this.$el);
         },
         setLogo: function () {
-            debugger;
             var logo = Radio.request("Parser", "getPortalConfig").PortalLogo,
                 result = "";
 
