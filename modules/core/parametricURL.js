@@ -79,6 +79,24 @@ define([
            });
            this.setLayerParams(layerParams);
         },
+        createLayerParamsUsingMetaId: function (metaIds) {
+            var layers = [],
+            layerParams = [];
+
+            var hintergrundKarte = Radio.request("Parser", "getItemByAttributes", {id: "453"});
+            layers.push(hintergrundKarte);
+
+            _.each(metaIds, function (metaId) {
+                var metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
+                _.each(metaIDlayers, function (layer) {
+                    layers.push(layer);
+                });
+            });
+            _.each(layers, function (layer) {
+                layerParams.push({id: layer.id, visibility: "TRUE", transparency: "0"});
+            });
+            this.setLayerParams(layerParams);
+        },
 
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
@@ -103,6 +121,7 @@ define([
 
                 Config.tree.metaIdsToSelected = values;
                 Config.view.zoomLevel = 0;
+                this.createLayerParamsUsingMetaId(values);
             }
 
             /**

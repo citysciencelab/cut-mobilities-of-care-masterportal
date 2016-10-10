@@ -41,7 +41,8 @@ define([
                 "getTreeType": this.getTreeType,
                 "getCategory": this.getCategory,
                 "getCategories": this.getCategories,
-                "getPortalConfig": this.getPortalConfig
+                "getPortalConfig": this.getPortalConfig,
+                "getItemsByMetaID": this.getItemsByMetaID
             }, this);
 
             channel.on({
@@ -376,6 +377,17 @@ define([
         },
         getPortalConfig: function () {
             return this.get("portalConfig");
+        },
+        getItemsByMetaID: function (metaID) {
+            var layers = _.filter(this.getItemList(), function (item) {
+                if (item.type === "layer") {
+                    if (item.datasets.length > 0) {
+                        return item.datasets[0].md_id === metaID;
+                    }
+                }
+            }, this);
+
+            return layers;
         }
     });
 
