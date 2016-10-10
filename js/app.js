@@ -288,9 +288,11 @@ define("app",
             new StyleWMSView();
         });
 
-        if (_.has(Config, "title") === true) {
+        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
+
+        if (title) {
             require(["modules/title/view"], function (TitleView) {
-                new TitleView();
+                new TitleView(title);
             });
         }
     });

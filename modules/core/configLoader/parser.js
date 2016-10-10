@@ -40,7 +40,8 @@ define([
                 "getItemsByAttributes": this.getItemsByAttributes,
                 "getTreeType": this.getTreeType,
                 "getCategory": this.getCategory,
-                "getCategories": this.getCategories
+                "getCategories": this.getCategories,
+                "getPortalConfig": this.getPortalConfig
             }, this);
 
             channel.on({
@@ -372,6 +373,9 @@ define([
             value = value.replace(/[^a-zA-Z0-9]/g, "");
 
             return _.uniqueId(value);
+        },
+        getPortalConfig: function () {
+            return this.get("portalConfig");
         }
     });
 
