@@ -419,9 +419,6 @@ define([
              */
             removeModelsByParentId: function (parentId) {
                 _.each(this.where({parentId: parentId}), function (model) {
-                    if (model.getType() === "folder") {
-                        this.removeModelsByParentId(model.getId());
-                    }
                     if (model.getType() === "layer" && model.getIsVisibleInMap() === true) {
                         model.setIsVisibleInMap(false);
                     }
