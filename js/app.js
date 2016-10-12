@@ -295,7 +295,8 @@ define("app",
         });
 
         var title = Radio.request("Parser","getPortalConfig").PortalTitle;
-        if(title){
+
+        if (title) {
             require(["modules/title/view"], function (TitleView) {
                 new TitleView(title);
             });

@@ -1,12 +1,14 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/modellist/list"
+    "modules/core/modellist/list",
+    "modules/core/util"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ModelList = require("modules/core/modellist/list"),
+        Util = require("modules/core/util"),
         Parser;
 
     Parser = Backbone.Model.extend({
@@ -39,7 +41,8 @@ define([
                 "getTreeType": this.getTreeType,
                 "getCategory": this.getCategory,
                 "getCategories": this.getCategories,
-                "getPortalConfig": this.getPortalConfig
+                "getPortalConfig": this.getPortalConfig,
+                "getItemsByMetaID": this.getItemsByMetaID
             }, this);
 
             channel.on({
@@ -79,9 +82,9 @@ define([
             this.createModelList();
         },
 
-        
+
         getPortalConfig: function(){
-            return this.get("portalConfig");  
+            return this.get("portalConfig");
         },
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
@@ -110,7 +113,15 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
+                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                    if (toolitem.id === "measure" || toolitem.id === "draw"){
+                        if (!Util.isApple() && !Util.isAndroid()){
+                             this.addItem(toolitem);
+                         }
+                    }
+                    else {
+                        this.addItem(toolitem);
+                    }
                 }
             }, this);
         },
@@ -367,6 +378,20 @@ define([
             value = value.replace(/[^a-zA-Z0-9]/g, "");
 
             return _.uniqueId(value);
+        },
+        getPortalConfig: function () {
+            return this.get("portalConfig");
+        },
+        getItemsByMetaID: function (metaID) {
+            var layers = _.filter(this.getItemList(), function (item) {
+                if (item.type === "layer") {
+                    if (item.datasets.length > 0) {
+                        return item.datasets[0].md_id === metaID;
+                    }
+                }
+            }, this);
+
+            return layers;
         }
     });
 

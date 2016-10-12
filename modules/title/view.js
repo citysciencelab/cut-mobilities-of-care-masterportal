@@ -20,27 +20,29 @@ define([
                 logo: this.getLogo(),
                 logoLink: Config.logoLink || "http://geoinfo.hamburg.de",
                 logoTooltip: Config.logoTooltip || "Landesbetrieb Geoinformation und Vermessung"
-            } ));
+            }));
             $(".navbar-collapse").append(this.$el);
         },
-        
-        setLogo: function(){
-            var logo = Radio.request("Parser","getPortalConfig").PortalLogo;
-            var result = "";
-            if(logo === "none"){
+        setLogo: function () {
+            var logo = Radio.request("Parser", "getPortalConfig").PortalLogo,
+                result = "";
+
+            if (logo === "none") {
                result = null;
             }
-            else if (_.isUndefined(logo)){
+            else if (_.isUndefined(logo)) {
                 result = "../img/hh-logo.png";
             }
-            else{
-               result = logo;
+            else {
+                result = logo;
             }
             this.logo = result;
         },
-        getLogo: function (){
+
+        getLogo: function () {
             return this.logo;
         }
     });
+
     return TitleView;
 });
