@@ -1,7 +1,7 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/modellist/list",
+    "modules/core/modelList/list",
     "modules/core/util"
 ], function () {
 
