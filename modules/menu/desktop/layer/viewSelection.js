@@ -33,7 +33,7 @@ define([
                 "change:isVisibleInMap": this.rerender,
                 "change:isSettingVisible": this.renderSetting,
                 "change:transparency": this.rerender,
-                "change:isOutOfScale": this.toggleColor
+                "change:isOutOfRange": this.toggleColor
             });
             this.render();
             this.toggleColor(this.model, this.model.getIsOutOfRange());

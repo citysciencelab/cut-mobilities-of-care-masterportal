@@ -23,7 +23,7 @@ define([
             this.listenTo(this.model, {
                 "change:isSelected": this.rerender,
                 "change:isVisibleInTree": this.removeIfNotVisible,
-                "change:isOutOfScale": this.toggleColor
+                "change:isOutOfRange": this.toggleColor
             });
             this.render();
             this.toggleColor(this.model, this.model.getIsOutOfRange());

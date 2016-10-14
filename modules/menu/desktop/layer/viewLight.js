@@ -32,7 +32,7 @@ define([
                 "change:isSelected": this.rerender,
                 "change:isSettingVisible": this.renderSetting,
                 "change:transparency": this.rerender,
-                "change:isOutOfScale": this.toggleColor
+                "change:isOutOfRange": this.toggleColor
             });
 
             this.$el.on({

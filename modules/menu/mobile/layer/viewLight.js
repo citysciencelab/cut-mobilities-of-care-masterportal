@@ -31,7 +31,7 @@ define([
                  "change:isSelected change:isVisibleInMap": this.render,
                  "change:isSettingVisible": this.renderSetting,
                  "change:isVisibleInTree": this.removeIfNotVisible,
-                "change:isOutOfScale": this.toggleColor
+                "change:isOutOfRange": this.toggleColor
             });
             this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
