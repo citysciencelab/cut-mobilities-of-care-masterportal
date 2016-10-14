@@ -86,10 +86,10 @@ define(function (require) {
         **/
         checkForScale: function (options) {
             if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
-                this.setIsOutOfScale(true);
+                this.setIsOutOfRange(false);
             }
             else {
-                this.setIsOutOfScale(false);
+                this.setIsOutOfRange(true);
             }
         },
 
@@ -159,8 +159,8 @@ define(function (require) {
             this.set("transparency", value);
         },
 
-        setIsOutOfScale: function (value) {
-            this.set("isOutOfScale", value);
+        setIsOutOfRange: function (value) {
+            this.set("isOutOfRange", value);
         },
 
         setMaxResolution: function (value) {
@@ -227,8 +227,8 @@ define(function (require) {
             return this.get("layerAttribution");
         },
 
-        getIsOutOfScale: function () {
-            return this.get("isOutOfScale");
+        getIsOutOfRange: function () {
+            return this.get("isOutOfRange");
         },
 
         getMaxScale: function () {

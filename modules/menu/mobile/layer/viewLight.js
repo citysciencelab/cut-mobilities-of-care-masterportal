@@ -33,7 +33,7 @@ define([
                  "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfScale": this.toggleColor
             });
-            this.toggleColor(this.model, this.model.getIsOutOfScale());
+            this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
         
         /**
@@ -41,7 +41,7 @@ define([
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
-                if (value === false) {
+                if (value === true) {
                     this.$el.addClass("disabled");
                     this.$el.find("*").css("pointer-events","none");
                 }
