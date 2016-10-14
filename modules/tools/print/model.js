@@ -115,7 +115,9 @@ define([
                         error: function () {
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
                             Radio.trigger("Window", "closeWin");
-                        }
+                        },
+                        complete: Util.hideLoader,
+                        beforeSend: Util.showLoader
                     });
                 }
                 else {
