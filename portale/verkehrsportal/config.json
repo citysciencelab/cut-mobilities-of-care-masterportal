@@ -2,6 +2,10 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600]
+    },
     "searchBar": {
         "minChars": 3,
         "bkg": {
