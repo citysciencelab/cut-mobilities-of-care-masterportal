@@ -86,7 +86,6 @@ define([
                     if (coord !== this.coordinate) {
                         this.coordinate = coord;
                         EventBus.trigger("mapHandler:showMarker", coord);
-                        $("#searchMarker").removeClass("featureMarker");
                     }
                 }
             }
