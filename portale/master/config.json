@@ -45,7 +45,8 @@
         "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600]
     },
     "menu": {
       "tree": {
