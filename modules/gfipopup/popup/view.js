@@ -25,6 +25,7 @@ define([
             EventBus.on("gfipopup:rerender", this.rerender, this);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
+            EventBus.trigger("mapHandler:showMarker", [0,0]);
         },
         /**
          * Toggle des Popovers in minimiert oder maximiert
@@ -78,13 +79,11 @@ define([
         render: function (evt) {
             var coord = [],
                 attr = this.model.toJSON();
+            
             if (_.has(Config,"gfiAtClick") && Config.gfiAtClick===false) {
                 if (_.has(evt,"changed")) {
                     coord = evt.changed.coordinate;
-                    if (coord === this.coordinate) {
-                        console.log("gleiche coord");
-                    }
-                    else {
+                    if (coord !== this.coordinate) {
                         this.coordinate = coord;
                         EventBus.trigger("mapHandler:showMarker", coord);
                     }
@@ -152,7 +151,7 @@ define([
          */
         destroy: function () {
             $(".gfi-win").hide();
-            EventBus.trigger("mapHandler:removeMarker");
+            EventBus.trigger("mapHandler:showMarker", [0,0]);
             this.removeTemplateModels();
             $("#popovermin").remove();
             this.model.destroyPopup();
