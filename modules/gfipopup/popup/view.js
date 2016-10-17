@@ -79,13 +79,14 @@ define([
         render: function (evt) {
             var coord = [],
                 attr = this.model.toJSON();
-            
+
             if (_.has(Config,"gfiAtClick") && Config.gfiAtClick===false) {
                 if (_.has(evt,"changed")) {
                     coord = evt.changed.coordinate;
                     if (coord !== this.coordinate) {
                         this.coordinate = coord;
                         EventBus.trigger("mapHandler:showMarker", coord);
+                        $("#searchMarker").removeClass("featureMarker");
                     }
                 }
             }
