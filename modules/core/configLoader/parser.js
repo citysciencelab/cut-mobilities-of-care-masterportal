@@ -82,10 +82,10 @@ define([
             this.createModelList();
         },
 
-
-        getPortalConfig: function(){
+        getPortalConfig: function () {
             return this.get("portalConfig");
         },
+
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
@@ -113,8 +113,9 @@ define([
                 }
                 else {
                     var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
-                    if (toolitem.id === "measure" || toolitem.id === "draw"){
-                        if (!Util.isApple() && !Util.isAndroid()){
+
+                    if (toolitem.id === "measure" || toolitem.id === "draw") {
+                        if (!Util.isApple() && !Util.isAndroid()) {
                              this.addItem(toolitem);
                          }
                     }
@@ -378,9 +379,7 @@ define([
 
             return _.uniqueId(value);
         },
-        getPortalConfig: function () {
-            return this.get("portalConfig");
-        },
+
         getItemsByMetaID: function (metaID) {
             var layers = _.filter(this.getItemList(), function (item) {
                 if (item.type === "layer") {
