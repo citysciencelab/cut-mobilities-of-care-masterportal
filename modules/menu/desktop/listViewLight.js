@@ -1,41 +1,41 @@
-define([
-    "backbone.radio",
-    "modules/menu/desktop/listViewMain",
-    "modules/menu/desktop/layer/viewLight"
-    ], function () {
-        var listView = require("modules/menu/desktop/listViewMain"),
-            DesktopLayerViewLight = require("modules/menu/desktop/layer/viewLight"),
-            Radio = require("backbone.radio"),
-            Menu;
+define(function (require) {
 
-        Menu = listView.extend({
-            initialize: function () {
-                this.collection = Radio.request("ModelList", "getCollection");
-                this.listenTo(this.collection,
-                {
-                    "updateLightTree": function () {
-                        this.render();
-                    }
-                });
-                this.renderMain();
-                this.render();
-            },
-            render: function () {
-                $("#" + "Themen").html("");
-                var models = this.collection.where({type: "layer"});
+    var listView = require("modules/menu/desktop/listViewMain"),
+        DesktopLayerViewLight = require("modules/menu/desktop/layer/viewLight"),
+        Radio = require("backbone.radio"),
+        Menu;
 
-                models = _.sortBy(models, function (model) {
-                    return model.getSelectionIDX();
-                });
+    Menu = listView.extend({
+        initialize: function () {
+            this.collection = Radio.request("ModelList", "getCollection");
+            this.listenTo(this.collection, {
+                "updateLightTree": function () {
+                    this.render();
+                }
+            });
+            this.renderMain();
+            this.render();
 
-                this.addViews(models);
-            },
-            addViews: function (models) {
-                _.each(models, function (model) {
-                     new DesktopLayerViewLight({model: model});
-                }, this);
+            // Themenbaum wird initial aufgeklappt wenn in der config.json im tree-Objekt konfiguriert
+            if (this.collection.findWhere({id: "Themen"}).attributes.isInitOpen === true) {
+                $("#" + "Themen").parent().addClass("open");
             }
-        });
-        return Menu;
-    }
-);
+        },
+        render: function () {
+            $("#" + "Themen").html("");
+            var models = this.collection.where({type: "layer"});
+
+            models = _.sortBy(models, function (model) {
+                return model.getSelectionIDX();
+            });
+
+            this.addViews(models);
+        },
+        addViews: function (models) {
+            _.each(models, function (model) {
+                 new DesktopLayerViewLight({model: model});
+            }, this);
+        }
+    });
+    return Menu;
+});

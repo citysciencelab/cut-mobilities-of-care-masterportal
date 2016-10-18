@@ -96,13 +96,12 @@ define([
                     var item = {
                         type: "folder",
                         parentId: parentId,
-                        glyphicon: value.glyphicon,
-                        name: value.name,
                         id: value.name,
-                        onlyDesktop: value.onlyDesktop,
                         treeType: this.getTreeType()
                     };
 
+                    // Attribute aus der config.json werden von item geerbt
+                    _.extend(item, value);
                     // folder Themen bekommt noch den Baumtyp als Attribut
                     if (value.name === "Themen") {
                         this.addItem(_.extend(item, {treeType: this.getTreeType()}));
