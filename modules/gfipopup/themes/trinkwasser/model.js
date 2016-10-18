@@ -1,10 +1,10 @@
 define([
     "backbone",
-    "config",
+    "backbone.radio",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
     "modules/gfipopup/gfiObjects/routable/view"
-], function (Backbone, Config, ImgView, VideoView, RoutableView) {
+], function (Backbone, Radio, ImgView, VideoView, RoutableView) {
     "use strict";
     var GFIContentTrinkwasserModel = Backbone.Model.extend({
         /**
@@ -55,7 +55,7 @@ define([
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
         checkRoutable: function () {
-            if (Config.menu.routing && Config.menu.routing === true) {
+            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
                 if (this.get("layer").get("routable") === true) {
                     this.set("routable", new RoutableView(this.get("position")));
                 }
@@ -69,9 +69,7 @@ define([
          */
         replaceValuesWithChildObjects: function () {
             var element = this.get("gfiContent"),
-                children = [],
-                lastroutenval,
-                lastroutenkey;
+                children = [];
             _.each(element, function (val, key) {
                 if (key === "Bild") {
                     var imgView = new ImgView(val);
