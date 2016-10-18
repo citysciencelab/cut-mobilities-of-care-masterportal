@@ -104,6 +104,12 @@ define([
                     return model.getType() === "folder";
                 });
 
+                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer") {
+                    folder = _.sortBy(folder, function (item) {
+                        return item.getName();
+                    });
+                    folder.reverse();
+                }
                 this.addOverlayViews(folder);
 
                 _.each(folder, function (folder) {
