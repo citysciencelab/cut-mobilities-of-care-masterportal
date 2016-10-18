@@ -14,13 +14,15 @@ define(function (require) {
          */
         defaults: {
             MM_PER_INCHES: 25.4,
-            POINTS_PER_INCH: 72
+            POINTS_PER_INCH: 72,
+            initalLoading: 0
         },
 
         /**
         *
         */
         initialize: function () {
+            this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
             var channel = Radio.channel("Map"),
                 mapView = new MapView();
 
@@ -46,7 +48,9 @@ define(function (require) {
                 "unregisterPostCompose": this.unregisterPostCompose,
                 "zoomToExtent": this.zoomToExtent,
                 "updatePrintPage": this.updatePrintPage,
-                "activateClick": this.activateClick
+                "activateClick": this.activateClick,
+                "addLoadingLayer": this.addLoadingLayer,
+                "removeLoadingLayer": this.removeLoadingLayer
             }, this);
 
             this.set("view", mapView.get("view"));
@@ -215,10 +219,12 @@ define(function (require) {
             this.setImportDrawMeasureLayersOnTop(layersCollection);
 
             // Laden des Layers überwachen
-            if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
-                this.getLayerLoadStatus(layer);
-            }
-
+            layer.getSource().on("wmsloadend", function () {
+                Radio.trigger("Map", "removeLoadingLayer");
+            });
+            layer.getSource().on("wmsloadstart", function () {
+                Radio.trigger("Map", "addLoadingLayer");
+            });
         },
 
         // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
@@ -237,39 +243,6 @@ define(function (require) {
             _.each(layersOnTop, function (layer) {
                 layers.push(layer);
             });
-        },
-
-        // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
-        // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
-        getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
-            return function (tile, src) {
-                    if (numLoadingTiles === 0) {
-                        Util.showLoader();
-                    }
-                    ++numLoadingTiles;
-                    var image = tile.getImage();
-
-                    image.onload = image.onerror = function () {
-                        --numLoadingTiles;
-                        if (numLoadingTiles === 0) {
-                            Util.hideLoader();
-                            // Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
-                            source.setTileLoadFunction(tileLoadFn);
-                        }
-                    };
-                tileLoadFn(tile, src);
-                };
-        },
-        // Setzt eine neue "setTileLoadFunction" an die source der übergebenen Layer
-        getLayerLoadStatus: function (layer) {
-            var context = this;
-
-            layer.getSource().setTileLoadFunction((function () {
-                var numLoadingTiles = 0,
-                tileLoadFn = layer.getSource().getTileLoadFunction();
-
-                return context.getTileLoadFunction(numLoadingTiles, tileLoadFn, layer.getSource());
-            })());
         },
 
         /**
@@ -480,6 +453,27 @@ define(function (require) {
             ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
             ctx.fill();
             ctx.restore();
+        },
+        addLoadingLayer: function () {
+            this.set("initalLoading", this.get("initalLoading") + 1);
+        },
+        removeLoadingLayer: function () {
+            this.set("initalLoading", this.get("initalLoading") - 1);
+        },
+        /**
+         * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
+         * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
+         */
+        initalLoadingChanged: function () {
+            var num = this.get("initalLoading");
+
+            if (num > 0) {
+                Util.showLoader();
+            }
+            else if (num === 0) {
+                Util.hideLoader();
+                this.stopListening(this, "change:initalLoading");
+            }
         }
     });
 
