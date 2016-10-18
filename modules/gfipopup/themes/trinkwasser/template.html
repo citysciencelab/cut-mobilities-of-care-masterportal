@@ -59,6 +59,7 @@ _.each(gfiContent.mikrobioContent, function(value, key) {
     </td>
 </tr>
 <% }); %>
+<% if(_.isEmpty(gfiContent.chemContent) === false){ %>
 <tr>
     <td colspan="2"></td>
 </tr>
@@ -67,7 +68,8 @@ _.each(gfiContent.mikrobioContent, function(value, key) {
         <strong>Chemische Parameter: </strong>
     </td>
 </tr>
-<% _.each(gfiContent.chemContent, function(value, key) {
+<%}
+_.each(gfiContent.chemContent, function(value, key) {
         if (_.isString(key) === false || _.isString(value)=== false) return;
     %>
 <tr colspan="2">
