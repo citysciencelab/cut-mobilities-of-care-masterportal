@@ -1,7 +1,8 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Solaratlas", 
+    "PortalLogo":"../img/he-logo.png",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
