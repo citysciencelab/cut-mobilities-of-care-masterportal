@@ -13,14 +13,16 @@ define([
                 maxPosTop: "10px"
             },
             initialize: function () {
-                // EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
                 var channel = Radio.channel("Window");
 
                 channel.on({
-                    "toggleWin": this.setParams
+                    "toggleWin": this.setParams,
+                    "closeWin": this.setVisible,
+                    "CollapseWin": this.collapseWindow,
+                    "uncollapseWin": this.uncollapseWindow
                 }, this);
             },
             collapseWindow: function () {

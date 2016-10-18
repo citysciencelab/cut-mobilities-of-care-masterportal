@@ -17,7 +17,8 @@ define([
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
             scale: {},
-            layerToPrint: []
+            layerToPrint: [],
+            fetched: false // gibt an, ob info.json schon geladen wurde
         },
 
         //
@@ -48,25 +49,10 @@ define([
                 "changedOptions": this.setScaleByMapView,
                 "changedCenter": this.setCenter
             });
-            // get print config (info.json)
-            this.fetch({
-                cache: false,
-                success: function (model) {
-                    _.each(model.get("scales"), function (scale) {
-                        var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
-
-                        scale.name = "1: " + scaletext;
-                        scale.value = parseInt(scale.value);
-                    });
-                    model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
-                    model.setScaleByMapView();
-                }
-            });
 
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            EventBus.on("receiveGFIForPrint", this.receiveGFIForPrint, this);
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
@@ -109,8 +95,35 @@ define([
         //
         setStatus: function (args) {
             if (args[2].getId() === "print") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+                if (this.get("fetched") === false) {
+                    // get print config (info.json)
+                    this.fetch({
+                        cache: false,
+                        success: function (model) {
+                            _.each(model.get("scales"), function (scale) {
+                                var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+
+                                scale.name = "1: " + scaletext;
+                                scale.value = parseInt(scale.value);
+                            });
+                            model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                            model.setScaleByMapView();
+                            model.set("isCollapsed", false);
+                            model.set("isCurrentWin", true);
+                            model.set("fetched", true);
+                        },
+                        error: function () {
+                            Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
+                            Radio.trigger("Window", "closeWin");
+                        },
+                        complete: Util.hideLoader,
+                        beforeSend: Util.showLoader
+                    });
+                }
+                else {
+                    this.set("isCollapsed", args[1]);
+                    this.set("isCurrentWin", args[0]);
+                }
             }
             else {
                 this.set("isCurrentWin", false);
@@ -130,12 +143,6 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            // if (_.has(Config.tree, "type") && Config.tree.type !== "light") {
-                // EventBus.trigger("getSelectedVisibleWMSLayer");
-            // }
-            // else {
-                // EventBus.trigger("layerlist:getVisibleWMSlayerList");
-            // }
             if (_.has(Config.tools, "draw") === true) {
                 EventBus.trigger("getDrawlayer");
             }
@@ -395,7 +402,7 @@ define([
                 },
                 success: this.openPDF,
                 error: function (error) {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Druck fehlgeschlagen: " + error.statusText,
                         kategorie: "alert-warning"
                     });
