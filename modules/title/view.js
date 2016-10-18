@@ -1,10 +1,9 @@
 define([
     "backbone",
     "text!modules/title/template.html",
-    "config",
     "modules/core/util",
     "backbone.radio"
-], function (Backbone, TitleTemplate, Config, Util, Radio) {
+], function (Backbone, TitleTemplate, Util, Radio) {
 
     var TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",
@@ -18,8 +17,8 @@ define([
                 title: portalTitle,
                 util: Util,
                 logo: this.getLogo(),
-                logoLink: Config.logoLink || "http://geoinfo.hamburg.de",
-                logoTooltip: Config.logoTooltip || "Landesbetrieb Geoinformation und Vermessung"
+                logoLink: Radio.request("Parser", "getPortalConfig").LogoLink || "http://geoinfo.hamburg.de",
+                logoTooltip: Radio.request("Parser", "getPortalConfig").LogoToolTip || "Landesbetrieb Geoinformation und Vermessung"
             }));
             $(".navbar-collapse").append(this.$el);
         },
