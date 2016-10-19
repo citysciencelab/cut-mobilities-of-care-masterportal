@@ -15,6 +15,13 @@ define(function () {
             epsg: "EPSG:25832"
             */
         },
+         namedProjections: [
+           
+            // ETRS89 UTM
+            ["EPSG:25831", "+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+            ["EPSG:25833", "+proj=utm +zone=33 +ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs"]
+        ],
        // customModules: [" "],
         footer: {
             visibility: true,
@@ -44,9 +51,8 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         
-        attributions: true,
+        attributions: false,
         // menubar: true,
-       
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,

@@ -1,7 +1,7 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Mein Baum-Meine Stadt",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
@@ -72,11 +72,11 @@
       }
     },
     "controls": {
-      "zoom": true,
-      "toggleMenu": true,
-      "orientation": "once",
-      "poi": true,
+     "toggleMenu": true,
       "fullScreen": true,
+      "zoom": true,
+      "orientation": "once",
+      "poi": false,
       "attributions": true
     },
     "scaleLine": true,
@@ -100,11 +100,11 @@
     {
       "Layer": [
         {
-          "id": "3322",
+          "id": "3323",
           "visibility": true
         },
         {
-          "id": "3323", 
+          "id": "3322", 
           "visibility": true
         },
         {
