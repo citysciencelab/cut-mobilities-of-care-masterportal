@@ -1,8 +1,5 @@
 define(function () {
     var config = {
-        title: "FHH - Atlas",
-        logo: "../img/hh-logo.png",
-        simpleMap: true,
         tree: {
             orderBy: "opendata",
             saveSelection: true,
