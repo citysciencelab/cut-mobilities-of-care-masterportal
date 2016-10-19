@@ -246,12 +246,20 @@ insert_final_newline = true
     color: #333;
 }
 ```
+
+# Branchworkflow
+![Branchworkflow](/img/branchworkflow.jpg)
+
+
+Portale werden nur auf dem stable-branch (hier Master) gebaut. Bei neuen Portalen oder Änderungen an bestehenden,
+wird dem Commit das Verb config vorangestellt (z.B. git commit -m "config FHH-Atlas Druckdienst entfernt"). Andere Commits sind auf dem stable-branch nicht erlaubt.
 # Git
 ## Commit
 * Committe früh und oft
 * Ein Commit repräsentiert eine Idee oder eine Änderung
-* Nutze Verben für die Commits (add/remove/update/refactor/fix)
+* Nutze Verben für die Commits **(add/remove/update/refactor/fix/config/hotfix)**
 * Es dürfen keine console.log Statements in den Commits vorhanden sein
+* Die einzigen zugelassen Commits auf dem stable-Branch sind "config-Commits"
 
 ## Branches
 * Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
@@ -269,29 +277,3 @@ insert_final_newline = true
 
 ### Decline
 * Im Falle von produktionsverhindernden Gründen wird der Pullrequest declined. Damit kann er in Bitbucket nicht mehr accepted werden und ein neuer Pullrequest muss nach Behebung der Fehler gestellt werden. Der requestor wird über die Gründe informiert.
-
-# Architektur
-    |-- modules
-    |   |-- Layer
-    |       |-- img
-    |       |-- style.css
-    |       |-- model.js
-    |       |-- collection.js
-    |       |-- view.js
-    |       |-- templateA.html
-    |       |-- templateB.html
-    |   |-- ...
-    |-- libs
-    |   |-- OpenLayers
-    |       |-- ...
-    |   |-- Backbone
-    |       |-- ...
-    |   |-- Sandbox (Backbone.Radio, EventBus.js, ...)
-    |   |-- ..
-    |-- main.js
-    |-- doc
-    |-- dist
-    |   |-- Planportal
-    |       |-- v1.4.3.min.js
-    |       |-- v1.5.1.min.js
-    |       |-- ...
