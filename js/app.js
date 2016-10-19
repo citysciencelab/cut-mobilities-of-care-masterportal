@@ -1,21 +1,33 @@
-// if (window.location.href.charAt(window.location.href.length-1) === "#") {
-//     window.location.href = window.location.href.substr(0, window.location.href.length-2);
-// }
-define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerList"], function ($, Config, Util, RawLayerList) {
-    "use strict";
-    require(["modules/alerting/view"]);
-    Util.showLoader();
+define("app",
+    [
+    "jquery",
+    "config",
+    "modules/core/util",
+    "modules/core/rawLayerList",
+    "modules/restReader/collection",
+    "modules/core/configLoader/preparser",
+    "modules/core/map",
+    "modules/core/parametricURL",
+    "modules/core/crs",
+    "modules/alerting/view"
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
+
+    // Core laden
     new RawLayerList();
+    new Preparser();
+    new ParametricURL();
+    new CRS();
+    new Map();
 
-    if (Config.allowParametricURL && Config.allowParametricURL === true) {
-        require(["modules/parametricURL/model"], function (ParametricURL) {
-            new ParametricURL();
-        });
-    }
+    // Module laden
+    require(["modules/menu/menuLoader"], function (MenuLoader) {
+        new MenuLoader();
+    });
+    new RestReaderList();
 
-    if (Config.tree.type === "custom") {
-        require(["modules/treeconfig/list"], function (TreeConfig) {
-            new TreeConfig();
+    if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
+        require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
+            new ZoomToFeature();
         });
     }
 
@@ -28,11 +40,12 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
          });
     }
 
-    if (Config.attributions && Config.attributions === true) {
-        require(["modules/attribution/view"], function (AttView) {
-            new AttView();
-        });
-    }
+    // Macht noch Probleme
+    // if (Config.attributions && Config.attributions === true) {
+    //     require(["modules/attribution/view"], function (AttView) {
+    //         new AttView();
+    //     });
+    // }
 
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {
@@ -40,11 +53,9 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
     }
 
     require([
-        "modules/core/map",
         "config",
-        "jquery"
-    ], function (Map, Config, $) {
-        new Map();
+        "backbone.radio"
+    ], function (Config, Radio) {
 
         if (Util.isAny()) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
@@ -87,82 +98,109 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
             });
         }
 
-        if (Config.menubar === true) {
-            require(["modules/menubar/view", "modules/controls/view"], function (MenubarView, ControlsView) {
-                new MenubarView();
-                if ($("#map").is(":visible") === true) {
-                    new ControlsView();
-                }
-                require(["modules/window/view"], function (WindowView) {
-                    new WindowView();
-                });
-                if (_.has(Config, "tools") === true) {
-                    require(["modules/tools/listView"], function (ToolsListView) {
-                        new ToolsListView();
+        require(["modules/window/view"], function (WindowView) {
+            new WindowView();
+        });
+
+        // Tools
+        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
+            switch (tool.id) {
+                case "animation": {
+                    require(["modules/tools/animation/view"], function (AnimationView) {
+                        new AnimationView();
                     });
-                    if (_.has(Config.tools, "coord") === true) {
-                        require(["modules/coordpopup/view"], function (CoordPopupView) {
-                            new CoordPopupView();
-                        });
-                    }
-                    if (_.has(Config.tools, "gfi") === true) {
-                        require(["modules/gfipopup/popup/view", "modules/gfipopup/popup/viewMobile", "modules/core/util"], function (GFIPopupView, MobileGFIPopupView, Util) {
-                            if (Util.isAny()) {
-                                new MobileGFIPopupView();
-                            }
-                            else {
-                                new GFIPopupView();
-                            }
-                        });
-                    }
-                    if (_.has(Config.tools, "measure") === true && !Util.isAny()) {
-                        require(["modules/tools/measure/view"], function (MeasureView) {
-                            new MeasureView();
-                        });
-                    }
-                    if (_.has(Config.tools, "draw") === true && !Util.isAny()) {
-                        require(["modules/draw/view"], function (DrawView) {
-                            new DrawView();
-                        });
-                    }
-                    if (Config.tools.record === true) {
-                        require(["modules/wfs_t/view"], function (WFS_TView) {
-                            new WFS_TView();
-                        });
-                    }
-                    if (_.has(Config.tools, "print") === true) {
-                        require(["modules/print/view"], function (PrintView) {
-                            new PrintView();
-                        });
-                    }
-                    if (_.has(Config.tools, "parcelSearch") === true) {
-                        require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
-                            new ParcelSearchView();
-                        });
-                    }
-                    if (_.has(Config.tools, "searchByCoord") === true) {
-                        require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
-                            new SearchByCoordView();
-                        });
-                    }
+                    break;
                 }
-                if (Config.menu.treeFilter === true) {
-                    require(["modules/treefilter/view"], function (TreeFilterView) {
-                        new TreeFilterView();
+                case "gfi":{
+                    require(["modules/gfipopup/popup/popupLoader"], function (PopupLoader) {
+                        new PopupLoader();
                     });
                 }
-                if (Config.menu.searchBar === true && Config.searchBar) {
-                    require(["modules/searchbar/view", "modules/mapMarker/view"], function (SearchbarView, MapMarkerView) {
-                        new MapMarkerView();
-                        new SearchbarView(Config.searchBar, Config.searchBar.initString);
+                case "coord": {
+                    require(["modules/coordpopup/view"], function (CoordPopupView) {
+                        new CoordPopupView();
                     });
+                    break;
                 }
-                if (Config.menu.wfsFeatureFilter === true) {
+                case "measure": {
+                    require(["modules/tools/measure/view"], function (MeasureView) {
+                        new MeasureView();
+                    });
+                    break;
+                }
+                case "draw": {
+                    require(["modules/tools/draw/view"], function (DrawView) {
+                        new DrawView();
+                    });
+                    break;
+                }
+                case "print": {
+                    require(["modules/tools/print/view"], function (PrintView) {
+                        new PrintView();
+                    });
+                    break;
+                }
+                case "parcelSearch": {
+                    require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
+                        new ParcelSearchView();
+                    });
+                    break;
+                }
+                case "searchByCoord": {
+                    require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                        new SearchByCoordView();
+                    });
+                    break;
+                }
+                case "saveSelection": {
+                    require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
+                        new SaveSelectionView();
+                    });
+                    break;
+                }
+                case "kmlimport": {
+                    require(["modules/tools/kmlimport/view"], function (ImportView) {
+                        new ImportView();
+                    });
+                    break;
+                }
+                case "wfsFeatureFilter": {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
                     });
+                    break;
                 }
-                if (Config.menu.legend === true) {
+                case "treeFilter": {
+                    require(["modules/treefilter/view"], function (TreeFilterView) {
+                        new TreeFilterView();
+                    });
+                    break;
+                }
+                case "routing": {
+                    require(["modules/viomRouting/view"], function (RoutingView) {
+                        new RoutingView();
+                    });
+                    break;
+                }
+                case "contact": {
+                    require(["modules/contact/view"], function (Contact) {
+                        new Contact();
+                    });
+                    break;
+                }
+                case "addWMS": {
+                    require(["modules/tools/addwms/view"], function (AddWMSView) {
+                        new AddWMSView();
+                    });
+                    break;
+                }
+                case "featureLister": {
+                    require(["modules/featurelister/view"], function (FeatureLister) {
+                        new FeatureLister();
+                    });
+                    break;
+                }
+                case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Util.isAny()) {
                             new MobileLegendView();
@@ -171,32 +209,90 @@ define("app", ["jquery", "config", "modules/core/util", "modules/core/rawLayerLi
                             new LegendView();
                         }
                     });
+                    break;
                 }
-                if (Config.menu.routing === true) {
-                    require(["modules/routing/view"], function (RoutingView) {
-                        new RoutingView();
-                    });
+                default: {
+                    break;
                 }
-                if (Config.menu.addWMS === true) {
-                    require(["modules/addwms/view"
-                        ], function (AddWMSView) {
-                        new AddWMSView();
-                    });
+            }
+        });
+
+        // controls
+        require(["modules/controls/view"], function (ControlsView) {
+            var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
+                controlsView = new ControlsView();
+
+            _.each(controls, function (control, index) {
+                switch (control.id) {
+                    case "toggleMenu": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                            new ToggleMenuControlView({el: el});
+                        });
+                        break;
+                    }
+                    case "zoom": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                            new ZoomControlView({el: el});
+                        });
+                        break;
+                    }
+                    case "orientation": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/orientation/view"], function (OrientationView) {
+                            new OrientationView({el: el});
+                        });
+                        break;
+                    }
+                    case "mousePosition": {
+                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                            new MousePositionView();
+                        });
+                        break;
+                    }
+                    case "fullScreen": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                            new FullScreenView({el: el});
+                        });
+                        break;
+                    }
+                    case "attributions": {
+                        require(["modules/controls/attributions/view"], function (AttributionsView) {
+                            new AttributionsView();
+                        });
+                        break;
+                    }
                 }
-                if (_.has(Config.menu, "featureLister") === true && Config.menu.featureLister > 0 && !Util.isAny()) {
-                    require(["modules/featurelister/view"], function (FeatureLister) {
-                        new FeatureLister();
-                    });
-                }
-                if ($.isArray(Config.menu.formular)) {
-                    $.each(Config.menu.formular, function (name, obj) {
-                        if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
-                            require(["modules/formular/view"], function (FormularView) {
-                                new FormularView(obj.modelname, obj.title, obj.symbol);
-                            });
-                        }
-                    });
-                }
+            });
+        });
+
+        require(["modules/mapMarker/view"], function (MapMarkerView) {
+            new MapMarkerView();
+        });
+
+        var sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+
+        if (sbconfig) {
+            require(["modules/searchbar/view"], function (SearchbarView) {
+                new SearchbarView(sbconfig);
+            });
+        }
+
+        require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+            new StyleWMSView();
+        });
+
+        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
+
+        if (title) {
+            require(["modules/title/view"], function (TitleView) {
+                new TitleView(title);
             });
         }
     });

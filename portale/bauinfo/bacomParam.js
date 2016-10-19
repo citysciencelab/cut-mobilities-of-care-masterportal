@@ -1,8 +1,9 @@
 define([
     "backbone",
     "eventbus",
-    "config"
-], function (Backbone, EventBus, Config) {
+    "config",
+    "backbone.radio"
+], function (Backbone, EventBus, Config, Radio) {
 
     var bacomParam = Backbone.Model.extend({
         /*
@@ -29,7 +30,9 @@ define([
                     value = parseInt(value, 10);
                     values[index] = value;
                 });
-                Config.view.center = values;
+                //Für lokale Entwicklungsumgebung notwendig, da keine Events zu dem Zeitpunkt vorhanden sind
+                //Config.view.center= values;
+                Radio.trigger("MapView", "setCenter", values, 8);
             }
 
             if (_.has(result, "LGV_BEZIRK")) {
@@ -45,10 +48,14 @@ define([
                     ];
 
                     if (bezirk.length === 1) {
-                        Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
+                        //Für lokale Entwicklungsumgebung notwendig, da keine Events zu dem Zeitpunkt vorhanden sind
+                        //Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
+                        Radio.trigger("MapView", "setCenter", _.findWhere(bezirke, {number: bezirk}).position, 8);
                     }
                     else {
-                        Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
+                        //Für lokale Entwicklungsumgebung notwendig, da keine Events zu dem Zeitpunkt vorhanden sind
+                        //Config.view.center = _.findWhere(bezirke, {name: bezirk}).position;
+						Radio.trigger("MapView", "setCenter", _.findWhere(bezirke, {name: bezirk}).position, 8);
                     }
             }
 

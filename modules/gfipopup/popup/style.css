@@ -60,9 +60,10 @@
 
 .gfi-content {
     font-size: 12px;
-    max-height: 66%;
+    max-height: 40vh;
     min-width:400px;
     overflow-y: auto;
+    overflow-x:hidden;
 }
 
 .gfi-content > table {
@@ -107,6 +108,14 @@
 
 .trinkwasserParams {
     white-space: normal;
+}
+
+.popover-solaratlas {
+    margin: 8px;
+}
+
+.popover-solaratlas p {
+    font-size: 12px;
 }
 
 /* minimiertes Info-Fenster*/

@@ -1,35 +1,13 @@
 define(function () {
 
     var config = {
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: true,
-            poi: false
-        },
+        allowParametricURL: true,
+        attributions: true,
         isMenubarVisible: true,
         layerConf: "../components/lgv-config/services-fhhnet.json",
-        tree: {
-            type: "light",
-            layer: [
-                {id: "39", visible: true},
-                {id: "2625", visible: false},
-                {id: "1711", visible: false, style: "1711", name: "Krankenhäuser WFS", searchField: "name"},
-                {id: "1561", visible: true}
-            ]
-        },
-        menu: {
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "mail@domain.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
-        },
-        menubar: true,
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        styleConf: "../components/lgv-config/style.json",
+        mouseHover: true,
         print: {
             printID: "99999",
             title: "Geoportal der Metropolregion Hamburg",
@@ -38,52 +16,8 @@ define(function () {
             configYAML: "gdimrh"
         },
         proxyURL: "/cgi-bin/proxy.cgi",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        quickHelp: true,
         scaleLine: true,
-        searchBar: {
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse, Ort",
-            geoLocateHit: true
-        },
-        styleConf: "../components/lgv-config/style.json",
-        tools: {
-            gfi: {
-              title: "Informationen abfragen",
-               glyphicon: "glyphicon-info-sign",
-               isActive: true
-            },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
-            coord: {
-               title: "Koordinate abfragen",
-               glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            },
-            draw: {
-                title: "Zeichnen",
-                glyphicon: "glyphicon-pencil"
-            },
-            searchByCoord: {
-               title: "Koordinatensuche",
-               glyphicon: "glyphicon-search"
-            }
-        },
         view: {
             center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst

@@ -16,7 +16,8 @@ define([
             visibility: false,
             treeType: Config.tree.type,
             featureCount: 1,
-            metaName: null // --> für Olympia-Portal, rendern sonst nicht möglich
+            metaName: null, // --> für Olympia-Portal, rendern sonst nicht möglich
+            transparence: 0
         },
         initialize: function () {
             this.listenToOnce(EventBus, {
@@ -41,9 +42,18 @@ define([
 
             this.listenTo(this, {
                 "change:viewResolution": this.setIsResolutionInRange,
-                "change:visibility": this.setVisibility,
-                "change:transparence": this.updateOpacity,
-                "change:selected": this.toggleToSelectionLayerList,
+                "change:visibility": function () {
+                    this.setVisibility();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {isLayerVisible: this.getVisibility()});
+                },
+                "change:transparence": function () {
+                    this.updateOpacity();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {transparence: this.getTransparence()});
+                },
+                "change:selected": function () {
+                    this.toggleToSelectionLayerList();
+                    Radio.trigger("TreeList", "setLayerAttributions", this.getId(), {isChecked: this.getSelected()});
+                },
                 "change:SLDBody": this.updateSourceSLDBody
             });
             this.set("settings", false);
@@ -51,8 +61,6 @@ define([
             this.set("gfiTheme", this.get("gfiTheme") || "default");
             // Setze 'routable' in Abhängigkeit der Config-Layerkonfiguration: entweder Wert aus config oder ''
             this.set("routable", this.get("routable") || false);
-            // Tranparenz
-            this.listenTo(this, "change:transparence", this.updateOpacity);
 
             // Prüfung, ob die Attributions ausgewertet werden sollen.
             if (Config.attributions && Config.attributions === true) {
@@ -74,9 +82,6 @@ define([
             if (this.get("transparence")) {
                 this.set("transparence", parseInt(this.get("transparence"), 10));
             }
-            else {
-                this.set("transparence", 0);
-            }
             // this.updateOpacity();
 
             // NOTE hier wird die ID an den Layer geschrieben. Sie ist identisch der ID des Backbone-Layer
@@ -87,6 +92,9 @@ define([
             }
             this.get("layer").setVisible(this.get("visibility"));
             this.setVisibility();
+            if (this.getVisibility() === true) {
+                this.set("selected", true);
+            }
         },
         // NOTE Reload für automatisches Aktualisieren im Rahmen der Attribution
         reload: function () {
@@ -112,7 +120,7 @@ define([
                             this.set("metaName", dataset.md_name);
                         }
                     }
-                    if (Config.tree.orderBy === "opendata") {
+                    if (Config.tree.orderBy === "opendata" && !this.has("node")) {
                         if (dataset.kategorie_opendata.length > 1) {
                             this.set("node", dataset.kategorie_opendata);
                         }
@@ -120,7 +128,7 @@ define([
                             this.set("node", dataset.kategorie_opendata[0]);
                         }
                     }
-                    else if (Config.tree.orderBy === "inspire") {
+                    else if (Config.tree.orderBy === "inspire" && !this.has("node")) {
                         if (dataset.kategorie_inspire.length > 1) {
                             this.set("node", dataset.kategorie_inspire);
                         }
@@ -179,6 +187,7 @@ define([
                 this.set("transparence", this.get("transparence") - value);
             }
         },
+
         /**
          *
          */
@@ -250,31 +259,20 @@ define([
             // window.open(this.get("metaURL"), "_blank");
         },
         setMetadataURL: function () {
-            if (Config.metadatenURL === "ignore") {
-                // hack
+            var url = Radio.request("RestReader", "getServiceById", "2");
+
+            if (url[0] === null || url[0] === undefined) {
                 this.set("metaURL", null);
             }
-            else if (Config.metadatenURL && Config.metadatenURL !== "") {
-                this.set("metaURL", Config.metadatenURL + this.get("metaID"));
-            }
             else {
+                url = url[0].attributes.url;
+
                 if (this.get("url") !== undefined && this.has("link") === false) {
-                    if (this.get("url").search("geodienste") !== -1) {
-                        this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
-                    }
-                    else {
-                        this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
-                    }
+                    this.set("metaURL", url + this.get("metaID"));
                 }
                 else if (this.get("backbonelayers") !== undefined && this.has("link") === false) { // Für Group-Layer
-                    if (this.get("backbonelayers")[0].get("url").search("geodienste") !== -1) {
-                        this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
-                    }
-                    else {
-                        this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("backbonelayers")[0].get("metaID"));
-                        this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
-                    }
+                    this.set("metaURL", url + this.get("backbonelayers")[0].get("metaID"));
+                    this.set("metaID", this.get("backbonelayers")[0].get("metaID"));
                 }
                 else {
                     // für olympia-portal --> hat keine metadaten!! Es wird auf ein PDF verlinkt.
@@ -287,6 +285,24 @@ define([
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
+        },
+        setSelected: function (value) {
+            this.set("selected", value);
+        },
+        getVisibility: function () {
+            return this.get("visibility");
+        },
+        getSelected: function () {
+            return this.get("selected");
+        },
+        getTransparence: function () {
+            return this.get("transparence");
+        },
+        getId: function () {
+            return this.get("id");
+        },
+        getTitle: function () {
+            return this.get("layers");
         }
     });
 

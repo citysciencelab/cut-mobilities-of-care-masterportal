@@ -1,11 +1,11 @@
 define([
     "backbone",
-    "eventbus",
+    "backbone.radio",
     "openlayers",
     "proj4",
     "config",
     "bootstrap/popover"
-], function (Backbone, EventBus, ol, proj4, Config) {
+], function (Backbone, Radio, ol, proj4, Config) {
 
     var CoordPopup = Backbone.Model.extend({
          defaults: {
@@ -15,11 +15,14 @@ define([
             coordinateGeo: {}
         },
         initialize: function () {
-            EventBus.on("setPositionCoordPopup", this.setPosition, this);
+            this.listenTo(Radio.channel("Map"), {
+                "setPositionCoordPopup": this.setPosition
+            });
+
             this.setCoordOverlay(new ol.Overlay({
                 element: this.getElement()[0]
             }));
-            EventBus.trigger("addOverlay", this.getCoordOverlay());
+            Radio.trigger("Map", "addOverlay", this.getCoordOverlay());
         },
         getCoordOverlay: function () {
             return this.get("coordOverlay");

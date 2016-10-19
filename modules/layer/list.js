@@ -25,6 +25,7 @@ define([
                 return new GeoJSONLayer(attrs, options);
             }
         },
+        response: {},
 
         initialize: function () {
             var channel = Radio.channel("LayerList");
@@ -39,8 +40,21 @@ define([
                 "getLayerListWhere": function (properties) {
                     return this.where(properties);
                 },
+                "getLayerFindWhere": function (properties) {
+                    return this.findWhere(properties);
+                },
                 "getOverlayerList": function () {
                     return this.where({isbaselayer: false});
+                },
+                "getResponse": function () {
+                    return this.response;
+                },
+                "getResponseByMetaId": function (metaId) {
+                    var layersByMetaId = _.filter(this.response, function (layer) {
+                        return layer.datasets[0].md_id === metaId;
+                    }, this);
+
+                    return layersByMetaId;
                 }
             }, this);
 
@@ -48,10 +62,37 @@ define([
                 "addModel": function (model) {
                     this.add(model);
                 },
+                "addModelById": function (id) {
+                    var model = Radio.request("RawLayerList", "getLayerWhere", {id: id});
+
+                    this.add(model.toJSON());
+                },
                 "fetchLayer": function () {
                     this.fetchLayer();
+                },
+                "setAttributionsByID": function (id, attrs) {
+                    this.get(id).set(attrs);
+                },
+                // "toggleLayerVisibleById": function (id) {
+                //     this.get(id).toggleSelected();
+                // },
+                "showLayerInformationById": function (id) {
+                    this.get(id).openMetadata();
                 }
             }, this);
+
+            this.listenToOnce(Radio.channel("MenuBar"), {
+                // wird ausgeführt wenn das Menü zwischen mobiler Ansicht und Desktop wechselt
+                "switchedMenu": function () {
+                    var isMobile = Radio.request("MenuBar", "isMobile");
+
+                    if (isMobile === false && Config.tree.type === "default") {
+                        EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true}));
+                        this.reset(this.response);
+                        this.sendNodeNames();
+                    }
+                }
+            });
 
             this.listenTo(EventBus, {
                 "layerlist:getOverlayerList": function () {
@@ -105,8 +146,9 @@ define([
             });
 
             this.listenTo(this, {
-                "add": function (model) {
-                    EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
+                "add": function () {
+                    // model.setSelected(true);
+                    // EventBus.trigger("addLayerToIndex", [model.get("layer"), this.indexOf(model)]);
                 },
                 "remove": function (model) {
                     EventBus.trigger("removeLayer", model.get("layer"));
@@ -130,8 +172,6 @@ define([
                         }, this);
                     }
 
-                    // Special-Ding für HVV --> Layer werden über Styles gesteuert
-                    this.cloneByStyle();
                     EventBus.trigger("mapView:getOptions");
                     EventBus.trigger("layerlist:sendOverlayerList", this.where({isbaselayer: false}));
                     if (Config.tree.type === "light") {
@@ -142,11 +182,11 @@ define([
                     EventBus.trigger("layerlist:sendBaselayerList");
                 }
             });
-            this.fetchLayer();
+            // this.fetchLayer();
         },
 
         fetchLayer: function () {
-            var response = Radio.request("RawLayerList", "getLayerList");
+            var response = Radio.request("RawLayerList", "getLayerAttributesList");
 
             if (this.length) {
                 EventBus.trigger("removeModelFromSelectionList", this.where({"selected": true}));
@@ -154,63 +194,60 @@ define([
 
             // Layerbaum mit Ordnerstruktur
             if (_.has(Config.tree, "type") && Config.tree.type === "default") {
-                // nur vom Typ WMS
-                response = _.where(response, {typ: "WMS"});
-                // nur Layer die min. einen Datensatz zugeordnet sind und solche mit korrekter URL
-                response = _.filter(response, function (element) {
+                _.each(response, function (element) {
                     element.isbaselayer = false;
-                    return (element.datasets.length > 0 && element.url !== "nicht vorhanden") ;
                 });
-                response = this.deleteLayerByID(response);
-                response = this.deleteLayersByMetaID(response);
                 response = this.deleteLayersIncludeCache(response);
-                response = this.mergeLayersByIDs(response);
-                response = this.mergeLayersByMetaID(response);
                 this.setLayerStyle(response);
                 this.setBaseLayer(response);
                 response = this.createLayerPerDataset(response);
-
-                this.reset(response);
-                this.resetModels();
-                this.sendNodeNames();
+                response = this.cloneObjects(response);
+                response = this.cloneByStyle(response);
+                if ($(window).width() >= 768) {
+                //    this.set("isMobile", false);
+                    this.reset(response);
+                    this.sendNodeNames();
+                    // this.resetModels();
+                }
+                this.response = response;
             }
             // Ansonsten Layer über ID
             else if (_.has(Config.tree, "type") && Config.tree.type === "light" || Config.tree.type === "custom") {
                 var modelsArray = [];
-
-                if (_.has(Config.tree, "layerIDsToMerge") === true) {
-                    response = this.mergeLayersByIDs(response);
-                }
 
                 _.each(Config.tree.layer, function (element) {
                     if (_.has(element, "id") && _.isString(element.id)) {
                         var layers = element.id.split(","),
                             layerinfos = _.findWhere(response, {id: layers[0]});
 
-                        if (_.isUndefined(layerinfos)) {
-                            EventBus.trigger("alert", "Der Layer mit der ID '" + element.id + "' ist nicht vorhanden");
+                        // element.isbaselayer = false;
+                        // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
+                        if (layers.length === 1) {
+                            if (!_.isUndefined(layerinfos)) {
+                                modelsArray.push(_.extend(layerinfos, element));
+                            }
+                            else {
+                                EventBus.trigger("alert", "Der Layer mit der ID '" + layers[0] + "' ist nicht vorhanden");
+                            }
                         }
-                        else {
-                            element.isbaselayer = false;
-                            // für "Singel-Model" z.B.: {id: "5181", visible: false, styles: "strassenbaumkataster_grau", displayInTree: false}
-                            if (layers.length === 1) {
-                                modelsArray.push(_.extend(layerinfos, element));
-                            }
-                            // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
-                            else if (layers.length > 1) {
-                                var layerList = "";
+                        // für "Single-Model" mit mehreren Layern(FNP, LAPRO, etc.) z.B.: {id: "550,551,552,553,554,555,556,557,558,559", visible: false}
+                        else if (layers.length > 1) {
+                            var layerList = "";
 
-                                _.each(layers, function (layer) {
-                                    var obj = _.findWhere(response, {id: layer});
-
+                            _.each(layers, function (layer) {
+                                var obj = _.findWhere(response, {id: layer});
+                                if (!_.isUndefined(obj)) {
                                     layerList += "," + obj.layers;
-                                });
-                                layerinfos.layers = layerList.slice(1, layerList.length);
-                                if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
-                                    layerinfos.name = layerinfos.datasets[0].md_name;
                                 }
-                                modelsArray.push(_.extend(layerinfos, element));
+                                else {
+                                    EventBus.trigger("alert", "Der Layer mit der ID '" + layer + "' ist nicht vorhanden");
+                                }
+                            });
+                            layerinfos.layers = layerList.slice(1, layerList.length);
+                            if (!_.has(element, "name") && layerinfos.datasets.length > 0) {
+                                layerinfos.name = layerinfos.datasets[0].md_name;
                             }
+                            modelsArray.push(_.extend(layerinfos, element));
                         }
                     }
                     // für "Group-Model", mehrere Dienste in einem Model/Layer z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
@@ -220,7 +257,7 @@ define([
                             layerdefinitions: []
                         };
 
-                        element.isbaselayer = false;
+                        // element.isbaselayer = false;
                         // Childlayerattributierung
                         _.each(element.id, function (childlayer) {
                             var layerinfos = _.findWhere(response, {id: childlayer.id});
@@ -237,24 +274,10 @@ define([
                         });
                     }
                 });
-                this.setBaseLayer(modelsArray);
                 this.setLayerStyle(modelsArray);
+                modelsArray = this.cloneByStyle(modelsArray);
                 this.reset(modelsArray);
             }
-        },
-
-        // Entfernt Layer über die ID. Wird über Config.tree.layerIDsToIgnore gesteuert.
-        deleteLayerByID: function (response) {
-            return _.reject(response, function (element) {
-                return _.contains(Config.tree.layerIDsToIgnore, element.id);
-            });
-        },
-
-        // Entfernt Layer über ihre MetadatenID. Wird über Config.tree.metaIDsToIgnore gesteuert.
-        deleteLayersByMetaID: function (response) {
-            return _.reject(response, function (element) {
-                return _.contains(Config.tree.metaIDsToIgnore, element.datasets[0].md_id);
-            });
         },
 
         // Entfernt alle Layer, die bereits im Cache dargestellt werden.
@@ -291,57 +314,6 @@ define([
             });
         },
 
-        // Layer mit gleicher Metadaten-ID werden zu einem neuem Layer zusammengefasst.
-        // Layer die gruppiert werden sollen, werden über Config.tree.metaIDsToMerge gesteuert.
-        // Die zusammenfassenden alten Layer werden rausgefiltert.
-        mergeLayersByMetaID: function (response) {
-            var newLayer;
-
-            _.each(Config.tree.metaIDsToMerge, function (metaID) {
-                var layersByID = _.filter(response, function (layer) {
-                    return layer.datasets[0].md_id === metaID;
-                });
-
-                newLayer = _.clone(layersByID[0]);
-                newLayer.name = layersByID[0].datasets[0].md_name;
-                newLayer.layers = _.pluck(layersByID, "layers").toString();
-                newLayer.maxScale = _.max(_.pluck(layersByID, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                newLayer.minScale = _.min(_.pluck(layersByID, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                response = _.difference(response, layersByID);
-                response.push(newLayer);
-            });
-            return response;
-        },
-
-        // Mehrere Layer werden zu einem neuem Layer über ihre ID zusammengefasst.
-        // Layer die gruppiert werden sollen, werden über Config.tree.layerIDsToMerge gesteuert.
-        // Die zusammenfassenden alten Layer werden entfernt.
-        mergeLayersByIDs: function (response) {
-            _.each(Config.tree.layerIDsToMerge, function (layerIDs) {
-                var layersByID,
-                    newLayer;
-
-                layersByID = _.filter(response, function (layer) {
-                    return _.contains(layerIDs, layer.id);
-                });
-                newLayer = _.clone(layersByID[0]);
-                newLayer.layers = _.pluck(layersByID, "layers").toString();
-                newLayer.maxScale = _.max(_.pluck(layersByID, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                newLayer.minScale = _.min(_.pluck(layersByID, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                response = _.difference(response, layersByID);
-                response.push(newLayer);
-            });
-            return response;
-        },
-
         // Hier wird den HVV-Layern ihr jeweiliger Style zugeordnet.
         setLayerStyle: function (response) {
 
@@ -374,48 +346,46 @@ define([
             });
         },
 
+        // Special-Ding für HVV --> Layer werden über Styles gesteuert
         // Hier werden Layer verarbeitet für die es nur eine ID gibt, aber mehrere Styles. Zum Beipsiel der HVV-Dienst.
         // Wenn ein Model mehr als einen Style hat, wird pro Style ein neues Model erzeugt. Die ID setzt sich aus dem Style und der ID des "alten" Models zusammen.
         // Das "alte" Model wird danach, wenn es sich dabei um ein "Singel-Model" handelt, gelöscht. "Gruppen-Models" werden lediglich aktualisiert.
-        cloneByStyle: function () {
-            // "Single" - Layer die mehrere Styles haben
-            var modelsByStyle = this.filter(function (model) {
-                return typeof model.get("styles") === "object" && model.get("typ") === "WMS";
+        cloneByStyle: function (response) {
+            // Layer die mehrere Styles haben
+            var objectsByStyle = _.filter(response, function (model) {
+                return typeof model.styles === "object" && model.typ === "WMS";
             });
 
-            // Iteriert über die Models
-            _.each(modelsByStyle, function (model) {
+            // Iteriert über die Objekte
+            _.each(objectsByStyle, function (obj) {
                 // Iteriert über die Styles
-                _.each(model.get("styles"), function (style, index) {
-                    // Model wird kopiert
-                    var cloneModel = model.clone();
-                    // Die Attribute name und die ID werden für das kopierte Model gesetzt
-                    cloneModel.set("style", style);
-                    cloneModel.set("legendURL", model.get("legendURL")[index]);
-                    cloneModel.set("name", model.get("name")[index]);
-                    cloneModel.set("id", model.get("id") + model.get("styles")[index].toLowerCase());
-                    // Die Source vom Model/Layer bekommt ein Update(neuen Style)
-                    cloneModel.get("source").updateParams({STYLES: model.get("styles")[index]});
-                    // Model wird der Collection hinzugefügt
-                    this.add(cloneModel, {merge: true, at: this.indexOf(model)});
+                _.each(obj.styles, function (style, index) {
+                    // Objekt wird kopiert
+                    var cloneObj = _.clone(obj);
+                    // Die Attribute name und die ID werden für das kopierte Objekt gesetzt
+                    cloneObj.style = style;
+                    cloneObj.legendURL = obj.legendURL[index];
+                    cloneObj.name = obj.name[index];
+                    cloneObj.id = obj.id + obj.styles[index].toLowerCase();
+                    cloneObj.styles = obj.styles[index];
+                    // Objekt wird der Response hinzugefügt
+                    response.splice(_.indexOf(response, obj), 0, cloneObj);
                 }, this);
+                // Das ursprüngliche Objekt wird gelöscht
+                response = _.without(response, obj);
             }, this);
-            // Die ursprüngliche Models werden gelöscht
-            this.remove(modelsByStyle);
 
             // Groupen-Layer deren Childlayer sich nur im Style unterscheiden
-            var modelsByStyle = this.filter(function (model) {
-                return typeof model.get("styles") === "object" && model.get("typ") === "GROUP";
+            var modelsByStyle = _.filter(response, function (model) {
+                return typeof model.styles === "object" && model.typ === "GROUP";
             });
 
             // Iteriert über die Models
-            _.each(modelsByStyle, function (model) {
-                // Iteriert über die Childlayer
-                model.get("layer").getLayers().forEach(function (layer, index) {
-                    // Das STYLES-Attribut der Source wird überschrieben
-                    layer.getSource().updateParams({STYLES: model.get("styles")[index]});
-                });
+            _.each(modelsByStyle, function (model, index) {
+                model.layerdefinitions[index].styles = model.styles[index];
             });
+
+            return response;
         },
 
         /**
@@ -448,6 +418,43 @@ define([
                 // Das ursprüngliche Model wird gelöscht
                 this.remove(element);
             }, this);
+        },
+        getCategoriesByLayer: function (element) {
+            if (Config.tree.orderBy === "opendata") {
+                    return element.datasets[0].kategorie_opendata;
+                }
+            else {
+                    return element.datasets[0].kategorie_inspire;
+            }
+        },
+
+        cloneObjects: function (response) {
+            // Name für das Model-Attribut für die entsprechende Kategorie
+            // Alle Models die mehreren Kategorien zugeordnet sind und damit in einem Array abgelegt sind!
+            var baseLayerIDs = _.pluck(Config.tree.baseLayer, "id"),
+                objectsByCategory = _.filter(response, function (element) {
+                    return this.getCategoriesByLayer(element).length > 1 && !_.contains(baseLayerIDs, element.id);
+                }, this);
+
+            // Iteriert über die Models
+            _.each(objectsByCategory, function (element) {
+                var categories = this.getCategoriesByLayer(element);
+
+                // Iteriert über die Kategorien
+                _.each(categories, function (category) {
+                    // Model wird kopiert
+                    var cloneModel = _.clone(element);
+                    // Die Attribute Kategorie und die ID werden für das kopierte Model gesetzt
+                    cloneModel.node = category;
+                    // cloneModel.datasets[0].kategorie_inspire = categories[index];
+                    cloneModel.id = element.id + category.replace(/ /g, "").replace(/,/g, "_").toUpperCase();
+                    // Model wird der Collection hinzugefügt
+                    response.push(cloneModel);
+                   }, this);
+                // Das ursprüngliche Model wird gelöscht
+                response = _.without(response, element);
+            }, this);
+            return response;
         },
 
         // Schiebt das Model in der Collection eine Position nach oben.

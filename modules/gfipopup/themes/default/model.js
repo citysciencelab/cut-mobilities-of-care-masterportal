@@ -1,10 +1,11 @@
 define([
     "backbone",
-    "config",
+    "backbone.radio",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routable/view"
-], function (Backbone, Config, ImgView, VideoView, RoutableView) {
+    "modules/gfipopup/gfiObjects/routable/view",
+    "modules/core/util"
+], function (Backbone, Radio, ImgView, VideoView, RoutableView, Util) {
     "use strict";
     var GFIContentDefaultModel = Backbone.Model.extend({
         /**
@@ -29,7 +30,7 @@ define([
         /**
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
          */
-        returnPrintContent: function() {
+        returnPrintContent: function () {
             return [this.get("gfiContent"),
                     this.get("gfiTitel")];
         },
@@ -37,7 +38,7 @@ define([
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
         checkRoutable: function () {
-            if (Config.menu.routing && Config.menu.routing === true) {
+            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
                 if (this.get("layer").get("routable") === true) {
                     this.set("routable", new RoutableView(this.get("position")));
                 }
@@ -51,9 +52,7 @@ define([
          */
         replaceValuesWithChildObjects: function () {
             var element = this.get("gfiContent"),
-                children = [],
-                lastroutenval,
-                lastroutenkey;
+                children = [];
 
             if (_.isString(element) && element.match(/content="text\/html/g)) {
                 children.push(element);
@@ -62,19 +61,36 @@ define([
                 _.each(element, function (val, key) {
                     if (key === "Bild") {
                         var imgView = new ImgView(val);
+
                         element[key] = "#";
                         children.push({
                             key: imgView.model.get("id"),
                             val: imgView
                         });
                     }
-                    else if (key === "video") {
+                    else if (key === "video" && Util.isAny() === null) {
                         var videoView = new VideoView(val);
+
                         element[key] = "#";
                         children.push({
                             key: videoView.model.get("id"),
                             val: videoView
                         });
+                        if (_.has(element, "mobil_video")) {
+                            element.mobil_video = "#";
+                        }
+                    }
+                    else if (key === "mobil_video" && Util.isAny()) {
+                        var videoView = new VideoView(val);
+
+                        element[key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView
+                        });
+                        if (_.has(element, "video")) {
+                            element.video = "#";
+                        }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
                     element = _.omit(element, function (value) {
@@ -94,6 +110,7 @@ define([
             _.each(this.get("gfiContent"), function (element) {
                 if (_.has(element, "children")) {
                     var children = _.values(_.pick(element, "children"))[0];
+
                     _.each(children, function (child) {
                         child.val.remove();
                     }, this);

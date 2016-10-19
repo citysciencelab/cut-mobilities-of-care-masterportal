@@ -27,17 +27,7 @@ define(function () {
                     "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
                     "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",  "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
-            ],
-            baseLayer: [
-            {id: "8", visibility: false}, // luftbilder unbelaubt
-            {id: "148", visibility: false}, // luftbilder belaubt
-            {id: "713", visibility: false}, // stadtplan s-w
-            {id: "717", visibility: false}, // stadtplan farbig
-            {id: "1043", visibility: true}, // stadtplan g-b
-            {id: "368", visibility: false}, // alkis farbig
-            {id: "149", visibility: false} // alkis g-b
-          ],
-            customConfig: "../components/lgv-config/tree-config/bauinfo.json"
+            ]
         },
         controls: {
             zoom: true,
@@ -87,17 +77,20 @@ define(function () {
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: false,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
         searchBar: {

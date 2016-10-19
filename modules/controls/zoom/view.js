@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/controls/zoom/template.html",
     "eventbus"
-], function (Backbone, ZoomControlTemplate, EventBus) {
+], function (Backbone, Radio, ZoomControlTemplate, EventBus) {
 
     var ZoomControlView = Backbone.View.extend({
         className: "row",
@@ -16,13 +17,13 @@ define([
             EventBus.trigger("registerZoomButtonsInClickCounter", this.$el);
         },
         render: function () {
-            $(".controls-view").append(this.$el.html(this.template));
+            this.$el.html(this.template);
         },
         setZoomLevelUp: function () {
-            EventBus.trigger("mapView:setZoomLevelUp");
+            Radio.trigger("MapView", "setZoomLevelUp");
         },
         setZoomLevelDown: function () {
-            EventBus.trigger("mapView:setZoomLevelDown");
+            Radio.trigger("MapView", "setZoomLevelDown");
         }
     });
 

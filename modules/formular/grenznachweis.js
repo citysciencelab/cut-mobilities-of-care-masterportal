@@ -1,12 +1,12 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "openlayers",
     "modules/cookie/view",
-    "modules/restReader/collection",
     "modules/core/util"
-], function (Backbone, EventBus, Config, ol, cookie, RestReader, Util) {
+], function (Backbone, Radio, EventBus, Config, ol, cookie, Util) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -42,7 +42,7 @@ define([
             // lese WPS-Url aus JSON ein
             var resp, newURL;
 
-            resp = RestReader.getServiceById(Config.wpsID);
+            resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
             newURL = Util.getProxyURL(resp[0].get("url"));
             this.set("wpsurl", newURL);
             // Fenstermanagement
@@ -51,7 +51,7 @@ define([
                 source: this.get("source"),
                 name: "grenznachweisDraw"
             }));
-            EventBus.trigger("addLayer", this.get("layer"));
+            Radio.trigger("Map", "addLayer", this.get("layer"));
             // Cookie lesen
             if (cookie.model.hasItem() === true) {
                 this.readCookie();
@@ -584,11 +584,11 @@ define([
                         })
                     }));
                 }, this);
-                EventBus.trigger("addInteraction", this.get("draw"));
+                Radio.trigger("Map", "addInteraction", this.get("draw");
                 this.set("activatedInteraction", true);
             }
             else {
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
                 this.set("activatedInteraction", false);
                 this.sourcechanged();
             }

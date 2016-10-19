@@ -10,106 +10,13 @@ define(function () {
     });
     */
     var config = {
-        /**
+         /**
         * @memberof config
-        * @type {Object}
-        * @property {Object} tree - Das tree-Konfigurationsobject
-        * @property {('light'|'custom'|'default')} tree.type - Art des trees. 'light' = einfache Auflistung, 'default' = FHH-Atlas, 'custom' = benutzerdefinierte Layerliste anhand json.
-        * @property {Boolean} tree.saveSelection - Aktviert die Funktion "Auswahl speichern" (nur bei tree.type = default oder custom).
-        * @property {Object[]} [tree.layer] - Bei type: light. Array, bestehend aus Layer-Konfigurationsobjekten.
-        * @property {String} tree.layer.id - ID aus layerConf. Werden kommaseparierte ID übergeben, können WMS gemeinsam abgefragt werden.
-        * @property {Boolean} tree.layer.visible - Initiale Sichtbarkeit des Layers.
-        * @property {String} [tree.layer.style] - Nur bei WFS-Layern. Weist dem Layer den Style aus styleConf zu.
-        * @property {String} [tree.layer.styles] - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {Number} [tree.layer.clusterDistance] - Nur bei WFS-Layern. Werte > 0 nutzen Clustering.
-        * @property {String} [tree.layer.searchField] - Nur bei WFS-Layern. Wenn searchField auf Attributnamen gesetzt, werden die entsprecheden Values in der Searchbar gesucht.
-        * @property {String} [tree.layer.styleField] - Nur bei WFS-Layern. Wenn styleField auf Attributname gesetzt, wird der jeweilge Wert für Style benutzt. styleConf muss angepasst werden.
-        * @property {String} [tree.layer.styleLabelField] - Nur bei WFS-Layern. Wenn styleLabelField auf Attributname gesetzt, wird der jeweilge Wert für Label verwendet. Style muss entsprechend konfiguriert sein.
-        * @property {String} [tree.layer.mouseHoverField] - Nur bei WFS-Layern. Wenn mouseHoverField auf Attributnamen gesetzt, stellt ein MouseHover-Event den Value als Popup dar.
-        * @property {Object[]} [tree.layer.filterOptions] - Nur bei WFS-Layern. Array aus Filterdefinitionen. Jede Filterdefinition ist ein Objekt mit Angaben zum Filter.
-        * @property {String} tree.layer.filterOptions.fieldName - Name des Attributes, auf das gefiltert werden soll.
-        * @property {('combo')} tree.layer.filterOptions.filterType - Name des zulässigen Filtertyps. Derzeit nur combo.
-        * @property {String} tree.layer.filterOptions.filterName - Name des Filters in der Oberfläche.
-        * @property {Array} tree.layer.filterOptions.filterString - Array filterbarer Einträge.
-        * @property {string} tree.layer.filterOptions.filterString.string - Eintrag, nach dem gefiltert werden kann.
-        * @property {String|Object} [tree.layer.attribution] - Falls ein String gesetzt wird, wird dieser als Attribution gesetzt. Alternativ kann ein Konfigurationsobjekt einer Atribution übergeben werden.
-        * @property {String} tree.layer.attribution.eventname - Name des Events, das abgefeuert wird.
-        * @property {integer} tree.layer.attribution.timeout - Dauer in Millisekunden für setInterval.
-        * @property {String} [tree.layer.opacity] - Wert für die voreingestellte Transparenz für den Layer.
-        * @property {String} [tree.layer.minScale] - Mindestmaßstab zum Anzeigen dieses Layers.
-        * @property {String} [tree.layer.maxScale] - Maximalmaßstab zum Anzeigen dieses Layers.
-        * @property {Boolean} [tree.layer.routable] - Wert, ob dieser Layer beim GFI als Routing Destination ausgewählt werden darf. Setzt menu.routing == true vorraus.
-        * @property {integer} [tree.layer.featureCount=[featureCount in layerConf]{@link config.layerConf}|1] - Nur bei WMS-Layern. Anzahl der im GetFeatureInfo abzufragenden Features, wird dem request angefügt. Wird hier kein Wert eingegeben, so wird der Wert aus der layerConf genommen. Wird dort kein Wert gefunden, dann default = 1.
-        * @property {Array} [tree.layerIDsToMerge] - Bei type: custom|default. Arrays der Definitionen, die im Baum zusammengefasst werden.
-        * @property {string[]} tree.layerIDsToMerge. - Array der LayerIDs.
-        * @property {Object[]} [tree.layerIDsToStyle] - Bei type: custom|default. Array der Konfigurationsobjekte zur Styledefinition.
-        * @property {string} tree.layerIDsToStyle.id - ID des Layers.
-        * @property {string|string[]} tree.layerIDsToStyle.styles - Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.
-        * @property {string|string[]} tree.layerIDsToStyle.name - Bezeichnungen dieser Layer im Tree.
-        * @property {string} [tree.customConfig] - Bei type: custom. URL der JSON mit der benutzerdefinierten Konfiguration.
-        * @property {'opendata'|'inspire'} [tree.orderBy] - Bei type: default. Defaultkategorie der Layersortierung.
-        * @property {string[]} [tree.layerIDsToIgnore] - Bei type: default. IDs der Layer, die im Tree ignoriert werden sollen.
-        * @property {string[]} [tree.metaIDsToMerge] - Bei type: default. IDs der Metadaten, nach denen nicht zusammengefasst wird.
-        * @property {string[]} [tree.metaIDsToIgnore] - Bei type: default. IDs der Metadaten, die nicht dargestellt werden sollen.
-        * @desc Diese Konfiguration steuert die inhaltliche und graphische Ausgestaltung des Layertrees in der Menubar.
+        * @type {Array}
+        * @desc Liste der ignorierten Attributnamen, die sowohl im requestor als auch im extended wfs filter ausgeschlossen werden
         */
-        tree: {
-            type: "light",
-            saveSelection: false,
-            layer: [
-                {id: "453", visibility: true, legendUrl: "ignore"},
-                {id: "452", visibility: false},
-                {id: "1748", visibility: false},
-                {id: "1562", visibility: false},
-                {id: "1561", visibility: false, featureCount: 10},
-                {id: "2003", visibility: false, style: "2003", mouseHoverField: "GEBIETSNAME"},
-                {id: "45", visibility: false, style: "45", clusterDistance: 50, routable: true},
-                {id:
-                 [
-                     {
-                         id: "946",
-                         attribution:
-                         {
-                             eventname: "aktualisiereverkehrsnetz",
-                             timeout: (10 * 60000)
-                         }
-                     },
-                     {
-                         id: "947"
-                     }
-                 ],
-                 name: "aktuelle Meldungen der TBZ", visibility: false
-                },
-                {id: "1711", visibility: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name", attribution: "<strong><a href='http://www.hh.de/' target='_blank'>Attributierung für Fachlayer</a></strong>",
-                 displayInTree: true,
-                 maxScale: 60000,
-                 minScale: 10000,
-                 filterOptions: [
-                     {
-                         fieldName: "teilnahme_geburtsklinik",
-                         filterType: "combo",
-                         filterName: "Geburtsklinik",
-                         filterString: ["*", "Ja", "Nein"]
-                     },
-                     {
-                         fieldName: "teilnahme_notversorgung",
-                         filterType: "combo",
-                         filterName: "Not- und Unfallversorgung",
-                         filterString: ["*", "Ja", "Eingeschränkt", "Nein"]
-                     }
-                 ],
-                 routable: true
-                },
-                {id: "753", visibility: false, style: "753", clusterDistance: 0, searchField: "", mouseHoverField: "Name", filterOptions: [
-                     {
-                         fieldName: "Bezirk",
-                         filterType: "combo",
-                         filterName: "Bezirk",
-                         filterString: ["*", "Altona"]
-                     }
-                 ], styleLabelField: "", styleField: "", routable: false}
-            ]
-        },
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        gfiAtClick: false,
         /**
         * @memberof config
         * @type {Boolean}
@@ -127,6 +34,7 @@ define(function () {
         /**
         * @memberof config
         * @type {Boolean}
+        * @property {string} [FEATUREID] - id (oder ids, komma-separiert) der WFS-Features auf dessen/deren BBoxes der initiale Kartenextent gestellt wird..
         * @property {string} [CENTER] - Zentrumskoordinate. Rechtswert, Hochwert. EPSG:25832. Siehe {@link config.view}.
         * @property {string} [LAYERIDS] - Kommagetrennte Aulistung der initial sichtbaren LayerIDs. Siehe {@link config.tree}.
         * @property {string} [VISIBILITY] - Kommagetrennte Aulistung der Sichtbarkeit, der unter LAYERIDS genannten Layer. Nur bei tree.type: custom interessant.
@@ -139,11 +47,32 @@ define(function () {
         * @default [false]
         */
         allowParametricURL: true,
+
+        /**
+        * @memberof config
+        * @type {Object}
+        * @desc Optionale Konfigurations-Einstellungen für den URL parameter "featureid"
+        * @property {string} [url] - URL zum WFS.
+        * @property {string} [version] - Die Version des WFS.
+        * @property {string} [typename] - typename des WFS. Entspricht Tabelle. Kommt beim request in den Filter.
+        * @property {string} [valuereference] - valuereference. Entspricht Spalte. Kommt beim request in den Filter.
+        * @property {string} [imglink] - Link für den Marker.
+        * @property {string} [layerid] - ID des layers an den die Marker gekoppelt werden.
+        */
+        zoomtofeature: {
+            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
+            version: "2.0.0",
+            typename: "app:hamburgconvention",
+            valuereference: "app:flaechenid",
+            imglink: "../img/location_eventlotse.svg",
+            layerid: "4426"
+        },
         /**
         * @memberof config
         * @type {Object}
         * @desc Optionale Konfigurations-Einstellungen für die Map View
         * @property {Object} [view] - Das Konfigurationsobjekt zur View-Definition.
+        * @property {String} [view.background] - Kartenhintergrund, mögliche Werte "white" oder "default".
         * @property {Array} [view.center=[565874, 5934140]] - Die initiale Zentrumskoordinate.
         * @property {Number} [view.resolution=15.874991427504629] - Die initale Resolution der Karte.
         * @property {Array} [view.extent=[510000.0, 5850000.0, 625000.4, 6000000.0]] - Die Ausdehnung der Karte.
@@ -151,6 +80,7 @@ define(function () {
         * @property {Array} [view.epsg=EPSG:25832] - Der EPSG-Code.
         */
         view: {
+            background: "white"
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
@@ -158,19 +88,34 @@ define(function () {
         },
         /**
         * @memberof config
-        * @type {Object}
-        * @desc Konfiguration der Controls auf der Map
-        * @property {Boolean}  [zoom=false] - Legt fest ob die Zoombuttons angezeigt werden sollen.
-        * @property {Boolean}  [toggleMenu=false] - Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.
-        * @property {'none'|'allways'|'once'} [orientation=none] - Legt fest ob das Orientation-Modul geladen werden soll, oder nicht ('none'). Bei 'allways' wird zusätzlich zur Standpunktdarstellung auch auf die Position gezoomt. Bei 'once' wird nur einmalig gezoomt.
-        * @property {Boolean}  [poi=false] - Legt fest ob die Points of Interest angezeigt werden sollen. Nur möglich, bei orientation: true.
+        * @type {Array}
+        * @desc Festlegung der Proj4JS nutzbaren Koordinatensysteme
+        * @property {string[]} namedProjections - Named projections for Proj4JS
+        * @example namedProjections: [["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],["EPSG:25833", "+proj=utm +zone=33 +ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs"],["EPSG:31468", "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs "]]
+        * @default [["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]
+         @tutorial http://spatialreference.org/ref/
         */
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: "once",
-            poi: true
-        },
+        namedProjections: [
+            // GK DHDN
+            ["EPSG:31461", "+proj=tmerc +lat_0=0 +lon_0=3 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31462", "+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31463", "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31464", "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31465", "+proj=tmerc +lat_0=0 +lon_0=15 +k=1 +x_0=5500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31466", "+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31467", "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            ["EPSG:31468", "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            // ETRS89 UTM
+            ["EPSG:25831", "+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+            ["EPSG:25833", "+proj=utm +zone=33 +ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs"],
+            // Soldner Berlin
+            ["EPSG:3068", "+proj=cass +lat_0=52.41864827777778 +lon_0=13.62720366666667 +x_0=40000 +y_0=10000 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+            // Pulkovo
+            ["EPSG:4178", "+proj=longlat +ellps=krass +towgs84=24,-123,-94,0.02,-0.25,-0.13,1.1 +no_defs"],
+            // Organisations
+            ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
+        ],
         /**
         * @memberof config
         * @desc Lädt zusätzliche Module außerhalb der main.js
@@ -179,7 +124,7 @@ define(function () {
         * @example customModules: ["../url", "../url"]
         * @default []
         */
-        customModules: [],
+        customModules: ["../portale/master/verkehrsfunctions"],
         /**
         * @memberof config
         * @type {Object}
@@ -205,7 +150,7 @@ define(function () {
                     "bezeichnung": "",
                     "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
                     "alias": "SDP Download",
-                    "alias_mobil": "ttt"
+                    "alias_mobil": "SDP"
                 },
                 {
                     "bezeichnung": "",
@@ -227,7 +172,7 @@ define(function () {
         * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes.
         * @example layerConf: "../components/lgv-config/services-fhhnet.json"
         */
-        layerConf: "../components/lgv-config/services-fhhnet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         /**
         * @memberof config
         * @type {String}
@@ -262,7 +207,7 @@ define(function () {
         * @desc Steuert, ob das Portal eine Menüleiste(Navigationsleiste) haben soll oder nicht.
         * @default [false]
         */
-        menubar: true,
+        // menubar: true,
         /**
         * @memberof config
         * @type {Boolean}
@@ -286,125 +231,11 @@ define(function () {
         isMenubarVisible: true,
         /**
         * @memberof config
-        * @type {Object}
-        * @desc Hier lassen sich die einzelnen Menüeinträge/Funktionen für die Menüleiste konfigurieren.
-        * @property {Object} menu - Das menu-Konfigurationsobject
-        * @property {boolean} helpButton - auf false setzen
-        * @property {Boolean} [menu.searchBar=false] - Legt fest, ob die Suchfunktion geladen werden soll.
-        * @property {Boolean}  menu.layerTree - Legt fest, ob der Themenbaum geladen werden soll.
-        * @property {Object}  menu.contactButton - Konfigurationsobjekt des Kontakt-Buttons.
-        * @property {boolean} [menu.contactButton.on=false] Kontakt-Button anzeigen.
-        * @property {string} menu.contactButton.email Emailadresse Empfänger.
-        * @property {Boolean}  menu.tools - Legt fest, ob der Werkzeuge-Button angezeigt werden soll.
-        * @property {Boolean}  menu.treeFilter - Legt fest, ob der Filter für die Straßenbäume angezeigt werden soll.
-        * @property {Boolean}  menu.wfsFeatureFilter - Legt fest, ob der WFS-Filter geladen werden soll. Siehe {@link config.tree}.
-        * @property {Boolean}  menu.legend - Legt fest, ob das Legendenmodul geladen werden soll.
-        * @property {Boolean}  menu.routing - Legt fest, ob das RoutingModul geladen werden soll.
-        * @property {Object[]}  [menu.formular] - Konfigurationsobjekt eines Formulars
-        * @property {string}  menu.formular.title - Bezeichnung des Formulars
-        * @property {string}  menu.formular.symbol - Symbolname
-        * @property {string}  menu.formular.modelname - Modelname, wie in view definiert.
-        * @property {integer}  menu.featureLister - Legt fest, dass das FeatureLister-Modul geladen werden soll, welches Vektorinformationen in einer Liste anzeigt. Wenn 0, dann ist es deaktiviert.
-        * @example contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"}
-        * @example formular: [{title: "Bestellung Grenznachweis", symbol: "glyphicon glyphicon-shopping-cart", modelname: "grenznachweis"}]
-        * @todo helpButton
-        */
-        menu: {
-            helpButton: false,
-            searchBar: true,
-            layerTree: true,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            featureLister: 10,
-            treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: true,
-            routing: true,
-            addWMS: true,
-            formular: {}
-        },
-        /**
-        * @memberof config
         * @type {String}
         * @desc Legt das Modul fest, das beim Starten geööfnet wird. Funktioniert derzeit nur mit Routing. Wird auch im parametrisierten Aufruf {@link config.allowParametricURL}erkannt.
         * @default ""
         */
         startUpModul: "",
-        /**
-        * @memberof config
-        * @type {Object}
-        * @desc Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @property {Object} [visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
-        * @property {integer} [visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Object} [tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
-        * @property {integer} [tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Objekt} [specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
-        * @property {integer} [specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Object[]} specialWFS.definitions - Definitionen der SpecialWFS.
-        * @property {Object} specialWFS.definitions[].definition - Definition eines SpecialWFS.
-        * @property {string} specialWFS.definitions[].definition.url - Die URL, des WFS
-        * @property {string} specialWFS.definitions[].definition.data - Query string des WFS-Request
-        * @property {string} specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @property {Object} bkg - Das Konfigurationsobjet der BKG Suche.
-        * @property {integer} [bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
-        * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
-        * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @property {integer} [bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
-        * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
-        * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
-        * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @property {Object} [gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
-        * @property {string} gazetteer.url - Die URL.
-        * @property {boolean} [gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @property {boolean} [gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @property {boolean} [gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @property {boolean} [gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
-        * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @property {string} [initialQuery] - Initialer Suchstring.
-        */
-        searchBar: {
-            gazetteer: {
-                minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            bkg: {
-                minChars: 3,
-                bkgSuggestURL: "/bkg_suggest",
-                bkgSearchURL: "/bkg_geosearch",
-                extent: [454591, 5809000, 700000, 6075769],
-                suggestCount:10,
-                epsg: "EPSG:25832",
-                filter: "filter=(typ:*)",
-                score: 0.6
-            },
-            specialWFS: {
-                minChar: 3,
-                definitions: [
-                    {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=hh_hh_planung_festgestellt&propertyName=planrecht",
-                        name: "bplan"
-                    },
-                    {
-                        url: "/geofos/fachdaten_public/services/wfs_hh_bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-                        data: "typeNames=imverfahren&propertyName=plan",
-                        name: "bplan"
-                    }
-                ]
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            layer: {
-                minChar: 3
-            },
-            placeholder: "Suche nach Adresse/Krankenhaus/B-Plan"
-        },
         /**
         * @memberof config
         * @type {Object}
@@ -417,71 +248,6 @@ define(function () {
             printID: "99999",
             title: "Master",
             gfi: false
-        },
-        /**
-        * @memberof config
-        * @type {Object}
-        * @desc Die Funktionen die unter dem Menüpunkt "Werkzeuge" gelistet werden können.
-        * @property {Object} [tools] - Das Konfigurationsobjekt für die Tools/Werkzeuge.
-        * @property {Object} [tools.parcelSearch] - Flurstückssuche.
-        * @property {string} [tools.parcelSearch.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.parcelSearch.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.parcelSearch.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.gfi] - GFI-Abfrage.
-        * @property {string} [tools.gfi.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.gfi.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.gfi.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.print] - Drucken.
-        * @property {string} [tools.print.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.print.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.print.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.coord] - Koordinateabfrage.
-        * @property {string} [tools.coord.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.coord.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.coord.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.measure] - Messen.
-        * @property {string} [tools.measure.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.measure.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.measure.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.draw] - Zeichnen.
-        * @property {string} [tools.draw.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.draw.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.draw.isActive] - Tool initial aktiviert.
-        * @property {Object} [tools.searchByCoord] - Koordinatensuche.
-        * @property {string} [tools.searchByCoord.title] - Der Title in der Liste unter Werkzeuge.
-        * @property {string} [tools.searchByCoord.glyphicon] - Das Glyphicon (Bootstrap Class).
-        * @property {Boolean} [tools.searchByCoord.isActive] - Tool initial aktiviert.
-        */
-        tools: {
-            parcelSearch: {
-                title: "Flurstückssuche",
-                glyphicon: "glyphicon-search"
-            },
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
-            print: {
-                title: "Karte drucken",
-                glyphicon: "glyphicon-print"
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            },
-            draw: {
-                title: "Zeichnen / Schreiben",
-                glyphicon: "glyphicon-pencil"
-            },
-            searchByCoord: {
-                title: "Koordinatensuche",
-                glyphicon: "glyphicon-search"
-            }
         },
         /**
         * @memberof config

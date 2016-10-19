@@ -1,5 +1,4 @@
 define([
-    "underscore",
     "backbone",
     "backbone.radio",
     "openlayers",
@@ -9,7 +8,7 @@ define([
     "modules/layer/wfsStyle/list",
     "modules/core/util",
     "modules/core/mapView"
-], function (_, Backbone, Radio, ol, EventBus, Config, Layer, StyleList, Util) {
+], function (Backbone, Radio, ol, EventBus, Config, Layer, StyleList, Util) {
     var WFSLayer = Layer.extend({
         updateData: function () {
             Util.showLoader();
@@ -321,10 +320,12 @@ define([
         },
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         setLegendURL: function () {
-            if (!_.isUndefined(this.get("styleId"))) {
-                var style = StyleList.returnModelById(this.get("styleId"));
+            if (!this.get("legendURL").length) {
+                if (!_.isUndefined(this.get("styleId"))) {
+                    var style = StyleList.returnModelById(this.get("styleId"));
 
-                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+                    this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+                }
             }
         }
     });

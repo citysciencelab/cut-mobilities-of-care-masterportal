@@ -45,18 +45,57 @@ define(function () {
             orientation: false,
             poi: true
         },
-        footer: false,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download",
+                    "alias_mobil": "SDP"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
+        },
         menu: {
             viewerName: "GeoViewer",
             searchBar: true,
@@ -72,19 +111,17 @@ define(function () {
         },
         startUpModul: "",
         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
             },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse, Stadtteil",
-            geoLocateHit: true
+
+            placeholder: "Suche nach Adresse / Stadtteil"
         },
         print: {
             printID: "99999",

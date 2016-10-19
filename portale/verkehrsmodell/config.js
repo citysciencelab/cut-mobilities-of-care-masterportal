@@ -7,10 +7,6 @@ define(function () {
             type: "custom",
             orderBy: "olympia",
             customConfig: "../components/lgv-config/tree-config/verkehrsmodell.json",
-            baseLayer: [
-                {id: "453", visibility: true},
-                {id: "452", visibility: false}
-            ],
             layerIDsToStyle: [
                 {
                     "id": "1933",
@@ -37,43 +33,46 @@ define(function () {
             orientation: false,
             poi: true
         },
+        footer: true,
+        quickHelp: true,
         layerConf: "../components/lgv-config/services-verkehrsmodell.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
+        proxyURL: "/cgi-bin/proxy.cgi",
         print: {
             printID: "99999",
             title: "Verkehrsmodell",
             gfi: false
         },
-        proxyURL: "/cgi-bin/proxy.cgi",
         menubar: true,
         mouseHover: true,
         scaleLine: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: false,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            tools: {
+                title: "Werkzeuge",
+                glyphicon: "glyphicon-wrench"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            }
         },
         startUpModul: "",
-        searchBar: {
+         searchBar: {
+            minChars: 3,
             gazetteer: {
                 minChars: 3,
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
+                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
                 searchStreets: true,
                 searchHouseNumbers: true,
                 searchDistricts: true,
                 searchParcels: true
-            },
-             visibleWFS: {
-                minChars: 3
+
             },
             placeholder: "Suche nach Adresse, Stadtteil",
             geoLocateHit: true
@@ -101,7 +100,7 @@ define(function () {
                 glyphicon: "glyphicon-pencil"
             }
         },
-       
+
     };
 
     return config;

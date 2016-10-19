@@ -1,7 +1,6 @@
 define([
-    'underscore',
     'backbone'
-], function (_, Backbone, EventBus, Config, ol) {
+], function (Backbone, EventBus, Config, ol) {
 
     var cookieModel = Backbone.Model.extend({
         defaults: {

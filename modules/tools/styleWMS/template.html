@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<div class="header">
+    <p class="buttons pull-right">
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+    </p>
+    <p class="title">
+        <span class="glyphicon glyphicon-picture"></span>
+        <span>Style WMS</span>
+    </p>
+</div>
+<div class="content">
+    <p class="layer-name"><%= model.get("name") %></p>
+    <br>
+    <div class="form-horizontal" role="form">
+        <div class="form-group form-group-sm">
+            <div class="col-md-12 col-sm-12">
+                <label class="range-label">Attribut</label>
+                <select class="form-control input-sm" id="attributField">
+                    <option class="pull-left" value="default" <% if (attributeName === "default") { print ("SELECTED")} %>>Bitte Attribut ausw&auml;hlen</option>
+                    <% _.each(model.get("attributesToStyle"), function (attribute) { %>
+                        <option class="pull-left" value=<%= attribute %> <% if (attribute === attributeName) { print ("SELECTED")} %>><%= attribute %></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        <% if (attributeName !== "default") { %>
+        <div class="form-group form-group-sm">
+            <div class="col-md-12 col-sm-12">
+                <label class="range-label">Anzahl der Klassen</label>
+                <select class="form-control input-sm" id="numberField">
+                    <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
+                    <% _.each(numberOfClassesList, function (number) { %>
+                        <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        <% } %>
+        <% if (numberOfClasses !== "default") { %>
+            <% for (var i = 0; i < numberOfClasses; i++) { %>
+                <div class="form-group">
+                    <div class="col-md-5 col-sm-5">
+                        <label class="range-label">Wertebereich Klasse <%= i + 1 %></label>
+                        <input class="form-control input-sm <%= 'start-range' + i %>" value="<% if (typeof styleClassAttributes[i] !== 'undefined') { print (styleClassAttributes[i].startRange)} %>" placeholder="von">
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <label class="range-label">&nbsp;</label>
+                        <input class="form-control input-sm <%= 'stop-range' + i %>" value="<% if (typeof styleClassAttributes[i] !== 'undefined') { print (styleClassAttributes[i].stopRange)} %>" placeholder="bis">
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <label class="range-label">&nbsp;</label>
+                        <div id="style-wms-colorpicker" class="input-group colorpicker-component">
+                            <input class="form-control input-sm <%= 'selected-color' + i %>" value="<% if (typeof styleClassAttributes[i] !== 'undefined') { print (styleClassAttributes[i].color)} else { print ('#337ab7')} %>">
+                            <span class="input-group-addon"><i></i></span>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            <div class="form-group form-group-sm">
+                <% if (typeof errors !== "undefined") { %>
+                    <span id="yearError" class="col-xs-7 col-xs-offset-5 treeFilterError"><%= errors.range %></span>
+                <% } %>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-panel-submit col-md-12 col-sm-12">Anwenden</button>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>

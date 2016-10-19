@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "eventbus",
     "config"
-], function (Backbone, Radio, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, Config) {
 
     var Measure = Backbone.Model.extend({
         defaults: {
@@ -36,9 +35,12 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(EventBus, {
-                "winParams": this.setStatus,
+            this.listenTo(Radio.channel("Map"), {
                 "pointerMoveOnMap": this.placeMeasureTooltip
+            });
+
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
             this.listenTo(this, {
@@ -47,36 +49,39 @@ define([
 
             this.set("layer", new ol.layer.Vector({
                 source: this.get("source"),
-                style: this.get("style")
+                style: this.get("style"),
+                name: "measure_layer",
+                alwaysOnTop: true
             }));
 
-            EventBus.trigger("addLayer", this.get("layer"));
+            var layers = Radio.request("Map","getLayers");
+            Radio.trigger("Map","addLayerToIndex",[this.get("layer"),layers.getArray().length]);
 
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
             }
         },
         setStatus: function (args) {
-            if (args[2] === "measure" && args[0] === true) {
+            if (args[2].getId() === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
             }
         },
 
         createInteraction: function () {
-            EventBus.trigger("removeInteraction", this.get("draw"));
+            Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("type"),
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
-                this.listenTo(EventBus, {
+                this.listenTo(Radio.channel("Map"), {
                     "pointerMoveOnMap": this.placeMeasureTooltip
                 });
                 this.set("sketch", evt.feature);
@@ -89,9 +94,9 @@ define([
                 this.get("sketch", null);
                 // unset tooltip so that a new one can be created
                 this.get("measureTooltipElement", null);
-                this.stopListening(EventBus, "pointerMoveOnMap");
+                this.stopListening(Radio.channel("Map"), "pointerMoveOnMap");
             }, this);
-            EventBus.trigger("addInteraction", this.get("draw"));
+            Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
 
         createMeasureTooltip: function () {
@@ -110,7 +115,7 @@ define([
             });
             this.set("measureTooltipElement", measureTooltipElement);
             this.set("measureTooltip", measureTooltip);
-            EventBus.trigger("addOverlay", measureTooltip, "measure");
+            Radio.trigger("Map", "addOverlay", measureTooltip, "measure");
             this.get("measureTooltips").push(measureTooltip);
         },
 
@@ -171,7 +176,7 @@ define([
             this.get("source").clear();
             // lösche alle Overlays (Tooltips)
             _.each(this.get("measureTooltips"), function (tooltip) {
-                EventBus.trigger("removeOverlay", tooltip, "measure");
+                Radio.trigger("Map", "removeOverlay", tooltip, "measure");
             });
             this.set("measureTooltips", []);
         },
@@ -304,5 +309,5 @@ define([
         }
     });
 
-    return new Measure();
+    return Measure;
 });

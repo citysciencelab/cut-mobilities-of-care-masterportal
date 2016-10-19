@@ -1,10 +1,11 @@
 define([
     "jquery",
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/alerting/model",
     "bootstrap/alert"
-], function ($, Backbone, EventBus, Model) {
+], function ($, Backbone, Radio, EventBus, Model) {
     /*
      * Dieses Modul reagiert auf Events vom EventBus, nimmt als Parameter des Events ein hmtl-String oder ein Konfigurationsobjekt entgegen und stellt dies dar.
      * Das Konfigurationsobjekt kann folgende Einstellungen überschrieben:
@@ -17,6 +18,12 @@ define([
         initialize: function () {
             EventBus.on("alert", this.checkVal, this);
             EventBus.on("alert:remove", this.remove, this);
+            var channel = Radio.channel("Alert");
+
+            channel.on({
+                "alert": this.checkVal,
+                "alert:remove": this.remove
+            }, this);
         },
         /**
         * @memberof config
@@ -24,15 +31,19 @@ define([
         * @desc entweder ein String und die Defaultwerte werden verwendet oder ein Konfigurationsobjekt
         */
         checkVal: function (val) {
+            var html = "",
+                kategorie = "",
+                dismissable = "";
+
             if (_.isString(val)) {
-                var html = val,
-                    kategorie = this.model.get("kategorie"),
-                    dismissable = this.model.get("dismissable");
+                html = val,
+                kategorie = this.model.get("kategorie"),
+                dismissable = this.model.get("dismissable");
             }
             else if (_.isObject(val)) {
-                var html = val.text,
-                    kategorie = (val.kategorie) ? val.kategorie : this.model.get("kategorie"),
-                    dismissable = (val.dismissable) ? val.dismissable : this.model.get("dismissable");
+                html = val.text,
+                kategorie = (val.kategorie) ? val.kategorie : this.model.get("kategorie"),
+                dismissable = (val.dismissable) ? val.dismissable : this.model.get("dismissable");
             }
             this.render(html, kategorie, dismissable);
         },

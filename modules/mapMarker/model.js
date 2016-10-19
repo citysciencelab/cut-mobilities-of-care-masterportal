@@ -1,8 +1,11 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus"
-    ], function (Backbone, ol, EventBus) {
+    "eventbus",
+    "backbone.radio",
+    "config",
+    "modules/core/util"
+    ], function (Backbone, ol, EventBus, Radio, Config, Util) {
     "use strict";
     var MapHandlerModel = Backbone.Model.extend({
         defaults: {
@@ -11,14 +14,24 @@ define([
                 stopEvent: false
             }),
             wkt: "",
-            source: new ol.source.Vector()
+            markers:[],
+            source: new ol.source.Vector(),
+            zoomLevel: 7
         },
         initialize: function () {
-            this.set("layer", new ol.layer.Vector({
-                source: this.get("source")
-            }));
-            EventBus.trigger("addLayer", this.get("layer"));
-            EventBus.trigger("addOverlay", this.get("marker"));
+//            this.set("layer", new ol.layer.Vector({
+//                source: this.get("source")
+//            }));
+//            EventBus.trigger("addLayer", this.get("layer"));
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            this.listenTo(EventBus, {
+                "layerlist:sendVisiblelayerList": this.checkLayer
+            });
+            var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+
+            if(_.has(searchConf, "zoomLevel")){
+                this.set("zoomLevel", searchConf.zoomLevel);
+            }
         },
 
         getExtentFromString: function () {
@@ -88,6 +101,53 @@ define([
             this.set("wkt", wkt);
 
             return wkt;
+        },
+
+        // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der BBOX pro Feature
+        askForMarkers: function () {
+            if (_.has(Config, "zoomtofeature")) {
+                var centers = Radio.request("zoomtofeature", "getCenterList"),
+                    imglink = Config.zoomtofeature.imglink;
+
+                _.each(centers, function (center, i){
+                    var id = "featureMarker" +i;
+
+                    // lokaler Pfad zum IMG-Ordner ist anders
+                    $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Util.getPath(imglink) + "'></div>");
+
+                    var marker = new ol.Overlay({
+                        id: id,
+                        positioning: "bottom-center",
+                        element: document.getElementById(id),
+                        stopEvent: false
+                    });
+
+                    marker.setPosition(center);
+                    var markers = this.get("markers");
+                    markers.push(marker);
+                    this.set("markers", markers);
+                    Radio.trigger("Map", "addOverlay", marker);
+
+                },this);
+                EventBus.trigger("layerlist:getVisiblelayerList");
+            }
+        },
+        checkLayer: function (layerlist) {
+            if (Config.zoomtofeature) {
+                var layer = _.find(layerlist,{id:Config.zoomtofeature.layerid});
+
+                EventBus.trigger("mapMarker:getMarkers");
+                var markers = this.get("markers");
+
+                _.each(markers, function (marker) {
+                    if (layer === undefined) {
+                        Radio.trigger("Map", "removeOverlay", marker);
+                    }
+                    else {
+                        Radio.trigger("Map", "addOverlay", marker);
+                    }
+                });
+            }
         }
     });
 

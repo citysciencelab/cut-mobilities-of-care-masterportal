@@ -10,10 +10,30 @@ define(function () {
         controls: {
             zoom: true,
             toggleMenu: true,
-            orientation: true,
+            orientation: "once",
             poi: true
         },
-        footer: true,
+        footer: {
+            visibility: true,
+            urls: [
+                {
+                    "bezeichnung": "Kartographie und Gestaltung: ",
+                    "url": "http://www.geoinfo.hamburg.de/",
+                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias_mobil": "LGV Hamburg"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                    "alias": "SDP Download"
+                },
+                {
+                    "bezeichnung": "",
+                    "url": "http://www.hamburg.de/bsu/timonline",
+                    "alias": "Kartenunstimmigkeit"
+                }
+            ]
+        },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
@@ -22,6 +42,7 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
         tree: {
             type: "light",
+            saveSelection: false,
             layer: [
                 {id: "453", visible: true},
                 {id: "2056", visible: true, style: "2056", clusterDistance: 30, styleField: "kategorie"},
@@ -36,21 +57,24 @@ define(function () {
         },
         menubar: true,
         scaleLine: true,
-        isMenubarVisible: false,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: false,
-            layerTree: true,
-            helpButton: false,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false,
-            addWMS: false
+        isMenubarVisible: true,
+        menuItems: {
+            tree: {
+                title: "Themen",
+                glyphicon: "glyphicon-list"
+            },
+            legend: {
+                title: "Legende",
+                glyphicon: "glyphicon-book"
+            },
+            contact: {
+                title: "Kontakt",
+                glyphicon: "glyphicon-envelope",
+                email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+            }
         },
         startUpModul: "",
+        attributions: true,
         tools: {
             gfi: {
                 title: "Informationen abfragen",

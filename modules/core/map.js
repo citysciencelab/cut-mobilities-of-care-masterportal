@@ -1,56 +1,59 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config",
-    "modules/core/mapView",
-    "eventbus",
-     "modules/core/util"
-], function (Backbone, Radio, ol, Config, MapView, EventBus, Util) {
+define(function (require) {
 
-    var Map = Backbone.Model.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        MapView = require("modules/core/mapView"),
+        Util = require("modules/core/util"),
+        Map;
+
+     Map = Backbone.Model.extend({
 
         /**
          *
          */
         defaults: {
             MM_PER_INCHES: 25.4,
-            POINTS_PER_INCH: 72
+            POINTS_PER_INCH: 72,
+            initalLoading: 0
         },
 
         /**
         *
         */
         initialize: function () {
-             var channel = Radio.channel("map");
+            this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
+            var channel = Radio.channel("Map"),
+                mapView = new MapView();
 
-            channel.reply({
-                "getView": MapView.get("view")
-            }, this);
             channel.reply({
                 "getMap": function () {
                     return this.get("map");
-                }
+                },
+                "getLayers": this.getLayers
             }, this);
 
-            EventBus.on("activateClick", this.activateClick, this);
-            EventBus.on("addLayer", this.addLayer, this);
-            EventBus.on("removeLayer", this.removeLayer, this);
-            EventBus.on("removeLastLayer", this.removeLastLayer, this);
-            EventBus.on("addOverlay", this.addOverlay, this);
-            EventBus.on("removeOverlay", this.removeOverlay, this);
-            EventBus.on("addControl", this.addControl, this);
-            EventBus.on("removeControl", this.removeControl, this);
-            EventBus.on("addInteraction", this.addInteraction, this);
-            EventBus.on("removeInteraction", this.removeInteraction, this);
-            EventBus.on("moveLayer", this.moveLayer, this);
-            EventBus.on("addLayerToIndex", this.addLayerToIndex, this);
-            EventBus.on("zoomToExtent", this.zoomToExtent, this);
-            EventBus.on("updatePrintPage", this.updatePrintPage, this);
-            EventBus.on("getMap", this.getMap, this); // getriggert aus MouseHoverPopup
-            EventBus.on("setMeasurePopup", this.setMeasurePopup, this); // warte auf Fertigstellung des MeasurePopup für Übergabe
+            channel.on({
+                "addLayer": this.addLayer,
+                "addLayerToIndex": this.addLayerToIndex,
+                "addOverlay": this.addOverlay,
+                "addInteraction": this.addInteraction,
+                "addControl": this.addControl,
+                "removeLayer": this.removeLayer,
+                "removeOverlay": this.removeOverlay,
+                "removeInteraction": this.removeInteraction,
+                "setBBox": this.setBBox,
+                "render": this.render,
+                "registerPostCompose": this.registerPostCompose,
+                "unregisterPostCompose": this.unregisterPostCompose,
+                "zoomToExtent": this.zoomToExtent,
+                "updatePrintPage": this.updatePrintPage,
+                "activateClick": this.activateClick,
+                "addLoadingLayer": this.addLoadingLayer,
+                "removeLoadingLayer": this.removeLoadingLayer
+            }, this);
 
-            this.set("view", MapView.get("view"));
+            this.set("view", mapView.get("view"));
 
             this.set("map", new ol.Map({
                 logo: null,
@@ -61,34 +64,34 @@ define([
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
-            this.get("map").on("pointermove", this.pointerMoveOnMap);
-            // Wenn Touchable, dann implementieren eines Touchevents. Für iPhone nicht nötig, aber auf Android.
-            // if (ol.has.TOUCH && navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
-            //     var startx = 0,
-            //         starty = 0;
-            //
-            //     this.get("map").getViewport().addEventListener("touchstart", function (e) {
-            //         var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
-            //
-            //         startx = parseInt(touchobj.clientX, 10); // get x position of touch point relative to left edge of browser
-            //         // e.preventDefault();
-            //     }, false);
-            //     this.get("map").getViewport().addEventListener("touchend", function (e) {
-            //         var touchobj = e.changedTouches[0], // reference first touch point (ie: first finger)
-            //         // Calculate if there was "significant" movement of the finger
-            //         movementX = Math.abs(startx - touchobj.clientX),
-            //         movementY = Math.abs(starty - touchobj.clientY);
-            //
-            //         if (movementX < 5 || movementY < 5) {
-            //             var x = _.values(_.pick(touchobj, "pageX"))[0],
-            //                 y = _.values(_.pick(touchobj, "pageY"))[0],
-            //                 coordinates = this.get("map").getCoordinateFromPixel([x, y]);
-            //             // TODO: nicht nur GFIParams setzen sondern auch messen implementieren
-            //             // this.setGFIParams({coordinate: coordinates});
-            //         }
-            //         // e.preventDefault(); //verhindert das weitere ausführen von Events. Wird z.B. zum schließen des GFI-Popup aber benötigt.
-            //     }.bind(this), false);
-            // }
+            this.registerPointerMove();
+
+            Radio.trigger("zoomtofeature", "zoomtoid");
+            Radio.trigger("ModelList", "addInitialyNeededModels");
+            var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+
+            if (!_.isUndefined(activeItem)) {
+                this.activateClick(activeItem.id);
+            }
+
+        },
+
+        getLayers: function () {
+            return this.get("map").getLayers();
+        },
+
+        render: function () {
+            this.get("map").render();
+        },
+
+        setBBox: function (bbox) {
+            this.set("bbox", bbox);
+            this.BBoxToMap(this.get("bbox"));
+        },
+        BBoxToMap: function (bbox) {
+            if (bbox) {
+                this.get("view").fit(bbox, this.get("map").getSize());
+            }
         },
 
         GFIPopupVisibility: function (value) {
@@ -101,34 +104,44 @@ define([
         },
 
         getMap: function () {
-            EventBus.trigger("setMap", this.get("map"));
+            return this.get("map");
         },
 
         activateClick: function (tool) {
             if (tool === "coord") {
                 this.get("map").un("click", this.setGFIParams, this);
                 this.get("map").on("click", this.setPositionCoordPopup, this);
-                // this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.registerPointerMove);
             }
             else if (tool === "gfi") {
                 this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").on("click", this.setGFIParams, this);
-                // this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.registerPointerMove);
             }
             else if (tool === "measure") {
                 this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").un("click", this.setGFIParams, this);
-                // this.get("map").on("pointermove", this.pointerMoveOnMap);
+                // this.get("map").on("pointermove", this.registerPointerMove);
             }
             else if (tool === "draw" || tool === "record") {
                 this.get("map").un("click", this.setPositionCoordPopup, this);
                 this.get("map").un("click", this.setGFIParams, this);
-                // this.get("map").un("pointermove", this.pointerMoveOnMap);
+                // this.get("map").un("pointermove", this.registerPointerMove);
             }
         },
 
-        pointerMoveOnMap: function (evt) {
-            EventBus.trigger("pointerMoveOnMap", evt);
+        registerPostCompose: function (callback, context) {
+            this.get("map").on("postcompose", callback, context);
+        },
+
+        unregisterPostCompose: function (callback) {
+            this.get("map").un("postcompose", callback);
+        },
+
+        registerPointerMove: function () {
+            this.get("map").on("pointermove", function (evt) {
+                Radio.trigger("Map", "pointerMoveOnMap", evt);
+            });
         },
 
         /**
@@ -184,13 +197,7 @@ define([
                 this.get("map").getLayers().push(layer);
             }
         },
-        /**
-        */
-        removeLastLayer: function () {
-            var layer = this.get("map").getLayers().getArray()[this.get("map").getLayers().getArray().length - 1];
 
-            this.get("map").removeLayer(layer);
-        },
         /**
         */
         removeLayer: function (layer) {
@@ -209,44 +216,33 @@ define([
 
             layersCollection.remove(layer);
             layersCollection.insertAt(index, layer);
+            this.setImportDrawMeasureLayersOnTop(layersCollection);
 
             // Laden des Layers überwachen
-            if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
-                this.getLayerLoadStatus(layer);
+            layer.getSource().on("wmsloadend", function () {
+                Radio.trigger("Map", "removeLoadingLayer");
+            });
+            layer.getSource().on("wmsloadstart", function () {
+                Radio.trigger("Map", "addLoadingLayer");
+            });
+        },
+
+        // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
+        setImportDrawMeasureLayersOnTop: function (layers) {
+            var layersOnTop = [];
+
+            for (var i = layers.getLength(); i >= 0; i--) {
+                var layer = layers.item(i);
+
+                if (!_.isUndefined(layer) && layer.get("alwaysOnTop")) {
+                    layers.removeAt(i);
+                    layersOnTop.push(layer);
+                }
             }
 
-        },
-        // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
-        // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
-        getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
-            return function (tile, src) {
-                    if (numLoadingTiles === 0) {
-                        Util.showLoader();
-                    }
-                    ++numLoadingTiles;
-                    var image = tile.getImage();
-
-                    image.onload = image.onerror = function () {
-                        --numLoadingTiles;
-                        if (numLoadingTiles === 0) {
-                            Util.hideLoader();
-                            // Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
-                            source.setTileLoadFunction(tileLoadFn);
-                        }
-                    };
-                tileLoadFn(tile, src);
-                };
-        },
-        // Setzt eine neue "setTileLoadFunction" an die source der übergebenen Layer
-        getLayerLoadStatus: function (layer) {
-            var context = this;
-
-            layer.getSource().setTileLoadFunction((function () {
-                var numLoadingTiles = 0,
-                tileLoadFn = layer.getSource().getTileLoadFunction();
-
-                return context.getTileLoadFunction(numLoadingTiles, tileLoadFn, layer.getSource());
-            })());
+            _.each(layersOnTop, function (layer) {
+                layers.push(layer);
+            });
         },
 
         /**
@@ -254,12 +250,13 @@ define([
         */
         setPositionCoordPopup: function (evt) {
             // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker(evt.pixel[1], evt.pixel[0]) === true) {
-                return;
-            }
-            else {
-                EventBus.trigger("setPositionCoordPopup", evt.coordinate);
-            }
+            // TODO
+            // if (this.checkInsideSearchMarker(evt.pixel[1], evt.pixel[0]) === true) {
+            //     return;
+            // }
+            // else {
+                Radio.trigger("Map", "setPositionCoordPopup", evt.coordinate);
+            // }
         },
         /**
         * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
@@ -282,60 +279,46 @@ define([
          * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
          */
         setGFIParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WMS"}),
-                visibleGeoJSONLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "GeoJSON"}),
+            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}),
+                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GeoJSON"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
                 gfiParams = [],
-                scale = _.findWhere(MapView.get("options"), {resolution: this.get("view").getResolution()}).scale,
+                scale = Radio.request("MapView", "getOptions").scale,
+                // scale = _.findWhere(Radio.request("MapView", "getOptions"), {resolution: this.get("view").getResolution()}).scale,
                 eventPixel = this.get("map").getEventPixel(evt.originalEvent),
                 isFeatureAtPixel = this.get("map").hasFeatureAtPixel(eventPixel),
                 resolution = this.get("view").getResolution(),
                 projection = this.get("view").getProjection(),
                 coordinate = evt.coordinate;
 
-            // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker(eventPixel[1], eventPixel[0]) === true) {
-                return;
-            }
             // WFS
             if (isFeatureAtPixel === true) {
-                var layerByFeature,
-                    visibleWFSLayerList = Radio.request("LayerList", "getLayerListWhere", {visibility: true, typ: "WFS"});
-                
-                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel) {
-                    // cluster-source
+                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
+                    var modelByFeature = Radio.request("ModelList", "getModelByAttributes", {id: pLayer.get("id")});
+                    // Cluster Feature
                     if (_.has(featureAtPixel.getProperties(), "features") === true) {
                         _.each(featureAtPixel.get("features"), function (feature) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getSource().getFeatureById(feature.getId());
-                            });
-                            if (_.isUndefined(layerByFeature) === false) {
-                                gfiParams.push({
-                                    typ: "WFS",
-                                    feature: feature,
-                                    attributes: layerByFeature.get("gfiAttributes"),
-                                    name: layerByFeature.get("name"),
-                                    ol_layer: layerByFeature.get("layer")
-                                });
-                            }
+                             if (_.isUndefined(modelByFeature) === false) {
+                                 gfiParams.push({
+                                     typ: "WFS",
+                                     feature: feature,
+                                     attributes: modelByFeature.get("gfiAttributes"),
+                                     name: modelByFeature.get("name"),
+                                     ol_layer: modelByFeature.get("layer")
+                                 });
+                             }
                         });
                     }
-                    // vector-source
+                    // Feature
                     else {
-                        if (featureAtPixel.getId() !== undefined) {
-                            layerByFeature = _.find(visibleWFSLayerList, function (layer) {
-                                return layer.get("source").getFeatureById(featureAtPixel.getId());
-                            });
-
+                        if (!_.isUndefined(modelByFeature)) {
                             gfiParams.push({
                                 typ: "WFS",
                                 feature: featureAtPixel,
-                                attributes: layerByFeature.get("gfiAttributes"),
-                                name: layerByFeature.get("name"),
-                                ol_layer: layerByFeature.get("layer")
+                                attributes: modelByFeature.get("gfiAttributes"),
+                                name: modelByFeature.get("name"),
+                                ol_layer: modelByFeature.get("layer")
                             });
-                        }
-                        else{
                         }
                     }
                 });
@@ -348,13 +331,14 @@ define([
 
                     if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                         if (element.get("typ") === "WMS") {
-                            var gfiURL = element.get("source").getGetFeatureInfoUrl(
+                            var gfiURL = element.getLayerSource().getGetFeatureInfoUrl(
                                 coordinate, resolution, projection,
-                                {INFO_FORMAT: element.get("infoFormat") || "text/xml"}
+                                {INFO_FORMAT: element.getInfoFormat()}
                             );
 
                             gfiParams.push({
                                 typ: "WMS",
+                                infoFormat: element.getInfoFormat(),
                                 scale: scale,
                                 url: gfiURL,
                                 name: element.get("name"),
@@ -379,13 +363,14 @@ define([
 
                         if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
                             if (layer.get("typ") === "WMS") {
-                                var gfiURL = layer.get("source").getGetFeatureInfoUrl(
+                                var gfiURL = layer.getLayerSource().getGetFeatureInfoUrl(
                                     coordinate, resolution, projection,
-                                    {INFO_FORMAT: layer.get("infoFormat") || "text/xml"}
+                                    {INFO_FORMAT: layer.getInfoFormat()}
                                 );
 
                                 gfiParams.push({
                                     typ: "WMS",
+                                    infoFormat: layer.getInfoFormat(),
                                     // scale: scale,
                                     url: gfiURL,
                                     name: layer.get("name"),
@@ -396,10 +381,10 @@ define([
                     });
                 }
             }, this);
-            EventBus.trigger("setGFIParams", [gfiParams, coordinate]);
+            Radio.trigger("Map", "setGFIParams", [gfiParams, coordinate]);
         },
-        zoomToExtent: function (extent) {
-            this.get("view").fit(extent, this.get("map").getSize());
+        zoomToExtent: function (extent, options) {
+            this.get("view").fit(extent, this.get("map").getSize(), options);
         },
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);
@@ -468,6 +453,27 @@ define([
             ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
             ctx.fill();
             ctx.restore();
+        },
+        addLoadingLayer: function () {
+            this.set("initalLoading", this.get("initalLoading") + 1);
+        },
+        removeLoadingLayer: function () {
+            this.set("initalLoading", this.get("initalLoading") - 1);
+        },
+        /**
+         * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
+         * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
+         */
+        initalLoadingChanged: function () {
+            var num = this.get("initalLoading");
+
+            if (num > 0) {
+                Util.showLoader();
+            }
+            else if (num === 0) {
+                Util.hideLoader();
+                this.stopListening(this, "change:initalLoading");
+            }
         }
     });
 

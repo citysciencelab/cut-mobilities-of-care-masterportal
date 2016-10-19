@@ -1,53 +1,20 @@
 define(function () {
     var config = {
-        tree: {
-            type: "light",
-            layer: [
-                {id: "453", visible: true},     //Karte
-            {id: "452", visible: false},    //Luftbild
-            {id: "2425", visible: false},    //Stadtteile
-            {id: "1933", visible: false},   //Haltestellen
-            {id:
-                [
-                {id: "1935",name: "Bus1"},
-                {id: "1935",name: "Bus2"}
-                ],
-                visible: false, name: "HVV Buslinien", styles: ["geofox-bus", "geofox_BusName"]
-            },
-
-            {id: "1935", visible: false, styles: ["geofox_Faehre", "geofox-bahn"], name: ["HVV Fährverbindungen", "HVV Bahnlinien"]},
-
-            {id: "1933", visible: false, styles: "geofox_stations", name: "HVV Haltestellen"},
-
-            {id: "2253", visible: false},   //Ärzte
-            {id: "2254", visible: false},   //Zahnärzt
-            {id: "2255", visible: false},   //Amb.Pflege
-            {id: "2256", visible: false},   //Apotheken
-            {id: "2257", visible: false},   //Baugenossenschaften
-            {id: "2258", visible: false},   //Beratungsstellen
-            {id: "2259", visible: false},   //Betr. Wohnen
-            {id: "2260", visible: false},   //Krankenhäuser
-            {id: "2261", visible: false},   //Krankenkassen
-            {id: "2262", visible: false},   //Presse
-            {id: "2263", visible: false},   //Seniorentreff
-            {id: "2264", visible: false},   //Sport u. Beweg.
-            {id: "2265", visible: false}    //Tagespflege
-            ]
-        },
-        
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        //title: "Gesundheits- und Pflegekonferenz Eimsbüttel",
+        simpleMap: false,
+        wfsImgPath: "../components/lgv-config/img/",
+        allowParametricURL: true,
         view: {
             center: [562674, 5940033],// Eimsbüttel
-            resolution: 15.874991427504629, //1.60.00
-            scale: 60000, // für print.js benötigt
-            extent: [454591, 5809000, 700000, 6075769]
+            background: "white"
+           /* center: [565874, 5934140],
+            extent: [454591, 5809000, 700000, 6075769],
+            epsg: "EPSG:25832"
+            */
         },
-        controls: {
-            zoom: true,
-            toggleMenu: true,
-            orientation: "once",
-            poi: true
-         },
-         footer: {
+        //customModules: ["../portale/master/verkehrsfunctions"],
+        footer: {
             visibility: true,
             urls: [
                 {
@@ -60,7 +27,7 @@ define(function () {
                     "bezeichnung": "",
                     "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
                     "alias": "SDP Download",
-                    "alias_mobil": "ttt"
+                    "alias_mobil": "SDP"
                 },
                 {
                     "bezeichnung": "",
@@ -70,66 +37,24 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf:"../components/lgv-config/services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        styleConf:"../components/lgv-config/style.json",
-        categoryConf: "../components/lgv-config/category.json",
+        styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-       
+
         attributions: true,
-        menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            contactButton: true,
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: false,
-            legend: true,
-            routing: false
-        },
-        searchBar: {
-            gazetteer: {
-                minChars: 3,
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true,
-                searchDistricts: true,
-                searchParcels: true
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            placeholder: "Suche nach Adresse",
-            geoLocateHit: true
-        },
+        startUpModul: "",
         print: {
             printID: "99999",
-            title: "Gesundheits- & Pflegekonferenz Eimsbüttel",
+            title: "Gesundheits- und Pflegekonferenz Eimsbüttel",
             gfi: false
         },
-        tools: {
-             gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            },
-            coord: {
-                title: "Koordinate abfragen",
-                glyphicon: "glyphicon-screenshot"
-            },
-            measure: {
-                title: "Strecke / Fläche messen",
-                glyphicon: "glyphicon-resize-full"
-            }
-        },
-        orientation: true,
-        poi: true
+        geoAPI: false,
+        clickCounter: {},
+        gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 
     return config;

@@ -16,6 +16,7 @@ define([
             searchHouseNumbers: false,
             searchDistricts: false,
             searchParcels: false,
+            searchStreetKey: false,
             onlyOneStreetName: "",
             searchStringRegExp: "",
             houseNumbers: []
@@ -51,6 +52,9 @@ define([
             if (config.searchParcels) {
                 this.set("searchParcels", config.searchParcels);
             }
+            if (config.searchStreetKey) {
+                this.set("searchStreetKey", config.searchStreetKey);
+            }
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
@@ -71,6 +75,7 @@ define([
             this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
                 if (this.get("searchStreets") === true) {
+                    searchString = searchString.replace(/[()]/g, '\\$&');
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
@@ -94,6 +99,11 @@ define([
                         this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
                     }
                 }
+                if (this.get("searchStreetKey") === true) {
+                    if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                    }
+                }
             }
         },
         /**
@@ -105,10 +115,14 @@ define([
         */
         adressSearch: function (adress) {
             if (adress.affix && adress.affix !== "") {
-                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + adress.streetname + "&hausnummer=" + adress.housenumber + "&zusatz=" + adress.affix, this.getAdress, false);
+                var searchString = (adress.streetname + "&hausnummer=" + adress.housenumber + "&zusatz=" + adress.affix).replace(/[()]/g, '\\$&');
+
+                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.getAdress, false);
             }
             else {
-                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + adress.streetname + "&hausnummer=" + adress.housenumber, this.getAdress, false);
+                var searchString = (adress.streetname + "&hausnummer=" + adress.housenumber).replace(/[()]/g, '\\$&');
+
+                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false);
             }
         },
         /**
@@ -121,6 +135,7 @@ define([
                 var splitInitString = searchString.split(",");
 
                 this.set("onlyOneStreetName", splitInitString[0]);
+                searchString = searchString.replace(/\ /g, "");
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/\,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false);
                 this.searchInHouseNumbers();
@@ -129,6 +144,11 @@ define([
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.set("onlyOneStreetName", "");
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
+            }
+            if (this.get("searchStreetKey") === true) {
+                if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                }
             }
             $("#searchInput").val(searchString);
             EventBus.trigger("createRecommendedList");
@@ -313,6 +333,28 @@ define([
             EventBus.trigger("createRecommendedList");
         },
         /**
+         *
+         */
+        getStreetKey: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                coordinates,
+                hitName;
+
+            _.each(hits, function (hit) {
+                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                // "Hitlist-Objekte"
+                EventBus.trigger("searchbar:pushHits", "hitList", {
+                    name: hitName,
+                    type: "Straße",
+                    coordinate: coordinates,
+                    glyphicon: "glyphicon-road",
+                    id: hitName.replace(/ /g, "") + "Straße"
+                });
+            }, this);
+            EventBus.trigger("createRecommendedList");
+        },
+        /**
          * @description Führt einen HTTP-GET-Request aus.
          *
          * @param {String} data - Data to be sent to the server
@@ -329,8 +371,10 @@ define([
                 type: "GET",
                 success: successFunction,
                 timeout: 6000,
-                error: function () {
-                    EventBus.trigger("alert", "Gazetteer-URL nicht erreichbar.");
+                error: function (err) {
+                    var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+                    EventBus.trigger("alert", "Gazetteer-URL nicht erreichbar. " + detail);
                 },
                 complete: function () {
                     this.set("inUse", this.get("inUse") - 1);

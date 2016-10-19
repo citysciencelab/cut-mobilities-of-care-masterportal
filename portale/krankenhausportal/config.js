@@ -3,29 +3,7 @@ define(function () {
 
     var config = {
         tree: {
-            type: "light",
-            layer: [
-                {id: "453", visible: true},
-                {id: "452", visible: false},
-                {id: "1711", visible: true, style: "1711", clusterDistance: 0, searchField: "name", mouseHoverField: "name",
-                 attribution: "<strong><a href='http://www.tagesschau.de/' target='_blank'>Weitere Informationen</a></strong>",
-                 displayInTree: true,
-                 filterOptions: [
-                     {
-                         "fieldName": "teilnahme_geburtsklinik",
-                         "filterType": "combo",
-                         "filterName": "Geburtshilfe",
-                         "filterString": ["*", "Ja", "Nein"]
-                     },
-                     {
-                         "fieldName": "teilnahme_notversorgung",
-                         "filterType": "combo",
-                         "filterName": "Not- und Unfallversorgung",
-                         "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-                     }
-                 ]
-                }
-            ]
+            type: "light"
         },
         wfsImgPath: "../components/lgv-config/img/",
         view: {
@@ -45,48 +23,61 @@ define(function () {
         attributions: false,
         allowParametricURL: true,
         quickHelp: false,
-        menubar: true,
+        // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-        menu: {
-            viewerName: "GeoViewer",
-            searchBar: true,
-            layerTree: true,
-            helpButton: false,
-            featureLister: 0,
-            contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
-            tools: true,
-            treeFilter: false,
-            wfsFeatureFilter: true,
-            legend: false,
-            routing: false
-        },
+        // menu: {
+        //     viewerName: "GeoViewer",
+        //     searchBar: true,
+        //     layerTree: true,
+        //     helpButton: false,
+        //     featureLister: 0,
+        //     contactButton: {on: true, email: "LGVGeoPortal-Hilfe@gv.hamburg.de"},
+        //     tools: true,
+        //     treeFilter: false,
+        //     wfsFeatureFilter: true,
+        //     legend: false,
+        //     routing: false
+        // },
+        // menuItems: {
+        //     tree: {
+        //         title: "Themen",
+        //         glyphicon: "glyphicon-list"
+        //     },
+        //     tools: {
+        //         title: "Werkzeuge",
+        //         glyphicon: "glyphicon-wrench"
+        //     },
+        //     contact: {
+        //         title: "Kontakt",
+        //         glyphicon: "glyphicon-envelope",
+        //         email: "LGVGeoPortal-Hilfe@gv.hamburg.de"
+        //     }
+            // featureLister: {
+            //     title: "Liste",
+            //     glyphicon: "glyphicon-plus",
+            //     lister: 20
+            // },
+            // wfsFeatureFilter: {
+            //     title: "Filter öffnen",
+            //     glyphicon: "glyphicon-filter"
+            // }
+        // },
         startUpModul: "",
-        searchBar: {
-            placeholder: "Suche nach Straße oder Krankenhausname",
-            gazetteer: {
-                url: "/geofos/dog_hh/services/wfs?service=WFS&request=GetFeature&version=2.0.0",
-                searchStreets: true,
-                searchHouseNumbers: true
-            },
-            visibleWFS: {
-                minChars: 3
-            },
-            geoLocateHit: true
-        },
         print: {
             printID: "99999",
             title: "Krankenhäuser in Hamburg",
             gfi: true
-        },
-        tools: {
-            gfi: {
-                title: "Informationen abfragen",
-                glyphicon: "glyphicon-info-sign",
-                isActive: true
-            }
         }
-    }
+        // tools: {
+        //     gfi: {
+        //         title: "Informationen abfragen",
+        //         glyphicon: "glyphicon-info-sign",
+        //         isActive: true
+        //     }
+        // }
+    };
+
     return config;
 });
