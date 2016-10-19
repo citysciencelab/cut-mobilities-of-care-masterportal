@@ -79,8 +79,8 @@
       }
     },
     "controls": {
-      "zoom": true,
       "toggleMenu": true,
+      "zoom": true,
       "orientation": "allways",
       "poi": true,
       "fullScreen": true,
