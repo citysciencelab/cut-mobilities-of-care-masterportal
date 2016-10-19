@@ -264,6 +264,7 @@ wird dem Commit das Verb config vorangestellt (z.B. git commit -m "config FHH-At
 ## Branches
 * Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
 * Bezeichnung der Branches: #43_add_GFI oder 56_update_draw (IssueNummer_Verb_Modul)
+* Nutze Verben für die Merge-Commits **(add/remove/update/refactor/fix/config/hotfix)**. Die Merging-Commit-Messages sollen deutsch und sprechend sein. Die "add"- und "fix"-Messages der Merges fließen bei neuen Stable-Versionen in die CHANGELOG.md !
 * Branches werden nach dem Mergen gelöscht
 
 ## Pushen
