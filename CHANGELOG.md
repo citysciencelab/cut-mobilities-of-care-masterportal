@@ -1,17 +1,24 @@
-# CHANGELOG
+# Changelog LGV Master-Portal 1.1.0
 
-## HEAD
-* Refactor Application to work with planned developing workflows
-* Add configuration directory for portals
-* Update css folder structure
-* Create visual tests
+NEU:
 
-## v0.1.0, 2015-02-28 - Create basic development Architecture
-* Add all external dependencies via bower (expecting openlayers)
-* Create basic directory structure (filesystem)
-* Add basic deployment & development infrastructure
-    * Use Grunt as build system
-    * Use Jasmine & Karma for unit-testing (BDD)
-    * Initiate Bower as default package manager for frontend components (bower.json)
-    * Initiate NPM as default package manager for Node.js Modules
-* Add default dotfiles (.gitignore, .bowerrc, …)
+  - 32964b6 Style WMS - Layer können jetzt im Client neu gestylt werden. Vorläufige Einschränkung: Nur mit Flächengeometrien im Zusammenspiel mit SLD v1.0.0 möglich
+  - 6f0dff6 kml import tool zugefügt
+  - d448742 Navigation für mobile Endgeraete bzw. fuer Bildschirmbreiten bis zu 768px komplett ueberarbeitet (Design und Usability)
+  - 2b8bb1b custom js für bauinfo
+
+FIXES:
+
+  - 06935f3 Legende wird im Infofenster erst angezeigt wenn der Layer sichtbar ist
+  - df8d671 Measure- und Zeichenlayer immer an oberster Stelle
+  - 9639ab9 maxscale initial ignoriert
+  - 698594f WFS-Layer können verschiedene Styles zugewiesen werden
+  - 582de4c Searchbar springt nicht mehr aus der Menüleiste
+  - 7e3d0fe Searchbar springt nicht mehr aus der Menueleiste
+  - 176d2bf GFI Abfrage funktioniert jetzt auch bei extern hinzugefügten WMS-Layern
+  - 07aeee9 Das Kontaktformular wird direkt bei der Texteingabe validiert.
+  - bb1fb95 initiale Strassensuche auch mit " " und "-" möglich
+  - baf3f4e Lokalisierung in Chrome ist nur noch von HTTPS möglich
+  - ffc0bcc drucken von KML-Features möglich
+  - 4304704 GFI-Reihenfolge wird in der richtigen Reihenfolge dargestellt
+  - faa9133 GFIPopup hat eine maximale Höhe in Relation zur Fensterhöhe
