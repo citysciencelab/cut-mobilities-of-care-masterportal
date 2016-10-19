@@ -178,6 +178,12 @@
     "Fachdaten":
     {
       "Layer": [
+          {"id": "353", 
+           "visibility": true, 
+           "styleId": "353", 
+           "clusterDistance": 30, 
+           "styleField": "kategorie"
+          },
         {
           "id": "1748"
         },
@@ -213,7 +219,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
@@ -236,7 +242,7 @@
         {
           "id": "753",
           "styleId": "753",
-          "visibility": true,
+          "visibility": false,
           "mouseHoverField": "Name",
           "extendedFilter": true,
           "filterOptions": [
