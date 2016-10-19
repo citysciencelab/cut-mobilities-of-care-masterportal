@@ -10,13 +10,13 @@ define(function () {
     });
     */
     var config = {
-        /**
+         /**
         * @memberof config
-        * @type {String}
-        * @desc Titel des Portals
-        * @example title: "FHH - Atlas"
+        * @type {Array}
+        * @desc Liste der ignorierten Attributnamen, die sowohl im requestor als auch im extended wfs filter ausgeschlossen werden
         */
-        title: "Master",
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        gfiAtClick: false,
         /**
         * @memberof config
         * @type {Boolean}

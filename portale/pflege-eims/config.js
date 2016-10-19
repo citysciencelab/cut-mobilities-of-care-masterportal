@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         //title: "Gesundheits- und Pflegekonferenz Eimsbüttel",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
@@ -40,7 +41,7 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         scaleLine: true,
         mouseHover: true,
