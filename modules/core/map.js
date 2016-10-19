@@ -279,8 +279,8 @@ define(function (require) {
          * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
          */
         setGFIParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}),
-                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GeoJSON"}),
+            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
+                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GeoJSON"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
                 gfiParams = [],
                 scale = Radio.request("MapView", "getOptions").scale,
