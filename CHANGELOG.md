@@ -2,6 +2,16 @@
 
 NEU:
 
+  (none)
+
+FIXES:
+
+  - b759d17 hotAuswahl speichern - Beim Öffnen einer gespeicherten Auswahl wurden immer alle Layer auf der Karte angezeigt, unabhängig davon ob der Layer sichtbar war oder nicht.
+
+# Changelog LGV Master-Portal 1.1.0
+
+NEU:
+
   - 32964b6 Style WMS - Layer können jetzt im Client neu gestylt werden. Vorläufige Einschränkung: Nur mit Flächengeometrien im Zusammenspiel mit SLD v1.0.0 möglich
   - 6f0dff6 kml import tool zugefügt
   - d448742 Navigation für mobile Endgeraete bzw. fuer Bildschirmbreiten bis zu 768px komplett ueberarbeitet (Design und Usability)
