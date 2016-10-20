@@ -112,14 +112,24 @@ define([
                 });
             }
             else {
-                legendURL.push(this.get("legendURL"));
-                names.push(this.get("datasets")[0].md_name);
+                if (this.get("legendURL").length > 1) {
+                    _.each(this.get("legendURL"), function (singleLegendURL) {
+                        legendURL.push(singleLegendURL);
+                    });
+                }
+                else {
+                    legendURL.push(this.get("legendURL"));
+                }
+                if (! _.isUndefined(this.get("datasets"))) {
+                    names.push(this.get("datasets")[0].md_name);
+                }
             }
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
                 "legendURL": legendURL,
                 "metaID": this.get("layerdefinitions")[0].datasets[0].md_id,
-                "name": names
+                "name": names,
+                "layername": this.get("name")
             });
         },
 
