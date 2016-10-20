@@ -113,7 +113,6 @@ define([
             }
             else {
                 legendURL.push(this.get("legendURL"));
-                console.log(this.get("datasets"));
                 names.push(this.get("datasets")[0].md_name);
             }
             Radio.trigger("LayerInformation", "add", {
