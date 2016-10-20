@@ -6,7 +6,7 @@ NEU:
 
 FIXES:
 
-  - b759d17 hotAuswahl speichern - Beim Öffnen einer gespeicherten Auswahl wurden immer alle Layer auf der Karte angezeigt, unabhängig davon ob der Layer sichtbar war oder nicht.
+  - b759d17 Auswahl speichern - Beim Öffnen einer gespeicherten Auswahl wurden immer alle Layer auf der Karte angezeigt, unabhängig davon ob der Layer sichtbar war oder nicht.
 
 # Changelog LGV Master-Portal 1.1.0
 
