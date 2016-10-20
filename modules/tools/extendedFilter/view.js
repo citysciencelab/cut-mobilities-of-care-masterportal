@@ -1,6 +1,6 @@
 define(function (require){
     var Backbone = require("backbone"),
-        Model = require("modules/tools/extendedfilter/model"),
+        Model = require("modules/tools/extendedFilter/model"),
         Template = require("text!modules/tools/extendedFilter/template.html"),
         ExtendedFilterView;
 
