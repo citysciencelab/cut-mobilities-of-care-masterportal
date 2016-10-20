@@ -1,16 +1,15 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "eventbus",
-    "openlayers",
-    "config",
-    "bootstrap/popover",
-    "modules/core/requestor",
-    "moment"
-//    "modules/gfipopup/themes/mietenspiegel/view-formular" // muss hier definiert werden, weil in mietenspiegelform.js nicht in gebauter Version verfügbar
-], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment) {
-    "use strict";
-    var GFIPopup = Backbone.Model.extend({
+define(function (require) {
+    require(["bootstrap/popover"]);
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        EventBus = require("eventbus"),
+        ol = require("openlayers"),
+        Requestor = require("modules/core/requestor"),
+        Moment = require("moment"),
+        GFIPopup;
+
+    GFIPopup = Backbone.Model.extend({
         /**
          *
          */
@@ -72,10 +71,7 @@ define([
             $("#popovermin").fadeOut(500, function () {
                 $("#popovermin").remove();
             });
-            // Für Straßenbaumkataster TODO
-            // if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
-            //      Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
-            // }
+
             $(this.getElement()).popover("show");
             this.set("isPopupVisible", true);
         },
