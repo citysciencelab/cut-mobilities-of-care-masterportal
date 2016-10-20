@@ -19,9 +19,13 @@ define(function () {
         startUpModul: "",
         print: {
             printID: "99999",
-            title: "Trinkwasser",
+            title: "Bohrdaten",
             gfi: false
         },
+        namedProjections: [
+        // ETRS89 UTM
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
+        ],
         gemarkungen: "../components/lgv-config/gemarkung.json"
     };
 

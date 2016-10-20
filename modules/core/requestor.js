@@ -187,7 +187,7 @@ define([
         },
         isValidKey: function (key) {
             var ignoredKeys = Config.ignoredKeys;
-            
+
             if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
                 return false;
             }

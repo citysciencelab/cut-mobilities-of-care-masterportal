@@ -24,6 +24,3 @@ FIXES:
   - ffc0bcc drucken von KML-Features möglich
   - 4304704 GFI-Reihenfolge wird in der richtigen Reihenfolge dargestellt
   - faa9133 GFIPopup hat eine maximale Höhe in Relation zur Fensterhöhe
-
-
-
