@@ -338,14 +338,14 @@ define([
                     _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
                         var lightModel = Radio.request("Parser", "getItemByAttributes", {id: param.id});
 
-                        // lightModel.isSelected = true;
                         this.add(lightModel);
-                        // this.get(param.id).setIsSelected(true);
                         if (param.visibility === "TRUE") {
                             this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
                         }
                         else {
                             this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
+                            // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
+                            this.get(param.id).setIsVisibleInMap(false);
                         }
                     }, this);
                 }
@@ -395,10 +395,10 @@ define([
 
                 // die "px" oder "%" vom string löschen und zu int parsen
                 if (heightThemen.slice(-2) === "px") {
-                    heightThemen = parseInt(heightThemen.slice(0, -2));
+                    heightThemen = parseInt(heightThemen.slice(0, -2), 10);
                 }
                 else if (heightThemen.slice(-1) === "%") {
-                    heightThemen = parseInt(heightThemen.slice(0, -1));
+                    heightThemen = parseInt(heightThemen.slice(0, -1), 10);
                 }
 
                 scrollToPx = offsetFromTop - heightThemen / 2;
