@@ -103,11 +103,17 @@ define([
            if (styleList.length > 0) {
                 _.each(styleList, function (style) {
                     legendURL.push(style.get("imagepath") + style.get("imagename"));
-                    names.push(style.get("styleFieldValue"));
+                    if (style.has("legendValue")) {
+                        names.push(style.get("legendValue"));
+                    }
+                    else {
+                        names.push(style.get("styleFieldValue"));
+                    }
                 });
             }
             else {
                 legendURL.push(this.get("legendURL"));
+                console.log(this.get("datasets"));
                 names.push(this.get("datasets")[0].md_name);
             }
             Radio.trigger("LayerInformation", "add", {
