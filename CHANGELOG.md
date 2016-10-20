@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.1.1
+
+FIXES:
+
+  - b759d17 Auswahl speichern - Beim Öffnen einer gespeicherten Auswahl wurden immer alle Layer auf der Karte angezeigt, unabhängig davon ob der Layer sichtbar war oder nicht.
+
 # Changelog LGV Master-Portal 1.1.0
 
 NEU:
@@ -9,8 +15,6 @@ NEU:
 
 FIXES:
 
-  - b6ea8d3 "in meiner Nähe" - Attribute nicht mehr doppelt
-  - b12c6d5 portallogo configurierbar
   - 06935f3 Legende wird im Infofenster erst angezeigt wenn der Layer sichtbar ist
   - df8d671 Measure- und Zeichenlayer immer an oberster Stelle
   - 9639ab9 maxscale initial ignoriert
