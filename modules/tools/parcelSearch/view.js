@@ -10,6 +10,7 @@ define([
         template: _.template(parcelSearchTemplate),
         events: {
             "change #districtField": "setDistrictNumber",
+            "change #cadastralDistrictField": "setCadastralDistrictName",
             "keyup #parcelField": "setParcelNumber",
             "click button": "validateParcelNumber"
         },
@@ -31,8 +32,39 @@ define([
                 this.undelegateEvents();
             }
         },
+        setCadastralDistrictName: function () {
+            var value = $("#cadastralDistrictField").val();
+        },
         setDistrictNumber: function () {
-            this.model.setDistrictNumber($("#districtField").val());
+            var value = $("#districtField").val();
+
+            if (value !== 0) {
+                this.model.setDistrictNumber($("#districtField").val());
+                this.setCadastralDistricts($("#districtField").val());
+            }
+            else {
+                $("#cadastralDistrictFieldSet").attr("disabled", true);
+                $("#parcelField").attr("disabled", true);
+            }
+        },
+        /*
+         * Setzt die gültigen Fluren für die ausgewählte Gemarkung in select.
+         * cadastralDistricts kann undefined sein, wenn keine Fluren verwendet werden.
+         */
+        setCadastralDistricts: function (districtNumber) {
+            var cadastralDistricts = this.model.get("cadastralDistricts");
+
+            if (cadastralDistricts !== undefined) {
+                $("#cadastralDistrictField").empty();
+                _.each((_.values(_.pick(cadastralDistricts, districtNumber))[0]), function (cadastralDistrict) {
+                    $("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
+                });
+                $("#cadastralDistrictField").focus();
+                $("#cadastralDistrictFieldSet").attr("disabled", false);
+            }
+            else {
+                $("#parcelField").attr("disabled", false);
+            }
         },
         setParcelNumber: function (evt) {
             if (evt.keyCode === 13) {
