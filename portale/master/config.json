@@ -61,7 +61,12 @@
         "children": {
           "parcelSearch": {
             "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search"
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "configJSON": "gemarkung.json",
+            "districts": "gemarkungenHamburg",
+            "cadastralDistricts": "flurenHamburg",
+            "cadastralDenominator": false
           },
           "measure": {
             "name": "Strecke / Fläche messen",

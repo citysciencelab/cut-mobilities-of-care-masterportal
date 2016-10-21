@@ -266,13 +266,7 @@ define(function () {
         * @property {string} clickCounter.mobil - URL des iFrame bei mobiler Ausspielung.
         * @example clickCounter: {version: "", desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html", mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"}
         */
-        clickCounter: {},
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Pfad zur gemarkung.json für die Flurstückssuche.
-        */
-        gemarkungen: "../components/lgv-config/gemarkung.json"
+        clickCounter: {}
     };
 
     return config;
