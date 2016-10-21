@@ -373,8 +373,7 @@
                         {
                           "id": "2092",
                           "visibility": false,
-                          "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH",
-                          "attributions": "<span>Verkehrslage der HERE Europe B.V bereitgestellt, aufbereitet und angepasst durch die VIOM GmbH, Berlin © 2015</span>"
+                          "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH"
                         } 
                     ]
                 },  
@@ -458,6 +457,10 @@
                         },
                         {
                           "id": "4872",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1627",
                           "visibility": false
                         }
                     ]
