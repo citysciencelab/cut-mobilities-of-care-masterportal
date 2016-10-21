@@ -8,17 +8,19 @@ define([
 
     var ParcelSearch = Backbone.Model.extend({
         defaults: {
-            "districtNumber": "0601",
-            "parcelNumber": "",
-            "gazetteerURL": Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr.gazetteer.url
+            "fetched": false,
+            "configJSON": "",
+            "serviceURL": "",
+            "districtsName": "",
+            "cadastralDistrictsName": "",
+            "districts": {},
+            "cadastralDistricts": {},
+            "districtNumber": ""
         },
-        url: Util.getPath(Config.gemarkungen),
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-
-            this.fetch();
         },
         validate: function (attributes) {
             var onlyNumbers = /^\d+$/;
@@ -32,12 +34,53 @@ define([
         },
         setStatus: function (args) {
             if (args[2].getId() === "parcelSearch") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+                if (this.get("fetched") === false) {
+                    // lade json und Konfiguration
+                    this.loadConfiguration(args);
+                }
+                else {
+                    this.set("isCollapsed", args[1]);
+                    this.set("isCurrentWin", args[0]);
+                }
             }
             else {
                 this.set("isCurrentWin", false);
             }
+        },
+        loadConfiguration: function (args) {
+            var restService = Radio.request("RestReader", "getServiceById", args[2].get("serviceId")),
+                configJSON = args[2].get("configJSON");
+
+            this.set("districtsName", args[2].get("districts"));
+            this.set("cadastralDistrictsName", args[2].get("cadastralDistricts"));
+
+            if (restService[0] && restService[0].get("url")) {
+                this.set("serviceURL", restService[0].get("url"));
+
+                this.fetch({
+                    url: configJSON,
+                    cache: false,
+                    success: function (model) {
+                        model.set("fetched", true);
+                    },
+                    error: function () {
+                        Radio.trigger("Alert", "alert", {text: "<strong>Konfiguration der Flurstückssuche konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
+                        Radio.trigger("Window", "closeWin");
+                    },
+                    complete: Util.hideLoader,
+                    beforeSend: Util.showLoader
+                });
+            }
+            else {
+                Radio.trigger("Alert", "alert", {text: "<strong>Flurstückssuchen-URL nicht bekannt!</strong>", kategorie: "alert-danger"});
+                Radio.trigger("Window", "closeWin");
+            }
+        },
+        parse: function (obj) {
+            this.set("districts", _.values(_.pick(obj, this.get("districtsName")))[0]);
+            this.set("cadastralDistricts", _.values(_.pick(obj, this.get("cadastralDistrictsName")))[0]);
+            this.set("isCollapsed", false);
+            this.set("isCurrentWin", true);
         },
         setDistrictNumber: function (value) {
             this.set("districtNumber", value);
