@@ -219,12 +219,24 @@ define(function (require) {
             this.setImportDrawMeasureLayersOnTop(layersCollection);
 
             // Laden des Layers überwachen
-            layer.getSource().on("wmsloadend", function () {
-                Radio.trigger("Map", "removeLoadingLayer");
-            });
-            layer.getSource().on("wmsloadstart", function () {
-                Radio.trigger("Map", "addLoadingLayer");
-            });
+            if (layer instanceof ol.layer.Group) {
+                layer.getLayers().forEach(function (singleLayer) {
+                    singleLayer.getSource().on("wmsloadend", function () {
+                        Radio.trigger("Map", "removeLoadingLayer");
+                    });
+                    singleLayer.getSource().on("wmsloadstart", function () {
+                        Radio.trigger("Map", "addLoadingLayer");
+                    });
+                });
+            }
+            else {
+                layer.getSource().on("wmsloadend", function () {
+                    Radio.trigger("Map", "removeLoadingLayer");
+                });
+                layer.getSource().on("wmsloadstart", function () {
+                    Radio.trigger("Map", "addLoadingLayer");
+                });
+            }
         },
 
         // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)

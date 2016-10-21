@@ -22,6 +22,10 @@
        "placeholder": "Suche nach Adresse/ Stadtteil/ Thema",
        "geoLocateHit": true
    },
+   "mapView": {
+       "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+       "startCenter": [561210, 5932600]
+   },
       "menu": {
         "tree": {
           "name": "Themen",
@@ -248,8 +252,8 @@
               "name": [
                   "Haltestellen"
                       ],
-             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",   
-                
+             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",
+
               "legendURL": [
                   "http://87.106.16.168/legende_mrh/hvv-bus.png"
                             ]
@@ -427,10 +431,8 @@
           "Layer": [
             {
               "id": ["947","946"],
-              "visibility": false,
               "name" : "Verkehrslage auf Autobahnen",
-              "metaName": "Verkehrslage auf Autobahnen",
-              "attributions": {
+              "layerAttribution": {
                 "text": "",
                 "channel": "Verkehrsfunctions",
                 "eventname": "aktualisiereverkehrsnetz",
@@ -443,8 +445,8 @@
               "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH",
               "metaName": "Verkehrslage Norddeutschland/Stadtgebiet HH",
               "attributions": "<span>Verkehrslage der HERE Europe B.V bereitgestellt, aufbereitet und angepasst durch die VIOM GmbH, Berlin © 2015</span>"
-            } 
-              
+            }
+
           ]
         },
 
@@ -565,7 +567,7 @@
             }
           ]
         },
-         
+
         {
         "Titel": "Umwelt",
         "Ordner": [
@@ -573,10 +575,10 @@
               "Titel": "Lärmkarten - Straßenverkehr",
               "Layer": [
                  {
-                    "id": "96", 
-                    "visibility": false, 
+                    "id": "96",
+                    "visibility": false,
                     "name": "Lärm Straßenverkehr Tag 2012",
-                    "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
+                    "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
                 },
                 {
                     "id": "95",
@@ -590,18 +592,18 @@
               "Titel": "Lärmkarten - Flugverkehr",
               "Layer": [
                 {
-                    "id": ["2415","2413"], 
-                    "visibility": false, 
+                    "id": ["2415","2413"],
+                    "visibility": false,
                     "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
                 },
                 {
-                    "id": ["2412","2415"], 
-                    "visibility": false, 
+                    "id": ["2412","2415"],
+                    "visibility": false,
                     "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)"
                 },
                 {
-                    "id": ["2414","2416"], 
-                    "visibility": false, 
+                    "id": ["2414","2416"],
+                    "visibility": false,
                     "name": "Nacht-Schutzzonen mit Isolinien LAeq in dB(A)"
                 }
               ]
