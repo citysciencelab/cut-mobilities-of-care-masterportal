@@ -7,7 +7,11 @@ define(function () {
         wfsImgPath: "..components/lgv-config/img",
         allowParametricURL: true,
         view: {
-            center: [565874, 5934140] // Rathausmarkt
+            background: "white"
+           /* center: [565874, 5934140],
+            extent: [454591, 5809000, 700000, 6075769],
+            epsg: "EPSG:25832"
+            */
         },
         layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
