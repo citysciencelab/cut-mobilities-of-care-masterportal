@@ -145,15 +145,15 @@
             }
           ]
         },
-        
-        
+
+
       "Fachdaten":
         {
           "Ordner": [
 			{
               "Titel": "Allgemeine Daten",
               "Ordner": [
-                
+
                 {
                   "Titel": "Verwaltungsgrenzen",
                       "Layer": [
@@ -209,7 +209,7 @@
                           "visibility": false
                         }
                   ]
-                },  
+                },
                 {
                  "Titel": "Bildung",
                     "Layer": [
@@ -236,7 +236,7 @@
                           "visibility": false
                         }
                     ]
-                }, 
+                },
                 {
                  "Titel": "Bevölkerung",
                     "Layer": [
@@ -290,14 +290,14 @@
                         }
 			         ]
                 }
-                  
+
               ]
             },
-				 
+
 			{
               "Titel": "Mobilitäts Daten",
               "Ordner": [
-                  
+
                  {
                   "Titel": "Baustellen",
                       "Layer": [
@@ -317,7 +317,7 @@
                             "routable": false
                         }
                       ]
-                 }, 
+                 },
                  {
                   "Titel": "Dynamische Anzeigen",
                       "Layer": [
@@ -347,20 +347,12 @@
                           "styleLabelField": ""
                         }
                     ]
-                }, 
+                },
                 {
                   "Titel": "Verkehrslage",
                       "Layer": [
                         {
-                          "id":
-                            [
-                                {
-                                "id": "946"
-                                },
-                                {
-                                "id": "947"
-                                }
-                            ],
+                          "id": ["946", "947"],
                           "name": "Verkehrslage auf Autobahnen",
                           "layerAttribution": {
                                 "text": "",
@@ -375,9 +367,9 @@
                           "visibility": false,
                           "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH",
                           "attributions": "<span>Verkehrslage der HERE Europe B.V bereitgestellt, aufbereitet und angepasst durch die VIOM GmbH, Berlin © 2015</span>"
-                        } 
+                        }
                     ]
-                },  
+                },
                 {
                   "Titel": "Parken",
                       "Layer": [
@@ -427,7 +419,7 @@
                           "visibility": false
                         }
                     ]
-                 },  
+                 },
                  {
                   "Titel": "Rad- und Fußverkehr",
                       "Layer": [
@@ -505,7 +497,7 @@
                                   ],
                           "legendURL": [
                               "http://87.106.16.168/legende_mrh/hvv-bahn.png",
-                              "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", 
+                              "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png",
                               "http://87.106.16.168/legende_mrh/hvv-faehre.png"
                                        ]
                         },
@@ -537,12 +529,12 @@
                     }
                 ]
             },
-			
+
 			{
               "Titel": "Planer Daten",
               "Ordner": [
-                  
-                  
+
+
                 {
                   "Titel": "Bauen und Wohnen",
                   "Layer": [
@@ -597,7 +589,7 @@
                       "name" : "Digitales Informationssystem Planrecht"
                     }
                   ]
-                }, 
+                },
                 {
                   "Titel": "Verkehrszählungen",
                   "Ordner": [
@@ -656,7 +648,7 @@
                       ]
                     }
                   ]
-                }, 
+                },
                 {
                  "Titel": "Umwelt",
                  "Ordner": [
@@ -664,8 +656,8 @@
                       "Titel": "Lärmkarten - Straßenverkehr",
                       "Layer": [
                          {
-                            "id": "96", 
-                            "visibility": false, 
+                            "id": "96",
+                            "visibility": false,
                             "name": "Lärm Straßenverkehr Tag 2012"
                         },
                         {
@@ -679,18 +671,18 @@
                       "Titel": "Lärmkarten - Flugverkehr",
                       "Layer": [
                         {
-                            "id": ["2415","2413"], 
-                            "visibility": false, 
+                            "id": ["2415","2413"],
+                            "visibility": false,
                             "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
                         },
                         {
-                            "id": ["2412","2415"], 
-                            "visibility": false, 
+                            "id": ["2412","2415"],
+                            "visibility": false,
                             "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)"
                         },
                         {
-                            "id": ["2414","2416"], 
-                            "visibility": false, 
+                            "id": ["2414","2416"],
+                            "visibility": false,
                             "name": "Nacht-Schutzzonen mit Isolinien LAeq in dB(A)"
                         }
                       ]
@@ -700,7 +692,7 @@
 
                   {
                   "Titel": "Planungsinformationen",
-                      
+
                       "Ordner": [
                         {
                          "Titel": "MRH Große Infrastruktuprojekte",
@@ -724,7 +716,7 @@
                             ]
                         }
                       ],
-                       
+
                       "Layer": [
                             {
                               "id": "2156",
@@ -743,7 +735,7 @@
                               "maxScale": "5000"
                             }
                     ]
-                },  
+                },
                 {
                   "Titel": "Weitere Straßeninformationen/Straßenausstattung",
                       "Layer": [
@@ -773,13 +765,12 @@
                         }
                       ]
                 }
-                  
+
               ]
-            }  
-              
+            }
+
           ]
         }
-        
+
     }
 }
-    
