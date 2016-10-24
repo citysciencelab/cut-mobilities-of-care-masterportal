@@ -181,7 +181,7 @@ define([
          */
         getManipulateDate: function (content) {
             _.each(content, function (value, key, list) {
-                if (Moment(value).parsingFlags().overflow === -1) {
+                if (Moment(value, Moment.ISO_8601, true).isValid() === true) {
                     list[key] = Moment(value).format("DD.MM.YYYY");
                 }
             });
