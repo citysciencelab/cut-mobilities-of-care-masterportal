@@ -1,8 +1,8 @@
 .gfi-win {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 40%;
+    top: 0;
+    right: 50px;
+    width: 50%;
     margin: 60px 10px 30px 10px;
     display: show;
     background-color: rgb(255, 255, 255);
@@ -59,7 +59,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: help;
-    max-width: 250px;
+    max-width: 260px;
 }
 
 .gfi-toggle {
@@ -80,7 +80,7 @@
     max-height: 40vh;
     min-width:400px;
     overflow-y: auto;
-    overflow-x:hidden;
+    /*overflow-x:hidden;*/
 }
 
 .gfi-content > table {

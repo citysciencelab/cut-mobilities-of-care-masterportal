@@ -85,46 +85,56 @@ define(function (require) {
                 templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer) {
-                _.each(layer.content, function (content) {
-                    content = this.getManipulateDate(content);
-                    switch (layer.ol_layer.get("gfiTheme")) {
-                        case "mietenspiegel": {
-                            require(["modules/gfipopup/themes/mietenspiegel/view", "backbone.radio"], function (MietenspiegelTheme, Radio) {
-                                templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
+                if (layer.ol_layer.get("gfiTheme") === "table") {
+                    require(["modules/gfipopup/themes/table/view"], function (TableTheme) {
+                        if (!_.isUndefined(layer.content) && layer.content.length > 0) {
+                            var tableThemeView = new TableTheme(layer);
+                            Radio.trigger("GFIPopup", "themeLoaded", tableThemeView, layer.name, coordinate);
                         }
-                        case "reisezeiten": {
-                            require(["modules/gfipopup/themes/reisezeiten/view", "backbone.radio"], function (ReisezeitenTheme, Radio) {
-                                templateView = new ReisezeitenTheme(content);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
+                    });
+                }
+                else {
+                    _.each(layer.content, function (content) {
+                        content = this.getManipulateDate(content);
+                        switch (layer.ol_layer.get("gfiTheme")) {
+                            case "mietenspiegel": {
+                                require(["modules/gfipopup/themes/mietenspiegel/view"], function (MietenspiegelTheme) {
+                                    templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            case "reisezeiten": {
+                                require(["modules/gfipopup/themes/reisezeiten/view"], function (ReisezeitenTheme) {
+                                    templateView = new ReisezeitenTheme(content);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            case "trinkwasser": {
+                                require(["modules/gfipopup/themes/trinkwasser/view"], function (TrinkwasserTheme) {
+                                    templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            case "solaratlas": {
+                                require(["modules/gfipopup/themes/solaratlas/view"], function (TrinkwasserTheme) {
+                                    templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            default: {
+                                require(["modules/gfipopup/themes/default/view"], function (DefaultTheme) {
+                                    templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
                         }
-                        case "trinkwasser": {
-                            require(["modules/gfipopup/themes/trinkwasser/view", "backbone.radio"], function (TrinkwasserTheme, Radio) {
-                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
-                        }
-                        case "solaratlas": {
-                            require(["modules/gfipopup/themes/solaratlas/view"], function (TrinkwasserTheme) {
-                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
-                        }
-                        default: {
-                            require(["modules/gfipopup/themes/default/view", "backbone.radio"], function (DefaultTheme, Radio) {
-                                templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
-                        }
-                    }
-                }, this);
+                    }, this);
+                }
             }, this);
         },
         /*
