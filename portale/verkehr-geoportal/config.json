@@ -324,7 +324,7 @@
                         {
                           "id": "2132",
                           "visibility": false,
-                          "style": "2132",
+                          "styleId": "2132",
                           "clusterDistance": 0,
                           "searchField": "",
                           "mouseHoverField": "",
@@ -339,7 +339,7 @@
                         {
                           "id": "2128",
                           "visibility": false,
-                          "style": "2128",
+                          "styleId": "2128",
                           "clusterDistance": 0,
                           "searchField": "",
                           "mouseHoverField": "",
@@ -726,7 +726,7 @@
                             {
                               "id": "2156",
                               "visibility": false,
-                              "style": "2156",
+                              "styleId": "2156",
                               "clusterDistance": 0,
                               "searchField": "",
                               "mouseHoverField": "",

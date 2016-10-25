@@ -105,7 +105,8 @@
         },
         {
           "id": "3322", 
-          "visibility": true
+          "visibility": true,
+          "layerAttribution": "<span>Darstellung der Baumkennzahl  ab Maßstab 1: 2500 </span>"
         },
         {
           "id": ["3318", "3319", "3320", "3321", "4571"],

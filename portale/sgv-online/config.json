@@ -3,6 +3,8 @@
   {
     "PortalTitle":"HH Straßen- u. Gebietsauskunft",
     "PortalLogo":"../img/stano.png",
+    "LogoLink": "http://www.statistik-nord.de/",
+    "LogoToolTip": "Statistikamt Nord",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
