@@ -85,6 +85,14 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("Draw");
+
+            channel.reply({
+                "getLayer": function () {
+                    return this.get("layer");
+                }
+            }, this);
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
@@ -391,9 +399,6 @@ define([
             }
         },
 
-        getLayer: function () {
-            EventBus.trigger("sendDrawLayer", this.get("layer"));
-        },
         /**
          * Startet das Downloadmodul
          */
