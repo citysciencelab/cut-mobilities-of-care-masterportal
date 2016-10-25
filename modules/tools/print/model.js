@@ -2,10 +2,9 @@ define([
     "backbone",
     "backbone.radio",
     "modules/core/util",
-    "eventbus",
     "config",
     "openlayers"
-], function (Backbone, Radio, Util, EventBus, Config, ol) {
+], function (Backbone, Radio, Util, Config, ol) {
     "use strict";
     var model = Backbone.Model.extend({
 
@@ -143,9 +142,6 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            if (_.has(Config.tools, "draw") === true) {
-                EventBus.trigger("getDrawlayer");
-            }
             this.getGFIForPrint();
         },
         /**
@@ -194,7 +190,7 @@ define([
          *
          */
         setDrawLayer: function (layer) {
-            if (!_.isUndefined()) {
+            if (!_.isUndefined(layer)) {
                 var features = [],
                     circleFeatures = [], // Kreise können nicht gedruckt werden
                     featureStyles = {};
@@ -270,7 +266,7 @@ define([
          */
         setSpecification: function () {
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setDrawLayer(Radio.request("draw", "getLayer"));
+            this.setDrawLayer(Radio.request("Draw", "getLayer"));
             var specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.getLayout().name,

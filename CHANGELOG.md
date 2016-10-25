@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.1.2
+
+FIXES:
+
+  - a27eb17 gfi Attribute werden nur noch nach Datum formatiert wenn sie ISO 8601 entsprechen
+
 # Changelog LGV Master-Portal 1.1.1
 
 FIXES:
