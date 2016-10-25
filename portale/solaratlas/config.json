@@ -3,6 +3,8 @@
   {
     "PortalTitle": "Solaratlas", 
     "PortalLogo":"../img/he-logo.png",
+    "LogoLink": "https://www.hamburgenergie.de/",
+    "LogoToolTip": "Hamburg Energie",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
