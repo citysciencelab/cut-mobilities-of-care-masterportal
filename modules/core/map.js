@@ -27,9 +27,6 @@ define(function (require) {
                 mapView = new MapView();
 
             channel.reply({
-                "getMap": function () {
-                    return this.get("map");
-                },
                 "getLayers": this.getLayers
             }, this);
 
@@ -50,7 +47,8 @@ define(function (require) {
                 "updatePrintPage": this.updatePrintPage,
                 "activateClick": this.activateClick,
                 "addLoadingLayer": this.addLoadingLayer,
-                "removeLoadingLayer": this.removeLoadingLayer
+                "removeLoadingLayer": this.removeLoadingLayer,
+                "registerListener": this.registerListener
             }, this);
 
             this.set("view", mapView.get("view"));
@@ -63,8 +61,6 @@ define(function (require) {
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
-
-            this.registerPointerMove();
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
@@ -91,15 +87,6 @@ define(function (require) {
         BBoxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
-            }
-        },
-
-        GFIPopupVisibility: function (value) {
-            if (value === true) {
-                this.set("GFIPopupVisibility", true);
-            }
-            else {
-                this.set("GFIPopupVisibility", false);
             }
         },
 
@@ -138,10 +125,24 @@ define(function (require) {
             this.get("map").un("postcompose", callback);
         },
 
-        registerPointerMove: function () {
-            this.get("map").on("pointermove", function (evt) {
-                Radio.trigger("Map", "pointerMoveOnMap", evt);
-            });
+        /**
+         * Registriert Listener für bestimmte Events auf der Karte
+         * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
+         * @param {String} event - Der Eventtyp
+         * @param {Function} callback - Die Callback Funktion
+         * @param {Object} context
+         */
+        registerListener: function (event, callback, context) {
+            this.getMap().on(event, callback, context);
+        },
+
+        /**
+         * Meldet Listener auf bestimmte Events ab
+         * @param {String} event - Der Eventtyp
+         * @param {Function} callback - Die Callback Funktion
+         */
+        unregisterListener: function (event, callback) {
+            this.getMap().un(event, callback);
         },
 
         /**
