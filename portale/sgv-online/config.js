@@ -1,9 +1,7 @@
 define(function () {
     var config = {
-       
-        logoLink: "http://www.statistik-nord.de/",
-        logoTooltip: "Statistikamt Nord",
-        
+         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        gfiAtClick: false,
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
