@@ -102,10 +102,6 @@
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
               "lister": 10
-          },
-          "animation": {
-            "name": "Animation",
-            "glyphicon": "glyphicon-play-circle"
           }
         }
       },
@@ -176,13 +172,6 @@
         {
           "id": "1562",
           "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
-        },
-        {
-          "id": "4639",
-          "visibility": false,
-          "styleable": true,
-          "geomType": "Polygon",
-          "attributesToStyle": ["AP30Sum", "AP60Sum"]
         },
         {
           "id": "2003",
