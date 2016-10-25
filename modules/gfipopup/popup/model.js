@@ -38,12 +38,16 @@ define(function (require) {
                 "getGFIForPrint": this.getGFIForPrint
             }, this);
 
+            this.listenTo(Radio.channel("Requestor"), {
+                "renderResults": this.getThemes
+            });
+
             this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
 
             Radio.trigger("Map", "addOverlay", this.get("gfiOverlay")); // listnener in map.js
             Radio.on("Map", "setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
-            EventBus.on("renderResults", this.getThemes, this);
+            // EventBus.on("renderResults", this.getThemes, this);
         },
         setGFIOverlay: function (overlay) {
             this.set("gfiOverlay", overlay);

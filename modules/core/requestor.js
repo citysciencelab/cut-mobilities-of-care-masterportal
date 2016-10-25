@@ -1,45 +1,41 @@
-define([
-    "backbone",
-    "eventbus",
-    "openlayers",
-    "modules/core/util",
-    "config"
-], function (Backbone, EventBus, ol, Util, Config) {
+define(function (require) {
 
-    var Requestor = Backbone.Model.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Util = require("modules/core/util"),
+        Config = require("config"),
+        Requestor;
+
+    Requestor = Backbone.Model.extend({
         requestCount: 0,
         pContent: [],
 
-        setGFIWMSContent: function (value) {
-            this.set("gfiWMSContent", value);
-        },
+        /**
+         * params: [0] = Objekt mit name und url; [1] = Koordinate
+         */
+        requestFeatures: function (params) {
 
-        setGFIWFSContent: function (value) {
-            this.set("gfiWFSContent", value);
-        },
+            this.groupContentByTyp(params[0]);
+            this.setGFIPosition(params[1]);
 
-        setGFIGeoJSONContent: function (value) {
-            this.set("gfiGeoJSONContent", value);
-        },
+            if (this.has("gfiWMSContent")) {
+                _.each(this.getGFIWMSContent(), function (visibleLayer) {
+                    if (visibleLayer.infoFormat === "text/html") {
+                        this.openHTMLContent(visibleLayer);
+                    }
+                    else {
+                        this.setWMSPopupContent(visibleLayer);
+                    }
+                }, this);
+            }
+            else {
+                this.getGFIFeatureContent();
+                this.buildTemplate(this.getGFIPosition());
+            }
 
-        setGFIPosition: function (value) {
-            this.set("gfiPosition", value);
-        },
-
-        getGFIWMSContent: function () {
-            return this.get("gfiWMSContent");
-        },
-
-        getGFIWFSContent: function () {
-            return this.get("gfiWFSContent");
-        },
-
-        getGFIGeoJSONContent: function () {
-            return this.get("gfiGeoJSONContent");
-        },
-
-        getGFIPosition: function () {
-            return this.get("gfiPosition");
+            this.pContent = [];
+            Util.hideLoader();
         },
 
         groupContentByTyp: function (content) {
@@ -113,39 +109,12 @@ define([
             }
         },
 
-        /**
-         * params: [0] = Objekt mit name und url; [1] = Koordinate
-         */
-        requestFeatures: function (params) {
-
-            this.groupContentByTyp(params[0]);
-            this.setGFIPosition(params[1]);
-
-            if (this.has("gfiWMSContent")) {
-                _.each(this.getGFIWMSContent(), function (visibleLayer) {
-                    if (visibleLayer.infoFormat === "text/html") {
-                        this.openHTMLContent(visibleLayer);
-                    }
-                    else {
-                        this.setWMSPopupContent(visibleLayer);
-                    }
-                }, this);
-            }
-            else {
-                this.getGFIFeatureContent();
-                this.buildTemplate(this.getGFIPosition());
-            }
-
-            this.pContent = [];
-            Util.hideLoader();
-        },
-
         pushGFIContent: function (gfiContent, visibleLayer) {
             this.pContent.push({
-                    content: gfiContent,
-                    name: visibleLayer.name,
-                    ol_layer: visibleLayer.ol_layer
-                });
+                content: gfiContent,
+                name: visibleLayer.name,
+                ol_layer: visibleLayer.ol_layer
+            });
         },
 
         setGeoJSONPopupContent: function (feature) {
@@ -246,9 +215,43 @@ define([
                 }
             });
         },
+
         buildTemplate: function () {
-                EventBus.trigger("renderResults", [this.pContent, this.getGFIPosition()]);
+            Radio.trigger("Requestor", "renderResults", [this.pContent, this.getGFIPosition()]);
         },
+
+        setGFIWMSContent: function (value) {
+            this.set("gfiWMSContent", value);
+        },
+
+        setGFIWFSContent: function (value) {
+            this.set("gfiWFSContent", value);
+        },
+
+        setGFIGeoJSONContent: function (value) {
+            this.set("gfiGeoJSONContent", value);
+        },
+
+        setGFIPosition: function (value) {
+            this.set("gfiPosition", value);
+        },
+
+        getGFIWMSContent: function () {
+            return this.get("gfiWMSContent");
+        },
+
+        getGFIWFSContent: function () {
+            return this.get("gfiWFSContent");
+        },
+
+        getGFIGeoJSONContent: function () {
+            return this.get("gfiGeoJSONContent");
+        },
+
+        getGFIPosition: function () {
+            return this.get("gfiPosition");
+        },
+
         isValidKey: function (key) {
             var ignoredKeys = Config.ignoredKeys;
 
