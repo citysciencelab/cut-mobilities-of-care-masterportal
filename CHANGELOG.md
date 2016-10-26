@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.1.3
+
+FIXES:
+
+  - c05d205 Zeichnungen werden nicht gedruckt
+
 # Changelog LGV Master-Portal 1.1.2
 
 FIXES:
