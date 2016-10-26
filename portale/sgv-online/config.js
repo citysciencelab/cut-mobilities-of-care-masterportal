@@ -15,7 +15,7 @@ define(function () {
         namedProjections: [
             // ETRS89 UTM
             ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
-        ], 
+            ],
         customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
@@ -39,8 +39,12 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
+
         
         attributions: false,
+
+        attributions: true,
+
         // menubar: true,
         scaleLine: true,
         mouseHover: true,

@@ -341,8 +341,8 @@ define(function (require) {
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
                 "legendURL": this.get("legendURL"),
-                "metaID": this.get("datasets")[0].md_id,
-                "name": this.get("datasets")[0].md_name
+                "metaID": this.getmetaID(),
+                "name": this.getmetaName()
             });
         },
         setSelectionIDX: function (idx) {
@@ -356,6 +356,30 @@ define(function (require) {
         },
         moveUp: function () {
             this.collection.moveModelUp(this);
+        },
+        /**
+         * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt die metaID wieder.
+         * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         */
+        getmetaID: function () {
+            if (this.get("datasets")[0]) {
+             return this.get("datasets")[0].md_id;
+            }
+            else {
+                    return undefined;
+            }
+        },
+        /**
+         * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
+         * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         */
+        getmetaName: function () {
+            if (this.get("datasets")[0]) {
+             return this.get("datasets")[0].md_name;
+            }
+            else {
+                    return undefined;
+            }
         }
     });
 
