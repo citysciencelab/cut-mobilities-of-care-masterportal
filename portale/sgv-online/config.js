@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         gfiAtClick: false,
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
@@ -15,7 +15,7 @@ define(function () {
         namedProjections: [
             // ETRS89 UTM
             ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
-        ],
+            ],
         customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
@@ -40,7 +40,11 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
 
+        
+        attributions: false,
+
         attributions: true,
+
         // menubar: true,
         scaleLine: true,
         mouseHover: true,

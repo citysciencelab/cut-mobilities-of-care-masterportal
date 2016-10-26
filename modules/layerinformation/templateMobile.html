@@ -11,12 +11,14 @@
         </div>
         <div class="modal-body">
             <h4 class="subtitle"><%= name %></h4>
-            <p class="abstract"><%= abstractText %></p>
-            <br>
-            <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
-            <p>Stand der Daten: <%= date %></p>
-            <% if (legendURL !== "ignore") { %>
-                <hr>
+            <% if (typeof metaID !== "undefined") { %>
+                <p class="abstract"><%= abstractText %></p>
+                <br>
+                <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
+                <p>Stand der Daten: <%= date %></p>
+            <% } %>
+            <% if (legendURL !== "ignore" && legendURL !== "" && typeof metaID !== "undefined") { %> <hr> <% } %>
+            <% if (legendURL !== "ignore" && legendURL !== "") { %>
                 <h4 class="subtitle">Legende</h4>
                 <p>
                     <% if (typeof legendURL === "string") {

@@ -180,9 +180,9 @@
                           "visibility": false
                         },
                         {
-                          "id": "2935",
+                          "id": "2428",
                           "visibility": false
-                        },
+                        },  
                         {
                           "id": "2422",
                           "visibility": false
@@ -224,15 +224,6 @@
                     "Layer": [
                         {
                           "id": ["682","683"],
-                          "visibility": false
-                        }
-                    ]
-                },
-                 {
-                 "Titel": "test",
-                    "Layer": [
-                        {
-                          "id": "1731",
                           "visibility": false
                         }
                     ]
@@ -592,7 +583,13 @@
                       "id": ["1201","1202","1203","1204","1205","1206","1207","1208","1209","1210","1211","1212"],
                       "visibility": false,
                       "name" : "Digitales Informationssystem Planrecht"
+                    },
+                    {
+                      "id": ["1520","1521","1522","1523","1524","1525","1527","1528","1529","2806","2807"],
+                      "visibility": false,
+                      "name" : "Landesgrundbesitzverzeichnis"
                     }
+                      
                   ]
                 },
                 {
