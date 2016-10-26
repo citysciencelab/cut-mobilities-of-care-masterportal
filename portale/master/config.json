@@ -92,7 +92,7 @@
           "routing": {
             "name": "Routenplaner",
             "glyphicon": "glyphicon-road",
-            "viomRouting": "3"
+            "viomRouting": "7"
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
