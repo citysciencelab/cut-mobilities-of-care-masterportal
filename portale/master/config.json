@@ -178,12 +178,6 @@
     "Fachdaten":
     {
       "Layer": [
-          {"id": "353", 
-           "visibility": true, 
-           "styleId": "353", 
-           "clusterDistance": 30, 
-           "styleField": "kategorie"
-          },
         {
           "id": "1748"
         },
