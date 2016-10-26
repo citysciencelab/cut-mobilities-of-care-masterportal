@@ -1,7 +1,7 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Lärmkarte-Straßenverkehr - 2012",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
@@ -20,7 +20,8 @@
     "menu": {
       "tree": {
         "name": "Themen",
-        "glyphicon": "glyphicon-list"
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
       },
       "tools": {
         "name": "Werkzeuge",

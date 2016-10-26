@@ -21,6 +21,10 @@ define(function () {
             epsg: "EPSG:25832"
             */
         },
+        namedProjections: [
+            // ETRS89 UTM
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
+        ],
         // customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
