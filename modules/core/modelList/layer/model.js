@@ -2,6 +2,7 @@ define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
+        StyleList = require("modules/layer/wfsStyle/list"),
         Layer;
 
     Layer = Item.extend({
@@ -338,11 +339,31 @@ define(function (require) {
             }
         },
         showLayerInformation: function () {
+            var legendURL = [],
+                names = [],
+                styleList = StyleList.returnAllModelsById(this.attributes.id);
+
+            if (styleList.length > 0) {
+                _.each(styleList, function (style) {
+                    legendURL.push(style.get("imagepath") + style.get("imagename"));
+                    if (style.has("legendValue")) {
+                        names.push(style.get("legendValue"));
+                    }
+                    else {
+                        names.push(style.get("styleFieldValue"));
+                    }
+                });
+            }
+            else {
+                legendURL.push(this.get("legendURL"));
+                names.push(this.get("datasets")[0].md_name);
+            }
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
-                "legendURL": this.get("legendURL"),
-                "metaID": this.getmetaID(),
-                "name": this.getmetaName()
+                "legendURL": legendURL,
+                "metaID": this.get("datasets")[0].md_id,
+                "name": names,
+                "layername":this.get("name")
             });
         },
         setSelectionIDX: function (idx) {
