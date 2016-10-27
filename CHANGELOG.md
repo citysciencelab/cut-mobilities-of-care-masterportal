@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.1.4
+
+FIXES:
+
+  - 11e3138 Die Reihenfolge der Themen auf der Karte entsprach nicht immer der korrekten Reihenfolge der Themen in der Auswahl
+
 # Changelog LGV Master-Portal 1.1.3
 
 FIXES:
