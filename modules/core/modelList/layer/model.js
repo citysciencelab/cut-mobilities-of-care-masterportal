@@ -36,7 +36,6 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
-                    this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },
                 "change:transparency": this.updateLayerTransparency,
@@ -291,10 +290,10 @@ define(function (require) {
         },
         /**
          * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-         * Abhängig vom Attribut "isVisibleInMap"
+         * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
-            if (this.getIsVisibleInMap() === true) {
+            if (this.getIsSelected() === true) {
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
             }
             else {

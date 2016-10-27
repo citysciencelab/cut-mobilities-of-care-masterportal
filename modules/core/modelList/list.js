@@ -66,6 +66,7 @@ define([
                         if (model.getType() === "layer") {
                             this.resetSelectionIdx(model);
                             model.setIsVisibleInMap(model.getIsSelected());
+                            model.toggleLayerOnMap();
                         }
                         this.trigger("updateSelection");
                         channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
