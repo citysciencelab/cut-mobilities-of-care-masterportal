@@ -345,7 +345,9 @@ define([
                         else {
                             this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
                             // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
-                            this.get(param.id).setIsVisibleInMap(false);
+                            if (_.isUndefined(this.get(param.id)) === false) {
+                                this.get(param.id).setIsVisibleInMap(false);
+                            }
                         }
                     }, this);
                 }
@@ -358,7 +360,9 @@ define([
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);
 
-                model.set(attrs);
+                if (_.isUndefined(model) === false) {
+                    model.set(attrs);
+                }
             },
 
             addModelsByAttributes: function (attrs) {
