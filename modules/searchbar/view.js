@@ -69,8 +69,6 @@ define([
             //     that.render();
             // });
 
-            var querySearchString = Radio.request("ParametricURL", "getInitString");
-
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
@@ -84,7 +82,6 @@ define([
                 this.model.set("placeholder", config.placeholder);
             }
             this.className = "navbar-form col-xs-9";
-            this.model.set("querySearchString", querySearchString);
 
             EventBus.on("searchInput:setFocus", this.setFocus, this);
             EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
@@ -117,12 +114,12 @@ define([
             // bedarfsweises Laden der Suchalgorythmen
             if (_.has(config, "gazetteer") === true) {
                 require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                    new GAZModel(config.gazetteer, querySearchString);
+                    new GAZModel(config.gazetteer);
                 });
             }
             if (_.has(config, "specialWFS") === true) {
                 require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
-                    new SpecialWFSModel(config.specialWFS, querySearchString);
+                    new SpecialWFSModel(config.specialWFS);
                 });
             }
             if (_.has(config, "visibleWFS") === true) {
@@ -228,10 +225,10 @@ define([
                 $("ul.dropdown-menu-search").html(template(attr));
             // }
             // Wird gerufen
-            if (this.model.get("querySearchString") !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
+            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
                 this.hitSelected();
-                this.model.unset("querySearchString", true);
             }
+            this.model.unset("initSearchString", true);
         },
         /**
         *
