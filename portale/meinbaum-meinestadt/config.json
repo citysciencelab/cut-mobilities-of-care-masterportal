@@ -2,6 +2,7 @@
   "Portalconfig":
   {
     "PortalTitle": "Mein Baum-Meine Stadt",
+    "PortalLogo": "none",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
