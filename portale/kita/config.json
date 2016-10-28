@@ -1,7 +1,7 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Kita-Stadtplan",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
@@ -53,6 +53,10 @@
           "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
+          },
+            "extendedFilter": {
+            "name": "Erweiterter Filter",
+            "glyphicon": "glyphicon-filter"
           }
         }
       },
@@ -122,13 +126,21 @@
           "id": "753",
           "styleId": "753",
           "visibility": true,
-          "mouseHoverField": "Name",
+           "styleField": "Leistungsarten",
+          "mouseHoverField": ["Name","Leistungsarten"],
+            "extendedFilter": true,
           "filterOptions": [
             {
               "fieldName": "Bezirk",
               "filterType": "combo",
               "filterName": "Bezirk",
               "filterString": ["*", "Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Harburg", "Wandsbek"]
+            },
+            {
+              "fieldName": "Leistungsarten",
+              "filterType": "combo",
+              "filterName": "Leistungsarten",
+              "filterString": ["*","E", "KE", "K", "KEEing"]
             }
           ]
         }
