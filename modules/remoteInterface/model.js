@@ -31,8 +31,6 @@ define(function (require) {
         addFeature: function (hit) {
             var feature = this.getFeatureFromHit(hit);
             Radio.trigger("Map", "addFeatureToLayer", feature, "gewerbeflaechen");
-
-
         },
         addFeatures: function (features) {
             _.each(features, function (features) {
@@ -78,9 +76,9 @@ define(function (require) {
             Radio.trigger("MapView", "resetView");
             Radio.trigger("MapMarker", "hideMarker");
         },
-        getFeatureFromHit(hit) {
+        getFeatureFromHit: function (hit) {
             var reader = new ol.format.GeoJSON(),
-                geom = reader.readGeometry(hit.geometry_gewfl, {
+                geom = reader.readGeometry(hit.geometry_gewfl_UTM_EPSG_25832, {
                     dataProjection: "EPSG:25832"
                 }),
                 feature = new ol.Feature({
