@@ -234,6 +234,7 @@
           "id": "753",
           "styleId": "753",
           "visibility": true,
+          "styleField": "Leistungsarten",
           "mouseHoverField": "Name",
           "extendedFilter": true,
           "filterOptions": [
