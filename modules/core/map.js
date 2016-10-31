@@ -40,6 +40,7 @@ define(function (require) {
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
                 "addFeatureToLayer": this.addFeatureToLayer,
+                "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "removeInteraction": this.removeInteraction,
                 "setBBox": this.setBBox,
                 "render": this.render,
@@ -47,8 +48,15 @@ define(function (require) {
                 "unregisterPostCompose": this.unregisterPostCompose,
                 "zoomToExtent": this.zoomToExtent,
                 "updatePrintPage": this.updatePrintPage,
-                "activateClick": this.activateClick
+                "activateClick": this.activateClick,
+                "createVectorLayer": this.createVectorLayer
             }, this);
+
+            this.listenTo(this, {
+                "change:vectorLayer": function (model, value) {
+                    this.addLayerToIndex([value, 0]);
+                }
+            });
 
             this.set("view", mapView.get("view"));
 
@@ -91,15 +99,54 @@ define(function (require) {
             layer.setStyle(styles);
             layer.getSource().addFeature(feature);
         },
+
+        /**
+         * Findet einen Layer über seinen Namen und gibt ihn zurück
+         * @param  {string} layerName - Name des Layers
+         * @return {ol.layer}
+         */
         getLayerByName: function (layerName) {
             var layers = this.get("map").getLayers().getArray(),
-                layer = _.filter(layers, function (layer) {
-                    return layer.values_.name === layerName;
+                layer = _.find(layers, function (layer) {
+                    return layer.get("name") === layerName;
                 });
-            return layer[0];
-        },
-        getLayers: function() {
 
+            return layer;
+        },
+
+        /**
+         * Erstellt einen Vectorlayer
+         * @param {string} layerName - Name des Vectorlayers
+         */
+        createVectorLayer: function (layerName) {
+            var layer = new ol.layer.Vector({
+                source: new ol.source.Vector({useSpatialIndex: false}),
+                alwaysOnTop: true,
+                name: layerName
+            });
+
+            this.setVectorLayer(layer);
+        },
+
+        /**
+         * Entfernt alle Features aus der Layersource
+         * @param {string} name - Layername
+         */
+        removeAllFeaturesFromLayer: function (name) {
+            var layer = this.getLayerByName(name);
+
+            layer.getSource().clear();
+        },
+
+        setVectorLayer: function (value) {
+            this.set("vectorLayer", value);
+        },
+
+        getVectorLayer: function () {
+            return this.get("vectorLayer");
+        },
+
+        getLayers: function () {
             return this.get("map").getLayers();
         },
 

@@ -6,19 +6,22 @@ define(function (require) {
 
     RemoteInterface = Backbone.Model.extend({
         initialize: function () {
-
             var channel = Radio.channel("RemoteInterface");
+
             channel.reply({
                 "getMapState": this.getMapState
             }, this);
+
             channel.on({
                 "addFeature": this.addFeature,
                 "addFeatures": this.addFeatures,
+                "removeAllFeatures": this.removeAllFeatures,
                 "centerFeature": this.centerFeature,
                 "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView
             }, this);
-            Radio.trigger("Map", "addLayerToIndex", [this.createLayer(), 0]);
+
+            Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
             parent.Backbone.MasterRadio = Radio;
             parent.postMessage("ready", "*");
             //Radio.trigger("remoteInterface", "addFeature", {});
@@ -33,19 +36,14 @@ define(function (require) {
             Radio.trigger("Map", "addFeatureToLayer", feature, "gewerbeflaechen");
         },
         addFeatures: function (features) {
-            _.each(features, function (features) {
-                this.addFeature(features._source);
+            _.each(features, function (feature) {
+                this.addFeature(feature._source);
             }, this);
         },
-        createLayer: function () {
-            var layer = new ol.layer.Vector({
-                source: new ol.source.Vector({useSpatialIndex: false}),
-                alwaysOnTop: true,
-                name: "gewerbeflaechen"
-            });
-
-            return layer;
+        removeAllFeatures: function () {
+            Radio.trigger("Map", "removeAllFeatures", "gewerbeflaechen");
         },
+
         centerFeature: function (hit) {
             var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent(),
@@ -84,6 +82,8 @@ define(function (require) {
                 feature = new ol.Feature({
                     geometry: geom
                 });
+
+                feature.setId(hit.gewfl_id);
                 return feature;
         },
         getMapState: function () {
