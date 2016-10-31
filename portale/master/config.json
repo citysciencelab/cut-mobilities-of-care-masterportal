@@ -64,9 +64,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "configJSON": "gemarkung.json",
-            "districts": "gemarkungenHamburg",
-            "cadastralDistricts": "flurenHamburg",
-            "cadastralDenominator": false
+            "parcelDenominator": true
           },
           "measure": {
             "name": "Strecke / Fläche messen",

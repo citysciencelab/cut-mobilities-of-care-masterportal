@@ -1,36 +1,26 @@
 define([
     "backbone",
-    "eventbus",
     "backbone.radio",
-    "config",
     "modules/core/util"
-], function (Backbone, EventBus, Radio, Config, Util) {
+], function (Backbone, Radio, Util) {
 
     var ParcelSearch = Backbone.Model.extend({
         defaults: {
-            "fetched": false,
-            "configJSON": "",
-            "serviceURL": "",
-            "districtsName": "",
-            "cadastralDistrictsName": "",
-            "districts": {},
-            "cadastralDistricts": {},
-            "districtNumber": ""
+            "fetched": false, // initiales Laden der JSON
+            "serviceURL": "", // Flurstücks-Gazetteer-URL
+            "districts": {}, // Object mit allen Gemarkungen {{"name": "id"}, {"name2": "id2"}, ...}
+            "cadastralDistricts": {}, // Object mit allen Fluren {{"id1": ["name1", "name2"]}, {"id2": ["name1", "name2"]}, ...}
+            "districtNumber": "0", // default Gemarkung
+            "cadastralDistrictField": false, // sollen Fluren genutzt werden? Wird automatisch beim parsen ermittelt.
+            "cadastralDistrictNumber": "0", // default Flur
+            "parcelDenominatorField": false, // sollen Flurstücksnenner verwendet werden? Aus config
+            "parcelNumber": "", // default Flurstücksnummer
+            "parcelDenominatorNumber": "" // default Flurstücksnenner
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-        },
-        validate: function (attributes) {
-            var onlyNumbers = /^\d+$/;
-
-            if (attributes.parcelNumber.length < 1) {
-                return "Bitte geben Sie eine Flurstücksnummer ein";
-            }
-            if (!attributes.parcelNumber.match(onlyNumbers)) {
-                return "Bitte geben Sie nur Ziffern ein";
-            }
         },
         setStatus: function (args) {
             if (args[2].getId() === "parcelSearch") {
@@ -47,12 +37,14 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
+        /*
+         * liest die gemarkung.json ein. Anschließend wird parse gestartet.
+         */
         loadConfiguration: function (args) {
             var restService = Radio.request("RestReader", "getServiceById", args[2].get("serviceId")),
                 configJSON = args[2].get("configJSON");
 
-            this.set("districtsName", args[2].get("districts"));
-            this.set("cadastralDistrictsName", args[2].get("cadastralDistricts"));
+            this.set("parcelDenominatorField", args[2].get("parcelDenominator"));
 
             if (restService[0] && restService[0].get("url")) {
                 this.set("serviceURL", restService[0].get("url"));
@@ -76,41 +68,53 @@ define([
                 Radio.trigger("Window", "closeWin");
             }
         },
+        /*
+         * parst die gemarkung.json. Das JSON-Object hat folgenden Aufbau:
+         * {"Allermöhe": { "id": "0601", "flur": ["Flur1", "Flur2"]}, "Alsterdorf": { "id": "0424", "flur": ["Flur3", "Flur4"]}, "Alt-Rahlstedt": { "id": "0544", "flur": []}, ...}
+         * Der Wert "flur" ist optional und davon abhängig, ob im nutzenden Bundesland auch Fluren genutzt werden.
+         */
         parse: function (obj) {
-            this.set("districts", _.values(_.pick(obj, this.get("districtsName")))[0]);
-            this.set("cadastralDistricts", _.values(_.pick(obj, this.get("cadastralDistrictsName")))[0]);
+            var districts = {},
+                cadastralDistricts = {};
+
+            _.each(obj, function (value, key) {
+                _.extend(districts, _.object([key], [value.id]));
+                if (_.has(value, "flur")) {
+                    _.extend(cadastralDistricts, _.object([value.id], [value.flur]));
+                }
+            }, this);
+            this.set("districts", districts);
+            if (_.values(cadastralDistricts).length > 0) {
+                this.set("cadastralDistricts", cadastralDistricts);
+                this.set("cadastralDistrictField", true);
+            }
             this.set("isCollapsed", false);
             this.set("isCurrentWin", true);
         },
         setDistrictNumber: function (value) {
             this.set("districtNumber", value);
         },
+        setCadastralDistrictNumber: function (value) {
+            this.set("cadastralDistrictNumber", value);
+        },
         setParcelNumber: function (value) {
             this.set("parcelNumber", value);
         },
-        validateParcelNumber: function () {
-            if (this.isValid()) {
-                $("#parcelField + .text-danger").html("");
-                $("#parcelField").parent().removeClass("has-error");
-                EventBus.trigger("alert:remove");
-                this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + this.get("districtNumber") + "&flurstuecksnummer=" + this.get("parcelNumber"), this.getParcel);
-            }
-            else {
-                $("#parcelField + .text-danger").html("");
-                $("#parcelField").after("<span class='text-danger'><small>" + this.validationError + "</small></span>");
-                $("#parcelField").parent().addClass("has-error");
-            }
+        setParcelDenominatorNumber: function (value) {
+            this.set("parcelDenominatorNumber", value);
         },
         sendRequest: function (data, successFunction) {
             $.ajax({
-                url: this.get("gazetteerURL"),
+                url: this.get("serviceURL"),
                 data: data,
                 context: this,
                 success: successFunction,
                 timeout: 6000,
                 error: function () {
-                    EventBus.trigger("alert", "Dienst ist zurzeit nicht erreichbar. Bitte versuchen Sie es später nochmal.");
-                }
+                    Radio.trigger("Alert", "alert", {text: "<strong>Flurstücksabfrage derzeit nicht möglich!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
+                },
+                complete: Util.hideLoader,
+                beforeSend: Util.showLoader
             });
         },
         getParcel: function (data) {
