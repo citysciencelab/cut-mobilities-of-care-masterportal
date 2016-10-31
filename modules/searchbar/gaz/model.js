@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
+    ], function (Backbone, Radio, EventBus) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -39,7 +40,11 @@ define([
                 "gaz:adressSearch": this.adressSearch
             });
 
-            this.set("gazetteerURL", config.url);
+            var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
+
+            if (gazService[0] && gazService[0].get("url")) {
+                this.set("gazetteerURL", gazService[0].get("url"));
+            }
             if (config.searchStreets) {
                 this.set("searchStreets", config.searchStreets);
             }
