@@ -1,7 +1,7 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "Solaratlas", 
+    "PortalTitle": "Solaratlas",
     "PortalLogo":"../img/he-logo.png",
     "LogoLink": "https://www.hamburgenergie.de/",
     "LogoToolTip": "Hamburg Energie",

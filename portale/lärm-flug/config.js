@@ -105,7 +105,7 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         },
-        
+
     };
 
     return config;

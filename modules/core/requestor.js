@@ -25,15 +25,15 @@ define([
             // Abfrage jedes Layers der von der map übermittelt wurde.
             _.each(sortedParams, function (visibleLayer) {
                 gfiContent = null;
-                switch (visibleLayer.ol_layer.get("typ")) {
+                switch (visibleLayer.typ) {
                     case "WFS": {
-                        this.set("typ", visibleLayer.ol_layer.get("typ"));
+                        this.set("typ", "WFS");
                         gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
                     }
                     case "GeoJSON": {
-                        this.set("typ", visibleLayer.ol_layer.get("typ"));
+                        this.set("typ", "GeoJSON");
                         gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                         this.pushGFIContent(gfiContent, visibleLayer);
                         break;
@@ -67,7 +67,7 @@ define([
                             }
                         }
                         else {
-                            this.set("typ", visibleLayer.ol_layer.get("typ"));
+                            this.set("typ", "WMS");
                             gfiContent = this.setWMSPopupContent(visibleLayer, positionGFI);
                             this.pushGFIContent(gfiContent, visibleLayer);
                         }

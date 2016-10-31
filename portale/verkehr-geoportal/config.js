@@ -25,7 +25,7 @@ define(function () {
         customModules: ["../portale/verkehr-geoportal/verkehrsfunctions"],
         startUpModul: "",
         gemarkungen: "../components/lgv-config/gemarkung.json"
-        
+
     };
 
     return config;
