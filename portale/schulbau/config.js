@@ -44,7 +44,7 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-       
+
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,

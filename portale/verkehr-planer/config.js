@@ -30,7 +30,7 @@ define(function () {
         customModules: ["../portale/verkehr-planer/verkehrsfunctions"],
         startUpModul: "",
         gemarkungen: "../components/lgv-config/gemarkung.json",
-        
+
    };
 
    return config;

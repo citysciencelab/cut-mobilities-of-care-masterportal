@@ -150,7 +150,7 @@
       "Fachdaten":
         {
           "Ordner": [
-			
+
 
 			{
               "Titel": "Mobilitätsdaten",
@@ -225,7 +225,7 @@
                           "visibility": false,
 
                           "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH"
-                        } 
+                        }
 
                     ]
                 },
@@ -421,7 +421,7 @@
                         {
                           "id": "2428",
                           "visibility": false
-                        },  
+                        },
                         {
                           "id": "2422",
                           "visibility": false
@@ -449,7 +449,7 @@
                         }
                   ]
                 },
-                  
+
                 {
                  "Titel": "Bildung",
                     "Layer": [
@@ -459,7 +459,7 @@
                         }
                     ]
                 },
-                  
+
                 {
                  "Titel": "Soziales",
                     "Layer": [
@@ -469,7 +469,7 @@
                         }
                     ]
                 },
-                  
+
                 {
                  "Titel": "Bevölkerung",
                     "Layer": [
@@ -479,7 +479,7 @@
                         }
                     ]
                 },
-                  
+
                 {
                  "Titel": "Umwelt",
                  "Ordner": [
@@ -520,7 +520,7 @@
                     }
                     ]
                 },
-                  
+
                 {
                   "Titel": "Bauen und Wohnen",
                   "Layer": [
@@ -579,10 +579,10 @@
                       "visibility": false,
                       "name" : "Landesgrundbesitzverzeichnis"
                     }
-                      
+
                   ]
                 },
-                
+
                 {
                   "Titel": "Projekte",
 
@@ -629,7 +629,7 @@
                             }
                     ]
                 },
-                  
+
                 {
                   "Titel": "Bauwerke/Straßenausstattung",
                       "Layer": [
@@ -659,7 +659,7 @@
                         }
                       ]
                 },
-                  
+
                 {
 				  "Titel": "Straßennetze",
 				    "Layer": [
@@ -704,7 +704,7 @@
                         }
 			         ]
                 },
-                  
+
                 {
                   "Titel": "Verkehrszählstellen Hamburg",
                   "Ordner": [
@@ -777,8 +777,8 @@
                         }
 			         ]
                 }
-                              
-                
+
+
 
               ]
             }
