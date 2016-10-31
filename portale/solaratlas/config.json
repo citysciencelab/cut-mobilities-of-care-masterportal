@@ -1,7 +1,10 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Solaratlas",
+    "PortalLogo":"../img/he-logo.png",
+    "LogoLink": "https://www.hamburgenergie.de/",
+    "LogoToolTip": "Hamburg Energie",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
@@ -17,7 +20,8 @@
     "menu": {
       "tree": {
         "name": "Themen",
-        "glyphicon": "glyphicon-list"
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
       },
       "tools": {
         "name": "Werkzeuge",

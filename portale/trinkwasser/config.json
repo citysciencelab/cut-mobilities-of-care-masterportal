@@ -1,23 +1,20 @@
 {
   "Portalconfig":
     {
-      "PortalTitle": "Geo - Online",
-      "PortalLogo": "../img/hh-logo.png",
+      "PortalTitle": "GeoViewer",
       "searchBar": {
-        "minChars": 3,
-        "placeholder": "Suche Adresse, Stadtteil, Themen, Flurstück",
-        "gazetteer": {
-           "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-           "searchStreets": true,
-           "searchHouseNumbers": true,
-           "searchDistricts": true,
-           "searchParcels": true
-       },
-       "tree": {
-           "minChars": 3
-       }
-   },
+          "gazetteer": {
+              "url": "/geodienste-hamburg/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+              "searchStreets": true,
+              "searchHouseNumbers": true,
+              "searchDistricts": true,
+              "searchParcels": true
+          },
+          "placeholder": "Adresssuche"
+      },
+      "mapView": {
+          "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+      },
       "menu": {
         "tree": {
           "name": "Themen",
@@ -33,7 +30,8 @@
             },
             "measure": {
               "name": "Strecke / Fläche messen",
-              "glyphicon": "glyphicon-resize-full"
+              "glyphicon": "glyphicon-resize-full",
+              "onlyDesktop": true
             },
             "gfi": {
               "name": "Informationen abfragen",
@@ -52,17 +50,9 @@
               "name": "Koordinatensuche",
               "glyphicon": "glyphicon-record"
             },
-            "kmlimport": {
-              "name": "KML Import",
-              "glyphicon": "glyphicon-import"
-            },
             "draw": {
               "name": "Zeichnen / Schreiben",
               "glyphicon": "glyphicon-pencil"
-            },
-            "saveSelection": {
-              "name": "Auswahl speichern",
-              "glyphicon": "glyphicon-share"
             }
           }
         },
@@ -74,7 +64,7 @@
             "name": "Kontakt",
             "glyphicon": "glyphicon-envelope",
             "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
-            "serviceID": "80002",
+            "serviceID": "80001",
             "from": [
               {
                 "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -99,48 +89,32 @@
         "toggleMenu": true,
         "fullScreen": true,
         "zoom": true,
-        "orientation": true,
-        "mousePosition": true,
-        "attributions": true
+        "orientation": "once",
+        "mousePosition": true
       },
-      "Baumtyp": "default"
+      "scaleLine": true,
+      "Baumtyp": "light"
     },
-    "Themenconfig":
+  "Themenconfig":
     {
       "Hintergrundkarten":
         {
           "Layer": [
             {
-              "id": ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
-              "name": "ALKIS farbig"
-            },
+              "id": "38",
+              "visibility": true,
+              "gfiAttributes": "ignore"
+            }
+          ]
+        },
+      "Fachdaten":
+        {
+          "Layer": [
             {
-              "id": ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
-              "name": "ALKIS grau-blau"
-            },
-            {
-              "id": ["717", "718", "719", "720"],
-              "name": "Geobasiskarten (farbig)"
-            },
-            {
-              "id": ["1043", "1044", "1045", "1046"],
-              "name": "Geobasiskarten (grau-blau)"
-            },
-            {
-              "id": ["713", "714", "715", "716"],
-              "name": "Geobasiskarten (schwarz-weiß)"
-            },
-            {
-             "id": "94"
-            },
-            {
-              "id": "452", "name": "Luftbilder DOP 40 (mit Umland)"
-            },
-            {
-              "id": "756"
-            },
-            {
-              "id": "453","visibility": true
+              "id": "3302",
+              "gfiTheme": "trinkwasser",
+              "visibility": true,
+              "featureCount": 5
             }
           ]
         }

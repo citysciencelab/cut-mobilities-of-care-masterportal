@@ -1,6 +1,6 @@
 define(function () {
     var config = {
-        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         // title: "Lärmschutzbereiche Flughafen Hamburg",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
@@ -15,12 +15,16 @@ define(function () {
         },
         view: {
             background: "white",
-             center: [565686, 5942986] //Flughafen
+            center: [565686, 5942986] //Flughafen
            /* center: [565874, 5934140],
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
             */
         },
+        namedProjections: [
+            // ETRS89 UTM
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
+        ],
         // customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,

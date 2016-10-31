@@ -1,12 +1,13 @@
-define([
-    "backbone",
-    "text!modules/gfipopup/popup/template.html",
-    "modules/gfipopup/popup/model",
-    "eventbus",
-    "config"
-], function (Backbone, GFIPopupTemplate, GFIPopup, EventBus, Config) {
-    "use strict";
-    var GFIPopupView = Backbone.View.extend({
+define(function (require) {
+
+    var Backbone = require("backbone"),
+        GFIPopupTemplate = require("text!modules/gfipopup/popup/template.html"),
+        GFIPopup = require("modules/gfipopup/popup/model"),
+        EventBus = require("eventbus"),
+        Config = require("config"),
+        GFIPopupView;
+
+    GFIPopupView = Backbone.View.extend({
         model: GFIPopup,
         template: _.template(GFIPopupTemplate),
         backupGFI: {},
@@ -80,8 +81,8 @@ define([
             var coord = [],
                 attr = this.model.toJSON();
 
-            if (_.has(Config,"gfiAtClick") && Config.gfiAtClick===false) {
-                if (_.has(evt,"changed")) {
+            if (_.has(Config, "gfiAtClick") && Config.gfiAtClick === false) {
+                if (_.has(evt, "changed")) {
                     coord = evt.changed.coordinate;
                     if (coord !== this.coordinate) {
                         this.coordinate = coord;
@@ -90,9 +91,9 @@ define([
                 }
             }
 
-            if (_.has(Config,"gfiAtClick") && Config.gfiAtClick===false) {
+            if (_.has(Config, "gfiAtClick") && Config.gfiAtClick === false) {
                 this.$el.attr("class", "gfi-win");
-                this.$el.html(this.template(attr));
+                // this.$el.html(this.template(attr));
                 $("body").append(this.$el.html(this.template(attr)));
                 $(".gfi-content").css("max-height", ($(window).height() * 0.7));
             }
@@ -115,7 +116,7 @@ define([
                 content: this.$el
             });
 
-            if (_.has(Config,"gfiAtClick") && Config.gfiAtClick===false) {
+            if (_.has(Config, "gfiAtClick") && Config.gfiAtClick === false) {
                 this.$el.draggable({
                     containment: "#map",
                     handle: ".gfi-header"

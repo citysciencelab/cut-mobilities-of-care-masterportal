@@ -1,7 +1,8 @@
 {
   "Portalconfig":
     {
-      "PortalTitle": "GeoViewer",
+    "PortalTitle": "Planerportal-Verkehr",
+    "PortalLogo": "none",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
@@ -20,6 +21,10 @@
        },
        "placeholder": "Suche nach Adresse/ Stadtteil/ Thema",
        "geoLocateHit": true
+   },
+   "mapView": {
+       "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+       "startCenter": [561210, 5932600]
    },
       "menu": {
         "tree": {
@@ -104,6 +109,7 @@
         }
       },
       "controls": {
+        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,
@@ -144,35 +150,35 @@
         {
           "Ordner": [
 
-        {
-          "Titel": "Straßennetze",
-          "Layer": [
             {
-              "id": "1556",
-              "visibility": false
-            },
-            {
-              "id": "1557",
-              "visibility": false
-            },
-            {
-              "id": "1558",
-              "visibility": false
-            },
-            {
-              "id": "1559",
-              "visibility": false
-            },
-            {
-                "id": "1951",
-                "visibility": false,
-                "name" : "Wichtige Bezirksstraßen (ZEB)",
-                "metaName": "Wichtige Bezirksstraßen (ZEB)"
-            },
-            {
-              "id":["1108","1109","1110"],
-              "visibility": false
-            },
+              "Titel": "Straßennetze",
+              "Layer": [
+                {
+                  "id": "1556",
+                  "visibility": false
+                },
+                {
+                  "id": "1557",
+                  "visibility": false
+                },
+                {
+                  "id": "1558",
+                  "visibility": false
+                },
+                {
+                  "id": "1559",
+                  "visibility": false
+                },
+                {
+                    "id": "1951",
+                    "visibility": false,
+                    "name" : "Wichtige Bezirksstraßen (ZEB)",
+                    "metaName": "Wichtige Bezirksstraßen (ZEB)"
+                },
+                {
+                  "id":["1108","1109","1110"],
+                  "visibility": false
+                },
             {
               "id": ["1047","1048","1049","1050","1051","1052","1053","1054","1055","1056","1057","1058","1059","1060","1061","1062","1063","1064","1065","1066","1067","1068","1069","1070","1071","1072","1073","1074","1075","1076","1077","1078","1079","1080","1081","1082","1083","1084","1085","1086","1087","1088","1089","1090","1091","1092","1093","1094","1095","1096","1097","1099","1100"],
               "visibility": false,
@@ -246,8 +252,8 @@
               "name": [
                   "Haltestellen"
                       ],
-             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",   
-                
+             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",
+
               "legendURL": [
                   "http://87.106.16.168/legende_mrh/hvv-bus.png"
                             ]
@@ -425,10 +431,8 @@
           "Layer": [
             {
               "id": ["947","946"],
-              "visibility": false,
               "name" : "Verkehrslage auf Autobahnen",
-              "metaName": "Verkehrslage auf Autobahnen",
-              "attributions": {
+              "layerAttribution": {
                 "text": "",
                 "channel": "Verkehrsfunctions",
                 "eventname": "aktualisiereverkehrsnetz",
@@ -441,8 +445,8 @@
               "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH",
               "metaName": "Verkehrslage Norddeutschland/Stadtgebiet HH",
               "attributions": "<span>Verkehrslage der HERE Europe B.V bereitgestellt, aufbereitet und angepasst durch die VIOM GmbH, Berlin © 2015</span>"
-            } 
-              
+            }
+
           ]
         },
 
@@ -563,7 +567,7 @@
             }
           ]
         },
-         
+
         {
         "Titel": "Umwelt",
         "Ordner": [
@@ -571,10 +575,10 @@
               "Titel": "Lärmkarten - Straßenverkehr",
               "Layer": [
                  {
-                    "id": "96", 
-                    "visibility": false, 
+                    "id": "96",
+                    "visibility": false,
                     "name": "Lärm Straßenverkehr Tag 2012",
-                    "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
+                    "attributions": "<span>Die Karte ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
                 },
                 {
                     "id": "95",
@@ -588,18 +592,18 @@
               "Titel": "Lärmkarten - Flugverkehr",
               "Layer": [
                 {
-                    "id": ["2415","2413"], 
-                    "visibility": false, 
+                    "id": ["2415","2413"],
+                    "visibility": false,
                     "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
                 },
                 {
-                    "id": ["2412","2415"], 
-                    "visibility": false, 
+                    "id": ["2412","2415"],
+                    "visibility": false,
                     "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)"
                 },
                 {
-                    "id": ["2414","2416"], 
-                    "visibility": false, 
+                    "id": ["2414","2416"],
+                    "visibility": false,
                     "name": "Nacht-Schutzzonen mit Isolinien LAeq in dB(A)"
                 }
               ]

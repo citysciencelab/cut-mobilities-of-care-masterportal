@@ -83,7 +83,7 @@ define(function () {
             center: [565874, 5934140],
             extent: [442800, 5809000, 738000, 6102200]
         },
-        
+
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",

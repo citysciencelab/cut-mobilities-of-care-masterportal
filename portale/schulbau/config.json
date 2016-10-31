@@ -1,7 +1,7 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Schulbau-Portal",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
@@ -128,17 +128,17 @@
       "Layer": [
 
         {
-          "id": "1732",
-          "styleId": "753",
-          "visibility": true,
-          "mouseHoverField": "Name"
-        },
-        {
           "id": "4972",
           "styleId": "4972",
           "visibility": true,
           "mouseHoverField": ["schulname","gebaeudebezeichnung"],
           "extendedFilter": true
+        },
+        {
+          "id": "1732",
+          "styleId": "753",
+          "visibility": true,
+          "mouseHoverField": "Name"
         }
 
       ]
