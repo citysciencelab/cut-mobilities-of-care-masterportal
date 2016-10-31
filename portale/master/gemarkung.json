@@ -1,6 +1,6 @@
 {
-    "Allermöhe": { "id": "0601", "flur": ["Flur1", "Flur2"]},
-    "Alsterdorf": { "id": "0424", "flur": ["Flur3", "Flur4"]},
+    "Allermöhe": { "id": "0601", "flur": []},
+    "Alsterdorf": { "id": "0424", "flur": []},
     "Alt-Rahlstedt": { "id": "0544", "flur": []},
     "Altengamme": { "id": "0602", "flur": []},
     "Altenwerder": { "id": "0701", "flur": []},
