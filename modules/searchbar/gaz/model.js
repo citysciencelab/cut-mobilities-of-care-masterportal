@@ -25,7 +25,7 @@ define([
         /**
          * @description Initialisierung der Gazetteer Suche
          * @param {Object} config - Das Konfigurationsobjekt für die Gazetteer-Suche.
-         * @param {string} config.url - Die URL.
+         * @param {string} config.serviceId - ID aus rest-conf für URL des GAZ.
          * @param {boolean} [config.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
          * @param {boolean} [config.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
          * @param {boolean} [config.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
