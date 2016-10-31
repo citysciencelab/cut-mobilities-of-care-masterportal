@@ -63,8 +63,9 @@
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
+            "StoredQueryID": "Flurstueck",
             "configJSON": "gemarkung.json",
-            "parcelDenominator": true
+            "parcelDenominator": false
           },
           "measure": {
             "name": "Strecke / Fläche messen",

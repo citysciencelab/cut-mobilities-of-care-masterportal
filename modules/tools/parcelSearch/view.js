@@ -15,7 +15,7 @@ define([
             "change #parcelFieldDenominator": "setParcelDenominatorNumber",
             "keyup #parcelField": "setParcelNumber",
             "keyup #parcelFieldDenominator": "setParcelDenominatorNumber",
-            "click button": "validateParcelNumber"
+            "click #submitbutton": "submitClicked"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -104,6 +104,9 @@ define([
         },
         setParcelDenominatorNumber: function (evt) {
             this.model.setParcelDenominatorNumber(evt.target.value);
+        },
+        submitClicked: function () {
+            this.model.sendRequest();
         }
     });
 

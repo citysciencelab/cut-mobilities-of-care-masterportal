@@ -1,13 +1,15 @@
 define([
     "backbone",
     "backbone.radio",
+    "underscore.string",
     "modules/core/util"
-], function (Backbone, Radio, Util) {
+], function (Backbone, Radio, _String, Util) {
 
     var ParcelSearch = Backbone.Model.extend({
         defaults: {
             "fetched": false, // initiales Laden der JSON
             "serviceURL": "", // Flurstücks-Gazetteer-URL
+            "storedQueryID": "", // StoredQueryID, die im Request angesprochen werden soll.
             "districts": {}, // Object mit allen Gemarkungen {{"name": "id"}, {"name2": "id2"}, ...}
             "cadastralDistricts": {}, // Object mit allen Fluren {{"id1": ["name1", "name2"]}, {"id2": ["name1", "name2"]}, ...}
             "districtNumber": "0", // default Gemarkung
@@ -45,6 +47,7 @@ define([
                 configJSON = args[2].get("configJSON");
 
             this.set("parcelDenominatorField", args[2].get("parcelDenominator"));
+            this.set("storedQueryID", args[2].get("StoredQueryID"));
 
             if (restService[0] && restService[0].get("url")) {
                 this.set("serviceURL", restService[0].get("url"));
@@ -79,7 +82,7 @@ define([
 
             _.each(obj, function (value, key) {
                 _.extend(districts, _.object([key], [value.id]));
-                if (_.has(value, "flur")) {
+                if (_.has(value, "flur") && _.isArray(value.flur) && value.flur.length > 0) {
                     _.extend(cadastralDistricts, _.object([value.id], [value.flur]));
                 }
             }, this);
@@ -103,12 +106,17 @@ define([
         setParcelDenominatorNumber: function (value) {
             this.set("parcelDenominatorNumber", value);
         },
-        sendRequest: function (data, successFunction) {
+        sendRequest: function () {
+            var flur = this.get("cadastralDistrictField") === true ? "flur=" + this.get("cadastralDistrictNumber") : "",
+                parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
+                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "flurstuecksnummernenner=" + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "",
+                data = "&StoredQuery_ID=" + this.get("storedQueryID") + "&gemarkung=" + this.get("districtNumber") + flur + "&flurstuecksnummer=" + parcelNumber + parcelDenominatorNumber;
+
             $.ajax({
                 url: this.get("serviceURL"),
                 data: data,
                 context: this,
-                success: successFunction,
+                success: this.getParcel,
                 timeout: 6000,
                 error: function () {
                     Radio.trigger("Alert", "alert", {text: "<strong>Flurstücksabfrage derzeit nicht möglich!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
@@ -123,12 +131,15 @@ define([
                 position;
 
             if (hit.length === 0) {
-                EventBus.trigger("alert", "Es wurde kein Flurstück mit der Nummer " + this.get("parcelNumber") + " gefunden.");
+                var parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
+                    parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "";
+
+                Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
             }
             else {
                 position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
                 coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                EventBus.trigger("mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
+                Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
             }
         }
     });
