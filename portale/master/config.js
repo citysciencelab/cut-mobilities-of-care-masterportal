@@ -10,7 +10,31 @@ define(function () {
     });
     */
     var config = {
+
          /**
+        * @memberof config
+        * @type {Object}
+        * @desc parameter für die Animation
+        */
+        animation: {
+            steps: 100,
+            url:"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            params:{
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                TYPENAME: "app:mrh_auspendler_gemeinde",
+                VERSION: "1.1.0",
+                maxFeatures: "5000"
+            },
+            featureType:"mrh_auspendler_gemeinde",
+            attrAnzahl:"anzahl_auspendler",
+            attrKreis:"wohnort_kreis",
+            minPx: 1,
+            maxPx: 30,
+            num_kreise_to_style: 4,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,.5)"]
+        },
+        /**
         * @memberof config
         * @type {Array}
         * @desc Liste der ignorierten Attributnamen, die sowohl im requestor als auch im extended wfs filter ausgeschlossen werden
