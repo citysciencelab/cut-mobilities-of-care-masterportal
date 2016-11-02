@@ -14,12 +14,7 @@ define(function () {
             layerid: "4426"
         },
         view: {
-            background: "white",
-            center: [565686, 5942986] //Flughafen
-           /* center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769],
-            epsg: "EPSG:25832"
-            */
+            background: "white"
         },
         namedProjections: [
             // ETRS89 UTM

@@ -254,6 +254,7 @@
             {
               "id": "1933",
               "visibility": false,
+              "maxScale": 20000,
               "styles": ["geofox_stations"],
               "name": ["Haltestellen"],
               "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
@@ -348,6 +349,7 @@
             {
               "id": "1578",
               "visibility": false,
+             "maxScale":2500,
               "name" : "Parkuhren (ab 1: 2500)"
             },
             {
@@ -358,9 +360,23 @@
 
           ]
         },
+          
+        {
+            "Titel": "Verkehrsmengen auf Hauptverkehrsstraßen in HH",
+				"Layer": [
+                    {
+                        "id": "5078",
+                        "visibility": false
+                    },
+                    {
+                        "id": "5080",
+                        "visibility": false
+                    }
+			     ]
+         },
 
          {
-          "Titel": "Verkehrszählungen",
+          "Titel": "Verkehrszählstellen Hamburg",
           "Ordner": [
             {
               "Titel": "Zählstellen - Kfz",
@@ -444,35 +460,35 @@
                 },
           
         {
-          "Titel": "Verkehrskameras",
-          "Layer": [
+            "Titel": "Verkehrskameras",
+                "Layer": [
             {
-              "id": "2128",
-              "visibility": false,
-              "style": "2128",
-              "clusterDistance": 0,
-              "searchField": "",
-              "mouseHoverField": "",
-              "filterOptions": [],
-              "styleLabelField": ""
+                "id": "2128",
+                "visibility": false,
+                "styleId": "2128",
+                "clusterDistance": 0,
+                "searchField": "",
+                "mouseHoverField": "",
+                "filterOptions": [],
+                "styleLabelField": ""
             }
-          ]
+                ]
         },
           
         {
-          "Titel": "Dynamische Anzeigen",
-          "Layer": [
+            "Titel": "Dynamische Anzeigen",
+                "Layer": [
             {
-              "id": "2132",
-              "visibility": false,
-              "style": "2132",
-              "clusterDistance": 0,
-              "searchField": "",
-              "mouseHoverField": "",
-              "filterOptions": [],
-              "styleLabelField": ""
+                 "id": "2132",
+                "visibility": false,
+                "styleId": "2132",
+                "clusterDistance": 0,
+                "searchField": "",
+                "mouseHoverField": "",
+                "filterOptions": [],
+                "styleLabelField": ""
             }
-          ]
+                    ]
         },
           
         {
@@ -542,18 +558,19 @@
           ],
           "Layer": [
             {
-              "id": "2156",
-              "visibility": false,
-              "style": "2156",
-              "clusterDistance": 0,
-              "searchField": "",
-              "mouseHoverField": "",
-              "filterOptions": [],
-              "styleLabelField": ""
+                "id": "2156",
+                "visibility": false,
+                "styleId": "2156",
+                "clusterDistance": 0,
+                "searchField": "",
+                "mouseHoverField": "",
+                "filterOptions": [],
+                "styleLabelField": ""
             },
             {
               "id": ["538","539","540"],
               "visibility": false,
+              "maxScale": "5000",
               "name" : "Kreuzungsskizzen (ab 1: 5000)"
             }
           ]
