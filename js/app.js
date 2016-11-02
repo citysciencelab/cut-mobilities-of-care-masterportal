@@ -231,19 +231,23 @@ define("app",
             _.each(controls, function (control, index) {
                 switch (control.id) {
                     case "toggleMenu": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                            new ToggleMenuControlView({el: el});
-                        });
+                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                                new ToggleMenuControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "zoom": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
-                        });
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "orientation": {
@@ -255,23 +259,29 @@ define("app",
                         break;
                     }
                     case "mousePosition": {
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView();
+                            });
+                        }
                         break;
                     }
                     case "fullScreen": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "attributions": {
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView();
+                            });
+                        }
                         break;
                     }
                 }

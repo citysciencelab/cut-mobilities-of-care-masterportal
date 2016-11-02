@@ -149,7 +149,7 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": true
+      "attributions": false
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -196,6 +196,12 @@
           "mouseHoverField": "GEBIETSNAME"
         },
         {
+          "id": "4905",
+          "visibility": true,
+          "gfiTheme": "table",
+          "featureCount": 20
+        },
+        {
            "id": "2404",
            "visibility": false,
            "styleId": "45",
@@ -210,7 +216,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
