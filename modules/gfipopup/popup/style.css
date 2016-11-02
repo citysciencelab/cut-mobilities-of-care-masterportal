@@ -10,8 +10,10 @@
 .gfi-win > .gfi-header {
     color: #777;
     cursor: move;
+    min-width:400px;
 }
 .gfi-win > .gfi-content {
+    width: 100%;
     overflow-y: auto;
     background-color: rgb(255, 255, 255);
 }
