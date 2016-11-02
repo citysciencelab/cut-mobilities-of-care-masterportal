@@ -47,11 +47,12 @@ define([
                         $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
                 }
                 else {
-                    // Folder auf der ersten Ebene
+                    // Folder ab der ersten Ebene
                     if (this.model.getLevel() > 0) {
                         $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
                     }
                     else {
+                        // Folder ist auf der Höchsten Ebene (direkt unter Themen)
                         var selector = "";
 
                         if (this.model.getParentId() === "Baselayer") {
