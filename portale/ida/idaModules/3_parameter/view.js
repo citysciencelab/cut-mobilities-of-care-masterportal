@@ -14,14 +14,7 @@ define([
             "click #seite3_weiter": "weiter",
             "click #seite3_back": "zurueck",
             "change .param": "paramChanged",
-            "change #WGFZ": "commaChanger",
-            "change #FLAE": "commaChanger",
-            "change #WOFL": "commaChanger",
-            "change #EGFL": "commaChanger",
-            "change #OGFL": "commaChanger",
-            "change #WONKM": "commaChanger",
-            "change #SONKM": "commaChanger",
-            "change #JEZ": "commaChanger",
+            "change .floatValue": "commaChanger",
             "click .btn-group": "buttonChanged",
             "click .waehrung": "waehrungChanged",
             "change .waehrung": "waehrungChanged"
@@ -57,13 +50,19 @@ define([
                 });
             }
 
+            var id = $(evt.currentTarget).attr("id"),
+                value = $(evt.currentTarget).find("input").val().replace(",", "."),
+                waehrung = $(evt.currentTarget).find(".active").val();
+
+            $("#" + id).find("input")[0].value = value;
+
             var obj = {
-                id: $(evt.currentTarget).attr("id"),
-                value: $(evt.currentTarget).find("input").val(),
+                id: id,
+                value: value,
                 type: "number",
                 minCheck: null,
                 maxCheck: null,
-                waehrung: $(evt.currentTarget).find(".active").val()
+                waehrung: waehrung
             };
 
             this.model.paramChanged(obj);
@@ -94,6 +93,17 @@ define([
                 value = evt.target.value.replace(",", ".");
 
             $("#" + id).val(value);
+
+            var obj = {
+                id: evt.currentTarget.id,
+                value: value,
+                type: evt.currentTarget.type,
+                minCheck: evt.currentTarget.min ? evt.currentTarget.min : null,
+                maxCheck: evt.currentTarget.max ? evt.currentTarget.max : null,
+                waehrung: null
+            };
+
+            this.model.paramChanged(obj);
         },
         switchToValid: function (id) {
             $("#" + id).parent().removeClass("has-error");

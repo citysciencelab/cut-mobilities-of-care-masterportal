@@ -119,7 +119,7 @@
         <div class="form-group col-md-6">
             <h5 class="control-label">Wertrelevante Geschossflächenzahl</h5>
             <div class="input-group">
-                <input id="WGFZ" class="param form-control" aria-describedby="wgfz-addon" type="number" min="0.4" max="4" value="<%= defaultWGFZ %>" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
+                <input id="WGFZ" class="floatValue form-control" aria-describedby="wgfz-addon" type="number" min="0.4" max="4" value="<%= defaultWGFZ %>" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
                 <span class="input-group-addon" id="wgfz-addon" title="Wenn Ihnen die WGFZ nicht bekannt ist, verwenden Sie die Wohn-/Nutzfläche dividiert durch das 0,78-fache der Grundstücksfläche.">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                 </span>
@@ -129,7 +129,7 @@
         <% if (requestedParams.FLAE === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Grundstücksgröße [m²]</h5>
-            <input id="FLAE" class="param form-control" type="number" min="0" value="<%= defaultFlae %>" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="FLAE" class="floatValue form-control" type="number" min="0" value="<%= defaultFlae %>" step="0.1"  pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.BAUW === true) { %>
@@ -152,7 +152,7 @@
         <div class="form-group col-md-6">
             <h5 class="control-label">Lage zur Straße</h5>
             <select id="STRL" class="param form-control">
-                <option value="F">Frontlage</option>
+                <option selected value="F">Frontlage</option>
                 <option value="E">Ecklage</option>
                 <option value="P">Pfeifenstielgrundstück</option>
                 <option value="H">Hinterlage (Zuwegung nur über Wegerecht)</option>
@@ -164,7 +164,7 @@
             <h5 class="control-label">Geschosslage</h5>
             <select id="GESL" class="param form-control">
                 <option value="UG">Untergeschoss, Souterrain</option>
-                <option value="EG">Erdgeschoss</option>
+                <option selected value="EG">Erdgeschoss</option>
                 <option value="OG">Obergeschoss</option>
                 <option value="DG">Dachgeschoss</option>
                 <option value="PH">Penthouse</option>
@@ -180,7 +180,7 @@
         <% if (requestedParams.WOFL === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Wohnfläche in m²</h5>
-            <input id="WOFL" class="param form-control" type="number" min="0" value="0" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="WOFL" class="floatValue form-control" type="number" min="0" step="0.1" value="0" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.ZAWO === true) { %>
@@ -210,13 +210,13 @@
         <% if (requestedParams.EGFL === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Gewerbliche Nutzfläche im Erdgeschoss in m²</h5>
-            <input id="EGFL" class="param form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="EGFL" class="floatValue form-control" type="number" min="0" value="0" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.OGFL === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Gewerbliche Nutzfläche in den Obergeschossen in m²</h5>
-            <input id="OGFL" class="param form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="OGFL" class="floatValue form-control" type="number" min="0" value="0" step="0.1" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.WONKM === true) { %>
@@ -224,8 +224,8 @@
             <h5 class="control-label">Jahresnettokaltmiete für Wohnungen</h5>
             <div class="input-group waehrung" id="WONKM" >
                 <div class="input-group-btn" aria-label="Währung in Euro oder DM">
-                    <button type="button" class="btn btn-default active" value="EUR">Euro</button>
-                    <button type="button" class="btn btn-default" value="DM">DM</button>
+                    <button type="button" class="btn btn-info active" value="EUR">Euro</button>
+                    <button type="button" class="btn btn-info" value="DM">DM</button>
                 </div>
                 <input class="form-control" type="number" min="0" value="0" step="1" pattern="[0-9]+([,\.][0-9]+)?"/>
                 <span class="input-group-addon" title="Sie können zwischen den Währungen Euro und DM frei wählen.">EUR</span>
@@ -254,7 +254,7 @@
         <% if (requestedParams.JEZ === true) { %>
         <div class="form-group col-md-6">
             <h5 class="control-label">Erbbauzins / Jahr in Euro</h5>
-            <input id="JEZ" class="param form-control" type="number" min="0" value="0" step="0.01" pattern="[0-9]+([,\.][0-9]+)?"/>
+            <input id="JEZ" class="floatValue form-control" type="number" min="0" value="0" step="0.01" pattern="[0-9]+([,\.][0-9]+)?"/>
         </div>
         <% } %>
         <% if (requestedParams.STST === true) { %>
@@ -286,7 +286,7 @@
         <div class="form-group col-md-6">
             <h5 class="control-label">Endenergiebedarf</h5>
             <div class="input-group">
-                <input id="ENER" class="param form-control" type="number" min="0" value="0" step="0.1" pattern="[0-9]"/>
+                <input id="ENER" class="floatValue form-control" type="number" min="0" value="0" step="0.1" pattern="[0-9]"/>
                 <span class="input-group-addon" id="ener-addon" title="Bitte Endernergiebedarf in kWh / m² a eingeben.">kWh / m² a</span>
             </div>
         </div>
