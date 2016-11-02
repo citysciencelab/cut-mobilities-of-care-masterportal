@@ -32,11 +32,6 @@ define([
                 }
             },
             initialize: function () {
-                var channel = Radio.channel("ViewCatalog");
-                channel.on({
-                    "toggleIsExpanded": this.toggleIsExpanded
-               }, this);
-
                 this.listenTo(this.model, {
                     "change:isExpanded": this.toggleGlyphicon
                 }, this);

@@ -379,9 +379,10 @@ define([
             showModelInTree: function (modelId) {
                 var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
+                this.closeAllExpandedFolder();
+
                 // öffnet den Themenbaum
                 $("#root li:first-child").addClass("open");
-                Radio.trigger("ViewCatalog","toggleIsExpanded");
                 // Parent und eventuelle Siblings werden hinzugefügt
                 this.addAndExpandModelsRecursive(lightModel.parentId);
                 this.setModelAttributesById(modelId, {isSelected: true});
