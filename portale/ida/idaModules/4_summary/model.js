@@ -59,8 +59,8 @@ define([
                 params = this.get("params"),
                 STRL = _.has(params, "STRL") === true ? params.STRL : "",
                 BAUW = _.has(params, "BAUW") === true ? params.BAUW : "",
-                ZWGFZ = 0,
-                ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : 0;
+                ZWGFZ = "",
+                ZFLAE = _.has(params, "FLAE") === true ? parseFloat(params.FLAE.replace(/,/, ".").trim()) : "";
 
             // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern.
             // Für den Miteigentumsanteil MEA wird der Quotient von MEAN / MEAZ verwendet.
@@ -68,16 +68,13 @@ define([
                 var WOFL = _.has(params, "WOFL") === true && Number(params.WOFL.replace(/,/, ".").trim()) > 0 ? Number(params.WOFL.replace(/,/, ".").trim()) : 0,
                     FLAE = _.has(params, "FLAE") === true && Number(params.FLAE.replace(/,/, ".").trim()) > 0 ? Number(params.FLAE.replace(/,/, ".").trim()) : 0,
                     EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
-                    OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0;
+                    OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
+                    MEA = _.has(params, "MEAN") === true && _.has(params, "MEAZ") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
+                    ZWGFZ = (WOFL + EGFL + OGFL) > 0 && FLAE > 0 ? ((WOFL + EGFL + OGFL) / FLAE / 0.78 / MEA).toFixed(2) : "";
 
-                if (FLAE > 0) {
-                    var EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
-                        OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
-                        MEA = _.has(params, "MEAN") === true && _.has(params, "MEAZ") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
-                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78 / MEA).toFixed(2);
-
-                    ZWGFZ = WGFZ;
-                    params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
+                // Nur wenn ZWGFZ > 0 wird der WGFZ für die BRW-Umrechnung verwendet und gelangt auch ins PDF.
+                if (ZWGFZ !== "") {
+                    params = _.extend(params, _.object(["WGFZ"], [ZWGFZ]));
                     if (MEA !== 1) {
                         // MEA = 1 ist uninteressant für JasperReport
                         params = _.extend(params, _.object(["MEA"], [MEA]));
@@ -87,6 +84,8 @@ define([
             }
             else {
                 ZWGFZ = params.WGFZ.replace(/,/, ".").trim();
+                params = _.extend(params, _.object(["WGFZ"], [ZWGFZ]));
+                this.set("params", params);
             }
             this.set("brwList", brwList);
             _.each(brwList, function (brw) {
@@ -103,7 +102,8 @@ define([
             }, this);
         },
         /*
-        * stellt Requests zur Abfrage der einzelnen BRW zusammen. Die Abfrage erfolgt immer in EUR, Rückgabe ist entsprechend auch in EUR.
+        * Stellt Requests zur Umrechnung der einzelnen BRW zusammen.
+        * Die Abfrage erfolgt immer in EUR, Rückgabe ist entsprechend auch in EUR.
         */
         requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE, ZNUTA) {
             var stichtag = brw.stichtag.split("."),
