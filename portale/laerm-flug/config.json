@@ -6,7 +6,7 @@
         "minChars": 3,
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -17,6 +17,10 @@
         },
         "placeholder": "Suche nach Adresse/Stadtteil"
     },
+     "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [565686, 5943986]
+    },  
     "menu": {
       "tree": {
         "name": "Themen",

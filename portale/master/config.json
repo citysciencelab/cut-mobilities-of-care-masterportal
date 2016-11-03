@@ -8,7 +8,7 @@
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -17,8 +17,8 @@
         },
         "bkg": {
             "minChars": 3,
-            "bkgSuggestURL": "/bkg_suggest",
-            "bkgSearchURL": "/bkg_geosearch",
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
             "extent": [454591, 5809000, 700000, 6075769],
             "suggestCount": 10,
             "epsg": "EPSG:25832",
@@ -149,7 +149,7 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": true
+      "attributions": false
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -196,6 +196,12 @@
           "mouseHoverField": "GEBIETSNAME"
         },
         {
+          "id": "4905",
+          "visibility": true,
+          "gfiTheme": "table",
+          "featureCount": 20
+        },
+        {
            "id": "2404",
            "visibility": false,
            "styleId": "45",
@@ -210,7 +216,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
