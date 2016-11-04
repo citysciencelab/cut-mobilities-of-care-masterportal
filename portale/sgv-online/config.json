@@ -12,7 +12,8 @@
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
-            "searchParcels": true
+            "searchParcels": true,
+            "searchStreetKey": true
         },
         "specialWFS": {
             "minChar": 3,
@@ -24,7 +25,7 @@
             "minChars": 3
         },
         "zoomLevel": 9,
-        "placeholder": "Suche nach Adresse/ Stadtteil/ Flursrück(0123/1234)"
+        "placeholder": "Suche nach Adresse/ Stadtteil/ Flurstück(0123/1234)"
     },
     "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
@@ -126,27 +127,7 @@
     "Fachdaten":
     {
       "Layer": [
-          {
-          "id": "3663"
-          },
-          {
-          "id": "3668"
-          },
-          {
-          "id": "3671"
-          },
-          {
-          "id": "3665"
-          },
-          {
-          "id": "3667"
-          },
-          {
-          "id": "3666"
-          },
-          {
-          "id": "3664"
-          },
+        
           {
           "id": "1037"
           },
@@ -164,6 +145,28 @@
           },
           {
           "id": "2313"
+          },
+          
+          {
+          "id": "211"
+          },
+          {
+          "id": "216"
+          },
+          {
+          "id": "219"
+          },
+          {
+          "id": "213"
+          },
+          {
+          "id": "215"
+          },
+          {
+          "id": "2134"
+          },
+          {
+          "id": "212"
           }
                 ]
 
