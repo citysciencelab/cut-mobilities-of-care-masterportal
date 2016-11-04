@@ -12,7 +12,8 @@
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
-            "searchParcels": true
+            "searchParcels": true,
+            "searchStreetKey": true
         },
         "specialWFS": {
             "minChar": 3,
