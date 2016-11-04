@@ -8,7 +8,7 @@
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "8",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
