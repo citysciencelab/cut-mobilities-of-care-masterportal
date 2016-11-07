@@ -15,7 +15,7 @@ define(function (require) {
             channel.on({
                 "addFeature": this.addFeature,
                 "addFeatures": this.addFeatures,
-                "removeAllFeatures": this.removeAllFeatures,
+                "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "centerFeature": this.centerFeature,
                 "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView
@@ -40,8 +40,8 @@ define(function (require) {
                 this.addFeature(feature._source);
             }, this);
         },
-        removeAllFeatures: function () {
-            Radio.trigger("Map", "removeAllFeatures", "gewerbeflaechen");
+        removeAllFeaturesFromLayer: function () {console.log(56);
+            Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
         },
 
         centerFeature: function (hit) {
