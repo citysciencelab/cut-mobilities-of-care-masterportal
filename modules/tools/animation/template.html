@@ -1,3 +1,56 @@
 <!DOCTYPE html>
-<button class="btn btn-default start" type="submit">Start</button>
-<button class="btn btn-default stop" type="submit">Stop</button>
+<div class="form-group">
+    <select id="select-kreis" class="form-control">
+        <option disabled selected hidden>Landkreis auswählen</option>
+        <% _.each(kreise, function (element) { %>
+            <% if (element === kreis) { %>
+                <option selected><%= element %></option>
+            <% }
+            else { %>
+                <option><%= element %></option>
+            <% } %>
+        <% }); %>
+    </select>
+</div>
+<% if (typeof gemeinden !== "undefined") { %>
+<div class="form-group">
+    <select id="select-gemeinde" class="form-control">
+        <option disabled selected hidden>Gemeinde auswählen</option>
+        <% _.each(gemeinden, function (element) { %>
+            <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
+                <option selected><%= element %></option>
+            <% }
+            else { %>
+                <option><%= element %></option>
+            <% } %>
+        <% }); %>
+    </select>
+</div>
+<% } %>
+<% if (typeof gemeinde !== "undefined") { %>
+<div class="radio">
+  <label class=" radio-inline">
+    <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
+    Wohnort
+  </label>
+  <label class=" radio-inline">
+    <input type="radio" name="direction" value="arbeitsort" <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
+    Arbeitsort
+  </label>
+</div>
+<% } %>
+<% if (typeof direction !== "undefined") { %>
+<hr>
+<div class="form-group pull-right">
+    <% if (animating === true) { %>
+        <button class="btn btn-default pause">
+            <span class="glyphicon glyphicon-pause"></span>&nbsp;Pause
+        </button>
+    <% }
+    else { %>
+        <button class="btn btn-default start">
+            <span class="glyphicon glyphicon-play"></span>&nbsp;Start
+        </button>
+    <% } %>
+</div>
+<% } %>
