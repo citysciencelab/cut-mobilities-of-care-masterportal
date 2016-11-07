@@ -62,7 +62,8 @@
           "id": "452"
         },
         {
-          "id": "453"
+          "id": "453",
+          "visibility": true
         }
       ]
     },
@@ -82,6 +83,11 @@
         },
         {
           "id": "182",
+          "visibility": true,
+          "displayInTree": false
+        },
+        {
+          "id": "5096",
           "visibility": true,
           "displayInTree": false
         },
