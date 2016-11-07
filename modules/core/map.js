@@ -349,6 +349,7 @@ define(function (require) {
                                 {INFO_FORMAT: element.getInfoFormat()}
                             );
 
+                            gfiURL = gfiURL.replace(/SLD_BODY\=.*?\&/, "");
                             gfiParams.push({
                                 typ: "WMS",
                                 infoFormat: element.getInfoFormat(),

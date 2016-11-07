@@ -65,6 +65,15 @@ define([
                 }
             }, this);
 
+            channel.on({
+                "mapHandler:clearMarker": this.clearMarker,
+                "mapHandler:zoomTo": this.zoomTo,
+                "mapHandler:hideMarker": this.hideMarker,
+                "mapHandler:showMarker": this.showMarker,
+                "mapHandler:zoomToBPlan": this.zoomToBPlan,
+                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
+            }, this);
+
             this.listenTo(EventBus, {
                 "mapHandler:clearMarker": this.clearMarker,
                 "mapHandler:zoomTo": this.zoomTo,
