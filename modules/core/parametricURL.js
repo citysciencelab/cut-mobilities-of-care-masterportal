@@ -245,9 +245,6 @@ define([
                 }
                 this.set("initString", initString);
             }
-            else {
-                this.set("initString", "");
-            }
 
             /**
             * Gibt den Wert für die config-Option clickCounter.enabled zurück.

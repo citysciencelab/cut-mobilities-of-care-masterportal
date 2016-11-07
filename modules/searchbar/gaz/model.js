@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
+], function (Backbone, Radio, EventBus) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -30,9 +31,8 @@ define([
          * @param {boolean} [config.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
          * @param {boolean} [config.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
          * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-         * @param {string} [initialQuery] - Initialer Suchstring.
          */
-        initialize: function (config, initialQuery) {
+        initialize: function (config) {
             this.listenTo(EventBus, {
                 "setPastedHouseNumber": this.setPastedHouseNumber,
                 "searchbar:search": this.search,
@@ -58,8 +58,8 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            if (initialQuery && _.isString(initialQuery) === true) {
-                this.directSearch(initialQuery);
+            if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                this.directSearch(Radio.request("ParametricURL", "getInitString"));
             }
         },
 
