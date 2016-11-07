@@ -5,6 +5,7 @@ require.config({
         jquery: "../components/jquery/dist/jquery.min",
         jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore-min",
+        "underscore.string": "../components/underscore.string/dist/underscore.string.min",
         backbone: "../components/backbone/backbone",
         "backbone.radio": "../components/backbone.radio/build/backbone.radio.min",
         text: "../components/requirejs-text/text",
