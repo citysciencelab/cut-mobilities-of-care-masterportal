@@ -33,6 +33,7 @@ define(function (require) {
         },
         addFeature: function (hit) {
             var feature = this.getFeatureFromHit(hit);
+
             Radio.trigger("Map", "addFeatureToLayer", feature, "gewerbeflaechen");
         },
         addFeatures: function (features) {
@@ -40,7 +41,7 @@ define(function (require) {
                 this.addFeature(feature._source);
             }, this);
         },
-        removeAllFeaturesFromLayer: function () {console.log(56);
+        removeAllFeaturesFromLayer: function () {
             Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
         },
 
