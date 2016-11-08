@@ -7,14 +7,23 @@ define(function (require) {
 
     AnimationView = Backbone.View.extend({
         model: new Animation(),
+        tagName: "form",
+        id: "animation-tool",
+        className: "win-body",
         template: _.template(AnimationTemplate),
         events: {
             "click .start": "start",
-            "click .stop": "stop"
+            "click .pause": "pause",
+            "change #select-kreis": "setKreis",
+            "change #select-gemeinde": "setGemeinde",
+            "change input[type=radio]": "setDirection"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
+                // ändert sich der Fensterstatus wird neu gezeichnet
+                "change:isCollapsed change:isCurrentWin": this.render,
+                // ändert sich eins dieser Attribute wird neu gezeichnet
+                "change:gemeinden change:gemeinde change:direction change:animating": this.render
             });
         },
         render: function () {
@@ -32,8 +41,20 @@ define(function (require) {
         start: function () {
             this.model.startAnimation();
         },
-        stop: function () {
+        pause: function () {
             this.model.stopAnimation();
+        },
+
+        setKreis: function (evt) {
+            this.model.setKreis(evt.target.value);
+        },
+
+        setGemeinde: function (evt) {
+            this.model.setGemeinde(evt.target.value);
+        },
+
+        setDirection: function (evt) {
+            this.model.setDirection(evt.target.value);
         }
     });
 
