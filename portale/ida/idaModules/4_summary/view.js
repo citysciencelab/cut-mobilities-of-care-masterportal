@@ -32,15 +32,31 @@ define([
             new Seite5(this.model.get("filepath"));
         },
         zurueck: function () {
-            $("#parameter").show();
+            // Wenn keine Parameter benötigt wurden, gibt es auch kein #parameter-Div
+            if ($("#parameter").length > 0) {
+                $("#parameter").show();
+            }
+            else {
+                $("#queries").show();
+            }
             this.remove();
         },
         render: function () {
             var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            $("#parameter").after(this.$el.html(this.template(attr)));
-            $("#parameter").hide();
+            // Wenn keine Parameter benötigt werden, gibt es auch kein #parameter-Div
+            if ($("#parameter").length > 0) {
+                $("#parameter").after(this.$el.html(this.template(attr)));
+                $("#parameter").hide();
+            }
+            else if ($("#bodenrichtwerte").length > 0) {
+                $("#bodenrichtwerte").after(this.$el.html(this.template(attr)));
+                $("#bodenrichtwerte").hide();
+            }
+            else {
+                $("#queries").after(this.$el.html(this.template(attr)));
+                $("#queries").hide();
+            }
         },
         refreshResult: function () {
             var result = this.model.get("result");
