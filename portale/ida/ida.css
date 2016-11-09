@@ -14,6 +14,5 @@
 }
 
 .btn-default:active, .btn-default.active {
-    background-color: #555 !important;
-    color: #fff !important;
+    font-weight: bold;
 }
