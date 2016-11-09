@@ -22,7 +22,7 @@ define([
             this.model.set("produkt", produkt);
             this.model.set("lage", lage);
             this.show();
-            this.BRWManuellView = new BRWManuellView();
+            this.BRWManuellView = new BRWManuellView(jahr, nutzung, produkt, lage);
             this.model.requestNecessaryData();
         },
         weiter: function () {

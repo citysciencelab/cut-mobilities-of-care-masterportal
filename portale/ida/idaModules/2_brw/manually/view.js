@@ -12,8 +12,12 @@ define([
         events: {
             "keyup input[type=text]": "checkBRWNummer"
         },
-        initialize: function () {
+        initialize: function (jahr, nutzung, produkt) {
             this.listenTo(this.model, "change:brwList", this.render);
+
+            this.model.set("jahr", jahr);
+            this.model.set("nutzung", nutzung);
+            this.model.set("produkt", produkt);
         },
         render: function () {
             var attr = this.model.toJSON();
