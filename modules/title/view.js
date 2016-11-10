@@ -2,7 +2,7 @@ define([
     "backbone",
     "text!modules/title/template.html",
     "backbone.radio"
-], function (Backbone, TitleTemplate, Util, Radio) {
+], function (Backbone, TitleTemplate, Radio) {
 
     var TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",

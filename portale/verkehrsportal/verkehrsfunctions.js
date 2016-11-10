@@ -2,9 +2,8 @@ define([
     "backbone",
     "eventbus",
     "openlayers",
-    "modules/core/util",
     "backbone.radio"
-], function (Backbone, EventBus, ol, Util, Radio) {
+], function (Backbone, EventBus, ol, Radio) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
 
@@ -38,7 +37,7 @@ define([
             "</wfs:GetFeature>";
 
             $.ajax({
-                url: Util.getProxyURL("http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
+                url: Radio.request("Util", "getProxyURL", "http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
                 type: "POST",
                 data: postmessage,
                 context: model,
@@ -70,7 +69,7 @@ define([
         refreshVerkehrsmeldung: function () {
             // diese Abfrage zeigt im Bedarfsfall eine Meldung
             $.ajax({
-                url: Util.getProxyURL("http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
+                url: Radio.request("Util", "getProxyURL", "http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
                 data: "SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0",
                 async: true,
                 context: this,

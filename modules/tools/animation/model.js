@@ -3,7 +3,6 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        Util = require("modules/core/util"),
         Config = require("config"),
         Animation;
 
@@ -80,7 +79,7 @@ define(function (require) {
          */
         sendRequest: function (type, data, successFunction) {
             $.ajax({
-                url: Util.getProxyURL(this.getUrl()),
+                url: Radio.request("Util", "getProxyURL", this.getUrl()),
                 data: data,
                 contentType: "text/xml",
                 type: type,

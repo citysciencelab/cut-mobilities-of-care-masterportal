@@ -8,9 +8,6 @@ define([
 
     var WFSStyle = Backbone.Model.extend({
         defaults: {
-            imagepath: function () {
-                return Radio.request("Util", "getPath", Config.wfsImgPath);
-            },
             subclass: "Icon",
             // für Icon
             imagename: "blank.png",
@@ -119,6 +116,7 @@ define([
         getSimpleStyle: function () {
             var imagestyle, symbolText, strokestyle, fill;
 
+            this.set("imagepath", Radio.request("Util", "getPath", Config.wfsImgPath))
             if (this.get("subclass") === "Icon") {
                 var src = this.get("imagepath") + this.get("imagename"),
                     width = this.get("imagewidth"),

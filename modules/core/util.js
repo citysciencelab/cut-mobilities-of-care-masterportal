@@ -14,6 +14,7 @@ define([
             channel.reply({
                 "isViewMobile": this.getIsViewMobile,
                 "getPath": this.getPath,
+                "getProxyURL": this.getProxyURL,
                 "isApple": this.isApple,
                 "isAndroid": this.isAndroid,
                 "isOpera": this.isOpera,

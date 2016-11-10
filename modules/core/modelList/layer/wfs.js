@@ -1,16 +1,13 @@
 define([
     "modules/core/modelList/layer/model",
     "backbone.radio",
-    "openlayers",
-    "modules/core/util",
-    "modules/layer/wfsStyle/list"
+    "openlayers"
 ], function () {
 
     var Layer = require("modules/core/modelList/layer/model"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        Util = require("modules/core/util"),
-        StyleList = require("modules/layer/wfsStyle/list"),
+        // StyleList = require("modules/layer/wfsStyle/list"),
         WFSLayer;
 
     WFSLayer = Layer.extend({
@@ -76,17 +73,17 @@ define([
                 VERSION: this.getVersion()
             };
 
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
 
             // this.buildGetRequest();
             $.ajax({
-                url: Util.getProxyURL(this.get("url")),
+                url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
                 async: true,
                 type: "GET",
                 context: this,
                 success: function (data) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
                             featureNS: this.get("featureNS"),
@@ -111,7 +108,6 @@ define([
                             // var src = new ol.source.Vector({
                             //     attributions: this.get("olAttribution")
                             // });
-
                             this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
                             if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
                                 this.styling();
@@ -134,7 +130,7 @@ define([
                 },
                 error: function (jqXHR, errorText, error) {
                     console.log(error);
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     // EventBus.trigger("alert", {
                     //     text: "<strong>Fehler bei Dienstabfrage aufgetreten </strong>" + errorText + error,
                     //     kategorie: "alert-warning"
@@ -244,7 +240,7 @@ define([
                 styleLabelField = this.get("styleLabelField");
 
             this.set("style", function (feature) {
-                var stylelistmodel = StyleList.returnModelById(styleId),
+                var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
                     label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
 
                 return stylelistmodel.getCustomLabeledStyle(label);
@@ -256,7 +252,7 @@ define([
 
             this.set("style", function (feature) {
                 var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
+                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
 
                 return stylelistmodel.getSimpleStyle();
             });
@@ -269,7 +265,7 @@ define([
             this.set("style", function (feature) {
                 var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
                     label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
-                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
+                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
 
                 return stylelistmodel.getCustomLabeledStyle(label);
             });
@@ -283,25 +279,25 @@ define([
                     stylelistmodel;
 
                 if (size > 1) {
-                    stylelistmodel = StyleList.returnModelById(styleId + "_cluster");
+                    stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
                 }
                 if (!stylelistmodel) {
                     var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
 
-                    stylelistmodel = StyleList.returnModelByValue(styleId, styleFieldValue);
+                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
                 }
                 return stylelistmodel.getClusterStyle(feature);
             });
         },
         setSimpleStyle: function () {
             var styleId = this.getStyleId(),
-                stylelistmodel = StyleList.returnModelById(styleId);
+                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
 
             this.set("style", stylelistmodel.getSimpleStyle());
         },
         setClusterStyle: function () {
             var styleId = this.getStyleId(),
-                stylelistmodel = StyleList.returnModelById(styleId);
+                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
 
             this.set("style", function (feature) {
                 return stylelistmodel.getClusterStyle(feature);
@@ -342,7 +338,7 @@ define([
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
             if (!this.get("legendURL").length) {
-                var style = StyleList.returnModelById(this.getStyleId());
+                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
                 this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
             }

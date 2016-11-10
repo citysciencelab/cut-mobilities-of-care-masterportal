@@ -4,9 +4,8 @@ define([
     "eventbus",
     "config",
     "openlayers",
-    "modules/cookie/view",
-    "modules/core/util"
-], function (Backbone, Radio, EventBus, Config, ol, cookie, Util) {
+    "modules/cookie/view"
+], function (Backbone, Radio, EventBus, Config, ol, cookie) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -43,7 +42,7 @@ define([
             var resp, newURL;
 
             resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
-            newURL = Util.getProxyURL(resp[0].get("url"));
+            newURL = Radio.request("Util", "getProxyURL", resp[0].get("url"));
             this.set("wpsurl", newURL);
             // Fenstermanagement
             EventBus.on("winParams", this.setStatus, this);

@@ -46,6 +46,17 @@ define([
             return Radio.request("Util", "getPath", Config.styleConf);
         },
         initialize: function () {
+            var channel = Radio.channel("StyleList");
+
+            channel.reply({
+                "returnModelById": this.returnModelById,
+                "returnAllModelsById": this.returnAllModelsById,
+                "returnModelByValue": this.returnModelByValue,
+                "returnModels": function () {
+                    return this.models;
+                }
+            }, this);
+
             this.fetch({
                 cache: false,
                 async: false,

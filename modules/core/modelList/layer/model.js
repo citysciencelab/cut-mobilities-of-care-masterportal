@@ -19,6 +19,7 @@ define(function (require) {
             selectionIDX: 0
         },
         initialize: function () {
+            new StyleList();
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,
@@ -341,7 +342,7 @@ define(function (require) {
         showLayerInformation: function () {
             var legendURL = [],
                 names = [],
-                styleList = StyleList.returnAllModelsById(this.attributes.id);
+                styleList = Radio.request("StyleList", "returnAllModelsById", this.attributes.id);
 
             if (styleList.length > 0) {
                 _.each(styleList, function (style) {

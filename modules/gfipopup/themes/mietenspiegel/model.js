@@ -3,9 +3,8 @@ define([
     "backbone.radio",
     "config",
     "eventbus",
-    "modules/core/util",
     "modules/layer/list"
-], function (Backbone, Radio, Config, EventBus, Util) {
+], function (Backbone, Radio, Config, EventBus) {
     "use strict";
     var GFIModel = Backbone.Model.extend({
         /**
@@ -130,12 +129,12 @@ define([
          * Lese Mietenspiegel-Daten aus msLayerMetaDaten und msLayerDaten. REQUESTOR kann nicht verwendet werden, weil es geometrielose Dienste sind.
          */
         ladeMetaDaten: function () {
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             var urlMetaDaten = this.get("msLayerMetaDaten").get("url"),
                 featureTypeMetaDaten = this.get("msLayerMetaDaten").get("featureType");
 
             $.ajax({
-                url: Util.getProxyURL(urlMetaDaten),
+                url: Radio.request("Util", "getProxyURL", urlMetaDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeMetaDaten,
                 async: true,
                 type: "GET",
@@ -143,7 +142,7 @@ define([
                 dataType: "xml",
                 context: this,
                 complete: function (jqXHR) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         EventBus.trigger("alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
                     }
@@ -167,12 +166,12 @@ define([
         },
         ladeDaten: function () {
             // Lade Mietenspiegel-Daten
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             var urlDaten = this.get("msLayerDaten").get("url"),
                 featureTypeDaten = this.get("msLayerDaten").get("featureType");
 
             $.ajax({
-                url: Util.getProxyURL(urlDaten),
+                url: Radio.request("Util", "getProxyURL", urlDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeDaten,
                 async: true,
                 type: "GET",
@@ -180,7 +179,7 @@ define([
                 dataType: "xml",
                 context: this,
                 complete: function (jqXHR) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         EventBus.trigger("alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
                     }
@@ -224,6 +223,7 @@ define([
                 merkmaleReduced = _.mapObject(merkmalnamen, function (value, key) {
                     return _.unique(_.pluck(merkmale, key));
                 });
+
             this.set("msMerkmale", merkmaleReduced);
             this.set("readyState", true);
         },
