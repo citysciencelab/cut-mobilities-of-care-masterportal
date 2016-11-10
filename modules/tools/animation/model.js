@@ -263,31 +263,43 @@ define(function (require) {
             var vectorContext = event.vectorContext,
                 frameState = event.frameState,
                 features = this.get("layer").getSource().getFeatures();
+                var elapsedTime = frameState.time - this.get("now"),
+                    // here the trick to increase speed is to jump some indexes
+                    // on lineString coordinates
+                    index = Math.round(10 * elapsedTime / 1000);
 
+                   // console.log(elapsedTime);
+                if (index >= this.get("steps")) {
+                    this.draw(vectorContext, features, -1);
+
+                    this.stopAnimation(true);
+                    return;
+                }
+                else {
+                    this.draw(vectorContext, features, index);
+                }
+
+            // tell OL3 to continue the postcompose animation
+            Radio.trigger("Map", "render");
+        },
+        draw: function (vectorContext, features, index) {
+            var currentPoint,
+                newFeature;
             for (var i = 0; i < features.length; i++) {
                 if (this.get("animating")) {
 
-                    var elapsedTime = frameState.time - this.get("now"),
-                        // here the trick to increase speed is to jump some indexes
-                        // on lineString coordinates
-                        index = Math.round(10 * elapsedTime / 1000),
-                        currentPoint,
-                        newFeature;
-
-                    if (index >= this.get("steps")) {
-                        this.stopAnimation(true);
-                        return;
-                    }
                     this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
-                    currentPoint = new ol.geom.Point(features[i].getGeometry().getCoordinates()[index]);
+                    if(index === -1) {
+                        currentPoint = new ol.geom.Point(features[i].getGeometry().getCoordinates()[features[i].getGeometry().getCoordinates().length-1]);
+                    }
+                    else {
+                        currentPoint = new ol.geom.Point(features[i].getGeometry().getCoordinates()[index]);
+                    }
                     newFeature = new ol.Feature(currentPoint);
                     vectorContext.drawFeature(newFeature, this.getDefaultPointStyle());
                 }
             }
-            // tell OL3 to continue the postcompose animation
-            Radio.trigger("Map", "render");
         },
-
         preparePointStyle: function (val, kreis) {
             var minVal = this.getMinVal(),
                 maxVal = this.getMaxVal(),
@@ -341,7 +353,7 @@ define(function (require) {
         stopAnimation: function () {
             this.set("animating", false);
             // remove listener
-            Radio.trigger("Map", "unregisterPostCompose", this.moveFeature);
+           // Radio.trigger("Map", "unregisterPostCompose", this.moveFeature);
         },
 
         setLineFeatures: function (value) {
