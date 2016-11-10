@@ -1,12 +1,11 @@
 define([
     "backbone",
-    "backbone.radio",
-    "modules/core/util"
-], function (Backbone, Radio, Util) {
+    "backbone.radio"
+], function (Backbone, Radio) {
     "use strict";
     var ContactModel = Backbone.Model.extend({
         defaults: {
-            maxLines: Util.isAny() ? "5" : "10",
+            maxLines: Radio.request("Util", "isAny") ? "5" : "10",
             cc: [],
             ccToUser: false,
             bcc: [],

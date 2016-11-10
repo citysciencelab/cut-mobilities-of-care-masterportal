@@ -1,19 +1,19 @@
 define([
     "backbone",
     "backbone.radio",
-    "config",
-    "modules/core/util"
+    "config"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
-        Util = require("modules/core/util"),
         RawLayerList;
 
     RawLayerList = Backbone.Collection.extend({
         // URL zur services.json
-        url: Util.getPath(Config.layerConf),
+        url: function () {
+            return Radio.request("Util", "getPath", Config.layerConf);
+        },
         initialize: function () {
             var channel = Radio.channel("RawLayerList");
 

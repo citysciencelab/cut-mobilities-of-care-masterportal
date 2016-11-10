@@ -12,7 +12,8 @@ define("app",
     "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
 
-    // Core laden
+    // Core lade
+    new Util();
     new RawLayerList();
     new Preparser();
     new ParametricURL();
@@ -57,7 +58,7 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
-        if (Util.isAny()) {
+        if (Radio.request("Util", "isAny")) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
                 new MobileLayerInformationView();
             });
@@ -208,7 +209,7 @@ define("app",
                 }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
-                        if (Util.isAny()) {
+                        if (Radio.request("Util", "isAny")) {
                             new MobileLegendView();
                         }
                         else {
@@ -311,6 +312,6 @@ define("app",
                 new TitleView(title);
             });
         }
+        Radio.trigger("Util", "hideLoader");
     });
-    Util.hideLoader();
 });

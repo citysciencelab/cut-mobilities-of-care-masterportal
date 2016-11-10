@@ -4,7 +4,6 @@ define(function (require) {
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
         MapView = require("modules/core/mapView"),
-        Util = require("modules/core/util"),
         Map;
 
      Map = Backbone.Model.extend({
@@ -482,10 +481,10 @@ define(function (require) {
             var num = this.get("initalLoading");
 
             if (num > 0) {
-                Util.showLoader();
+                Radio.trigger("Util", "showLoader");
             }
             else if (num === 0) {
-                Util.hideLoader();
+                Radio.trigger("Util", "hideLoader");
                 this.stopListening(this, "change:initalLoading");
             }
         }

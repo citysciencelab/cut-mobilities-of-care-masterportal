@@ -1,7 +1,6 @@
 define([
     "backbone",
     "text!modules/title/template.html",
-    "modules/core/util",
     "backbone.radio"
 ], function (Backbone, TitleTemplate, Util, Radio) {
 
@@ -13,10 +12,9 @@ define([
             this.render(title);
         },
         render: function (portalTitle) {
-            this.$el.html(this.template( {
+            this.$el.html(this.template({
                 title: portalTitle,
-                util: Util,
-                logo: this.getLogo(),
+                logo: Radio.request("Util", "getPath", this.getLogo()),
                 logoLink: Radio.request("Parser", "getPortalConfig").LogoLink || "http://geoinfo.hamburg.de",
                 logoTooltip: Radio.request("Parser", "getPortalConfig").LogoToolTip || "Landesbetrieb Geoinformation und Vermessung"
             }));

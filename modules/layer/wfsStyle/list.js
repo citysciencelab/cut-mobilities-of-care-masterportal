@@ -2,10 +2,9 @@ define([
     "backbone",
     "modules/layer/wfsStyle/model",
     "config",
-    "modules/core/util",
     "eventbus",
     "backbone.radio"
-], function (Backbone, WFSStyle, Config, Util, EventBus, Radio) {
+], function (Backbone, WFSStyle, Config, EventBus, Radio) {
 
     var StyleList = Backbone.Collection.extend ({
         model: WFSStyle,
@@ -43,14 +42,16 @@ define([
         //         }
         //     });
         // },
-        url: Util.getPath(Config.styleConf),
+        url: function () {
+            return Radio.request("Util", "getPath", Config.styleConf);
+        },
         initialize: function () {
             this.fetch({
                 cache: false,
                 async: false,
                 error: function () {
                     EventBus.trigger("alert", {
-                        text: "Fehler beim Laden von: " + Util.getPath(Config.styleConf),
+                        text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
                         kategorie: "alert-warning"
                     });
                 },
@@ -82,5 +83,5 @@ define([
         }
     });
 
-    return new StyleList();
+    return StyleList;
 });

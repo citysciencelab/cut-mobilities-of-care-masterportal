@@ -12,9 +12,22 @@ define([
             var channel = Radio.channel("Util");
 
             channel.reply({
-                "isViewMobile": this.getIsViewMobile
+                "isViewMobile": this.getIsViewMobile,
+                "getPath": this.getPath,
+                "isApple": this.isApple,
+                "isAndroid": this.isAndroid,
+                "isOpera": this.isOpera,
+                "isWindows": this.isWindows,
+                "isChrome": this.isChrome,
+                "isAny": this.isAny
             }, this);
-            //initial isMobileView setzen
+
+            channel.on({
+                "hideLoader": this.hideLoader,
+                "showLoader": this.showLoader
+            }, this);
+
+            // initial isMobileView setzen
             this.toggleIsViewMobile();
 
             this.listenTo(this, {
@@ -41,7 +54,7 @@ define([
             if (/Chrome/i.test(navigator.userAgent)) {
                 return true;
             }
-            else{
+            else {
                 return false;
             }
         },
@@ -137,5 +150,5 @@ define([
         }
     });
 
-    return new Util();
+    return Util;
 });
