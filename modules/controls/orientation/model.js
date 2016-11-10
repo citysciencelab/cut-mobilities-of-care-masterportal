@@ -21,7 +21,7 @@ define([
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
             position: ""
         },
-        initialize: function () {console.log(567);
+        initialize: function () {
             this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
                 this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
