@@ -201,11 +201,11 @@
                       "visibility": false
                     },
                     {
-                      "id": "4639",
+                      "id": "4926",
                       "visibility": true,
-                      "styleable": false,
+                      "styleable": true,
                       "geomType": "Polygon",
-                      "attributesToStyle": ["AP30Sum", "AP60Sum"]
+                      "attributesToStyle": ["ErreichbareArbeitsplaetzein30Min"]
                     }
                   ]
                 }
