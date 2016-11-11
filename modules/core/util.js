@@ -5,9 +5,9 @@ define([
 ], function (Backbone, Radio, Require) {
 
     var Util = Backbone.Model.extend({
-        defaults: {
-            isViewMobile: false
-        },
+        // defaults: {
+        //     isViewMobile: false
+        // },
         initialize: function () {
             var channel = Radio.channel("Util");
 
@@ -33,7 +33,7 @@ define([
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
+                    channel.trigger("isViewMobileChanged");
                 }
             });
 
