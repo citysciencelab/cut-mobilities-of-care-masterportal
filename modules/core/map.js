@@ -62,6 +62,8 @@ define(function (require) {
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
+            this.registerPointerMove();
+            
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
             var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
@@ -72,6 +74,11 @@ define(function (require) {
 
         },
 
+        registerPointerMove: function () {
+            this.get("map").on("pointermove", function (evt) {
+                Radio.trigger("Map", "pointerMoveOnMap", evt);
+            });
+        },
         getLayers: function () {
             return this.get("map").getLayers();
         },
