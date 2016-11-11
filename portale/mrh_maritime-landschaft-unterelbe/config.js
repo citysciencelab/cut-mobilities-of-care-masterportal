@@ -37,8 +37,6 @@ define(function () {
             ]
         },
         view: {
-            center: [565874, 5934140],
-            extent: [454591, 5809000, 700000, 6075769], // extent aus altem portal erzeugt fehler im webatlas und suchdienst
             resolution: 76.43718115953851,
             options: [
                 {
@@ -99,7 +97,7 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
+        layerConf: "../components/lgv-config/services-mrh.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",

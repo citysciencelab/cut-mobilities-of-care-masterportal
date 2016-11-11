@@ -1,7 +1,8 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "Maritime Landschaft Unterelbe",
+    "PortalTitle": "Freizeitportal - MLU",
+    "PortalLogo":"../img/Logo_MLU.png",
     "searchBar": {
        "minChars": 3,
         "bkg": {
@@ -98,37 +99,47 @@
     {
       "Layer": [
         {
-          "id": "453",
-          "visibility": true
+          "id": "51",
+          "visibility": false
         },
         {
-          "id": "452"
+          "id": "53"
+        },
+        {
+          "id": "55"
         }
       ]
     },
     "Fachdaten":
     {
       "Layer": [
-        
         {
-         "id": "2689", 
-         "visibility": true,
-         "name" : "Sportboothäfen in der MRH" 
+         "id": "145", 
+         "visibility": true
         },
         {
-         "id": "2677", 
-         "visibility": true,
-         "name" : "Lieblingsplätze am Wasser"
+         "id": "129", 
+         "visibility": true
         },
         {
-         "id": "2685", 
-         "visibility": true,
-         "name" : "Tage der Industriekultur am Wasser"
+         "id": "147", 
+         "visibility": true
         },
         {
-         "id": ["2875", "2876", "2874", "2877"], 
-         "visibility": true,
-         "name" : "Verwaltungsgrenzen "
+         "id": "317", 
+         "visibility": false
+        },
+        {
+         "id": "319", 
+         "visibility": false
+        },
+        {
+         "id": "315", 
+         "visibility": false
+        },
+        {
+         "id": "313", 
+         "visibility": false
         }
       ]
     }
