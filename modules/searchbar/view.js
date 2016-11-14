@@ -310,7 +310,7 @@ define([
                 if (event.keyCode === 40) {
                     this.nextElement(selected);
                 }
-                if (event.keyCode === 13) {
+                if (event.keyCode === 13 && this.model.get("hitList").length > 1) {
                     if (this.isFolderElement(selected)) {
                         this.collapseHits(selected);
                     }
@@ -517,7 +517,7 @@ define([
             this.hideMarker();
             EventBus.trigger("mapHandler:clearMarker", this);
             this.clearSelection();
-            //Suchvorschläge löschen
+            // Suchvorschläge löschen
             $("#searchInputUL").html("");
 
         },
