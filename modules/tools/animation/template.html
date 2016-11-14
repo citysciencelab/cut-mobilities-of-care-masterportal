@@ -44,12 +44,14 @@
     <% _.each(ort_kreise_mit_anzahl, function(kreis){ %>
         <% if (kreis.color !== null){ %>
             <tr>
-                <td><div class="form-group pull-left" style="width:20px;height:20px;background-color:<%= kreis.color %>"></div></td>
+                <td><div class="form-group pull-left animation_legend" style="background-color:<%= kreis.color %>"></div></td>
                 <td><%=kreis.kreis%> (Gesamt: <%=kreis.anzahl_pendler%>)</td>
             </tr>
         <%} %>
     <% }); %>
-</table>    
+    <td><div class="form-group pull-left animation_legend"></div></td>
+    <td>Sonstige</td>
+</table>
 <hr>
 <div class="form-group pull-right">
     <% if (animating === true) { %>
@@ -62,6 +64,6 @@
             <span class="glyphicon glyphicon-play"></span>&nbsp;Start
         </button>
     <% } %>
-</div> 
-    
+</div>
+
 <% } %>
