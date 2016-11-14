@@ -36,7 +36,15 @@ define(function (require) {
                 "change:gemeinde": function () {
                     this.unset("direction");
                 },
-                "change:direction": this.createPostBody,
+                "change:direction": function (model, value) {
+                    if (value === "arbeitsort") {
+                        this.setAttrKreis("wohnort_kreis");
+                    }
+                    else {
+                        this.setAttrKreis("arbeitsort_kreis");
+                    }
+                    this.createPostBody(value);
+                },
                 "change:postBody": function (model, value) {
                     this.sendRequest("POST", value, this.parseFeatures);
                 },
@@ -58,16 +66,16 @@ define(function (require) {
             this.setParams(Config.animation.params || {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
-                TYPENAME: "app:mrh_auspendler_gemeinde",
+                TYPENAME: "app:mrh_einpendler_gemeinde",
                 VERSION: "1.1.0",
                 maxFeatures: "10000"
             });
-            this.setFeatureType(Config.animation.featureType || "mrh_auspendler_gemeinde");
+            this.setFeatureType(Config.animation.featureType || "mrh_einpendler_gemeinde");
             this.setMinPx(Config.animation.minPx || 1);
             this.setMaxPx(Config.animation.maxPx || 20);
             this.setNumKreiseToStyle(Config.animation.num_kreise_to_style || 2);
             this.setColors(Config.animation.colors || ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-            this.setAttrAnzahl(Config.animation.attrAnzahl || "anzahl_auspendler");
+            this.setAttrAnzahl(Config.animation.attrAnzahl || "anzahl_einpendler");
             this.setAttrKreis(Config.animation.attrKreis || "wohnort_kreis");
         },
 
@@ -210,18 +218,18 @@ define(function (require) {
             }
         },
 
-        createPostBody: function (model, value) {
+        createPostBody: function (value) {
             var postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
-                            "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-                                "<wfs:Query typeName='app:mrh_auspendler_gemeinde'>" +
-                                    "<ogc:Filter>" +
-                                        "<ogc:PropertyIsEqualTo>" +
-                                            "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
-                                            "<ogc:Literal>" + this.getGemeinde() + "</ogc:Literal>" +
-                                        "</ogc:PropertyIsEqualTo>" +
-                                    "</ogc:Filter>" +
-                                "</wfs:Query>" +
-                            "</wfs:GetFeature>";
+                        "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
+                            "<wfs:Query typeName='app:mrh_einpendler_gemeinde'>" +
+                                "<ogc:Filter>" +
+                                    "<ogc:PropertyIsEqualTo>" +
+                                        "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
+                                        "<ogc:Literal>" + this.getGemeinde() + "</ogc:Literal>" +
+                                    "</ogc:PropertyIsEqualTo>" +
+                                "</ogc:Filter>" +
+                            "</wfs:Query>" +
+                        "</wfs:GetFeature>";
 
             this.setPostBody(postBody);
         },
