@@ -7,6 +7,12 @@
     display: show;
     background-color: rgb(255, 255, 255);
 }
+.fixed {
+    table-layout:fixed;
+    word-wrap:break-word;
+}
+
+
 .gfi-win > .gfi-header {
     color: #777;
     cursor: move;
