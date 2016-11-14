@@ -162,12 +162,16 @@ define([
         setConfig: function () {
             _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
                 switch (setting.id) {
-                case "backgroundImage": {
-                    this.set("backgroundImage", setting.attr);
+                    case "backgroundImage": {
+                        this.set("backgroundImage", setting.attr);
 
-                    this.setBackground(setting.attr);
-                    break;
-                }
+                        this.setBackground(setting.attr);
+                        break;
+                    }
+                    case "startCenter": {
+                        this.set("startCenter", setting.attr);
+                        break;
+                    }
                 }
             }, this);
         },
