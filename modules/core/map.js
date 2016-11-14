@@ -27,7 +27,8 @@ define(function (require) {
                 mapView = new MapView();
 
             channel.reply({
-                "getLayers": this.getLayers
+                "getLayers": this.getLayers,
+                "createLayerIfNotExists": this.createLayerIfNotExists
             }, this);
 
             channel.on({
@@ -488,6 +489,32 @@ define(function (require) {
                 Util.hideLoader();
                 this.stopListening(this, "change:initalLoading");
             }
+        },
+        // Prüft ob der Layer mit dem Namen "Name" schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
+        createLayerIfNotExists: function (name) {
+            var layers = this.getLayers(),
+                found = false,
+                resultLayer = {};
+
+            _.each(layers.getArray(), function (layer) {
+                if (layer.get("name") === name) {
+                    found = true;
+                    resultLayer = layer;
+                }
+            }, this);
+
+            if (!found) {
+                var source = new ol.source.Vector({useSpatialIndex: false}),
+                    layer = new ol.layer.Vector({
+                    name: name,
+                    source: source,
+                    alwaysOnTop: true
+                });
+
+                resultLayer = layer;
+                Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
+            }
+            return resultLayer;
         }
     });
 
