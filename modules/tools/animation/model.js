@@ -198,9 +198,8 @@ define(function (require) {
 
                 obj.color = colors[index];
             });
-            ort_kreise_mit_anzahl = _.sortBy(ort_kreise_mit_anzahl,'anzahl_pendler');
+            ort_kreise_mit_anzahl = _.sortBy(ort_kreise_mit_anzahl, "anzahl_pendler");
             this.setOrtKreiseMitAnzahl(ort_kreise_mit_anzahl.reverse());
-           
         },
 
         setStatus: function (args) {
@@ -307,7 +306,7 @@ define(function (require) {
             percent = (val * 100) / (maxVal - minVal);
             pixel = ((maxPx - minPx) / 100) * percent;
             ort = _.findWhere(ort_kreise_mit_anzahl, {kreis: kreis});
-            
+
             if (!_.isUndefined(ort) && ort.color !== null) {
                 color = ort.color;
             }
