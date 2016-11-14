@@ -36,7 +36,15 @@ define(function (require) {
                 "change:gemeinde": function () {
                     this.unset("direction");
                 },
-                "change:direction": this.createPostBody,
+                "change:direction": function (model, value) {
+                    if (value === "arbeitsort") {
+                        this.setAttrKreis("wohnort_kreis");
+                    }
+                    else {
+                        this.setAttrKreis("arbeitsort_kreis");
+                    }
+                    this.createPostBody(value);
+                },
                 "change:postBody": function (model, value) {
                     this.sendRequest("POST", value, this.parseFeatures);
                 },
@@ -210,14 +218,7 @@ define(function (require) {
             }
         },
 
-        createPostBody: function (model, value) {
-            if (value === "arbeitsort") {
-                this.setAttrKreis("wohnort_kreis");
-            }
-            else{
-                this.setAttrKreis("arbeitsort_kreis");
-            }
-            
+        createPostBody: function (value) {
             var postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
                         "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
                             "<wfs:Query typeName='app:mrh_einpendler_gemeinde'>" +
@@ -229,7 +230,7 @@ define(function (require) {
                                 "</ogc:Filter>" +
                             "</wfs:Query>" +
                         "</wfs:GetFeature>";
-           
+
             this.setPostBody(postBody);
         },
 
