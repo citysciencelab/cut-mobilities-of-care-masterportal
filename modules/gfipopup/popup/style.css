@@ -1,15 +1,17 @@
 .gfi-win {
     position: absolute;
     top: 0;
-    right: 50px;
-    width: 30%;
+    right: 130px;
+    max-width: 25%;
     margin: 60px 10px 30px 10px;
     display: show;
     background-color: rgb(255, 255, 255);
 }
-.fixed {
-    table-layout:fixed;
-    word-wrap:break-word;
+.table-fixed {
+    table-layout: fixed;
+}
+td:first-child {
+    word-wrap: break-word;
 }
 
 
