@@ -26,8 +26,8 @@ define(function () {
                 VERSION: "1.1.0",
                 maxFeatures: "10000"
             },
-            featureType: "mrh_auspendler_gemeinde",
-            attrAnzahl: "anzahl_auspendler",
+            featureType: "mrh_einpendler_gemeinde",
+            attrAnzahl: "anzahl_einpendler",
             attrKreis: "wohnort_kreis",
             minPx: 5,
             maxPx: 30,
