@@ -27,6 +27,13 @@ define(function (require) {
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
             EventBus.trigger("mapHandler:showMarker", [0,0]);
+            if (_.has(Config,"gfiWindow")) {
+                this.gfiWindow = Config.gfiWindow;
+            }
+            else {
+                this.gfiWindow = "detached";
+            }
+            
         },
         /**
          * Toggle des Popovers in minimiert oder maximiert
@@ -81,7 +88,7 @@ define(function (require) {
             var coord = [],
                 attr = this.model.toJSON();
 
-            if (_.has(Config, "gfiAtClick") && Config.gfiAtClick === false) {
+            if (this.gfiWindow !== "attached") {
                 if (_.has(evt, "changed")) {
                     coord = evt.changed.coordinate;
                     if (coord !== this.coordinate) {
@@ -91,9 +98,8 @@ define(function (require) {
                 }
             }
 
-            if (_.has(Config, "gfiAtClick") && Config.gfiAtClick === false) {
+            if (this.gfiWindow !== "attached") {
                 this.$el.attr("class", "gfi-win");
-                // this.$el.html(this.template(attr));
                 $("body").append(this.$el.html(this.template(attr)));
                 $(".gfi-content").css("max-height", ($(window).height() * 0.7));
             }
@@ -116,7 +122,7 @@ define(function (require) {
                 content: this.$el
             });
 
-            if (_.has(Config, "gfiAtClick") && Config.gfiAtClick === false) {
+            if (this.gfiWindow !== "attached") {
                 this.$el.draggable({
                     containment: "#map",
                     handle: ".gfi-header"
