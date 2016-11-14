@@ -40,7 +40,10 @@ define(function (require) {
                 "change:postBody": function (model, value) {
                     this.sendRequest("POST", value, this.parseFeatures);
                 },
-                "change:lineFeatures": this.createLineString
+                "change:lineFeatures": function (model, value) {
+                    this.centerGemeinde();
+                    this.createLineString();
+                }
             });
 
             // Config auslesen oder default
@@ -139,6 +142,18 @@ define(function (require) {
             this.prepareData();
         },
 
+        /**
+         * Übergibt die Zentrumskoordinate der Gemeinde an die MapView, abhängig der Richtung.
+         */
+        centerGemeinde: function () {
+            if (this.getDirection() === "wohnort") {
+                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getFirstCoordinate(), 0);
+            }
+            else {
+                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getLastCoordinate(), 0);
+            }
+        },
+
         prepareData: function () {
             var features = this.getLineFeatures(),
                 values = [],
@@ -213,7 +228,7 @@ define(function (require) {
         createPostBody: function (model, value) {
             var postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
                             "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-                                "<wfs:Query typeName='app:mrh_auspendler_gemeinde'>" +
+                                "<wfs:Query typeName='app:mrh_einpendler_gemeinde'>" +
                                     "<ogc:Filter>" +
                                         "<ogc:PropertyIsEqualTo>" +
                                             "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
