@@ -9,11 +9,8 @@
 }
 .table-fixed {
     table-layout: fixed;
-}
-td:first-child {
     word-wrap: break-word;
 }
-
 
 .gfi-win > .gfi-header {
     color: #777;
