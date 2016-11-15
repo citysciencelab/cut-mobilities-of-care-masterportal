@@ -20,6 +20,10 @@
         },
         "placeholder": "Suche nach Adresse, Ort"
     },
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [565874, 5934140]
+    },
     "menu": {
       "tree": {
         "name": "Themen",
@@ -98,11 +102,11 @@
       }
     },
     "controls": {
+      "toggleMenu": true, 
+      "fullScreen": true,
       "zoom": true,
-      "toggleMenu": true,
       "orientation": "allways",
       "poi": true,
-      "fullScreen": true,
       "attributions": true
     },
     "scaleLine": true,
