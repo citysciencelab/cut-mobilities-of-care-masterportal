@@ -123,7 +123,7 @@
       "Hintergrundkarten":
         {
           "Layer": [
-              
+
             {
              "id": "368",
              "visible": false,
@@ -162,7 +162,7 @@
               "visibility": false,
               "name" : "Stadtplan (farbig)"
             }
-              
+
           ]
         },
 
@@ -266,11 +266,11 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
-            
+
             {
               "id": "4866",
               "visibility": false
@@ -306,7 +306,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -360,7 +360,7 @@
 
           ]
         },
-          
+
         {
             "Titel": "Verkehrsmengen auf Hauptverkehrsstraßen in Hamburg",
 				"Layer": [
@@ -408,7 +408,7 @@
                   "id": "2160",
                   "visibility": false,
                   "name" : "Kfz-Pegel"
-                
+
                 }
               ]
             },
@@ -466,7 +466,7 @@
 
                     ]
                 },
-          
+
         {
             "Titel": "Verkehrskameras",
                 "Layer": [
@@ -482,7 +482,7 @@
             }
                 ]
         },
-          
+
         {
             "Titel": "Dynamische Anzeigen",
                 "Layer": [
@@ -498,7 +498,7 @@
             }
                     ]
         },
-          
+
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -508,7 +508,7 @@
             }
           ]
         },
-          
+
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -538,7 +538,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -583,7 +583,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Umwelt",
           "Layer": [
@@ -599,7 +599,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -609,7 +609,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -681,7 +681,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Soziales",
           "Layer": [
@@ -700,7 +700,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [

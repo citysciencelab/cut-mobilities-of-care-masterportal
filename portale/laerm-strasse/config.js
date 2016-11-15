@@ -46,7 +46,7 @@ define(function () {
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
-        
+
         // menubar: true,
         scaleLine: true,
         mouseHover: true,

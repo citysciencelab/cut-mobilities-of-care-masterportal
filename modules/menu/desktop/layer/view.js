@@ -63,7 +63,7 @@ define([
                 }
             }
         },
-        
+
         rerender: function () {
             var attr = this.model.toJSON();
 

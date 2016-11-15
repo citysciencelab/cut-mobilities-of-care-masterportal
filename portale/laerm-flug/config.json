@@ -20,7 +20,7 @@
      "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [565686, 5943986]
-    },  
+    },
     "menu": {
       "tree": {
         "name": "Themen",
@@ -31,7 +31,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -102,20 +102,20 @@
     "Fachdaten":
     {
       "Layer": [
-        
+
         {
-         "id": ["2413","2415"], 
+         "id": ["2413","2415"],
          "visibility": true,
          "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
         },
         {
-         "id": ["2412","2415"], 
-         "visibility": false, 
+         "id": ["2412","2415"],
+         "visibility": false,
          "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)"
         },
         {
-         "id": ["2414","2416"], 
-         "visibility": false, 
+         "id": ["2414","2416"],
+         "visibility": false,
          "name": "Nacht-Schutzzonen mit Isolinien LAeq in dB(A)"
         }
       ]

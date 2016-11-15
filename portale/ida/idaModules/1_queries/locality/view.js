@@ -1,22 +1,28 @@
 define([
     "jquery",
     "backbone",
+    "text!idaModules/1_queries/locality/template.html",
     "config",
     "idaModules/1_queries/locality/model",
     "modules/searchbar/view"
-], function ($, Backbone, Config, Model, Searchbar) {
+], function ($, Backbone, Template, Config, Model, Searchbar) {
     "use strict";
     var LocalityView = Backbone.View.extend({
         el: "#lage",
         model: Model,
+        template: _.template(Template),
         events: {
             "change input[type=radio]": "switchLage", // 'click .toggleRoutingOptions': 'toggleRoutingOptions',
             "change #gemarkungsnummer": "setGemarkungsnummer",
             "keyup #flurstuecksnummer": "setFlurstuecksnummer",
-            "keyup #flurstuecksstrasse": "setFlurstuecksstrasse"
+            "blur #flurstuecksstrasse": "setFlurstuecksstrasse"
         },
         initialize: function () {
+            this.listenTo(this.model, "change:header", this.setHeader);
+
+            this.render();
             new Searchbar(Config.searchBar);
+            $("#searchInput").focus();
         },
         switchLage: function (evt) {
             if (evt.target.value === "radio1") {
@@ -30,6 +36,11 @@ define([
                 $("#adresse").hide();
             }
         },
+        setHeader: function () {
+            var header = this.model.get("header");
+
+            $("#lageheaderSuffix").text(header);
+        },
         setGemarkungsnummer: function (evt) {
             this.model.set("flurGemarkung", evt.currentTarget.value);
         },
@@ -38,8 +49,13 @@ define([
         },
         setFlurstuecksstrasse: function (evt) {
             this.model.set("flurStrasse", evt.currentTarget.value);
+        },
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
         }
     });
 
-    return new LocalityView;
+    return LocalityView;
 });

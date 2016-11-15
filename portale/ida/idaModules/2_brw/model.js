@@ -61,6 +61,7 @@ define([
                 return (brw.brwValues && brw.brwLage); // brwValues und brwLage sind Objekte innerhalb des Objekts "brw", die erst nach erfolgreicher Suche angefügt worden sind.
             });
             if (complete === true) {
+                this.unset("complete", {silent: true});
                 this.set("complete", true);
             }
             else {
@@ -92,7 +93,6 @@ define([
             dataInputs += "</wps:Data>";
             dataInputs += "</wps:Input>";
             dataInputs += "</wps:DataInputs>";
-            this.set("brwList", []);
             EventBus.trigger("wps:request", {
                 workbenchname: this.get("wpsWorkbenchnameListe"),
                 dataInputs: dataInputs

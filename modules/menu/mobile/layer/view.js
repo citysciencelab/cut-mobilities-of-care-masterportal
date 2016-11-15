@@ -37,11 +37,9 @@ define([
                  "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
-            
             this.toggleColor(this.model, this.model.getIsOutOfRange());
-            
         },
-        
+
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
          */

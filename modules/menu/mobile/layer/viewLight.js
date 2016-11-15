@@ -35,7 +35,7 @@ define([
             });
             this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
-        
+
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
          */
@@ -51,7 +51,7 @@ define([
                 }
             }
         },
-        
+
         render: function () {
             var attr = this.model.toJSON();
 

@@ -149,11 +149,11 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
-            
+
             {
               "id": "4866",
               "visibility": false
@@ -190,7 +190,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -276,7 +276,7 @@
                   "visibility": false,
                   "name" : "Kfz-Pegel",
                   "metaName": "Kfz-Pegel"
-                
+
                 }
               ]
             },
@@ -334,7 +334,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -350,7 +350,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -366,7 +366,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -376,7 +376,7 @@
             }
           ]
         },
-          
+
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -406,7 +406,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -451,7 +451,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Umwelt",
           "Layer": [
@@ -469,7 +469,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -479,7 +479,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -558,7 +558,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Soziales",
           "Layer": [
@@ -577,7 +577,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [

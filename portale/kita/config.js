@@ -53,14 +53,14 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-       
+
         attributions: true,
         // menubar: true,
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-      
+
         print: {
             printID: "99999",
             title: "Kita-Stadtplan",

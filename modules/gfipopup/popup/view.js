@@ -33,7 +33,7 @@ define(function (require) {
             else {
                 this.gfiWindow = "detached";
             }
-            
+
         },
         /**
          * Toggle des Popovers in minimiert oder maximiert
