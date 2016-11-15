@@ -14,7 +14,7 @@ define([
             this.render();
         },
         render: function () {
-            $(".controls-view").append(this.$el.html(this.template));
+            this.$el.html(this.template);
             if (Config.isMenubarVisible === false) {
                 this.toggleNavigation();
             }

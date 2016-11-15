@@ -1,8 +1,8 @@
 define([
     "backbone",
-    "text!modules/controls/mousePosition/template.html",
-    "eventbus"
-], function (Backbone, MousePositionTemplate, EventBus) {
+    "backbone.radio",
+    "text!modules/controls/mousePosition/template.html"
+], function (Backbone, Radio, MousePositionTemplate) {
 
     var MousePositionView = Backbone.View.extend({
         className: "mouse-position hidden-xs",
@@ -11,9 +11,7 @@ define([
             "click .glyphicon": "toggle"
         },
         initialize: function () {
-            this.listenTo(EventBus, {
-                "pointerMoveOnMap": this.setCoordinates
-            });
+            Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates);
 
             this.render();
         },

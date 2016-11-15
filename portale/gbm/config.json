@@ -1,12 +1,13 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "IT-GBM",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
            "minChars": 3,
            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "serviceId": "6",
            "searchStreets": true,
            "searchHouseNumbers": true,
            "searchDistricts": true,
@@ -60,12 +61,14 @@
       }
     },
     "controls": {
-      "zoom": true,
       "toggleMenu": true,
-      "attributions": true
+      "zoom": true,
+      "orientation": "once",
+      "attributions": false,
+      "fullScreen": true
     },
     "scaleLine": true,
-    "Baumtyp": "light"
+    "Baumtyp": "custom"
   },
   "Themenconfig":
   {
@@ -83,29 +86,220 @@
       ]
     },
     "Fachdaten":
-    {
-      "Layer": [
+
         {
-          "id": ["758", "759"],
-          "name": "Störfallbetriebe mit Abstandszonen"
-        },
-        {
-          "id": "1747"
-        },
-        {
-          "id": "1561"
-        },
-        {
-          "id": "1562"
-        },
-        {
-          "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
-          "name": "Digitales Informationssystem Planrecht (DIP)"
-        },
-        {
-          "id": "1749"
+          "Ordner": [
+
+            {
+              "Titel": "Planungsrecht / -konzepte",
+              "Layer": [
+                {
+                    "id": "1561"
+                },
+                {
+                    "id": "1562"
+                },
+                {
+                    "id": "1747"
+                },
+
+                {
+                    "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
+                    "name": "Digitales Informationssystem Planrecht (DIP)"
+                },
+                {
+                    "id": "1749"
+                }
+              ]
+            },
+
+            {
+              "Titel": "Vermarktungserfordernisse",
+              "Layer": [
+                {
+                    "id": ["758", "759"],
+                    "name": "Störfallbetriebe mit Abstandszonen"
+                }
+              ]
+            },
+
+            {
+              "Titel": "Besondere Vermarktungserfordernisse",
+
+              "Ordner": [
+                    {
+                      "Titel": "Biotopkataster",
+                      "Layer": [
+                        {
+                          "id": "1687",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1688",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1689",
+                          "visibility": false
+                        }
+                      ]
+                    },
+                    {
+                      "Titel": "Hochwasserschutz",
+                      "Layer": [
+                        {
+                          "id": "435",
+                          "visibility": false
+                        },
+                        {
+                          "id": "436",
+                          "visibility": false
+                        }
+                      ]
+                    },
+                    {
+                      "Titel": "Denkmalschutz",
+                      "Layer": [
+                        {
+                            "id": "1754"
+                        },
+                        {
+                            "id": "1755"
+                        },
+                        {
+                            "id": "1756"
+                        },
+                        {
+                            "id": "1757"
+                        },
+                        {
+                            "id": "1758"
+                        },
+                        {
+                            "id": "1759"
+                        }
+                      ]
+                    }
+                  ]
+              },
+
+             {
+              "Titel": "Verkehrsanbindung / Erschließung",
+
+                "Ordner": [
+                    {
+                      "Titel": "Straßennetz",
+                      "Layer": [
+                        {
+                          "id": "1556",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1557",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1558",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1559",
+                          "visibility": false
+                        }
+                      ]
+                    },
+
+                    {
+                      "Titel": "Wasserstraßen",
+                      "Layer": [
+                        {
+                          "id": "4362",
+                          "visibility": false
+                        }
+                      ]
+                    },
+
+                    {
+                    "Titel": "ÖPNV",
+                        "Layer": [
+                    {
+                        "id": "1935",
+                        "visibility": false,
+                        "styles": [
+                            "geofox_Faehre",
+                            "geofox-bahn",
+                            "geofox-bus",
+                            "geofox_BusName"
+                                ],
+                        "name": [
+                            "Fährverbindungen",
+                            "Bahnlinien",
+                            "Buslinien",
+                            "Busliniennummern"
+                            ],
+                        "legendURL": [
+                            "http://87.106.16.168/legende_mrh/hvv-faehre.png",
+                            "http://87.106.16.168/legende_mrh/hvv-bahn.png",
+                            "http://87.106.16.168/legende_mrh/hvv-bus.png",
+                            "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                            ]
+                    },
+                    {
+                      "id": "1933",
+                      "visibility": false,
+                      "styles": [
+                        "geofox_stations"
+                      ],
+                      "name": [
+                        "Haltestellen"
+                      ],
+                      "legendURL": [
+                        "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                      ]
+                    }
+                  ]
+                 }
+              ]
+            },
+
+            {
+              "Titel": "Lage / Bezeichnung",
+                 "Ordner": [
+                    {
+                      "Titel": "Verwaltungsgrenzen",
+                      "Layer": [
+                        {
+                          "id": "2427",
+                          "visibility": false
+                        },
+                        {
+                          "id": "2426",
+                          "visibility": false
+                        },
+                        {
+                          "id": "2425",
+                          "visibility": false
+                        },
+                        {
+                          "id": "2424",
+                          "visibility": false
+                        },
+                        {
+                          "id": "2423",
+                          "visibility": false
+                        }
+                      ]
+                    }
+                  ],
+
+              "Layer": [
+
+
+
+                        ]
+            }
+
+          ]
         }
-      ]
-    }
   }
 }

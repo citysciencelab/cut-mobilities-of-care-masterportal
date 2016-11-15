@@ -584,11 +584,11 @@ define([
                         })
                     }));
                 }, this);
-                EventBus.trigger("addInteraction", this.get("draw"));
+                Radio.trigger("Map", "addInteraction", this.get("draw");
                 this.set("activatedInteraction", true);
             }
             else {
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
                 this.set("activatedInteraction", false);
                 this.sourcechanged();
             }

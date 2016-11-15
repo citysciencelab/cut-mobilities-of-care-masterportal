@@ -1,0 +1,44 @@
+<div class="panel panel-default" style="margin: 10px;border: none;">
+    <%if (currentContent.step > 1){%>
+        <label><%=currentFilterType %></label>
+        <br>
+    <%}else{%>
+        <label>Filteroption</label>
+        <br>
+    <%}%>
+
+    <%if (currentContent.layername !== undefined){%>
+        <label>Für den Layer: <%="<b>"+currentContent.layername+"</b>" %></label>
+        <br>
+    <%}%>
+    <%if (currentContent.attribute !== undefined){%>
+        <label>Auf das Attribut: <%="<b>"+currentContent.attribute+"</b>" %></label>
+        <br>
+    <%}%>
+
+    <select class="form-control input" id="dropdown">
+         <option title="<%=currentContent.name %>"><%=currentContent.name %></option>
+        <% _.each(currentContent.options, function (option,i) {%>
+            <option title="<%=option %>"><%=option %></option>
+        <% });%>
+    </select>
+
+    <%if (currentContent.step > 1){%>
+        <button id="btn_back" title="Einen Schritt zurück" class="btn btn-btn-default " type="button">Zurück</button>
+    <%};%>
+
+    <%if (currentFilters.length > 0){%>
+        <%_.each(currentFilters,function(filter){%>
+            <div>
+                <label><%=filter.layername%></%></label>
+                <%_.each(filter.attributes,function(attr){%>
+                    <button id="<%=filter.layername+'__'+attr.attribute+'__'+attr.value %>" title="<%=attr.value %>" class="btn btn-btn-default btn_remove" type="button"><%=attr.attribute %>
+                        <span class ="glyphicon glyphicon-remove"></span>
+                    </button>
+
+                <%});%>
+            </div>
+        <%});%>
+
+    <%};%>
+</div>

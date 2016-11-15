@@ -1,12 +1,14 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/modellist/list"
+    "modules/core/modelList/list",
+    "modules/core/util"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        ModelList = require("modules/core/modellist/list"),
+        ModelList = require("modules/core/modelList/list"),
+        Util = require("modules/core/util"),
         Parser;
 
     Parser = Backbone.Model.extend({
@@ -38,7 +40,9 @@ define([
                 "getItemsByAttributes": this.getItemsByAttributes,
                 "getTreeType": this.getTreeType,
                 "getCategory": this.getCategory,
-                "getCategories": this.getCategories
+                "getCategories": this.getCategories,
+                "getPortalConfig": this.getPortalConfig,
+                "getItemsByMetaID": this.getItemsByMetaID
             }, this);
 
             channel.on({
@@ -57,10 +61,10 @@ define([
                     Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
                 }
             });
-            this.parseMenu(this.get("portalConfig").menu, "root");
-            this.parseControls(this.get("portalConfig").controls);
-            this.parseSearchBar(this.get("portalConfig").searchBar);
-            this.parseMapView(this.get("portalConfig").mapView);
+            this.parseMenu(this.getPortalConfig().menu, "root");
+            this.parseControls(this.getPortalConfig().controls);
+            this.parseSearchBar(this.getPortalConfig().searchBar);
+            this.parseMapView(this.getPortalConfig().mapView);
 
             if (this.getTreeType() === "light") {
                 this.parseTree(this.getOverlayer(), "Themen", 0);
@@ -78,6 +82,10 @@ define([
             this.createModelList();
         },
 
+        getPortalConfig: function () {
+            return this.get("portalConfig");
+        },
+
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
@@ -88,13 +96,12 @@ define([
                     var item = {
                         type: "folder",
                         parentId: parentId,
-                        glyphicon: value.glyphicon,
-                        name: value.name,
                         id: value.name,
-                        onlyDesktop: value.onlyDesktop,
                         treeType: this.getTreeType()
                     };
 
+                    // Attribute aus der config.json werden von item geerbt
+                    _.extend(item, value);
                     // folder Themen bekommt noch den Baumtyp als Attribut
                     if (value.name === "Themen") {
                         this.addItem(_.extend(item, {treeType: this.getTreeType()}));
@@ -105,7 +112,16 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    this.addItem(_.extend(value, {type: "tool", parentId: parentId, id: key}));
+                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+
+                    if (toolitem.id === "measure" || toolitem.id === "draw") {
+                        if (!Util.isApple() && !Util.isAndroid()) {
+                             this.addItem(toolitem);
+                         }
+                    }
+                    else {
+                        this.addItem(toolitem);
+                    }
                 }
             }, this);
         },
@@ -294,7 +310,7 @@ define([
                 id: "Baselayer",
                 parentId: "Themen",
                 isInThemen: true,
-                isExpanded: false,
+                isInitiallyExpanded: false,
                 level: 0
             });
             this.addItem({
@@ -304,7 +320,7 @@ define([
                 id: "Overlayer",
                 parentId: "Themen",
                 isInThemen: true,
-                isExpanded: false,
+                isInitiallyExpanded: false,
                 level: 0
             });
             this.addItem({
@@ -315,7 +331,7 @@ define([
                 parentId: "Themen",
                 isLeafFolder: true,
                 isInThemen: true,
-                isExpanded: true,
+                isInitiallyExpanded: true,
                 level: 0
             });
         },
@@ -327,13 +343,13 @@ define([
          * @return {Object[]} layerlist - Objekte aus der services.json
          */
         mergeObjectsByIds: function (ids, layerlist) {
-            var objectsByIds,
+            var objectsByIds = [],
                 newObject;
-
                 // Objekte die gruppiert werden
-                objectsByIds = _.filter(layerlist, function (object) {
-                    return _.contains(ids, object.id);
+                _.each(ids, function (id) {
+                    objectsByIds.push(_.findWhere(layerlist, {id: id}));
                 });
+
                 // Das erste Objekt wird kopiert
                 newObject = _.clone(objectsByIds[0]);
                 // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
@@ -363,12 +379,17 @@ define([
 
             return _.uniqueId(value);
         },
-        getNextSelectionIDX: function () {
-            var idx = this.get("selectionIDX");
 
-            this.set("selectionIDX", idx + 1);
+        getItemsByMetaID: function (metaID) {
+            var layers = _.filter(this.getItemList(), function (item) {
+                if (item.type === "layer") {
+                    if (item.datasets.length > 0) {
+                        return item.datasets[0].md_id === metaID;
+                    }
+                }
+            }, this);
 
-            return idx + 1;
+            return layers;
         }
     });
 

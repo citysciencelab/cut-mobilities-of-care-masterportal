@@ -85,6 +85,14 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("Draw");
+
+            channel.reply({
+                "getLayer": function () {
+                    return this.get("layer");
+                }
+            }, this);
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
@@ -112,48 +120,51 @@ define([
             this.createLayerIfNotExists();
 
             this.get("selectClick").setActive(false);
-            EventBus.trigger("addInteraction", this.get("selectClick"));
+            Radio.trigger("Map", "addInteraction", this.get("selectClick"));
         },
 
         // Prüft ob import_draw_layer schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
-        createLayerIfNotExists: function(){
-            var layers = Radio.request("Map","getLayers");
-            var found = false;
-            _.each(layers.getArray(),function(layer){
-                if(layer.get("name") === "import_draw_layer"){
-                    found = true;
-                    this.set("layer",layer);
-                    this.set("source",layer.getSource());
-                }
-            },this);
+        createLayerIfNotExists: function () {
+            var layers = Radio.request("Map", "getLayers"),
+                found = false;
 
-            if(!found){
-                this.set("source",new ol.source.Vector({useSpatialIndex: false}));
+            _.each(layers.getArray(), function (layer) {
+                if (layer.get("name") === "import_draw_layer") {
+                    found = true;
+                    this.set("layer", layer);
+                    this.set("source", layer.getSource());
+                }
+            }, this);
+
+            if (!found) {
+                this.set("source", new ol.source.Vector({useSpatialIndex: false}));
                 var layer = new ol.layer.Vector({
                     name: "import_draw_layer",
                     source: this.get("source"),
                     alwaysOnTop: true
                 });
-                this.set("layer",layer);
-                Radio.trigger("Map","addLayerToIndex",[layer,layers.getArray().length]);
+
+                this.set("layer", layer);
+                Radio.trigger("Map", "addLayerToIndex", [layer,layers.getArray().length]);
             }
         },
 
         setStatus: function (args) {
-            if (args[2].getId() === "draw") {
+            if (args[2].getId() === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.setStyle();
             }
             else {
                 this.set("isCurrentWin", false);
-                EventBus.trigger("removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
+                Radio.trigger("Map", "addInteraction", this.get("selectClick"));
                 this.get("selectClick").setActive(false);
             }
         },
 
         createInteraction: function () {
-            EventBus.trigger("removeInteraction", this.get("draw"));
+            Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
                 type: this.get("selectedType"),
@@ -161,7 +172,7 @@ define([
             }));
             if (this.get("selectedType") === "Circle") {
                 this.get("draw").on("drawstart", function (evt) {
-                    this.listenTo(EventBus, {
+                    this.listenTo(Radio.channel("Map"), {
                         "pointerMoveOnMap": this.placecircleTooltip
                     });
                     this.set("sketch", evt.feature);
@@ -172,11 +183,11 @@ define([
                 this.setDrawendCoords(evt.feature.getGeometry());
                 evt.feature.setStyle(this.get("style"));
                 _.each(this.get("circleTooltips"), function (tooltip) {
-                    EventBus.trigger("removeOverlay", tooltip, "circle");
+                    Radio.trigger("Map", "removeOverlay", tooltip, "circle");
                 });
-                this.stopListening(EventBus, "pointerMoveOnMap");
+                this.stopListening(Radio.channel("Map"), "pointerMoveOnMap");
             }, this);
-            EventBus.trigger("addInteraction", this.get("draw"));
+            Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
 
         /**
@@ -323,7 +334,7 @@ define([
             this.get("source").clear();
             // lösche alle Overlays (Tooltips)
             _.each(this.get("circleTooltips"), function (tooltip) {
-                EventBus.trigger("removeOverlay", tooltip, "circle");
+                Radio.trigger("Map", "removeOverlay", tooltip, "circle");
             });
             this.set("circleTooltips", []);
         },
@@ -339,10 +350,10 @@ define([
                 $("#map").off("mousemove");
                 this.setGlyphToCursor("glyphicon glyphicon-pencil");
 
-                EventBus.trigger("removeInteraction", this.get("modify"));
+                Radio.trigger("Map", "removeInteraction", this.get("modify"));
             }
             else {
-                EventBus.trigger("removeInteraction", this.get("modify"));
+                Radio.trigger("Map", "removeInteraction", this.get("modify"));
                 this.set("modify", new ol.interaction.Modify({
                     features: this.get("source").getFeaturesCollection()
                 }));
@@ -353,7 +364,7 @@ define([
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
                 this.setGlyphToCursor("glyphicon glyphicon-wrench");
-                EventBus.trigger("addInteraction", this.get("modify"));
+                Radio.trigger("Map", "addInteraction", this.get("modify"));
             }
         },
         // Erstellt ein HTML-Element, legt dort das Glyphicon rein und klebt es an den Cursor
@@ -388,9 +399,6 @@ define([
             }
         },
 
-        getLayer: function () {
-            EventBus.trigger("sendDrawLayer", this.get("layer"));
-        },
         /**
          * Startet das Downloadmodul
          */

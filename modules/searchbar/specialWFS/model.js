@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/searchbar/model"],
-function (Backbone, EventBus) {
+function (Backbone, Radio, EventBus) {
         "use strict";
         return Backbone.Model.extend({
         /**
@@ -24,9 +25,8 @@ function (Backbone, EventBus) {
          * @param {string} config.definitions[].definition.url - Die URL, des WFS
          * @param {string} config.definitions[].definition.data - Query string des WFS-Request
          * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|kita)
-         * @param {string} [initialQuery] - Initialer Suchstring.
          */
-        initialize: function (config, initialQuery) {
+        initialize: function (config) {
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
@@ -41,8 +41,8 @@ function (Backbone, EventBus) {
             }, this);
             EventBus.on("searchbar:search", this.search, this);
             EventBus.on("specialWFS:requestbplan", this.requestbplan, this);
-            if (initialQuery && _.isString(initialQuery) === true) {
-                this.search(initialQuery);
+            if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                this.search(Radio.request("ParametricURL", "getInitString"));
             }
         },
         /**

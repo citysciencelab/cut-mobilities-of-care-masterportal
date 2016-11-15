@@ -66,12 +66,6 @@
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
             {
-              "id": "1932",
-              "visibility": false,
-              "name" : "StadtRAD-Stationen (ab 1: 40 000)",
-              "metaName": "StadtRAD-Stationen (ab 1: 40 000)"
-              },
-            {
               "id": "4866",
               "visibility": false
             },

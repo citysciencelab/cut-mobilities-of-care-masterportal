@@ -33,7 +33,7 @@ define([
          * @param  {Object} obj - Resolution, Zoomlevel und Scale aus der MapView
          */
         modifyScale: function (obj) {
-            var scaleNumber = obj.scale;
+            var scaleNumber = obj.scale.toString();
 
             if (scaleNumber >= 10000) {
                 scaleNumber = scaleNumber.substring(0, scaleNumber.length - 3) + " " + scaleNumber.substring(scaleNumber.length - 3);

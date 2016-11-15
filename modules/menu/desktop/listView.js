@@ -38,7 +38,9 @@ define([
                 $("#" + "Themen").html("");
                 // Eine Themenebene rendern
                 this.renderSubTree("Themen", 0, 0, true);
-                $("ul#Themen ul#Overlayer").css("max-height", "80vh");
+                $("ul#Themen ul#Overlayer").addClass("LayerListMaxHeight");
+                $("ul#Themen ul#SelectedLayer").addClass("LayerListMaxHeight");
+                $("ul#Themen ul#Baselayer").addClass("LayerListMaxHeight");
             },
             /**
              * Rendert die  Auswahlliste
@@ -65,8 +67,18 @@ define([
                     return;
                 }
 
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                    models = this.collection.add(lightModels);
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
+
+                var models = this.collection.add(lightModels);
+
+                // Ordner öffnen, die initial geöffnet sein sollen
+                if (parentId === "Themen") {
+                     _.each(models, function (model) {
+                        if (model.getType() === "folder" && model.getIsInitiallyExpanded()) {
+                            model.setIsExpanded(true);
+                        }
+                    });
+                }
 
                 if (level === 0 && firstTime !== true) {
                     this.collection.setVisibleByParentIsExpanded(parentId);
@@ -92,6 +104,12 @@ define([
                     return model.getType() === "folder";
                 });
 
+                if (parentId !== "Overlayer") {
+                    folder = _.sortBy(folder, function (item) {
+                        return item.getName();
+                    });
+                    folder.reverse();
+                }
                 this.addOverlayViews(folder);
 
                 _.each(folder, function (folder) {

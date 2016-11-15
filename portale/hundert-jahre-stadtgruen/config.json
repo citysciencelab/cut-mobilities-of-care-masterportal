@@ -1,11 +1,12 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "100 Jahre Stadtgrün",
+
     "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [567360, 5939010]
     },
-    "searchBar": true,
     "menu": {
       "tree": {
         "name": "Themen",
@@ -16,23 +17,19 @@
         "glyphicon": "glyphicon-wrench",
         "children": {
 
-          "gfi": {
-            "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign",
-            "isActive": true
-          },
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
             "onlyDesktop": true
           },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
           "print": {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
-          },
-          "coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
           }
         }
       },
@@ -40,6 +37,10 @@
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
+       "wfsFeatureFilter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter"
+          },
       "contact": {
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
@@ -93,22 +94,19 @@
     "Fachdaten":
     {
       "Layer": [
-        {
+       {
           "id": "1132",
           "styleId": "1132",
-          "name": "Icon",
+          "name": "Attraktionen",
           "visibility": true,
+          "styleField": "icon_vi",
           "mouseHoverField": "titel"
         },
         {
-          "id": "628",
-          "name": "Strecken",
-          "visibility": true
+          "id": "628"
         },
         {
-          "id": "629",
-          "name": "Umring",
-          "visibility": false
+          "id": "629"
         }
       ]
     }

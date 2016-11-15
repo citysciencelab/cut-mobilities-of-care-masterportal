@@ -205,7 +205,7 @@ define([
             this.get("routeLayer").setSource(source);
             this.get("routeLayer").setStyle(null);
             Radio.trigger("Map", "addLayer", this.get("routeLayer"));
-            EventBus.trigger("zoomToExtent", source.getExtent());
+            Radio.trigger("Map", "zoomToExtent", source.getExtent());
         },
         /*
          * Zerstört das Modul vollständig.

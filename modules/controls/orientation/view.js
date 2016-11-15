@@ -16,9 +16,24 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
+            var showGeolocation = true;
+
+            if(Util.isChrome() === true && window.location.protocol === "http:"){
+                showGeolocation = false;
+            }
+            if(Util.isApple()){
+                showGeolocation = false;
+            }
             // Chrome erlaubt nur bei https-Seiten die Lokalisierung (stand: 20.07.2016).
             // Deshalb nehmen wir bei Chrome die Lokalisierung raus, da unsere Portale auf http laufen und die Dienste auch.
-            if (!(Util.isChrome() === true && window.location.protocol === "http:")) {// wenn es nicht Chrome UND http ist, Lokalisierung und InMeinerNähe initialisieren
+            if (showGeolocation) {// wenn es nicht Chrome UND http ist, Lokalisierung und InMeinerNähe initialisieren
+
+                var channel = Radio.channel("orientation");
+
+                channel.on({
+                    "untrack": this.toggleLocateRemoveClass
+                }, this);
+
                 this.listenTo(Radio.channel("ModelList"), {
                     "updateVisibleInMapList": this.checkWFS
                 });
@@ -29,7 +44,16 @@ define([
                 this.render();
                 // erst nach render kann auf document.getElementById zugegriffen werden
                 this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
+                if (this.model.get("isPoiOn")) {
+                    require(["modules/controls/orientation/poi/view"], function (POIView) {
+                        new POIView();
+                    });
+                }
             }
+        },
+
+        toggleLocateRemoveClass: function(){
+            $("#geolocate").removeClass("toggleButtonPressed");
         },
         /*
         * Steuert die Darstellung des Geolocate-buttons
@@ -45,7 +69,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $(".controls-view").append(this.$el.html(this.template(attr)));
+            this.$el.html(this.template(attr));
         },
         /*
         * schaltet POI-Control un-/sichtbar

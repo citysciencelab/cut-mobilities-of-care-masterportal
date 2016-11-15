@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
+    ], function (Backbone, Radio, EventBus) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -23,8 +24,8 @@ define([
          * @description Initialisierung der BKG Suggest Suche
          * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
          * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-         * @param {string} config.bkgSuggestURL - URL für schnelles Suggest.
-         * @param {string} [config.bkgSearchURL] - URL für ausführliche Search.
+         * @param {string} config.suggestServiceId - ID aus rest-services für URL für schnelles Suggest.
+         * @param {string} [config.geosearchServiceId] - ID aus rest-services für URL für ausführliche Search.
          * @param {[float]} [config.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
          * @param {integer} [config.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
          * @param {string} [config.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
@@ -32,12 +33,19 @@ define([
          * @param {float} [config.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
          */
         initialize: function (config) {
-            this.set("bkgSuggestURL", config.bkgSuggestURL);
+            var suggestService = Radio.request("RestReader", "getServiceById", config.suggestServiceId),
+                geosearchService = Radio.request("RestReader", "getServiceById", config.geosearchServiceId);
+
+            if (suggestService[0] && suggestService[0].get("url")) {
+                this.set("bkgSuggestURL", suggestService[0].get("url"));
+            }
+
+            if (geosearchService[0] && geosearchService[0].get("url")) {
+                this.set("bkgSearchURL", geosearchService[0].get("url"));
+            }
+
             if (config.minChars) {
                 this.set("minChars", config.minChars);
-            }
-            if (config.bkgSearchURL) {
-                this.set("bkgSearchURL", config.bkgSearchURL);
             }
             if (config.extent) {
                 this.set("extent", config.extent);

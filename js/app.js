@@ -8,13 +8,15 @@ define("app",
     "modules/core/configLoader/preparser",
     "modules/core/map",
     "modules/core/parametricURL",
+    "modules/core/crs",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
 
     // Core laden
     new RawLayerList();
     new Preparser();
     new ParametricURL();
+    new CRS();
     new Map();
 
     // Module laden
@@ -103,11 +105,16 @@ define("app",
         // Tools
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
-                case "gfi": {
-                    require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
-                        new GFIPopupView();
+                case "animation": {
+                    require(["modules/tools/animation/view"], function (AnimationView) {
+                        new AnimationView();
                     });
                     break;
+                }
+                case "gfi":{
+                    require(["modules/gfipopup/popup/popupLoader"], function (PopupLoader) {
+                        new PopupLoader();
+                    });
                 }
                 case "coord": {
                     require(["modules/coordpopup/view"], function (CoordPopupView) {
@@ -163,6 +170,12 @@ define("app",
                     });
                     break;
                 }
+                case "extendedFilter": {
+                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                        new ExtendedFilterView();
+                    });
+                    break;
+                }
                 case "treeFilter": {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
@@ -210,56 +223,69 @@ define("app",
             }
         });
 
-        require(["modules/controls/view"], function (ControlsView) {
-            new ControlsView();
-        });
-
         // controls
-        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "control"}), function (control) {
-            switch (control.id) {
-                case "toggleMenu": {
-                    require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                        new ToggleMenuControlView();
-                    });
-                    break;
+        require(["modules/controls/view"], function (ControlsView) {
+            var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
+                controlsView = new ControlsView();
+
+            _.each(controls, function (control, index) {
+                switch (control.id) {
+                    case "toggleMenu": {
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                                new ToggleMenuControlView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "zoom": {
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "orientation": {
+                        var el = controlsView.addRow(control.id);
+
+                        require(["modules/controls/orientation/view"], function (OrientationView) {
+                            new OrientationView({el: el});
+                        });
+                        break;
+                    }
+                    case "mousePosition": {
+                        if(control.attr === true){
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView();
+                            });
+                        }
+                        break;
+                    }
+                    case "fullScreen": {
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "attributions": {
+                        if(control.attr === true){
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView();
+                            });
+                        }
+                        break;
+                    }
                 }
-                case "zoom": {
-                    require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                        new ZoomControlView();
-                    });
-                    break;
-                }
-                case "orientation": {
-                    require(["modules/controls/orientation/view"], function (OrientationView) {
-                        new OrientationView();
-                    });
-                    break;
-                }
-                case "poi": {
-                    require(["modules/controls/orientation/poi/view"], function (PoiView) {
-                        new PoiView();
-                    });
-                    break;
-                }
-                case "mousePosition": {
-                    require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                        new MousePositionView();
-                    });
-                    break;
-                }
-                case "fullScreen": {
-                    require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                        new FullScreenView();
-                    });
-                    break;
-                }
-                case "attributions": {
-                    require(["modules/controls/attributions/view"], function (AttributionsView) {
-                        new AttributionsView();
-                    });
-                    break;
-                }
-            }
+            });
         });
 
         require(["modules/mapMarker/view"], function (MapMarkerView) {
@@ -278,25 +304,13 @@ define("app",
             new StyleWMSView();
         });
 
-        if (_.has(Config, "title") === true) {
+        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
+
+        if (title) {
             require(["modules/title/view"], function (TitleView) {
-                new TitleView();
+                new TitleView(title);
             });
         }
-
-//        if (Config.menubar === true) {
-//            require(["modules/menubar/view"], function () {
-//                if ($.isArray(Config.menuItems.formular)) {
-//                    $.each(Config.menuItems.formular, function (name, obj) {
-//                        if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
-//                            require(["modules/formular/view"], function (FormularView) {
-//                                new FormularView(obj.modelname, obj.title, obj.symbol);
-//                            });
-//                        }
-//                    });
-//                }
-//            });
-//        }
     });
     Util.hideLoader();
 });

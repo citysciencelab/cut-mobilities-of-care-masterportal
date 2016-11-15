@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/searchbar/model"
-    ], function (Backbone, EventBus) {
+], function (Backbone, Radio, EventBus) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -16,6 +17,7 @@ define([
             searchHouseNumbers: false,
             searchDistricts: false,
             searchParcels: false,
+            searchStreetKey: false,
             onlyOneStreetName: "",
             searchStringRegExp: "",
             houseNumbers: []
@@ -23,22 +25,25 @@ define([
         /**
          * @description Initialisierung der Gazetteer Suche
          * @param {Object} config - Das Konfigurationsobjekt für die Gazetteer-Suche.
-         * @param {string} config.url - Die URL.
+         * @param {string} config.serviceId - ID aus rest-conf für URL des GAZ.
          * @param {boolean} [config.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
          * @param {boolean} [config.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
          * @param {boolean} [config.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
          * @param {boolean} [config.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
          * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-         * @param {string} [initialQuery] - Initialer Suchstring.
          */
-        initialize: function (config, initialQuery) {
+        initialize: function (config) {
             this.listenTo(EventBus, {
                 "setPastedHouseNumber": this.setPastedHouseNumber,
                 "searchbar:search": this.search,
                 "gaz:adressSearch": this.adressSearch
             });
 
-            this.set("gazetteerURL", config.url);
+            var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
+
+            if (gazService[0] && gazService[0].get("url")) {
+                this.set("gazetteerURL", gazService[0].get("url"));
+            }
             if (config.searchStreets) {
                 this.set("searchStreets", config.searchStreets);
             }
@@ -51,11 +56,14 @@ define([
             if (config.searchParcels) {
                 this.set("searchParcels", config.searchParcels);
             }
+            if (config.searchStreetKey) {
+                this.set("searchStreetKey", config.searchStreetKey);
+            }
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            if (initialQuery && _.isString(initialQuery) === true) {
-                this.directSearch(initialQuery);
+            if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                this.directSearch(Radio.request("ParametricURL", "getInitString"));
             }
         },
 
@@ -93,6 +101,11 @@ define([
                         gemarkung = searchString.slice(0, 4);
                         flurstuecksnummer = searchString.slice(4);
                         this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                    }
+                }
+                if (this.get("searchStreetKey") === true) {
+                    if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
                     }
                 }
             }
@@ -135,6 +148,11 @@ define([
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.set("onlyOneStreetName", "");
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
+            }
+            if (this.get("searchStreetKey") === true) {
+                if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                }
             }
             $("#searchInput").val(searchString);
             EventBus.trigger("createRecommendedList");
@@ -314,6 +332,28 @@ define([
                     glyphicon: "glyphicon-map-marker",
                     geom: "geom",
                     id: "Parcel"
+                });
+            }, this);
+            EventBus.trigger("createRecommendedList");
+        },
+        /**
+         *
+         */
+        getStreetKey: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                coordinates,
+                hitName;
+
+            _.each(hits, function (hit) {
+                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                // "Hitlist-Objekte"
+                EventBus.trigger("searchbar:pushHits", "hitList", {
+                    name: hitName,
+                    type: "Straße",
+                    coordinate: coordinates,
+                    glyphicon: "glyphicon-road",
+                    id: hitName.replace(/ /g, "") + "Straße"
                 });
             }, this);
             EventBus.trigger("createRecommendedList");

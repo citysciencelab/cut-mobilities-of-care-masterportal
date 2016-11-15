@@ -38,20 +38,15 @@ define([
         activateTool: function () {
             if (this.getIsActive() === true) {
                 this.collection.setActiveToolToFalse(this);
-                EventBus.trigger("activateClick", this.getId());
+                Radio.trigger("Map", "activateClick", this.getId());
                 if (this.getId() === "legend") {
                     EventBus.trigger("toggleLegendWin");
                 }
                 else if (this.getId() === "featureLister") {
                     EventBus.trigger("toggleFeatureListerWin");
                 }
-                else if (this.getId() !== "gfi" && this.getId() !== "coord") {
-                    Radio.trigger("Window", "toggleWin", this);
-                }
-
                 else {
-                    EventBus.trigger("closeWindow", false);
-                    EventBus.trigger("winParams", [false, false, ""]);
+                    Radio.trigger("Window", "toggleWin", this);
                 }
             }
         },

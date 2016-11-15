@@ -4,21 +4,44 @@
         <label for="districtField" class="col-md-5 col-sm-5 control-label">Gemarkung</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm pull-left" id="districtField">
+                <option <% if (districtNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0">bitte wählen</option>
                 <% _.each(this.model.get("districts"), function(value, key) { %>
-                    <option class="pull-left" value=<%= value %>><%= key + " (" + value + ")" %></option>
+                    <option <% if (districtNumber === value) {print ("selected ");} %>class="pull-left" value=<%= value %>><%= key + " (" + value + ")" %></option>
                 <% }); %>
             </select>
         </div>
     </div>
+    <% if (cadastralDistrictField === true) { %>
+    <div class="form-group form-group-sm">
+        <label for="districtField" class="col-md-5 col-sm-5 control-label">Flur</label>
+        <div class="col-md-7 col-sm-7">
+            <fieldset <% if (districtNumber === "0") {print ("disabled ");} %>id="cadastralDistrictFieldSet">
+                <select class="form-control input-sm pull-left" id="cadastralDistrictField">
+                    <option <% if (cadastralDistrictNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0">bitte wählen</option>
+                    <% _.each((_.values(_.pick(cadastralDistricts, districtNumber))[0]), function (cadastralDistrict) { %>
+                        <option <% if (cadastralDistrictNumber === cadastralDistrict) {print ("selected ");} %>class="pull-left" value=<%= cadastralDistrict %>><%= cadastralDistrict %></option>
+                    <% }); %>
+                </select>
+            </fieldset>
+        </div>
+    </div>
+    <% } %>
+
     <div class="form-group form-group-sm">
         <label for="parcelField" class="col-md-5 col-sm-5 control-label">Flurst&uuml;cksnummer</label>
         <div class="col-md-7 col-sm-7">
-            <input type="text" class="form-control" id="parcelField">
+             <div class="input-group">
+                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelField" class="form-control" type="number" min="1" max="99999" step="1" pattern="[0-9]" value="<%= parcelNumber %>"/>
+                <% if (this.model.get("parcelDenominatorField") === true) { %>
+                <span class="input-group-addon">/</span>
+                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelFieldDenominator" class="form-control" type="number" min="1" max="999" step="1" pattern="[0-9]" value="<%= parcelDenominatorNumber %>"/>
+                <% } %>
+            </div>
         </div>
     </div>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <button class="btn btn-panel-submit col-md-12 col-sm-12">Suchen</button>
+            <button id="submitbutton" class="btn btn-primary btn-md btn-block" <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0") || parcelNumber === "" || (parcelDenominatorField === true && parcelDenominatorNumber ==="")) {print ("disabled ");} %>>Suchen</button>
         </div>
     </div>
 </div>

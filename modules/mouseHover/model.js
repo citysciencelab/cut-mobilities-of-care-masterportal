@@ -15,6 +15,8 @@ define([
             GFIPopupVisibility: false
         },
         initialize: function () {
+            Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
+
             $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
 
             this.set("mhpOverlay", new ol.Overlay({
@@ -24,7 +26,6 @@ define([
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
             EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
-            EventBus.on("pointerMoveOnMap", this.checkForEachFeatureAtPixel, this);
         },
 
         filterWFSList: function () {
@@ -71,10 +72,9 @@ define([
         * if-Bedingung gespeichert und abschließend wird das Aufbereiten dieser
         * Selektion angestpßen.
         */
-        checkForEachFeatureAtPixel: function (evt, map) {
-            var map = Radio.request("Map", "getMap"),
-                pFeatureArray = [],
-                featuresAtPixel = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+        checkForEachFeatureAtPixel: function (evt) {
+            var pFeatureArray = [],
+                featuresAtPixel = evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                     return {
                         feature: feature,
                         layer: layer

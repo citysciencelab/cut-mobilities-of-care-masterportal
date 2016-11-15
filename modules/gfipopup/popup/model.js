@@ -1,16 +1,15 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "eventbus",
-    "openlayers",
-    "config",
-    "bootstrap/popover",
-    "modules/core/requestor",
-    "moment"
-//    "modules/gfipopup/themes/mietenspiegel/view-formular" // muss hier definiert werden, weil in mietenspiegelform.js nicht in gebauter Version verfügbar
-], function (Backbone, Radio, EventBus, ol, Config, Popover, Requestor, Moment) {
-    "use strict";
-    var GFIPopup = Backbone.Model.extend({
+define(function (require) {
+    require(["bootstrap/popover"]);
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        EventBus = require("eventbus"),
+        ol = require("openlayers"),
+        Requestor = require("modules/core/requestor"),
+        Moment = require("moment"),
+        GFIPopup;
+
+    GFIPopup = Backbone.Model.extend({
         /**
          *
          */
@@ -39,12 +38,16 @@ define([
                 "getGFIForPrint": this.getGFIForPrint
             }, this);
 
+            this.listenTo(Radio.channel("Requestor"), {
+                "renderResults": this.getThemes
+            });
+
             this.setGFIOverlay(new ol.Overlay({element: this.getElement()[0]}));
 
             Radio.trigger("Map", "addOverlay", this.get("gfiOverlay")); // listnener in map.js
-            EventBus.on("setGFIParams", this.setGFIParams, this); // trigger in map.js
+            Radio.on("Map", "setGFIParams", this.setGFIParams, this); // trigger in map.js
             EventBus.on("sendGFIForPrint", this.sendGFIForPrint, this);
-            EventBus.on("renderResults", this.getThemes, this);
+            // EventBus.on("renderResults", this.getThemes, this);
         },
         setGFIOverlay: function (overlay) {
             this.set("gfiOverlay", overlay);
@@ -72,10 +75,7 @@ define([
             $("#popovermin").fadeOut(500, function () {
                 $("#popovermin").remove();
             });
-            // Für Straßenbaumkataster TODO
-            // if (_.has(Config.tools.gfi, "zoomTo") && Radio.request("MapView", "getZoomLevel") < 7) {
-            //      Radio.trigger("MapView", "setCenter", this.get("coordinate"), 7);
-            // }
+
             $(this.getElement()).popover("show");
             this.set("isPopupVisible", true);
         },
@@ -89,46 +89,56 @@ define([
                 templateView;
             // Erzeugen eines TemplateModels anhand 'gfiTheme'
             _.each(features, function (layer) {
-                _.each(layer.content, function (content) {
-                    content = this.getManipulateDate(content);
-                    switch (layer.ol_layer.get("gfiTheme")) {
-                        case "mietenspiegel": {
-                            require(["modules/gfipopup/themes/mietenspiegel/view", "backbone.radio"], function (MietenspiegelTheme, Radio) {
-                                templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
+                if (layer.ol_layer.get("gfiTheme") === "table") {
+                    require(["modules/gfipopup/themes/table/view"], function (TableTheme) {
+                        if (!_.isUndefined(layer.content) && layer.content.length > 0) {
+                            var tableThemeView = new TableTheme(layer);
+                            Radio.trigger("GFIPopup", "themeLoaded", tableThemeView, layer.name, coordinate);
                         }
-                        case "reisezeiten": {
-                            require(["modules/gfipopup/themes/reisezeiten/view", "backbone.radio"], function (ReisezeitenTheme, Radio) {
-                                templateView = new ReisezeitenTheme(content);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
+                    });
+                }
+                else {
+                    _.each(layer.content, function (content) {
+                        content = this.getManipulateDate(content);
+                        switch (layer.ol_layer.get("gfiTheme")) {
+                            case "mietenspiegel": {
+                                require(["modules/gfipopup/themes/mietenspiegel/view"], function (MietenspiegelTheme) {
+                                    templateView = new MietenspiegelTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            case "reisezeiten": {
+                                require(["modules/gfipopup/themes/reisezeiten/view"], function (ReisezeitenTheme) {
+                                    templateView = new ReisezeitenTheme(content);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            case "trinkwasser": {
+                                require(["modules/gfipopup/themes/trinkwasser/view"], function (TrinkwasserTheme) {
+                                    templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            case "solaratlas": {
+                                require(["modules/gfipopup/themes/solaratlas/view"], function (TrinkwasserTheme) {
+                                    templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
+                            default: {
+                                require(["modules/gfipopup/themes/default/view"], function (DefaultTheme) {
+                                    templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
+                                    Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
+                                });
+                                break;
+                            }
                         }
-                        case "trinkwasser": {
-                            require(["modules/gfipopup/themes/trinkwasser/view", "backbone.radio"], function (TrinkwasserTheme, Radio) {
-                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
-                        }
-                        case "solaratlas": {
-                            require(["modules/gfipopup/themes/solaratlas/view"], function (TrinkwasserTheme) {
-                                templateView = new TrinkwasserTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
-                        }
-                        default: {
-                            require(["modules/gfipopup/themes/default/view", "backbone.radio"], function (DefaultTheme, Radio) {
-                                templateView = new DefaultTheme(layer.ol_layer, content, coordinate);
-                                Radio.trigger("GFIPopup", "themeLoaded", templateView, layer.name, coordinate);
-                            });
-                            break;
-                        }
-                    }
-                }, this);
+                    }, this);
+                }
             }, this);
         },
         /*
@@ -181,7 +191,7 @@ define([
          */
         getManipulateDate: function (content) {
             _.each(content, function (value, key, list) {
-                if (Moment(value).parsingFlags().overflow === -1) {
+                if (Moment(value, Moment.ISO_8601, true).isValid() === true) {
                     list[key] = Moment(value).format("DD.MM.YYYY");
                 }
             });

@@ -55,7 +55,7 @@ define([
             }
         },
         removeOverlay: function () {
-            EventBus.trigger("removeOverlay", this.get("marker"));
+            Radio.trigger("Map", "removeOverlay", this.get("marker"));
         },
         untrack: function () {
             var geolocation = this.get("geolocation");
@@ -155,7 +155,7 @@ define([
             geolocation.un ("error", this.onPOIError, this);
         },
         callGetPOI: function () {
-            this.getPOI(500);
+            this.getPOI(0);
             this.untrackPOI();
         },
         getPOI: function (distance) {

@@ -80,11 +80,29 @@
 
 <body>
     <div id="loader"><img src="../../img/ajax-loader.gif"></div>
-    <!-- Hack um die Bildschirmauflösung zu bekommen -->
+    <!-- Hack um die Bildschirmauflösung zu bekommen-->
     <div id="dpidiv" style="height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;"></div>
     <div id="map"></div>
     <div id="popup"></div>
     <div id="gfipopup"></div>
+    <nav id="main-nav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div id="navbarRow" class="row">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Navigation ein-/ausblenden</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav-menu" id="root">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="changelog-window">
         <div class="changelog-header">
             <span class="changelog-title" data-toggle="tooltip" data-placement="bottom" title="Die wichtigsten Neuerungen auf einen Blick">Die wichtigsten Neuerungen auf einen Blick</span>
@@ -93,6 +111,22 @@
             <span class="glyphicon glyphicon-minus pull-right changelog-min" onclick="minimizeWindow();" data-toggle="tooltip" data-placement="bottom" title="Minimieren"></span>
         </div>
         <div class="changelog-content">
+            <p>
+                <h4>Update 13.09.2016</h4>
+                <dl>
+                    <dt>Zeichnen / Schreiben</dt>
+                    <dd>Das Werkzeug wurde um drei Funktionen erweitert:<br>
+                        - Zeichnungen können nächträglich bearbeitet werden<br>
+                        - Löschen einzelner Zeichnungen<br>
+                        - Zeichnungen können als KML-Datei heruntergeladen werden</dd>
+                    <dt>KML Import</dt>
+                    <dd>Als neues Werkzeug ist der KML Import dazugekommen. Dadurch können z.B. heruntergeladene Zeichnungen wieder importiert werden</dd>
+                    <dt>Auswahl speichern</dt>
+                    <dd>Zusätzlich wird die aktuelle Transparenz der Layer gespeichert.</dd>
+                    <dt>Vollbild</dt>
+                    <dd>Über den Fullscreen Button ( <span class="glyphicon glyphicon-fullscreen"></span> rechte Seite), wird der Vollbild-Modus aktiviert. Über den gleichen Button kann dieser Modus wieder verlassen werden.</dd>
+                </dl>
+            </p>
             <p>
                 <h4>Update 18.04.2016</h4>
                 <dl>

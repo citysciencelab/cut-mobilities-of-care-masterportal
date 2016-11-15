@@ -2,6 +2,7 @@ define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
+        StyleList = require("modules/layer/wfsStyle/list"),
         Layer;
 
     Layer = Item.extend({
@@ -30,6 +31,7 @@ define(function (require) {
                 },
                 "change:layer": function () {
                     this.updateLayerTransparency();
+                    this.getResolutions();
                 }
             });
 
@@ -47,6 +49,18 @@ define(function (require) {
                     this.checkForScale(options);
                 }
             });
+            // Default min/max Resolutions für WFS setzen
+            if (this.get("typ") === "WFS") {
+                var resolutions = Radio.request("MapView", "getScales");
+                if (!_.isUndefined(resolutions) && resolutions.length > 0) {
+                    if (_.isUndefined(this.attributes.minScale)) {
+                        this.attributes.minScale = resolutions[resolutions.length - 1];
+                    }
+                    if (_.isUndefined(this.attributes.maxScale)) {
+                        this.attributes.maxScale = resolutions[0];
+                    }
+                }
+            }
 
             this.checkForScale(Radio.request("MapView", "getOptions"));
 
@@ -64,18 +78,19 @@ define(function (require) {
                 this.createLayerSource();
                 this.toggleLayerOnMap();
             }
+            this.setAttributes();
             this.createLegendURL();
         },
 
         /**
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
         **/
-        checkForScale: function(options) {
+        checkForScale: function (options) {
             if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
-                this.setIsOutOfScale(true);
+                this.setIsOutOfRange(false);
             }
             else {
-                this.setIsOutOfScale(false);
+                this.setIsOutOfRange(true);
             }
         },
 
@@ -85,6 +100,15 @@ define(function (require) {
         createLegendURL: function () {},
         createLayerSource: function () {},
         createLayer: function () {},
+        setAttributes: function () {},
+
+        getResolutions: function () {
+            var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
+                resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
+
+            this.setMaxResolution(resoByMaxScale + 1);
+            this.setMinResolution(resoByMinScale);
+        },
 
         /**
          * Setter für Attribut "layerSource"
@@ -136,8 +160,16 @@ define(function (require) {
             this.set("transparency", value);
         },
 
-        setIsOutOfScale: function (value) {
-            this.set("isOutOfScale", value);
+        setIsOutOfRange: function (value) {
+            this.set("isOutOfRange", value);
+        },
+
+        setMaxResolution: function (value) {
+            this.getLayer().setMaxResolution(value);
+        },
+
+        setMinResolution: function (value) {
+            this.getLayer().setMinResolution(value);
         },
 
         /**
@@ -193,11 +225,19 @@ define(function (require) {
          * @return {String|Object}
          */
         getAttributions: function () {
-            return this.get("attributions");
+            return this.get("layerAttribution");
         },
 
-        getIsOutOfScale: function () {
-            return this.get("isOutOfScale");
+        getIsOutOfRange: function () {
+            return this.get("isOutOfRange");
+        },
+
+        getMaxScale: function () {
+            return this.get("maxScale");
+        },
+
+        getMinScale: function () {
+            return this.get("minScale");
         },
 
         incTransparency: function () {
@@ -270,7 +310,7 @@ define(function (require) {
          * Wird für die Verkehrslage auf den Autobahnen genutzt
          */
         toggleAttributionsInterval: function () {
-            if (this.has("attributions") && _.isObject(this.getAttributions())) {
+            if (this.has("layerAttribution") && _.isObject(this.getAttributions())) {
                 var channelName = this.getAttributions().channel,
                     eventName = this.getAttributions().eventname,
                     timeout = this.getAttributions().timeout;
@@ -299,11 +339,31 @@ define(function (require) {
             }
         },
         showLayerInformation: function () {
+            var legendURL = [],
+                names = [],
+                styleList = StyleList.returnAllModelsById(this.attributes.id);
+
+            if (styleList.length > 0) {
+                _.each(styleList, function (style) {
+                    legendURL.push(style.get("imagepath") + style.get("imagename"));
+                    if (style.has("legendValue")) {
+                        names.push(style.get("legendValue"));
+                    }
+                    else {
+                        names.push(style.get("styleFieldValue"));
+                    }
+                });
+            }
+            else {
+                legendURL.push(this.get("legendURL"));
+                names.push(this.get("datasets")[0].md_name);
+            }
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
-                "legendURL": this.get("legendURL"),
+                "legendURL": legendURL,
                 "metaID": this.get("datasets")[0].md_id,
-                "name": this.get("datasets")[0].md_name
+                "name": names,
+                "layername":this.get("name")
             });
         },
         setSelectionIDX: function (idx) {
@@ -317,6 +377,30 @@ define(function (require) {
         },
         moveUp: function () {
             this.collection.moveModelUp(this);
+        },
+        /**
+         * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt die metaID wieder.
+         * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         */
+        getmetaID: function () {
+            if (this.get("datasets")[0]) {
+             return this.get("datasets")[0].md_id;
+            }
+            else {
+                    return undefined;
+            }
+        },
+        /**
+         * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
+         * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         */
+        getmetaName: function () {
+            if (this.get("datasets")[0]) {
+             return this.get("datasets")[0].md_name;
+            }
+            else {
+                    return undefined;
+            }
         }
     });
 

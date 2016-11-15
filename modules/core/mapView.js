@@ -2,15 +2,13 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "config",
-    "proj4"
+    "config"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
         Config = require("config"),
-        proj4 = require("proj4"),
         MapView;
 
     MapView = Backbone.Model.extend({
@@ -24,52 +22,52 @@ define([
             options: [
                 {
                     resolution: 66.14579761460263,
-                    scale: "250000",
+                    scale: 250000,
                     zoomLevel: 0
                 },
                 {
                     resolution: 26.458319045841044,
-                    scale: "100000",
+                    scale: 100000,
                     zoomLevel: 1
                 },
                 {
                     resolution: 15.874991427504629,
-                    scale: "60000",
+                    scale: 60000,
                     zoomLevel: 2
                 },
                 {
                     resolution: 10.583327618336419,
-                    scale: "40000",
+                    scale: 40000,
                     zoomLevel: 3
                 },
                 {
                     resolution: 5.2916638091682096,
-                    scale: "20000",
+                    scale: 20000,
                     zoomLevel: 4
                 },
                 {
                     resolution: 2.6458319045841048,
-                    scale: "10000",
+                    scale: 10000,
                     zoomLevel: 5
                 },
                 {
                     resolution: 1.3229159522920524,
-                    scale: "5000",
+                    scale: 5000,
                     zoomLevel: 6
                 },
                 {
                     resolution: 0.6614579761460262,
-                    scale: "2500",
+                    scale: 2500,
                     zoomLevel: 7
                 },
                 {
                     resolution: 0.2645831904584105,
-                    scale: "1000",
+                    scale: 1000,
                     zoomLevel: 8
                 },
                 {
                     resolution: 0.13229159522920521,
-                    scale: "500",
+                    scale: 500,
                     zoomLevel: 9
                 }
             ],
@@ -100,7 +98,9 @@ define([
                 },
                 "getResolutions": function () {
                     return this.getResolutions();
-                }
+                },
+                "getResoByScale": this.getResoByScale,
+                "getScales": this.getScales
             }, this);
 
             channel.on({
@@ -142,8 +142,8 @@ define([
 
             this.setExtent();
             this.setResolution();
-            this.setStartCenter();
             this.setProjection();
+            this.setStartCenter();
             this.setView();
 
             // Listener für ol.View
@@ -162,12 +162,16 @@ define([
         setConfig: function () {
             _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
                 switch (setting.id) {
-                case "backgroundImage": {
-                    this.set("backgroundImage", setting.attr);
+                    case "backgroundImage": {
+                        this.set("backgroundImage", setting.attr);
 
-                    this.setBackground(setting.attr);
-                    break;
-                }
+                        this.setBackground(setting.attr);
+                        break;
+                    }
+                    case "startCenter": {
+                        this.set("startCenter", setting.attr);
+                        break;
+                    }
                 }
             }, this);
         },
@@ -200,6 +204,10 @@ define([
 
         setScales: function () {
             this.set("scales", _.pluck(this.get("options"), "scale"));
+        },
+
+        getScales: function () {
+            return this.get("scales");
         },
 
         setResolutions: function () {
@@ -243,8 +251,25 @@ define([
          *
          */
         setStartCenter: function () {
-            if (Config.view.center && _.isArray(Config.view.center)) {
-                this.set("startCenter", Config.view.center);
+            var center = Radio.request("ParametricURL", "getCenter");
+
+            if (center) {
+                var fromCRSName = center.crs,
+                    position = [center.x, center.y],
+                    toCRSName = this.get("projection").getCode();
+
+                if (fromCRSName !== "" && fromCRSName !== toCRSName) {
+                    // transform
+                    var fromCRS = Radio.request("CRS", "getProjection", fromCRSName);
+
+                    if (!fromCRS) {
+                        Radio.trigger("Alert", "alert", {text: "<strong>" + fromCRSName + " des <i>CENTER</i>-Parameters unbekannt.</strong> Default wird verwendet.", kategorie: "alert-info"});
+                    }
+                    else {
+                        position = Radio.request("CRS", "transform", {fromCRS: fromCRSName, toCRS: toCRSName, point: position});
+                    }
+                }
+                this.set("startCenter", position);
             }
         },
 
@@ -252,24 +277,17 @@ define([
          *
          */
         setProjection: function () {
-            // supported projections
-            switch (Config.view.epsg){
-                case "EPSG:25833": {
-                    proj4.defs("EPSG:25833", "+proj=utm +zone=33 +ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
-                    break;
-                }
-                case "EPSG:31468": {
-                    proj4.defs("EPSG:31468", "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs ");
-                    break;
-                }
-                default: {
-                    proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-                    break;
-                }
+            // check for crs
+            var epsgCode = Config.view.epsg ? Config.view.epsg : "EPSG:25832",
+                proj = Radio.request("CRS", "getProjection", epsgCode);
+
+            if (!proj) {
+                alert("Unknown CRS " + epsgCode + ". Can't set projection.");
+                return;
             }
 
             var proj = new ol.proj.Projection({
-                code: Config.view.epsg || "EPSG:25832",
+                code: epsgCode,
                 units: this.get("units"),
                 extent: this.get("extent"),
                 axisOrientation: "enu",
@@ -322,6 +340,43 @@ define([
          */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
+        },
+
+        /**
+         * Gibt zur Scale die entsprechende Resolution zurück.
+         * @param  {String|number} scale
+         * @param  {String} scaleType - min oder max
+         * @return {number} resolution
+         */
+        getResoByScale: function (scale, scaleType) {
+            var mapViewScales = _.union(this.getScales(), [parseInt(scale, 10)]),
+                index;
+
+            mapViewScales = _.sortBy(mapViewScales, function (num) {
+                return -num;
+            });
+            index = _.indexOf(mapViewScales, parseInt(scale, 10));
+            if (mapViewScales.length === this.getScales().length) {
+                if (scaleType === "max") {
+                    return this.getResolutions()[index];
+                }
+                else if (scaleType === "min") {
+                    return this.getResolutions()[index];
+                }
+            }
+            else {
+                if (scaleType === "max") {
+                    if (index === 0) {
+                        return this.getResolutions()[index];
+                    }
+                    else {
+                        return this.getResolutions()[index - 1];
+                    }
+                }
+                else if (scaleType === "min") {
+                    return this.getResolutions()[index - 1];
+                }
+            }
         },
 
         getCenter: function () {

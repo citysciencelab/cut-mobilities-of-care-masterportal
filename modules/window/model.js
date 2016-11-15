@@ -13,14 +13,16 @@ define([
                 maxPosTop: "10px"
             },
             initialize: function () {
-                // EventBus.on("toggleWin", this.setParams, this);
                 EventBus.on("closeWindow", this.setVisible, this);
                 EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
                 var channel = Radio.channel("Window");
 
                 channel.on({
-                    "toggleWin": this.setParams
+                    "toggleWin": this.setParams,
+                    "closeWin": this.setVisible,
+                    "CollapseWin": this.collapseWindow,
+                    "uncollapseWin": this.uncollapseWindow
                 }, this);
             },
             collapseWindow: function () {
@@ -35,12 +37,17 @@ define([
             setVisible: function (value) {
                 this.set("isVisible", value);
             },
-            setParams: function (value, modelId) {
+            setParams: function (value) {
                 this.setTool(value);
                 this.set("title", value.getName());
                 this.set("icon", value.getGlyphicon());
                 this.set("winType", value.getId());
-                this.set("isVisible", true);
+                if (value.getId() === "coord" || value.getId() === "gfi") {
+                    this.set("isVisible", false);
+                }
+                else {
+                    this.set("isVisible", true);
+                }
             },
             sendParamsToWinCotent: function () {
                 Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);

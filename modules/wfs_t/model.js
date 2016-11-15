@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus"
-], function (Backbone, ol, EventBus) {
+], function (Backbone, Radio, ol, EventBus) {
 
     var WFS_T = Backbone.Model.extend({
 
@@ -27,13 +28,13 @@ define([
             this.listenTo(this, {
                 "change:url": this.getDescribeFeatureType,
                 "change:activeButton": function () {
-                    EventBus.trigger("removeInteraction", this.get("interaction"));
-                    EventBus.trigger("removeInteraction", this.get("editInteraction"));
+                    Radio.trigger("Map", "removeInteraction", this.get("interaction"));
+                    Radio.trigger("Map", "removeInteraction", this.get("editInteraction"));
                     this.set("showAttrTable", false);
                     this.setInteraction();
                 },
                 "change:interaction": function () {
-                    EventBus.trigger("addInteraction", this.get("interaction"));
+                    Radio.trigger("Map", "addInteraction", this.get("interaction"));
                 },
                 "change:recordData": this.sendTransaction
             });
@@ -51,7 +52,7 @@ define([
             else {
                 this.set("isCurrentWin", false);
                 this.set("activeButton", "");
-                EventBus.trigger("removeInteraction", this.get("interaction"));
+                Radio.trigger("Map", "removeInteraction", this.get("interaction"));
             }
         },
 
@@ -201,7 +202,7 @@ define([
         // Die Interactions für das Bearbeiten der Geometrie werden gesetzt.
         // Registriert eine Listener-Funktion für "remove" der Feature-Collection.
         setModifyInteraction: function () {
-            EventBus.trigger("addInteraction", this.get("editInteraction"));
+            Radio.trigger("Map", "addInteraction", this.get("editInteraction"));
             this.set("interaction", new ol.interaction.Modify({
                 features: this.get("editInteraction").getFeatures()
             }));

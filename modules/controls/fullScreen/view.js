@@ -16,7 +16,7 @@ define([
             this.render();
         },
         render: function () {
-            $(".controls-view").append(this.$el.html(this.template));
+            this.$el.html(this.template);
         },
         toggleFullScreen: function () {
             // true wenn "window" keine iframe ist --> FullScree-Modus (F11)

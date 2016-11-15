@@ -7,6 +7,12 @@ define(function (require) {
 
     WMSLayer = Layer.extend({
 
+        setAttributes: function () {
+            if (_.isUndefined(this.getInfoFormat()) === true) {
+                this.setInfoFormat("text/xml");
+            }
+        },
+
         /**
          * [createLayerSource description]
          * @return {[type]} [description]
@@ -45,10 +51,10 @@ define(function (require) {
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
                     })
-                });
+                }),
+                context = this;
 
-                var context = this;
-
+                // wms_webatlasde
                 source.on("tileloaderror", function(event) {
                   if (context.get("tileloaderror") === false) {
                     context.set("tileloaderror", true);
@@ -71,6 +77,7 @@ define(function (require) {
                 }));
             }
             this.registerErrorListener();
+            this.registerLoadingListeners();
         },
 
         /**
@@ -119,6 +126,65 @@ define(function (require) {
             }
         },
 
+        /**
+         * Register LayerLoad-Events
+         */
+        registerLoadingListeners: function () {
+            if (this.getLayerSource() instanceof ol.source.TileWMS) {
+                this.registerTileWMSLoadEvents();
+            }
+            else if (this.getLayerSource() instanceof ol.source.ImageWMS) {
+                this.registerImageLoadEvents();
+            }
+        },
+
+        registerImageLoadEvents: function () {
+            this.getLayerSource().on("imageloadend", function () {
+                this.set("loadingParts", this.get("loadingParts") - 1);
+            });
+
+            this.getLayerSource().on("imageloadstart", function () {
+                var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
+
+                this.set("loadingParts", startval + 1);
+            });
+
+            this.getLayerSource().on("change:loadingParts", function (obj) {
+                if (obj.oldValue > 0 && this.get("loadingParts") === 0) {
+                    this.dispatchEvent("wmsloadend");
+                    this.unset("loadingParts", {silent: true});
+                }
+                else if (obj.oldValue === undefined && this.get("loadingParts") === 1) {
+                    this.dispatchEvent("wmsloadstart");
+                }
+            });
+        },
+
+        registerTileWMSLoadEvents: function () {
+            this.getLayerSource().on("tileloadend", function () {
+                this.set("loadingParts", this.get("loadingParts") - 1);
+            });
+
+            this.getLayerSource().on("tileloadstart", function () {
+                var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
+
+                this.set("loadingParts", startval + 1);
+            });
+
+            this.getLayerSource().on("change:loadingParts", function (obj) {
+                if (obj.oldValue > 0 && this.get("loadingParts") === 0) {
+                    this.dispatchEvent("wmsloadend");
+                    this.unset("loadingParts", {silent: true});
+                }
+                else if (obj.oldValue === undefined && this.get("loadingParts") === 1) {
+                    this.dispatchEvent("wmsloadstart");
+                }
+            });
+        },
+
+        /**
+         * Register LayerLoad-Events
+         */
         registerErrorListener: function () {
             if (this.getLayerSource() instanceof ol.source.TileWMS) {
                 this.registerTileloadError();
@@ -141,7 +207,11 @@ define(function (require) {
         },
 
         updateSourceSLDBody: function () {
-            this.getLayerSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
+            this.getLayer().getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
+        },
+
+        setInfoFormat: function (value) {
+            this.set("infoFormat", value);
         },
 
         /**
@@ -154,6 +224,10 @@ define(function (require) {
 
         getSingleTile: function () {
             return this.get("singleTile");
+        },
+
+        getInfoFormat: function () {
+            return this.get("infoFormat");
         }
     });
 
