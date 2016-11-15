@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.1.5
+
+FIXES:
+
+  - 658d016 startcenter wurde nicht ausgelesen aus config.json
+
 # Changelog LGV Master-Portal 1.1.4
 
 FIXES:
