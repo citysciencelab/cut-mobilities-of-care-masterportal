@@ -12,7 +12,7 @@ dist
 temp
 lgv-config
 doc
-examples
+examples*
 
 /nbproject/private/
 /img/*.db
