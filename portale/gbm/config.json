@@ -65,7 +65,7 @@
       "attributions": true
     },
     "scaleLine": true,
-    "Baumtyp": "light"
+    "Baumtyp": "custom"
   },
   "Themenconfig":
   {
@@ -83,29 +83,94 @@
       ]
     },
     "Fachdaten":
-    {
-      "Layer": [
+      
         {
-          "id": ["758", "759"],
-          "name": "Störfallbetriebe mit Abstandszonen"
-        },
-        {
-          "id": "1747"
-        },
-        {
-          "id": "1561"
-        },
-        {
-          "id": "1562"
-        },
-        {
-          "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
-          "name": "Digitales Informationssystem Planrecht (DIP)"
-        },
-        {
-          "id": "1749"
-        }
-      ]
-    }
+          "Ordner": [
+            
+            {
+              "Titel": "Planungsrecht / -konzepte",
+              "Layer": [
+                {
+                    "id": "1561"
+                },
+                {
+                    "id": "1562"
+                }
+              ]
+            },
+              
+            {
+              "Titel": "Vermarktungserfordernisse",
+              "Layer": [
+                {
+                    "id": "1561"
+                },
+                {
+                    "id": "1562"
+                }
+              ]
+            },  
+             
+            {
+              "Titel": "Besondere Vermarktungserfordernisse",
+              "Layer": [
+                {
+                    "id": "1561"
+                },
+                {
+                    "id": "1562"
+                }
+              ]
+            },
+              
+            {
+              "Titel": "Verkehrsanbindung / Erschließung",
+              "Layer": [
+                {
+                    "id": "1561"
+                },
+                {
+                    "id": "1562"
+                }
+              ]
+            },
+              
+             {
+              "Titel": "Verkehrsanbindung / Erschließung",
+              "Layer": [
+                {
+                    "id": "1561"
+                },
+                {
+                    "id": "1562"
+                }
+              ]
+            }, 
+              
+            {
+              "Titel": "Lage / Bezeichnung",
+                
+              "Layer": [
+                {
+                    "id": ["758", "759"],
+                    "name": "Störfallbetriebe mit Abstandszonen"
+                },
+                  {
+                    "id": "1747"
+                },
+        
+                {
+                    "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
+                    "name": "Digitales Informationssystem Planrecht (DIP)"
+                },
+                {
+                    "id": "1749"
+                }  
+                
+              ]
+            }
+            
+          ]
+        }  
   }
 }
