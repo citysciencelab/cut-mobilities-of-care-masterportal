@@ -18,6 +18,9 @@ define([
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });
+            this.listenTo(Radio.channel("StyleWMS"), {
+                "updateLegend": this.updateLegendFromStyleWMS
+            });
 
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
@@ -26,6 +29,22 @@ define([
             });
         },
 
+        updateLegendFromStyleWMS: function (html) {
+//            console.log(html);
+            var legendParams = this.get("legendParams");
+            
+            console.log(legendParams);
+            
+            _.each(legendParams, function (param) {
+               if (param.layername === "Erreichbare Arbeitsplaetze in 30min") {
+                   param.img = html;
+               } 
+            });
+            console.log(legendParams);
+            this.set("legendParams",legendParams);
+            this.createLegend();
+        },
+        
         createLegend: function () {
             this.set("legendParams", []);
             this.set("legendParams", _.sortBy(this.get("tempArray"), function (obj) {
