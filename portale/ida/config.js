@@ -12,7 +12,7 @@ define(function () {
         jahreText: "Die aktuellsten Daten beziehen sich auf das Jahr 2015. Für den Bodenrichtwert zum 31.12.2015 wählen Sie bitte das Jahr 2016.",
         searchBar: {
             gazetteer: {
-                url: "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+                "serviceId": "6",
                 searchStreets: true,
                 searchHouseNumbers: true
             },
