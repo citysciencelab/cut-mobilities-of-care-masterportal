@@ -29,22 +29,25 @@ define([
             });
         },
 
-        updateLegendFromStyleWMS: function (html) {
-//            console.log(html);
-            var legendParams = this.get("legendParams");
-            
-            console.log(legendParams);
-            
-            _.each(legendParams, function (param) {
-               if (param.layername === "Erreichbare Arbeitsplaetze in 30min") {
-                   param.img = html;
-               } 
+        updateLegendFromStyleWMS: function (params) {
+            var legendParams = this.get("legendParams"),
+                legendParams2 = [];
+
+            _.each(legendParams, function (legendParam) {
+                if(legendParam.layername === "Erreichbare Arbeitsplaetze in 30min"){
+                    var layername = legendParam.layername;
+
+                    legendParams2.push({params: params,
+                                       layername: layername,
+                                       typ: "styleWMS"});
+                }
+                else {
+                    legendParams2.push(legendParam);
+                }
             });
-            console.log(legendParams);
-            this.set("legendParams",legendParams);
-            this.createLegend();
+            this.set("legendParams", legendParams2);
         },
-        
+
         createLegend: function () {
             this.set("legendParams", []);
             this.set("legendParams", _.sortBy(this.get("tempArray"), function (obj) {
@@ -164,5 +167,5 @@ define([
         }
     });
 
-    return new Legend();
+    return Legend;
 });

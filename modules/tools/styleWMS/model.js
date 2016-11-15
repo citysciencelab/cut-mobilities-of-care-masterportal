@@ -130,26 +130,10 @@ define([
             }
         },
 
-        
         updateLegend: function (attributes) {
-            console.log(attributes);
-            var html = "";
-            
-            html += "<div class='panel-body panel-legend'>";
-            html += "<table>";
-            _.each(attributes, function (attr) {
-                html += "<tr>";
-                html += "<td><div class='form-group pull-left animation_legend' style='width: 20px; height: 20px; background-color:" + attr.color + "'></div></td>";
-                html += "<td>" + attr.startRange + " - " + attr.stopRange + "</td>"
-                html += "</tr>";
-            });
-            html += "</table>";
-            html += "</div>";
-            
-//            console.log(html);
-            Radio.trigger("StyleWMS","updateLegend", html);
+            Radio.trigger("StyleWMS", "updateLegend", attributes);
         },
-        
+
         /**
          * Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
          * und liefert das gesamte SLD zurück

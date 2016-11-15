@@ -9,7 +9,7 @@ define([
 ], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, EventBus, Radio) {
 
     var LegendView = Backbone.View.extend({
-        model: Legend,
+        model: new Legend(),
         // className: "legend-win",
         template: _.template(LegendTemplate),
         templateMobile: _.template(LegendTemplateMobile),
