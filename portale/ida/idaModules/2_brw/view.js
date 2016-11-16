@@ -4,14 +4,15 @@ define([
     "eventbus",
     "idaModules/2_brw/model",
     "idaModules/2_brw/manually/view",
-    "idaModules/3_parameter/view"
-], function ($, Backbone, EventBus, Model, BRWManuellView, Seite3) {
+    "idaModules/3_parameter/view",
+    "text!idaModules/2_brw/template.html"
+], function ($, Backbone, EventBus, Model, BRWManuellView, Seite3, Template) {
     "use strict";
     var BRWView = Backbone.View.extend({
-        el: "#seite_zwei",
+        id: "bodenrichtwerte",
+        template: _.template(Template),
         model: Model,
         events: {
-            "click #seite2_weiter": "weiter"
         },
         initialize: function (jahr, nutzung, produkt, lage) {
             this.listenTo(this.model, "change:complete", this.weiter);
@@ -20,16 +21,22 @@ define([
             this.model.set("nutzung", nutzung);
             this.model.set("produkt", produkt);
             this.model.set("lage", lage);
-            this.model.requestNecessaryData();
             this.show();
+            this.BRWManuellView = new BRWManuellView(jahr, nutzung, produkt, lage);
+            this.model.requestNecessaryData();
         },
         weiter: function () {
-            new Seite3(this.model.get("lage"), this.model.get("params"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("brwList"), this.model.get("jahr"));
+            this.listenTo(new Seite3(this.model.get("lage"), this.model.get("params"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("brwList"), this.model.get("jahr")), "removeBRWDiv", function () {
+                this.BRWManuellView.remove();
+                this.remove();
+            });
         },
         show: function () {
-            $("#seite_zwei").show();
-            $("#seite_eins").hide();
-            $("#seite_drei").hide();
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+            $("#queries").after(this.$el.html(this.template(attr)));
+            $("#queries").hide();
         }
     });
 

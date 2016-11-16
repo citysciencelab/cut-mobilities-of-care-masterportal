@@ -2,7 +2,7 @@
   "Portalconfig":
   {
     "PortalTitle": "100 Jahre Stadtgrün",
-  
+
     "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [567360, 5939010]
@@ -16,7 +16,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
@@ -94,9 +94,8 @@
     "Fachdaten":
     {
       "Layer": [
-        
        {
-          "id": "1132", 
+          "id": "1132",
           "styleId": "1132",
           "name": "Attraktionen",
           "visibility": true,

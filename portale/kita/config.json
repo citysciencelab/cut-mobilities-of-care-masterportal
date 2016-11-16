@@ -11,7 +11,7 @@
             "searchDistricts": true,
             "searchParcels": true
         },
-        
+
         "specialWFS": {
             "minChar": 3,
             "definitions": [
@@ -39,7 +39,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
@@ -121,7 +121,7 @@
     "Fachdaten":
     {
       "Layer": [
-        
+
         {
           "id": "753",
           "styleId": "753",
@@ -144,7 +144,7 @@
             }
           ]
         }
-        
+
       ]
     }
   }

@@ -45,7 +45,7 @@
           "name": "Werkzeuge",
           "glyphicon": "glyphicon-wrench",
           "children": {
-              
+
             "gfi": {
               "name": "Informationen abfragen",
               "glyphicon": "glyphicon-info-sign",
@@ -94,7 +94,7 @@
             "includeSystemInfo": true
         }
       },
-      "controls": 
+      "controls":
         {
         "zoom": true,
         "toggleMenu": "true",
@@ -152,7 +152,7 @@
           "Ordner": [
             {
               "Titel": "Lage und Gebietszugehörigkeit",
-             
+
               "Layer": [
                 {
                   "id": "2427",

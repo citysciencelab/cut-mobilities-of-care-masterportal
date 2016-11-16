@@ -29,31 +29,39 @@ define([
                     flurstueck: this.get("flurFlurstueck"),
                     strassendefinition: this.get("flurStrasse")
                 });
+                this.set("header", this.get("flurGemarkung") + "/" + this.get("flurFlurstueck") + "(" + this.get("flurStrasse") + ")");
             }
             else {
                 EventBus.trigger("seite1_lage:newLage", "");
+                this.set("header", "");
             }
         },
         searchbarhit: function (hit) {
             if (hit.type === "Adresse") {
                 EventBus.trigger("gaz:adressSearch", hit.adress);
+                this.set("header", hit.adress.streetname + " " + hit.adress.housenumber + hit.adress.affix);
             }
             else {
                 EventBus.trigger("seite1_lage:newLage", "");
+                this.set("header", "");
             }
         },
         adressHit: function (data) {
-             var hit = $("wfs\\:member,member", data)[0],
+            var hit = $("wfs\\:member,member", data)[0],
                  strschl,
                  strName,
                  strHsNr,
                  strHsNrZusatz,
                  zusatzTest,
+                 stadtteil,
+                 plz,
                  coordinates = [];
 
             this.set("strschl", $(hit).find("dog\\:strasse,strasse")[0].textContent);
             this.set("strName", $(hit).find("dog\\:strassenname, strassenname")[0].textContent);
             this.set("strHsNr", $(hit).find("dog\\:hausnummer, hausnummer")[0].textContent);
+            this.set("stadtteil", $(hit).find("dog\\:postOrtsteil, postOrtsteil")[0].textContent);
+            this.set("plz", $(hit).find("dog\\:postleitzahl, postleitzahl")[0].textContent);
             zusatzTest = $(hit).find("dog\\:hausnummernzusatz, hausnummernzusatz")[0];
             if (zusatzTest) {
                 this.set("strHsNrZusatz", zusatzTest.textContent);
@@ -68,6 +76,8 @@ define([
                 strassenname: this.get("strName"),
                 hausnummer: this.get("strHsNr"),
                 hausnummerZusatz: this.get("strHsNrZusatz"),
+                stadtteil: this.get("stadtteil"),
+                plz: this.get("plz"),
                 rechtswert: coordinates[0],
                 hochwert: coordinates[1]
             });

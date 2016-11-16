@@ -24,7 +24,7 @@
      "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [522525, 5957400]
-    },  
+    },
     "menu": {
       "tree": {
         "name": "Themen",
@@ -114,31 +114,31 @@
     {
       "Layer": [
         {
-         "id": "145", 
+         "id": "145",
          "visibility": true
         },
         {
-         "id": "129", 
+         "id": "129",
          "visibility": true
         },
         {
-         "id": "147", 
+         "id": "147",
          "visibility": true
         },
         {
-         "id": "317", 
+         "id": "317",
          "visibility": false
         },
         {
-         "id": "319", 
+         "id": "319",
          "visibility": false
         },
         {
-         "id": "315", 
+         "id": "315",
          "visibility": false
         },
         {
-         "id": "313", 
+         "id": "313",
          "visibility": false
         }
       ]

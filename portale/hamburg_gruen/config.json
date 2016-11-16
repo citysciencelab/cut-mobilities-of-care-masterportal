@@ -41,9 +41,9 @@
         "glyphicon": "glyphicon-list"
       },
       "tools": {
-        
+
         "children": {
-          
+
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
@@ -86,7 +86,7 @@
       "zoom": true,
       "orientation": "once",
       "poi": true
-      
+
     },
     "scaleLine": true,
     "Baumtyp": "light"

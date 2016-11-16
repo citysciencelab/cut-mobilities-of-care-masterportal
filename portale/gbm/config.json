@@ -88,10 +88,10 @@
       ]
     },
     "Fachdaten":
-      
+
         {
           "Ordner": [
-            
+
             {
               "Titel": "Planungsrecht / -konzepte",
               "Layer": [
@@ -104,13 +104,14 @@
                 {
                     "id": "1747"
                 },
-        
+
                 {
                     "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
                     "name": "Digitales Informationssystem Planrecht (DIP)"
                 },
                 {
                     "id": "1749"
+<<<<<<< HEAD
                 },
                 {
                     "id": "1814"
@@ -127,10 +128,12 @@
                 {
                     "id": "4240",
                      "name": "Uebersichts über normierte Bodenrichtwerte"
+=======
+>>>>>>> 6ce00a4243156673ce499d59beaeb964e56b8002
                 }
               ]
             },
-              
+
             {
               "Titel": "Vermarktungserfordernisse",
               "Layer": [
@@ -143,11 +146,11 @@
                     "name": "Bauschutzbereich § 12 LuftVG Hamburg"
                 }
               ]
-            },  
-             
+            },
+
             {
               "Titel": "Besondere Vermarktungserfordernisse",
-                
+
               "Ordner": [
                     {
                       "Titel": "Biotopkataster",
@@ -201,13 +204,13 @@
                             "id": "1759"
                         }
                       ]
-                    } 
+                    }
                   ]
               },
-              
+
              {
               "Titel": "Verkehrsanbindung / Erschließung",
-                 
+
                 "Ordner": [
                     {
                       "Titel": "Straßennetz",
@@ -240,7 +243,7 @@
                         }
                       ]
                     },
-          
+
                     {
                     "Titel": "ÖPNV",
                         "Layer": [
@@ -280,10 +283,10 @@
                       ]
                     }
                   ]
-                 } 
+                 }
               ]
-            }, 
-              
+            },
+
             {
               "Titel": "Lage / Bezeichnung",
                  "Ordner": [
@@ -313,8 +316,9 @@
                       ]
                     }
                   ],
-                
+
               "Layer": [
+<<<<<<< HEAD
                         {
                             "id": "8"
                         }
@@ -322,7 +326,15 @@
                         ]
                 }
             
+=======
+
+
+
+                        ]
+            }
+
+>>>>>>> 6ce00a4243156673ce499d59beaeb964e56b8002
           ]
-        }  
+        }
   }
 }
