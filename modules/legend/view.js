@@ -68,7 +68,7 @@ define([
             var isViewMobile = Radio.request("Util", "isViewMobile"),
                 legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
 
-            this.model.setLayerList(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
+            this.render();
             if (isViewMobile === true) {
 
                 this.$el.modal("toggle");
