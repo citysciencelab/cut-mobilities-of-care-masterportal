@@ -116,7 +116,7 @@ define([
         },
         sendRequest: function () {
             var flur = this.get("cadastralDistrictField") === true ? "flur=" + this.get("cadastralDistrictNumber") : "",
-                parcelNumber = this.get("parcelNumber"),// _String.lpad(this.get("parcelNumber"), 5, "0"),
+                parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
                 parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "flurstuecksnummernenner=" + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "",
                 data = "&StoredQuery_ID=" + this.get("storedQueryID") + "&gemarkung=" + this.get("districtNumber") + flur + "&flurstuecksnummer=" + parcelNumber + parcelDenominatorNumber;
 
