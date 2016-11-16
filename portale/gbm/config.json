@@ -63,8 +63,8 @@
       "toggleMenu": true,
       "zoom": true,
       "orientation": "once",
-      "attributions": false,
-      "fullScreen": true
+      "fullScreen": true,
+      "attributions": false
     },
     "scaleLine": true,
     "Baumtyp": "custom"
@@ -91,48 +91,73 @@
 
         {
           "Ordner": [
-
+              
             {
               "Titel": "Planungsrecht / -konzepte",
-              "Layer": [
-                {
-                    "id": "1561"
-                },
-                {
-                    "id": "1562"
-                },
-                {
-                    "id": "1747"
-                },
+                 "Ordner": [
+                    {
+                      "Titel": "Normierte Bodenrichtwerte",
+                      "Layer": [
+                        {
+                          "id": "4236"
+                        },
+                        {
+                          "id": "4237"
+                        },
+                        {
+                          "id": "4238"
+                        },
+                        {
+                          "id": "4239"
+                        },
+                        {
+                          "id": "4240"
+                        }
+                      ]
+                    },
+                    {
+                      "Titel": "Bodenrichtwertzonen",
+                      "Layer": [
+                        {
+                          "id": "1810"
+                        },
+                        {
+                          "id": "1812"
+                        },
+                        {
+                          "id": "1814"
+                        },
+                        {
+                          "id": "1816"
+                        },
+                        {
+                          "id": "2405"
+                        },
+                        {
+                          "id": "4635"
+                        }
+                      ]
+                    }
+                  ],
 
-                {
-                    "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
-                    "name": "Digitales Informationssystem Planrecht (DIP)"
+                "Layer": [
+                        {
+                        "id": "1561"
+                        },
+                        {
+                        "id": "1562"
+                        },
+                        {
+                        "id": "1747"
+                        },
+
+                        {
+                          "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
+                         "name": "Digitales Informationssystem Planrecht (DIP)"
+                        }
+                    ]
                 },
-                {
-                    "id": "1749"
-<<<<<<< HEAD
-                },
-                {
-                    "id": "1814"
-                },
-                {
-                    "id": "1816"
-                },
-                {
-                    "id": "2405"
-                },
-                {
-                    "id": "4635"
-                },
-                {
-                    "id": "4240",
-                     "name": "Uebersichts über normierte Bodenrichtwerte"
-=======
->>>>>>> 6ce00a4243156673ce499d59beaeb964e56b8002
-                }
-              ]
-            },
+ 
 
             {
               "Titel": "Vermarktungserfordernisse",
@@ -156,16 +181,13 @@
                       "Titel": "Biotopkataster",
                       "Layer": [
                         {
-                          "id": "1687",
-                          "visibility": false
+                          "id": "1687"
                         },
                         {
-                          "id": "1688",
-                          "visibility": false
+                          "id": "1688"
                         },
                         {
-                          "id": "1689",
-                          "visibility": false
+                          "id": "1689"
                         }
                       ]
                     },
@@ -173,12 +195,10 @@
                       "Titel": "Hochwasserschutz",
                       "Layer": [
                         {
-                          "id": "435",
-                          "visibility": false
+                          "id": "435"
                         },
                         {
-                          "id": "436",
-                          "visibility": false
+                          "id": "436"
                         }
                       ]
                     },
@@ -216,20 +236,16 @@
                       "Titel": "Straßennetz",
                       "Layer": [
                         {
-                          "id": "1556",
-                          "visibility": false
+                          "id": "1556"
                         },
                         {
-                          "id": "1557",
-                          "visibility": false
+                          "id": "1557"
                         },
                         {
-                          "id": "1558",
-                          "visibility": false
+                          "id": "1558"
                         },
                         {
-                          "id": "1559",
-                          "visibility": false
+                          "id": "1559"
                         }
                       ]
                     },
@@ -294,47 +310,32 @@
                       "Titel": "Verwaltungsgrenzen",
                       "Layer": [
                         {
-                          "id": "2427",
-                          "visibility": false
+                          "id": "2427"
                         },
                         {
-                          "id": "2426",
-                          "visibility": false
+                          "id": "2426"
                         },
                         {
-                          "id": "2425",
-                          "visibility": false
+                          "id": "2425"
                         },
                         {
-                          "id": "2424",
-                          "visibility": false
+                          "id": "2424"
                         },
                         {
-                          "id": "2423",
-                          "visibility": false
+                          "id": "2423"
                         }
                       ]
                     }
                   ],
 
-              "Layer": [
-<<<<<<< HEAD
+                "Layer": [
                         {
                             "id": "8"
                         }
-                
-                        ]
+                    ]
                 }
-            
-=======
 
-
-
-                        ]
-            }
-
->>>>>>> 6ce00a4243156673ce499d59beaeb964e56b8002
-          ]
+            ]
         }
-  }
+    }
 }
