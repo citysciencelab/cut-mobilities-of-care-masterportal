@@ -143,9 +143,12 @@ define([
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
             }
             else {
-                var position = $(member).find("gml\\:pos, pos")[0].textContent.split(" "),
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])],
-                    attributes = _.object(["coordinate"], [coordinate]);
+                var position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null,
+                    coordinate = position ? [parseFloat(position[0]), parseFloat(position[1])] : null,
+                    attributes = coordinate ? _.object(["coordinate"], [coordinate]) : {},
+                    geoExtent = $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] ? $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] : null,
+                    posList = geoExtent ? $(geoExtent).find("gml\\:posList, posList")[0].textContent.split(" ") : null,
+                    attributes = posList ? _.extend(attributes, _.object(["extent"], [posList])) : attributes;
 
                 $(member).find("*").filter(function () {
                     return this.nodeName.indexOf("dog") !== -1 || this.nodeName.indexOf("gages") !== -1;
