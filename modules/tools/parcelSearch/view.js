@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "text!modules/tools/parcelSearch/template.html",
     "modules/tools/parcelSearch/model"
-], function (Backbone, parcelSearchTemplate, ParcelSearch) {
+], function (Backbone, Radio, parcelSearchTemplate, ParcelSearch) {
 
     var ParcelSearchView = Backbone.View.extend({
         model: new ParcelSearch(),
@@ -17,18 +18,45 @@ define([
             "keyup #parcelFieldDenominator": "setParcelDenominatorNumber",
             "click #submitbutton": "submitClicked"
         },
-        initialize: function () {
+        /*
+         * In init wird configuration nach "renderToDOM" untersucht.
+         * Switch Window oder render2DOM - Modus
+         */
+        initialize: function (psconfig) {
+            var renderToDOM = psconfig && psconfig.renderToDOM ? psconfig.renderToDOM : null;
+
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render,
                 "change:parcelNumber": this.checkInput,
                 "change:parcelDenominatorNumber": this.checkInput,
                 "change:districtNumber": this.checkInput,
                 "change:cadastralDistrictNumber": this.checkInput
             });
-        },
-        render: function () {
-            var attr = this.model.toJSON();
 
+            if (_.isString(renderToDOM)) {
+                this.setElement(renderToDOM);
+                this.model.readConfig(psconfig);
+                this.listenTo(this.model, {
+                    "change:fetched": function () {
+                        this.render2DOM();
+                    }
+                });
+            }
+            else {
+                this.listenTo(this.model, {
+                    "change:isCollapsed change:isCurrentWin": this.render2Window,
+                    "change:fetched": function () {
+                        this.model.set("isCollapsed", false, {silent: true});
+                        this.model.set("isCurrentWin", true, {silent: true});
+                        this.render2Window();
+                    }
+                });
+            }
+        },
+        /*
+         * Standard-Renderer, wenn parcelSearch in Window über Menubar angezeigt wird.
+         */
+        render2Window: function () {
+            var attr = this.model.toJSON();
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -36,6 +64,14 @@ define([
             else {
                 this.undelegateEvents();
             }
+        },
+        /*
+         * Renderer, wenn parcelSearch ohne Menubar angezeigt wird, z.B. in IDA
+         */
+        render2DOM: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
         },
         checkInput: function () {
             if (this.model.get("districtNumber") !== "0" &&

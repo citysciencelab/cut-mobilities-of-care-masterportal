@@ -25,25 +25,12 @@ define([
             });
         },
         /*
-         * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird.
+         * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().
          */
         setStatus: function (args) {
             if (args[2].getId() === "parcelSearch") {
                 if (this.get("fetched") === false) {
-                    var restService = Radio.request("RestReader", "getServiceById", args[2].get("serviceId")),
-                        serviceURL = restService[0] && restService[0].get("url") ? restService[0].get("url") : null,
-                        configJSON = args[2].get("configJSON") ? args[2].get("configJSON") : null,
-                        parcelDenominatorField = args[2].get("parcelDenominator") ? args[2].get("parcelDenominator") : false,
-                        storedQueryID = args[2].get("StoredQueryID") ? args[2].get("StoredQueryID") : null;
-
-                    // lade json und Konfiguration
-                    if (serviceURL && configJSON && storedQueryID) {
-                        this.loadConfiguration(serviceURL, configJSON, parcelDenominatorField, storedQueryID);
-                    }
-                    else {
-                        Radio.trigger("Alert", "alert", {text: "<strong>Invalid parcelSearch configuration!</strong>", kategorie: "alert-danger"});
-                        Radio.trigger("Window", "closeWin");
-                    }
+                    this.readConfig(args[2].attributes);
                 }
                 else {
                     this.set("isCollapsed", args[1]);
@@ -55,19 +42,36 @@ define([
             }
         },
         /*
-         * liest die gemarkung.json ein. Anschließend wird parse gestartet.
+         * liest die übergebene Konfiguration, prüft und initiiert das Lesen der gemarkung.json
          */
-        loadConfiguration: function (serviceURL, configJSON, parcelDenominatorField, storedQueryID) {
+        readConfig: function (psconfig) {
+            var serviceId = psconfig.serviceId ? psconfig.serviceId : null,
+                restService = serviceId ? Radio.request("RestReader", "getServiceById", serviceId) : null,
+                serviceURL = restService && restService[0] && restService[0].get("url") ? restService[0].get("url") : null,
+                configJSON = psconfig.configJSON ? psconfig.configJSON : null,
+                parcelDenominatorField = psconfig.parcelDenominator ? psconfig.parcelDenominator : false,
+                storedQueryID = psconfig.StoredQueryID ? psconfig.StoredQueryID : null;
+
             this.set("parcelDenominatorField", parcelDenominatorField);
             this.set("storedQueryID", storedQueryID);
             this.set("serviceURL", serviceURL);
 
+            // lade json und Konfiguration
+            if (serviceURL && configJSON && storedQueryID) {
+                this.loadConfiguration(configJSON);
+            }
+            else {
+                Radio.trigger("Alert", "alert", {text: "<strong>Invalid parcelSearch configuration!</strong>", kategorie: "alert-danger"});
+                Radio.trigger("Window", "closeWin");
+            }
+        },
+        /*
+         * liest die gemarkung.json ein. Anschließend wird parse gestartet.
+         */
+        loadConfiguration: function (configJSON) {
             this.fetch({
                 url: configJSON,
                 cache: false,
-                success: function (model) {
-                    model.set("fetched", true);
-                },
                 error: function () {
                     Radio.trigger("Alert", "alert", {text: "<strong>Konfiguration der Flurstückssuche konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
                     Radio.trigger("Window", "closeWin");
@@ -96,8 +100,7 @@ define([
                 this.set("cadastralDistricts", cadastralDistricts);
                 this.set("cadastralDistrictField", true);
             }
-            this.set("isCollapsed", false);
-            this.set("isCurrentWin", true);
+            this.set("fetched", true);
         },
         setDistrictNumber: function (value) {
             this.set("districtNumber", value);
