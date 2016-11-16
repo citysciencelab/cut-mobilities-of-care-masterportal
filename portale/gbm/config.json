@@ -64,7 +64,7 @@
       "zoom": true,
       "orientation": "once",
       "fullScreen": true,
-      "attributions": false
+      "attributions": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"
