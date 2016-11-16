@@ -1,3 +1,5 @@
+[TOC]
+
 # Code
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
