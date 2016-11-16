@@ -631,7 +631,7 @@
                 },
 
                 {
-                  "Titel": "Bauwerke/Straßenausstattung",
+                  "Titel": "Bauwerke und Anlagen",
                       "Layer": [
                         {
                           "id": ["669","670"],
@@ -659,6 +659,38 @@
                         }
                       ]
                 },
+              
+                    {
+                    "Titel": "Einzugsbereiche von HVV-Haltestellen",
+                      "Layer": [
+                        {
+                          "id": "4624",
+                          "visibility": false,
+                          "name" : "RE/RB"
+                        },
+                        {
+                          "id": "4625",
+                          "visibility": false,
+                          "name" : "AKN"
+                        },
+                        {
+                          "id": "4626",
+                          "visibility": false,
+                          "name" : "S-Bahn"
+                        },
+                        {
+                          "id": "4627",
+                          "visibility": false,
+                          "name" : "U-Bahn"
+                        },
+                        {
+                          "id": "4628",
+                          "visibility": false,
+                          "name" : "Bus"
+                        }
+                      ]
+                     },
+                   
 
                 {
 				  "Titel": "Straßennetze",
