@@ -116,7 +116,7 @@ define([
         },
         sendRequest: function () {
             var flur = this.get("cadastralDistrictField") === true ? "flur=" + this.get("cadastralDistrictNumber") : "",
-                parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
+                parcelNumber = this.get("parcelNumber"),// _String.lpad(this.get("parcelNumber"), 5, "0"),
                 parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "flurstuecksnummernenner=" + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "",
                 data = "&StoredQuery_ID=" + this.get("storedQueryID") + "&gemarkung=" + this.get("districtNumber") + flur + "&flurstuecksnummer=" + parcelNumber + parcelDenominatorNumber;
 
@@ -134,20 +134,26 @@ define([
             });
         },
         getParcel: function (data) {
-            var hit = $("wfs\\:member,member", data),
-                coordinate,
-                position;
+            var member = $("wfs\\:member,member", data)[0];
 
-            if (hit.length === 0) {
+            if (!member || member.length === 0) {
                 var parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
                     parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "";
 
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
             }
             else {
-                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                var position = $(member).find("gml\\:pos, pos")[0].textContent.split(" "),
+                    coordinate = [parseFloat(position[0]), parseFloat(position[1])],
+                    attributes = _.object(["coordinate"], [coordinate]);
+
+                $(member).find("*").filter(function () {
+                    return this.nodeName.indexOf("dog") !== -1 || this.nodeName.indexOf("gages") !== -1;
+                }).each(function (i, obj) {
+                    _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
+                });
                 Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
+                Radio.trigger("ParcelSearch", "parcelFound", attributes);
             }
         }
     });
