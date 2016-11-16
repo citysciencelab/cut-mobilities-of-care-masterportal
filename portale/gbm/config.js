@@ -15,7 +15,7 @@ define(function () {
        styleConf: "../components/lgv-config/style.json",
        print: {
            printID: "99999",
-           title: "Master-Portal",
+           title: "IT-GBM",
            gfi: false
        },
        proxyURL: "/cgi-bin/proxy.cgi",
