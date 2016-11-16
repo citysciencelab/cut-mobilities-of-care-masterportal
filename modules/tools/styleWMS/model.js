@@ -131,7 +131,7 @@ define([
         },
 
         updateLegend: function (attributes) {
-            Radio.trigger("StyleWMS", "updateLegend", attributes);
+            Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
         },
 
         /**

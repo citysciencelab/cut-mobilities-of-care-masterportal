@@ -10,7 +10,8 @@ define([
         defaults: {
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
-            wmsLayerList: []
+            wmsLayerList: [],
+            paramsStyleWMS: []
         },
 
         initialize: function () {
@@ -19,22 +20,28 @@ define([
                 "updatedSelectedLayerList": this.setLayerList
             });
             this.listenTo(Radio.channel("StyleWMS"), {
-                "updateLegend": this.updateLegendFromStyleWMS
+                "updateParamsStyleWMS": this.updateParamsStyleWMS
             });
 
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromWFS,
-                "change:groupLayerList": this.setLegendParamsFromGROUP
+                "change:groupLayerList": this.setLegendParamsFromGROUP,
+                "change:paramsStyleWMS": this.updateLegendFromStyleWMS
             });
         },
 
-        updateLegendFromStyleWMS: function (params) {
-            var legendParams = this.get("legendParams"),
+        updateParamsStyleWMS: function (params) {
+            this.set("paramsStyleWMS", params);
+        },
+
+        updateLegendFromStyleWMS: function () {
+            var params = this.get("paramsStyleWMS"),
+                legendParams = this.get("legendParams"),
                 legendParams2 = [];
 
             _.each(legendParams, function (legendParam) {
-                if(legendParam.layername === "Erreichbare Arbeitsplaetze in 30min"){
+                if (legendParam.layername === "Erreichbare Arbeitsplaetze in 30min") {
                     var layername = legendParam.layername;
 
                     legendParams2.push({params: params,
@@ -90,14 +97,26 @@ define([
         },
 
         setLegendParamsFromWMS: function () {
-            _.each(this.get("wmsLayerList"), function (layer) {
-                var legendURL = layer.get("legendURL");
+            var paramsStyleWMS = this.get("paramsStyleWMS");
 
-                this.push("tempArray", {
-                    layername: layer.get("name"),
-                    img: legendURL,
-                    typ: "WMS"
-                });
+            _.each(this.get("wmsLayerList"), function (layer) {
+
+                if (paramsStyleWMS.length > 0 && layer.get("name") === "Erreichbare Arbeitsplaetze in 30min") {
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        typ: "styleWMS",
+                        params: paramsStyleWMS
+                    });
+                }
+                else {
+                    var legendURL = layer.get("legendURL");
+
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        img: legendURL,
+                        typ: "WMS"
+                    });
+                }
             }, this);
         },
 
