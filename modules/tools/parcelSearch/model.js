@@ -24,11 +24,13 @@ define([
                 "winParams": this.setStatus
             });
         },
+        /*
+         * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().
+         */
         setStatus: function (args) {
             if (args[2].getId() === "parcelSearch") {
                 if (this.get("fetched") === false) {
-                    // lade json und Konfiguration
-                    this.loadConfiguration(args);
+                    this.readConfig(args[2].attributes);
                 }
                 else {
                     this.set("isCollapsed", args[1]);
@@ -40,36 +42,43 @@ define([
             }
         },
         /*
-         * liest die gemarkung.json ein. Anschließend wird parse gestartet.
+         * liest die übergebene Konfiguration, prüft und initiiert das Lesen der gemarkung.json
          */
-        loadConfiguration: function (args) {
-            var restService = Radio.request("RestReader", "getServiceById", args[2].get("serviceId")),
-                configJSON = args[2].get("configJSON");
+        readConfig: function (psconfig) {
+            var serviceId = psconfig.serviceId ? psconfig.serviceId : null,
+                restService = serviceId ? Radio.request("RestReader", "getServiceById", serviceId) : null,
+                serviceURL = restService && restService[0] && restService[0].get("url") ? restService[0].get("url") : null,
+                configJSON = psconfig.configJSON ? psconfig.configJSON : null,
+                parcelDenominatorField = psconfig.parcelDenominator ? psconfig.parcelDenominator : false,
+                storedQueryID = psconfig.StoredQueryID ? psconfig.StoredQueryID : null;
 
-            this.set("parcelDenominatorField", args[2].get("parcelDenominator"));
-            this.set("storedQueryID", args[2].get("StoredQueryID"));
+            this.set("parcelDenominatorField", parcelDenominatorField);
+            this.set("storedQueryID", storedQueryID);
+            this.set("serviceURL", serviceURL);
 
-            if (restService[0] && restService[0].get("url")) {
-                this.set("serviceURL", restService[0].get("url"));
-
-                this.fetch({
-                    url: configJSON,
-                    cache: false,
-                    success: function (model) {
-                        model.set("fetched", true);
-                    },
-                    error: function () {
-                        Radio.trigger("Alert", "alert", {text: "<strong>Konfiguration der Flurstückssuche konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
-                        Radio.trigger("Window", "closeWin");
-                    },
-                    complete: Util.hideLoader,
-                    beforeSend: Util.showLoader
-                });
+            // lade json und Konfiguration
+            if (serviceURL && configJSON && storedQueryID) {
+                this.loadConfiguration(configJSON);
             }
             else {
-                Radio.trigger("Alert", "alert", {text: "<strong>Flurstückssuchen-URL nicht bekannt!</strong>", kategorie: "alert-danger"});
+                Radio.trigger("Alert", "alert", {text: "<strong>Invalid parcelSearch configuration!</strong>", kategorie: "alert-danger"});
                 Radio.trigger("Window", "closeWin");
             }
+        },
+        /*
+         * liest die gemarkung.json ein. Anschließend wird parse gestartet.
+         */
+        loadConfiguration: function (configJSON) {
+            this.fetch({
+                url: configJSON,
+                cache: false,
+                error: function () {
+                    Radio.trigger("Alert", "alert", {text: "<strong>Konfiguration der Flurstückssuche konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
+                    Radio.trigger("Window", "closeWin");
+                },
+                complete: Util.hideLoader,
+                beforeSend: Util.showLoader
+            });
         },
         /*
          * parst die gemarkung.json. Das JSON-Object hat folgenden Aufbau:
@@ -91,8 +100,7 @@ define([
                 this.set("cadastralDistricts", cadastralDistricts);
                 this.set("cadastralDistrictField", true);
             }
-            this.set("isCollapsed", false);
-            this.set("isCurrentWin", true);
+            this.set("fetched", true);
         },
         setDistrictNumber: function (value) {
             this.set("districtNumber", value);
@@ -126,20 +134,28 @@ define([
             });
         },
         getParcel: function (data) {
-            var hit = $("wfs\\:member,member", data),
-                coordinate,
-                position;
+            var member = $("wfs\\:member,member", data)[0];
 
-            if (hit.length === 0) {
+            if (!member || member.length === 0) {
                 var parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
                     parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "";
 
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
             }
             else {
-                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                var position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null,
+                    coordinate = position ? [parseFloat(position[0]), parseFloat(position[1])] : null,
+                    attributes = coordinate ? _.object(["coordinate"], [coordinate]) : {},
+                    geoExtent = $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] ? $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] : null,
+                    attributes = geoExtent ? _.extend(attributes, _.object(["geographicExtent"], [geoExtent])) : attributes;
+
+                $(member).find("*").filter(function () {
+                    return this.nodeName.indexOf("dog") !== -1 || this.nodeName.indexOf("gages") !== -1;
+                }).each(function (i, obj) {
+                    _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
+                });
                 Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
+                Radio.trigger("ParcelSearch", "parcelFound", attributes);
             }
         }
     });
