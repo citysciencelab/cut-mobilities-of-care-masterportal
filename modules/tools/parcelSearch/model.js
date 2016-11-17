@@ -147,8 +147,7 @@ define([
                     coordinate = position ? [parseFloat(position[0]), parseFloat(position[1])] : null,
                     attributes = coordinate ? _.object(["coordinate"], [coordinate]) : {},
                     geoExtent = $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] ? $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] : null,
-                    posList = geoExtent ? $(geoExtent).find("gml\\:posList, posList")[0].textContent.split(" ") : null,
-                    attributes = posList ? _.extend(attributes, _.object(["extent"], [posList])) : attributes;
+                    attributes = geoExtent ? _.extend(attributes, _.object(["geographicExtent"], [geoExtent])) : attributes;
 
                 $(member).find("*").filter(function () {
                     return this.nodeName.indexOf("dog") !== -1 || this.nodeName.indexOf("gages") !== -1;
