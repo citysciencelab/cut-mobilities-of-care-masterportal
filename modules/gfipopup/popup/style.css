@@ -1,8 +1,8 @@
 .gfi-win {
     position: absolute;
     top: 0;
-    right: 130px;
-    max-width: 25%;
+    right: 50px;
+    width: 25%;
     margin: 60px 10px 30px 10px;
     display: show;
     background-color: rgb(255, 255, 255);
@@ -15,7 +15,6 @@
 .gfi-win > .gfi-header {
     color: #777;
     cursor: move;
-    min-width:400px;
 }
 .gfi-win > .gfi-content {
     width: 100%;
@@ -85,9 +84,7 @@
 .gfi-content {
     font-size: 12px;
     max-height: 40vh;
-    min-width:400px;
     overflow-y: auto;
-    /*overflow-x:hidden;*/
 }
 
 .gfi-content > table {
