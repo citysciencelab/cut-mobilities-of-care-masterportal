@@ -65,7 +65,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: help;
-    max-width: 260px;
+    max-width: 70%;
 }
 
 .gfi-toggle {
