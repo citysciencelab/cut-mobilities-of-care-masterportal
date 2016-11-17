@@ -57,14 +57,38 @@
       "legend": {
         "name": "Legende",
         "glyphicon": "glyphicon-book"
-      }
+      }, 
+       "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80001",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "subject": "",
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+        }
     },
     "controls": {
       "toggleMenu": true,
       "zoom": true,
       "orientation": "once",
-      "attributions": false,
-      "fullScreen": true
+      "fullScreen": true,
+      "attributions": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"
@@ -75,7 +99,10 @@
     {
       "Layer": [
         {
-          "id": "8"
+             "id": "368",
+             "visible": false,
+             "name": "ALKIS farbig",
+             "maxScale": "10000"
         },
         {
           "id": ["717", "718", "719", "720"],
@@ -88,29 +115,73 @@
 
         {
           "Ordner": [
-
+              
             {
               "Titel": "Planungsrecht / -konzepte",
-              "Layer": [
-                {
-                    "id": "1561"
-                },
-                {
-                    "id": "1562"
-                },
-                {
-                    "id": "1747"
-                },
+                 "Ordner": [
+                    {
+                      "Titel": "Normierte Bodenrichtwerte",
+                      "Layer": [
+                        {
+                          "id": "4236"
+                        },
+                        {
+                          "id": "4237"
+                        },
+                        {
+                          "id": "4238"
+                        },
+                        {
+                          "id": "4239"
+                        },
+                        {
+                          "id": "4240"
+                        }
+                      ]
+                    },
+                    {
+                      "Titel": "Bodenrichtwertzonen",
+                      "Layer": [
+                        {
+                          "id": "1810"
+                        },
+                        {
+                          "id": "1812"
+                        },
+                        {
+                          "id": "1814"
+                        },
+                        {
+                          "id": "1816"
+                        },
+                        {
+                          "id": "2405"
+                        },
+                        {
+                          "id": "4635"
+                        }
+                      ]
+                    }
+                  ],
 
-                {
-                    "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
-                    "name": "Digitales Informationssystem Planrecht (DIP)"
+                "Layer": [
+                        {
+                        "id": "1561"
+                        },
+                        {
+                        "id": "1562"
+                        },
+                        {
+                        "id": "1747"
+                        },
+
+                        {
+                          "id": ["1201", "1202", "1203", "1204", "1205", "1206", "1207", "1208", "1209", "1210", "4394", "4395", "1211", "1212"],
+                         "name": "Digitales Informationssystem Planrecht (DIP)"
+                        }
+                    ]
                 },
-                {
-                    "id": "1749"
-                }
-              ]
-            },
+ 
 
             {
               "Titel": "Vermarktungserfordernisse",
@@ -118,6 +189,10 @@
                 {
                     "id": ["758", "759"],
                     "name": "Störfallbetriebe mit Abstandszonen"
+                },
+                {
+                    "id": ["412", "413", "414", "415", "416", "417", "418", "419", "420", "421", "423", "424", "425", "426", "427", "428", "429", "430", "431"],
+                    "name": "Bauschutzbereich § 12 LuftVG Hamburg"
                 }
               ]
             },
@@ -130,16 +205,13 @@
                       "Titel": "Biotopkataster",
                       "Layer": [
                         {
-                          "id": "1687",
-                          "visibility": false
+                          "id": "1687"
                         },
                         {
-                          "id": "1688",
-                          "visibility": false
+                          "id": "1688"
                         },
                         {
-                          "id": "1689",
-                          "visibility": false
+                          "id": "1689"
                         }
                       ]
                     },
@@ -147,12 +219,10 @@
                       "Titel": "Hochwasserschutz",
                       "Layer": [
                         {
-                          "id": "435",
-                          "visibility": false
+                          "id": "435"
                         },
                         {
-                          "id": "436",
-                          "visibility": false
+                          "id": "436"
                         }
                       ]
                     },
@@ -190,20 +260,16 @@
                       "Titel": "Straßennetz",
                       "Layer": [
                         {
-                          "id": "1556",
-                          "visibility": false
+                          "id": "1556"
                         },
                         {
-                          "id": "1557",
-                          "visibility": false
+                          "id": "1557"
                         },
                         {
-                          "id": "1558",
-                          "visibility": false
+                          "id": "1558"
                         },
                         {
-                          "id": "1559",
-                          "visibility": false
+                          "id": "1559"
                         }
                       ]
                     },
@@ -268,37 +334,32 @@
                       "Titel": "Verwaltungsgrenzen",
                       "Layer": [
                         {
-                          "id": "2427",
-                          "visibility": false
+                          "id": "2427"
                         },
                         {
-                          "id": "2426",
-                          "visibility": false
+                          "id": "2426"
                         },
                         {
-                          "id": "2425",
-                          "visibility": false
+                          "id": "2425"
                         },
                         {
-                          "id": "2424",
-                          "visibility": false
+                          "id": "2424"
                         },
                         {
-                          "id": "2423",
-                          "visibility": false
+                          "id": "2423"
                         }
                       ]
                     }
                   ],
 
-              "Layer": [
+                "Layer": [
+                        {
+                            "id": "8"
+                        }
+                    ]
+                }
 
-
-
-                        ]
-            }
-
-          ]
+            ]
         }
-  }
+    }
 }

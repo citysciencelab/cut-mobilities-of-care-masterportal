@@ -216,33 +216,7 @@
         },
         {
           "Titel": "ÖV-Netze",
-            "Ordner": [
-            {
-                "Titel": "Einzugsbereiche von HVV-Haltestellen",
-              "Layer": [
-                {
-                  "id": "4624",
-                  "visibility": false
-                },
-                {
-                  "id": "4625",
-                  "visibility": false
-                },
-                {
-                  "id": "4626",
-                  "visibility": false
-                },
-                {
-                  "id": "4627",
-                  "visibility": false
-                },
-                {
-                  "id": "4628",
-                  "visibility": false
-                }
-              ]
-            }
-                ],
+          
           "Layer": [
             {
               "id": "1935",
@@ -264,7 +238,39 @@
               "visible": false,
               "name" : "Schienenverkehrsnetz MRH"
             }
-          ]
+          ],
+             "Ordner": [
+            {
+                "Titel": "Einzugsbereiche von HVV-Haltestellen",
+              "Layer": [
+                {
+                  "id": "4624",
+                  "visibility": false,
+                  "name" : "RE/RB"
+                },
+                {
+                  "id": "4625",
+                  "visibility": false,
+                  "name" : "AKN"
+                },
+                {
+                  "id": "4626",
+                  "visibility": false,
+                  "name" : "S-Bahn"
+                },
+                {
+                  "id": "4627",
+                  "visibility": false,
+                  "name" : "U-Bahn"
+                },
+                {
+                  "id": "4628",
+                  "visibility": false,
+                  "name" : "Bus"
+                }
+              ]
+            }
+                ]
         },
 
         {

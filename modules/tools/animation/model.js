@@ -14,7 +14,8 @@ define(function (require) {
             layer: new ol.layer.Vector({
                 source: new ol.source.Vector(),
                 style: null
-            })
+            }),
+            ort_kreise_mit_anzahl: null
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -205,7 +206,8 @@ define(function (require) {
 
                 obj.color = colors[index];
             });
-            this.setOrtKreiseMitAnzahl(ort_kreise_mit_anzahl);
+            ort_kreise_mit_anzahl = _.sortBy(ort_kreise_mit_anzahl, "anzahl_pendler");
+            this.setOrtKreiseMitAnzahl(ort_kreise_mit_anzahl.reverse());
         },
 
         setStatus: function (args) {
@@ -312,6 +314,7 @@ define(function (require) {
             percent = (val * 100) / (maxVal - minVal);
             pixel = ((maxPx - minPx) / 100) * percent;
             ort = _.findWhere(ort_kreise_mit_anzahl, {kreis: kreis});
+
             if (!_.isUndefined(ort) && ort.color !== null) {
                 color = ort.color;
             }

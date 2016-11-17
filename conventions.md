@@ -1,3 +1,5 @@
+[TOC]
+
 # Code
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
@@ -259,12 +261,12 @@ wird dem Commit das Verb config vorangestellt (z.B. git commit -m "config FHH-At
 * Ein Commit repräsentiert eine Idee oder eine Änderung
 * Nutze Verben für die Commits **(add/remove/update/refactor/fix/config/hotfix)**
 * Es dürfen keine console.log Statements in den Commits vorhanden sein
-* Die einzigen zugelassen Commits auf dem stable-Branch sind "config-Commits"
+* Die einzigen zugelassen Commits auf dem stable-Branch sind "hotfix-Commits"
 
 ## Branches
 * Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
 * Bezeichnung der Branches: #43_add_GFI oder 56_update_draw (IssueNummer_Verb_Modul)
-* Nutze Verben für die Merge-Commits **(add/remove/update/refactor/fix/config/hotfix)**. Die Merging-Commit-Messages sollen deutsch und sprechend sein. Die "add"- und "fix"-Messages der Merges fließen bei neuen Stable-Versionen in die CHANGELOG.md !
+* Nutze Verben für die Merge-Commits **(add/remove/update/refactor/fix/config/hotfix)**. Die Merging-Commit-Messages sollen deutsch und sprechend sein. Die "add"- und "fix"-Messages der Merges fließen bei neuen Stable-Versionen in die CHANGELOG.md! "hotfix"-Messages fließen ebenso in die CHANGELOG.md, wenn minor-updates gemacht werden.
 * Branches werden nach dem Mergen gelöscht
 
 ## Pushen
