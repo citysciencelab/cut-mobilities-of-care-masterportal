@@ -19,7 +19,14 @@ define(function () {
             minChars: 3,
             placeholder: "Suche nach Adresse (Straße/Hausnummer)",
             renderToDOM: "#adressfeld"
-        }
+        },
+        parcelSearch: {
+            serviceId: "6",
+            StoredQueryID: "Flurstueck",
+            configJSON: "/../../components/lgv-config/gemarkungen_hh.json",
+            parcelDenominator: false,
+            renderToDOM: "#parcelSearchField"
+      }
     };
 
     return config;

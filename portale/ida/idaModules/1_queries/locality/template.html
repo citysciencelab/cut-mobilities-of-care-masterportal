@@ -12,145 +12,23 @@
         <h4>Wie möchten Sie die Lage Ihrer Immobilie mitteilen?</h4>
         <label class="radio-inline"><input type="radio" name="lage_radio" value="radio1" checked="checked"><p>Straße / Hausnummer</p></label>
         <label class="radio-inline"><input type="radio" name="lage_radio" value="radio2"><p>Gemarkung / Flurstück / Straße</p></label><br><br>
-        <div class="row">
-            <div class="col-lg-12 navbar-form" style="display:block;" id="adresse">
-                <div id="adressfeld"></div>
-            </div>
+        <div class="navbar-form" style="display:block;" id="adresse">
+            <div id="adressfeld"></div>
         </div>
-        <div class="row" style="display:none;" id="gemarkung">
-            <div class="col-xs-4 form-group">
-                    <select class="form-control" id="gemarkungsnummer" name="gemarkung">
-                        <option value="-">Bitte auswählen</option>
-                        <option value="0601">Allermöhe</option>
-                        <option value="0424">Alsterdorf</option>
-                        <option value="0544">Alt-Rahlstedt</option>
-                        <option value="0602">Altengamme</option>
-                        <option value="0701">Altenwerder</option>
-                        <option value="0213">Altona-Nord</option>
-                        <option value="0214">Altona-Nordwest</option>
-                        <option value="0215">Altona-Südwest</option>
-                        <option value="0101">Altstadt Nord</option>
-                        <option value="0102">Altstadt Süd</option>
-                        <option value="0211">Bahrenfeld</option>
-                        <option value="0453">Barmbek</option>
-                        <option value="0603">Bergedorf</option>
-                        <option value="0538">Bergstedt</option>
-                        <option value="0103">Billbrook</option>
-                        <option value="0104">Billwerder Ausschlag</option>
-                        <option value="0604">Billwerder</option>
-                        <option value="0203">Blankenese</option>
-                        <option value="0605">Boberg</option>
-                        <option value="0105">Borgfelde</option>
-                        <option value="0546">Bramfeld</option>
-                        <option value="0702">Cranz</option>
-                        <option value="0606">Curslack</option>
-                        <option value="0204">Dockenhuden</option>
-                        <option value="0534">Duvenstedt</option>
-                        <option value="0536">Duvenstedter Brook</option>
-                        <option value="0305">Eidelstedt</option>
-                        <option value="0556">Eilbek</option>
-                        <option value="0303">Eimsbüttel</option>
-                        <option value="0711">Eißendorf</option>
-                        <option value="0426">Eppendorf</option>
-                        <option value="0545">Farmsen</option>
-                        <option value="0106">Finkenwerder Nord</option>
-                        <option value="0107">Finkenwerder Süd</option>
-                        <option value="0705">Fischbek</option>
-                        <option value="0706">Francop</option>
-                        <option value="0421">Fuhlsbüttel</option>
-                        <option value="0419">Groß Borstel</option>
-                        <option value="0208">Groß Flottbek</option>
-                        <option value="0717">Gut Moor</option>
-                        <option value="0108">Hamm Geest</option>
-                        <option value="0109">Hamm Marsch</option>
-                        <option value="0709">Harburg</option>
-                        <option value="0302">Harvestehude</option>
-                        <option value="0703">Hasselwerder</option>
-                        <option value="0710">Heimfeld</option>
-                        <option value="0548">Hinschenfelde</option>
-                        <option value="0455">Hohenfelde</option>
-                        <option value="0110">Horn Geest</option>
-                        <option value="0111">Horn Marsch</option>
-                        <option value="0530">Hummelsbüttel</option>
-                        <option value="0550">Jenfeld</option>
-                        <option value="0144">Kattwyk</option>
-                        <option value="0112">Kirchsteinbek</option>
-                        <option value="0607">Kirchwerder</option>
-                        <option value="0422">Klein Borstel</option>
-                        <option value="0209">Klein Flottbek</option>
-                        <option value="0113">Kleiner Grasbrook</option>
-                        <option value="0723">Langenbek</option>
-                        <option value="0420">Langenhorn</option>
-                        <option value="0533">Lemsahl-Mellingstedt</option>
-                        <option value="0608">Lohbrügge</option>
-                        <option value="0306">Lokstedt</option>
-                        <option value="0207">Lurup</option>
-                        <option value="0551">Marienthal</option>
-                        <option value="0721">Marmstorf</option>
-                        <option value="0541">Meiendorf</option>
-                        <option value="0704">Moorburg</option>
-                        <option value="0609">Moorfleet</option>
-                        <option value="0145">Moorwerder</option>
-                        <option value="0543">Neu-Rahlstedt</option>
-                        <option value="0610">Neuengamme</option>
-                        <option value="0707">Neugraben</option>
-                        <option value="0146">Neuhof</option>
-                        <option value="0718">Neuland</option>
-                        <option value="0114">Neustadt Nord</option>
-                        <option value="0115">Neustadt Süd</option>
-                        <option value="0125">Neuwerk</option>
-                        <option value="0307">Niendorf</option>
-                        <option value="0205">Nienstedten</option>
-                        <option value="0708">Nincop</option>
-                        <option value="0611">Ochsenwerder</option>
-                        <option value="0116">Öjendorf</option>
-                        <option value="0423">Ohlsdorf</option>
-                        <option value="0537">Ohlstedt</option>
-                        <option value="0542">Oldenfelde</option>
-                        <option value="0206">Osdorf</option>
-                        <option value="0612">Ost-Krauel</option>
-                        <option value="0210">Othmarschen</option>
-                        <option value="0212">Ottensen</option>
-                        <option value="0613">Overhaken</option>
-                        <option value="0532">Poppenbüttel</option>
-                        <option value="0614">Reitbrook</option>
-                        <option value="0201">Rissen</option>
-                        <option value="0301">Rotherbaum</option>
-                        <option value="0720">Rönneburg</option>
-                        <option value="0539">Sasel</option>
-                        <option value="0117">Schiffbek</option>
-                        <option value="0308">Schnelsen</option>
-                        <option value="0719">Sinstorf</option>
-                        <option value="0615">Spadenland</option>
-                        <option value="0118">St. Georg Nord</option>
-                        <option value="0119">St. Georg Süd</option>
-                        <option value="0120">St. Pauli Nord</option>
-                        <option value="0121">St. Pauli Süd</option>
-                        <option value="0547">Steilshoop</option>
-                        <option value="0122">Steinwerder-Waltershof</option>
-                        <option value="0304">Stellingen</option>
-                        <option value="0216">Sternschanze</option>
-                        <option value="0202">Sülldorf</option>
-                        <option value="0616">Tatenberg</option>
-                        <option value="0549">Tonndorf</option>
-                        <option value="0454">Uhlenhorst</option>
-                        <option value="0712">Vahrendorf-Forst</option>
-                        <option value="0124">Veddel</option>
-                        <option value="0540">Volksdorf</option>
-                        <option value="0552">Wandsbek</option>
-                        <option value="0531">Wellingsbüttel</option>
-                        <option value="0147">Wilhelmsburg</option>
-                        <option value="0722">Wilstorf</option>
-                        <option value="0425">Winterhude</option>
-                        <option value="0535">Wohldorf</option>
-                    </select>
-            </div><!-- col -->
-            <div class="col-xs-3 form-group">
-                <input id="flurstuecksnummer" type="text" class="form-control" placeholder="Flurstück" name="flurstuck" />
-            </div><!-- col -->
-            <div class="col-xs-5 form-group" id="strassenfeld">
-                <input id="flurstuecksstrasse" type="text" class="form-control" placeholder="Straße" name="strasse_gemarkung" />
-            </div><!-- col -->
+        <div style="display:none;" id="gemarkung">
+            <div class="col-md-6 col-lg-4 col-sm-8 col-xs-12">
+                <div id="parcelSearchField"></div>
+            </div>
+            <div class="col-md-6 col-lg-4 col-sm-8 col-xs-12">
+                <div class="form-horizontal" role="form">
+                    <div class="form-group form-group-sm">
+                        <label for="flurstueckstrassenliste" class="col-md-5 col-sm-5 control-label">Zuwegung über Straße</label>
+                        <div class="col-md-7 col-sm-7">
+                            <select disabled class="form-control input-sm pull-left" id="flurstueckstrassenliste"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div><!-- .row -->
     </div><!-- /.panel-body -->
 </div>
