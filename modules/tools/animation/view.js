@@ -23,7 +23,7 @@ define(function (require) {
                 // ändert sich der Fensterstatus wird neu gezeichnet
                 "change:isCollapsed change:isCurrentWin": this.render,
                 // ändert sich eins dieser Attribute wird neu gezeichnet
-                "change:gemeinden change:gemeinde change:direction change:animating": this.render
+                "change:gemeinden change:gemeinde change:direction change:animating change:pendlerLegend": this.render
             });
         },
         render: function () {
