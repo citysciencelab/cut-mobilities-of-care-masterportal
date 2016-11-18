@@ -15,7 +15,7 @@ define(function (require) {
                 source: new ol.source.Vector(),
                 style: null
             }),
-            ort_kreise_mit_anzahl: null
+            pendlerLegend: []
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -207,7 +207,30 @@ define(function (require) {
                 obj.color = colors[index];
             });
             ort_kreise_mit_anzahl = _.sortBy(ort_kreise_mit_anzahl, "anzahl_pendler");
-            this.setOrtKreiseMitAnzahl(ort_kreise_mit_anzahl.reverse());
+            ort_kreise_mit_anzahl.reverse();
+            this.preparePendlerLegend(ort_kreise_mit_anzahl);
+            this.setOrtKreiseMitAnzahl(ort_kreise_mit_anzahl);
+        },
+
+
+        preparePendlerLegend: function (kreise) {
+            var pendlerLegend = [],
+                pendlerCountOther = 0;
+
+            _.each(kreise, function(kreis) {
+               if(kreis.color !== null){
+                   pendlerLegend.push(kreis);
+               }
+                else {
+                   pendlerCountOther += kreis.anzahl_pendler;
+                }
+            });
+            pendlerLegend.push({
+                anzahl_pendler: pendlerCountOther,
+                color:"rgba(0,0,0,.5)",
+                kreis:"Andere"
+            });
+            this.set("pendlerLegend", pendlerLegend);
         },
 
         setStatus: function (args) {
