@@ -2,15 +2,19 @@
     position: absolute;
     top: 0;
     right: 50px;
-    width: 50%;
+    width: 25%;
     margin: 60px 10px 30px 10px;
     display: show;
     background-color: rgb(255, 255, 255);
 }
+.table-fixed {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
 .gfi-win > .gfi-header {
     color: #777;
     cursor: move;
-    min-width:400px;
 }
 .gfi-win > .gfi-content {
     width: 100%;
@@ -61,7 +65,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: help;
-    max-width: 260px;
+    max-width: 70%;
 }
 
 .gfi-toggle {
@@ -80,9 +84,7 @@
 .gfi-content {
     font-size: 12px;
     max-height: 40vh;
-    min-width:400px;
     overflow-y: auto;
-    /*overflow-x:hidden;*/
 }
 
 .gfi-content > table {

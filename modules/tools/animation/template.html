@@ -41,13 +41,11 @@
 <% } %>
 <% if (typeof direction !== "undefined") { %>
 <table class="table">
-    <% _.each(ort_kreise_mit_anzahl, function(kreis){ %>
-        <% if (kreis.color !== null){ %>
-            <tr>
-                <td><div class="form-group pull-left animation_legend" style="background-color:<%= kreis.color %>"></div></td>
-                <td><%=kreis.kreis%> (Gesamt: <%=kreis.anzahl_pendler%>)</td>
-            </tr>
-        <%} %>
+    <% _.each(pendlerLegend, function(kreis){ %>
+        <tr>
+            <td><div class="form-group pull-left animation_legend" style="background-color:<%= kreis.color %>"></div></td>
+            <td><%=kreis.kreis%> (Gesamt: <%=kreis.anzahl_pendler%>)</td>
+        </tr>
     <% }); %>
 </table>
 <hr>
