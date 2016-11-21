@@ -9,7 +9,8 @@ define(function (require) {
             var channel = Radio.channel("RemoteInterface");
 
             channel.reply({
-                "getMapState": this.getMapState
+                "getMapState": this.getMapState,
+                "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX
             }, this);
 
             channel.on({
@@ -77,7 +78,7 @@ define(function (require) {
         },
         getFeatureFromHit: function (hit) {
             var reader = new ol.format.GeoJSON(),
-                geom = reader.readGeometry(hit.geometry_gewfl_UTM_EPSG_25832, {
+                geom = reader.readGeometry(hit.geometry_UTM_EPSG_25832, {
                     dataProjection: "EPSG:25832"
                 }),
                 feature = new ol.Feature({
@@ -89,6 +90,9 @@ define(function (require) {
         },
         getMapState: function () {
             return Radio.request("SaveSelection", "getMapState");
+        },
+        getWGS84MapSizeBBOX: function () {
+            return Radio.request("Map", "getWGS84MapSizeBBOX");
         }
     });
 

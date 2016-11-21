@@ -28,7 +28,8 @@ define(function (require) {
                 "getMap": function () {
                     return this.get("map");
                 },
-                "getLayers": this.getLayers
+                "getLayers": this.getLayers,
+                "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX
             }, this);
 
             channel.on({
@@ -162,6 +163,16 @@ define(function (require) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
+        },
+
+        getWGS84MapSizeBBOX: function () {
+            var bbox = this.get("view").calculateExtent(this.get("map").getSize()),
+                firstCoord = [bbox[0], bbox[1]],
+                secondCoord = [bbox[2], bbox[3]],
+                firstCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: firstCoord}),
+                secondCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: secondCoord});
+console.log(bbox);
+            return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
         },
 
         GFIPopupVisibility: function (value) {
