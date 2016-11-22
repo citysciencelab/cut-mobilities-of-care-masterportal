@@ -73,14 +73,13 @@ define(function (require) {
         },
         getFeatureFromHit: function (hit) {
             var reader = new ol.format.GeoJSON(),
-                geom = reader.readGeometry(hit._source.geometry_UTM_EPSG_25832, {
+                geom = reader.readGeometry(hit.geometry_UTM_EPSG_25832, {
                     dataProjection: "EPSG:25832"
                 }),
                 feature = new ol.Feature({
                     geometry: geom,
-                    type: hit._type
+                    type: hit.typ
                 });
-
                 feature.setId(hit.id);
                 return feature;
         },
