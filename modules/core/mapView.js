@@ -159,6 +159,7 @@ define([
         resetView: function () {
             this.get("view").setCenter(this.get("startCenter"));
             this.get("view").setZoom(2);
+            Radio.trigger("MapMarker","hideMarker");
         },
 
         /*

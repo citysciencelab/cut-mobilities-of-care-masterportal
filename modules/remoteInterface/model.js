@@ -16,7 +16,7 @@ define(function (require) {
                 "addFeature": this.addFeature,
                 "addFeatures": this.addFeatures,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
-                "centerFeature": this.centerFeature,
+                "moveMarkerToHit": this.moveMarkerToHit,
                 "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView
             }, this);
@@ -41,11 +41,11 @@ define(function (require) {
             Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
         },
 
-        centerFeature: function (hit) {
+        moveMarkerToHit: function (hit) {
             var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
-                Radio.trigger("MapView", "setCenter", center);
+//                Radio.trigger("MapView", "setCenter", center);
                 Radio.trigger("MapMarker", "showMarker", center);
         },
         zoomToFeature: function (hit) {
