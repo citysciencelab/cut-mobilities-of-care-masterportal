@@ -730,6 +730,14 @@
                     }
                   ]
                 },
+                {
+                 "Titel": "Durchschnittliche tägliche Verkehrsstärken in Hamburg",
+                    "Layer": [
+                        {
+                          "id": "5103"
+                        }
+                    ]
+                },
                   
                 {
 				  "Titel": "Verkehrsmengen auf Hauptverkehrsstraßen in Hamburg",
@@ -747,18 +755,7 @@
                           "id": "5080"
                         }
 			         ]
-                },
-                
-                {
-                 "Titel": "Durchschnittliche tägliche Verkehrsstärken in Hamburg",
-                    "Layer": [
-                        {
-                          "id": "5103"
-                        }
-                    ]
                 }
-
-
 
               ]
             }
