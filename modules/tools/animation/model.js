@@ -56,6 +56,7 @@ define(function (require) {
         },
 
         setDefaults: function () {
+            this.setZoomLevel(Config.animation.zoomlevel);
             this.setSteps(Config.animation.steps || 50);
             this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
             this.setParams(Config.animation.params || {
@@ -108,7 +109,7 @@ define(function (require) {
 
                 kreise.push(kreis);
             });
-            this.setKreise(kreise.sort());
+            this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
         },
 
         /**
@@ -147,10 +148,10 @@ define(function (require) {
          */
         centerGemeinde: function () {
             if (this.getDirection() === "wohnort") {
-                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getFirstCoordinate(), 0);
+                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getFirstCoordinate(), this.getZoomLevel());
             }
             else {
-                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getLastCoordinate(), 0);
+                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getLastCoordinate(), this.getZoomLevel());
             }
         },
 
@@ -501,6 +502,14 @@ define(function (require) {
 
         getDirection: function () {
             return this.get("direction");
+        },
+
+        setZoomLevel: function (value) {
+            this.set("zoomLevel", value);
+        },
+
+        getZoomLevel: function () {
+            return this.get("zoomLevel");
         }
     });
 

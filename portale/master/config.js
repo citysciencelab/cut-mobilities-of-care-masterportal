@@ -32,7 +32,8 @@ define(function () {
             minPx: 5,
             maxPx: 30,
             num_kreise_to_style: 4,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,.5)"]
+            zoomlevel: 1,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
         },
         /**
         * @memberof config
