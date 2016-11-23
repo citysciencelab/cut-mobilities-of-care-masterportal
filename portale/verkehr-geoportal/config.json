@@ -324,19 +324,25 @@
                     "Titel": "Einzugsbereiche von HVV-Haltestellen",
                       "Layer": [
                         {
-                          "id": "4624"
+                          "id": "4624",
+                        "name" : "RE/RB"
                         },
                         {
-                          "id": "4625"
+                          "id": "4625",
+                          "name" : "AKN"
                         },
                         {
-                          "id": "4626"
+                          "id": "4626",
+                          "name" : "S-Bahn"
+                            
                         },
                         {
-                          "id": "4627"
+                          "id": "4627",
+                          "name" : "U-Bahn"
                         },
                         {
-                          "id": "4628"
+                          "id": "4628",
+                          "name" : "Bus"
                         }
                       ]
                      }
