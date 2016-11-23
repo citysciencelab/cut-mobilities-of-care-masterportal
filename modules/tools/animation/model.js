@@ -49,7 +49,10 @@ define(function (require) {
                 "change:postBody": function (model, value) {
                     this.sendRequest("POST", value, this.parseFeatures);
                 },
-                "change:lineFeatures": this.createLineString
+                "change:lineFeatures": function (model, value) {
+                    this.centerGemeinde();
+                    this.createLineString();
+                }
             });
 
             // Config auslesen oder default
@@ -62,6 +65,7 @@ define(function (require) {
         },
 
         setDefaults: function () {
+            this.setZoomLevel(Config.animation.zoomlevel);
             this.setSteps(Config.animation.steps || 50);
             this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
             this.setParams(Config.animation.params || {
@@ -114,7 +118,7 @@ define(function (require) {
 
                 kreise.push(kreis);
             });
-            this.setKreise(kreise.sort());
+            this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
         },
 
         /**
@@ -146,6 +150,18 @@ define(function (require) {
             this.get("layer").getSource().clear();
             this.setLineFeatures(wfsReader.readFeatures(data));
             this.prepareData();
+        },
+
+        /**
+         * Übergibt die Zentrumskoordinate der Gemeinde an die MapView, abhängig der Richtung.
+         */
+        centerGemeinde: function () {
+            if (this.getDirection() === "wohnort") {
+                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getFirstCoordinate(), this.getZoomLevel());
+            }
+            else {
+                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getLastCoordinate(), this.getZoomLevel());
+            }
         },
 
         prepareData: function () {
@@ -245,16 +261,16 @@ define(function (require) {
 
         createPostBody: function (value) {
             var postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
-                        "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-                            "<wfs:Query typeName='app:mrh_einpendler_gemeinde'>" +
-                                "<ogc:Filter>" +
-                                    "<ogc:PropertyIsEqualTo>" +
-                                        "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
-                                        "<ogc:Literal>" + this.getGemeinde() + "</ogc:Literal>" +
-                                    "</ogc:PropertyIsEqualTo>" +
-                                "</ogc:Filter>" +
-                            "</wfs:Query>" +
-                        "</wfs:GetFeature>";
+                            "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
+                                "<wfs:Query typeName='app:mrh_einpendler_gemeinde'>" +
+                                    "<ogc:Filter>" +
+                                        "<ogc:PropertyIsEqualTo>" +
+                                            "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
+                                            "<ogc:Literal>" + this.getGemeinde() + "</ogc:Literal>" +
+                                        "</ogc:PropertyIsEqualTo>" +
+                                    "</ogc:Filter>" +
+                                "</wfs:Query>" +
+                            "</wfs:GetFeature>";
 
             this.setPostBody(postBody);
         },
@@ -520,6 +536,14 @@ define(function (require) {
 
         getDirection: function () {
             return this.get("direction");
+        },
+
+        setZoomLevel: function (value) {
+            this.set("zoomLevel", value);
+        },
+
+        getZoomLevel: function () {
+            return this.get("zoomLevel");
         }
     });
 
