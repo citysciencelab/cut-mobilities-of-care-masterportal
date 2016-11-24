@@ -74,9 +74,9 @@ define("app",
             });
         }
 
-        if (typeof (Config.clickCounter) === "object" && Config.clickCounter.version !== "") {
+        if (Config.clickCounter && Config.clickCounter.desktop !== "" && Config.clickCounter.mobile !== "") {
             require(["modules/clickCounter/view"], function (ClickCounterView) {
-                new ClickCounterView();
+                new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
             });
         }
 
