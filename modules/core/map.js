@@ -41,6 +41,7 @@ define(function (require) {
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
                 "addFeatureToLayer": this.addFeatureToLayer,
+                "addFeaturesToLayer":  this.addFeaturesToLayer,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "removeInteraction": this.removeInteraction,
                 "setBBox": this.setBBox,
@@ -81,21 +82,27 @@ define(function (require) {
             }
 
         },
+        addFeaturesToLayer: function (features, layerName) {
+            _.each(features, function (feature) {
+                this.addFeatureToLayer(feature, layerName);
+            }, this);
+        },
         addFeatureToLayer: function (feature, layerName) {
             var layer = this.getLayerByName(layerName),
-             fill = new ol.style.Fill({
-               color: "#f88699"
-             }),
-             stroke = new ol.style.Stroke({
-               color: "#000",
-               width: 1.25
-             }),
-             styles = [
-               new ol.style.Style({
-                 fill: fill,
-                 stroke: stroke
-               })
-             ];
+                color = feature.values_.type === "potfl"? "#0000b2" : "#f88699",
+                 fill = new ol.style.Fill({
+                   color: color
+                 }),
+                 stroke = new ol.style.Stroke({
+                   color: "#000",
+                   width: 1.25
+                 }),
+                 styles = [
+                   new ol.style.Style({
+                     fill: fill,
+                     stroke: stroke
+                   })
+                 ];
 
             layer.setStyle(styles);
             layer.getSource().addFeature(feature);
