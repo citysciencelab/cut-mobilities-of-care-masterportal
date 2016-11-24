@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "modules/clickCounter/model"
-], function (Backbone, Radio, EventBus, ClickCounterModel) {
+], function (Backbone, Radio, ClickCounterModel) {
 
     var ClickCounterView = Backbone.View.extend({
         initialize: function (desktopURL, mobileURL) {
@@ -15,11 +14,9 @@ define([
             channel.on({
                 "toolChanged": this.registerClick,
                 "calcRoute": this.registerClick,
-                "zoomChanged": this.registerClick
+                "zoomChanged": this.registerClick,
+                "layerVisibleChanged": this.registerClick
             }, this);
-
-            // Warte auf Zufügen von Layern in Layertree
-            EventBus.on("registerLayerTreeInClickCounter", this.registerLayerEvent, this);
 
             this.registerMap();
             // fired beim Öffnen der Seite
