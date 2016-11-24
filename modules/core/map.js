@@ -305,6 +305,7 @@ define(function (require) {
                 coordinate = evt.coordinate;
 
             // WFS
+            Radio.trigger("ClickCounter", "gfi");
             if (isFeatureAtPixel === true) {
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
                     var modelByFeature = Radio.request("ModelList", "getModelByAttributes", {id: pLayer.get("id")});
