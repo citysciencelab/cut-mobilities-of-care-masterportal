@@ -13,12 +13,12 @@ define([
             var channel = Radio.channel("ClickCounter");
 
             channel.on({
-                "toolChanged": this.registerClick
+                "toolChanged": this.registerClick,
+                "calcRoute": this.registerClick
             }, this);
 
             // Warte auf Zufügen von Layern in Layertree
             EventBus.on("registerLayerTreeInClickCounter", this.registerLayerEvent, this);
-            EventBus.on("registerRoutingClickInClickCounter", this.registerRoutingClickEvent, this);
             EventBus.on("registerZoomButtonsInClickCounter", this.registerZoomButtonsClickEvent, this);
 
             this.registerMap();
@@ -29,14 +29,6 @@ define([
             // fired beim Zoomen über zoombuttons
             if (zoomButtons.length > 0) {
                 zoomButtons.click(function () {
-                  this.registerClick();
-                }.bind(this));
-            }
-        },
-        registerRoutingClickEvent: function (routingTool) {
-            // fired beim Klicken in der Routenberechnung
-            if (routingTool.length > 0) {
-                routingTool.click(function () {
                   this.registerClick();
                 }.bind(this));
             }

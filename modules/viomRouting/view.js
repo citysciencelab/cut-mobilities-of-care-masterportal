@@ -25,7 +25,6 @@ define([
             EventBus.on("setGeolocation", this.setGeolocation, this);
             EventBus.on("setRoutingDestination", this.setRoutingDestination, this);
             EventBus.on("deleteRoute", this.deleteRoute, this);
-            EventBus.trigger("registerRoutingClickInClickCounter", this.$el);
         },
         events: {
             "click .toggleRoutingOptions": "toggleRoutingOptions",
