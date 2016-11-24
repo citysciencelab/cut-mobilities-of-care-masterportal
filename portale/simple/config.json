@@ -74,7 +74,7 @@
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
           "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
-          "serviceID": "80001",
+          "serviceID": "80002",
           "from": [
             {
               "email": "lgvgeoportal-hilfe@gv.hamburg.de",
