@@ -298,9 +298,6 @@ define(function (require) {
                             }
                         }
                     }
-                   // console.log(elapsedTime);
-
-            // tell OL3 to continue the postcompose animation
         },
         draw: function (vectorContext, features, index) {
             var currentPoint,
