@@ -75,7 +75,7 @@ define("app",
         }
 
         if (typeof (Config.clickCounter) === "object" && Config.clickCounter.version !== "") {
-            require(["modules/ClickCounter/view"], function (ClickCounterView) {
+            require(["modules/clickCounter/view"], function (ClickCounterView) {
                 new ClickCounterView();
             });
         }

@@ -2,7 +2,7 @@ define([
     "jquery",
     "backbone",
     "eventbus",
-    "modules/ClickCounter/model"
+    "modules/clickCounter/model"
 ], function ($, Backbone, EventBus, ClickCounter) {
 
     var ClickCounterView = Backbone.View.extend({
