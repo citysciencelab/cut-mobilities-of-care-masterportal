@@ -122,8 +122,8 @@ define(function (require) {
             this.get("map").on("postcompose", callback, context);
         },
 
-        unregisterPostCompose: function (callback) {
-            this.get("map").un("postcompose", callback);
+        unregisterPostCompose: function (callback, context) {
+            this.get("map").un("postcompose", callback, context);
         },
 
         /**

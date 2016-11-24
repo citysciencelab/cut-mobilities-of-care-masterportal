@@ -13,7 +13,7 @@ define(function (require) {
         template: _.template(AnimationTemplate),
         events: {
             "click .start": "start",
-            "click .pause": "pause",
+            "click .reset": "reset",
             "change #select-kreis": "setKreis",
             "change #select-gemeinde": "setGemeinde",
             "change input[type=radio]": "setDirection"
@@ -39,9 +39,9 @@ define(function (require) {
             }
         },
         start: function () {
-            this.model.startAnimation();
+            this.model.prepareAnimation();
         },
-        pause: function () {
+        reset: function () {
             this.model.stopAnimation();
         },
 
