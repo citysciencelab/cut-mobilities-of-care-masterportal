@@ -212,7 +212,7 @@ define(function () {
         * @example customModules: ["../url", "../url"]
         * @default []
         */
-        customModules: ["../portale/master/verkehrsfunctions"],
+        customModules: "",
         /**
         * @memberof config
         * @type {Object}
@@ -233,17 +233,6 @@ define(function () {
                     "url": "http://www.geoinfo.hamburg.de/",
                     "alias": "Landesbetrieb Geoniformation und Vermessung",
                     "alias_mobil": "LGV"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download",
-                    "alias_mobil": "SDP"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
                 }
             ]
         },

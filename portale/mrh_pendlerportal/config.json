@@ -1,10 +1,8 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "Master",
-    "PortalLogo": "../img/hh-logo.png",
-    "LogoLink": "http://geoinfo.hamburg.de",
-    "LogoToolTip": "Landesbetrieb Geoinformation und Vermessung",
+    "PortalTitle": "Pendlerportal",
+    "PortalLogo": "none",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
@@ -26,7 +24,7 @@
             "score": 0.6
         },
         "zoomLevel": 9,
-        "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+        "placeholder": "Suche nach Adresse"
     },
     "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
@@ -41,14 +39,6 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          "parcelSearch": {
-            "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search",
-            "serviceId": "6",
-            "StoredQueryID": "Flurstueck5stellig",
-            "configJSON": "/../../components/lgv-config/gemarkungen_hh.json",
-            "parcelDenominator": false
-          },
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
@@ -59,30 +49,13 @@
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
           },
-          "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print"
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
           },
           "searchByCoord": {
             "name": "Koordinatensuche",
             "glyphicon": "glyphicon-record"
-          },
-          "kmlimport": {
-            "name": "KML Import",
-            "glyphicon": "glyphicon-import"
-          },
-          "wfsFeatureFilter": {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter"
-          },
-          "extendedFilter": {
-            "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter"
-          },
-          "routing": {
-            "name": "Routenplaner",
-            "glyphicon": "glyphicon-road",
-            "viomRouting": "3"
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
