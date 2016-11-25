@@ -15,10 +15,10 @@ define([
                 "toolChanged": this.registerClick,
                 "calcRoute": this.registerClick,
                 "zoomChanged": this.registerClick,
-                "layerVisibleChanged": this.registerClick
+                "layerVisibleChanged": this.registerClick,
+                "gfi": this.registerClick
             }, this);
 
-            this.registerMap();
             // fired beim Öffnen der Seite
             this.registerClick();
         },
@@ -29,12 +29,6 @@ define([
                      this.registerClick();
                 }.bind(this));
             }
-        },
-        registerMap: function () {
-            // fired beim Ausschnitt-Move und Klickabfragen auf Features
-            $("#map").click(function () {
-              this.registerClick();
-            }.bind(this));
         },
         registerClick: function () {
             console.log(1);
