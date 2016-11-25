@@ -1,30 +1,48 @@
 define([
     "backbone",
-    "config"
-], function (Backbone, Config) {
+    "backbone.radio"
+], function (Backbone, Radio) {
 
     var ClickCounter = Backbone.Model.extend({
         defaults: {
             countframeid: _.uniqueId("countframe"),
-            srcUrl: ""
+            usedURL: "", // beutzte iFrame-URL, kann desktop oder mobile sein
+            desktopURL: "", // URL die verwendet wird, wenn nicht mobile
+            mobileURL: "" // URL die verwendet wird, wenn mobile
         },
-        initialize: function () {
-            var srcurl = "";
+        initialize: function (desktopURL, mobileURL) {
+            var isMobile = Radio.request("Util", "isViewMobile"),
+                usedURL = isMobile === true ? mobileURL : desktopURL;
 
-            _.each(Config.clickCounter, function (value, key) {
-                if (Config.clickCounter.version.toUpperCase() === key.toUpperCase()) {
-                    srcurl = value;
-                }
+            this.set("desktopURL", desktopURL);
+
+            this.set("mobileURL", mobileURL);
+
+            this.set("usedURL", usedURL);
+
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": this.updateURL
             });
-            if (srcurl != "") {
-                this.set("srcUrl", srcurl);
+            // Erzeuge iFrame
+            $("<iframe ' src='" + this.get("usedURL") + "' id='" + this.get("countframeid") + "' width='0' height='0' frameborder='0'/>").appendTo("body");
+        },
+        updateURL: function (isMobile) {
+            var usedURL;
+
+            if (isMobile) {
+                usedURL = this.get("mobileURL");
             }
+            else {
+                usedURL = this.get("desktopURL");
+            }
+            this.set("usedURL", usedURL);
         },
         refreshIframe: function () {
-            $("#" + this.get("countframeid")).attr("src", function (i, val) {
-                return val;
-            });
+            var id = this.get("countframeid"),
+                url = this.get("usedURL");
+
+            $("#" + id).attr("src", url);
         }
     });
-    return new ClickCounter();
+    return ClickCounter;
 });
