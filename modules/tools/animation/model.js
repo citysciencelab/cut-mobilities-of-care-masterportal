@@ -217,7 +217,7 @@ define(function (require) {
         createPostBody: function (model, value) {
             var postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
                             "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-                                "<wfs:Query typeName='app:mrh_auspendler_gemeinde'>" +
+                                "<wfs:Query typeName='app:mrh_einpendler_gemeinde'>" +
                                     "<ogc:Filter>" +
                                         "<ogc:PropertyIsEqualTo>" +
                                             "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
@@ -273,7 +273,7 @@ define(function (require) {
                     // on lineString coordinates
                     index = Math.round(elapsedTime / 100);
                     // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
-                    if (this.getAnimationCount() % 2 === 0) {
+                    if (this.getAnimationCount() % 2 === 1) {
                         index = this.get("steps") - index;
                         if (index <= 0) {
                             this.repeatAnimation(features, true);
@@ -321,7 +321,7 @@ define(function (require) {
                 coordinates = features[i].getGeometry().getCoordinates();
                 this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
                 // Ob die Feature bei der Startposition oder der Endposition gezeichnet werden müssen, ist abhängig von der anzahl der Durchgänge
-                var drawIndex = this.getAnimationLimit() % 2 === 0? 0 : coordinates.length - 1;
+                var drawIndex = this.getAnimationLimit() % 2 === 1 ? 0 : coordinates.length - 1;
 
                 currentPoint = new ol.geom.Point(coordinates[drawIndex]);
                 newFeature = new ol.Feature(currentPoint);
