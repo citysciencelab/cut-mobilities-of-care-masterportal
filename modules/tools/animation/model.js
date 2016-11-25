@@ -15,7 +15,11 @@ define(function (require) {
                 source: new ol.source.Vector(),
                 style: null
             }),
-            pendlerLegend: []
+            pendlerLegend: [],
+            // Der aktuelle Animation Durchlauf (eine Richtung = ein Durchlauf)
+            animationCount: 0,
+            // Wie wieviele Durchläufe
+            animationLimit: 0
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -313,30 +317,67 @@ define(function (require) {
                 frameState = event.frameState,
                 features = this.get("layer").getSource().getFeatures();
 
+                var elapsedTime = frameState.time - this.get("now"),
+                    // here the trick to increase speed is to jump some indexes
+                    // on lineString coordinates
+                    index = Math.round(elapsedTime / 100);
+                    // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
+                    if (this.getAnimationCount() % 2 === 1) {
+                        index = this.get("steps") - index;
+                        if (index <= 0) {
+                            this.repeatAnimation(features, true);
+                            return;
+                        }
+                        else {
+                            if(this.get("animating")) {
+                                this.draw(vectorContext, features, index);
+                                Radio.trigger("Map", "render");
+                            }
+                        }
+                    }
+                    else {
+                        if (index >= this.get("steps")) {
+                            this.repeatAnimation(features);
+                            return;
+                        }
+                        else {
+                            if (this.get("animating")) {
+                                this.draw(vectorContext, features, index);
+                                Radio.trigger("Map", "render");
+                            }
+                        }
+                    }
+        },
+        draw: function (vectorContext, features, index) {
+            var currentPoint,
+                newFeature;
+
             for (var i = 0; i < features.length; i++) {
                 if (this.get("animating")) {
-
-                    var elapsedTime = frameState.time - this.get("now"),
-                        // here the trick to increase speed is to jump some indexes
-                        // on lineString coordinates
-                        index = Math.round(10 * elapsedTime / 1000),
-                        currentPoint,
-                        newFeature;
-
-                    if (index >= this.get("steps")) {
-                        this.stopAnimation(true);
-                        return;
-                    }
+                    var coordinates = features[i].getGeometry().getCoordinates();
                     this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
-                    currentPoint = new ol.geom.Point(features[i].getGeometry().getCoordinates()[index]);
+                    currentPoint = new ol.geom.Point(coordinates[index]);
                     newFeature = new ol.Feature(currentPoint);
                     vectorContext.drawFeature(newFeature, this.getDefaultPointStyle());
                 }
             }
-            // tell OL3 to continue the postcompose animation
-            Radio.trigger("Map", "render");
         },
+        addFeaturesToLayer: function (features, layer) {
+            var currentPoint, coordinates,
+                newFeature;
 
+            for (var i = 0; i < features.length; i++) {
+                coordinates = features[i].getGeometry().getCoordinates();
+                this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+                // Ob die Feature bei der Startposition oder der Endposition gezeichnet werden müssen, ist abhängig von der anzahl der Durchgänge
+                var drawIndex = this.getAnimationLimit() % 2 === 1 ? 0 : coordinates.length - 1;
+
+                currentPoint = new ol.geom.Point(coordinates[drawIndex]);
+                newFeature = new ol.Feature(currentPoint);
+                newFeature.setStyle(this.getDefaultPointStyle());
+                layer.getSource().addFeature(newFeature);
+            }
+        },
         preparePointStyle: function (val, kreis) {
             var minVal = this.getMinVal(),
                 maxVal = this.getMaxVal(),
@@ -376,24 +417,65 @@ define(function (require) {
             );
         },
 
-        startAnimation: function () {
-            if (this.get("animating")) {
-                this.stopAnimation(false);
+        prepareAnimation: function () {
+            if (this.getDirection() === "wohnort") {
+                this.setAnimationLimit(2);
             }
             else {
-                this.set("animating", true);
-                this.set("now", new Date().getTime());
-                Radio.trigger("Map", "registerPostCompose", this.moveFeature, this);
-                Radio.trigger("Map", "render");
+                this.setAnimationLimit(1);
+            }
+            this.setAnimationCount(0);
+            var animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
+
+            this.set("animationLayer", animationLayer);
+            this.get("animationLayer").getSource().clear();
+            Radio.trigger("Map", "registerPostCompose", this.moveFeature, this);
+            if (this.get("animating")) {
+                this.stopAnimation([]);
+            }
+            else {
+                this.startAnimation();
             }
         },
-
-        stopAnimation: function () {
-            this.set("animating", false);
-            // remove listener
-            Radio.trigger("Map", "unregisterPostCompose", this.moveFeature);
+        startAnimation: function () {
+            this.set("animating", true);
+            this.set("now", new Date().getTime());
+            Radio.trigger("Map", "render");
         },
-
+        /**
+         * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
+         * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
+         */
+        repeatAnimation: function (features) {
+             if (this.getAnimationCount() < this.getAnimationLimit()) {
+                this.setAnimationCount(this.getAnimationCount() + 1);
+                this.startAnimation();
+            }
+            else {
+                this.stopAnimation(features);
+            }
+        },
+        stopAnimation: function (features) {
+            Radio.trigger("Map", "unregisterPostCompose", this.moveFeature, this);
+            this.set("animating", false);
+            // Wenn Animation fertig alle Features als Vectoren auf neue Layer malen.
+            // features ist undefined, wenn die Funktion üder den Resetknopf aufgerufen wird
+            if (!_.isUndefined(features)) {
+                this.addFeaturesToLayer(features, this.get("animationLayer"));
+            }
+        },
+        setAnimationCount: function (value) {
+            this.set("animationCount", value);
+        },
+        getAnimationCount: function () {
+            return this.get("animationCount");
+        },
+        setAnimationLimit: function (value) {
+            this.set("animationLimit", value);
+        },
+        getAnimationLimit: function () {
+            return this.get("animationLimit");
+        },
         setLineFeatures: function (value) {
             this.set("lineFeatures", value);
         },
