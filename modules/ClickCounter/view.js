@@ -1,16 +1,23 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "modules/clickCounter/model"
-], function (Backbone, EventBus, ClickCounterModel) {
+], function (Backbone, Radio, EventBus, ClickCounterModel) {
 
     var ClickCounterView = Backbone.View.extend({
         initialize: function (desktopURL, mobileURL) {
             this.model = new ClickCounterModel(desktopURL, mobileURL);
 
+            // Radio Events
+            var channel = Radio.channel("ClickCounter");
+
+            channel.on({
+                "toolChanged": this.registerClick
+            }, this);
+
             // Warte auf Zufügen von Layern in Layertree
             EventBus.on("registerLayerTreeInClickCounter", this.registerLayerEvent, this);
-            EventBus.on("registerToolsClickInClickCounter", this.registerToolsClickEvent, this);
             EventBus.on("registerRoutingClickInClickCounter", this.registerRoutingClickEvent, this);
             EventBus.on("registerZoomButtonsInClickCounter", this.registerZoomButtonsClickEvent, this);
 
@@ -42,14 +49,6 @@ define([
                 }.bind(this));
             }
         },
-        registerToolsClickEvent: function (toolsmenu) {
-            // fired beim ToolChange
-            if (toolsmenu.length > 0) {
-                toolsmenu.click(function () {
-                  this.registerClick();
-                }.bind(this));
-            }
-        },
         registerMap: function () {
             // fired beim Ausschnitt-Move und Klickabfragen auf Features
             $("#map").click(function () {
@@ -57,6 +56,7 @@ define([
             }.bind(this));
         },
         registerClick: function () {
+            console.log(1);
             this.model.refreshIframe();
         }
     });

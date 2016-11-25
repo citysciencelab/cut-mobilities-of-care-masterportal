@@ -1,9 +1,8 @@
 define([
     "backbone",
     "text!modules/tools/template.html",
-    "modules/tools/model",
-    "eventbus"
-    ], function (Backbone, ToolsTemplate, Tools, EventBus) {
+    "modules/tools/model"
+    ], function (Backbone, ToolsTemplate, Tools) {
     var ToolsView = Backbone.View.extend({
         tagName: "li",
         template: _.template(ToolsTemplate),
@@ -14,11 +13,11 @@ define([
             this.listenTo(this.model, {
                 "change:isActive": this.toggleStyle
             });
+
             if (this.model.get("isActive") === true) {
                 this.toggleStyle();
             }
             this.render();
-            EventBus.trigger("registerToolsClickInClickCounter", this.$el);
         },
         render: function () {
             var attr = this.model.toJSON();
