@@ -31,7 +31,6 @@ define([
             }
         },
         registerClick: function () {
-            console.log(1);
             this.model.refreshIframe();
         }
     });
