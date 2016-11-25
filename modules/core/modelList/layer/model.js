@@ -36,6 +36,8 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
+                    // triggert das Ein- und Ausschalten von Layern
+                    Radio.trigger("ClickCounter", "layerVisibleChanged");
                     this.toggleAttributionsInterval();
                 },
                 "change:transparency": this.updateLayerTransparency,
