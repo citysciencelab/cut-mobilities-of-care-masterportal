@@ -250,16 +250,6 @@ define([
             }
 
             /**
-            * Gibt den Wert für die config-Option clickCounter.enabled zurück.
-            *
-            */
-            if (_.has(result, "CLICKCOUNTER")) {
-                var value = _.values(_.pick(result, "CLICKCOUNTER"))[0].toUpperCase();
-
-                Config.clickCounter.version = value;
-            }
-
-            /**
             * blendet alle Bedienelemente aus - für MRH
             *
             */
