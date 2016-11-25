@@ -56,9 +56,8 @@ define(function () {
         */
         mouseHover: false,
         clickCounter: {
-            version: "",
             desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html",
-            mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
+            mobile: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
         },
         print: {
             printID: "99999",

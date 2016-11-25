@@ -200,6 +200,9 @@ define([
             });
         },
         requestRoute: function () {
+            // zählt das Anfordern einer Routenberechnung
+            Radio.trigger("ClickCounter", "calcRoute");
+
             var request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]

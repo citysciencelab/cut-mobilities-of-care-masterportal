@@ -114,6 +114,8 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    // triggert das Zoom in / out übers Mausrad / Touch
+                    Radio.trigger("ClickCounter", "zoomChanged");
                 },
                 "change:center": function () {
                     channel.trigger("changedCenter", this.getCenter());
