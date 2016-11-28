@@ -322,31 +322,35 @@ define([
                 // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
                 // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
                 // wie sie hinzugefügt werden
-                if (Radio.request("Parser", "getTreeType") === "light") {
+                var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
+                    treeType = Radio.request("Parser", "getTreeType");
+                if (treeType === "light") {
                     var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
                     lightModels.reverse();
                     this.add(lightModels);
                     // Parametrisierter Aufruf im lighttree
-                    if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                        _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: true});
-                        }, this);
-                    }
+                    _.each(paramLayers, function (paramLayer) {
+                        this.setModelAttributesById(paramLayer.id, {isVisibleInMap: paramLayer.visibility, transparency: paramLayer.transparency});
+                    }, this);
                 }
                 // Parametrisierter Aufruf
-                else if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                    _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
-                        var lightModel = Radio.request("Parser", "getItemByAttributes", {id: param.id});
+                else if (paramLayers.length > 0) {
+                    _.each(paramLayers, function (paramLayer) {
+                        var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
-                        this.add(lightModel);
-                        if (param.visibility === "TRUE") {
-                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
-                        }
-                        else {
-                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
-                            // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
-                            this.get(param.id).setIsVisibleInMap(false);
+                        if (_.isUndefined(lightModel) === false) {
+                            this.add(lightModel);
+                            if (paramLayer.visibility === true) {
+                                this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
+                            }
+                            else {
+                                this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
+                                // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
+                                if (_.isUndefined(this.get(paramLayer.id)) === false) {
+                                    this.get(paramLayer.id).setIsVisibleInMap(false);
+                                }
+                            }
                         }
                     }, this);
                 }
