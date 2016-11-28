@@ -101,7 +101,9 @@
           "routing": {
             "name": "Routenplaner",
             "glyphicon": "glyphicon-road",
-            "viomRouting": "3"
+            "viomRoutingID": "7",
+            "bkgSuggestID": "4",
+            "bkgGeosearchID": "5"
           },
           "draw": {
             "name": "Zeichnen / Schreiben",

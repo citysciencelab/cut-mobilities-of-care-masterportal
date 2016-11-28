@@ -148,10 +148,10 @@ define([
         *
         */
         setLayerToPrint: function (layers) {
-            // eventuell TODO
-            // if (Config.tree.type === "light") {
-            //     layers = layers.reverse();
-            // }
+            layers = _.sortBy(layers, function (layer) {
+                return layer.get("selectionIDX");
+            });
+
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},

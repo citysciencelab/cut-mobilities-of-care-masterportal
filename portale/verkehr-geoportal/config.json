@@ -273,7 +273,8 @@
                             "routable": true
                         },
                         {
-                          "id": "1580"                        },
+                          "id": "1580"
+                        },
                         {
                           "id": "1578",
                           "name" : "Parkuhren",
@@ -743,7 +744,6 @@
                     }
                   ]
                 },
-                  
                 {
 				  "Titel": "Verkehrsmengen auf Hauptverkehrsstraßen in Hamburg",
 				    "Layer": [
@@ -770,9 +770,6 @@
                         }
                     ]
                 }
-
-
-
               ]
             }
 

@@ -91,7 +91,9 @@
             "routing": {
               "name": "Routenplaner",
               "glyphicon": "glyphicon-road",
-              "viomRouting": "3"
+              "viomRoutingID": "7",
+              "bkgSuggestID": "4",
+              "bkgGeosearchID": "5"
             }
           }
         },
@@ -125,6 +127,7 @@
         }
       },
       "controls": {
+        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,
@@ -148,7 +151,7 @@
               "name": "ALKIS farbig"
             },
             {
-              "id": "8"
+              "id": "452"
             },
             {
               "id": ["713", "714", "715", "716"],

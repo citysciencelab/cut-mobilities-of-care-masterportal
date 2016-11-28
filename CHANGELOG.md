@@ -1,3 +1,21 @@
+# Changelog LGV Master-Portal 1.1.5
+
+FIXES:
+
+  - 658d016 startcenter wurde nicht ausgelesen aus config.json
+
+# Changelog LGV Master-Portal 1.1.4
+
+FIXES:
+
+  - 11e3138 Die Reihenfolge der Themen auf der Karte entsprach nicht immer der korrekten Reihenfolge der Themen in der Auswahl
+
+# Changelog LGV Master-Portal 1.1.3
+
+FIXES:
+
+  - c05d205 Zeichnungen werden nicht gedruckt
+
 # Changelog LGV Master-Portal 1.1.2
 
 FIXES:

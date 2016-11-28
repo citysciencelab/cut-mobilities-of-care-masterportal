@@ -293,10 +293,9 @@ define(function () {
         * @type {Object}
         * @desc Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.
         * @property {Object} [clickCounter] - Konfigurationsobjekt
-        * @property {'desktop'|'mobil'} [clickCounter.version] - Legt fest, an welche URL gemeldet werden soll. Siehe auch {@link config.allowParametricURL}
         * @property {string} clickCounter.desktop - URL des iFrame bei Desktopausspielung.
-        * @property {string} clickCounter.mobil - URL des iFrame bei mobiler Ausspielung.
-        * @example clickCounter: {version: "", desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html", mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"}
+        * @property {string} clickCounter.mobile - URL des iFrame bei mobiler Ausspielung.
+        * @example clickCounter: {desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html", mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"}
         */
         clickCounter: {}
     };
