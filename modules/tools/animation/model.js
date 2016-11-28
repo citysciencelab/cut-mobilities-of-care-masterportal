@@ -53,8 +53,8 @@ define(function (require) {
                 "change:postBody": function (model, value) {
                     this.sendRequest("POST", value, this.parseFeatures);
                 },
-                "change:lineFeatures": function (model, value) {
-                    this.centerGemeinde();
+                "change:lineFeatures": function () {
+                    this.centerGemeindeAndSetMarker();
                     this.createLineString();
                 }
             });
@@ -159,12 +159,18 @@ define(function (require) {
         /**
          * Übergibt die Zentrumskoordinate der Gemeinde an die MapView, abhängig der Richtung.
          */
-        centerGemeinde: function () {
+        centerGemeindeAndSetMarker: function () {
+            var coords = [];
+
             if (this.getDirection() === "wohnort") {
-                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getFirstCoordinate(), this.getZoomLevel());
+                coords = this.getLineFeatures()[0].getGeometry().getFirstCoordinate();
+                Radio.trigger("MapView", "setCenter", coords, this.getZoomLevel());
+                Radio.trigger("MapMarker", "mapHandler:showMarker", coords);
             }
             else {
-                Radio.trigger("MapView", "setCenter", this.getLineFeatures()[0].getGeometry().getLastCoordinate(), this.getZoomLevel());
+                coords = this.getLineFeatures()[0].getGeometry().getLastCoordinate();
+                Radio.trigger("MapView", "setCenter", coords, this.getZoomLevel());
+                Radio.trigger("MapMarker", "mapHandler:showMarker", coords);
             }
         },
 
@@ -232,13 +238,12 @@ define(function (require) {
             this.setOrtKreiseMitAnzahl(ort_kreise_mit_anzahl);
         },
 
-
         preparePendlerLegend: function (kreise) {
             var pendlerLegend = [],
                 pendlerCountOther = 0;
 
-            _.each(kreise, function(kreis) {
-               if(kreis.color !== null){
+            _.each (kreise, function (kreis) {
+               if (kreis.color !== null) {
                    pendlerLegend.push(kreis);
                }
                 else {
@@ -247,8 +252,8 @@ define(function (require) {
             });
             pendlerLegend.push({
                 anzahl_pendler: pendlerCountOther,
-                color:"rgba(0,0,0,.5)",
-                kreis:"Andere"
+                color: "rgba(0,0,0,.5)",
+                kreis: "Andere"
             });
             this.set("pendlerLegend", pendlerLegend);
         },
@@ -315,12 +320,11 @@ define(function (require) {
         moveFeature: function (event) {
             var vectorContext = event.vectorContext,
                 frameState = event.frameState,
-                features = this.get("layer").getSource().getFeatures();
-
-                var elapsedTime = frameState.time - this.get("now"),
+                features = this.get("layer").getSource().getFeatures(),
+                elapsedTime = frameState.time - this.get("now"),
                     // here the trick to increase speed is to jump some indexes
                     // on lineString coordinates
-                    index = Math.round(elapsedTime / 100);
+                index = Math.round(elapsedTime / 100);
                     // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
                     if (this.getAnimationCount() % 2 === 1) {
                         index = this.get("steps") - index;
@@ -329,7 +333,7 @@ define(function (require) {
                             return;
                         }
                         else {
-                            if(this.get("animating")) {
+                            if (this.get("animating")) {
                                 this.draw(vectorContext, features, index);
                                 Radio.trigger("Map", "render");
                             }
@@ -355,6 +359,7 @@ define(function (require) {
             for (var i = 0; i < features.length; i++) {
                 if (this.get("animating")) {
                     var coordinates = features[i].getGeometry().getCoordinates();
+
                     this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
                     currentPoint = new ol.geom.Point(coordinates[index]);
                     newFeature = new ol.Feature(currentPoint);
