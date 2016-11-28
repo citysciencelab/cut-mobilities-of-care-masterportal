@@ -19,7 +19,8 @@ define(function (require) {
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "moveMarkerToHit": this.moveMarkerToHit,
                 "zoomToFeatures": this.zoomToFeatures,
-                "resetView": this.resetView
+                "resetView": this.resetView,
+                "zoomToFeature": this.zoomToFeature
             }, this);
 
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
