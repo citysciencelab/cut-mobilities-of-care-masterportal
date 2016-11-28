@@ -283,6 +283,7 @@ define(function (require) {
                 rightSM = button.right;
 
             if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
+                Radio.trigger("GFIPopup", "closeGFIParams");
                 return true;
             }
             else {
@@ -304,6 +305,11 @@ define(function (require) {
                 resolution = this.get("view").getResolution(),
                 projection = this.get("view").getProjection(),
                 coordinate = evt.coordinate;
+
+            // Abbruch, wenn auf SerchMarker x geklcikt wird.
+            if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
+                return;
+            }
 
             // WFS
             Radio.trigger("ClickCounter", "gfi");

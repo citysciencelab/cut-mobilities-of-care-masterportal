@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
         GFIPopupTemplate = require("text!modules/gfipopup/popup/template.html"),
         GFIPopup = require("modules/gfipopup/popup/model"),
         EventBus = require("eventbus"),
@@ -21,6 +22,12 @@ define(function (require) {
          * Wird aufgerufen wenn die View erzeugt wird.
          */
         initialize: function () {
+            var channel = Radio.channel("GFIPopup");
+
+            channel.on({
+                "closeGFIParams": this.destroy
+            }, this);
+
             $("#popovermin").remove();
             this.listenTo(this.model, "change:coordinate", this.render);
             EventBus.on("gfipopup:rerender", this.rerender, this);
