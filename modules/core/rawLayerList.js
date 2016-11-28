@@ -201,7 +201,7 @@ define([
                     cloneObj.style = style;
                     cloneObj.legendURL = obj.legendURL[index];
                     cloneObj.name = obj.name[index];
-                    cloneObj.id = obj.id + obj.styles[index].toLowerCase();
+                    cloneObj.id = obj.id + obj.styles[index].toUpperCase();
                     cloneObj.styles = obj.styles[index];
                     // Objekt wird der Response hinzugefügt
                     response.splice(_.indexOf(response, obj), 0, cloneObj);

@@ -294,10 +294,10 @@ define(function (require) {
         },
         /**
          * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-         * Abhängig vom Attribut "isVisibleInMap"
+         * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
-            if (this.getIsVisibleInMap() === true) {
+            if (this.getIsSelected() === true) {
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
             }
             else {
