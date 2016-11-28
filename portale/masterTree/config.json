@@ -1,26 +1,19 @@
 {
   "Portalconfig":
     {
-      "PortalTitle": "GeoViewer",
+      "PortalTitle": "MasterTree",
+      "PortalLogo": "../img/hh-logo.png",
       "searchBar": {
         "minChars": 3,
         "gazetteer": {
            "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "serviceId": "6",
            "searchStreets": true,
            "searchHouseNumbers": true,
            "searchDistricts": true,
            "searchParcels": true
        },
-       "bkg": {
-           "minChars": 3,
-           "bkgSuggestURL": "/bkg_suggest",
-           "bkgSearchURL": "/bkg_geosearch",
-           "extent": [454591, 5809000, 700000, 6075769],
-           "epsg": "EPSG:25832",
-           "filter": "filter=(typ:*)",
-           "score": 0.6
-       },
+
        "specialWFS": {
            "minChar": 3,
            "definitions": [
@@ -98,7 +91,9 @@
             "routing": {
               "name": "Routenplaner",
               "glyphicon": "glyphicon-road",
-              "viomRouting": "3"
+              "viomRoutingID": "7",
+              "bkgSuggestID": "4",
+              "bkgGeosearchID": "5"
             }
           }
         },
@@ -132,6 +127,7 @@
         }
       },
       "controls": {
+        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,
@@ -155,7 +151,7 @@
               "name": "ALKIS farbig"
             },
             {
-              "id": "8"
+              "id": "452"
             },
             {
               "id": ["713", "714", "715", "716"],
@@ -208,11 +204,11 @@
                       "visibility": false
                     },
                     {
-                      "id": "4639",
-                      "visibility": false,
+                      "id": "4926",
+                      "visibility": true,
                       "styleable": true,
                       "geomType": "Polygon",
-                      "attributesToStyle": ["AP30Sum", "AP60Sum"]
+                      "attributesToStyle": ["ErreichbareArbeitsplaetzein30Min"]
                     }
                   ]
                 }

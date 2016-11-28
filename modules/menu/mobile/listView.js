@@ -88,7 +88,7 @@ define([
                         return layer.getSelectionIDX();
                 }).reverse();
                 if (withAnimation) {
-                    this.slideModels("descent", models, "Themen");
+                    this.slideModels("descent", models, "Themen", "Selection");
                 }
                 else {
                     // Views löschen um doppeltes Zeichnen zu vermeiden
@@ -104,6 +104,7 @@ define([
                     lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}),
 
                 models = this.collection.add(lightModels);
+
                 if (model.getIsLeafFolder()) {
                     models.push(model);
                 }
@@ -115,7 +116,7 @@ define([
 
                 this.slideModels("ascent", models, model.getId());
             },
-            slideModels: function (direction, modelsToShow, parentIdOfModelsToHide) {
+            slideModels: function (direction, modelsToShow, parentIdOfModelsToHide, currentList) {
                 var slideIn, slideOut;
 
                 if (direction === "descent") {
@@ -131,13 +132,28 @@ define([
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"},
                     function () {
                         that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
-                        // Folder zuerst zeichnen
-                        var groupedModels = _.groupBy(modelsToShow, function (model) {
-                            return (model.getType() === "folder" ? "folder" : "other");
-                        }) ;
-
-                        that.addViews(groupedModels.folder);
-                        that.addViews(groupedModels.other);
+                        // befinden wir uns in der Auswahl sind die models bereits nach ihrem SelectionIndex sortiert
+                        if (currentList === "Selection") {
+                            that.addViews(modelsToShow);
+                        }
+                        else {
+                            // Gruppieren nach Folder und Rest
+                            var groupedModels = _.groupBy(modelsToShow, function (model) {
+                                return (model.getType() === "folder" ? "folder" : "other");
+                            }) ;
+                            // Im default-Tree werden folder und layer alphabetisch sortiert
+                            if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "Themen") {
+                                groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
+                                    return item.getName();
+                                });
+                                groupedModels.other = _.sortBy(groupedModels.other, function (item) {
+                                    return item.getName();
+                                });
+                            }
+                            // Folder zuerst zeichnen
+                            that.addViews(groupedModels.folder);
+                            that.addViews(groupedModels.other);
+                        }
                     }
                 );
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});

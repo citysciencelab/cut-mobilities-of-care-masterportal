@@ -12,3 +12,7 @@
     width: 100%;
     z-index: 2000;
 }
+
+.btn-default:active, .btn-default.active {
+    font-weight: bold;
+}

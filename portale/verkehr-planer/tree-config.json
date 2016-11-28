@@ -33,7 +33,7 @@
       ]
     }
   ],
-    
+
   "Fachdaten": [
     {
       "Ordner": [
@@ -82,7 +82,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "ÖV-Netze",
             "Ordner": [
@@ -135,7 +135,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
@@ -177,7 +177,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -187,7 +187,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Parken",
 
@@ -263,7 +263,7 @@
                   "visibility": false,
                   "name" : "Kfz-Pegel",
                   "metaName": "Kfz-Pegel"
-                
+
                 }
               ]
             },
@@ -321,7 +321,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -337,7 +337,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -353,7 +353,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -363,7 +363,7 @@
             }
           ]
         },
-          
+
          {
           "Titel": "Bauwerke und Anlagen",
           "Layer": [
@@ -393,7 +393,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Planungsinformationen",
           "Ordner": [
@@ -438,7 +438,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Umwelt",
           "Layer": [
@@ -456,7 +456,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bevölkerung",
           "Layer": [
@@ -466,7 +466,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Bauen und Wohnen",
           "Layer": [
@@ -523,8 +523,8 @@
             }
           ]
         },
-          
-          
+
+
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [

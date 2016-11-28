@@ -16,8 +16,8 @@
 
 	function connect_ldap($base_dn) {
 		global $data, $domain, $user, $dn, $con;
-		$username  = 'LGV-Taskplaner';     // ldap rdn oder dn
-		$password = '7Wtib0J4YZ"\7=u7VT=p';  // entsprechendes password
+		$username  = '';     // ldap rdn oder dn
+		$password = '';  // entsprechendes password
 		$server = 'fhhnet.stadt.hamburg.de';
 		$username = $username.'@'.$server;
 		$password = $password;

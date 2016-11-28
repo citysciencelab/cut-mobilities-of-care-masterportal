@@ -115,6 +115,8 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    // triggert das Zoom in / out übers Mausrad / Touch
+                    Radio.trigger("ClickCounter", "zoomChanged");
                 },
                 "change:center": function () {
                     channel.trigger("changedCenter", this.getCenter());
@@ -168,12 +170,16 @@ define([
         setConfig: function () {
             _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
                 switch (setting.id) {
-                case "backgroundImage": {
-                    this.set("backgroundImage", setting.attr);
+                    case "backgroundImage": {
+                        this.set("backgroundImage", setting.attr);
 
-                    this.setBackground(setting.attr);
-                    break;
-                }
+                        this.setBackground(setting.attr);
+                        break;
+                    }
+                    case "startCenter": {
+                        this.set("startCenter", setting.attr);
+                        break;
+                    }
                 }
             }, this);
         },

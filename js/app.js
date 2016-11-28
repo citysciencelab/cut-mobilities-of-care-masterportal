@@ -77,9 +77,9 @@ define("app",
             });
         }
 
-        if (typeof (Config.clickCounter) === "object" && Config.clickCounter.version !== "") {
-            require(["modules/ClickCounter/view"], function (ClickCounterView) {
-                new ClickCounterView();
+        if (Config.clickCounter && Config.clickCounter.desktop && Config.clickCounter.desktop !== "" && Config.clickCounter.mobile && Config.clickCounter.mobile !== "") {
+            require(["modules/clickCounter/view"], function (ClickCounterView) {
+                new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
             });
         }
 
@@ -114,11 +114,10 @@ define("app",
                     });
                     break;
                 }
-                case "gfi": {
-                    require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
-                        new GFIPopupView();
+                case "gfi":{
+                    require(["modules/gfipopup/popup/popupLoader"], function (PopupLoader) {
+                        new PopupLoader();
                     });
-                    break;
                 }
                 case "coord": {
                     require(["modules/coordpopup/view"], function (CoordPopupView) {
@@ -171,6 +170,12 @@ define("app",
                 case "wfsFeatureFilter": {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView();
+                    });
+                    break;
+                }
+                case "extendedFilter": {
+                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                        new ExtendedFilterView();
                     });
                     break;
                 }
@@ -229,19 +234,23 @@ define("app",
             _.each(controls, function (control, index) {
                 switch (control.id) {
                     case "toggleMenu": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                            new ToggleMenuControlView({el: el});
-                        });
+                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                                new ToggleMenuControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "zoom": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
-                        });
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "orientation": {
@@ -253,23 +262,29 @@ define("app",
                         break;
                     }
                     case "mousePosition": {
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView();
+                            });
+                        }
                         break;
                     }
                     case "fullScreen": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "attributions": {
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView();
+                            });
+                        }
                         break;
                     }
                 }
@@ -292,25 +307,13 @@ define("app",
             new StyleWMSView();
         });
 
-        if (_.has(Config, "title") === true) {
+        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
+
+        if (title) {
             require(["modules/title/view"], function (TitleView) {
-                new TitleView();
+                new TitleView(title);
             });
         }
-
-//        if (Config.menubar === true) {
-//            require(["modules/menubar/view"], function () {
-//                if ($.isArray(Config.menuItems.formular)) {
-//                    $.each(Config.menuItems.formular, function (name, obj) {
-//                        if (obj.title !== "" && obj.symbol !== "" && obj.modelname !== "") {
-//                            require(["modules/formular/view"], function (FormularView) {
-//                                new FormularView(obj.modelname, obj.title, obj.symbol);
-//                            });
-//                        }
-//                    });
-//                }
-//            });
-//        }
     });
     Util.hideLoader();
 });

@@ -1,12 +1,16 @@
 define([
     "backbone",
     "backbone.radio",
+    "underscore.string",
     "config",
     "modules/core/configLoader/preparser"
-], function (Backbone, Radio, Config, Preparser) {
+], function (Backbone, Radio, _String, Config, Preparser) {
 
     var ParametricURL = Backbone.Model.extend({
-
+        defaults: {
+            layerParams: [],
+            initString: ""
+        },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
 
@@ -50,34 +54,48 @@ define([
         },
         createLayerParams: function () {
             var layerIdString = _.values(_.pick(this.getResult(), "LAYERIDS"))[0],
-                visibilityListString = "",
-                transparencyListString = "",
-                layerIdList = [],
-                visibilityList = [],
-                transparencyList = [],
+                visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
+                transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
+                layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
+                visibilityList = visibilityListString === "" ? _.map(layerIdList, function () {
+                    return true;
+                }) : visibilityListString.indexOf(",") > -1 ? _.map(visibilityListString.split(","), function (val) {
+                    return _String.toBoolean(val);
+                }) : new Array(_String.toBoolean(visibilityListString)),
+                transparencyList = transparencyListString === "" ? _.map(layerIdList, function () {
+                    return 0;
+                }) : transparencyListString.indexOf(",") > -1 ? _.map(transparencyListString.split(","), function (val) {
+                    return _String.toNumber(val);
+                }) : new Array(_String.toNumber(transparencyListString)),
                 layerParams = [];
 
-                if (_.has(this.getResult(), "VISIBILITY")) {
-                    visibilityListString = _.values(_.pick(this.getResult(), "VISIBILITY"))[0];
-                }
-                if (_.has(this.getResult(), "TRANSPARENCY")) {
-                     transparencyListString = _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0];
-                }
+            if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
+                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Die Parameter werden ignoriert.", kategorie: "alert-warning"});
+            }
+            else {
+                _.each(layerIdList, function (val, index) {
+                    layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
+                });
+                this.setLayerParams(layerParams);
+            }
+        },
+        createLayerParamsUsingMetaId: function (metaIds) {
+            var layers = [],
+                layerParams = [],
+                hintergrundKarte = Radio.request("Parser", "getItemByAttributes", {id: "453"});
 
-           if (layerIdString.indexOf(",") !== -1) {
-               layerIdList = layerIdString.split(",");
-               visibilityList = visibilityListString.split(",");
-               transparencyList = transparencyListString.split(",");
-           }
-           else {
-               layerIdList.push(layerIdString);
-               visibilityList.push(visibilityListString);
-               transparencyList.push(transparencyListString);
-           }
-           _.each(layerIdList, function (val, index) {
-               layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
-           });
-           this.setLayerParams(layerParams);
+            layers.push(hintergrundKarte);
+
+            _.each(metaIds, function (metaId) {
+                var metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
+                _.each(metaIDlayers, function (layer) {
+                    layers.push(layer);
+                });
+            });
+            _.each(layers, function (layer) {
+                layerParams.push({id: layer.id, visibility: true, transparency: 0});
+            });
+            this.setLayerParams(layerParams);
         },
 
         parseURL: function (result) {
@@ -103,6 +121,7 @@ define([
 
                 Config.tree.metaIdsToSelected = values;
                 Config.view.zoomLevel = 0;
+                this.createLayerParamsUsingMetaId(values);
             }
 
             /**
@@ -225,19 +244,6 @@ define([
                     initString = value.substring(0, 1).toUpperCase() + value.substring(1);
                 }
                 this.set("initString", initString);
-            }
-            else {
-                this.set("initString", "");
-            }
-
-            /**
-            * Gibt den Wert für die config-Option clickCounter.enabled zurück.
-            *
-            */
-            if (_.has(result, "CLICKCOUNTER")) {
-                var value = _.values(_.pick(result, "CLICKCOUNTER"))[0].toUpperCase();
-
-                Config.clickCounter.version = value;
             }
 
             /**

@@ -15,9 +15,7 @@ define([
             GFIPopupVisibility: false
         },
         initialize: function () {
-            this.listenTo(Radio.channel("Map"), {
-                "pointerMoveOnMap": this.checkForEachFeatureAtPixel
-            });
+            Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
 
             $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
 
@@ -74,10 +72,9 @@ define([
         * if-Bedingung gespeichert und abschließend wird das Aufbereiten dieser
         * Selektion angestpßen.
         */
-        checkForEachFeatureAtPixel: function (evt, map) {
-            var map = Radio.request("Map", "getMap"),
-                pFeatureArray = [],
-                featuresAtPixel = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+        checkForEachFeatureAtPixel: function (evt) {
+            var pFeatureArray = [],
+                featuresAtPixel = evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                     return {
                         feature: feature,
                         layer: layer

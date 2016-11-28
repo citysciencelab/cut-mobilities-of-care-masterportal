@@ -155,7 +155,7 @@ define([
             geolocation.un ("error", this.onPOIError, this);
         },
         callGetPOI: function () {
-            this.getPOI(500);
+            this.getPOI(0);
             this.untrackPOI();
         },
         getPOI: function (distance) {

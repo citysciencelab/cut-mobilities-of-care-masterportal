@@ -14,13 +14,15 @@ define(function (require) {
          */
         defaults: {
             MM_PER_INCHES: 25.4,
-            POINTS_PER_INCH: 72
+            POINTS_PER_INCH: 72,
+            initalLoading: 0
         },
 
         /**
         *
         */
         initialize: function () {
+            this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
             var channel = Radio.channel("Map"),
                 mapView = new MapView();
 
@@ -29,7 +31,8 @@ define(function (require) {
                     return this.get("map");
                 },
                 "getLayers": this.getLayers,
-                "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX
+                "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
+                "createLayerIfNotExists": this.createLayerIfNotExists
             }, this);
 
             channel.on({
@@ -51,7 +54,10 @@ define(function (require) {
                 "zoomToExtent": this.zoomToExtent,
                 "updatePrintPage": this.updatePrintPage,
                 "activateClick": this.activateClick,
-                "createVectorLayer": this.createVectorLayer
+                "createVectorLayer": this.createVectorLayer,
+                "addLoadingLayer": this.addLoadingLayer,
+                "removeLoadingLayer": this.removeLoadingLayer,
+                "registerListener": this.registerListener
             }, this);
 
             this.listenTo(this, {
@@ -70,8 +76,6 @@ define(function (require) {
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
-
-            this.registerPointerMove();
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
@@ -222,14 +226,28 @@ console.log(bbox);
             this.get("map").on("postcompose", callback, context);
         },
 
-        unregisterPostCompose: function (callback) {
-            this.get("map").un("postcompose", callback);
+        unregisterPostCompose: function (callback, context) {
+            this.get("map").un("postcompose", callback, context);
         },
 
-        registerPointerMove: function () {
-            this.get("map").on("pointermove", function (evt) {
-                Radio.trigger("Map", "pointerMoveOnMap", evt);
-            });
+        /**
+         * Registriert Listener für bestimmte Events auf der Karte
+         * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
+         * @param {String} event - Der Eventtyp
+         * @param {Function} callback - Die Callback Funktion
+         * @param {Object} context
+         */
+        registerListener: function (event, callback, context) {
+            this.getMap().on(event, callback, context);
+        },
+
+        /**
+         * Meldet Listener auf bestimmte Events ab
+         * @param {String} event - Der Eventtyp
+         * @param {Function} callback - Die Callback Funktion
+         */
+        unregisterListener: function (event, callback) {
+            this.getMap().un(event, callback);
         },
 
         /**
@@ -307,10 +325,24 @@ console.log(bbox);
             this.setImportDrawMeasureLayersOnTop(layersCollection);
 
             // Laden des Layers überwachen
-            if (!_.isUndefined(layer) && _.isFunction(layer.getSource) && _.isFunction(layer.getSource().setTileLoadFunction)) {
-                this.getLayerLoadStatus(layer);
+            if (layer instanceof ol.layer.Group) {
+                layer.getLayers().forEach(function (singleLayer) {
+                    singleLayer.getSource().on("wmsloadend", function () {
+                        Radio.trigger("Map", "removeLoadingLayer");
+                    });
+                    singleLayer.getSource().on("wmsloadstart", function () {
+                        Radio.trigger("Map", "addLoadingLayer");
+                    });
+                });
             }
-
+            else {
+                layer.getSource().on("wmsloadend", function () {
+                    Radio.trigger("Map", "removeLoadingLayer");
+                });
+                layer.getSource().on("wmsloadstart", function () {
+                    Radio.trigger("Map", "addLoadingLayer");
+                });
+            }
         },
 
         // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
@@ -329,39 +361,6 @@ console.log(bbox);
             _.each(layersOnTop, function (layer) {
                 layers.push(layer);
             });
-        },
-
-        // Gibt eine loadTile Funtktion zurück, die die geladenen Tiles zählt und dann die ursprüngliche tileLoadFunktion aufruft
-        // Wenn alle Tiles fertig geladen sind wird das Loading gif ausgeblendet
-        getTileLoadFunction: function (numLoadingTiles, tileLoadFn, source) {
-            return function (tile, src) {
-                    if (numLoadingTiles === 0) {
-                        Util.showLoader();
-                    }
-                    ++numLoadingTiles;
-                    var image = tile.getImage();
-
-                    image.onload = image.onerror = function () {
-                        --numLoadingTiles;
-                        if (numLoadingTiles === 0) {
-                            Util.hideLoader();
-                            // Damit das Loading gif nur beim intitialen Laden kommt (und nicht beim zoom/pan wieder alte loadtile funktion herstellen)
-                            source.setTileLoadFunction(tileLoadFn);
-                        }
-                    };
-                tileLoadFn(tile, src);
-                };
-        },
-        // Setzt eine neue "setTileLoadFunction" an die source der übergebenen Layer
-        getLayerLoadStatus: function (layer) {
-            var context = this;
-
-            layer.getSource().setTileLoadFunction((function () {
-                var numLoadingTiles = 0,
-                tileLoadFn = layer.getSource().getTileLoadFunction();
-
-                return context.getTileLoadFunction(numLoadingTiles, tileLoadFn, layer.getSource());
-            })());
         },
 
         /**
@@ -388,6 +387,7 @@ console.log(bbox);
                 rightSM = button.right;
 
             if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
+                Radio.trigger("GFIPopup", "closeGFIParams");
                 return true;
             }
             else {
@@ -398,8 +398,8 @@ console.log(bbox);
          * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
          */
         setGFIParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}),
-                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GeoJSON"}),
+            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
+                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GeoJSON"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
                 gfiParams = [],
                 scale = Radio.request("MapView", "getOptions").scale,
@@ -410,7 +410,13 @@ console.log(bbox);
                 projection = this.get("view").getProjection(),
                 coordinate = evt.coordinate;
 
+            // Abbruch, wenn auf SerchMarker x geklcikt wird.
+            if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
+                return;
+            }
+
             // WFS
+            Radio.trigger("ClickCounter", "gfi");
             if (isFeatureAtPixel === true) {
                 this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
                     var modelByFeature = Radio.request("ModelList", "getModelByAttributes", {id: pLayer.get("id")});
@@ -455,6 +461,7 @@ console.log(bbox);
                                 {INFO_FORMAT: element.getInfoFormat()}
                             );
 
+                            gfiURL = gfiURL.replace(/SLD_BODY\=.*?\&/, "");
                             gfiParams.push({
                                 typ: "WMS",
                                 infoFormat: element.getInfoFormat(),
@@ -572,6 +579,53 @@ console.log(bbox);
             ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
             ctx.fill();
             ctx.restore();
+        },
+        addLoadingLayer: function () {
+            this.set("initalLoading", this.get("initalLoading") + 1);
+        },
+        removeLoadingLayer: function () {
+            this.set("initalLoading", this.get("initalLoading") - 1);
+        },
+        /**
+         * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
+         * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
+         */
+        initalLoadingChanged: function () {
+            var num = this.get("initalLoading");
+
+            if (num > 0) {
+                Util.showLoader();
+            }
+            else if (num === 0) {
+                Util.hideLoader();
+                this.stopListening(this, "change:initalLoading");
+            }
+        },
+        // Prüft ob der Layer mit dem Namen "Name" schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
+        createLayerIfNotExists: function (name) {
+            var layers = this.getLayers(),
+                found = false,
+                resultLayer = {};
+
+            _.each(layers.getArray(), function (layer) {
+                if (layer.get("name") === name) {
+                    found = true;
+                    resultLayer = layer;
+                }
+            }, this);
+
+            if (!found) {
+                var source = new ol.source.Vector({useSpatialIndex: false}),
+                    layer = new ol.layer.Vector({
+                    name: name,
+                    source: source,
+                    alwaysOnTop: true
+                });
+
+                resultLayer = layer;
+                Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
+            }
+            return resultLayer;
         }
     });
 

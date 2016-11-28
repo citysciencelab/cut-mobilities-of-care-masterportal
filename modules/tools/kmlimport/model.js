@@ -23,32 +23,9 @@ define([
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            this.createLayerIfNotExists();
-        },
-
-        // Prüft ob import_draw_layer schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
-        createLayerIfNotExists: function(){
-            var layers = Radio.request("Map","getLayers"),
-                found = false;
-
-            _.each(layers.getArray(),function(layer){
-                if(layer.get("name") === "import_draw_layer"){
-                    found = true;
-                    this.set("layer",layer);
-                    this.set("source",layer.getSource());
-                }
-            },this);
-
-            if(!found){
-                this.set("source",new ol.source.Vector({useSpatialIndex: false}));
-                var layer = new ol.layer.Vector({
-                    name: "import_draw_layer",
-                    source: this.get("source"),
-                    alwaysOnTop: true
-                });
-                this.set("layer",layer);
-                Radio.trigger("Map","addLayerToIndex",[layer,layers.getArray().length]);
-            }
+            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+            this.set("layer", drawLayer);
+            this.set("source", drawLayer.getSource());
         },
 
         setStatus: function (args) {

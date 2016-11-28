@@ -69,8 +69,6 @@ define([
             //     that.render();
             // });
 
-            var querySearchString = Radio.request("ParametricURL", "getInitString");
-
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
@@ -84,7 +82,6 @@ define([
                 this.model.set("placeholder", config.placeholder);
             }
             this.className = "navbar-form col-xs-9";
-            this.model.set("querySearchString", querySearchString);
 
             EventBus.on("searchInput:setFocus", this.setFocus, this);
             EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
@@ -117,12 +114,12 @@ define([
             // bedarfsweises Laden der Suchalgorythmen
             if (_.has(config, "gazetteer") === true) {
                 require(["modules/searchbar/gaz/model"], function (GAZModel) {
-                    new GAZModel(config.gazetteer, querySearchString);
+                    new GAZModel(config.gazetteer);
                 });
             }
             if (_.has(config, "specialWFS") === true) {
                 require(["modules/searchbar/specialWFS/model"], function (SpecialWFSModel) {
-                    new SpecialWFSModel(config.specialWFS, querySearchString);
+                    new SpecialWFSModel(config.specialWFS);
                 });
             }
             if (_.has(config, "visibleWFS") === true) {
@@ -228,10 +225,10 @@ define([
                 $("ul.dropdown-menu-search").html(template(attr));
             // }
             // Wird gerufen
-            if (this.model.get("querySearchString") !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
+            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
                 this.hitSelected();
-                this.model.unset("querySearchString", true);
             }
+            this.model.unset("initSearchString", true);
         },
         /**
         *
@@ -283,7 +280,7 @@ define([
             // 3. Zoome ggf. auf Ergebnis
             EventBus.trigger("mapHandler:zoomTo", hit);
             // 4. Triggere Treffer über Eventbus
-            // wird nicht mehr benötigt??? SD 02.08.2016
+            // Wird benötigt für IDA und sgv-online, ...
             EventBus.trigger("searchbar:hit", hit);
             // 5. Beende Event
             if (evt) {
@@ -313,7 +310,7 @@ define([
                 if (event.keyCode === 40) {
                     this.nextElement(selected);
                 }
-                if (event.keyCode === 13) {
+                if (event.keyCode === 13 && this.model.get("hitList").length > 1) {
                     if (this.isFolderElement(selected)) {
                         this.collapseHits(selected);
                     }
@@ -440,34 +437,40 @@ define([
         *
         */
         setSearchString: function (evt) {
-            if (evt.type === "paste") {
-                var that = this;
-
-                // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
-                setTimeout(function () {
-                    that.model.setSearchString(evt.target.value, evt.type);
-                }, 0);
-            }
-            else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
-                if (evt.key === "Enter" || evt.keyCode === 13) {
-                    if (this.model.get("hitList").length === 1) {
-                        this.hitSelected(); // erster und einziger Eintrag in Liste
-                    }
-                    else {
-                        this.renderHitList();
-                    }
-                }
-                else {
-                    this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
-                }
-            }
-
-            // Der "x-Button" in der Suchleiste
-            if (evt.target.value.length > 0) {
-                $("#searchInput + span").show();
+            if (evt.target.value.length === 0) {
+                // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
+                this.deleteSearchString();
             }
             else {
-                $("#searchInput + span").hide();
+                if (evt.type === "paste") {
+                    var that = this;
+
+                    // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+                    setTimeout(function () {
+                        that.model.setSearchString(evt.target.value, evt.type);
+                    }, 0);
+                }
+                else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
+                    if (evt.key === "Enter" || evt.keyCode === 13) {
+                        if (this.model.get("hitList").length === 1) {
+                            this.hitSelected(); // erster und einziger Eintrag in Liste
+                        }
+                        else {
+                            this.renderHitList();
+                        }
+                    }
+                    else {
+                        this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
+                    }
+                }
+
+                // Der "x-Button" in der Suchleiste
+                if (evt.target.value.length > 0) {
+                    $("#searchInput + span").show();
+                }
+                else {
+                    $("#searchInput + span").hide();
+                }
             }
         },
         collapseHits: function (target) {
@@ -514,6 +517,9 @@ define([
             this.hideMarker();
             EventBus.trigger("mapHandler:clearMarker", this);
             this.clearSelection();
+            // Suchvorschläge löschen
+            $("#searchInputUL").html("");
+
         },
         /**
         *

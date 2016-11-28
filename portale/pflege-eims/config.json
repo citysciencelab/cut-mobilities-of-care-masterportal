@@ -6,7 +6,7 @@
         "minChars": 3,
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -26,12 +26,12 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            
+
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
-          },  
+          },
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -111,7 +111,7 @@
           "id": "2264",
           "visibility": false,
           "mouseHoverField": "Name"
-        }, 
+        },
         {
           "id": "2263",
           "visibility": false,
@@ -188,8 +188,8 @@
               "name": [
                   "HVV Haltestellen"
                       ],
-             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",   
-                
+             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",
+
               "legendURL": [
                   "http://87.106.16.168/legende_mrh/hvv-bus.png"
                             ]
@@ -199,7 +199,7 @@
           "visibility": false,
           "mouseHoverField": "Name"
           }
-          
+
 
       ]
     }
