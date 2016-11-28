@@ -2,10 +2,7 @@
   "Portalconfig":
   {
     "PortalTitle": "Mein Baum-Meine Stadt",
-<<<<<<< HEAD
     "PortalLogo": "none",
-=======
->>>>>>> stable
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
@@ -105,21 +102,13 @@
     {
       "Layer": [
         {
-<<<<<<< HEAD
           "id": "3323",
-=======
-          "id": "3323",
->>>>>>> stable
           "visibility": true
         },
         {
           "id": "3322",
           "visibility": true,
-<<<<<<< HEAD
-          "layerAttribution": "<span>Darstellung der Baumkennzahl  ab Maßstab 1: 2500 </span>"
-=======
-           "layerAttribution": "<span>Darstellung der Baumkennzahl ab Maßstab 1: 2500</span>"
->>>>>>> stable
+          "layerAttribution": "<span>Darstellung der Baumkennzahl ab Maßstab 1: 2500 </span>"
         },
         {
           "id": ["3318", "3319", "3320", "3321", "4571"],
