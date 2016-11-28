@@ -80,7 +80,7 @@ define(function (require) {
             this.set("isPopupVisible", true);
         },
         setGFIParams: function (params) {
-            EventBus.trigger("closeGFIParams", this);
+            Radio.trigger("GFIPopup", "closeGFIParams");
             Requestor.requestFeatures(params);
         },
         getThemes: function (response) {
