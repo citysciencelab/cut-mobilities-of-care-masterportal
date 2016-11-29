@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/layerinformation/model",
     "text!modules/layerinformation/template.html",
     "jqueryui/widgets/draggable"
-], function (Backbone, Layerinformation, LayerInformationTemplate) {
+], function (Backbone, Radio, Layerinformation, LayerInformationTemplate) {
 
     var LayerInformationView = Backbone.View.extend({
         model: new Layerinformation(),
@@ -38,6 +39,7 @@ define([
         },
 
         hide: function () {
+            Radio.trigger("Layer", "setLayerInfoChecked", false);
             this.$el.hide();
         }
     });
