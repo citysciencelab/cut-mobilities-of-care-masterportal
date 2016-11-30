@@ -25,7 +25,10 @@ define(function (require) {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": function (args) {
                     this.setStatus(args);
-                    this.hideMapContent();
+                    if (args[0] === false) {
+                        this.hideMapContent();
+                        this.resetAnimationWindow();
+                    }
                 }
             });
 
@@ -639,14 +642,13 @@ define(function (require) {
         hideMapContent: function () {
             if (this.get("animationLayer")) {
                 Radio.trigger("Map", "removeLayer", this.get("animationLayer"));
-                this.resetAnimationWindow();
+
             }
             Radio.trigger("MapMarker", "mapHandler:hideMarker");
         },
 
         resetAnimationWindow: function () {
-            this.set("kreis", "Landkreis auswählen");
-            this.set("gemeinden", "Gemeinde auswählen");
+            this.setKreis("");
             this.set("pendlerLegend", []);
         }
     });
