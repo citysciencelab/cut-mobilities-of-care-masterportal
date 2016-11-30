@@ -34,7 +34,7 @@ define(function (require) {
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
             EventBus.trigger("mapHandler:showMarker", [0,0]);
-            if (_.has(Config,"gfiWindow")) {
+            if (_.has(Config, "gfiWindow")) {
                 this.gfiWindow = Config.gfiWindow;
             }
             else {
