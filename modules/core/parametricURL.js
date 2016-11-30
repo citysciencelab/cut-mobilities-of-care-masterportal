@@ -8,8 +8,7 @@ define([
 
     var ParametricURL = Backbone.Model.extend({
         defaults: {
-            layerParams: [],
-            initString: ""
+            layerParams: []
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
