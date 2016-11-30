@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         title: "FHH - Atlas",
         logo: "../img/hh-logo.png",
         simpleMap: true,
@@ -82,6 +83,7 @@ define(function () {
             center: [565874, 5934140],
             extent: [442800, 5809000, 738000, 6102200]
         },
+
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
@@ -95,7 +97,7 @@ define(function () {
             gfi: true
         },
         proxyURL: "/cgi-bin/proxy.cgi",
-         namedProjections: [
+        namedProjections: [
             // GK DHDN
             ["EPSG:31461", "+proj=tmerc +lat_0=0 +lon_0=3 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
             ["EPSG:31462", "+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -115,7 +117,7 @@ define(function () {
             ["EPSG:4178", "+proj=longlat +ellps=krass +towgs84=24,-123,-94,0.02,-0.25,-0.13,1.1 +no_defs"],
             // Organisations
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
-        ],
+        ]
     };
 
     return config;

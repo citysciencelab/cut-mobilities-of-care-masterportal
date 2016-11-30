@@ -35,9 +35,7 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(Radio.channel("Map"), {
-                "pointerMoveOnMap": this.placeMeasureTooltip
-            });
+            Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
 
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus

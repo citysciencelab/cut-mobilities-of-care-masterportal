@@ -12,7 +12,7 @@ dist
 temp
 lgv-config
 doc
-examples
+examples*
 
 /nbproject/private/
 /img/*.db
@@ -20,3 +20,4 @@ jshintrc
 examples.zip
 portale/master-based-app
 bowerupdate.log
+portalconfigs

@@ -37,6 +37,8 @@ define([
 
         activateTool: function () {
             if (this.getIsActive() === true) {
+                // triggert das Ändern eines Tools
+                Radio.trigger("ClickCounter", "toolChanged");
                 this.collection.setActiveToolToFalse(this);
                 Radio.trigger("Map", "activateClick", this.getId());
                 if (this.getId() === "legend") {
@@ -45,13 +47,8 @@ define([
                 else if (this.getId() === "featureLister") {
                     EventBus.trigger("toggleFeatureListerWin");
                 }
-                else if (this.getId() !== "gfi" && this.getId() !== "coord") {
-                    Radio.trigger("Window", "toggleWin", this);
-                }
-
                 else {
-                    EventBus.trigger("closeWindow", false);
-                    EventBus.trigger("winParams", [false, false, ""]);
+                    Radio.trigger("Window", "toggleWin", this);
                 }
             }
         },

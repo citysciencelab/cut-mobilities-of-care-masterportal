@@ -21,9 +21,11 @@ define([
         },
         setZoomLevelUp: function () {
             Radio.trigger("MapView", "setZoomLevelUp");
+            Radio.trigger("ClickCounter", "zoomChanged");
         },
         setZoomLevelDown: function () {
             Radio.trigger("MapView", "setZoomLevelDown");
+            Radio.trigger("ClickCounter", "zoomChanged");
         }
     });
 

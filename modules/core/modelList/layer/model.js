@@ -2,6 +2,7 @@ define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
+        StyleList = require("modules/layer/wfsStyle/list"),
         Layer;
 
     Layer = Item.extend({
@@ -36,6 +37,8 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
+                    // triggert das Ein- und Ausschalten von Layern
+                    Radio.trigger("ClickCounter", "layerVisibleChanged");
                     this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },
@@ -86,10 +89,10 @@ define(function (require) {
         **/
         checkForScale: function (options) {
             if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
-                this.setIsOutOfScale(true);
+                this.setIsOutOfRange(false);
             }
             else {
-                this.setIsOutOfScale(false);
+                this.setIsOutOfRange(true);
             }
         },
 
@@ -159,8 +162,8 @@ define(function (require) {
             this.set("transparency", value);
         },
 
-        setIsOutOfScale: function (value) {
-            this.set("isOutOfScale", value);
+        setIsOutOfRange: function (value) {
+            this.set("isOutOfRange", value);
         },
 
         setMaxResolution: function (value) {
@@ -227,8 +230,8 @@ define(function (require) {
             return this.get("layerAttribution");
         },
 
-        getIsOutOfScale: function () {
-            return this.get("isOutOfScale");
+        getIsOutOfRange: function () {
+            return this.get("isOutOfRange");
         },
 
         getMaxScale: function () {
@@ -291,10 +294,10 @@ define(function (require) {
         },
         /**
          * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-         * Abhängig vom Attribut "isVisibleInMap"
+         * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
-            if (this.getIsVisibleInMap() === true) {
+            if (this.getIsSelected() === true) {
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
             }
             else {
@@ -338,11 +341,31 @@ define(function (require) {
             }
         },
         showLayerInformation: function () {
+            var legendURL = [],
+                names = [],
+                styleList = StyleList.returnAllModelsById(this.attributes.id);
+
+            if (styleList.length > 0) {
+                _.each(styleList, function (style) {
+                    legendURL.push(style.get("imagepath") + style.get("imagename"));
+                    if (style.has("legendValue")) {
+                        names.push(style.get("legendValue"));
+                    }
+                    else {
+                        names.push(style.get("styleFieldValue"));
+                    }
+                });
+            }
+            else {
+                legendURL.push(this.get("legendURL"));
+                names.push(this.get("datasets")[0].md_name);
+            }
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
-                "legendURL": this.get("legendURL"),
+                "legendURL": legendURL,
                 "metaID": this.get("datasets")[0].md_id,
-                "name": this.get("datasets")[0].md_name
+                "name": names,
+                "layername":this.get("name")
             });
         },
         setSelectionIDX: function (idx) {
@@ -356,6 +379,30 @@ define(function (require) {
         },
         moveUp: function () {
             this.collection.moveModelUp(this);
+        },
+        /**
+         * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt die metaID wieder.
+         * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         */
+        getmetaID: function () {
+            if (this.get("datasets")[0]) {
+             return this.get("datasets")[0].md_id;
+            }
+            else {
+                    return undefined;
+            }
+        },
+        /**
+         * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
+         * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         */
+        getmetaName: function () {
+            if (this.get("datasets")[0]) {
+             return this.get("datasets")[0].md_name;
+            }
+            else {
+                    return undefined;
+            }
         }
     });
 

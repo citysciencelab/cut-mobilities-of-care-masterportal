@@ -1,12 +1,12 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Lärmkarte-Straßenverkehr - 2012",
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -20,13 +20,14 @@
     "menu": {
       "tree": {
         "name": "Themen",
-        "glyphicon": "glyphicon-list"
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
       },
       "tools": {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
@@ -87,23 +88,23 @@
     {
       "Layer": [
         {
-          "id": "453",  
+          "id": "453",
           "visibility": true
         },
         {
           "id": "452"
-        } 
+        }
       ]
     },
     "Fachdaten":
     {
       "Layer": [
-        
+
         {
-          "id": "96", 
-          "visibility": true, 
+          "id": "96",
+          "visibility": true,
           "name": "Lärm Straßenverkehr Tag 2012",
-          "attributions": "<span>Die Karte 'Lärm Straßenverkehr Tag' ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>" 
+          "attributions": "<span>Die Karte 'Lärm Straßenverkehr Tag' ist nicht geeignet zum Schallschutznachweis nach DIN 4109 'Schallschutz im Hochbau'</span>"
 
         },
         {

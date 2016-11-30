@@ -6,8 +6,8 @@
         "minChars": 3,
         "bkg": {
             "minChars": 3,
-            "bkgSuggestURL": "/bkg_suggest",
-            "bkgSearchURL": "/bkg_geosearch",
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
             "extent": [454591, 5809000, 700000, 6075769],
             "epsg": "EPSG:25832",
             "filter": "filter=(typ:*)",
@@ -17,6 +17,10 @@
             "minChars": 3
         },
         "placeholder": "Suche nach Adresse, Ort"
+    },
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [565874, 5934140]
     },
     "menu": {
       "tree": {
@@ -70,7 +74,7 @@
           "name": "Kontakt",
           "glyphicon": "glyphicon-envelope",
           "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
-          "serviceID": "80001",
+          "serviceID": "80002",
           "from": [
             {
               "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -92,11 +96,11 @@
       }
     },
     "controls": {
-      "zoom": true,
       "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
       "orientation": "allways",
       "poi": true,
-      "fullScreen": true,
       "attributions": true
     },
     "scaleLine": true,

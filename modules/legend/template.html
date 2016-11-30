@@ -43,6 +43,21 @@
                         });
                         %>
                         </table>
+
+                    <% }else if (element.typ === "styleWMS") {%>
+
+                        <table>
+                      <% _.each(element.params, function(param){
+                       %>
+                            <tr>
+                                <td><div class="styleWMS" style="background-color:<%=param.color%>"></div></td>
+                                <td><%=param.startRange%> - <%=param.stopRange%></td>
+                            </tr>
+                       <%
+                       });
+                       %>
+                        </table>
+
                     <%
                     }
                     else {

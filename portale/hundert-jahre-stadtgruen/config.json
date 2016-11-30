@@ -1,10 +1,11 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
-  
+    "PortalTitle": "100 Jahre Stadtgrün",
+
     "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [567360, 5939010]
     },
     "menu": {
       "tree": {
@@ -15,7 +16,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full",
@@ -93,25 +94,20 @@
     "Fachdaten":
     {
       "Layer": [
-        
        {
-          "id": "1132", 
+          "id": "1132",
           "styleId": "1132",
           "name": "Attraktionen",
           "visibility": true,
+          "styleField": "icon_vi",
           "mouseHoverField": "titel"
         },
-          {
+        {
           "id": "628"
         },
-          {
+        {
           "id": "629"
         }
-        
-
-
-        
-        
       ]
     }
   }

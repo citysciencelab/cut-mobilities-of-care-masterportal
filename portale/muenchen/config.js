@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         title: "Geoportal München",
         logo: "http://www.unterdarchinger-musi.de/wp-content/uploads/2011/10/muenchen.svg_.png",
         logoLink: "https://www.muenchen.de",

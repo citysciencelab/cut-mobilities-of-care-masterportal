@@ -6,7 +6,7 @@
         "minChars": 3,
         "gazetteer": {
            "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "serviceId": "6",
            "searchStreets": true,
            "searchHouseNumbers": true,
            "searchDistricts": true,
@@ -30,7 +30,7 @@
           "name": "Werkzeuge",
           "glyphicon": "glyphicon-wrench",
           "children": {
-            
+
             "gfi": {
               "name": "Informationen abfragen",
               "glyphicon": "glyphicon-info-sign",
@@ -98,7 +98,7 @@
       "Hintergrundkarten":
         {
           "Layer": [
-            
+
             {
               "id": "452"
             },
@@ -111,7 +111,7 @@
       "Fachdaten":
         {
           "Ordner": [
-            
+
             {
               "Titel": "Pflanzstandorte 2016",
               "Layer": [
@@ -150,7 +150,7 @@
                 }
               ]
             }
-            
+
           ]
         }
     }

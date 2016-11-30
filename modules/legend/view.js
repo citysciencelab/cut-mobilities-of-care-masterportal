@@ -9,7 +9,7 @@ define([
 ], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, EventBus, Radio) {
 
     var LegendView = Backbone.View.extend({
-        model: Legend,
+        model: new Legend(),
         // className: "legend-win",
         template: _.template(LegendTemplate),
         templateMobile: _.template(LegendTemplateMobile),
@@ -68,7 +68,7 @@ define([
             var isViewMobile = Radio.request("Util", "isViewMobile"),
                 legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
 
-            this.model.setLayerList(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}));
+            this.render();
             if (isViewMobile === true) {
 
                 this.$el.modal("toggle");

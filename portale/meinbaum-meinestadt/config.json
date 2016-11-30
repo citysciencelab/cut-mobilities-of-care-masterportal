@@ -1,12 +1,16 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Mein Baum-Meine Stadt",
+<<<<<<< HEAD
+    "PortalLogo": "none",
+=======
+>>>>>>> stable
     "searchBar": {
         "minChars": 3,
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -20,13 +24,14 @@
     "menu": {
       "tree": {
         "name": "Themen",
-        "glyphicon": "glyphicon-list"
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
       },
       "tools": {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-         
+
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
@@ -72,11 +77,11 @@
       }
     },
     "controls": {
-      "zoom": true,
-      "toggleMenu": true,
-      "orientation": "once",
-      "poi": true,
+     "toggleMenu": true,
       "fullScreen": true,
+      "zoom": true,
+      "orientation": "once",
+      "poi": false,
       "attributions": true
     },
     "scaleLine": true,
@@ -100,12 +105,21 @@
     {
       "Layer": [
         {
-          "id": "3322",
+<<<<<<< HEAD
+          "id": "3323",
+=======
+          "id": "3323",
+>>>>>>> stable
           "visibility": true
         },
         {
-          "id": "3323", 
-          "visibility": true
+          "id": "3322",
+          "visibility": true,
+<<<<<<< HEAD
+          "layerAttribution": "<span>Darstellung der Baumkennzahl  ab Maßstab 1: 2500 </span>"
+=======
+           "layerAttribution": "<span>Darstellung der Baumkennzahl ab Maßstab 1: 2500</span>"
+>>>>>>> stable
         },
         {
           "id": ["3318", "3319", "3320", "3321", "4571"],

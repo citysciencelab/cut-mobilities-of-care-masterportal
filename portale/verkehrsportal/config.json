@@ -2,12 +2,16 @@
   "Portalconfig":
   {
     "PortalTitle": "GeoViewer",
+    "mapView": {
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600]
+    },
     "searchBar": {
         "minChars": 3,
         "bkg": {
             "minChars": 3,
-            "bkgSuggestURL": "/bkg_suggest",
-            "bkgSearchURL": "/bkg_geosearch",
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
             "extent": [454591, 5809000, 700000, 6075769],
             "epsg": "EPSG:25832",
             "filter": "filter=(typ:*)",
@@ -24,7 +28,7 @@
     "routing": {
         "name": "Routenplaner",
         "glyphicon": "glyphicon-road",
-        "viomRoutingID": "3",
+        "viomRoutingID": "7",
         "bkgSuggestID": "4",
         "bkgGeosearchID": "5",
         "autostart": false
@@ -75,8 +79,8 @@
       }
     },
     "controls": {
-      "zoom": true,
       "toggleMenu": true,
+      "zoom": true,
       "orientation": "allways",
       "poi": true,
       "fullScreen": true,

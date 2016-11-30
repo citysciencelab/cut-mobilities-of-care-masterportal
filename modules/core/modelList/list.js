@@ -66,6 +66,7 @@ define([
                         if (model.getType() === "layer") {
                             this.resetSelectionIdx(model);
                             model.setIsVisibleInMap(model.getIsSelected());
+                            model.toggleLayerOnMap();
                         }
                         this.trigger("updateSelection");
                         channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -321,31 +322,35 @@ define([
                 // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
                 // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
                 // wie sie hinzugefügt werden
-                if (Radio.request("Parser", "getTreeType") === "light") {
+                var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
+                    treeType = Radio.request("Parser", "getTreeType");
+                if (treeType === "light") {
                     var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
                     lightModels.reverse();
                     this.add(lightModels);
                     // Parametrisierter Aufruf im lighttree
-                    if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                        _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
-                            this.setModelAttributesById(param.id, {isVisibleInMap: true});
-                        }, this);
-                    }
+                    _.each(paramLayers, function (paramLayer) {
+                        this.setModelAttributesById(paramLayer.id, {isVisibleInMap: paramLayer.visibility, transparency: paramLayer.transparency});
+                    }, this);
                 }
                 // Parametrisierter Aufruf
-                else if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                    _.each(Radio.request("ParametricURL", "getLayerParams"), function (param) {
-                        var lightModel = Radio.request("Parser", "getItemByAttributes", {id: param.id});
+                else if (paramLayers.length > 0) {
+                    _.each(paramLayers, function (paramLayer) {
+                        var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
-                        // lightModel.isSelected = true;
-                        this.add(lightModel);
-                        // this.get(param.id).setIsSelected(true);
-                        if (param.visibility === "TRUE") {
-                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
-                        }
-                        else {
-                            this.setModelAttributesById(param.id, {isSelected: true, transparency: parseInt(param.transparency, 10)});
+                        if (_.isUndefined(lightModel) === false) {
+                            this.add(lightModel);
+                            if (paramLayer.visibility === true) {
+                                this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
+                            }
+                            else {
+                                this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
+                                // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
+                                if (_.isUndefined(this.get(paramLayer.id)) === false) {
+                                    this.get(paramLayer.id).setIsVisibleInMap(false);
+                                }
+                            }
                         }
                     }, this);
                 }
@@ -358,7 +363,9 @@ define([
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);
 
-                model.set(attrs);
+                if (_.isUndefined(model) === false) {
+                    model.set(attrs);
+                }
             },
 
             addModelsByAttributes: function (attrs) {
@@ -375,11 +382,39 @@ define([
             showModelInTree: function (modelId) {
                 var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
+                this.closeAllExpandedFolder();
+
                 // öffnet den Themenbaum
                 $("#root li:first-child").addClass("open");
                 // Parent und eventuelle Siblings werden hinzugefügt
                 this.addAndExpandModelsRecursive(lightModel.parentId);
                 this.setModelAttributesById(modelId, {isSelected: true});
+                this.scrollToLayer(lightModel.name);
+            },
+
+            /**
+            * Scrolled auf den Layer
+            * @param {String} layername - in "Fachdaten" wird auf diesen Layer gescrolled
+            */
+            scrollToLayer: function (layername) {
+                var liLayer = _.findWhere($("#Overlayer").find("span"), {title: layername}),
+                    offsetFromTop = $(liLayer).offset().top,
+                    heightThemen = $("#Themen").css("height"),
+                    scrollToPx = 0;
+
+                // die "px" oder "%" vom string löschen und zu int parsen
+                if (heightThemen.slice(-2) === "px") {
+                    heightThemen = parseInt(heightThemen.slice(0, -2), 10);
+                }
+                else if (heightThemen.slice(-1) === "%") {
+                    heightThemen = parseInt(heightThemen.slice(0, -1), 10);
+                }
+
+                scrollToPx = offsetFromTop - heightThemen / 2;
+
+                $("#Overlayer").animate({
+                    scrollTop: scrollToPx
+                }, "fast");
             },
 
             /**
@@ -419,9 +454,6 @@ define([
              */
             removeModelsByParentId: function (parentId) {
                 _.each(this.where({parentId: parentId}), function (model) {
-                    if (model.getType() === "folder") {
-                        this.removeModelsByParentId(model.getId());
-                    }
                     if (model.getType() === "layer" && model.getIsVisibleInMap() === true) {
                         model.setIsVisibleInMap(false);
                     }

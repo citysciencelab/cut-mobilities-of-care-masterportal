@@ -121,3 +121,9 @@
 .panel-legend > p {
     margin: 0;
 }
+
+.styleWMS {
+    height: 15px;
+    width: 15px;
+    margin-right: 5px;
+}

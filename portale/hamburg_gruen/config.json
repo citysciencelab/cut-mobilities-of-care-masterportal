@@ -5,7 +5,7 @@
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -41,9 +41,9 @@
         "glyphicon": "glyphicon-list"
       },
       "tools": {
-        
+
         "children": {
-          
+
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
@@ -86,7 +86,7 @@
       "zoom": true,
       "orientation": "once",
       "poi": true
-      
+
     },
     "scaleLine": true,
     "Baumtyp": "light"

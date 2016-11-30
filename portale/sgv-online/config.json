@@ -1,27 +1,31 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle":"HH Straßen- u. Gebietsauskunft",
+    "PortalLogo":"../img/stano.png",
+    "LogoLink": "http://www.statistik-nord.de/",
+    "LogoToolTip": "Statistikamt Nord",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "8",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
-            "searchParcels": true
+            "searchParcels": true,
+            "searchStreetKey": true
         },
         "specialWFS": {
             "minChar": 3,
             "definitions": [
-                
+
                         ]
                     },
         "visibleWFS": {
             "minChars": 3
         },
         "zoomLevel": 9,
-        "placeholder": "Suche nach Adresse/ Stadtteil/ Flursrück(0123/1234)"
+        "placeholder": "Suche nach Adresse/ Stadtteil/ Flurstück(0123/1234)"
     },
     "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
@@ -123,10 +127,49 @@
     "Fachdaten":
     {
       "Layer": [
-        
-        
-        
+
+          {
+          "id": "1037"
+          },
+          {
+          "id": "2074"
+          },
+          {
+          "id": "2071"
+          },
+          {
+          "id": "1561"
+          },
+          {
+          "id": "2448"
+          },
+          {
+          "id": "2313"
+          },
+
+          {
+          "id": "211"
+          },
+          {
+          "id": "216"
+          },
+          {
+          "id": "219"
+          },
+          {
+          "id": "213"
+          },
+          {
+          "id": "215"
+          },
+          {
+          "id": "2134"
+          },
+          {
+          "id": "212"
+          }
                 ]
+
     }
   }
 }
