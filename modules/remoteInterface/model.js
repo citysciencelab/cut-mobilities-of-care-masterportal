@@ -82,6 +82,7 @@ define(function (require) {
                     geometry: geom,
                     type: hit.typ
                 });
+                feature.setProperties(_.omit(hit, "geometry_UTM_EPSG_25832"));
                 feature.setId(hit.id);
                 return feature;
         },
