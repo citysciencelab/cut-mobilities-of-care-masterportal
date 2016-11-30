@@ -221,7 +221,7 @@ define([
                     initString = "";
 
                 // Bei " " oder "-" im Suchstring
-                if (value.includes(" ") || value.includes("-")) {
+                if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
 
                     // nach " " splitten
                     var split = value.split(" ");
