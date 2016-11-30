@@ -151,5 +151,5 @@ define([
         }
     });
 
-    return new MapHandlerModel();
+    return MapHandlerModel;
 });

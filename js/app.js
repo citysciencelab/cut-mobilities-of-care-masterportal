@@ -11,7 +11,6 @@ define("app",
     "modules/core/crs",
     "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
-
     // Core laden
     new RawLayerList();
     new Preparser();
@@ -24,6 +23,10 @@ define("app",
         new MenuLoader();
     });
     new RestReaderList();
+
+    require(["modules/remoteinterface/model"], function (Remoteinterface) {
+        new Remoteinterface();
+    });
 
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {

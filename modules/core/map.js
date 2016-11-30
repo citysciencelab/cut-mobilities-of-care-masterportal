@@ -27,7 +27,11 @@ define(function (require) {
                 mapView = new MapView();
 
             channel.reply({
+                "getMap": function () {
+                    return this.get("map");
+                },
                 "getLayers": this.getLayers,
+                "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
                 "createLayerIfNotExists": this.createLayerIfNotExists
             }, this);
 
@@ -39,6 +43,9 @@ define(function (require) {
                 "addControl": this.addControl,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
+                "addFeatureToLayer": this.addFeatureToLayer,
+                "addFeaturesToLayer":  this.addFeaturesToLayer,
+                "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "removeInteraction": this.removeInteraction,
                 "setBBox": this.setBBox,
                 "render": this.render,
@@ -47,10 +54,17 @@ define(function (require) {
                 "zoomToExtent": this.zoomToExtent,
                 "updatePrintPage": this.updatePrintPage,
                 "activateClick": this.activateClick,
+                "createVectorLayer": this.createVectorLayer,
                 "addLoadingLayer": this.addLoadingLayer,
                 "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener
             }, this);
+
+            this.listenTo(this, {
+                "change:vectorLayer": function (model, value) {
+                    this.addLayerToIndex([value, 0]);
+                }
+            });
 
             this.set("view", mapView.get("view"));
 
@@ -72,6 +86,77 @@ define(function (require) {
             }
 
         },
+        addFeaturesToLayer: function (features, layerName) {
+            _.each(features, function (feature) {
+                this.addFeatureToLayer(feature, layerName);
+            }, this);
+        },
+        addFeatureToLayer: function (feature, layerName) {
+            var layer = this.getLayerByName(layerName),
+                color = feature.values_.type === "potfl"? "#0000b2" : "#f88699",
+                 fill = new ol.style.Fill({
+                   color: color
+                 }),
+                 stroke = new ol.style.Stroke({
+                   color: "#000",
+                   width: 1.25
+                 }),
+                 styles = [
+                   new ol.style.Style({
+                     fill: fill,
+                     stroke: stroke
+                   })
+                 ];
+
+            layer.setStyle(styles);
+            layer.getSource().addFeature(feature);
+        },
+
+        /**
+         * Findet einen Layer über seinen Namen und gibt ihn zurück
+         * @param  {string} layerName - Name des Layers
+         * @return {ol.layer}
+         */
+        getLayerByName: function (layerName) {
+            var layers = this.get("map").getLayers().getArray(),
+                layer = _.find(layers, function (layer) {
+                    return layer.get("name") === layerName;
+                });
+
+            return layer;
+        },
+
+        /**
+         * Erstellt einen Vectorlayer
+         * @param {string} layerName - Name des Vectorlayers
+         */
+        createVectorLayer: function (layerName) {
+            var layer = new ol.layer.Vector({
+                source: new ol.source.Vector({useSpatialIndex: false}),
+                alwaysOnTop: true,
+                name: layerName
+            });
+
+            this.setVectorLayer(layer);
+        },
+
+        /**
+         * Entfernt alle Features aus der Layersource
+         * @param {string} name - Layername
+         */
+        removeAllFeaturesFromLayer: function (name) {
+            var layer = this.getLayerByName(name);
+
+            layer.getSource().clear();
+        },
+
+        setVectorLayer: function (value) {
+            this.set("vectorLayer", value);
+        },
+
+        getVectorLayer: function () {
+            return this.get("vectorLayer");
+        },
 
         getLayers: function () {
             return this.get("map").getLayers();
@@ -88,6 +173,25 @@ define(function (require) {
         BBoxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
+            }
+        },
+
+        getWGS84MapSizeBBOX: function () {
+            var bbox = this.get("view").calculateExtent(this.get("map").getSize()),
+                firstCoord = [bbox[0], bbox[1]],
+                secondCoord = [bbox[2], bbox[3]],
+                firstCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: firstCoord}),
+                secondCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: secondCoord});
+
+            return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
+        },
+
+        GFIPopupVisibility: function (value) {
+            if (value === true) {
+                this.set("GFIPopupVisibility", true);
+            }
+            else {
+                this.set("GFIPopupVisibility", false);
             }
         },
 

@@ -23,8 +23,8 @@ define([
 
     Radio.trigger("Map", "addLayer", searchVector);
 
-    return Backbone.View.extend({
-        model: MapHandlerModel,
+    var MapMarker = Backbone.View.extend({
+        model: new MapHandlerModel(),
         id: "searchMarker",
         className: "glyphicon glyphicon-map-marker",
         template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
@@ -36,7 +36,10 @@ define([
         */
         initialize: function () {
             var channel = Radio.channel("MapMarker");
-
+            channel.on({
+                "showMarker": this.showMarker,
+                "hideMarker": this.hideMarker
+            }, this);
             channel.reply({
                 "getCloseButtonCorners": function () {
                     if (this.$el.is(":visible") === false) {
@@ -188,6 +191,11 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
+                default: {
+                    this.showMarker(hit.coordinate);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    break;
+                }
             }
         },
         /*
@@ -238,4 +246,5 @@ define([
             this.$el.css("display", "none");
         }
     });
+    return MapMarker;
 });
