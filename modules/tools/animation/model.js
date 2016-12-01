@@ -23,7 +23,13 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
+                "winParams": function (args) {
+                    this.setStatus(args);
+                    if (args[0] === false) {
+                        this.hideMapContent();
+                        this.resetAnimationWindow();
+                    }
+                }
             });
 
             this.listenTo(this, {
@@ -252,7 +258,7 @@ define(function (require) {
             });
             pendlerLegend.push({
                 anzahl_pendler: pendlerCountOther,
-                color: "rgba(0,0,0,.5)",
+                color: "rgba(0,0,0,.7)",
                 kreis: "Andere"
             });
             this.set("pendlerLegend", pendlerLegend);
@@ -631,6 +637,19 @@ define(function (require) {
 
         getZoomLevel: function () {
             return this.get("zoomLevel");
+        },
+
+        hideMapContent: function () {
+            if (this.get("animationLayer")) {
+                Radio.trigger("Map", "removeLayer", this.get("animationLayer"));
+
+            }
+            Radio.trigger("MapMarker", "mapHandler:hideMarker");
+        },
+
+        resetAnimationWindow: function () {
+            this.setKreis("");
+            this.set("pendlerLegend", []);
         }
     });
 
