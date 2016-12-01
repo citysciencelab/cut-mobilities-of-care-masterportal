@@ -85,6 +85,10 @@ define(function (require) {
                         if ($(data).find("tbody").children().length > 1 === true) {
                             this.pushGFIContent([gfiFeatures], visibleLayer);
                         }
+                    },
+                    complete: function () {
+                        this.buildTemplate(this.getGFIPosition());
+                        this.pContent = [];
                     }
                 });
             }
