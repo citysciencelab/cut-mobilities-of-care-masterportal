@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/layer/wfsStyle/list",
     "backbone.radio",
     "bootstrap/modal"
-], function (Backbone, StyleList, Radio) {
+], function (Backbone, Radio, StyleList, Radio) {
 
     var Legend = Backbone.Model.extend({
 
@@ -15,6 +16,11 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("Legend");
+
+            channel.reply({
+               "getLegendParams": this.getLegendParams
+            }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
@@ -29,6 +35,7 @@ define([
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMS": this.updateLegendFromStyleWMS
             });
+            this.setLayerList();
         },
 
         updateParamsStyleWMS: function (params) {
@@ -42,11 +49,13 @@ define([
 
             _.each(legendParams, function (legendParam) {
                 if (legendParam.layername === "Erreichbare Arbeitsplaetze in 30min") {
-                    var layername = legendParam.layername;
+                    var layername = legendParam.layername,
+                        isVisibleInMap = legendParam.isVisibleInMap;
 
                     legendParams2.push({params: params,
                                        layername: layername,
-                                       typ: "styleWMS"});
+                                       typ: "styleWMS",
+                                       isVisibleInMap: isVisibleInMap});
                 }
                 else {
                     legendParams2.push(legendParam);
@@ -55,6 +64,9 @@ define([
             this.set("legendParams", legendParams2);
         },
 
+        getLegendParams: function () {
+            return this.get("legendParams");
+        },
         createLegend: function () {
             this.set("legendParams", []);
             this.set("legendParams", _.sortBy(this.get("tempArray"), function (obj) {
@@ -62,10 +74,14 @@ define([
             }));
         },
 
-        setLayerList: function (layerlist) {
+        setLayerList: function () {
             var filteredLayerList,
-                groupedLayers;
+                groupedLayers,
+                modelList = Radio.request("ModelList", "getCollection"),
+                layerlist;
 
+//            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
+            layerlist = modelList.where({type: "layer"});
             this.unsetLegendParams();
             // Die Layer die nicht in der Legende dargestellt werden sollen
             filteredLayerList = _.filter(layerlist, function (layer) {
@@ -105,7 +121,8 @@ define([
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         typ: "styleWMS",
-                        params: paramsStyleWMS
+                        params: paramsStyleWMS,
+                        isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
                 else {
@@ -114,7 +131,8 @@ define([
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         img: legendURL,
-                        typ: "WMS"
+                        typ: "WMS",
+                        isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
             }, this);
@@ -126,7 +144,8 @@ define([
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         img: layer.get("legendURL"),
-                        typ: "WFS"
+                        typ: "WFS",
+                        isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
                 else {
@@ -156,7 +175,8 @@ define([
                             layername: layer.get("name"),
                             legendname: name,
                             img: image,
-                            typ: "WFS"
+                            typ: "WFS",
+                            isVisibleInMap: layer.get("isVisibleInMap")
                         });
                 }
             }, this);
@@ -168,7 +188,8 @@ define([
                 this.push("tempArray", {
                     layername: layer.get("name"),
                     img: layer.get("legendURL"),
-                    typ: "WMS"
+                    typ: "WMS",
+                    isVisibleInMap: layer.get("isVisibleInMap")
                 });
             }, this);
         },

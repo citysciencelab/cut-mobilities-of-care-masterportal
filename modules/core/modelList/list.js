@@ -324,6 +324,7 @@ define([
                 // wie sie hinzugefügt werden
                 var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
                     treeType = Radio.request("Parser", "getTreeType");
+
                 if (treeType === "light") {
                     var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 

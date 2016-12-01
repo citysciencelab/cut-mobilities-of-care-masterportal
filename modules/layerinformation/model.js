@@ -80,6 +80,7 @@ define([
                     var dates = $("gmd\\:CI_Date,CI_Date", xmlDoc),
                     datetype,revisionDateTime,publicationDateTime,
                     dateTime;
+
                     if (dates.length === 1) {
                         dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[0].textContent;
                     }
@@ -92,16 +93,16 @@ define([
                             else if ($(datetype).attr("codeListValue") === "publication") {
                                 publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
-                            else{
+                            else {
                                 dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
                         });
                     }
-                    if (revisionDateTime){
-                        dateTime=revisionDateTime;
+                    if (revisionDateTime) {
+                        dateTime = revisionDateTime;
                     }
                     else if (publicationDateTime) {
-                        dateTime=publicationDateTime;
+                        dateTime = publicationDateTime;
                     }
                     return moment(dateTime).format("DD.MM.YYYY");
                 }()
