@@ -18,6 +18,7 @@ define(function (require) {
 
             this.groupContentByTyp(params[0]);
             this.setGFIPosition(params[1]);
+            this.pContent = [];
 
             if (this.has("gfiWMSContent")) {
                 _.each(this.getGFIWMSContent(), function (visibleLayer) {
@@ -34,7 +35,6 @@ define(function (require) {
                 this.buildTemplate(this.getGFIPosition());
             }
 
-            this.pContent = [];
             Util.hideLoader();
         },
 
