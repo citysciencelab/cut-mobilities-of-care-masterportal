@@ -3,9 +3,8 @@ define([
     "text!modules/controls/orientation/template.html",
     "modules/controls/orientation/model",
     "config",
-    "backbone.radio",
-    "modules/core/util"
-], function (Backbone, OrientationTemplate, OrientationModel, Config, Radio, Util) {
+    "backbone.radio"
+], function (Backbone, OrientationTemplate, OrientationModel, Config, Radio) {
     "use strict";
     var OrientationView = Backbone.View.extend({
         className: "row",
@@ -18,10 +17,10 @@ define([
         initialize: function () {
             var showGeolocation = true;
 
-            if(Util.isChrome() === true && window.location.protocol === "http:"){
+            if (Radio.request("Util", "isChrome") === true && window.location.protocol === "http:") {
                 showGeolocation = false;
             }
-            if(Util.isApple()){
+            if (Radio.request("Util", "isApple") === true) {
                 showGeolocation = false;
             }
             // Chrome erlaubt nur bei https-Seiten die Lokalisierung (stand: 20.07.2016).
@@ -52,7 +51,7 @@ define([
             }
         },
 
-        toggleLocateRemoveClass: function(){
+        toggleLocateRemoveClass: function() {
             $("#geolocate").removeClass("toggleButtonPressed");
         },
         /*

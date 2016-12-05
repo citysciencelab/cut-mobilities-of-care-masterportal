@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "modules/layer/wfsStyle/list",
     "modules/core/modelList/layer/model"
-], function (Backbone, Radio, ol, StyleList, Layer) {
+], function (Backbone, Radio, ol, Layer) {
 
     var GroupLayer = Layer.extend({
 
@@ -98,7 +97,7 @@ define([
         showLayerInformation: function () {
             var legendURL = [],
                 names = [],
-                styleList = StyleList.returnAllModelsById(this.attributes.id);
+                styleList = Radio.request("StyleList", "returnAllModelsById", this.attributes.id);
 
            if (styleList.length > 0) {
                 _.each(styleList, function (style) {

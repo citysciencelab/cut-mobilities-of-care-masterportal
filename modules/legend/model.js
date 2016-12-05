@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "modules/layer/wfsStyle/list",
-    "backbone.radio",
     "bootstrap/modal"
-], function (Backbone, Radio, StyleList, Radio) {
+], function (Backbone, Radio, StyleList) {
 
     var Legend = Backbone.Model.extend({
 
@@ -153,7 +152,7 @@ define([
                         name = [],
                         styleList;
 
-                    styleList = StyleList.returnAllModelsById(layer.getStyleId());
+                    styleList = Radio.request("StyleList", "returnAllModelsById", layer.getStyleId());
                     if (styleList.length > 1) {
                         _.each(styleList, function (style) {
                             image.push(style.getSimpleStyle()[0].getImage().getSrc());

@@ -12,7 +12,7 @@ define(function (require) {
         },
     initialize: function () {
         Radio.on("Util", {
-            "isViewMobileChanged": "checkIfMobile"
+            "isViewMobileChanged": this.checkIfMobile
         }, this);
 
         var isMobile = Radio.request("Util", "isViewMobile"),
@@ -20,12 +20,12 @@ define(function (require) {
 
         if (isMobile) {
             require(["modules/gfipopup/popup/viewMobile"], function (GFIPopupView) {
-                context.set("currenView", new GFIPopupView());
+                context.set("currentView", new GFIPopupView());
             });
         }
         else {
              require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
-                 context.set("currenView", new GFIPopupView());
+                 context.set("currentView", new GFIPopupView());
             });
         }
     },
@@ -36,12 +36,12 @@ define(function (require) {
         this.get("currentView").remove();
         if (isMobile) {
             require(["modules/gfipopup/popup/viewMobile"], function (GFIPopupView) {
-                 context.set("currenView", new GFIPopupView());
+                 context.set("currentView", new GFIPopupView());
             });
         }
         else {
              require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
-                  context.set("currenView", new GFIPopupView());
+                  context.set("currentView", new GFIPopupView());
             });
         }
     }

@@ -3,8 +3,7 @@ define([
     "text!modules/controls/attributions/templateShow.html",
     "text!modules/controls/attributions/templateHide.html",
     "modules/controls/attributions/model",
-    "backbone.radio",
-    "modules/core/util"
+    "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -12,7 +11,6 @@ define([
         TemplateHide = require("text!modules/controls/attributions/templateHide.html"),
         Attributions = require("modules/controls/attributions/model"),
         Radio = require("backbone.radio"),
-        Util = require("modules/core/util"),
         AttributionsView;
 
     AttributionsView = Backbone.View.extend({
@@ -38,7 +36,7 @@ define([
 
             this.render();
 
-            if(Util.isAny()){
+            if (Radio.request("Util", "isAny") === true) {
                 this.toggleIsContentVisible();
             }
 

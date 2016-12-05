@@ -19,6 +19,7 @@ define(function (require) {
             layerInfoClicked: false
         },
         initialize: function () {
+            new StyleList();
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,
