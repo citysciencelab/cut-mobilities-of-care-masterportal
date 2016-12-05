@@ -72,6 +72,7 @@ define(function (require) {
             }
             if (visibleLayer.ol_layer.id === "2407" || visibleLayer.ol_layer.id === "4423") {
                 window.open(visibleLayer.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+                this.buildTemplate(this.getGFIPosition());
             }
             else {
                 var gfiFeatures = {"html": visibleLayer.url};
