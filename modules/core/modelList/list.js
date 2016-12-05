@@ -324,6 +324,7 @@ define([
                 // wie sie hinzugefügt werden
                 var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
                     treeType = Radio.request("Parser", "getTreeType");
+
                 if (treeType === "light") {
                     var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
@@ -363,7 +364,9 @@ define([
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);
 
-                model.set(attrs);
+                if (_.isUndefined(model) === false) {
+                    model.set(attrs);
+                }
             },
 
             addModelsByAttributes: function (attrs) {
@@ -379,6 +382,8 @@ define([
              */
             showModelInTree: function (modelId) {
                 var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
+
+                this.closeAllExpandedFolder();
 
                 // öffnet den Themenbaum
                 $("#root li:first-child").addClass("open");

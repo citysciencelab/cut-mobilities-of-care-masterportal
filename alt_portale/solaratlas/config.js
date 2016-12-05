@@ -2,7 +2,7 @@ define(function () {
     var config = {
         title: "Solaratlas",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
-        gfiAtClick: false,
+
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
@@ -15,7 +15,6 @@ define(function () {
             */
         },
         namedProjections: [
-            
             // ETRS89 UTM
             ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
         ],

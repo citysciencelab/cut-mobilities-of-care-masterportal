@@ -7,7 +7,7 @@
         "placeholder": "Suche Adresse, Stadtteil",
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true
@@ -62,7 +62,8 @@
           "id": "452"
         },
         {
-          "id": "453"
+          "id": "453",
+          "visibility": true
         }
       ]
     },
@@ -82,6 +83,11 @@
         },
         {
           "id": "182",
+          "visibility": true,
+          "displayInTree": false
+        },
+        {
+          "id": "5096",
           "visibility": true,
           "displayInTree": false
         },

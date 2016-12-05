@@ -7,7 +7,10 @@ define([
     var ManuallyModel = Backbone.Model.extend({
         defaults: {
             brwList: [],
-            wpsWorkbenchnameWNUM: "IDABRWByWNUM"
+            wpsWorkbenchnameWNUM: "IDABRWByWNUM",
+            jahr: "",
+            nutzung: "",
+            produkt: ""
         },
         initialize: function () {
             EventBus.on("seite2:newBRWList", this.setBRWList, this);
@@ -66,6 +69,7 @@ define([
                         acza = brwValues.find("wps\\:acza,acza")[0].textContent ? parseFloat(brwValues.find("wps\\:acza,acza")[0].textContent.replace(/,/, ".")) : "",
                         grza = brwValues.find("wps\\:grza,grza")[0].textContent ? parseFloat(brwValues.find("wps\\:grza,grza")[0].textContent.replace(/,/, ".")) : "",
                         frei = brwValues.find("wps\\:frei,frei")[0].textContent ? brwValues.find("wps\\:frei,frei")[0].textContent.split(";") : [],
+                        brwGruppeNr = frei[1] && frei[1].trim() != "" ? parseFloat(frei[1].replace(/,/, ".").trim()) : "",
                         nWohnW = frei[6] && frei[6].trim() != "" ? parseFloat(frei[6].replace(/,/, ".").trim()) : "",
                         nBueroW = frei[7] && frei[7].trim() != "" ? parseFloat(frei[7].replace(/,/, ".").trim()) : "",
                         nLadenW = frei[8] && frei[8].trim() != "" ? parseFloat(frei[8].replace(/,/, ".").trim()) : "",
@@ -97,57 +101,70 @@ define([
 
                     _.each(this.get("brwList"), function (obj) {
                         if (obj.nutzung === idaIdent && obj.stichtag === stichtag) {
-                            obj = _.extend(obj, {
-                                brwValues: {
-                                    acza: acza,
-                                    grza: grza,
-                                    brw: brw,
-                                    wnum: wnum,
-                                    entw: entw,
-                                    beit: beit,
-                                    nuta: nuta,
-                                    ergnuta: ergnuta,
-                                    wgfz: wgfz,
-                                    bauw: bauw,
-                                    flae: flae,
-                                    nWohnW: nWohnW,
-                                    nBueroW: nBueroW,
-                                    nLadenW: nLadenW,
-                                    ugnutzung: ugnutzung,
-                                    uggfzAnt: uggfzAnt,
-                                    ugw: ugw,
-                                    egnutzung: egnutzung,
-                                    eggfzAnt: eggfzAnt,
-                                    egw: egw,
-                                    ignutzung: ignutzung,
-                                    iggfzAnt: iggfzAnt,
-                                    igw: igw,
-                                    zgnutzung: zgnutzung,
-                                    zggfzAnt: zggfzAnt,
-                                    zgw: zgw,
-                                    ognutzung: ognutzung,
-                                    oggfzAnt: oggfzAnt,
-                                    ogw: ogw
-                                },
-                                brwLage: {
-                                    adresse: adresse,
-                                    plz: plz,
-                                    bezirk: bezirk,
-                                    stadtteil: stadtteil,
-                                    statistikGebiet: statistikGebiet,
-                                    baublock: baublock,
-                                    weitereLage: weitereLage,
-                                    x: x,
-                                    y: y
-                                },
-                                ermittlungsart: "WNUM"
-                            });
+                            // Gültigkeitsprüfung des eingegebenen BRW
+                            if (idaIdent === "MFH" && ergnuta === "WGH" && nWohnW === "") {
+                                EventBus.trigger("alert", "Der angegebene Bodenrichtwert für eine gemischte Nutzung kann nicht auf monofunktionale Nutzungen aufgeschlüsselt werden. Bitte wählen Sie einen monofunktionalen Bodenrichtwert.");
+                            }
+                            else if (idaIdent === "BH" && (ergnuta === "WGH" || ergnuta === "BGH" || ergnuta === "EKZ") && nBueroW === "") {
+                                EventBus.trigger("alert", "Der angegebene Bodenrichtwert für eine gemischte Nutzung kann nicht auf monofunktionale Nutzungen aufgeschlüsselt werden. Bitte wählen Sie einen monofunktionalen Bodenrichtwert.");
+                            }
+                            else if ((this.get("produkt") === "BR" || this.get("produkt") === "BW") && this.get("jahr") >= 1983 && this.get("jahr") <= 1992 && (this.get("nutzung") === "ETW" || this.get("nutzung") === "TG" || this.get("nutzung") === "GAR" || this.get("nutzung") === "STP") && (brwGruppeNr !== 42 || brwGruppeNr !== 53)) {
+                                EventBus.trigger("alert", "Der angegebene Bodenrichtwert bezieht sich nicht auf Eigentumswohnungen. Bitte wählen Sie einen BRW mit dem Zusatz ETW.");
+                            }
+                            // gültig
+                            else {
+                                obj = _.extend(obj, {
+                                    brwValues: {
+                                        acza: acza,
+                                        grza: grza,
+                                        brw: brw,
+                                        wnum: wnum,
+                                        entw: entw,
+                                        beit: beit,
+                                        nuta: nuta,
+                                        ergnuta: ergnuta,
+                                        wgfz: wgfz,
+                                        bauw: bauw,
+                                        flae: flae,
+                                        nWohnW: nWohnW,
+                                        nBueroW: nBueroW,
+                                        nLadenW: nLadenW,
+                                        ugnutzung: ugnutzung,
+                                        uggfzAnt: uggfzAnt,
+                                        ugw: ugw,
+                                        egnutzung: egnutzung,
+                                        eggfzAnt: eggfzAnt,
+                                        egw: egw,
+                                        ignutzung: ignutzung,
+                                        iggfzAnt: iggfzAnt,
+                                        igw: igw,
+                                        zgnutzung: zgnutzung,
+                                        zggfzAnt: zggfzAnt,
+                                        zgw: zgw,
+                                        ognutzung: ognutzung,
+                                        oggfzAnt: oggfzAnt,
+                                        ogw: ogw
+                                    },
+                                    brwLage: {
+                                        adresse: adresse,
+                                        plz: plz,
+                                        bezirk: bezirk,
+                                        stadtteil: stadtteil,
+                                        statistikGebiet: statistikGebiet,
+                                        baublock: baublock,
+                                        weitereLage: weitereLage,
+                                        x: x,
+                                        y: y
+                                    },
+                                    ermittlungsart: "WNUM"
+                                });
+                            }
                         }
-                    });
+                    }, this);
                     EventBus.trigger("seite2:setBRWList", this.get("brwList"));
                 }
                 else {
-                    EventBus.trigger("alert", "Die eingegebene BRW-Nummer existiert nicht zum Stichtag.");
+                    EventBus.trigger("alert", "Fehler bei der BRW-Abfrage aufgetreten.");
                 }
             }
         }

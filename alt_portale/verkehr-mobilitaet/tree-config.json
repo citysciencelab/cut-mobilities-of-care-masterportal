@@ -60,8 +60,8 @@
               "metaName": "Schienenverkehrsnetz MRH"
             }
           ]
-        }, 
-          
+        },
+
         {
           "Titel": "Rad- und Fußverkehr",
           "Layer": [
@@ -97,7 +97,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Mobilitätsinformationen",
           "Layer": [
@@ -107,7 +107,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Parken",
 
@@ -153,7 +153,7 @@
 
           ]
         },
-          
+
         {
           "Titel": "Verkehrslage",
           "Layer": [
@@ -175,7 +175,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Verkehrskameras",
           "Layer": [
@@ -191,7 +191,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Dynamische Anzeigen",
           "Layer": [
@@ -207,7 +207,7 @@
             }
           ]
         },
-          
+
         {
           "Titel": "Baustellen",
           "Layer": [
@@ -217,7 +217,7 @@
             }
           ]
         },
-        
+
         {
           "Titel": "Verwaltungsgrenzen",
           "Layer": [

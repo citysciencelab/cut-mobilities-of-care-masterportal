@@ -12,6 +12,7 @@ define([
         defaults: {
             title: Config.print.title,
             outputFilename: Config.print.outputFilename,
+            outputFormat: "pdf",
             isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
@@ -273,7 +274,7 @@ define([
                 srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
-                outputFormat: "pdf",
+                outputFormat: this.getoutputFormat(),
                 layers: this.get("layerToPrint"),
                 pages: [
                     {
@@ -470,6 +471,14 @@ define([
             var hex = color.toString(16);
 
             return hex.length === 1 ? "0" + hex : hex;
+        },
+        getoutputFormat: function () {
+            if (Config.print.outputFormat) {
+                return Config.print.outputFormat;
+            }
+            else {
+                return "pdf";
+            }
         }
     });
 

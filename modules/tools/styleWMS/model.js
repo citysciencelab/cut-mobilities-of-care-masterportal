@@ -126,7 +126,12 @@ define([
         createSLD: function () {
             if (this.isValid() === true) {
                 this.setSLD(this.createAndGetRootElement());
+                this.updateLegend(this.getStyleClassAtributes());
             }
+        },
+
+        updateLegend: function (attributes) {
+            Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
         },
 
         /**

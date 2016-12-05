@@ -1,17 +1,19 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/controls/orientation/poi/feature/model",
     "eventbus",
-    "config",
     "openlayers"
-], function (Backbone, PointOfInterest, EventBus, Config, ol) {
+], function (Backbone, Radio, PointOfInterest, EventBus, ol) {
 
     var PointOfInterestList = Backbone.Collection.extend({
         initialize: function () {
             EventBus.on("setModel", this.setModel, this);
         },
         comparator: "distance",
-        setModel: function (clusterFeature, styleList, maxDist, newCenter, layer) {
+        setModel: function (clusterFeature, maxDist, newCenter, layer) {
+            var styleModels = Radio.request("StyleList", "returnModels");
+
             // Cluster-WFS
             if (clusterFeature.getProperties().features) {
             _.each(clusterFeature.getProperties().features, function (feature) {
@@ -34,12 +36,12 @@ define([
                     img;
 
                 if (kategorie !== undefined) {
-                    img = _.find(styleList.models, function (num) {
+                    img = _.find(styleModels, function (num) {
                         return num.attributes.styleFieldValue === kategorie;
                     });
                 }
                 else {
-                    img = _.find(styleList.models, function (num) {
+                    img = _.find(styleModels, function (num) {
                         return num.attributes.layerId === layer.attributes.id;
                     });
                 }
@@ -73,7 +75,7 @@ define([
                 lineStringArray.push(poiObject);
                 var lineString = new ol.geom.LineString(lineStringArray),
                     distance = Math.round(lineString.getLength()),
-                    img = _.find(styleList.models, function (num) {
+                    img = _.find(styleModels, function (num) {
                         return num.attributes.layerId === layer.attributes.id;
                     });
 

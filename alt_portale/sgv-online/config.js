@@ -1,10 +1,7 @@
 define(function () {
     var config = {
-        title: "HH Straßen- und Gebietsauskunft",
-        logo: "../img/stano.png",
-        logoLink: "http://www.statistik-nord.de/",
-        logoTooltip: "Statistikamt Nord",
-        
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
+        gfiAtClick: false,
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
@@ -18,8 +15,8 @@ define(function () {
         namedProjections: [
             // ETRS89 UTM
             ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
-        ],
-        customModules: ["../portale/master/verkehrsfunctions"],
+            ],
+        customModules: ["../portale/sgv-online/gfionaddress"],
         footer: {
             visibility: true,
             urls: [
@@ -38,12 +35,12 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
+        layerConf: "../components/lgv-config/services-fhhnet-All.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
         attributions: true,
+
         // menubar: true,
         scaleLine: true,
         mouseHover: true,

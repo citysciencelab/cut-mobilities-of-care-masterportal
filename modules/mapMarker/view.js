@@ -29,7 +29,7 @@ define([
         className: "glyphicon glyphicon-map-marker",
         template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
         events: {
-            "click .glyphicon": "hideMarker"
+            "click .glyphicon-remove": "hideMarker"
         },
         /**
         * @description View des Map Handlers
@@ -63,6 +63,15 @@ define([
                         };
                     }
                 }
+            }, this);
+
+            channel.on({
+                "mapHandler:clearMarker": this.clearMarker,
+                "mapHandler:zoomTo": this.zoomTo,
+                "mapHandler:hideMarker": this.hideMarker,
+                "mapHandler:showMarker": this.showMarker,
+                "mapHandler:zoomToBPlan": this.zoomToBPlan,
+                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
             }, this);
 
             this.listenTo(EventBus, {
@@ -220,13 +229,13 @@ define([
         */
         showMarker: function (coordinate) {
             this.model.get("marker").setPosition(coordinate);
-            this.$el.css("display", "block");
+            this.$el.show();
         },
         /**
         *
         */
         hideMarker: function () {
-            this.$el.css("display", "none");
+            this.$el.hide();
         }
     });
 });

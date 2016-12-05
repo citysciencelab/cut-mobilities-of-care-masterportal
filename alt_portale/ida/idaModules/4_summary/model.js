@@ -14,6 +14,8 @@ define([
             jahr: "",
             lage: "",
             page: "",
+            result: "",
+            error: "",
             wpsWorkbenchnameBRW: "BRWUmrechnungHH",
             wpsWorkbenchnameIDAUmrechnung: "IDABerechnungHH"
         },
@@ -63,16 +65,16 @@ define([
             // Berechne ZWGFZ, falls nicht gesetzt, als Produkt von Parametern.
             // Für den Miteigentumsanteil MEA wird der Quotient von MEAN / MEAZ verwendet.
             if (_.has(params, "WGFZ") === false) {
-                if (_.has(params, "WOFL") === true && _.has(params, "FLAE") === true) {
-                    var WOFL = Number(params.WOFL.replace(/,/, ".").trim()),
-                        FLAE = Number(params.FLAE.replace(/,/, ".").trim()),
-                        EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
-                        OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
-                        MEA = _.has(params, "MEAN") === true && _.has(params, "MEAZ") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
-                        WGFZ = ((WOFL + EGFL + OGFL) / FLAE / 0.78 / MEA).toFixed(2);
+                var WOFL = _.has(params, "WOFL") === true && Number(params.WOFL.replace(/,/, ".").trim()) > 0 ? Number(params.WOFL.replace(/,/, ".").trim()) : 0,
+                    FLAE = _.has(params, "FLAE") === true && Number(params.FLAE.replace(/,/, ".").trim()) > 0 ? Number(params.FLAE.replace(/,/, ".").trim()) : 0,
+                    EGFL = _.has(params, "EGFL") === true ? Number(params.EGFL.replace(/,/, ".").trim()) : 0,
+                    OGFL = _.has(params, "OGFL") === true ? Number(params.OGFL.replace(/,/, ".").trim()) : 0,
+                    MEA = _.has(params, "MEAN") === true && _.has(params, "MEAZ") === true ? Number(params.MEAN.replace(/,/, ".").trim()) / Number(params.MEAZ.replace(/,/, ".").trim()) : 1,
+                    ZWGFZ = (WOFL + EGFL + OGFL) > 0 && FLAE > 0 ? ((WOFL + EGFL + OGFL) / FLAE / 0.78 / MEA).toFixed(2) : "";
 
-                    ZWGFZ = WGFZ;
-                    params = _.extend(params, _.object(["WGFZ"], [WGFZ]));
+                // Nur wenn ZWGFZ > 0 wird der WGFZ für die BRW-Umrechnung verwendet und gelangt auch ins PDF.
+                if (ZWGFZ !== "") {
+                    params = _.extend(params, _.object(["WGFZ"], [ZWGFZ]));
                     if (MEA !== 1) {
                         // MEA = 1 ist uninteressant für JasperReport
                         params = _.extend(params, _.object(["MEA"], [MEA]));
@@ -82,28 +84,30 @@ define([
             }
             else {
                 ZWGFZ = params.WGFZ.replace(/,/, ".").trim();
+                params = _.extend(params, _.object(["WGFZ"], [ZWGFZ]));
+                this.set("params", params);
             }
             this.set("brwList", brwList);
             _.each(brwList, function (brw) {
                 switch (brw.art) {
                     case "Akt.BRW": {
-                        this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE);
+                        this.requestBRW(brw, STRL, BAUW, ZWGFZ, ZFLAE, brw.nutzung);
                         break;
                     }
                     case "Norm.BRW": {
-                        this.requestBRW(brw, "F", "eh", 1, 1000); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
+                        this.requestBRW(brw, "F", "eh", 1, 1000, brw.nutzung); // immer Frontlage, Einfamilienhaus, 1.0 und 1000m²
                         break;
                     }
                 }
             }, this);
         },
         /*
-        * stellt Requests zur Abfrage der einzelnen BRW zusammen. Die Abfrage erfolgt immer in EUR, Rückgabe ist entsprechend auch in EUR.
+        * Stellt Requests zur Umrechnung der einzelnen BRW zusammen.
+        * Die Abfrage erfolgt immer in EUR, Rückgabe ist entsprechend auch in EUR.
         */
-        requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE) {
+        requestBRW: function (brw, STRL, BAUW, ZWGFZ, ZFLAE, ZNUTA) {
             var stichtag = brw.stichtag.split("."),
-                dataInputs = "<wps:DataInputs>",
-                znuta = brw.brwValues.ergnuta && brw.brwValues.ergnuta !== "" ? brw.brwValues.ergnuta : brw.brwValues.nuta;
+                dataInputs = "<wps:DataInputs>";
 
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ExtID", brw.id, "string")); // Externer Identifikator des WPS-Prozesses, wird mit ausgegeben.
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("BRW", brw.brwValues.brw, "float"));
@@ -121,7 +125,7 @@ define([
             }
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZENTW", brw.brwValues.entw, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBEIT", brw.brwValues.beit, "string"));
-            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", znuta, "string"));
+            dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZNUTA", ZNUTA, "string"));
             dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZBAUW", BAUW, "string"));
             if (ZWGFZ !== "") {
                 dataInputs = this.concatStrings (dataInputs, this.returnBRWInputSnippet("ZWGFZ", ZWGFZ, "float"));

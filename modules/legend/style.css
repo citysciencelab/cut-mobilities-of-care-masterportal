@@ -7,7 +7,7 @@
     position: absolute;
     top: 20px;
     left: 20px;
-    min-width: 40%;
+    max-width: 40%;
     margin: 60px 10px 30px 10px;
     display: none;
     background-color: rgb(255, 255, 255);
@@ -30,7 +30,8 @@
 
 .legend-win-header > .title {
     white-space: nowrap;
-    min-width: 250px;
+    min-width: 150px;
+    max-width: 40%;
     cursor: move;
     font-size: 14px;
     padding-top: 8px;
@@ -120,4 +121,10 @@
 
 .panel-legend > p {
     margin: 0;
+}
+
+.styleWMS {
+    height: 15px;
+    width: 15px;
+    margin-right: 5px;
 }

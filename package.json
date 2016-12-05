@@ -2,7 +2,7 @@
 	"name": "LGV-Master",
 	"version": "1.1.5",
 	"description": "LGV Master",
-    "license": "MIT",
+  "license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://bitbucket.org/lgv-g12/lgv-config.git"

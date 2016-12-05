@@ -2,13 +2,11 @@ define([
     "backbone",
     "config",
     "backbone.radio",
-    "modules/core/util",
     "eventbus"
 ], function () {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
-        Util = require("modules/core/util"),
         EventBus = require("eventbus"),
 
         ZoomToFeature = Backbone.Model.extend({
@@ -91,7 +89,7 @@ define([
         // feuert den AJAX request ab
         sendRequest: function (url, data) {
             $.ajax({
-                    url: Util.getProxyURL(url),
+                    url: Radio.request("Util", "getProxyURL", url),
                     data: encodeURI(data),
                     context: this,
                     async: false,
@@ -99,7 +97,7 @@ define([
                     success: this.getFeatures,
                     timeout: 6000,
                     error: function () {
-                        alert("URL: " + Util.getProxyURL(url) + " nicht erreichbar.");
+                        alert("URL: " + Radio.request("Util", "getProxyURL", url) + " nicht erreichbar.");
                     }
                 });
         },

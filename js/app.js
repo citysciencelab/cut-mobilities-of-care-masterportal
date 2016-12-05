@@ -12,7 +12,8 @@ define("app",
     "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
 
-    // Core laden
+    // Core lade
+    new Util();
     new RawLayerList();
     new Preparser();
     new ParametricURL();
@@ -57,7 +58,7 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
-        if (Util.isAny()) {
+        if (Radio.request("Util", "isAny")) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
                 new MobileLayerInformationView();
             });
@@ -170,6 +171,12 @@ define("app",
                     });
                     break;
                 }
+                case "extendedFilter": {
+                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                        new ExtendedFilterView();
+                    });
+                    break;
+                }
                 case "treeFilter": {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
@@ -202,7 +209,7 @@ define("app",
                 }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
-                        if (Util.isAny()) {
+                        if (Radio.request("Util", "isAny")) {
                             new MobileLegendView();
                         }
                         else {
@@ -225,19 +232,23 @@ define("app",
             _.each(controls, function (control, index) {
                 switch (control.id) {
                     case "toggleMenu": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                            new ToggleMenuControlView({el: el});
-                        });
+                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                                new ToggleMenuControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "zoom": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
-                        });
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "orientation": {
@@ -249,23 +260,29 @@ define("app",
                         break;
                     }
                     case "mousePosition": {
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView();
+                            });
+                        }
                         break;
                     }
                     case "fullScreen": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "attributions": {
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView();
+                            });
+                        }
                         break;
                     }
                 }
@@ -295,6 +312,6 @@ define("app",
                 new TitleView(title);
             });
         }
+        Radio.trigger("Util", "hideLoader");
     });
-    Util.hideLoader();
 });

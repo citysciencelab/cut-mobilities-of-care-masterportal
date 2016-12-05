@@ -1,5 +1,6 @@
 define(function () {
     var config = {
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         //title: "Hundert-Jahre-Stadtgrün",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
@@ -8,11 +9,11 @@ define(function () {
         view: {
             background: "white",
             resolution: 2.6458319045841048,
-            center: [567360, 5939010],
-            /* extent: [454591, 5809000, 700000, 6075769],
-            epsg: "EPSG:25832"
-            */
         },
+        namedProjections: [
+            // ETRS89 UTM
+            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
+        ],
        // customModules: ["../portale/master/verkehrsfunctions"],
         footer: {
             visibility: true,
@@ -41,7 +42,7 @@ define(function () {
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         // menubar: true,
         scaleLine: true,
@@ -49,7 +50,7 @@ define(function () {
         isMenubarVisible: true,
         startUpModul: "",
 
-        
+
         print: {
             printID: "99999",
             title: "100 Jahre Stadtgrün",

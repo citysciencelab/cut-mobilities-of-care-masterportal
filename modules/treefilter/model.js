@@ -25,7 +25,9 @@ define([
         },
         url: Util.getPath(Config.treeConf),
         initialize: function () {
-            EventBus.on("winParams", this.setStatus, this); // Fenstermanagement
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
+            });
             // EventBus.once("layerlist:sendLayerByID", this.setListenerForVisibility, this);
             // EventBus.trigger("layerlist:getLayerByID", "182");
             var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
@@ -62,7 +64,7 @@ define([
             });
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "treeFilter") {
+            if (args[2].getId() === "treeFilter" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 $("#window").css("max-width", "420px");

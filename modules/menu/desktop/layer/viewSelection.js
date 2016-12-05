@@ -33,10 +33,10 @@ define([
                 "change:isVisibleInMap": this.rerender,
                 "change:isSettingVisible": this.renderSetting,
                 "change:transparency": this.rerender,
-                "change:isOutOfScale": this.toggleColor
+                "change:isOutOfRange": this.toggleColor
             });
             this.render();
-            this.toggleColor(this.model, this.model.getIsOutOfScale());
+            this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
 
         render: function () {
@@ -125,7 +125,7 @@ define([
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
-                if (value === false) {
+                if (value === true) {
                     this.$el.addClass("disabled");
                     this.$el.find("*").css("pointer-events","none");
                     this.$el.find("*").css("cursor","not-allowed");

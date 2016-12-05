@@ -36,6 +36,7 @@ define([
         setProdukt: function (val) {
             this.set("produkt", $("#produktdropdown")[0].value);
             EventBus.trigger("seite1_produkt:newProdukt", $("#produktdropdown")[0].value);
+            this.set("header", $("#produktdropdown")[0].value);
         },
         setNutzung: function (val) {
             this.set("nutzung", val);
@@ -74,6 +75,7 @@ define([
                 $("#produktdropdown").empty();
                 this.set("produkt", "");
                 EventBus.trigger("seite1_produkt:newProdukt", "");
+                this.set("header", "");
             }
         }
     });

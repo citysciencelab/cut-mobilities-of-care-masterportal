@@ -1,12 +1,13 @@
 {
   "Portalconfig":
     {
-      "PortalTitle": "GeoViewer",
+      "PortalTitle": "MasterTree",
+      "PortalLogo": "../img/hh-logo.png",
       "searchBar": {
         "minChars": 3,
         "gazetteer": {
            "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "serviceId": "6",
            "searchStreets": true,
            "searchHouseNumbers": true,
            "searchDistricts": true,
@@ -201,6 +202,13 @@
                     {
                       "id": "685",
                       "visibility": false
+                    },
+                    {
+                      "id": "4926",
+                      "visibility": true,
+                      "styleable": true,
+                      "geomType": "Polygon",
+                      "attributesToStyle": ["ErreichbareArbeitsplaetzein30Min"]
                     }
                   ]
                 }
