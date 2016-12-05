@@ -71,8 +71,12 @@ define(function (require) {
                 visibleLayer.url = visibleLayer.url.concat(featurecount);
             }
             if (visibleLayer.ol_layer.id === "2407" || visibleLayer.ol_layer.id === "4423") {
+
                 window.open(visibleLayer.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+                this.getGFIFeatureContent();
                 this.buildTemplate(this.getGFIPosition());
+                this.unset("gfiWMSContent");
+                this.pContent = [];
             }
             else {
                 var gfiFeatures = {"html": visibleLayer.url};
@@ -88,7 +92,9 @@ define(function (require) {
                         }
                     },
                     complete: function () {
+                        this.getGFIFeatureContent();
                         this.buildTemplate(this.getGFIPosition());
+                        this.unset("gfiWMSContent");
                         this.pContent = [];
                     }
                 });
