@@ -218,6 +218,9 @@ define("app",
                             new LegendView();
                         }
                     });
+                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+                        new AddGeoJSON();
+                    });
                     break;
                 }
                 default: {

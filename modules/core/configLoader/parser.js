@@ -48,7 +48,10 @@ define([
             channel.on({
                 "setCategory": this.setCategory,
                 "addItem": this.addItem,
-                "addItems": this.addItems
+                "addItems": this.addItems,
+                "addFolder": this.addFolder,
+                "addLayer": this.addLayer,
+                "addGeoJSONLayer": this.addGeoJSONLayer
             }, this);
 
             this.listenTo(this, {
@@ -187,6 +190,80 @@ define([
             _.each(objs, function (obj) {
                 this.addItem(_.extend(obj, attr));
             }, this);
+        },
+
+        addFolder: function (name, id, parentId, level) {console.log(id);
+            var folder = {
+                type: "folder",
+                name: name,
+                glyphicon: "glyphicon-plus-sign",
+                id: id,
+                parentId: parentId,
+                isExpanded: false,
+                level: level
+            };
+
+            this.addItem(folder);
+            // $("ul#Themen ul#ExternalLayer").addClass("LayerListMaxHeight");
+            // $('.LayerListMaxHeight').css("max-height","calc(100vH - 212px)");
+        },
+
+        addLayer: function (name, id, parentId, level, layers, url, version) {
+            console.log(name);
+            var layer = {
+                type: "layer",
+                name: name,
+                id: id,
+                parentId: parentId,
+                level: level,
+                url: url,
+                typ: "WMS",
+                layers: layers,
+                format: "image/png",
+                version: version,
+                singleTile: false,
+                transparent: true,
+                tilesize: "512",
+                gutter: "0",
+                featureCount: 3,
+                minScale: "0",
+                maxScale: "350000",
+                gfiAttributes: "showAll",
+                layerAttribution: "nicht vorhanden",
+                legendURL: "",
+                isbaselayer: false,
+                cache: false,
+                datasets: []
+            };
+
+            this.addItem(layer);
+        },
+
+        addGeoJSONLayer: function (name, id, parentId, level, features) {
+            var layer = {
+                type: "layer",
+                name: name,
+                id: id,
+                parentId: parentId,
+                level: level,
+                typ: "GeoJSON",
+                features: features,
+                singleTile: false,
+                transparent: true,
+                tilesize: "512",
+                gutter: "0",
+                featureCount: 3,
+                minScale: "0",
+                maxScale: "350000",
+                gfiAttributes: "showAll",
+                layerAttribution: "nicht vorhanden",
+                legendURL: "",
+                isbaselayer: false,
+                cache: false,
+                datasets: []
+            };
+
+            this.addItem(layer);
         },
 
         /**

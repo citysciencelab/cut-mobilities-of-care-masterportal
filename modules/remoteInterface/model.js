@@ -16,6 +16,7 @@ define(function (require) {
             channel.on({
                 "addFeature": this.addFeature,
                 "addFeatures": this.addFeatures,
+                "addFeaturesFromGBM": this.addFeaturesFromGBM,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "moveMarkerToHit": this.moveMarkerToHit,
                 "zoomToFeatures": this.zoomToFeatures,
@@ -32,8 +33,12 @@ define(function (require) {
 
             Radio.trigger("Map", "addFeatureToLayer", feature, "gewerbeflaechen");
         },
+        addFeaturesFromGBM: function (hits, layerName) {
+            Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, layerName);
+        },
         addFeatures: function (hits) {
             var result = [];
+
             _.each(hits, function (hit) {
                 result.push(this.getFeatureFromHit(hit));
             }, this);
