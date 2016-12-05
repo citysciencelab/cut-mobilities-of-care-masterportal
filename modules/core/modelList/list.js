@@ -89,11 +89,11 @@ define([
                     else if (attrs.typ === "WFS") {
                         return new WFSLayer(attrs, options);
                     }
+                    else if (attrs.typ === "GeoJSON") {
+                        return new GeoJSONLayer(attrs, options);
+                    }
                     else if (attrs.typ === "GROUP") {
                         return new GROUPLayer(attrs, options);
-                    }
-                    else if (attrs.typ === "GeoJSON") {console.log(4);
-                        return new GeoJSONLayer(attrs, options);
                     }
                 }
                 else if (attrs.type === "folder") {
@@ -329,6 +329,7 @@ define([
                 // wie sie hinzugefügt werden
                 var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
                     treeType = Radio.request("Parser", "getTreeType");
+
                 if (treeType === "light") {
                     var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
