@@ -60,14 +60,11 @@ define([
                         this.setWMSVersion(capability.version);
                         this.setWMSUrl(Util.getProxyURL(url));
                         if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
-                            // this.addFolder("Externe Fachdaten", "ExternalLayer", "Themen", 0);
                             Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "Themen", 0);
                             Radio.trigger("ModelList", "renderTree");
                             $("#Overlayer").parent().after($("#ExternalLayer").parent());
                         }
                         Radio.trigger("Parser", "addFolder", capability.Service.Title, uniqId, "ExternalLayer", 0);
-                        // this.addFolder(capability.Service.Title, uniqId, "ExternalLayer", 0);
-
                         _.each(capability.Capability.Layer.Layer, function (layer) {
                             this.parseLayer(layer, uniqId, 1);
                         }, this);
@@ -90,61 +87,12 @@ define([
                 _.each(object.Layer, function (layer) {
                     this.parseLayer(layer, object.Title, level + 1);
                 }, this);
-                // this.addFolder(object.Title, object.Title, parentId, level);
                 Radio.trigger("Parser", "addFolder", object.Title, object.Title, parentId, level);
             }
             else {
-                // console.log(this.getWMSUrl());
                 Radio.trigger("Parser", "addLayer", object.Title, object.Title, parentId, level, object.Name, this.getWMSUrl(), this.getWMSVersion());
-                // this.addLayer(object.Title, object.Title, parentId, level, object.Name);
             }
         },
-
-        // addFolder: function (name, id, parentId, level) {
-        //     var folder = {
-        //         type: "folder",
-        //         name: name,
-        //         glyphicon: "glyphicon-plus-sign",
-        //         id: id,
-        //         parentId: parentId,
-        //         isExpanded: false,
-        //         level: level
-        //     };
-        //
-        //     Radio.trigger("Parser", "addItem", folder);
-        //     $("ul#Themen ul#ExternalLayer").addClass("LayerListMaxHeight");
-        //     $('.LayerListMaxHeight').css("max-height","calc(100vH - 212px)");
-        // },
-
-        // addLayer: function (name, id, parentId, level, layers) {
-        //     var layer = {
-        //         type: "layer",
-        //         name: name,
-        //         id: id,
-        //         parentId: parentId,
-        //         level: level,
-        //         url: this.getWMSUrl(),
-        //         typ: "WMS",
-        //         layers: layers,
-        //         format: "image/png",
-        //         version: this.getWMSVersion(),
-        //         singleTile: false,
-        //         transparent: true,
-        //         tilesize: "512",
-        //         gutter: "0",
-        //         featureCount: 3,
-        //         minScale: "0",
-        //         maxScale: "350000",
-        //         gfiAttributes: "showAll",
-        //         layerAttribution: "nicht vorhanden",
-        //         legendURL: "",
-        //         isbaselayer: false,
-        //         cache: false,
-        //         datasets: []
-        //     };
-        //
-        //     Radio.trigger("Parser", "addItem", layer);
-        // },
 
         setWMSVersion: function (value) {
             this.set("version", value);
