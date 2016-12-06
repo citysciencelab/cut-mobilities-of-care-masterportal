@@ -35,7 +35,7 @@
        "tree": {
            "minChars": 3
        },
-       "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan",
+       "placeholder": "Adresssuche",
        "geoLocateHit": true
    },
       "menu": {
@@ -274,7 +274,7 @@
                 },
                 {
                   "id": "1562",
-                  "visibility": true,
+                  "visibility": false,
                   "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
                   "metaName": "Bebauungspläne im Verfahren (§ 2 BauGB)"
                 },

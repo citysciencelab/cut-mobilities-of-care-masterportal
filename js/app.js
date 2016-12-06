@@ -12,7 +12,7 @@ define("app",
     "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
 
-    // Core lade
+    // Core laden
     new Util();
     new RawLayerList();
     new Preparser();
@@ -25,6 +25,10 @@ define("app",
         new MenuLoader();
     });
     new RestReaderList();
+
+    require(["modules/remoteinterface/model"], function (Remoteinterface) {
+        new Remoteinterface();
+    });
 
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
@@ -215,6 +219,9 @@ define("app",
                         else {
                             new LegendView();
                         }
+                    });
+                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+                        new AddGeoJSON();
                     });
                     break;
                 }
