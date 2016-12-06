@@ -239,20 +239,14 @@ define([
             this.addItem(layer);
         },
 
-        addGeoJSONLayer: function (name, id, parentId, level, features) {
+        addGeoJSONLayer: function (name, id, features) {
             var layer = {
                 type: "layer",
                 name: name,
                 id: id,
-                parentId: parentId,
-                level: level,
                 typ: "GeoJSON",
                 features: features,
-                singleTile: false,
                 transparent: true,
-                tilesize: "512",
-                gutter: "0",
-                featureCount: 3,
                 minScale: "0",
                 maxScale: "350000",
                 gfiAttributes: "showAll",

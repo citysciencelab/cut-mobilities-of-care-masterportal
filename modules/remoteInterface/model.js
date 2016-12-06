@@ -14,35 +14,32 @@ define(function (require) {
             }, this);
 
             channel.on({
-                "addFeature": this.addFeature,
-                "addFeatures": this.addFeatures,
+                "showAllFeatures": this.showAllFeatures,
+                "showFeaturesById": this.showFeaturesById,
                 "addFeaturesFromGBM": this.addFeaturesFromGBM,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "moveMarkerToHit": this.moveMarkerToHit,
                 "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView,
-                "zoomToFeature": this.zoomToFeature
+                "zoomToFeature": this.zoomToFeature,
+                "setModelAttributesById": this.setModelAttributesById
             }, this);
 
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
             parent.Backbone.MasterRadio = Radio;
             parent.postMessage("ready", "*");
         },
-        addFeature: function (hit) {
-            var feature = this.getFeatureFromHit(hit);
-
-            Radio.trigger("Map", "addFeatureToLayer", feature, "gewerbeflaechen");
+        addFeaturesFromGBM: function (hits, id, layerName) {
+            Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
         },
-        addFeaturesFromGBM: function (hits, layerName) {
-            Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, layerName);
+        showAllFeatures: function (id) {
+            Radio.trigger("ModelList", "showAllFeatures", id);
         },
-        addFeatures: function (hits) {
-            var result = [];
-
-            _.each(hits, function (hit) {
-                result.push(this.getFeatureFromHit(hit));
-            }, this);
-            Radio.trigger("Map", "addFeaturesToLayer", result, "gewerbeflaechen");
+        showFeaturesById: function (layerId, featureIds) {
+            Radio.trigger("ModelList", "showFeaturesById", layerId, featureIds);
+        },
+        setModelAttributesById: function (id, attributes) {
+            Radio.trigger("ModelList", "setModelAttributesById", id, attributes);
         },
         removeAllFeaturesFromLayer: function () {
             Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
