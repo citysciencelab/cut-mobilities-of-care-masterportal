@@ -192,7 +192,7 @@ define([
             }, this);
         },
 
-        addFolder: function (name, id, parentId, level) {console.log(id);
+        addFolder: function (name, id, parentId, level) {
             var folder = {
                 type: "folder",
                 name: name,
@@ -204,8 +204,6 @@ define([
             };
 
             this.addItem(folder);
-            // $("ul#Themen ul#ExternalLayer").addClass("LayerListMaxHeight");
-            // $('.LayerListMaxHeight').css("max-height","calc(100vH - 212px)");
         },
 
         addLayer: function (name, id, parentId, level, layers, url, version) {
