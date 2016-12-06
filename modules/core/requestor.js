@@ -3,7 +3,6 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        Util = require("modules/core/util"),
         Config = require("config"),
         Requestor;
 
@@ -18,6 +17,7 @@ define(function (require) {
 
             this.groupContentByTyp(params[0]);
             this.setGFIPosition(params[1]);
+            this.pContent = [];
 
             if (this.has("gfiWMSContent")) {
                 _.each(this.getGFIWMSContent(), function (visibleLayer) {
@@ -34,8 +34,7 @@ define(function (require) {
                 this.buildTemplate(this.getGFIPosition());
             }
 
-            this.pContent = [];
-            Util.hideLoader();
+            Radio.trigger("Util", "hideLoader");
         },
 
         groupContentByTyp: function (content) {
@@ -77,7 +76,7 @@ define(function (require) {
                 var gfiFeatures = {"html": visibleLayer.url};
 
                 $.ajax({
-                    url: Util.getProxyURL(visibleLayer.url),
+                    url: Radio.request("Util", "getProxyURL", visibleLayer.url),
                     async: false,
                     type: "GET",
                     context: this,
@@ -137,7 +136,7 @@ define(function (require) {
                 pgfi = [];
 
             if (params.url.search(location.host) === -1) {
-                url = Util.getProxyURL(params.url);
+                url = Radio.request("Util", "getProxyURL", params.url);
             }
             else {
                 url = params.url;
@@ -301,7 +300,7 @@ define(function (require) {
                         gfi[key] = value;
                     }, this);
                     // im IE müssen die Attribute für WMS umgedreht werden
-                 if (Util.isInternetExplorer() !== false && typ === "WMS") {
+                 if (Radio.request("Util", "isInternetExplorer") !== false && typ === "WMS") {
                         var keys = [],
                             values = [];
 

@@ -24,7 +24,7 @@ define([
             });
 
             this.listenTo(this.model, {
-                "change:legendParams": this.render
+                "change:legendParams": this.paramsChanged
             });
 
             this.listenTo(EventBus, {
@@ -38,7 +38,12 @@ define([
             this.render();
         },
 
+        paramsChanged: function () {
+            Radio.trigger("Layer", "updateLayerInfo", "Erreichbare Arbeitsplaetze in 30min");
+            this.render();
+        },
         render: function () {
+
             var isViewMobile = Radio.request("Util", "isViewMobile"),
                 attr = this.model.toJSON();
 

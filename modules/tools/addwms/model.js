@@ -9,9 +9,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "openlayers",
-    "modules/core/util"
-], function (Backbone, Radio, ol, Util) {
+    "openlayers"
+], function (Backbone, Radio, ol) {
 
     var AddWMSModel = Backbone.Model.extend({
         initialize: function () {
@@ -45,20 +44,20 @@ define([
                 this.displayError("Bitte die URL eines WMS in das Textfeld eingeben!");
                 return;
             }
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             $.ajax({
                 timeout: 4000,
                 context: this,
-                url: Util.getProxyURL(url) + "?request=GetCapabilities&service=WMS",
+                url: Radio.request("Util", "getProxyURL", url) + "?request=GetCapabilities&service=WMS",
                 success: function (data) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     try {
                         var parser = new ol.format.WMSCapabilities(),
                             uniqId = _.uniqueId("external_"),
                             capability = parser.read(data);
 
                         this.setWMSVersion(capability.version);
-                        this.setWMSUrl(Util.getProxyURL(url));
+                        this.setWMSUrl(Radio.request("Util", "getProxyURL", url));
                         if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
                             Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "Themen", 0);
                             Radio.trigger("ModelList", "renderTree");
@@ -75,7 +74,7 @@ define([
                     }
                 },
                 error: function () {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     this.displayError();
                 }
             });

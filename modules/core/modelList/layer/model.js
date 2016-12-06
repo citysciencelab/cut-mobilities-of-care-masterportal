@@ -2,7 +2,6 @@ define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
-        StyleList = require("modules/layer/wfsStyle/list"),
         Layer;
 
     Layer = Item.extend({
@@ -16,9 +15,11 @@ define(function (require) {
             // Transparenz in %
             transparency: 0,
             // der Index der die Reihenfolge der selektierten Models beim Zeichnen in "Auswahl der Themen" bestimmt
-            selectionIDX: 0
+            selectionIDX: 0,
+            layerInfoClicked: false
         },
         initialize: function () {
+            new StyleList();
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,
@@ -34,6 +35,16 @@ define(function (require) {
                     this.getResolutions();
                 }
             });
+            this.listenTo(Radio.channel("Layer"), {
+                  "updateLayerInfo": function (name) {
+                      if (this.get("name") === name && this.getLayerInfoChecked() === true) {
+                          this.showLayerInformation();
+                      }
+                  },
+                "setLayerInfoChecked": function (layerInfoChecked) {
+                    this.setLayerInfoChecked(layerInfoChecked);
+                }
+              });
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
@@ -51,9 +62,11 @@ define(function (require) {
                     this.checkForScale(options);
                 }
             });
+
             // Default min/max Resolutions für WFS setzen
             if (this.get("typ") === "WFS") {
                 var resolutions = Radio.request("MapView", "getScales");
+
                 if (!_.isUndefined(resolutions) && resolutions.length > 0) {
                     if (_.isUndefined(this.attributes.minScale)) {
                         this.attributes.minScale = resolutions[resolutions.length - 1];
@@ -84,6 +97,13 @@ define(function (require) {
             this.createLegendURL();
         },
 
+        getLayerInfoChecked: function () {
+            return this.get("layerInfoChecked");
+        },
+
+        setLayerInfoChecked: function (value) {
+            this.set("layerInfoChecked", value);
+        },
         /**
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
         **/
@@ -342,31 +362,18 @@ define(function (require) {
         },
         showLayerInformation: function () {
             var legendURL = [],
-                names = [],
-                styleList = StyleList.returnAllModelsById(this.attributes.id);
+                legendParams = Radio.request("Legend", "getLegendParams"),
+                name = this.get("name");
 
-            if (styleList.length > 0) {
-                _.each(styleList, function (style) {
-                    legendURL.push(style.get("imagepath") + style.get("imagename"));
-                    if (style.has("legendValue")) {
-                        names.push(style.get("legendValue"));
-                    }
-                    else {
-                        names.push(style.get("styleFieldValue"));
-                    }
+                legendURL.push(_.findWhere(legendParams, {layername: name}));
+
+                Radio.trigger("LayerInformation", "add", {
+                    "id": this.getId(),
+                    "legendURL": legendURL,
+                    "metaID": this.get("datasets")[0].md_id,
+                    "layername": this.get("name")
                 });
-            }
-            else {
-                legendURL.push(this.get("legendURL"));
-                names.push(this.get("datasets")[0].md_name);
-            }
-            Radio.trigger("LayerInformation", "add", {
-                "id": this.getId(),
-                "legendURL": legendURL,
-                "metaID": this.get("datasets")[0].md_id,
-                "name": names,
-                "layername":this.get("name")
-            });
+                this.setLayerInfoChecked(true);
         },
         setSelectionIDX: function (idx) {
             this.set("selectionIDX", idx);

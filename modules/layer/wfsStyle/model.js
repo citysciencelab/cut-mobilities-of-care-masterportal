@@ -1,14 +1,13 @@
 define([
     "backbone",
+    "backbone.radio",
     "openlayers",
     "eventbus",
-    "config",
-    "modules/core/util"
-], function (Backbone, ol, EventBus, Config, Util) {
+    "config"
+], function (Backbone, Radio, ol, EventBus, Config) {
 
     var WFSStyle = Backbone.Model.extend({
         defaults: {
-            imagepath: Util.getPath(Config.wfsImgPath),
             subclass: "Icon",
             // für Icon
             imagename: "blank.png",
@@ -117,6 +116,7 @@ define([
         getSimpleStyle: function () {
             var imagestyle, symbolText, strokestyle, fill;
 
+            this.set("imagepath", Radio.request("Util", "getPath", Config.wfsImgPath))
             if (this.get("subclass") === "Icon") {
                 var src = this.get("imagepath") + this.get("imagename"),
                     width = this.get("imagewidth"),

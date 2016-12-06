@@ -1,14 +1,12 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/modelList/list",
-    "modules/core/util"
+    "modules/core/modelList/list"
 ], function () {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ModelList = require("modules/core/modelList/list"),
-        Util = require("modules/core/util"),
         Parser;
 
     Parser = Backbone.Model.extend({
@@ -118,7 +116,7 @@ define([
                     var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
 
                     if (toolitem.id === "measure" || toolitem.id === "draw") {
-                        if (!Util.isApple() && !Util.isAndroid()) {
+                        if (!Radio.request("Util", "isApple") && !Radio.request("Util", "isAndroid")) {
                              this.addItem(toolitem);
                          }
                     }
