@@ -208,7 +208,7 @@ define("app",
                     break;
                 }
                 case "legend": {
-                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                    require(["modules/legend/view", "modules/legend/viewMobile"], function (LegendView, MobileLegendView) {
                         if (Radio.request("Util", "isAny")) {
                             new MobileLegendView();
                         }

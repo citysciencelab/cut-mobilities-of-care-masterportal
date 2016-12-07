@@ -1,11 +1,7 @@
-define([
-    "backbone",
-    "eventbus",
-    "text!modules/menu/mobile/tool/template.html"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
-        EventBus = require("eventbus"),
+        Radio = require("backbone.radio"),
         ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),
         ItemView;
 
@@ -29,7 +25,7 @@ define([
         },
         checkItem: function () {
             if (this.model.getName() === "legend") {
-                EventBus.trigger("toggleLegendWin");
+                Radio.trigger("Legend", "toggleLegendWin");
             }
             else {
                 this.model.setIsActive(true);

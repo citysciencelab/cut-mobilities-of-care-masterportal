@@ -10,7 +10,7 @@ define([
 
     var LegendView = Backbone.View.extend({
         model: new Legend(),
-        // className: "legend-win",
+        className: "legend-win",
         template: _.template(LegendTemplate),
         templateMobile: _.template(LegendTemplateMobile),
         events: {
@@ -27,7 +27,7 @@ define([
                 "change:legendParams": this.paramsChanged
             });
 
-            this.listenTo(EventBus, {
+            this.listenTo(Radio.channel("Legend"), {
                 "toggleLegendWin": this.toggle
             });
 
@@ -43,44 +43,22 @@ define([
             this.render();
         },
         render: function () {
+            var attr = this.model.toJSON();
 
-            var isViewMobile = Radio.request("Util", "isViewMobile"),
-                attr = this.model.toJSON();
-
-            if (isViewMobile === true) {
-                this.$el.attr("id", "base-modal-legend");
-                this.$el.attr("class", "modal bs-example-modal-sm legend fade in");
-                this.$el.html(this.templateMobile(attr));
-                this.$el.modal({
-                    backdrop: "static",
-                    show: false
-                });
-            }
-            else {
-                this.$el.attr("id", "");
-                this.$el.attr("class", "legend-win");
-                this.$el.html(this.template(attr));
-                $("body").append(this.$el.html(this.template(attr)));
-                $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
-                this.$el.draggable({
-                    containment: "#map",
-                    handle: ".legend-win-header"
-                });
-            }
+            this.$el.html(this.template(attr));
+            $("body").append(this.$el.html(this.template(attr)));
+            $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".legend-win-header"
+            });
         },
 
         toggle: function () {
-            var isViewMobile = Radio.request("Util", "isViewMobile"),
-                legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
+            var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
 
             this.render();
-            if (isViewMobile === true) {
-
-                this.$el.modal("toggle");
-            }
-            else {
-                this.$el.toggle();
-            }
+            this.$el.toggle();
 
             if (this.$el.css("display") === "block") {
                 legendModel.setIsActive(true);
