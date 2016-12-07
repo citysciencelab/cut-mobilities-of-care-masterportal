@@ -57,7 +57,7 @@ define([
                     });
                 },
                 success: function () {
-                    URadio.trigger("Util", "hideLoader");
+                    Radio.trigger("Util", "hideLoader");
                 }
             });
         },
