@@ -126,7 +126,7 @@ define([
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
                 "legendURL": legendURL,
-                "metaID": this.get("layerdefinitions")[0].datasets[0].md_id,
+                "metaID": this.get("layerdefinitions")[0].datasets[0] ? this.get("layerdefinitions")[0].datasets[0].md_id : null,
                 "name": names,
                 "layername": this.get("name")
             });

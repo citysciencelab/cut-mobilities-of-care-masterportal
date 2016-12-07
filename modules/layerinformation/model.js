@@ -36,7 +36,7 @@ define([
         setAttributes: function (attrs) {
             this.set(attrs);
             this.setMetadataURL();
-            if (!_.isUndefined(this.get("metaID"))) {
+            if (!_.isNull(this.get("metaID"))) {
                 this.fetchData({id: this.get("metaID")});
             }
             else {
