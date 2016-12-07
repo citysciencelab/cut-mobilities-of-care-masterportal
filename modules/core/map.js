@@ -183,14 +183,6 @@ define(function (require) {
             }
         },
 
-        registerPostCompose: function (callback, context) {
-            this.get("map").on("postcompose", callback, context);
-        },
-
-        unregisterPostCompose: function (callback, context) {
-            this.get("map").un("postcompose", callback, context);
-        },
-
         /**
          * Registriert Listener für bestimmte Events auf der Karte
          * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html

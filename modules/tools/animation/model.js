@@ -439,7 +439,7 @@ define(function (require) {
 
             this.set("animationLayer", animationLayer);
             this.get("animationLayer").getSource().clear();
-            Radio.trigger("Map", "registerPostCompose", this.moveFeature, this);
+            Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature, this);
             if (this.get("animating")) {
                 this.stopAnimation([]);
             }
@@ -466,7 +466,7 @@ define(function (require) {
             }
         },
         stopAnimation: function (features) {
-            Radio.trigger("Map", "unregisterPostCompose", this.moveFeature, this);
+            Radio.trigger("Map", "unregisterPostCompose", "postcompose", this.moveFeature, this);
             this.set("animating", false);
             // Wenn Animation fertig alle Features als Vectoren auf neue Layer malen.
             // features ist undefined, wenn die Funktion üder den Resetknopf aufgerufen wird
