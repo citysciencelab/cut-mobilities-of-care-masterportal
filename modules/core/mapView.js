@@ -290,7 +290,7 @@ define([
                 proj = Radio.request("CRS", "getProjection", epsgCode);
 
             if (!proj) {
-                alert("Unknown CRS " + epsgCode + ". Can't set projection.");
+                Radio.trigger("Alert", "alert", "Unknown CRS " + epsgCode + ". Can't set projection.");
                 return;
             }
 

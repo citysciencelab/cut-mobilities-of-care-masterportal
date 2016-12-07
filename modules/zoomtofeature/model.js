@@ -97,7 +97,9 @@ define([
                     success: this.getFeatures,
                     timeout: 6000,
                     error: function () {
-                        alert("URL: " + Radio.request("Util", "getProxyURL", url) + " nicht erreichbar.");
+                        var msg = "URL: " + Radio.request("Util", "getProxyURL", url) + " nicht erreichbar.";
+
+                        Radio.trigger("Alert", "alert", msg);
                     }
                 });
         },
