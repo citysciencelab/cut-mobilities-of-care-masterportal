@@ -92,7 +92,7 @@ define([
                     text: text
                 };
 
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             $.ajax({
                 url: this.get("url"),
                 data: dataToSend,
@@ -102,7 +102,7 @@ define([
                 dataType: "json",
                 context: this,
                 complete: function (jqXHR) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
                     }

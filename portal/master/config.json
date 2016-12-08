@@ -136,10 +136,6 @@
             }
           ],
           "to": [
-            {
-              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-              "name": "LGVGeoportalHilfe"
-             }
            ],
           "ccToUser": true,
           "cc": [],
