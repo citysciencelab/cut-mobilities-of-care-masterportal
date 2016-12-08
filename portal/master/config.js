@@ -156,7 +156,7 @@ define(function () {
         * @example customModules: ["../url", "../url"]
         * @default []
         */
-        customModules: ["../portale/master/verkehrsfunctions"],
+        customModules: ["../portal/master/verkehrsfunctions"],
         /**
         * @memberof config
         * @type {Object}
