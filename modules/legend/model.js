@@ -76,14 +76,12 @@ define([
         setLayerList: function () {
             var filteredLayerList,
                 groupedLayers,
-                modelList = Radio.request("ModelList", "getCollection"),
-                layerlist;
+                modelList = Radio.request("ModelList", "getCollection");
 
 //            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
-            layerlist = modelList.where({type: "layer"});
             this.unsetLegendParams();
-            // Die Layer die nicht in der Legende dargestellt werden sollen
-            filteredLayerList = _.filter(layerlist, function (layer) {
+            // Die Layer die in der Legende dargestellt werden sollen
+            filteredLayerList = _.filter(modelList.models, function (layer) {
                 return layer.get("legendURL") !== "ignore";
             });
 

@@ -61,6 +61,7 @@ define([
                         }
                         // Trigger für mobiles Wandern im Baum
                         this.trigger("traverseTree", model);
+                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     },
                     "change:isSelected": function (model) {
                         if (model.getType() === "layer") {
