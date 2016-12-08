@@ -30,8 +30,13 @@ define([
         },
 
         initialize: function () {
+            var channel = Radio.channel("Tool");
+
             this.listenTo(this, {
-                "change:isActive": this.activateTool
+                "change:isActive": function () {
+                    this.activateTool();
+                    channel.trigger("activatedTool", this.getId());
+                }
             });
         },
 

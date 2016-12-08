@@ -5,7 +5,7 @@ define([
 ], function (Backbone, CoordPopup, CoordPopupTemplate) {
 
     var CoordPopupView = Backbone.View.extend({
-        model: CoordPopup,
+        model: new CoordPopup(),
         id: "coord-popup",
         template: _.template(CoordPopupTemplate),
         events: {

@@ -73,6 +73,10 @@
             "glyphicon": "glyphicon-resize-full",
             "onlyDesktop": true
           },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",

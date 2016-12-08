@@ -53,7 +53,8 @@ define(function (require) {
                 "createVectorLayer": this.createVectorLayer,
                 "addLoadingLayer": this.addLoadingLayer,
                 "removeLoadingLayer": this.removeLoadingLayer,
-                "registerListener": this.registerListener
+                "registerListener": this.registerListener,
+                "unregisterListener": this.unregisterListener
             }, this);
 
             this.listenTo(this, {
@@ -161,25 +162,11 @@ define(function (require) {
         },
 
         activateClick: function (tool) {
-            if (tool === "coord") {
-                this.get("map").un("click", this.setGFIParams, this);
-                this.get("map").on("click", this.setPositionCoordPopup, this);
-                // this.get("map").un("pointermove", this.registerPointerMove);
-            }
-            else if (tool === "gfi") {
-                this.get("map").un("click", this.setPositionCoordPopup, this);
+            if (tool === "gfi") {
                 this.get("map").on("click", this.setGFIParams, this);
-                // this.get("map").un("pointermove", this.registerPointerMove);
             }
-            else if (tool === "measure") {
-                this.get("map").un("click", this.setPositionCoordPopup, this);
+            else {
                 this.get("map").un("click", this.setGFIParams, this);
-                // this.get("map").on("pointermove", this.registerPointerMove);
-            }
-            else if (tool === "draw" || tool === "record") {
-                this.get("map").un("click", this.setPositionCoordPopup, this);
-                this.get("map").un("click", this.setGFIParams, this);
-                // this.get("map").un("pointermove", this.registerPointerMove);
             }
         },
 
@@ -198,9 +185,10 @@ define(function (require) {
          * Meldet Listener auf bestimmte Events ab
          * @param {String} event - Der Eventtyp
          * @param {Function} callback - Die Callback Funktion
+         * @param {Object} context
          */
-        unregisterListener: function (event, callback) {
-            this.getMap().un(event, callback);
+        unregisterListener: function (event, callback, context) {
+            this.getMap().un(event, callback, context);
         },
 
         /**
@@ -316,19 +304,6 @@ define(function (require) {
             });
         },
 
-        /**
-        *
-        */
-        setPositionCoordPopup: function (evt) {
-            // Abbruch, wenn auf SearchMarker x geklickt wird.
-            // TODO
-            // if (this.checkInsideSearchMarker(evt.pixel[1], evt.pixel[0]) === true) {
-            //     return;
-            // }
-            // else {
-                Radio.trigger("Map", "setPositionCoordPopup", evt.coordinate);
-            // }
-        },
         /**
         * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
         */
