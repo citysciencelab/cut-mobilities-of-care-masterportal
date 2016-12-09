@@ -27,7 +27,8 @@ define([
             // Anzahl der verwendeten Style-Klassen
             numberOfClasses: "default",
             // Die Angaben der Style Klassen (Wertebereich und Farbe)
-            styleClassAttributes: []
+            styleClassAttributes: [],
+            styleWMSName: ""
         },
 
         /**
@@ -131,6 +132,7 @@ define([
         },
 
         updateLegend: function (attributes) {
+            attributes.styleWMSName = this.get("model").get("name");
             Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
         },
 
