@@ -1,0 +1,516 @@
+{
+  "Portalconfig":
+    {
+      "PortalTitle": "GeoViewer",
+      "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+           "minChars": 3,
+           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+           "searchStreets": true,
+           "searchHouseNumbers": true,
+           "searchDistricts": true,
+           "searchParcels": true
+       },
+
+       "specialWFS": {
+           "minChar": 3,
+           "definitions": [
+               {
+                   "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                   "data": "typeNames=prosin_festgestellt&propertyName=planrecht",
+                   "name": "bplan"
+               },
+               {
+                   "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
+                   "data": "typeNames=prosin_imverfahren&propertyName=plan",
+                   "name": "bplan"
+               }
+           ]
+       },
+       "visibleWFS": {
+           "minChars": 3
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan",
+       "geoLocateHit": true
+   },
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+            "parcelSearch": {
+              "name": "Flurstückssuche",
+              "glyphicon": "glyphicon-search"
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "kmlimport": {
+              "name": "KML Import",
+              "glyphicon": "glyphicon-import"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            },
+            "addWMS": {
+              "name": "WMS hinzufügen",
+              "glyphicon": "glyphicon-plus"
+            },
+            "routing": {
+              "name": "Routenplaner",
+              "glyphicon": "glyphicon-road",
+              "viomRoutingID": "7",
+              "bkgSuggestID": "4",
+              "bkgGeosearchID": "5"
+            }
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+        "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80001",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "subject": "",
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+        }
+      },
+      "controls": {
+        "toggleMenu": true,
+        "zoom": true,
+        "orientation": "once",
+        "poi": true,
+        "fullScreen": true,
+        "mousePosition": true
+      },
+      "scaleLine": true,
+      "Baumtyp": "custom"
+    },
+  "Themenconfig":
+    {
+      "Hintergrundkarten":
+        {
+          "Layer": [
+            {
+              "id": ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
+              "name": "ALKIS grau-blau"
+            },
+            {
+              "id": ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
+              "name": "ALKIS farbig"
+            },
+            {
+              "id": "452"
+            },
+            {
+              "id": ["713", "714", "715", "716"],
+              "name": "Geobasiskarten (schwarz-weiß)"
+            },
+            {
+              "id": ["1043", "1044", "1045", "1046"],
+              "name": "Geobasiskarten (grau-blau)"
+            },
+            {
+              "id": ["717", "718", "719", "720"],
+              "visibility": true,
+              "name": "Geobasiskarten (farbig)"
+            },
+            {
+              "id": "453"
+            }
+          ]
+        },
+      "Fachdaten":
+        {
+          "Ordner": [
+            {
+              "Titel": "Lage und Gebietszugehörigkeit",
+              "Ordner": [
+                {
+                  "Titel": "Überschwemmungsgebiete",
+                  "Ordner": [
+                    {
+                      "Titel": "Überschwemmungsgebiete",
+                      "Layer": [
+                        {
+                          "id": "1103",
+                          "visibility": false
+                        },
+                        {
+                          "id": "1104",
+                          "visibility": false
+                        }
+                      ]
+                    }
+                  ],
+                  "Layer": [
+                    {
+                      "id": "684",
+                      "visibility": false
+                    },
+                    {
+                      "id": "685",
+                      "visibility": false
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "2427",
+                  "visibility": false
+                },
+                {
+                  "id": "2426",
+                  "visibility": false
+                },
+                {
+                  "id": "2425",
+                  "visibility": false
+                },
+                {
+                  "id": "2423",
+                  "visibility": false
+                },
+                {
+                  "id": "2428",
+                  "visibility": false
+                },
+                {
+                  "id": "936",
+                  "visibility": false,
+                  "name": "Hafengebiet (§ 2 HafenEG)",
+                  "metaName": "Hafengebiet (§ 2 HafenEG)"
+                }
+              ]
+            },
+            {
+              "Titel": "Vermessungswesen",
+              "Layer": [
+                {
+                  "id": "1200",
+                  "visibility": false
+                },
+                {
+                  "id": "1199",
+                  "visibility": false
+                },
+                {
+                  "id": "1198",
+                  "visibility": false
+                },
+                {
+                  "id": "1197",
+                  "visibility": false
+                }
+              ]
+            },
+            {
+              "Titel": "Städtebaurecht",
+              "Layer": [
+                {
+                  "id": "1561",
+                  "visibility": false,
+                  "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
+                  "metaName": "Festgestellte Bebauungspläne (§ 10 BauGB)"
+                },
+                {
+                  "id": "1562",
+                  "visibility": true,
+                  "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                  "metaName": "Bebauungspläne im Verfahren (§ 2 BauGB)"
+                },
+                {
+                  "id": "2438",
+                  "visibility": false,
+                  "name": "Umlegungsgebiete (§§ 45 ff BauGB)",
+                  "metaName": "Umlegungsgebiete (§§ 45 ff BauGB))"
+                },
+                {
+                  "id": "2437",
+                  "visibility": false,
+                  "name": "Sanierungsgebiete (§§ 136 ff BauGB)",
+                  "metaName": "Sanierungsgebiete (§§ 136 ff BauGB)"
+                },
+                {
+                  "id": "1205",
+                  "visibility": false,
+                  "name": "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)",
+                  "metaName": "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)"
+                },
+                {
+                  "id": "4445",
+                  "visibility": false,
+                  "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft",
+                  "metaName": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft"
+                },
+                {
+                  "id": "4446",
+                  "visibility": false,
+                  "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung",
+                  "metaName": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung"
+                }
+              ]
+            },
+            {
+              "Titel": "Denkmalschutz",
+              "Layer": [
+                {
+                  "id": "1757",
+                  "visibility": false,
+                  "name": "Baudenkmäler (§§ 4, 6 DSchG)"
+                },
+                {
+                  "id": "1755",
+                  "visibility": false,
+                  "name": "Gartendenkmäler (§§ 4, 6 DSchG)"
+                },
+                {
+                  "id": "1754",
+                  "visibility": false,
+                  "name": "Ensemble (§§ 4, 6 DSchG)"
+                }
+              ]
+            },
+            {
+              "Titel": "Naturschutz und Landschaftsschutz",
+              "Ordner": [
+                {
+                  "Titel": "Biotopkataster gesetzlich geschützte Biotope (§ 30 BNatSchG, § 14 HmbBNatSchAG) - ab 1:5000 bis 1:500",
+                  "Layer": [
+                    {
+                      "id": "1689",
+                      "visibility": false
+                    },
+                    {
+                      "id": "1688",
+                      "visibility": false
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "1453",
+                  "visibility": false,
+                  "name": "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)",
+                  "metaName": "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)"
+                },
+                {
+                  "id": "1992",
+                  "visibility": false,
+                  "name": "Naturschutzgebiete (§ 23 BNatSchG)",
+                  "metaName": "Naturschutzgebiete (§ 23 BNatSchG)"
+                },
+                {
+                  "id": "1996",
+                  "visibility": false,
+                  "name": "Nationalpark (§ 24 BNatSchG)",
+                  "metaName": "Nationalpark (§ 24 BNatSchG)"
+                },
+                {
+                  "id": "1997",
+                  "visibility": false,
+                  "name": "Biosphärenreservate (§ 25 BNatSchG)",
+                  "metaName": "Biosphärenreservate (§ 25 BNatSchG)"
+                },
+                {
+                  "id": "1998",
+                  "visibility": false,
+                  "name": "Landschaftsschutzgebiete (§ 26 BNatSchG)",
+                  "metaName": "Landschaftsschutzgebiete (§ 26 BNatSchG)"
+                },
+                {
+                  "id": "1999",
+                  "visibility": false,
+                  "name": "Naturdenkmäler (§ 28 BNatSchG)",
+                  "metaName": "Naturdenkmäler (§ 28 BNatSchG)"
+                }
+              ]
+            },
+            {
+              "Titel": "Wasserrecht",
+              "Ordner": [
+                {
+                  "Titel": "Überschwemmungsgebiete (ÜSG)",
+                  "Layer": [
+                    {
+                      "id": "2432",
+                      "visibility": false,
+                      "name": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)",
+                      "metaName": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)"
+                    },
+                    {
+                      "id": "2433",
+                      "visibility": false,
+                      "name": "Vorläufig gesicherte ÜSG (§ 76 WHG)",
+                      "metaName": "Vorläufig gesicherte ÜSG (§ 76 WHG)"
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "685",
+                  "visibility": false,
+                  "name": "Hamburger Wasserschutzgebiete (§§ 51 ff WHG)",
+                  "metaName": "Wasserschutzgebiete (§§ 51 ff WHG)"
+                }
+              ]
+            },
+            {
+              "Titel": "Luftverkehr",
+              "Layer": [
+                {
+                  "id": ["412","413","414","415","416","417","418","419","420","421","423","424","425","426","427","428","429","430","431"],
+                  "visibility": false,
+                  "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
+                  "metaName": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
+                  "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
+                }
+              ]
+            },
+            {
+              "Titel": "Emissionen",
+              "Ordner": [
+
+                {
+                  "Titel": "Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
+                  "Layer": [
+                    {
+                      "id": "2431",
+                      "visibility": false
+                    },
+                    {
+                      "id": "2430",
+                      "visibility": false
+                    },
+                    {
+                      "id": "2429",
+                      "visibility": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel": "Eisenbahnwesen / Personenbeförderung",
+              "Ordner": [
+                {
+                  "Titel": "Hamburger Verkehrsverbund (HVV)",
+                  "Layer": [
+                    {
+                      "id": "1935",
+                      "visibility": false,
+                      "styles": [
+                        "geofox_Faehre",
+                        "geofox-bahn",
+                        "geofox-bus",
+                        "geofox_BusName"
+                      ],
+                      "name": [
+                        "Fährverbindungen",
+                        "Bahnlinien",
+                        "Buslinien",
+                        "Busliniennummern"
+                      ],
+                      "legendURL": [
+                        "http://87.106.16.168/legende_mrh/hvv-faehre.png",
+                        "http://87.106.16.168/legende_mrh/hvv-bahn.png",
+                        "http://87.106.16.168/legende_mrh/hvv-bus.png",
+                        "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                      ]
+                    },
+                    {
+                      "id": "1933",
+                      "visibility": false,
+                      "styles": [
+                        "geofox_stations"
+                      ],
+                      "name": [
+                        "Haltestellen"
+                      ],
+                      "legendURL": [
+                        "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "2182",
+                  "visibility": false
+                },
+                {
+                  "id": "2181",
+                  "visibility": false
+                },
+                {
+                  "id": "2180",
+                  "visibility": false
+                },
+                {
+                  "id": "2179",
+                  "visibility": false
+                },
+                {
+                  "id": "2178",
+                  "visibility": false
+                }
+              ]
+            }
+          ]
+        }
+    }
+}
