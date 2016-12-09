@@ -9,6 +9,7 @@
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     /*font-size: 12px;*/
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.176);
+    border: 0;
 }
 
 .dropdown-menu {
