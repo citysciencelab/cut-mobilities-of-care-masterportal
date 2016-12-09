@@ -24,7 +24,7 @@ define(function (require) {
             return this;
         },
         checkItem: function () {
-            if (this.model.getName() === "legend") {
+            if (this.model.getId() === "legend") {
                 Radio.trigger("Legend", "toggleLegendWin");
             }
             else {
