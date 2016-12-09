@@ -211,6 +211,12 @@ define("app",
                     });
                     break;
                 }
+                case "formular": {
+                    require(["modules/formular/view"], function (Formular) {
+                        new Formular(tool.modelname);
+                    });
+                    break;
+                }
                 case "legend": {
                     require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
                         if (Radio.request("Util", "isAny")) {

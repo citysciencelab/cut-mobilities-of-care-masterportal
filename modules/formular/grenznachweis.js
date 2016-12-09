@@ -39,25 +39,34 @@ define([
         },
         initialize: function () {
             // lese WPS-Url aus JSON ein
-            var resp, newURL;
+            var wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
+                wpsURL = wpsService && wpsService[0] && wpsService[0].get("url") ? wpsService[0].get("url") : null,
+                newURL = wpsURL ? Radio.request("Util", "getProxyURL", wpsURL) : null;
 
-            resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
-            newURL = Radio.request("Util", "getProxyURL", resp[0].get("url"));
-            this.set("wpsurl", newURL);
-            // Fenstermanagement
-            EventBus.on("winParams", this.setStatus, this);
-            this.set("layer", new ol.layer.Vector({
-                source: this.get("source"),
-                name: "grenznachweisDraw"
-            }));
-            Radio.trigger("Map", "addLayer", this.get("layer"));
-            // Cookie lesen
-            if (cookie.model.hasItem() === true) {
-                this.readCookie();
+            if (newURL) {
+                this.set("wpsurl", newURL);
+                // Fenstermanagement
+                this.listenTo(Radio.channel("Window"), {
+                    "winParams": this.setStatus
+                });
+                // Erzeuge OL-Layer für Geometrie
+                this.set("layer", new ol.layer.Vector({
+                    source: this.get("source"),
+                    name: "grenznachweisDraw"
+                }));
+                Radio.trigger("Map", "addLayer", this.get("layer"));
+                // Cookie lesen
+                if (cookie.model.hasItem() === true) {
+                    this.readCookie();
+                }
+            }
+            else {
+                Radio.trigger("Alert", "alert", "Die WPS-URL konnte nicht ermittelt werden.");
             }
         },
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "grenznachweis") {
+        setStatus: function (args) {
+            // Fenstermanagement
+            if (args[2].getId() === "formular") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -583,7 +592,7 @@ define([
                         })
                     }));
                 }, this);
-                Radio.trigger("Map", "addInteraction", this.get("draw");
+                Radio.trigger("Map", "addInteraction", this.get("draw"));
                 this.set("activatedInteraction", true);
             }
             else {
@@ -612,5 +621,5 @@ define([
         }
     });
 
-    return new GrenznachweisModel();
+    return GrenznachweisModel;
 });
