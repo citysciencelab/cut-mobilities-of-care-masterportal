@@ -185,21 +185,27 @@ define([
             }
             else if (evt.target.id === "kundennummer") {
                 this.set("kundennummer", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenname") {
                 this.set("kundenname", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenadresse") {
                 this.set("kundenadresse", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenplz") {
                 this.set("kundenplz", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenort") {
                 this.set("kundenort", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenemail") {
                 this.set("kundenemail", evt.target.value);
+                this.writeCookie();
             }
         },
         keyup: function (evt) {
