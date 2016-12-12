@@ -81,6 +81,7 @@
     font-size: 12px;
     max-height: 40vh;
     overflow-y: auto;
+    width: 100%;
 }
 
 .gfi-content > table {
