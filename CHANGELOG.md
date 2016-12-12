@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.1.6
+
+FIXES:
+
+  - 59fae85 Parameter &LAYERIDS in URL wurden nicht mit SimpleTree ausgewertet. &CLICKCOUNTER jetzt überflüssig.
+
 # Changelog LGV Master-Portal 1.1.5
 
 FIXES:
