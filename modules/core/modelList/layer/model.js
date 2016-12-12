@@ -2,7 +2,6 @@ define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
-        StyleList = require("modules/layer/wfsStyle/list"),
         Layer;
 
     Layer = Item.extend({
@@ -20,7 +19,6 @@ define(function (require) {
             layerInfoClicked: false
         },
         initialize: function () {
-            new StyleList();
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,

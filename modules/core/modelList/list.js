@@ -5,12 +5,14 @@ define([
     "modules/core/modelList/layer/wfs",
     "modules/core/modelList/layer/group",
     "modules/core/modelList/folder/model",
-    "modules/core/modelList/tool/model"
+    "modules/core/modelList/tool/model",
+    "modules/layer/wfsStyle/list"
 ], function () {
 
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
+        StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -20,6 +22,7 @@ define([
     ModelList = Backbone.Collection.extend({
             selectionIDX: [],
             initialize: function () {
+                new StyleList();
                 var channel = Radio.channel("ModelList");
 
                 channel.reply({
