@@ -1,7 +1,7 @@
 # Changelog LGV Master-Portal 1.1.6
 
 FIXES:
-
+  - 97ad0aa  csw falsches Datum ausgelesen, da erneut über ganze csw Datei gesucht wurde
   - 59fae85 Parameter &LAYERIDS in URL wurden nicht mit SimpleTree ausgewertet. &CLICKCOUNTER jetzt überflüssig.
 
 # Changelog LGV Master-Portal 1.1.5
