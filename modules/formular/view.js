@@ -1,11 +1,12 @@
 define([
     "backbone",
+    "backbone.radio",
     "eventbus",
     "config",
     "modules/formular/grenznachweis",
     "text!modules/formular/grenznachweis.html",
     "text!modules/formular/grenznachweis.css"
-], function (Backbone, EventBus, Config, Grenznachweismodel, Grenznachweistemplate, Grenznachweiscss) {
+], function (Backbone, Radio, EventBus, Config, Grenznachweismodel, Grenznachweistemplate, Grenznachweiscss) {
     "use strict";
     var formularView = Backbone.View.extend({
         id: "formularWin",
@@ -21,6 +22,7 @@ define([
             this.listenTo(this.model, {
                 "change:isCollapsed render invalid change:isCurrentWin": this.render
             });
+            Radio.trigger("Autostart", "initializedTool", "formular");
         },
         events: {
             // anonymisierte Events

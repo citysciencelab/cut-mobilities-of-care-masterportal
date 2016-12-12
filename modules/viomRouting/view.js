@@ -25,6 +25,7 @@ define([
             EventBus.on("setGeolocation", this.setGeolocation, this);
             EventBus.on("setRoutingDestination", this.setRoutingDestination, this);
             EventBus.on("deleteRoute", this.deleteRoute, this);
+            Radio.trigger("Autostart", "initializedTool", "routing");
         },
         events: {
             "click .toggleRoutingOptions": "toggleRoutingOptions",
