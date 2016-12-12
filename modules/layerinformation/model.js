@@ -81,7 +81,7 @@ define([
                     dateTime;
 
                     if (dates.length === 1) {
-                        dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", xmlDoc)[0].textContent;
+                        dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", dates)[0].textContent;
                     }
                     else {
                         dates.each(function (index, element) {
