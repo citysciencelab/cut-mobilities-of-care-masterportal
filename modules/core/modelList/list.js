@@ -397,32 +397,37 @@ define([
             // Parent und eventuelle Siblings werden hinzugefügt
             this.addAndExpandModelsRecursive(lightModel.parentId);
             this.setModelAttributesById(modelId, {isSelected: true});
-            this.scrollToLayer(lightModel.name);
+            // Nur bei Overlayern wird in Tree gescrollt.
+            if (lightModel.parentId !== "Baselayer") {
+                this.scrollToLayer(lightModel.name);
+            }
         },
 
         /**
         * Scrolled auf den Layer
         * @param {String} layername - in "Fachdaten" wird auf diesen Layer gescrolled
         */
-        scrollToLayer: function (layername) {
-            var liLayer = _.findWhere($("#Overlayer").find("span"), {title: layername}),
-                offsetFromTop = $(liLayer).offset().top,
+        scrollToLayer: function (overlayername) {
+            var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
+                offsetFromTop = liLayer ? $(liLayer).offset().top : null,
                 heightThemen = $("#Themen").css("height"),
                 scrollToPx = 0;
 
-            // die "px" oder "%" vom string löschen und zu int parsen
-            if (heightThemen.slice(-2) === "px") {
-                heightThemen = parseInt(heightThemen.slice(0, -2), 10);
-            }
-            else if (heightThemen.slice(-1) === "%") {
-                heightThemen = parseInt(heightThemen.slice(0, -1), 10);
-            }
+            if (offsetFromTop) {
+                // die "px" oder "%" vom string löschen und zu int parsen
+                if (heightThemen.slice(-2) === "px") {
+                    heightThemen = parseInt(heightThemen.slice(0, -2), 10);
+                }
+                else if (heightThemen.slice(-1) === "%") {
+                    heightThemen = parseInt(heightThemen.slice(0, -1), 10);
+                }
 
-            scrollToPx = offsetFromTop - heightThemen / 2;
+                scrollToPx = offsetFromTop - heightThemen / 2;
 
-            $("#Overlayer").animate({
-                scrollTop: scrollToPx
-            }, "fast");
+                $("#Overlayer").animate({
+                    scrollTop: scrollToPx
+                }, "fast");
+            }
         },
 
         /**
