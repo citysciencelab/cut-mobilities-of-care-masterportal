@@ -42,6 +42,7 @@ define([
                 });
                 this.render();
                 this.breadCrumbListView = new BreadCrumbListView();
+                this.autostartTool();
             },
             render: function () {
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
@@ -49,6 +50,18 @@ define([
                 var rootModels = this.collection.where({parentId: "root"});
 
                 this.addViews(rootModels);
+            },
+            /**
+            * Startet alle Tools aus config.json mit "autostart:true"
+            */
+            autostartTool: function () {
+                var startUpModul = Radio.request("ParametricURL", "getStartUpModul");
+
+                _.each(this.collection.where({type: "tool"}), function (model) {
+                    if (model.get("autostart") === true || model.get("id").toUpperCase() === startUpModul) {
+                        model.setIsActive(true);
+                    }
+                });
             },
             traverseTree: function (model) {
 
