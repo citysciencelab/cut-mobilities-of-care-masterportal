@@ -32,8 +32,8 @@ define([
 
             $(".navbar-collapse").append(this.$el);
 
-            // maximaler platz den der Titel haben kann, Fensterbreite - root - searchbar - 10 (als toleranz)
-            var width = window.innerWidth - 678 - 407 - 10;
+            // maximaler platz den der Titel haben kann, Fensterbreite - root - searchbar - 30 (als toleranz)
+            var width = window.innerWidth - 678 - 407 - 30;
 
             $("#portalTitle").width(width);
 
