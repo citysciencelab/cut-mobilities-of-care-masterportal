@@ -165,7 +165,7 @@ define(function (require) {
             if (tool === "gfi") {
                 this.get("map").on("click", this.setGFIParams, this);
             }
-            else {
+            else if (tool === "coords" || tool === "draw" || tool === "measure") {
                 this.get("map").un("click", this.setGFIParams, this);
             }
         },
