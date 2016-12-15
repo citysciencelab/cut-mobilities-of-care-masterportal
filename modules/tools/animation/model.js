@@ -74,7 +74,7 @@ define(function (require) {
         },
 
         setDefaults: function () {
-            this.setZoomLevel(Config.animation.zoomlevel);
+            this.setZoomLevel(Config.animation.zoomlevel || 1);
             this.setSteps(Config.animation.steps || 50);
             this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
             this.setParams(Config.animation.params || {
