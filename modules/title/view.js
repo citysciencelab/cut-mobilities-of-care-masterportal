@@ -9,6 +9,13 @@ define([
         id: "portalTitle",
         template: _.template(TitleTemplate),
         initialize: function (title) {
+            var channel = Radio.channel("Title");
+            
+            channel.on({
+                "setSize": this.setSize
+            }, this);
+            
+            
             $(window).on("resize", this.setSize);
             this.setLogo();
             this.render(title);
