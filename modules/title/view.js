@@ -24,7 +24,7 @@ define([
         setSize: function () {
             var rootWidth = $("#root").width(),
                 searchbarWidth = $("#searchbar").width(),
-                width = window.innerWidth - rootWidth - searchbarWidth - 30;
+                width = window.innerWidth - rootWidth - searchbarWidth - 30; // 30px toleranz wegen  passing und margin von #root, #searchbar und #portalTitle
 
             $("#portalTitle").width(width);
         },
@@ -38,13 +38,8 @@ define([
             }));
 
             $(".navbar-collapse").append(this.$el);
-
-            // maximaler platz den der Titel haben kann, Fensterbreite - root - searchbar - 30 (als toleranz)
-            var width = window.innerWidth - 678 - 407 - 30;
-
-            $("#portalTitle").width(width);
-
         },
+        
         setLogo: function () {
             var logo = Radio.request("Parser", "getPortalConfig").PortalLogo,
                 result = "";
