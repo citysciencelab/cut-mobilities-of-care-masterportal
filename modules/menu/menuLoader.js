@@ -17,6 +17,7 @@ define([
             if (isMobile) {
                 require(["modules/menu/mobile/listView"], function (Menu) {
                     caller.currentMenu = new Menu();
+                    channel.trigger("ready");
                 });
             }
             else {

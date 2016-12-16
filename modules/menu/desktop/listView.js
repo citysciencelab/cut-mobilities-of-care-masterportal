@@ -16,8 +16,9 @@ define([
 
         Menu = listView.extend({
             initialize: function () {
-                 this.collection = Radio.request("ModelList", "getCollection");
+                this.collection = Radio.request("ModelList", "getCollection");
 
+                Radio.on("Autostart", "startTool", this.startTool, this);
                 this.listenTo(this.collection, {
                     "updateOverlayerView": function (parentId) {
                         this.updateOverlayer(parentId);
@@ -160,6 +161,14 @@ define([
                 _.each(models, function (model) {
                    new SelectionView({model: model});
                 }, this);
+            },
+            startTool: function (toolId) {
+                var tools = this.collection.where({type: "tool"}),
+                    tool = _.findWhere(tools, {id: toolId});
+
+                if (tool) {
+                    tool.setIsActive(true);
+                }
             }
         });
         return Menu;
