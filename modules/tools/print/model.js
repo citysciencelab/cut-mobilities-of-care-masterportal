@@ -152,7 +152,6 @@ define([
             layers = _.sortBy(layers, function (layer) {
                 return layer.get("selectionIDX");
             });
-
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
                 var params = {},
@@ -190,7 +189,7 @@ define([
         /**
          *
          */
-        setDrawLayer: function (layer) {
+        setLayer: function (layer) {
             if (!_.isUndefined(layer)) {
                 var features = [],
                     circleFeatures = [], // Kreise können nicht gedruckt werden
@@ -266,8 +265,17 @@ define([
          *
          */
         setSpecification: function () {
+            var animationLayer = Radio.request("Map", "getLayers");
+            
+            animationLayer.forEach(function(layer){
+                if(layer.get("name")=== "animationLayer"){
+                    animationLayer = layer;
+                }
+            }); 
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setDrawLayer(Radio.request("Draw", "getLayer"));
+            this.setLayer(Radio.request("Draw", "getLayer"));
+            this.setLayer(animationLayer);
+            
             var specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.getLayout().name,
