@@ -35,7 +35,8 @@ define(function (require) {
             }, this);
 
             channel.reply({
-                "getGFIForPrint": this.getGFIForPrint
+                "getGFIForPrint": this.getGFIForPrint,
+                "getCoordinates": this.getCoordinates
             }, this);
 
             this.listenTo(Radio.channel("Requestor"), {
@@ -196,6 +197,9 @@ define(function (require) {
                 }
             });
             return content;
+        },
+        getCoordinates: function () {
+            return this.get("coordinate");
         }
     });
 
