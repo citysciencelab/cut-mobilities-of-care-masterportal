@@ -36,7 +36,8 @@ define([
                     id: layer.id,
                     name: layer.get("name"),
                     filterOptions: layer.get("filterOptions"),
-                    layer: layer.get("layer")
+                    layer: layer.get("layer"),
+                    styleField: layer.get("styleField")
                 });
             });
             this.set("wfsList", wfsList);
