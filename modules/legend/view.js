@@ -24,7 +24,8 @@ define([
             });
 
             this.listenTo(this.model, {
-                "change:legendParams": this.paramsChanged
+                "change:legendParams": this.paramsChanged,
+                "change:paramsStyleWMSArray": this.paramsChanged
             });
 
             this.listenTo(EventBus, {
@@ -39,7 +40,7 @@ define([
         },
 
         paramsChanged: function () {
-            Radio.trigger("Layer", "updateLayerInfo", "Erreichbare Arbeitsplaetze in 30min");
+            Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
             this.render();
         },
         render: function () {

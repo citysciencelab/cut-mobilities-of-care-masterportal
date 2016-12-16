@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/layer/wfsStyle/list",
     "bootstrap/modal"
-], function (Backbone, Radio, StyleList) {
+], function (Backbone, Radio) {
 
     var Legend = Backbone.Model.extend({
 
@@ -11,7 +10,8 @@ define([
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             wmsLayerList: [],
-            paramsStyleWMS: []
+            paramsStyleWMS: [],
+            paramsStyleWMSArray: []
         },
 
         initialize: function () {
@@ -25,42 +25,52 @@ define([
                 "updatedSelectedLayerList": this.setLayerList
             });
             this.listenTo(Radio.channel("StyleWMS"), {
-                "updateParamsStyleWMS": this.updateParamsStyleWMS
+                "updateParamsStyleWMS": this.updateParamsStyleWMSArray
             });
 
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromWFS,
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
-                "change:paramsStyleWMS": this.updateLegendFromStyleWMS
+                "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
+
             this.setLayerList();
         },
 
-        updateParamsStyleWMS: function (params) {
-            this.set("paramsStyleWMS", params);
-        },
-
-        updateLegendFromStyleWMS: function () {
-            var params = this.get("paramsStyleWMS"),
-                legendParams = this.get("legendParams"),
-                legendParams2 = [];
-
-            _.each(legendParams, function (legendParam) {
-                if (legendParam.layername === "Erreichbare Arbeitsplaetze in 30min") {
-                    var layername = legendParam.layername,
-                        isVisibleInMap = legendParam.isVisibleInMap;
-
-                    legendParams2.push({params: params,
-                                       layername: layername,
-                                       typ: "styleWMS",
-                                       isVisibleInMap: isVisibleInMap});
-                }
-                else {
-                    legendParams2.push(legendParam);
+        updateParamsStyleWMSArray: function (params) {
+            var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
+            paramsStyleWMSArray2 = [];
+            _.each (paramsStyleWMSArray, function (paramsStyleWMS){
+                if(params.styleWMSName !== paramsStyleWMS.styleWMSName){
+                    paramsStyleWMSArray2.push(paramsStyleWMS);
                 }
             });
-            this.set("legendParams", legendParams2);
+            paramsStyleWMSArray2.push(params);
+            this.set("paramsStyleWMS", params);
+            this.set("paramsStyleWMSArray", paramsStyleWMSArray2);
+
+        },
+
+        updateLegendFromStyleWMSArray: function () {
+            var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
+                legendParams = this.get("legendParams")
+
+            _.each(this.get("legendParams"), function (legendParam, i) {
+                    _.find (paramsStyleWMSArray, function (paramsStyleWMS) {
+                        if (legendParam.layername === paramsStyleWMS.styleWMSName) {
+                            var layername = legendParam.layername,
+                                isVisibleInMap = legendParam.isVisibleInMap;
+
+                            legendParams.splice(i, 1, {params: paramsStyleWMS,
+                                               layername: layername,
+                                               typ: "styleWMS",
+                                               isVisibleInMap: isVisibleInMap});
+
+                        }
+                    });
+            });
+            this.set("legendParams", legendParams);
         },
 
         getLegendParams: function () {
@@ -110,11 +120,17 @@ define([
         },
 
         setLegendParamsFromWMS: function () {
-            var paramsStyleWMS = this.get("paramsStyleWMS");
+            var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
+            paramsStyleWMS = "";
 
             _.each(this.get("wmsLayerList"), function (layer) {
+                paramsStyleWMS = _.find(paramsStyleWMSArray, function(paramsStyleWMS){
+                    if (layer.get("name") === paramsStyleWMS.styleWMSName) {
+                        return true;
+                    }
+                });
+                if (paramsStyleWMS) {
 
-                if (paramsStyleWMS.length > 0 && layer.get("name") === "Erreichbare Arbeitsplaetze in 30min") {
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         typ: "styleWMS",
