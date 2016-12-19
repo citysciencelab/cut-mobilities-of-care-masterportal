@@ -92,7 +92,8 @@ define(function (require) {
                 }
 
                 this.createLayerSource();
-                this.toggleLayerOnMap();
+                Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
+                this.setIsVisibleInMap(this.getIsSelected());
             }
             this.setAttributes();
             this.createLegendURL();
@@ -318,12 +319,14 @@ define(function (require) {
          * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
-            if (this.getIsSelected() === true) {
-                Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
-            }
-            else {
-                // model.collection besser?!
-                Radio.trigger("Map", "removeLayer", this.getLayer());
+            if (Radio.request("Parser", "getTreeType") !== "light") {
+                if (this.getIsSelected() === true) {
+                    Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
+                }
+                else {
+                    // model.collection besser?!
+                    Radio.trigger("Map", "removeLayer", this.getLayer());
+                }
             }
         },
 
