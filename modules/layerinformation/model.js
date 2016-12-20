@@ -51,7 +51,7 @@ define([
                 dataType: "xml",
                 error: function () {
                     Radio.trigger("Util", "hideLoader");
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Informationen zurzeit nicht verfügbar",
                         kategorie: "alert-warning"
                     });

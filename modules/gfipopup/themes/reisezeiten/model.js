@@ -32,7 +32,7 @@ define([
                 this.sortRouten();
             }
             else {
-                EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (reisezeiten)", kategorie: "alert-danger"});
+                Radio.trigger("Alert", "alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (reisezeiten)", kategorie: "alert-danger"});
             }
         },
         /**
@@ -64,7 +64,7 @@ define([
                 complete: function (jqXHR) {
                     Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        EventBus.trigger("alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
+                        Radio.trigger("Alert", "alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
                     }
                 },
                 success: function (data) {
@@ -136,7 +136,7 @@ define([
                 complete: function (jqXHR) {
                     Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        EventBus.trigger("alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
+                        Radio.trigger("Alert", "alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
                     }
                 },
                 success: function (data) {

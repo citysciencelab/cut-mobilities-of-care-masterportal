@@ -118,14 +118,14 @@ define([
             }
         },
         onError: function (evt) {
-            EventBus.trigger("alert", {
+            Radio.trigger("Alert", "alert", {
                 text: "<strong>Lokalisierung nicht verfügbar: </strong>" + evt.message,
                 kategorie: "alert-danger"
             });
             this.untrack();
         },
         onPOIError: function (evt) {
-            EventBus.trigger("alert", {
+            Radio.trigger("Alert", "alert", {
                 text: "<strong>'In meiner Nähe' nicht verfügbar: </strong>" + evt.message,
                 kategorie: "alert-danger"
             });

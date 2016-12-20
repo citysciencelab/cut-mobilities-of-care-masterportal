@@ -98,7 +98,7 @@ define([
                 this.setFeatures(features);
             }
             else {
-                EventBus.trigger("alert", "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus");
+                Radio.trigger("Alert", "alert", "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus");
             }
         },
 
@@ -215,7 +215,7 @@ define([
                     break;
                 }
                 default: {
-                    EventBus.trigger("alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
+                    Radio.trigger("Alert", "alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
                 }
             }
             return transCoord;

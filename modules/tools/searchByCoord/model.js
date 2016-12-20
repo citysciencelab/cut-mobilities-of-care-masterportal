@@ -52,7 +52,7 @@ define([
                     else {
                         $(fieldName + "+ .text-danger").html("");
                         $(fieldName).parent().removeClass("has-error");
-                        EventBus.trigger("alert:remove");
+                        Radio.trigger("Alert", "alert:remove");
                     }
                 }
                       );
@@ -76,7 +76,7 @@ define([
                             else {
                                 $("#coordinatesEastingField + .text-danger").html("");
                                 $("#coordinatesEastingField").parent().removeClass("has-error");
-                                EventBus.trigger("alert:remove");
+                                Radio.trigger("Alert", "alert:remove");
                             }
                     });
                     _.each(attributes.coordinates[1].coord, function (value, key) {
@@ -96,7 +96,7 @@ define([
                         else {
                             $("#coordinatesNorthingField + .text-danger").html("");
                             $("#coordinatesNorthingField").parent().removeClass("has-error");
-                            EventBus.trigger("alert:remove");
+                            Radio.trigger("Alert", "alert:remove");
                         }
                     });
             }
@@ -118,7 +118,7 @@ define([
                     else {
                         $("#coordinatesEastingField + .text-danger").html("");
                         $("#coordinatesEastingField").parent().removeClass("has-error");
-                        EventBus.trigger("alert:remove");
+                        Radio.trigger("Alert", "alert:remove");
                     }
                 });
                 _.each(attributes.coordinates[1].coord, function (value, key) {
@@ -137,7 +137,7 @@ define([
                     else {
                         $("#coordinatesNorthingField + .text-danger").html("");
                         $("#coordinatesNorthingField").parent().removeClass("has-error");
-                        EventBus.trigger("alert:remove");
+                        Radio.trigger("Alert", "alert:remove");
                     }
                 });
 

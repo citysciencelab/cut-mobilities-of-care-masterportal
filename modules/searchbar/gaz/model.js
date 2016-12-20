@@ -378,7 +378,7 @@ define([
                 error: function (err) {
                     var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-                    EventBus.trigger("alert", "Gazetteer-URL nicht erreichbar. " + detail);
+                    Radio.trigger("Alet", "alert", "Gazetteer-URL nicht erreichbar. " + detail);
                 },
                 complete: function () {
                     this.set("inUse", this.get("inUse") - 1);

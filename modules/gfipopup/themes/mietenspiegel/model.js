@@ -85,7 +85,7 @@ define([
                     this.ladeMetaDaten();
                 }
                 else {
-                    EventBus.trigger("alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
                 }
             }
         },
@@ -144,7 +144,7 @@ define([
                 complete: function (jqXHR) {
                     Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        EventBus.trigger("alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
+                        Radio.trigger("Alert", "alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
                     }
                 },
                 success: function (data) {
@@ -181,7 +181,7 @@ define([
                 complete: function (jqXHR) {
                     Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        EventBus.trigger("alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
+                        Radio.trigger("Alert", "alert", {text: "<strong>Dienst antwortet nicht wie erwartet.</strong> Bitte versuchen Sie es später wieder.", kategorie: "alert-warning"});
                     }
                 },
                 success: function (data) {
@@ -205,7 +205,7 @@ define([
                         this.calculateMerkmale();
                     }
                     else {
-                        EventBus.trigger("alert", {text: "<strong>Fehlende Wohnlagendaten.</strong> Dieses Portal ist derzeit nicht einsatzbereit. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
+                        Radio.trigger("Alert", "alert", {text: "<strong>Fehlende Wohnlagendaten.</strong> Dieses Portal ist derzeit nicht einsatzbereit. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
                     }
                 }
             });
