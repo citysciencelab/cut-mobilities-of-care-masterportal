@@ -60,7 +60,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    cursor: move;
 }
 
 .gfi-toggle {

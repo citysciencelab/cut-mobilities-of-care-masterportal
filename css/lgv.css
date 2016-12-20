@@ -17,7 +17,7 @@ label {
     cursor: none;
 }
 
-.glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open {
+.glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open {
     cursor: pointer;
 }
 
