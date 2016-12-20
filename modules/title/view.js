@@ -10,12 +10,12 @@ define([
         template: _.template(TitleTemplate),
         initialize: function (title) {
             var channel = Radio.channel("Title");
-            
+
             channel.on({
                 "setSize": this.setSize
             }, this);
-            
-            
+
+
             $(window).on("resize", this.setSize);
             this.setLogo();
             this.render(title);
@@ -24,7 +24,7 @@ define([
         setSize: function () {
             var rootWidth = $("#root").width(),
                 searchbarWidth = $("#searchbar").width(),
-                width = window.innerWidth - rootWidth - searchbarWidth - 30; // 30px toleranz wegen  passing und margin von #root, #searchbar und #portalTitle
+                width = window.innerWidth - rootWidth - searchbarWidth - 35; // 35px toleranz wegen  passing und margin von #root, #searchbar und #portalTitle
 
             $("#portalTitle").width(width);
         },
@@ -39,7 +39,7 @@ define([
 
             $(".navbar-collapse").append(this.$el);
         },
-        
+
         setLogo: function () {
             var logo = Radio.request("Parser", "getPortalConfig").PortalLogo,
                 result = "";
