@@ -165,7 +165,7 @@ define(function (require) {
          */
         destroy: function () {
             $(".gfi-win").hide();
-            EventBus.trigger("mapHandler:showMarker", [0,0]);
+            Radio.trigger("MapMarker", "hideMarker");
             this.removeTemplateModels();
             $("#popovermin").remove();
             this.model.destroyPopup();

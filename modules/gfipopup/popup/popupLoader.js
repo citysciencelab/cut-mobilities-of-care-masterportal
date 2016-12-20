@@ -7,7 +7,7 @@ define(function (require) {
         GFIPopupLoader;
 
     GFIPopupLoader = Backbone.Model.extend({
-        defaults :{
+        defaults: {
             currentView: {}
         },
     initialize: function () {
@@ -31,17 +31,29 @@ define(function (require) {
     },
     checkIfMobile: function () {
         var isMobile = Radio.request("Util", "isViewMobile"),
-            context = this;
+            context = this,
+            gfiWin = $(".gfi-win").is(":visible"),
+            gfiModal = $(".gfi-mobile-header").is(":visible");
 
         this.get("currentView").remove();
         if (isMobile) {
             require(["modules/gfipopup/popup/viewMobile"], function (GFIPopupView) {
                  context.set("currentView", new GFIPopupView());
+                 if (gfiWin === true) {
+                     context.get("currentView").render();
+                     Radio.trigger("MapMarker", "hideMarker");
+                     }
             });
         }
         else {
+            $(".modal-backdrop").remove();
              require(["modules/gfipopup/popup/view"], function (GFIPopupView) {
                   context.set("currentView", new GFIPopupView());
+                  if (gfiModal === true) {
+                      context.get("currentView").render();
+                      Radio.trigger("MapMarker", "showMarker", Radio.request("GFIPopup", "getCoordinates"));
+                      }
+
             });
         }
     }

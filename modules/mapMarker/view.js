@@ -236,6 +236,7 @@ define([
         *
         */
         showMarker: function (coordinate) {
+            this.clearMarker();
             this.model.get("marker").setPosition(coordinate);
             this.$el.show();
         },
@@ -246,5 +247,6 @@ define([
             this.$el.hide();
         }
     });
+
     return MapMarker;
 });
