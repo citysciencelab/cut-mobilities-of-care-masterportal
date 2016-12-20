@@ -1,10 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/util",
     "config",
     "openlayers"
-], function (Backbone, Radio, Util, Config, ol) {
+], function (Backbone, Radio, Config, ol) {
     "use strict";
     var model = Backbone.Model.extend({
 
@@ -18,22 +17,26 @@ define([
             center: Config.view.center,
             scale: {},
             layerToPrint: [],
-            fetched: false // gibt an, ob info.json schon geladen wurde
+            fetched: false, // gibt an, ob info.json schon geladen wurde
+            printGFI: Config.print.gfi ? Config.print.gfi : false,
+            printurl: ""
         },
 
-        //
+        /*
+         * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
+         */
         url: function () {
-            var resp;
-            resp = Radio.request("RestReader", "getServiceById", Config.print.printID);
-            if (resp[0] && resp[0].get("url")) {
-                this.set("printurl", resp[0].get("url"));
-            }
+            var resp = Radio.request("RestReader", "getServiceById", Config.print.printID),
+                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null;
 
-            if (_.has(Config.print, "configYAML") === true) {
-                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json";
+            if (url) {
+                var printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
+
+                this.set("printurl", printurl);
+                return Config.proxyURL + "?url=" + printurl + "/info.json";
             }
             else {
-                return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
+                return "undefined"; // muss String übergeben, sonst Laufzeitfehler
             }
         },
 
@@ -116,8 +119,12 @@ define([
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
                             Radio.trigger("Window", "closeWin");
                         },
-                        complete: Util.hideLoader,
-                        beforeSend: Util.showLoader
+                        complete: function () {
+                            Radio.trigger("Util", "hideLoader");
+                        },
+                        beforeSend: function () {
+                            Radio.trigger("Util", "showLoader");
+                        }
                     });
                 }
                 else {
@@ -265,7 +272,7 @@ define([
         /**
          *
          */
-        setSpecification: function () {
+        setSpecification: function (gfiPosition) {
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setDrawLayer(Radio.request("Draw", "getLayer"));
             var specification = {
@@ -288,7 +295,7 @@ define([
                 ]
             };
 
-            if (this.get("printGFIPosition") !== null) {
+            if (gfiPosition !== null) {
                 _.each(_.flatten(this.get("gfiParams")), function (element, index) {
                     specification.pages[0]["attr_" + index] = element;
                 }, this);
@@ -299,11 +306,9 @@ define([
         /**
          * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
          */
-        setGFIPos: function () {
-            var position = this.get("printGFIPosition");
-
-            if (position !== null) {
-                position[0] = position[0] + 0.25; // Verbesserung der Punktlage im Print
+        setGFIPos: function (gfiPosition) {
+            if (gfiPosition !== null) {
+                gfiPosition[0] = gfiPosition[0] + 0.25; // Verbesserung der Punktlage im Print
                 this.push("layerToPrint", {
                     type: "Vector",
                     styleProperty: "styleId",
@@ -329,7 +334,7 @@ define([
                                 type: "Feature",
                                 geometry: {
                                     type: "Point",
-                                    coordinates: position
+                                    coordinates: gfiPosition
                                 },
                                 properties: {
                                     styleId: 0
@@ -339,7 +344,7 @@ define([
                                 type: "Feature",
                                 geometry: {
                                     type: "Point",
-                                    coordinates: position
+                                    coordinates: gfiPosition
                                 },
                                 properties: {
                                     styleId: 1
@@ -349,40 +354,30 @@ define([
                     }
                 });
             }
-            this.setSpecification();
+            this.setSpecification(gfiPosition);
         },
 
         /**
-        * Abfrage an popupmodel starten.
-        * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
+        * Setzt die createURL in Abhängigkeit der GFI
         */
         getGFIForPrint: function () {
-            var gfis = Radio.request("GFIPopup", "getGFIForPrint");
+            var gfis = Radio.request("GFIPopup", "getGFIForPrint"),
+                gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
+                gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
+                gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
+                printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
+                printurl = this.get("printurl"); // URL des Druckdienstes
 
-            if (_.isUndefined(gfis) === false) {
-                this.set("gfiParams", _.pairs(gfis[0]));
-                this.set("gfiTitle", gfis[1]);
-                this.set("printGFIPosition", gfis[2]);
-                // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0 && _.has(Config.print, "configYAML") === false) {
-                    this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-                }
-                else if (_.has(Config.print, "configYAML") === true && Config.print.gfi === true && this.get("gfiParams").length > 0) {
-                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-                }
-                else {
-                    if (_.has(Config.print, "configYAML") === true) {
-                        this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
-                    }
-                    else {
-                        this.set("createURL", this.get("printurl") + "/master/create.json");
-                    }
-                }
-                this.setGFIPos();
+            this.set("gfiParams", gfiParams);
+            this.set("gfiTitle", gfiTitle);
+            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+            if (!_.isNull(gfiPosition) && printGFI === true && gfiParams && gfiParams.length > 0) {
+                this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             }
             else {
-                this.setSpecification();
+                this.set("createURL", printurl + "/create.json");
             }
+            this.setGFIPos(gfiPosition);
         },
 
         /**
@@ -404,8 +399,12 @@ define([
                         kategorie: "alert-warning"
                     });
                 },
-                complete: Util.hideLoader,
-                beforeSend: Util.showLoader
+                complete: function () {
+                    Radio.trigger("Util", "hideLoader");
+                },
+                beforeSend: function () {
+                    Radio.trigger("Util", "showLoader");
+                }
             });
         },
 
