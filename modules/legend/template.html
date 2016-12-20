@@ -13,7 +13,7 @@
 
 <div class="legend-win-content">
     <div class="panel-group" role="tablist" aria-multiselectable="true">
-    <% _.each(legendParams, function(element, index) {
+    <% _.each(legendParams, function(element, index) {console.log(element);
       if(element.isVisibleInMap === true) {
     %>
         <div class="panel panel-default">
@@ -88,12 +88,11 @@
                         <% }
                         }
                        }
-                    }
                     %>
                 </div>
             </div>
         </div>
-    <%
-    });
-    %>
+
+    <% }}); %>
+    </div>
 </div>
