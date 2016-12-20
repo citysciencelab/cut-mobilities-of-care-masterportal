@@ -21,7 +21,7 @@ define([
         },
         startShowingRoute: function (evt) {
             this.model.showRoute(evt.currentTarget.id);
-            EventBus.trigger("showGFIParams");
+            EventBus.trigger("closeGFIParams");
         },
         /**
          *
