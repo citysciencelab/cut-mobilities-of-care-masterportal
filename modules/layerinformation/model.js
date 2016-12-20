@@ -1,10 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "config",
     "moment"
-], function (Backbone, Radio, EventBus, Config, moment) {
+], function (Backbone, Radio, Config, moment) {
 
     var LayerInformation = Backbone.Model.extend({
         defaults: {
