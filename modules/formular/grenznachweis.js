@@ -583,7 +583,7 @@ define([
                         })
                     }));
                 }, this);
-                Radio.trigger("Map", "addInteraction", this.get("draw");
+                Radio.trigger("Map", "addInteraction", this.get("draw"));
                 this.set("activatedInteraction", true);
             }
             else {

@@ -9,10 +9,12 @@ define("app",
     "modules/core/map",
     "modules/core/parametricURL",
     "modules/core/crs",
+    "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
 
     // Core lade
+    new Autostarter();
     new Util();
     new RawLayerList();
     new Preparser();
@@ -204,6 +206,12 @@ define("app",
                 case "featureLister": {
                     require(["modules/featurelister/view"], function (FeatureLister) {
                         new FeatureLister();
+                    });
+                    break;
+                }
+                case "formular": {
+                    require(["modules/formular/view"], function (Formular) {
+                        new Formular(tool.modelname);
                     });
                     break;
                 }

@@ -28,6 +28,7 @@ define([
             breadCrumbListView: {},
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
+                Radio.on("Autostart", "startTool", this.startTool, this);
                 this.listenTo(this.collection,
                 {
                     "traverseTree": this.traverseTree,
@@ -42,7 +43,6 @@ define([
                 });
                 this.render();
                 this.breadCrumbListView = new BreadCrumbListView();
-                this.autostartTool();
             },
             render: function () {
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
@@ -50,18 +50,6 @@ define([
                 var rootModels = this.collection.where({parentId: "root"});
 
                 this.addViews(rootModels);
-            },
-            /**
-            * Startet alle Tools aus config.json mit "autostart:true"
-            */
-            autostartTool: function () {
-                var startUpModul = Radio.request("ParametricURL", "getStartUpModul");
-
-                _.each(this.collection.where({type: "tool"}), function (model) {
-                    if (model.get("autostart") === true || model.get("id").toUpperCase() === startUpModul) {
-                        model.setIsActive(true);
-                    }
-                });
             },
             traverseTree: function (model) {
 
@@ -207,7 +195,15 @@ define([
                 this.remove();
                 this.collection.setAllModelsInvisible();
                 $("body").append(this.el);
-            }
+            },
+            startTool: function (toolId) {
+                var tools = this.collection.where({type: "tool"}),
+                    tool = _.findWhere(tools, {id: toolId});
+
+                if (tool) {
+                    tool.setIsActive(true);
+                }
+             }
         });
         return Menu;
     }
