@@ -38,7 +38,6 @@ define(function (require) {
             }, this);
         },
         startTool: function (toolId) {
-            console.log(toolId);
             var tools = this.collection.where({type: "tool"}),
                 tool = _.findWhere(tools, {id: toolId});
 

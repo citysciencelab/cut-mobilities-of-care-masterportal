@@ -9,6 +9,7 @@ define([
 
     var searchVector = new ol.layer.Vector({
         source: new ol.source.Vector(),
+        alwaysOnTop: true,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: "#08775f",
@@ -21,7 +22,7 @@ define([
         })
     });
 
-    Radio.trigger("Map", "addLayer", searchVector);
+    Radio.trigger("Map", "addLayerToIndex", [searchVector, Radio.request("Map", "getLayers").getArray().length]);
 
     var MapMarker = Backbone.View.extend({
         model: new MapHandlerModel(),

@@ -1,17 +1,18 @@
 .portal-title {
     float: left;
-    margin-left: 55px;
-}
-
-.portal-title > a > img {
-    /*height: 44px;*/
-    margin: 5px;
-}
-
-.portal-title > span {
+    margin-left: 10px;
+    max-width: 30%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     text-shadow: #c0c0c0 3px 3px 5px;
     font-size: 26px;
     color: #777;
     font-family: 'UniversNextW01-Regular','Arial Narrow',Arial,sans-serif;
     vertical-align: middle;
+}
+
+.portal-title > a > img {
+    /*height: 44px;*/
+    margin: 5px;
 }

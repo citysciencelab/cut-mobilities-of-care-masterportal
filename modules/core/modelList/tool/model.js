@@ -47,7 +47,7 @@ define([
                 this.collection.setActiveToolToFalse(this);
                 Radio.trigger("Map", "activateClick", this.getId());
                 if (this.getId() === "legend") {
-                    EventBus.trigger("toggleLegendWin");
+                    Radio.trigger("Legend", "toggleLegendWin");
                 }
                 else if (this.getId() === "featureLister") {
                     EventBus.trigger("toggleFeatureListerWin");

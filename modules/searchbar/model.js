@@ -1,8 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus"
-], function (Backbone, Radio, EventBus) {
+    "eventbus",
+    "config"
+], function (Backbone, Radio, EventBus, Config) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
@@ -18,6 +19,9 @@ define([
         *
         */
         initialize: function () {
+            if (Config.quickHelp) {
+                this.set("quickHelp", Config.quickHelp);
+            }
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
             EventBus.on("searchbar:pushHits", this.pushHits, this);
 

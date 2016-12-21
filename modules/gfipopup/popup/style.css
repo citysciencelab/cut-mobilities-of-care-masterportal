@@ -60,8 +60,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    cursor: help;
-    max-width: 70%;
 }
 
 .gfi-toggle {
@@ -81,6 +79,7 @@
     font-size: 12px;
     max-height: 40vh;
     overflow-y: auto;
+    width: 100%;
 }
 
 .gfi-content > table {
