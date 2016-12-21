@@ -18,6 +18,7 @@ define([
 
             $(window).on("resize", this.setSize);
             this.setLogo();
+            this.setSize();
             this.render(title);
         },
 
