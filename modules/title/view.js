@@ -15,11 +15,10 @@ define([
                 "setSize": this.setSize
             }, this);
 
-
             $(window).on("resize", this.setSize);
             this.setLogo();
-            this.setSize();
             this.render(title);
+            this.setSize();
         },
 
         setSize: function () {

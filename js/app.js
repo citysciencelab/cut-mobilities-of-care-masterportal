@@ -305,13 +305,6 @@ define("app",
             new StyleWMSView();
         });
 
-        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
-
-        if (title) {
-            require(["modules/title/view"], function (TitleView) {
-                new TitleView(title);
-            });
-        }
         Radio.trigger("Util", "hideLoader");
     });
 });
