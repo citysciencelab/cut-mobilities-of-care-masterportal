@@ -8,6 +8,7 @@ define(function (require) {
     Menu = listView.extend({
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
+            Radio.on("Autostart", "startTool", this.startTool, this);
             this.listenTo(this.collection, {
                 "updateLightTree": function () {
                     this.render();
@@ -35,7 +36,15 @@ define(function (require) {
             _.each(models, function (model) {
                  new DesktopLayerViewLight({model: model});
             }, this);
-        }
+        },
+        startTool: function (toolId) {
+            var tools = this.collection.where({type: "tool"}),
+                tool = _.findWhere(tools, {id: toolId});
+
+            if (tool) {
+                tool.setIsActive(true);
+            }
+         }
     });
     return Menu;
 });
