@@ -31,12 +31,6 @@ define([
                     require(["modules/menu/desktop/listView"], function (Menu) {
                         caller.currentMenu = new Menu();
                         channel.trigger("ready");
-                        var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
-                        if (title) {
-                            require(["modules/title/view"], function (TitleView) {
-                                new TitleView(title);
-                            });
-                        }
                     });
                 }
             }
