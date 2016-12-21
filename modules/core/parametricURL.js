@@ -22,6 +22,7 @@ define([
             }, this);
 
             this.parseURL();
+            channel.trigger("ready");
         },
 
         setResult: function (value) {
