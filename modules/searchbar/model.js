@@ -1,7 +1,9 @@
 define([
     "backbone",
-    "eventbus"
-], function (Backbone, EventBus) {
+    "backbone.radio",
+    "eventbus",
+    "config"
+], function (Backbone, Radio, EventBus, Config) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
@@ -17,8 +19,23 @@ define([
         *
         */
         initialize: function () {
+            if (Config.quickHelp) {
+                this.set("quickHelp", Config.quickHelp);
+            }
             EventBus.on("createRecommendedList", this.createRecommendedList, this);
             EventBus.on("searchbar:pushHits", this.pushHits, this);
+
+            if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
+            }
+        },
+
+        setInitSearchString: function (value) {
+            this.set("initSearchString", value);
+        },
+
+        getInitSearchString: function () {
+            return this.get("initSearchString");
         },
 
         /**

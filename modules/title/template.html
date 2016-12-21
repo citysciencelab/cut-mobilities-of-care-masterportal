@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <a href="<%= logoLink %> " target="_blank" data-toggle="tooltip" data-placement="bottom" title="<%= logoTooltip %>">
-    <img src="<% print (util.getPath(logo)) %>">
+    <% if (logo !== "") { %>
+        <img src="<%= logo %>">
+    <% } %>
 </a>
 <span>
     <%= title %>

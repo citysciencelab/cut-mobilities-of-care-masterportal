@@ -3,9 +3,8 @@ define([
     "backbone.radio",
     "eventbus",
     "config",
-    "moment",
-    "modules/core/util"
-], function (Backbone, Radio, EventBus, Config, moment, Util) {
+    "moment"
+], function (Backbone, Radio, EventBus, Config, moment) {
 
     var LayerInformation = Backbone.Model.extend({
         defaults: {
@@ -23,7 +22,7 @@ define([
             }
 
             if (resp[0] && resp[0].get("url")) {
-                return Util.getProxyURL(resp[0].get("url"));
+                return Radio.request("Util", "getProxyURL", resp[0].get("url"));
             }
         },
         initialize: function () {
@@ -46,19 +45,19 @@ define([
         },
 
         fetchData: function (data) {
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             this.fetch({
                 data: data,
                 dataType: "xml",
                 error: function () {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     EventBus.trigger("alert", {
                         text: "Informationen zurzeit nicht verfügbar",
                         kategorie: "alert-warning"
                     });
                 },
                 success: function () {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                 }
             });
         },
@@ -80,6 +79,7 @@ define([
                     var dates = $("gmd\\:CI_Date,CI_Date", xmlDoc),
                     datetype,revisionDateTime,publicationDateTime,
                     dateTime;
+
                     if (dates.length === 1) {
                         dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", dates)[0].textContent;
                     }
@@ -92,16 +92,16 @@ define([
                             else if ($(datetype).attr("codeListValue") === "publication") {
                                 publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
-                            else{
+                            else {
                                 dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                             }
                         });
                     }
-                    if (revisionDateTime){
-                        dateTime=revisionDateTime;
+                    if (revisionDateTime) {
+                        dateTime = revisionDateTime;
                     }
                     else if (publicationDateTime) {
-                        dateTime=publicationDateTime;
+                        dateTime = publicationDateTime;
                     }
                     return moment(dateTime).format("DD.MM.YYYY");
                 }()

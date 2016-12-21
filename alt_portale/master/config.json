@@ -1,11 +1,14 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "GeoViewer",
+    "PortalTitle": "Master",
+    "PortalLogo": "../img/hh-logo.png",
+    "LogoLink": "http://geoinfo.hamburg.de",
+    "LogoToolTip": "Landesbetrieb Geoinformation und Vermessung",
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -14,8 +17,8 @@
         },
         "bkg": {
             "minChars": 3,
-            "bkgSuggestURL": "/bkg_suggest",
-            "bkgSearchURL": "/bkg_geosearch",
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
             "extent": [454591, 5809000, 700000, 6075769],
             "suggestCount": 10,
             "epsg": "EPSG:25832",
@@ -44,12 +47,14 @@
         "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg"
+        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600]
     },
     "menu": {
       "tree": {
         "name": "Themen",
-        "glyphicon": "glyphicon-list"
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
       },
       "tools": {
         "name": "Werkzeuge",
@@ -57,7 +62,11 @@
         "children": {
           "parcelSearch": {
             "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search"
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "StoredQueryID": "Flurstueck5stellig",
+            "configJSON": "/../../components/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false
           },
           "measure": {
             "name": "Strecke / Fläche messen",
@@ -73,10 +82,6 @@
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print"
           },
-          "coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
-          },
           "searchByCoord": {
             "name": "Koordinatensuche",
             "glyphicon": "glyphicon-record"
@@ -87,6 +92,10 @@
           },
           "wfsFeatureFilter": {
             "name": "Filter",
+            "glyphicon": "glyphicon-filter"
+          },
+          "extendedFilter": {
+            "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter"
           },
           "routing": {
@@ -104,6 +113,10 @@
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
               "lister": 10
+          },
+          "animation": {
+            "name": "Pendler Animation",
+            "glyphicon": "glyphicon-play-circle"
           }
         }
       },
@@ -142,7 +155,7 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": true
+      "attributions": false
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -176,10 +189,23 @@
           "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
+          "id": "4926",
+          "visibility": false,
+          "styleable": true,
+          "geomType": "Polygon",
+          "attributesToStyle": ["ErreichbareArbeitsplaetzein30Min"]
+        },
+        {
           "id": "2003",
           "visibility": false,
           "styleId": "2003",
           "mouseHoverField": "GEBIETSNAME"
+        },
+        {
+          "id": "4905",
+          "visibility": false,
+          "gfiTheme": "table",
+          "featureCount": 20
         },
         {
            "id": "2404",
@@ -196,10 +222,11 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
+          "extendedFilter": true,
           "filterOptions": [
             {
               "fieldName": "teilnahme_geburtsklinik",
@@ -219,7 +246,9 @@
           "id": "753",
           "styleId": "753",
           "visibility": false,
+          "styleField": "Leistungsarten",
           "mouseHoverField": "Name",
+          "extendedFilter": true,
           "filterOptions": [
             {
               "fieldName": "Bezirk",

@@ -11,9 +11,7 @@ define([
             "click .glyphicon": "toggle"
         },
         initialize: function () {
-            this.listenTo(Radio.channel("Map"), {
-                "pointerMoveOnMap": this.setCoordinates
-            });
+            Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates);
 
             this.render();
         },

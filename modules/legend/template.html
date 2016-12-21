@@ -13,8 +13,8 @@
 
 <div class="legend-win-content">
     <div class="panel-group" role="tablist" aria-multiselectable="true">
-    <%
-    _.each(legendParams, function(element, index) {
+    <% _.each(legendParams, function(element, index) {
+      if(element.isVisibleInMap === true) {
     %>
         <div class="panel panel-default">
             <div class="panel-heading legend-heading" role="tab" id="überschriftEins<%=index%>" data-toggle="collapse" href="#collapseEins<%=index%>" aria-expanded="true" aria-controls"collapseEins<%=index%>">
@@ -25,6 +25,7 @@
             <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
                 <div class="panel-body panel-legend">
                     <%
+
                     if (element.typ === "WFS") {
                     %>
                         <table>
@@ -43,6 +44,21 @@
                         });
                         %>
                         </table>
+
+                    <% }else if (element.typ === "styleWMS") {%>
+
+                        <table>
+                      <% _.each(element.params, function(param){
+                       %>
+                            <tr>
+                                <td><div class="styleWMS" style="background-color:<%=param.color%>"></div></td>
+                                <td><%=param.startRange%> - <%=param.stopRange%></td>
+                            </tr>
+                       <%
+                       });
+                       %>
+                        </table>
+
                     <%
                     }
                     else {
@@ -71,6 +87,7 @@
                             </p>
                         <% }
                         }
+                       }
                     }
                     %>
                 </div>

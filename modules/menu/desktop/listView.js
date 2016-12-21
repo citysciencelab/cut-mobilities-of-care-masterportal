@@ -16,8 +16,9 @@ define([
 
         Menu = listView.extend({
             initialize: function () {
-                 this.collection = Radio.request("ModelList", "getCollection");
+                this.collection = Radio.request("ModelList", "getCollection");
 
+                Radio.on("Autostart", "startTool", this.startTool, this);
                 this.listenTo(this.collection, {
                     "updateOverlayerView": function (parentId) {
                         this.updateOverlayer(parentId);
@@ -41,6 +42,7 @@ define([
                 $("ul#Themen ul#Overlayer").addClass("LayerListMaxHeight");
                 $("ul#Themen ul#SelectedLayer").addClass("LayerListMaxHeight");
                 $("ul#Themen ul#Baselayer").addClass("LayerListMaxHeight");
+                Radio.trigger("Title", "setSize");
             },
             /**
              * Rendert die  Auswahlliste
@@ -104,12 +106,16 @@ define([
                     return model.getType() === "folder";
                 });
 
-                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer") {
+                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "Themen") {
                     folder = _.sortBy(folder, function (item) {
                         return item.getName();
                     });
+                }
+
+                if (parentId !== "Overlayer" && parentId !== "Themen") {
                     folder.reverse();
                 }
+
                 this.addOverlayViews(folder);
 
                 _.each(folder, function (folder) {
@@ -156,7 +162,15 @@ define([
                 _.each(models, function (model) {
                    new SelectionView({model: model});
                 }, this);
-            }
+            },
+            startTool: function (toolId) {
+                var tools = this.collection.where({type: "tool"}),
+                    tool = _.findWhere(tools, {id: toolId});
+
+                if (tool) {
+                    tool.setIsActive(true);
+                }
+             }
         });
         return Menu;
     }

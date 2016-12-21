@@ -7,14 +7,22 @@
         "minChars": 3,
         "gazetteer": {
            "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
            "serviceId": "6",
            "searchStreets": true,
            "searchHouseNumbers": true,
            "searchDistricts": true,
            "searchParcels": true
        },
-       
+        "bkg": {
+            "minChars": 3,
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
+            "extent": [454591, 5809000, 700000, 6075769],
+            "suggestCount": 10,
+            "epsg": "EPSG:25832",
+            "filter": "filter=(typ:*)",
+            "score": 0.6
+        },
        "visibleWFS": {
            "minChars": 3
        },
@@ -265,7 +273,8 @@
                             "routable": true
                         },
                         {
-                          "id": "1580"                        },
+                          "id": "1580"
+                        },
                         {
                           "id": "1578",
                           "name" : "Parkuhren",
@@ -325,7 +334,7 @@
                       "Layer": [
                         {
                           "id": "4624",
-                        "name" : "RE/RB"
+                          "name" : "RE/RB"
                         },
                         {
                           "id": "4625",
@@ -334,7 +343,6 @@
                         {
                           "id": "4626",
                           "name" : "S-Bahn"
-                            
                         },
                         {
                           "id": "4627",
@@ -737,15 +745,6 @@
                   ]
                 },
                 {
-                 "Titel": "Durchschnittliche tägliche Verkehrsstärken in Hamburg",
-                    "Layer": [
-                        {
-                          "id": "5103"
-                        }
-                    ]
-                },
-                  
-                {
 				  "Titel": "Verkehrsmengen auf Hauptverkehrsstraßen in Hamburg",
 				    "Layer": [
                         {
@@ -761,8 +760,16 @@
                           "id": "5080"
                         }
 			         ]
+                },
+                
+                {
+                 "Titel": "Durchschnittliche tägliche Verkehrsstärken in Hamburg",
+                    "Layer": [
+                        {
+                          "id": "5103"
+                        }
+                    ]
                 }
-
               ]
             }
 

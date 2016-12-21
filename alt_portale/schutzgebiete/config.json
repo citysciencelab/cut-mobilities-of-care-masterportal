@@ -6,7 +6,7 @@
         "minChars": 3,
         "gazetteer": {
             "minChars": 3,
-            "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+            "serviceId": "6",
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
@@ -26,7 +26,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          
+
           "gfi": {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
@@ -99,10 +99,10 @@
           "id": "452"
         },
         {
-          "id": "713", 
-          "visibility": false, 
+          "id": "713",
+          "visibility": false,
           "name" : "Stadtplan S-W"
-        }  
+        }
       ]
     },
     "Fachdaten":
@@ -114,21 +114,21 @@
          "transparency": 40
         },
         {
-         "id": "1998", 
+         "id": "1998",
          "visibility": true
         },
         {
-         "id": "1999", 
+         "id": "1999",
          "visibility": true
         },
         {
-         "id": "1994", 
-         "visibility": true, 
+         "id": "1994",
+         "visibility": true,
          "name": "Vogelschutzgebiete"
         },
         {
-         "id": "1993", 
-         "visibility": true, 
+         "id": "1993",
+         "visibility": true,
          "name": "Fauna-Flora-Habitat-Gebiete"
         }
       ]

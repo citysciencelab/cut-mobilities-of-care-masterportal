@@ -28,6 +28,7 @@ define([
             breadCrumbListView: {},
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
+                Radio.on("Autostart", "startTool", this.startTool, this);
                 this.listenTo(this.collection,
                 {
                     "traverseTree": this.traverseTree,
@@ -194,7 +195,15 @@ define([
                 this.remove();
                 this.collection.setAllModelsInvisible();
                 $("body").append(this.el);
-            }
+            },
+            startTool: function (toolId) {
+                var tools = this.collection.where({type: "tool"}),
+                    tool = _.findWhere(tools, {id: toolId});
+
+                if (tool) {
+                    tool.setIsActive(true);
+                }
+             }
         });
         return Menu;
     }

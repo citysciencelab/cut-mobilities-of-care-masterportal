@@ -22,34 +22,8 @@ define([
             this.listenTo(this.model, "change:coordinate", this.render);
 
             EventBus.on("closeGFIParams", this.closeModal, this); // trigger in map.js
-            EventBus.on("showGFIParams", this.minMaximizePop, this);
         },
-        /**
-         * Toggle des Popovers in minimiert oder maximiert
-         */
-        minMaximizePop: function () {
-            var html;
 
-            if ($(".modal").is(":visible") === false) {
-                $("#popovermin").fadeOut(500, function () {
-                    $("#popovermin").remove();
-                    $(".modal").show(500);
-                    $(".modal-backdrop").show(500);
-                });
-            }
-            else {
-                html = "<div id='popovermin' class='popover-min'>";
-                html += "<span class='glyphicon glyphicon-info-sign gfi-icon-mobile'></span>";
-                html += "</div>";
-                $(".modal").hide();
-                $(".modal-backdrop").hide();
-                $("#map").append(html);
-                $("#popovermin").fadeIn(500);
-                $("#popovermin").click(function () {
-                    EventBus.trigger("showGFIParams", this);
-                });
-            }
-        },
         /**
          *
          */
@@ -92,17 +66,10 @@ define([
          */
         closeModal: function () {
             $("#popovermin").remove();
-            this.removeTemplateModels();
             this.$el.modal("hide");
             this.model.set("isPopupVisible", false);
             this.model.unset("coordinate", {silent: true});
             this.model.destroyPopup();
-        },
-        /**
-         *
-         */
-        removeTemplateModels: function () {
-            this.model.removeChildObjects();
         }
     });
 

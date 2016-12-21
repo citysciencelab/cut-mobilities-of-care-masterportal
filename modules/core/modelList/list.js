@@ -5,12 +5,14 @@ define([
     "modules/core/modelList/layer/wfs",
     "modules/core/modelList/layer/group",
     "modules/core/modelList/folder/model",
-    "modules/core/modelList/tool/model"
+    "modules/core/modelList/tool/model",
+    "modules/layer/wfsStyle/list"
 ], function () {
 
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
+        StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -20,6 +22,7 @@ define([
     ModelList = Backbone.Collection.extend({
             selectionIDX: [],
             initialize: function () {
+                new StyleList();
                 var channel = Radio.channel("ModelList");
 
                 channel.reply({
@@ -61,12 +64,12 @@ define([
                         }
                         // Trigger für mobiles Wandern im Baum
                         this.trigger("traverseTree", model);
+                        channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                     },
                     "change:isSelected": function (model) {
                         if (model.getType() === "layer") {
                             this.resetSelectionIdx(model);
                             model.setIsVisibleInMap(model.getIsSelected());
-                            model.toggleLayerOnMap();
                         }
                         this.trigger("updateSelection");
                         channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -324,6 +327,7 @@ define([
                 // wie sie hinzugefügt werden
                 var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
                     treeType = Radio.request("Parser", "getTreeType");
+
                 if (treeType === "light") {
                     var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
@@ -331,7 +335,7 @@ define([
                     this.add(lightModels);
                     // Parametrisierter Aufruf im lighttree
                     _.each(paramLayers, function (paramLayer) {
-                        this.setModelAttributesById(paramLayer.id, {isVisibleInMap: paramLayer.visibility, transparency: paramLayer.transparency});
+                        this.setModelAttributesById(paramLayer.id, {isSelected: paramLayer.visibility, transparency: paramLayer.transparency});
                     }, this);
                 }
                 // Parametrisierter Aufruf
@@ -363,7 +367,9 @@ define([
             setModelAttributesById: function (id, attrs) {
                 var model = this.get(id);
 
-                model.set(attrs);
+                if (_.isUndefined(model) === false) {
+                    model.set(attrs);
+                }
             },
 
             addModelsByAttributes: function (attrs) {
@@ -379,6 +385,8 @@ define([
              */
             showModelInTree: function (modelId) {
                 var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
+
+                this.closeAllExpandedFolder();
 
                 // öffnet den Themenbaum
                 $("#root li:first-child").addClass("open");

@@ -5,21 +5,35 @@ define([
 ], function (Backbone, Radio, Require) {
 
     var Util = Backbone.Model.extend({
-        defaults: {
-            isViewMobile: false
-        },
+        // defaults: {
+        //     isViewMobile: false
+        // },
         initialize: function () {
             var channel = Radio.channel("Util");
 
             channel.reply({
-                "isViewMobile": this.getIsViewMobile
+                "isViewMobile": this.getIsViewMobile,
+                "getPath": this.getPath,
+                "getProxyURL": this.getProxyURL,
+                "isApple": this.isApple,
+                "isAndroid": this.isAndroid,
+                "isOpera": this.isOpera,
+                "isWindows": this.isWindows,
+                "isChrome": this.isChrome,
+                "isAny": this.isAny
             }, this);
-            //initial isMobileView setzen
+
+            channel.on({
+                "hideLoader": this.hideLoader,
+                "showLoader": this.showLoader
+            }, this);
+
+            // initial isMobileView setzen
             this.toggleIsViewMobile();
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
+                    channel.trigger("isViewMobileChanged");
                 }
             });
 
@@ -41,7 +55,7 @@ define([
             if (/Chrome/i.test(navigator.userAgent)) {
                 return true;
             }
-            else{
+            else {
                 return false;
             }
         },
@@ -103,6 +117,9 @@ define([
             result = url.replace(protocol, "").replace(":" + port, "");
             // www und www2 usw. raus
             // hostname = result.replace(/www\d?\./, "");
+            if (!parser.hostname) {
+                parser.hostname = window.location.hostname;
+            }
             hostname = parser.hostname.split(".").join("_");
             result = result.replace(parser.hostname, "/" + hostname);
             return result;
@@ -137,5 +154,5 @@ define([
         }
     });
 
-    return new Util();
+    return Util;
 });

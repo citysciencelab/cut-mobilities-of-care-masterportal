@@ -48,6 +48,7 @@ define([
                 attr.treeType = Radio.request("Parser", "getTreeType");
                 attr.category = Radio.request("Parser", "getCategory");
                 attr.categories = Radio.request("Parser", "getCategories");
+                attr.backgroundImage = Radio.request("Parser", "getItemByAttributes", {id: "backgroundImage"});
                 this.$el.find(".header").toggleClass("closed");
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
             },

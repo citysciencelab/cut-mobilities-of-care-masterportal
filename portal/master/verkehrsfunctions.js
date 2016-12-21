@@ -2,18 +2,25 @@ define([
     "backbone",
     "eventbus",
     "openlayers",
-    "modules/core/util",
     "backbone.radio"
-], function (Backbone, EventBus, ol, Util, Radio) {
+], function (Backbone, EventBus, ol, Radio) {
 
     var aktualisiereVerkehrsdaten = Backbone.Model.extend({
 
+        default: {
+            proxyURLVerkehrssituation: "",
+            proxyURLVerkehrsmeldung: ""
+        },
         /*
          * Lese Layer mit URL und starte refreshVerkehrsmeldungen, wobei layerid der gleichen URL entsprechen muss.
          */
         initialize: function () {
-            var channel = Radio.channel("Verkehrsfunctions");
+            var proxyURLVerkehrssituation = Radio.request("Util", "getProxyURL", "http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
+                proxyURLVerkehrsmeldung = Radio.request("Util", "getProxyURL", "http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
+                channel = Radio.channel("Verkehrsfunctions");
 
+            this.set("proxyURLVerkehrssituation", proxyURLVerkehrssituation);
+            this.set("proxyURLVerkehrsmeldung", proxyURLVerkehrsmeldung);
             this.listenTo(channel, {
                 "aktualisiereverkehrsnetz": this.refreshVerkehrssituation
             }, this);
@@ -38,7 +45,7 @@ define([
             "</wfs:GetFeature>";
 
             $.ajax({
-                url: Util.getProxyURL("http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
+                url: this.get("proxyURLVerkehrssituation"),
                 type: "POST",
                 data: postmessage,
                 context: model,
@@ -70,7 +77,7 @@ define([
         refreshVerkehrsmeldung: function () {
             // diese Abfrage zeigt im Bedarfsfall eine Meldung
             $.ajax({
-                url: Util.getProxyURL("http://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"),
+                url: this.get("proxyURLVerkehrsmeldung"),
                 data: "SERVICE=WFS&REQUEST=GetFeature&TYPENAME=vkl_hinweis&VERSION=1.1.0",
                 async: true,
                 context: this,

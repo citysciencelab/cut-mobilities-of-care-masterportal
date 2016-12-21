@@ -10,13 +10,45 @@ define(function () {
     });
     */
     var config = {
+
          /**
+        * @memberof config
+        * @type {Object}
+        * @desc parameter für die Animation
+        */
+        animation: {
+            steps: 30,
+            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            params: {
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                TYPENAME: "app:mrh_kreise",
+                VERSION: "1.1.0",
+                maxFeatures: "10000"
+            },
+            featureType: "mrh_einpendler_gemeinde",
+            attrAnzahl: "anzahl_einpendler",
+            attrKreis: "wohnort_kreis",
+            minPx: 5,
+            maxPx: 30,
+            num_kreise_to_style: 4,
+            zoomlevel: 1,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+        },
+        /**
         * @memberof config
         * @type {Array}
         * @desc Liste der ignorierten Attributnamen, die sowohl im requestor als auch im extended wfs filter ausgeschlossen werden
         */
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
-        gfiAtClick: false,
+
+        /**
+        * @memberof config
+        * @type String
+        * @desc bei "attached" wird das GFI-Fenster am Klickpunkt angezeigt, bei jedem anderen String wird es als eigenes Fenster erzeugt. Wird das attribut nicht gesetzt wird der default "detached" verwendet
+        */
+        gfiWindow: "detached",
+
         /**
         * @memberof config
         * @type {Boolean}
@@ -124,7 +156,7 @@ define(function () {
         * @example customModules: ["../url", "../url"]
         * @default []
         */
-        customModules: ["../portale/master/verkehrsfunctions"],
+        customModules: ["../portal/master/verkehrsfunctions"],
         /**
         * @memberof config
         * @type {Object}
@@ -265,13 +297,7 @@ define(function () {
         * @property {string} clickCounter.mobile - URL des iFrame bei mobiler Ausspielung.
         * @example clickCounter: {desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html", mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"}
         */
-        clickCounter: {},
-        /**
-        * @memberof config
-        * @type {String}
-        * @desc Pfad zur gemarkung.json für die Flurstückssuche.
-        */
-        gemarkungen: "../components/lgv-config/gemarkung.json"
+        clickCounter: {}
     };
 
     return config;

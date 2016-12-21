@@ -9,6 +9,7 @@ define([
 
     var searchVector = new ol.layer.Vector({
         source: new ol.source.Vector(),
+        alwaysOnTop: true,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: "#08775f",
@@ -21,7 +22,7 @@ define([
         })
     });
 
-    Radio.trigger("Map", "addLayer", searchVector);
+    Radio.trigger("Map", "addLayerToIndex", [searchVector, Radio.request("Map", "getLayers").getArray().length]);
 
     return Backbone.View.extend({
         model: MapHandlerModel,
@@ -29,7 +30,7 @@ define([
         className: "glyphicon glyphicon-map-marker",
         template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
         events: {
-            "click .glyphicon": "hideMarker"
+            "click .glyphicon-remove": "hideMarker"
         },
         /**
         * @description View des Map Handlers
@@ -63,6 +64,15 @@ define([
                         };
                     }
                 }
+            }, this);
+
+            channel.on({
+                "mapHandler:clearMarker": this.clearMarker,
+                "mapHandler:zoomTo": this.zoomTo,
+                "mapHandler:hideMarker": this.hideMarker,
+                "mapHandler:showMarker": this.showMarker,
+                "mapHandler:zoomToBPlan": this.zoomToBPlan,
+                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
             }, this);
 
             this.listenTo(EventBus, {
@@ -220,13 +230,13 @@ define([
         */
         showMarker: function (coordinate) {
             this.model.get("marker").setPosition(coordinate);
-            this.$el.css("display", "block");
+            this.$el.show();
         },
         /**
         *
         */
         hideMarker: function () {
-            this.$el.css("display", "none");
+            this.$el.hide();
         }
     });
 });

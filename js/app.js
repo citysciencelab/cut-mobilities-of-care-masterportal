@@ -9,10 +9,13 @@ define("app",
     "modules/core/map",
     "modules/core/parametricURL",
     "modules/core/crs",
+    "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
 
-    // Core laden
+    // Core lade
+    new Autostarter();
+    new Util();
     new RawLayerList();
     new Preparser();
     new ParametricURL();
@@ -57,7 +60,7 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
-        if (Util.isAny()) {
+        if (Radio.request("Util", "isAny")) {
             require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
                 new MobileLayerInformationView();
             });
@@ -170,6 +173,12 @@ define("app",
                     });
                     break;
                 }
+                case "extendedFilter": {
+                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                        new ExtendedFilterView();
+                    });
+                    break;
+                }
                 case "treeFilter": {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
                         new TreeFilterView();
@@ -200,9 +209,15 @@ define("app",
                     });
                     break;
                 }
+                case "formular": {
+                    require(["modules/formular/view"], function (Formular) {
+                        new Formular(tool.modelname);
+                    });
+                    break;
+                }
                 case "legend": {
-                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
-                        if (Util.isAny()) {
+                    require(["modules/legend/view", "modules/legend/viewMobile"], function (LegendView, MobileLegendView) {
+                        if (Radio.request("Util", "isAny")) {
                             new MobileLegendView();
                         }
                         else {
@@ -225,19 +240,23 @@ define("app",
             _.each(controls, function (control, index) {
                 switch (control.id) {
                     case "toggleMenu": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                            new ToggleMenuControlView({el: el});
-                        });
+                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
+                                new ToggleMenuControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "zoom": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
-                        });
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "orientation": {
@@ -249,23 +268,29 @@ define("app",
                         break;
                     }
                     case "mousePosition": {
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView();
+                            });
+                        }
                         break;
                     }
                     case "fullScreen": {
-                        var el = controlsView.addRow(control.id);
+                        if(control.attr === true){
+                            var el = controlsView.addRow(control.id);
 
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
                         break;
                     }
                     case "attributions": {
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView();
-                        });
+                        if(control.attr === true){
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView();
+                            });
+                        }
                         break;
                     }
                 }
@@ -281,6 +306,12 @@ define("app",
         if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
                 new SearchbarView(sbconfig);
+                var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
+                if (title) {
+                    require(["modules/title/view"], function (TitleView) {
+                        new TitleView(title);
+                    });
+                }
             });
         }
 
@@ -288,13 +319,6 @@ define("app",
             new StyleWMSView();
         });
 
-        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
-
-        if (title) {
-            require(["modules/title/view"], function (TitleView) {
-                new TitleView(title);
-            });
-        }
+        Radio.trigger("Util", "hideLoader");
     });
-    Util.hideLoader();
 });

@@ -3,9 +3,8 @@ define([
     "backbone.radio",
     "openlayers",
     "eventbus",
-    "modules/core/util",
     "config"
-], function (Backbone, Radio, ol, EventBus, Util, Config) {
+], function (Backbone, Radio, ol, EventBus, Config) {
     "use strict";
     var RoutingModel = Backbone.Model.extend({
         /**
@@ -50,9 +49,9 @@ define([
                 standort = this.get("standort"),
                 request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_routen'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:start_ort</PropertyName><Literal>" + standort + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>";
 
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             $.ajax({
-                url: Util.getProxyURL(layer.get("url")),
+                url: Radio.request("Util", "getProxyURL", layer.get("url")),
                 data: request_str,
                 headers: {
                     "Content-Type": "text/xml; charset=UTF-8"
@@ -63,7 +62,7 @@ define([
                 method: "POST",
                 dataType: "xml",
                 complete: function (jqXHR) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         EventBus.trigger("alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
                     }
@@ -122,9 +121,9 @@ define([
                 request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_verkehrslage'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:route_id</PropertyName><Literal>" + routenid + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>",
                 source;
 
-            Util.showLoader();
+            Radio.trigger("Util", "showLoader");
             $.ajax({
-                url: Util.getProxyURL(layer.get("url")),
+                url: Radio.request("Util", "getProxyURL", layer.get("url")),
                 data: request_str,
                 headers: {
                     "Content-Type": "text/xml; charset=UTF-8"
@@ -135,7 +134,7 @@ define([
                 method: "POST",
                 dataType: "xml",
                 complete: function (jqXHR) {
-                    Util.hideLoader();
+                    Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
                         EventBus.trigger("alert", "Dienst antwortet nicht wie erwartet. Bitte versuchen Sie es später wieder.");
                     }

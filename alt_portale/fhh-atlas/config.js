@@ -1,5 +1,9 @@
 define(function () {
     var config = {
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        title: "FHH - Atlas",
+        logo: "../img/hh-logo.png",
+        simpleMap: true,
         tree: {
             orderBy: "opendata",
             saveSelection: true,
@@ -79,6 +83,7 @@ define(function () {
             center: [565874, 5934140],
             extent: [442800, 5809000, 738000, 6102200]
         },
+
         layerConf: "../components/lgv-config/services-fhhnet.json",
         restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",

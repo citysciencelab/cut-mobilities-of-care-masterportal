@@ -126,13 +126,13 @@
 
             {
              "id": "368",
-             
+
              "name": "ALKIS farbig (ab 1: 10 000)",
              "maxScale": "10000"
             },
             {
              "id": "149",
-             
+
              "name": "ALKIS grau-blau (ab 1: 10 000)",
              "maxScale": "10000"
             },
@@ -204,7 +204,7 @@
         },
         {
           "Titel": "ÖV-Netze",
-          
+
           "Layer": [
             {
               "id": "1935",
@@ -368,7 +368,7 @@
                     }
 			     ]
          },
-          
+
          {
             "Titel": "Durchschnittliche tägliche Verkehrsstärken in Hamburg",
                  "Layer": [
@@ -436,7 +436,7 @@
                         {
                           "id": ["947", "946"],
                           "name": "Verkehrslage auf Autobahnen",
-                          "layerAttribution": 
+                          "layerAttribution":
                             {
                                 "text": "",
                                 "channel": "Verkehrsfunctions",
@@ -636,8 +636,8 @@
             },
             {
               "id": ["2429","2430","2431","2432","2433","2434","2435","2436","2437","2438","2459"],
-              "name" : "ALKIS - Festlegungen"  
-                
+              "name" : "ALKIS - Festlegungen"
+
             },
             {
               "id": "2444",

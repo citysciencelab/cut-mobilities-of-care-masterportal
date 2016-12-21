@@ -12,7 +12,7 @@ define(function () {
             epsg: "EPSG:25832"
             */
         },
-         namedProjections: [
+        namedProjections: [
             // ETRS89 UTM
             ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
         ],
@@ -40,11 +40,11 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
+        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
         restConf: "../components/lgv-config/rest-services-internet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
-        attributions: true,
+
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,

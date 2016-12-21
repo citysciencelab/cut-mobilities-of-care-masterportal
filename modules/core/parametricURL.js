@@ -22,6 +22,7 @@ define([
             }, this);
 
             this.parseURL();
+            channel.trigger("ready");
         },
 
         setResult: function (value) {
@@ -220,7 +221,7 @@ define([
                     initString = "";
 
                 // Bei " " oder "-" im Suchstring
-                if (value.includes(" ") || value.includes("-")) {
+                if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
 
                     // nach " " splitten
                     var split = value.split(" ");
@@ -243,9 +244,6 @@ define([
                     initString = value.substring(0, 1).toUpperCase() + value.substring(1);
                 }
                 this.set("initString", initString);
-            }
-            else {
-                this.set("initString", "");
             }
 
             /**

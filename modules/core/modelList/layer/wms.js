@@ -207,7 +207,7 @@ define(function (require) {
         },
 
         updateSourceSLDBody: function () {
-            this.getLayerSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
+            this.getLayer().getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
         setInfoFormat: function (value) {
