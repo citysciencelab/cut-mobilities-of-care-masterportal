@@ -27,7 +27,7 @@ define(function () {
             resolution: 66.14579761460263,
             extent: [454591, 5809000, 700000, 6075769],
             epsg: "EPSG:25832"
-            
+
         },
         controls: {
             zoom: true,
@@ -140,10 +140,10 @@ define(function () {
                 glyphicon: "glyphicon-resize-full"
             }
         },
-        
+
 =======
         proxyURL: "/cgi-bin/proxy.cgi",
-        
+
         attributions: true,
         scaleLine: true,
         mouseHover: true,
