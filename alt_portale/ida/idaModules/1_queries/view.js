@@ -1,24 +1,19 @@
 define([
     "jquery",
     "backbone",
-    "text!idaModules/1_queries/template.html",
     "idaModules/1_queries/model",
     "idaModules/2_brw/view",
     "idaModules/1_queries/locality/view",
     "idaModules/1_queries/year/view",
     "idaModules/1_queries/use/view",
-    "idaModules/1_queries/product/view",
-    "bootstrap/collapse"
-], function ($, Backbone, Template, Model, Seite2, Locality, Year, Use, Product) {
+    "idaModules/1_queries/product/view"
+], function ($, Backbone, Model, Seite2) {
     "use strict";
     var QueriesView = Backbone.View.extend({
-        el: "#queries",
+        el: "#seite_eins",
         model: Model,
-        template: _.template(Template),
         events: {
-            "click #seite1_weiter": "weiter",
-            "mouseover .panel": "panelMouseHover",
-            "click .panel": "panelClick"
+            "click #seite1_weiter": "weiter"
         },
         initialize: function () {
             this.listenTo(this.model, "change:jahr", this.checkParameter),
@@ -27,84 +22,17 @@ define([
             this.listenTo(this.model, "change:lage", this.checkParameter);
 
             this.model.reset();
-            this.render();
-            new Locality;
-            new Year;
-            new Use;
-            new Product;
         },
         weiter: function () {
             new Seite2(this.model.get("jahr"), this.model.get("nutzung"), this.model.get("produkt"), this.model.get("lage"));
         },
         checkParameter: function () {
-            $("#seite1_weiter").prop("disabled", true);
-            if (this.model.get("lage") !== "") {
-                this.panelPrimary("jahr");
-                $("#jahresfeld").focus();
-                if (this.model.get("jahr") !== "") {
-                    this.panelPrimary("nutzung");
-                    $("#nutzungdropdown").focus();
-                    if (this.model.get("nutzung") !== "") {
-                        this.panelPrimary("produkt");
-                        $("#produktdropdown").focus();
-                        if (this.model.get("produkt") !== "") {
-                            $("#seite1_weiter").prop("disabled", false);
-                        }
-                    }
-                }
+            if (this.model.get("jahr") !== "" && this.model.get("nutzung") !== "" && this.model.get("produkt") !== "" && this.model.get("lage") !== "") {
+                $("#seite1_weiter").prop("disabled", false);
             }
-        },
-        panelMouseHover: function (evt) {
-            var targetId = evt.currentTarget.id;
-
-            _.each(this.$el.find(".panel-default"), function (div) {
-                var id = $(div).children()[1].id;
-
-                if ($(div)[0].id === targetId) {
-                    this.panelCollapse(id, "show");
-                    this.nuker();
-                }
-                else {
-                    this.panelCollapse(id, "hide");
-                }
-            }, this);
-        },
-        nuker: function () {
-            setTimeout(function () {
-                _.each(this.$el.find(".panel-default"), function (div) {
-                    this.panelCollapse($(div).children()[1].id, "hide");
-                }, this);
-            }.bind(this), 5000);
-        },
-        panelClick: function (evt) {
-            this.panelPrimary(evt.currentTarget.id);
-            evt.stopPropagation();
-        },
-        panelPrimary: function (id) {
-            _.each(this.$el.find(".panel"), function (panel) {
-                if (id === $(panel).attr("id")) {
-                    if ($(panel).hasClass("panel-primary") === false) {
-                        $(panel).addClass("panel-primary");
-                        $(panel).removeClass("panel-default");
-                    }
-                    this.panelCollapse($(panel).children()[1].id, "show");
-                }
-                else {
-                    if ($(panel).hasClass("panel-primary") !== false) {
-                        $(panel).removeClass("panel-primary");
-                        $(panel).addClass("panel-default");
-                        this.panelCollapse($(panel).children()[1].id, "hide");
-                    }
-                }
-            }, this);
-        },
-        panelCollapse: function (id, status) {
-            $("#" + id).collapse(status);
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html(this.template(attr));
+            else {
+                $("#seite1_weiter").prop("disabled", true);
+            }
         }
     });
 

@@ -6,13 +6,15 @@ define([
     "modules/core/modelList/layer/geojson",
     "modules/core/modelList/layer/group",
     "modules/core/modelList/folder/model",
-    "modules/core/modelList/tool/model"
+    "modules/core/modelList/tool/model",
+    "modules/layer/wfsStyle/list"
 ], function () {
 
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
+        StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -24,6 +26,7 @@ define([
         initialize: function () {
             var channel = Radio.channel("ModelList");
 
+            new StyleList();
             channel.reply({
                 "getCollection": this,
                 "getModelsByAttributes": function (attributes) {
@@ -50,19 +53,19 @@ define([
                 "renderTree": function () {
                     this.trigger("renderTree");
                 }
-           }, this);
+            }, this);
 
-           this.listenTo(this, {
-               "change:isVisibleInMap": function () {
-                   channel.trigger("updateVisibleInMapList");
-                   channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
-               },
-               "change:isExpanded": function (model) {
-                       this.trigger("updateOverlayerView", model.getId());
+            this.listenTo(this, {
+                "change:isVisibleInMap": function () {
+                    channel.trigger("updateVisibleInMapList");
+                    channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                },
+                "change:isExpanded": function (model) {
+                    this.trigger("updateOverlayerView", model.getId());
                     if (model.getId() === "SelectedLayer") {
                         this.trigger("updateSelection", model);
                     }
-                    // Trigger für mobiles Wandern im Baum
+                    // Trigger fÃ¼r mobiles Wandern im Baum
                     this.trigger("traverseTree", model);
                     channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                 },
@@ -70,7 +73,6 @@ define([
                     if (model.getType() === "layer") {
                         this.resetSelectionIdx(model);
                         model.setIsVisibleInMap(model.getIsSelected());
-                        model.toggleLayerOnMap();
                     }
                     this.trigger("updateSelection");
                     channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -106,9 +108,9 @@ define([
             }
         },
         /**
-         * [checkIsExpanded description]
-         * @return {[type]} [description]
-         */
+        * [checkIsExpanded description]
+        * @return {[type]} [description]
+        */
         closeAllExpandedFolder: function () {
             var folderModel = this.findWhere({isExpanded: true});
 
@@ -118,21 +120,21 @@ define([
         },
 
         /**
-        * Setzt bei Änderung der Ebene, alle Model
+        * Setzt bei Ã„nderung der Ebene, alle Model
         * auf der neuen Ebene auf sichtbar
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
         */
         setModelsVisibleByParentId: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-                // Falls es ein LeafFolder ist --> "Alle auswählen" Template
-                selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
+            // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
+            selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
 
             _.each(_.union(selectedLeafFolder, itemListByParentId), function (item) {
                 item.setIsVisibleInTree(true);
             });
         },
-         /**
-        * Setzt bei Änderung der Ebene, alle Model
+        /**
+        * Setzt bei Ã„nderung der Ebene, alle Model
         * auf der alten Ebene auf unsichtbar
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
         */
@@ -149,20 +151,20 @@ define([
                 item.setIsVisibleInTree(false);
             });
         },
-         /**
+        /**
         *
         *
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
         */
         setVisibleByParentIsExpanded: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-                parent = this.findWhere({id: parentId});
+            parent = this.findWhere({id: parentId});
 
             if (!parent.getIsExpanded()) {
                 this.setAllDescendantsInvisible(parentId);
             }
             else {
-                 _.each(itemListByParentId, function (item) {
+                _.each(itemListByParentId, function (item) {
                     item.setIsVisibleInTree(true);
                 });
             }
@@ -180,8 +182,8 @@ define([
         },
 
         /**
-         * Setzt alle Models unsichtbar
-         */
+        * Setzt alle Models unsichtbar
+        */
         setAllModelsInvisible: function () {
             this.forEach(function (model) {
                 model.setIsVisibleInTree(false);
@@ -190,7 +192,7 @@ define([
                 }
             });
         },
-         /**
+        /**
         * Alle Layermodels von einem Leaffolder werden "selected" oder "unselected"
         * @param {Backbone.Model} model - folderModel
         */
@@ -202,16 +204,16 @@ define([
             });
         },
         /**
-         * Prüft ob alle Layer im Leaffolder isSelected = true sind
-         * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt
-         * @param {Backbone.Model} model - layerModel
-         */
+        * PrÃ¼ft ob alle Layer im Leaffolder isSelected = true sind
+        * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt
+        * @param {Backbone.Model} model - layerModel
+        */
         setIsSelectedOnParent: function (model) {
             var layers = this.where({parentId: model.getParentId()}),
-               folderModel = this.findWhere({id: model.getParentId()}),
-               allLayersSelected = _.every(layers, function (layer) {
-                    return layer.getIsSelected() === true;
-               });
+            folderModel = this.findWhere({id: model.getParentId()}),
+            allLayersSelected = _.every(layers, function (layer) {
+                return layer.getIsSelected() === true;
+            });
 
             if (allLayersSelected === true) {
                 folderModel.setIsSelected(true);
@@ -272,7 +274,7 @@ define([
         },
         moveModelDown: function (model) {
             var oldIDX = model.getSelectionIDX(),
-                newIDX = oldIDX - 1;
+            newIDX = oldIDX - 1;
 
             if (oldIDX > 0) {
                 this.removeFromSelectionIDX(model.getSelectionIDX());
@@ -282,25 +284,25 @@ define([
                 }
                 this.trigger("updateSelection");
                 this.trigger("updateLightTree");
-                // Trigger für mobil
+                // Trigger fÃ¼r mobil
                 this.trigger("changeSelectedList");
             }
         },
         moveModelUp: function (model) {
             var oldIDX = model.getSelectionIDX(),
-                newIDX = oldIDX + 1;
+            newIDX = oldIDX + 1;
 
             if (oldIDX < this.selectionIDX.length - 1) {
                 this.removeFromSelectionIDX(model.getSelectionIDX());
                 this.insertIntoSelectionIDXAt(model, newIDX);
-                // Auch wenn die Layer im simple Tree noch nicht selected wurde, können
+                // Auch wenn die Layer im simple Tree noch nicht selected wurde, kÃ¶nnen
                 // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
                 if (model.getIsSelected()) {
                     Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
                 }
                 this.trigger("updateSelection");
                 this.trigger("updateLightTree");
-                // Trigger für mobil
+                // Trigger fÃ¼r mobil
                 this.trigger("changeSelectedList");
             }
         },
@@ -311,9 +313,9 @@ define([
         },
 
         /**
-         * Setzt bei allen Models vom Typ "layer" das Attribut "isSettingVisible"
-         * @param {boolean} value
-         */
+        * Setzt bei allen Models vom Typ "layer" das Attribut "isSettingVisible"
+        * @param {boolean} value
+        */
         setIsSettingVisible: function (value) {
             var models = this.where({type: "layer"});
 
@@ -322,15 +324,15 @@ define([
             });
         },
         /**
-         * Im Lighttree alle Models hinzufügen ansonsten, die Layer die initial
-         * angezeigt werden sollen.
-         */
+        * Im Lighttree alle Models hinzufÃ¼gen ansonsten, die Layer die initial
+        * angezeigt werden sollen.
+        */
         addInitialyNeededModels: function () {
-            // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
-            // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
-            // wie sie hinzugefügt werden
+            // lighttree: Alle models gleich hinzufÃ¼gen, weil es nicht viele sind und sie direkt einen Selection index
+            // benÃ¶tigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
+            // wie sie hinzugefÃ¼gt werden
             var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
-                treeType = Radio.request("Parser", "getTreeType");
+            treeType = Radio.request("Parser", "getTreeType");
 
             if (treeType === "light") {
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
@@ -383,18 +385,18 @@ define([
         },
 
         /**
-         * Wird aus der Themensuche heraus aufgerufen
-         * Öffnet den Themenbaum, selektiert das Model und fügt es zur Themenauswahl hinzu
-         * @param  {String} modelId
-         */
+        * Wird aus der Themensuche heraus aufgerufen
+        * Ã–ffnet den Themenbaum, selektiert das Model und fÃ¼gt es zur Themenauswahl hinzu
+        * @param  {String} modelId
+        */
         showModelInTree: function (modelId) {
             var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
             this.closeAllExpandedFolder();
 
-            // öffnet den Themenbaum
+            // Ã¶ffnet den Themenbaum
             $("#root li:first-child").addClass("open");
-            // Parent und eventuelle Siblings werden hinzugefügt
+            // Parent und eventuelle Siblings werden hinzugefÃ¼gt
             this.addAndExpandModelsRecursive(lightModel.parentId);
             this.setModelAttributesById(modelId, {isSelected: true});
             // Nur bei Overlayern wird in Tree gescrollt.
@@ -409,12 +411,12 @@ define([
         */
         scrollToLayer: function (overlayername) {
             var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
-                offsetFromTop = liLayer ? $(liLayer).offset().top : null,
-                heightThemen = $("#Themen").css("height"),
-                scrollToPx = 0;
+            offsetFromTop = liLayer ? $(liLayer).offset().top : null,
+            heightThemen = $("#Themen").css("height"),
+            scrollToPx = 0;
 
             if (offsetFromTop) {
-                // die "px" oder "%" vom string löschen und zu int parsen
+                // die "px" oder "%" vom string lÃ¶schen und zu int parsen
                 if (heightThemen.slice(-2) === "px") {
                     heightThemen = parseInt(heightThemen.slice(0, -2), 10);
                 }
@@ -432,9 +434,9 @@ define([
 
         /**
         * Rekursive Methode, die von unten im Themenbaum startet
-        * Fügt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
-        * Beim Zurücklaufen werden die Parent-Models expanded
-        * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefügt
+        * FÃ¼gt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
+        * Beim ZurÃ¼cklaufen werden die Parent-Models expanded
+        * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefÃ¼gt
         */
         addAndExpandModelsRecursive: function (parentId) {
             var lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
@@ -457,10 +459,10 @@ define([
         },
 
         /**
-         * [removeModelsByParentId description]
-         * @param  {[type]} parentId [description]
-         * @return {[type]}          [description]
-         */
+        * [removeModelsByParentId description]
+        * @param  {[type]} parentId [description]
+        * @return {[type]}          [description]
+        */
         removeModelsByParentId: function (parentId) {
             _.each(this.where({parentId: parentId}), function (model) {
                 if (model.getType() === "layer" && model.getIsVisibleInMap() === true) {

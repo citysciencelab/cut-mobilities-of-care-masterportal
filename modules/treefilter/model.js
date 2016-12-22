@@ -1,10 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "config",
     "modules/core/util"
-], function (Backbone, Radio, EventBus, Config, Util) {
+], function (Backbone, Radio, Config, Util) {
 
     var TreeFilter = Backbone.Model.extend({
         defaults: {
@@ -28,8 +27,6 @@ define([
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            // EventBus.once("layerlist:sendLayerByID", this.setListenerForVisibility, this);
-            // EventBus.trigger("layerlist:getLayerByID", "182");
             var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
 
             if (!_.isUndefined(model)) {
@@ -275,22 +272,15 @@ define([
         },
         updateStyleByID: function () {
             Radio.trigger("ModelList", "setModelAttributesById", "182", {"SLDBody": this.get("SLDBody")});
-            // EventBus.trigger("layerlist:setAttributionsByID", "182", {"SLDBody": this.get("SLDBody")});
             if (this.get("isFilter") === true) {
                 Radio.trigger("ModelList", "setModelAttributesById", "2297", {"displayInTree": false, "visibility": false});
                 Radio.trigger("ModelList", "setModelAttributesById", "182", {"displayInTree": true, "visibility": true});
                 Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibility": true});
-                // EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": false, "visibility": false});
-                // EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": true, "visibility": true});
-                // EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": true});
             }
             else {
                 Radio.trigger("ModelList", "setModelAttributesById", "2297", {"displayInTree": true, "visibility": true});
                 Radio.trigger("ModelList", "setModelAttributesById", "182", {"displayInTree": false, "visibility": false});
                 Radio.trigger("ModelList", "setModelAttributesById", "2298", {"visibility": false});
-                // EventBus.trigger("layerlist:setAttributionsByID", "2297", {"displayInTree": true, "visibility": true});
-                // EventBus.trigger("layerlist:setAttributionsByID", "182", {"displayInTree": false, "visibility": false});
-                // EventBus.trigger("layerlist:setAttributionsByID", "2298", {"visibility": false});
             }
         },
         removeFilter: function () {

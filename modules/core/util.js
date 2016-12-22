@@ -117,6 +117,9 @@ define([
             result = url.replace(protocol, "").replace(":" + port, "");
             // www und www2 usw. raus
             // hostname = result.replace(/www\d?\./, "");
+            if (!parser.hostname) {
+                parser.hostname = window.location.hostname;
+            }
             hostname = parser.hostname.split(".").join("_");
             result = result.replace(parser.hostname, "/" + hostname);
             return result;

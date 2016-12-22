@@ -1,10 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "config",
     "moment"
-], function (Backbone, Radio, EventBus, Config, moment) {
+], function (Backbone, Radio, Config, moment) {
 
     var LayerInformation = Backbone.Model.extend({
         defaults: {
@@ -51,7 +50,7 @@ define([
                 dataType: "xml",
                 error: function () {
                     Radio.trigger("Util", "hideLoader");
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Informationen zurzeit nicht verfügbar",
                         kategorie: "alert-warning"
                     });

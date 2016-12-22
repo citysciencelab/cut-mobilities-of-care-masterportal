@@ -35,7 +35,7 @@ define([
         },
 
         initialize: function () {
-            Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
+            var layers = Radio.request("Map", "getLayers");
 
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
@@ -52,8 +52,7 @@ define([
                 alwaysOnTop: true
             }));
 
-            var layers = Radio.request("Map","getLayers");
-            Radio.trigger("Map","addLayerToIndex",[this.get("layer"),layers.getArray().length]);
+            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
 
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
@@ -79,9 +78,7 @@ define([
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
-                this.listenTo(Radio.channel("Map"), {
-                    "pointerMoveOnMap": this.placeMeasureTooltip
-                });
+                Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
                 this.set("sketch", evt.feature);
                 this.createMeasureTooltip();
             }, this);
@@ -89,10 +86,10 @@ define([
                 this.get("measureTooltipElement").className = "tooltip-default tooltip-static";
                 this.get("measureTooltip").setOffset([0, -7]);
                 // unset sketch
-                this.get("sketch", null);
+                this.set("sketch", null);
                 // unset tooltip so that a new one can be created
-                this.get("measureTooltipElement", null);
-                this.stopListening(Radio.channel("Map"), "pointerMoveOnMap");
+                this.set("measureTooltipElement", null);
+                Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
@@ -189,36 +186,46 @@ define([
             var scaleError = 0;
 
             switch (scale) {
-                case 500:
+                case 500: {
                     scaleError = 0.5;
                     break;
-                case 1000:
+                }
+                case 1000: {
                     scaleError = 1;
                     break;
-                case 2500:
+                }
+                case 2500: {
                     scaleError = 2.5;
                     break;
-                case 5000:
+                }
+                case 5000: {
                     scaleError = 5;
                     break;
-                case 10000:
+                }
+                case 10000: {
                     scaleError = 10;
                     break;
-                case 20000:
+                }
+                case 20000: {
                     scaleError = 20;
                     break;
-                case 40000:
+                }
+                case 40000: {
                     scaleError = 40;
                     break;
-                case 60000:
+                }
+                case 60000: {
                     scaleError = 60;
                     break;
-                case 100000:
+                }
+                case 100000: {
                     scaleError = 100;
                     break;
-                case 250000:
+                }
+                case 250000: {
                     scaleError = 250;
                     break;
+                }
             }
             return scaleError;
         },
@@ -247,14 +254,14 @@ define([
                 rechtswertMittel = 0,
                 lengthRed,
                 fehler = 0,
-                scale = parseInt(this.get("scale")),
+                scale = parseInt(this.get("scale"), 10),
                 scaleError = this.getScaleError(scale);
 
             for (var i = 0; i < coords.length; i++) {
                 rechtswertMittel += coords[i][0];
                 if (i < coords.length - 1) {
-                    //http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
-                    //Seite 5:
+                    // http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
+                    // Seite 5:
                     fehler += Math.pow(scaleError, 2);
                 }
             }
@@ -282,11 +289,11 @@ define([
                 rechtswertMittel = 0,
                 areaRed,
                 fehler = 0,
-                scale = parseInt(this.get("scale")),
+                scale = parseInt(this.get("scale"), 10),
                 scaleError = this.getScaleError(scale);
 
             for (var i = 0;i < coords.length;i++) {
-                rechtswertMittel += parseInt(coords[i][0]);
+                rechtswertMittel += parseInt(coords[i][0], 10);
                 if (i === coords.length - 1) {
                     fehler += this.calcDeltaPow(coords, i, 0);
                 }

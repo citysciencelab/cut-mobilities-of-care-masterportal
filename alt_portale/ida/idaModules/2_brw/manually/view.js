@@ -12,12 +12,8 @@ define([
         events: {
             "keyup input[type=text]": "checkBRWNummer"
         },
-        initialize: function (jahr, nutzung, produkt) {
+        initialize: function () {
             this.listenTo(this.model, "change:brwList", this.render);
-
-            this.model.set("jahr", jahr);
-            this.model.set("nutzung", nutzung);
-            this.model.set("produkt", produkt);
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -28,29 +24,24 @@ define([
         * Wird zweimal gerufen, wenn mit Strg + V eingefügt wird. Einmal pro Taste.
         */
         checkBRWNummer: function (evt) {
-            if (evt.keyCode >= 48 && evt.keyCode <= 57 || evt.keyCode >= 96 && evt.keyCode <= 105) { // nur Zahlen
-                this.requestBRW(evt);
-            }
-            else if (evt.keyCode === 86) { // könnte Strg + V sein
-                this.requestBRW(evt);
-            }
-        },
-        requestBRW: function (evt) {
-            if (evt.currentTarget.value.length === 7) {
-                var wnum = "0" + evt.currentTarget.value;
-            }
-            else if (evt.currentTarget.value.length === 8) {
-                var wnum = evt.currentTarget.value;
-            }
-            else {
-                return;
-            }
-            var nutzung = evt.currentTarget.id.split("#")[0],
-                jahr = evt.currentTarget.id.split("#")[1];
+            if (evt.ctrlKey === false && evt.shiftKey === false && evt.altKey === false) { // verhindert doppeltes ausführen
+                if (evt.currentTarget.value.length === 7) { // return
+                    var wnum = "0" + evt.currentTarget.value,
+                        nutzung = evt.currentTarget.id.split("#")[0],
+                        jahr = evt.currentTarget.id.split("#")[1];
 
-            this.model.requestBRWDetails(wnum, jahr, nutzung);
+                    this.model.requestBRWDetails(wnum, jahr, nutzung);
+                }
+                else if (evt.keyCode === 13 || evt.currentTarget.value.length === 8) {
+                    var wnum = evt.currentTarget.value,
+                        nutzung = evt.currentTarget.id.split("#")[0],
+                        jahr = evt.currentTarget.id.split("#")[1];
+
+                    this.model.requestBRWDetails(wnum, jahr, nutzung);
+                }
+            }
         }
     });
 
-    return ManuallyView;
+    return new ManuallyView();
 });

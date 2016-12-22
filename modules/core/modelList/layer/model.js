@@ -2,7 +2,6 @@ define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
-        StyleList = require("modules/layer/wfsStyle/list"),
         Layer;
 
     Layer = Item.extend({
@@ -20,7 +19,6 @@ define(function (require) {
             layerInfoClicked: false
         },
         initialize: function () {
-            new StyleList();
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": this.createLayerSource,
@@ -92,7 +90,8 @@ define(function (require) {
                 }
 
                 this.createLayerSource();
-                this.toggleLayerOnMap();
+                Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
+                this.setIsVisibleInMap(this.getIsSelected());
             }
             this.setAttributes();
             this.createLegendURL();
@@ -318,12 +317,14 @@ define(function (require) {
          * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
-            if (this.getIsSelected() === true) {
-                Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
-            }
-            else {
-                // model.collection besser?!
-                Radio.trigger("Map", "removeLayer", this.getLayer());
+            if (Radio.request("Parser", "getTreeType") !== "light") {
+                if (this.getIsSelected() === true) {
+                    Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
+                }
+                else {
+                    // model.collection besser?!
+                    Radio.trigger("Map", "removeLayer", this.getLayer());
+                }
             }
         },
 

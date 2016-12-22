@@ -288,18 +288,12 @@ define(function (require) {
 
         // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
         setImportDrawMeasureLayersOnTop: function (layers) {
-            var layersOnTop = [];
-
-            for (var i = layers.getLength(); i >= 0; i--) {
-                var layer = layers.item(i);
-
-                if (!_.isUndefined(layer) && layer.get("alwaysOnTop")) {
-                    layers.removeAt(i);
-                    layersOnTop.push(layer);
-                }
-            }
+            var layersOnTop = _.filter(layers.getArray(), function (layer) {
+                return layer.get("alwaysOnTop") === true;
+            });
 
             _.each(layersOnTop, function (layer) {
+                layers.remove(layer);
                 layers.push(layer);
             });
         },

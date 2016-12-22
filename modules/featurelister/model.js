@@ -76,7 +76,7 @@ define([
                     });
                 }
                 else {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
                         kategorie: "alert-warning"
                     });

@@ -135,7 +135,7 @@ define([
                 success: successFunction,
                 timeout: 6000,
                 error: function () {
-                    EventBus.trigger("alert", url + " nicht erreichbar.");
+                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
                 }
             });
         }

@@ -198,7 +198,7 @@ function (Backbone, Radio, EventBus) {
                 timeout: 6000,
                 contentType: "text/xml",
                 error: function () {
-                    EventBus.trigger("alert", url + " nicht erreichbar.");
+                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
                 }
             });
         },
@@ -213,7 +213,7 @@ function (Backbone, Radio, EventBus) {
                 success: successFunction,
                 timeout: 6000,
                 error: function () {
-                    EventBus.trigger("alert", url + " nicht erreichbar.");
+                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
                 }
             });
         }

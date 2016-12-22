@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "eventbus",
     "config"
-], function (Backbone, Radio, ol, EventBus, Config) {
+], function (Backbone, Radio, ol, Config) {
 
     var RoutingModel = Backbone.Model.extend({
         defaults: {
@@ -30,8 +29,7 @@ define([
             if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
                 this.set("bbox", "&bbox=" + Config.view.extent[0] + "," + Config.view.extent[1] + "," + Config.view.extent[2] + "," + Config.view.extent[3] + "&srsName=" + Config.view.epsg);
             }
-//            EventBus.on("setMap", this.setMap, this);
-//            EventBus.trigger("getMap", this);
+
             Radio.on("Window", "winParams", this.setStatus, this);
             Radio.on("geolocation", "position", this.position, this);
         },
@@ -147,7 +145,7 @@ define([
                     }
                 },
                 error: function (error) {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Adressabfrage fehlgeschlagen: " + error.statusText,
                         kategorie: "alert-warning"
                     });
@@ -191,7 +189,7 @@ define([
                     }
                 },
                 error: function (error) {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Adressabfrage fehlgeschlagen: " + error.statusText,
                         kategorie: "alert-warning"
                     });
@@ -250,7 +248,7 @@ define([
                     $("#loader").hide();
                     this.set("description", "");
                     this.set("endDescription", "");
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Fehlermeldung beim Laden der Route: \n" + data.responseText,
                         kategorie: "alert-warning"
                     });

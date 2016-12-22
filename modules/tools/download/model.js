@@ -1,10 +1,9 @@
 define([
     "openlayers",
     "backbone",
-    "eventbus",
     "backbone.radio",
     "proj4"
-], function (ol, Backbone, EventBus, Radio, proj4) {
+], function (ol, Backbone, Radio, proj4) {
         var Download = Backbone.Model.extend({
             // Die Features
             data: {},
@@ -108,7 +107,7 @@ define([
                 var result = filename.match(/^[0-9a-zA-Z ]+(\.[0-9a-zA-Z]+)?$/);
 
                 if (!result) {
-                    EventBus.trigger("alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
+                    Radio.trigger("Alert", "alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
                 }
                 return result;
              },
@@ -129,7 +128,7 @@ define([
                 var format = this.getSelectedFormat();
 
                 if (format === "none" || format === "" || typeof format === "undefined") {
-                     EventBus.trigger("alert", "Bitte Format auswählen");
+                     Radio.trigger("Alert", "alert", "Bitte Format auswählen");
                      return false;
                 }
                 return true;
@@ -267,7 +266,7 @@ define([
                         return this.convertFeaturesToKML;
                     }
                     default: {
-                        EventBus.trigger("alert", "Ein Unbekanntes Format wurde an das Download Tool übergeben: <br><strong>" + format + "</strong><br> Bekannte Formate:<br>" + knownFormats);
+                        Radio.trigger("Alert", "alert", "Ein Unbekanntes Format wurde an das Download Tool übergeben: <br><strong>" + format + "</strong><br> Bekannte Formate:<br>" + knownFormats);
                     }
                 }
             },
@@ -295,7 +294,7 @@ define([
                         break;
                     }
                     default: {
-                        EventBus.trigger("alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
+                        Radio.trigger("Alert", "alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
                     }
                 }
                 return transCoord;

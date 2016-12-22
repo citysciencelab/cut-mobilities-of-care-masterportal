@@ -197,6 +197,7 @@ define([
                 $("#searchInput:focus").css("border-right-width", "0");
             }
             this.delegateEvents(this.events);
+            Radio.trigger("Title", "setSize");
         },
         /**
         * @description Methode, um den Searchstring über den Eventbus zu steuern ohne Event auszulösen

@@ -12,6 +12,7 @@ define(function (require) {
             animating: false,
             layer: new ol.layer.Vector({
                 source: new ol.source.Vector(),
+                alwaysOnTop: true,
                 style: null
             }),
             pendlerLegend: [],
@@ -70,7 +71,7 @@ define(function (require) {
             }
 
             this.sendRequest("GET", this.getParams(), this.parseKreise);
-            Radio.trigger("Map", "addLayer", this.get("layer"));
+            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), Radio.request("Map", "getLayers").getArray().length]);
         },
 
         setDefaults: function () {

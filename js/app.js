@@ -118,7 +118,7 @@ define("app",
                     });
                     break;
                 }
-                case "gfi":{
+                case "gfi": {
                     require(["modules/gfipopup/popup/popupLoader"], function (PopupLoader) {
                         new PopupLoader();
                     });
@@ -220,7 +220,7 @@ define("app",
                     break;
                 }
                 case "legend": {
-                    require(["modules/legend/view", "modules/legend/viewMobile", "modules/core/util"], function (LegendView, MobileLegendView, Util) {
+                    require(["modules/legend/view", "modules/legend/viewMobile"], function (LegendView, MobileLegendView) {
                         if (Radio.request("Util", "isAny")) {
                             new MobileLegendView();
                         }
@@ -244,10 +244,10 @@ define("app",
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
                 controlsView = new ControlsView();
 
-            _.each(controls, function (control, index) {
+            _.each(controls, function (control) {
                 switch (control.id) {
                     case "toggleMenu": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
 
                             require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
@@ -257,7 +257,7 @@ define("app",
                         break;
                     }
                     case "zoom": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
@@ -275,7 +275,7 @@ define("app",
                         break;
                     }
                     case "mousePosition": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
                                 new MousePositionView();
                             });
@@ -283,7 +283,7 @@ define("app",
                         break;
                     }
                     case "fullScreen": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
@@ -293,7 +293,7 @@ define("app",
                         break;
                     }
                     case "attributions": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
                                 new AttributionsView();
                             });
@@ -312,7 +312,14 @@ define("app",
 
         if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
+                var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
+
                 new SearchbarView(sbconfig);
+                if (title) {
+                    require(["modules/title/view"], function (TitleView) {
+                        new TitleView(title);
+                    });
+                }
             });
         }
 
@@ -320,13 +327,6 @@ define("app",
             new StyleWMSView();
         });
 
-        var title = Radio.request("Parser","getPortalConfig").PortalTitle;
-
-        if (title) {
-            require(["modules/title/view"], function (TitleView) {
-                new TitleView(title);
-            });
-        }
         Radio.trigger("Util", "hideLoader");
     });
 });
