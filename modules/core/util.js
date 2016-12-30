@@ -33,7 +33,7 @@ define([
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged");
+                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
                 }
             });
 

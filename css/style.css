@@ -46,3 +46,7 @@
 @import "../modules/tools/extendedFilter/style.css";
 @import "../modules/gfipopup/themes/table/style.css";
 @import "../modules/tools/animation/style.css";
+@import "../modules/gfi/desktop/style.css";
+@import "../modules/gfi/mobile/style.css";
+@import "../modules/gfi/themes/table/style.css";
+@import "../modules/gfi/themes/reisezeiten/style.css";

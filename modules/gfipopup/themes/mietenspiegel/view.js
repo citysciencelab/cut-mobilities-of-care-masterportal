@@ -1,10 +1,11 @@
 define([
     "backbone",
+    "backbone.Radio",
     "text!modules/gfipopup/themes/mietenspiegel/template.html",
     "text!modules/gfipopup/themes/mietenspiegel/template-formular.html",
     "modules/gfipopup/themes/mietenspiegel/model",
     "eventbus"
-], function (Backbone, GFITemplate, GFITemplateFormular, GFIModel, EventBus) {
+], function (Backbone, Radio, GFITemplate, GFITemplateFormular, GFIModel, EventBus) {
     "use strict";
     var GFIContentMietenspiegelView = Backbone.View.extend({
         /*
@@ -31,7 +32,11 @@ define([
                 this.listenTo(this.model, "showErgebnisse", this.showErgebnisse);
                 this.listenTo(this.model, "hideErgebnisse", this.hideErgebnisse);
             }
-            EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
+            this.listenTo(Radio.channel("GFI"), {
+                "isVisible": this.popupRendered
+            }, this);
+
+            // EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
             this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
                 this.model.newWindow (layer, response, coordinate);
                 $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));

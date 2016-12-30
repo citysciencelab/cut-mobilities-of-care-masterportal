@@ -7,7 +7,7 @@ define([
 ], function (Backbone, Template, GFIPopup, EventBus) {
     "use strict";
     var GFIPopupView = Backbone.View.extend({
-        model: GFIPopup,
+        model: new GFIPopup(),
         className: "modal fade",
         template: _.template(Template),
         events: {

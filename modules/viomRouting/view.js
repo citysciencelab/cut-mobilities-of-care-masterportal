@@ -85,8 +85,8 @@ define([
                 $("#input-group-ziel ul").hide();
             }
         },
-        setRoutingDestination: function (coordinate) {
-            EventBus.trigger("closeGFIParams", this);
+        setRoutingDestination: function (coordinate) {console.log(coordinate);
+            Radio.trigger("GFIPopup", this);
             EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
             this.model.set("toStrassenname", coordinate.toString());
             this.model.set("toCoord", coordinate);

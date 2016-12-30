@@ -2,8 +2,8 @@ define([
     "backbone",
     "text!modules/gfipopup/themes/reisezeiten/template.html",
     "modules/gfipopup/themes/reisezeiten/model",
-    "eventbus"
-], function (Backbone, Template, Model, EventBus) {
+    "backbone.radio"
+], function (Backbone, Template, Model, Radio) {
     "use strict";
     var RoutingView = Backbone.View.extend({
         template: _.template(Template),
@@ -21,7 +21,7 @@ define([
         },
         startShowingRoute: function (evt) {
             this.model.showRoute(evt.currentTarget.id);
-            EventBus.trigger("closeGFIParams");
+            Radio.trigger("GFIPopup", "closeGFIParams");
         },
         /**
          *

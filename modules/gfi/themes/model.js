@@ -1,98 +1,100 @@
-define(function (require) {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
-        Config = require("config"),
-        Requestor;
-
-    Requestor = Backbone.Model.extend({
-        requestCount: 0,
-        pContent: [],
-
+define([
+    "backbone",
+    "backbone.radio",
+    "modules/gfipopup/gfiObjects/img/view",
+    "modules/gfipopup/gfiObjects/video/view",
+    "modules/gfipopup/gfiObjects/routable/view",
+    "modules/core/util",
+    "config",
+    "openlayers"
+            // Moment = require("moment"),
+], function (Backbone, Radio, ImgView, VideoView, RoutableView, Util, Config, ol) {
+    "use strict";
+    var GFIContentDefaultModel = Backbone.Model.extend({
         /**
-         * params: [0] = Objekt mit name und url
+         *
          */
-        requestFeatures: function (params) {
-            this.groupContentByTyp(params);
-            this.pContent = [];
-
-            if (this.has("gfiWMSContent")) {
-                _.each(this.getGFIWMSContent(), function (visibleLayer) {
-                    if (visibleLayer.infoFormat === "text/html") {
-                        this.openHTMLContent(visibleLayer);
-                    }
-                    else {
-                        this.setWMSPopupContent(visibleLayer);
-                    }
-                }, this);
-            }
-            else {
-                this.getGFIFeatureContent();
-                this.buildTemplate();
-            }
-
-            Radio.trigger("Util", "hideLoader");
+        defaults: {
+            // ist das Theme sichtbar
+            isVisible: false,
+            // gfiAttributes
+            name: undefined,
+            infoFormat: "",
+            routable: null,
+            children: null,
+            ready: false
         },
 
-        groupContentByTyp: function (content) {
-            var groupByTyp = _.groupBy(content, function (obj) {
-                // WMS || WFS || GeoJSON
-                return obj.model.getTyp();
-            });
+        setIsVisible: function (value) {
+            this.set("isVisible", value);
+        },
 
-            _.each(groupByTyp, function (value, key) {
-                switch (key) {
-                    case "WFS": {
-                        this.setGFIWFSContent(value);
-                        break;
-                    }
-                    case "GeoJSON": {
-                        this.setGFIGeoJSONContent(value);
-                        break;
-                    }
-                    case "WMS": {
-                        this.setGFIWMSContent(value);
-                        break;
-                    }
+        getGfiContent: function () {
+            return this.get("gfiContent");
+        },
+
+        /**
+         * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
+         */
+        destroy: function () {
+            _.each(this.get("gfiContent"), function (element) {
+                if (_.has(element, "children")) {
+                    var children = _.values(_.pick(element, "children"))[0];
+
+                    _.each(children, function (child) {
+                        child.val.remove();
+                    }, this);
+                }
+            }, this);
+            _.each(this.get("gfiRoutables"), function (element) {
+                if (_.isObject(element) === true) {
+                    element.remove();
                 }
             }, this);
         },
 
-        openHTMLContent: function (visibleLayer) {
-            // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
-            if (visibleLayer.ol_layer.get("featureCount")) {
-                var featurecount = "&FEATURE_COUNT=";
-
-                featurecount = featurecount.concat(visibleLayer.ol_layer.get("featureCount").toString());
-                visibleLayer.url = visibleLayer.url.concat(featurecount);
-            }
-            if (visibleLayer.ol_layer.id === "2407" || visibleLayer.ol_layer.id === "4423") {
-
-                window.open(visibleLayer.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
-                this.getGFIFeatureContent();
-                this.buildTemplate();
-                this.unset("gfiWMSContent");
-                this.pContent = [];
+        /**
+         *
+         */
+        requestFeatures: function () {
+            if (this.get("typ") === "WMS") {
+                if (this.get("infoFormat") === "text/html") {
+                    this.openHTMLContent();
+                }
+                else {
+                    this.setWMSPopupContent();
+                }
             }
             else {
-                var gfiFeatures = {"html": visibleLayer.url};
+                this.getGFIFeatureContent();
+            }
+        },
+
+        openHTMLContent: function () {
+            var url;
+            // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
+            if (this.get("featureCount")) {
+                var featurecount = "&FEATURE_COUNT=";
+
+                featurecount = featurecount.concat(this.get("featureCount").toString());
+                url = this.get("gfiUrl").concat(featurecount);
+            }
+            if (this.get("id") === "2407" || this.get("id") === "4423") {
+                window.open(url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+            }
+            else {
+                var gfiFeatures = {"html": this.get("gfiUrl")};
 
                 $.ajax({
-                    url: Radio.request("Util", "getProxyURL", visibleLayer.url),
+                    url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
                     async: false,
                     type: "GET",
                     context: this,
                     success: function (data) {
                         if ($(data).find("tbody").children().length > 1 === true) {
-                            this.pushGFIContent([gfiFeatures], visibleLayer);
+                            this.set("gfiContent", [gfiFeatures]);
                         }
-                    },
-                    complete: function () {
-                        this.getGFIFeatureContent();
-                        this.buildTemplate();
-                        this.unset("gfiWMSContent");
-                        this.pContent = [];
+                        this.set("ready", true);
                     }
                 });
             }
@@ -101,54 +103,21 @@ define(function (require) {
         getGFIFeatureContent: function () {
             var gfiContent;
 
-            if (this.has("gfiWFSContent")) {
-                _.each(this.getGFIWFSContent(), function (visibleLayer) {
-                    gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.model.get("gfiAttributes"));
-                    this.pushGFIContent(gfiContent, visibleLayer.model);
-                }, this);
-                this.unset("gfiWFSContent");
-            }
-            if (this.has("gfiGeoJSONContent")) {
-                _.each(this.getGFIGeoJSONContent(), function (visibleLayer) {
-                    gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
-                    this.pushGFIContent(gfiContent, visibleLayer);
-                }, this);
-                this.unset("gfiGeoJSONContent");
-            }
+            gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
+            this.set("gfiContent", gfiContent);
+            this.set("ready", true);
         },
 
-        pushGFIContent: function (gfiContent, visibleLayer) {
-            this.pContent.push({
-                content: gfiContent,
-                name: visibleLayer.getName(),
-                ol_layer: visibleLayer.getLayer()
-            });
-        },
-
-        setGeoJSONPopupContent: function (feature) {
-            var featureList = [];
-
-            if (_.has(feature.getProperties(), "gfiAttributes")) {
-                featureList.push(feature.getProperties().gfiAttributes);
-            }
-            else {
-                _.each(feature.getProperties().features, function (feature) {
-                    featureList.push(feature.get("gfiAttributes"));
-                });
-            }
-            return featureList;
-        },
-
-        setWMSPopupContent: function (obj) {
+        setWMSPopupContent: function () {
             var url,
-                data = "FEATURE_COUNT=" + obj.model.get("featureCount").toString(),
+                data = "FEATURE_COUNT=" + this.get("featureCount").toString(),
                 pgfi = [];
 
-            if (obj.model.getGfiUrl().search(location.host) === -1) {
-                url = Radio.request("Util", "getProxyURL", obj.model.getGfiUrl());
+            if (this.get("gfiUrl").search(location.host) === -1) {
+                url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
             }
             else {
-                url = obj.model.getGfiUrl();
+                url = this.get("gfiUrl");
             }
             url = url.replace(/SLD_BODY\=.*?\&/, "");
             ++this.requestCount;
@@ -206,51 +175,19 @@ define(function (require) {
                     }
 
                     if (gfiList) {
-                        pgfi = this.translateGFI(gfiList, obj.model.get("gfiAttributes"), obj.model.get("gfiTheme"), "WMS");
+                        pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"), this.get("gfiTheme"), "WMS");
                     }
-                    this.pushGFIContent(pgfi, obj.model);
+
+                    if (gfiList.length > 0) {
+                        // this.pushGFIContent(pgfi);
+                        this.set("gfiContent", pgfi);
+                    }
+                    this.set("ready", true);
                 },
                 error: function (jqXHR, textStatus) {
                     alert("Ajax-Request " + textStatus);
-                },
-                complete: function () {
-                     --this.requestCount;
-
-                    if (this.requestCount === 0) {
-                        this.getGFIFeatureContent();
-                        this.buildTemplate();
-                        this.unset("gfiWMSContent");
-                    }
                 }
             });
-        },
-
-        buildTemplate: function () {
-            Radio.trigger("Requestor", "renderResults", this.pContent);
-        },
-
-        setGFIWMSContent: function (value) {
-            this.set("gfiWMSContent", value);
-        },
-
-        setGFIWFSContent: function (value) {
-            this.set("gfiWFSContent", value);
-        },
-
-        setGFIGeoJSONContent: function (value) {
-            this.set("gfiGeoJSONContent", value);
-        },
-
-        getGFIWMSContent: function () {
-            return this.get("gfiWMSContent");
-        },
-
-        getGFIWFSContent: function () {
-            return this.get("gfiWFSContent");
-        },
-
-        getGFIGeoJSONContent: function () {
-            return this.get("gfiGeoJSONContent");
         },
 
         isValidKey: function (key) {
@@ -336,8 +273,22 @@ define(function (require) {
                 }
             }, this);
             return pgfi;
-    }
+        },
+        /**
+         * Guckt alle Werte durch und prüft, ob es sich dabei um ein ISO8601-konformes Datum handelt.
+         * Falls ja, wird es in das Format DD.MM.YYYY umgewandelt.
+         * @param  {object} content - GFI Attribute
+         * @return {object} content
+         */
+        getManipulateDate: function (content) {
+            _.each(content, function (value, key, list) {
+                if (Moment(value, Moment.ISO_8601, true).isValid() === true) {
+                    list[key] = Moment(value).format("DD.MM.YYYY");
+                }
+            });
+            return content;
+        }
     });
 
-    return new Requestor();
+    return GFIContentDefaultModel;
 });

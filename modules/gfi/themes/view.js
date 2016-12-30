@@ -1,31 +1,37 @@
 define([
-    "backbone",
-    "text!modules/gfipopup/themes/default/template.html",
-    "modules/gfipopup/themes/default/model"
-], function (Backbone, GFIContentDefaultTemplate, GFIContentDefaultModel) {
-    "use strict";
-    var GFIContentDefaultView = Backbone.View.extend({
-        template: _.template(GFIContentDefaultTemplate),
-        events: {
-            "remove": "destroy"
-        },
-        /**
-         * Wird aufgerufen wenn die View erzeugt wird.
-         */
-        initialize: function (layer, content) {
-            this.model = new GFIContentDefaultModel(layer, content);
+    "backbone"
+], function (Backbone) {
+
+    var Backbone = require("backbone"),
+        ThemeView;
+
+    ThemeView = Backbone.View.extend({
+
+        initialize: function () {
+            this.listenTo(this.model, {
+                 "change:isVisible": this.appendTheme
+            });
+
             this.render();
         },
-        /**
-         *
-         */
-        render: function () {
-            var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            this.appendChildren();
-            this.appendRoutableButton();
+        render: function () {console.log("render");console.log(this.model.get("gfiContent"));
+            if (_.isUndefined(this.model.get("gfiContent")) === false) {
+                var attr = this.model.toJSON();
+console.log(attr);
+                this.$el.html(this.template(attr));
+                this.appendChildren();
+                this.appendRoutableButton();
+            }
         },
+
+        appendTheme: function (model, value) {
+            if (value === true) {
+                $(".gfi-content").html(this.el);
+                $(".gfi-title").text(this.model.get("name"));
+            }
+        },
+
         /**
          *
          */
@@ -56,5 +62,5 @@ define([
         }
     });
 
-    return GFIContentDefaultView;
+    return ThemeView;
 });

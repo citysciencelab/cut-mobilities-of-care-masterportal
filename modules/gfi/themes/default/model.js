@@ -1,31 +1,14 @@
 define([
-    "backbone",
+    "modules/gfi/themes/model",
     "backbone.radio",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
     "modules/gfipopup/gfiObjects/routable/view",
     "modules/core/util"
-], function (Backbone, Radio, ImgView, VideoView, RoutableView, Util) {
-    "use strict";
-    var GFIContentDefaultModel = Backbone.Model.extend({
-        /**
-         *
-         */
-        defaults: {
-            routable: null,
-            children: null
-        },
-        /**
-         *
-         */
-        initialize: function (layer, content) {console.log("default");
-            this.set("id", _.uniqueId("defaultTheme"));
-            this.set("layer", layer);
-            this.set("gfiContent", content);
-            this.set("gfiTitel", layer.get("name"));
-            this.replaceValuesWithChildObjects();
-            this.checkRoutable();
-        },
+], function (Theme, Radio, ImgView, VideoView, RoutableView, Util) {
+
+    var DefaultTheme = Theme.extend({
+
         /**
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
          */
@@ -123,5 +106,5 @@ define([
         }
     });
 
-    return GFIContentDefaultModel;
+    return DefaultTheme;
 });
