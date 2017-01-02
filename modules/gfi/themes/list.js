@@ -7,6 +7,8 @@ define(function (require) {
         TableTheme = require("modules/gfi/themes/table/model"),
         ReisezeitenThemeView = require("modules/gfi/themes/reisezeiten/view"),
         ReisezeitenTheme = require("modules/gfi/themes/reisezeiten/model"),
+        SolaratlasThemeView = require("modules/gfi/themes/solaratlas/view"),
+        SolaratlasTheme = require("modules/gfi/themes/solaratlas/model"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -16,6 +18,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "reisezeiten") {
                 return new ReisezeitenTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "solaratlas") {
+                return new SolaratlasTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -37,15 +42,11 @@ define(function (require) {
                             return model.get("gfiContent") === undefined;
                         });
                         this.remove(removeModels);
-                        this.addViews();
+                        this.forEach(this.addView, this);
                         this.trigger("ready");
                     }
                 }
             });
-        },
-
-        addViews: function () {
-            this.forEach(this.addView, this);
         },
 
         addView: function (model) {
@@ -56,6 +57,10 @@ define(function (require) {
                 }
                 case "reisezeiten": {
                     new ReisezeitenThemeView({model: model});
+                    break;
+                }
+                case "solaratlas": {
+                    new SolaratlasThemeView({model: model});
                     break;
                 }
                 default: {
@@ -70,7 +75,7 @@ define(function (require) {
         },
 
         setAllInVisible: function () {
-            this.forEach(function (model) {console.log(model);
+            this.forEach(function (model) {
                 model.setIsVisible(false);
             });
         }

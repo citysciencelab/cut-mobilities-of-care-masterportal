@@ -1,14 +1,21 @@
 define([
     "modules/gfi/themes/model",
     "backbone.radio",
-    "modules/gfipopup/gfiObjects/img/view",
-    "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routable/view",
-    "modules/core/util"
-], function (Theme, Radio, ImgView, VideoView, RoutableView, Util) {
+    "modules/gfi/objects/image/view",
+    "modules/gfi/objects/video/view",
+    "modules/gfi/objects/routingButton/view"
+], function (Theme, Radio, ImgView, VideoView, RoutableView) {
 
     var DefaultTheme = Theme.extend({
 
+        initialize: function () {
+            this.listenTo(this, {
+                "change:ready": function () {
+                    this.replaceValuesWithChildObjects();
+                    this.checkRoutable();
+                }
+            });
+        },
         /**
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
          */
@@ -21,8 +28,8 @@ define([
          */
         checkRoutable: function () {
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
-                if (this.get("layer").get("routable") === true) {
-                    this.set("routable", new RoutableView(Radio.request("GFIPopup", "getCoordinate")));
+                if (this.get("routable") === true) {
+                    this.set("routable", new RoutableView());
                 }
             }
         },
@@ -40,45 +47,47 @@ define([
                 children.push(element);
             }
             else {
-                _.each(element, function (val, key) {
-                    if (key === "Bild") {
-                        var imgView = new ImgView(val);
+                _.each(element, function (ele) {
+                    _.each(ele, function (val, key) {
+                        if (key === "Bild") {
+                            var imgView = new ImgView(val);
 
-                        element[key] = "#";
-                        children.push({
-                            key: imgView.model.get("id"),
-                            val: imgView
-                        });
-                    }
-                    else if (key === "video" && Util.isAny() === null) {
-                        var videoView = new VideoView(val);
-
-                        element[key] = "#";
-                        children.push({
-                            key: videoView.model.get("id"),
-                            val: videoView
-                        });
-                        if (_.has(element, "mobil_video")) {
-                            element.mobil_video = "#";
+                            element[key] = "#";
+                            children.push({
+                                key: imgView.model.get("id"),
+                                val: imgView
+                            });
                         }
-                    }
-                    else if (key === "mobil_video" && Util.isAny()) {
-                        var videoView = new VideoView(val);
+                        else if (key === "video" && Radio.request("Util", "isAny") === null) {
+                            var videoView = new VideoView(val);
 
-                        element[key] = "#";
-                        children.push({
-                            key: videoView.model.get("id"),
-                            val: videoView
-                        });
-                        if (_.has(element, "video")) {
-                            element.video = "#";
+                            element[key] = "#";
+                            children.push({
+                                key: videoView.model.get("id"),
+                                val: videoView
+                            });
+                            if (_.has(element, "mobil_video")) {
+                                element.mobil_video = "#";
+                            }
                         }
-                    }
-                    // lösche leere Dummy-Einträge wieder raus.
-                    element = _.omit(element, function (value) {
-                        return value === "#";
-                    });
-                }, this);
+                        else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
+                            var videoView = new VideoView(val);
+
+                            element[key] = "#";
+                            children.push({
+                                key: videoView.model.get("id"),
+                                val: videoView
+                            });
+                            if (_.has(element, "video")) {
+                                element.video = "#";
+                            }
+                        }
+                        // lösche leere Dummy-Einträge wieder raus.
+                        element = _.omit(element, function (value) {
+                            return value === "#";
+                        });
+                    }, this);
+                });
             }
             if (children.length > 0) {
                 this.set("children", children);
@@ -88,22 +97,22 @@ define([
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
-        destroy: function () {
-            _.each(this.get("gfiContent"), function (element) {
-                if (_.has(element, "children")) {
-                    var children = _.values(_.pick(element, "children"))[0];
-
-                    _.each(children, function (child) {
-                        child.val.remove();
-                    }, this);
-                }
-            }, this);
-            _.each(this.get("gfiRoutables"), function (element) {
-                if (_.isObject(element) === true) {
-                    element.remove();
-                }
-            }, this);
-        }
+        // destroy: function () {
+        //     _.each(this.get("gfiContent"), function (element) {
+        //         if (_.has(element, "children")) {
+        //             var children = _.values(_.pick(element, "children"))[0];
+        //
+        //             _.each(children, function (child) {
+        //                 child.val.remove();
+        //             }, this);
+        //         }
+        //     }, this);
+        //     _.each(this.get("gfiRoutables"), function (element) {
+        //         if (_.isObject(element) === true) {
+        //             element.remove();
+        //         }
+        //     }, this);
+        // }
     });
 
     return DefaultTheme;

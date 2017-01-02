@@ -1,16 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/gfipopup/gfiObjects/img/view",
-    "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routable/view",
-    "modules/core/util",
-    "config",
-    "openlayers"
-            // Moment = require("moment"),
-], function (Backbone, Radio, ImgView, VideoView, RoutableView, Util, Config, ol) {
-    "use strict";
-    var GFIContentDefaultModel = Backbone.Model.extend({
+define(function (require) {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Config = require("config"),
+        Moment = require("moment"),
+        ol = require("openlayers"),
+        Theme;
+
+    Theme = Backbone.Model.extend({
         /**
          *
          */
@@ -31,26 +28,6 @@ define([
 
         getGfiContent: function () {
             return this.get("gfiContent");
-        },
-
-        /**
-         * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
-         */
-        destroy: function () {
-            _.each(this.get("gfiContent"), function (element) {
-                if (_.has(element, "children")) {
-                    var children = _.values(_.pick(element, "children"))[0];
-
-                    _.each(children, function (child) {
-                        child.val.remove();
-                    }, this);
-                }
-            }, this);
-            _.each(this.get("gfiRoutables"), function (element) {
-                if (_.isObject(element) === true) {
-                    element.remove();
-                }
-            }, this);
         },
 
         /**
@@ -104,6 +81,7 @@ define([
             var gfiContent;
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent);
             this.set("gfiContent", gfiContent);
             this.set("ready", true);
         },
@@ -176,6 +154,7 @@ define([
 
                     if (gfiList) {
                         pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"), this.get("gfiTheme"), "WMS");
+                        pgfi = this.getManipulateDate(pgfi);
                     }
 
                     if (gfiList.length > 0) {
@@ -274,6 +253,7 @@ define([
             }, this);
             return pgfi;
         },
+
         /**
          * Guckt alle Werte durch und prüft, ob es sich dabei um ein ISO8601-konformes Datum handelt.
          * Falls ja, wird es in das Format DD.MM.YYYY umgewandelt.
@@ -281,14 +261,16 @@ define([
          * @return {object} content
          */
         getManipulateDate: function (content) {
-            _.each(content, function (value, key, list) {
-                if (Moment(value, Moment.ISO_8601, true).isValid() === true) {
-                    list[key] = Moment(value).format("DD.MM.YYYY");
-                }
+            _.each(content, function (element) {
+                _.each(element, function (value, key, list) {
+                    if (Moment(value, Moment.ISO_8601, true).isValid() === true) {
+                        list[key] = Moment(value).format("DD.MM.YYYY");
+                    }
+                });
             });
             return content;
         }
     });
 
-    return GFIContentDefaultModel;
+    return Theme;
 });

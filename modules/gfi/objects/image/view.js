@@ -1,17 +1,11 @@
 define([
     "backbone",
-    "text!modules/gfipopup/gfiObjects/img/template.html",
-    "modules/gfipopup/gfiObjects/img/model"
+    "text!modules/gfi/objects/image/template.html",
+    "modules/gfi/objects/image/model"
 ], function (Backbone, ImgTemplate, ImgModel) {
     "use strict";
     var ImgView = Backbone.View.extend({
         template: _.template(ImgTemplate),
-        /**
-         * Wird aufgerufen wenn die View erzeugt wird.
-         */
-        events: {
-            "remove": "destroy"
-        },
 
         initialize: function (url) {
             this.model = new ImgModel();
@@ -28,14 +22,7 @@ define([
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         },
-        /**
-         * Removed das Img-Objekt vollständig.
-         * Wird beim destroy des GFI für alle Child-Objekte aufgerufen.
-         */
-        destroy: function () {console.log("destroy image");
-            this.unbind();
-            this.model.destroy();
-        },
+
         checkReloadVersuch: function () {
             if (this.model.get("reloadVersuch") > this.model.get("reloadMaxVersuche")) {
                 this.remove();

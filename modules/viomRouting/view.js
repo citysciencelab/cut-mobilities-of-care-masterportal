@@ -13,6 +13,12 @@ define([
         className: "win-body",
         template: _.template(RoutingWin),
         initialize: function () {
+            var channel = Radio.channel("Routing");
+
+            channel.on({
+                "setRoutingDestination": this.setRoutingDestination
+            }, this);
+
             this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
 
             this.listenTo(this.model, "change:fromCoord", this.coord_change);

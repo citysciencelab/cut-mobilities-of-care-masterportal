@@ -19,11 +19,11 @@ define([
         },
         setRoutingDestination: function () {
             EventBus.trigger("setRoutingDestination", this.get("coordinate"));
-        },
-        destroy: function () {
-            this.unbind();
-            this.clear({silent: true});
         }
+        // destroy: function () {
+        //     this.unbind();
+        //     this.clear({silent: true});
+        // }
     });
     return RoutableModel;
 });

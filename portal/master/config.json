@@ -186,6 +186,23 @@
           "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
+          "id": "2128",
+          "styleId": "2128",
+          "visibility": true,
+          "clusterDistance": 0,
+          "searchField": "",
+          "mouseHoverField": "",
+          "filterOptions": [],
+          "styleLabelField": ""
+        },
+        {
+          "id": "2059",
+          "visibility": true,
+          "styleId": "2059",
+          "clusterDistance": 30,
+          "styleField": "kategorie"
+        },
+        {
           "id": "4926",
           "visibility": false,
           "styleable": true,
@@ -215,16 +232,28 @@
            "styleId": "45",
            "clusterDistance": 40,
            "routable": true
-       },
-       {
+        },
+        {
+           "id": "4479",
+           "visibility": true
+        },
+        {
+          "id": ["4537", "4538"],
+          "name": "Eignungsflächen",
+          "visibility": true,
+          "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
+          "gfiTheme": "solaratlas",
+          "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
+        },
+        {
           "id": "2407",
           "visibility": false,
           "infoFormat": "text/html"
-      },
+        },
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",

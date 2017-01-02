@@ -40,7 +40,6 @@ define(function (require) {
             this.listenTo(this, {
                 "change:isVisible": function (model, value) {
                     channel.trigger("isVisible", value);
-                    console.log(value);
                     if (value === false && this.getNumberOfThemes() > 0) {
                         this.getThemeList().setAllInVisible();
                     }
@@ -271,7 +270,7 @@ define(function (require) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
 
             if (_.isUndefined(model) === false) {
-                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme");
+                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;

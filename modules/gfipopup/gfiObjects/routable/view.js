@@ -10,7 +10,7 @@ define([
          * Wird aufgerufen wenn die View erzeugt wird.
          */
         events: {
-            "remove": "destroy",
+            // "remove": "destroy",
             "click": "setZielpunkt"
         },
 
@@ -35,10 +35,10 @@ define([
          * Removed das Routing-Objekt vollständig.
          * Wird beim destroy des GFI für alle Child-Objekte aufgerufen.
          */
-        destroy: function () {
-            this.unbind();
-            this.model.destroy();
-        }
+        // destroy: function () {console.log("destroy routable");
+        //     this.unbind();
+        //     this.model.destroy();
+        // }
     });
 
     return RoutableView;
