@@ -22,6 +22,12 @@ define(function (require) {
             animationLimit: 0
         },
         initialize: function () {
+            var channel = Radio.channel("Animation");
+
+            channel.reply({
+                "getLayer": this.getLayer
+            }, this);
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": function (args) {
                     this.setStatus(args);
@@ -637,6 +643,10 @@ define(function (require) {
 
         getZoomLevel: function () {
             return this.get("zoomLevel");
+        },
+
+        getLayer: function () {
+            return this.get("layer");
         },
 
         hideMapContent: function () {

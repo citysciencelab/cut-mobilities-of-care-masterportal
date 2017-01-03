@@ -14,21 +14,28 @@ define(function (require) {
         defaults: {
             // ist das Theme sichtbar
             isVisible: false,
-            // gfiAttributes
+            // Layername = Theme Titel
             name: undefined,
-            infoFormat: "",
-            routable: null,
-            children: null,
-            ready: false
+            // Theme hat GFI-Attribute abgefragt und bearbeitet
+            isReady: false,
+            // Info-Format für WMS-GFI
+            infoFormat: undefined
         },
 
+        // Setter
         setIsVisible: function (value) {
             this.set("isVisible", value);
+        },
+
+        // Getter
+        getName: function () {
+            return this.get("name");
         },
 
         getGfiContent: function () {
             return this.get("gfiContent");
         },
+
 
         /**
          *
@@ -71,7 +78,7 @@ define(function (require) {
                         if ($(data).find("tbody").children().length > 1 === true) {
                             this.set("gfiContent", [gfiFeatures]);
                         }
-                        this.set("ready", true);
+                        this.set("isReady", true);
                     }
                 });
             }
@@ -83,7 +90,7 @@ define(function (require) {
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
             this.set("gfiContent", gfiContent);
-            this.set("ready", true);
+            this.set("isReady", true);
         },
 
         setWMSPopupContent: function () {
@@ -161,7 +168,7 @@ define(function (require) {
                         // this.pushGFIContent(pgfi);
                         this.set("gfiContent", pgfi);
                     }
-                    this.set("ready", true);
+                    this.set("isReady", true);
                 },
                 error: function (jqXHR, textStatus) {
                     alert("Ajax-Request " + textStatus);

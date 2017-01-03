@@ -46,8 +46,8 @@ define([
         /**
          * Fügt den Button dem gfiContent hinzu
          */
-        appendRoutableButton: function () {
-            if (this.model.get("routable") !== null) {
+        appendRoutableButton: function () {console.log(this.model);
+            if (this.model.get("routable") !== undefined) {
                 var rb = this.model.get("routable");
                 this.$el.after(rb.$el);
             }

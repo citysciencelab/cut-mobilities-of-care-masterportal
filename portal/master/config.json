@@ -188,7 +188,7 @@
         {
           "id": "2128",
           "styleId": "2128",
-          "visibility": true,
+          "visibility": false,
           "clusterDistance": 0,
           "searchField": "",
           "mouseHoverField": "",
@@ -196,8 +196,14 @@
           "styleLabelField": ""
         },
         {
+          "id": "3302",
+          "gfiTheme": "trinkwasser",
+          "visibility": false,
+          "featureCount": 5
+        },
+        {
           "id": "2059",
-          "visibility": true,
+          "visibility": false,
           "styleId": "2059",
           "clusterDistance": 30,
           "styleField": "kategorie"
@@ -235,12 +241,12 @@
         },
         {
            "id": "4479",
-           "visibility": true
+           "visibility": false
         },
         {
           "id": ["4537", "4538"],
           "name": "Eignungsflächen",
-          "visibility": true,
+          "visibility": false,
           "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"

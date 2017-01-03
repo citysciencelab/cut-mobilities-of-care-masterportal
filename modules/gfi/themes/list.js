@@ -9,6 +9,8 @@ define(function (require) {
         ReisezeitenTheme = require("modules/gfi/themes/reisezeiten/model"),
         SolaratlasThemeView = require("modules/gfi/themes/solaratlas/view"),
         SolaratlasTheme = require("modules/gfi/themes/solaratlas/model"),
+        TrinkwasserThemeView = require("modules/gfi/themes/trinkwasser/view"),
+        TrinkwasserTheme = require("modules/gfi/themes/trinkwasser/model"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -21,6 +23,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "solaratlas") {
                 return new SolaratlasTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "trinkwasser") {
+                return new TrinkwasserTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -35,9 +40,8 @@ define(function (require) {
                 }
             });
             this.listenTo(this, {
-                "change:ready": function () {console.log("ready");
-                    // console.log(this.pluck("ready"));
-                    if (_.contains(this.pluck("ready"), false) === false) {
+                "change:isReady": function () {
+                    if (_.contains(this.pluck("isReady"), false) === false) {
                         var removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
@@ -61,6 +65,10 @@ define(function (require) {
                 }
                 case "solaratlas": {
                     new SolaratlasThemeView({model: model});
+                    break;
+                }
+                case "trinkwasser": {
+                    new TrinkwasserThemeView({model: model});
                     break;
                 }
                 default: {

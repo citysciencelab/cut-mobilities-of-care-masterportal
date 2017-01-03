@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<tbody>
+<tr>
+    <th colspan="2">
+        <strong>Untersuchungsergebnisse: </strong>
+    </th>
+</tr>
+<tr>
+    <td>
+        <strong>Entnahmedatum: </strong>
+    </td>
+    <td>
+        <%=gfiContent.allgemContent["Entnahmedatum"] %>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>Versorgungsgebiet: </strong>
+    </td>
+    <td class="trinkwasserParams">
+        <%=gfiContent.allgemContent.Versorgungsgebiet %>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>Bezirk: </strong>
+    </td>
+    <td>
+        <%=gfiContent.allgemContent.Bezirk %>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>Stadtteil: </strong>
+    </td>
+    <td>
+        <%=gfiContent.allgemContent.Stadtteil %>
+    </td>
+</tr>
+<% if(_.isEmpty(gfiContent.mikrobioContent) === false){ %>
+
+    <tr>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <strong>Mikrobiologische Parameter: </strong>
+        </td>
+    </tr>
+<%}
+_.each(gfiContent.mikrobioContent, function(value, key) {
+        if (_.isString(key) === false || _.isString(value)=== false) return;
+    %>
+<tr colspan="2">
+    <td>
+        <strong><%= key + ''%></strong>
+    </td>
+    <td>
+            <%= value %>
+    </td>
+</tr>
+<% }); %>
+<% if(_.isEmpty(gfiContent.chemContent) === false){ %>
+<tr>
+    <td colspan="2"></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <strong>Chemische Parameter: </strong>
+    </td>
+</tr>
+<%}
+_.each(gfiContent.chemContent, function(value, key) {
+        if (_.isString(key) === false || _.isString(value)=== false) return;
+    %>
+<tr colspan="2">
+    <td>
+        <strong><%= key + ''%></strong>
+    </td>
+    <td>
+            <%= value %>
+    </td>
+</tr>
+<% }); %>
+</tbody>

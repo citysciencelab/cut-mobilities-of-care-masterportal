@@ -150,7 +150,9 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
-            this.getGFIForPrint();
+            if (Radio.request("GFI", "getIsVisible") === true) {
+                this.getGFIForPrint();
+            }
         },
         /**
         *
@@ -201,7 +203,7 @@ define([
                 var features = [],
                     circleFeatures = [], // Kreise können nicht gedruckt werden
                     featureStyles = {};
-
+console.log(layer);
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -272,17 +274,13 @@ define([
          *
          */
         setSpecification: function (gfiPosition) {
-            var animationLayer = Radio.request("Map", "getLayers");
-
-            animationLayer.forEach(function (layer) {
-                if (layer.get("name") === "animationLayer") {
-                    animationLayer = layer;
-                }
-            });
+            var animationLayer = Radio.request("Animation", "getLayer");
 
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setLayer(Radio.request("Draw", "getLayer"));
-            this.setLayer(animationLayer);
+            if (_.isUndefined(animationLayer) === false) {
+                this.setLayer(animationLayer);
+            }
 
             var specification = {
                 // layout: $("#layoutField option:selected").html(),
@@ -370,7 +368,7 @@ define([
         * Setzt die createURL in Abhängigkeit der GFI
         */
         getGFIForPrint: function () {
-            var gfis = Radio.request("GFIPopup", "getGFIForPrint"),
+            var gfis = Radio.request("GFI", "getGFIForPrint"),
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI

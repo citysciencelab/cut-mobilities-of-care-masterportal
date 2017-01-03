@@ -29,6 +29,7 @@ define(function (require) {
             var channel = Radio.channel("GFI");
 
             channel.reply({
+                "getIsVisible": this.getIsVisible,
                 "getGFIForPrint": this.getGFIForPrint,
                 "getCoordinate": this.getCoordinate
             }, this);
@@ -83,8 +84,6 @@ define(function (require) {
             }
 
             this.setIsMobile(Radio.request("Util", "isViewMobile"));
-
-            var channel = Radio.channel("GFIPopup");
 
             this.listenTo(Radio.channel("Tool"), {
                 "activatedTool": this.checkTool
@@ -203,25 +202,9 @@ define(function (require) {
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
         getGFIForPrint: function () {
-            if (this.get("isPopupVisible") === true) {
-                var printContent = this.get("gfiContent")[this.get("numberOfThemes") - 1].model.returnPrintContent(),
-                    attr = printContent[0],
-                    title = printContent[1];
+            var theme = this.getThemeList().at(this.get("currentCount"));
 
-                return [attr, title, this.getCoordinate()];
-            }
-            else {
-                return undefined;
-            }
-        },
-        /**
-         * Alle childTemplates im gfiContent müssen hier removed werden.
-         * Das gfipopup.model wird nicht removed - nur reset.
-         */
-        removeChildObjects: function () {
-            _.each(this.get("gfiContent"), function (element) {
-                element.remove();
-            }, this);
+            return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
         },
 
         setGFIParamsmap: function (evt) {

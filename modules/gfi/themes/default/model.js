@@ -10,23 +10,17 @@ define([
 
         initialize: function () {
             this.listenTo(this, {
-                "change:ready": function () {
+                "change:isReady": function () {
                     this.replaceValuesWithChildObjects();
                     this.checkRoutable();
                 }
             });
         },
-        /**
-         * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
-         */
-        returnPrintContent: function () {
-            return [this.get("gfiContent"),
-                    this.get("gfiTitel")];
-        },
+
         /**
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
-        checkRoutable: function () {
+        checkRoutable: function () {;
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
                 if (this.get("routable") === true) {
                     this.set("routable", new RoutableView());
@@ -93,26 +87,7 @@ define([
                 this.set("children", children);
             }
             this.set("gfiContent", element);
-        },
-        /**
-         * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
-         */
-        // destroy: function () {
-        //     _.each(this.get("gfiContent"), function (element) {
-        //         if (_.has(element, "children")) {
-        //             var children = _.values(_.pick(element, "children"))[0];
-        //
-        //             _.each(children, function (child) {
-        //                 child.val.remove();
-        //             }, this);
-        //         }
-        //     }, this);
-        //     _.each(this.get("gfiRoutables"), function (element) {
-        //         if (_.isObject(element) === true) {
-        //             element.remove();
-        //         }
-        //     }, this);
-        // }
+        }
     });
 
     return DefaultTheme;
