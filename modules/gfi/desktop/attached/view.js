@@ -16,9 +16,6 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            // console.log(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1]);
-            // this.$el.find(".gfi-content").append(this.model.get("gfiContent")[this.model.get("gfiCounter") - 1].$el.clone(true));
-            // this.$el.find(".gfi-title").text(this.model.get("gfiTitles")[this.model.get("gfiCounter") - 1]);
             $(this.model.getOverlayElement()).popover({
                 content: this.$el,
                 html: true,
@@ -45,6 +42,7 @@ define(function (require) {
          * Blendet das Popover ein oder aus
          */
         toggle: function () {
+            console.log(this.model.get("currentTheme"));
             if (this.model.getIsVisible() === true) {
                 $(this.model.getOverlayElement()).popover("show");
             }
@@ -54,6 +52,7 @@ define(function (require) {
         },
 
         removeView: function () {
+            $(this.model.getOverlayElement()).popover("destroy");
             $("#gfipopup").remove();
             this.remove();
         }
@@ -61,26 +60,3 @@ define(function (require) {
 
     return GFIAttachedView;
 });
-
-
-// TODO fuer Mietenspiegel
-// EventBus.on("gfipopup:rerender", this.rerender, this);
-/*
-* Zeichnet Popup mit vorhandenem content neu
-*/
-// rerender: function () {
-//     $(this.model.get("element")).popover({
-//         placement: function () {
-//             if (this.getPosition().top > window.innerHeight / 2) {
-//                 return "top";
-//             }
-//             else {
-//                 return "bottom";
-//             }
-//         },
-//         html: true,
-//         content: this.$el.find(".gfi-content")
-//     });
-//     // this.model.showPopup();
-//     this.minMaxPopover();
-// },

@@ -1,8 +1,7 @@
-define([
-    "backbone"
-], function (Backbone) {
+define(function (require) {
 
     var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
         ThemeView;
 
     ThemeView = Backbone.View.extend({
@@ -14,7 +13,7 @@ define([
             this.render();
         },
 
-        render: function () {console.log(this);
+        render: function () {
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
                 var attr = this.model.toJSON();
 
@@ -24,11 +23,11 @@ define([
 
         appendTheme: function (model, value) {
             if (value === true) {
-                $(".gfi-content").html(this.el);
-                $(".gfi-title").text(this.model.get("name"));
+                Radio.request("GFI", "getCurrentView").$el.find(".gfi-content").html(this.el);
+                // Radio.request("GFI", "getCurrentView").$el.find(".gfi-title").text(this.model.get("name"));
+                this.appendChildren();
+                this.appendRoutableButton();
             }
-            this.appendChildren();
-            this.appendRoutableButton();
         },
 
         /**
@@ -46,7 +45,7 @@ define([
         /**
          * Fügt den Button dem gfiContent hinzu
          */
-        appendRoutableButton: function () {console.log(this.model);
+        appendRoutableButton: function () {
             if (this.model.get("routable") !== undefined) {
                 var rb = this.model.get("routable");
                 this.$el.after(rb.$el);

@@ -1,12 +1,13 @@
-define([
-    "modules/gfi/themes/model",
-    "backbone.radio",
-    "modules/gfi/objects/image/view",
-    "modules/gfi/objects/video/view",
-    "modules/gfi/objects/routingButton/view"
-], function (Theme, Radio, ImgView, VideoView, RoutableView) {
+define(function (require) {
 
-    var DefaultTheme = Theme.extend({
+    var Theme = require("modules/gfi/themes/model"),
+        Radio = require("backbone.radio"),
+        ImgView = require("modules/gfi/objects/image/view"),
+        VideoView = require("modules/gfi/objects/video/view"),
+        RoutableView = require("modules/gfi/objects/routingButton/view"),
+        DefaultTheme;
+
+    DefaultTheme = Theme.extend({
 
         initialize: function () {
             this.listenTo(this, {
@@ -20,7 +21,7 @@ define([
         /**
          * Prüft, ob der Button zum Routen angezeigt werden soll
          */
-        checkRoutable: function () {;
+        checkRoutable: function () {
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
                 if (this.get("routable") === true) {
                     this.set("routable", new RoutableView());

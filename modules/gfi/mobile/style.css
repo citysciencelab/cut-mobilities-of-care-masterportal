@@ -23,6 +23,7 @@
 
 .gfi-mobile .modal-body {
     padding: 0;
+    overflow-y: auto;
 }
 
 .gfi-mobile table {

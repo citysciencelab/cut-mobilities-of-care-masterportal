@@ -234,7 +234,7 @@ define(function (require) {
                 projection = Radio.request("MapView", "getProjection"),
                 coordinate = Radio.request("GFI", "getCoordinate");
 
-            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat() });
+            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
         }
     });
 

@@ -1,9 +1,9 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
-        GFIDesktopView;
+        GFIView;
 
-    GFIDesktopView = Backbone.View.extend({
+    GFIView = Backbone.View.extend({
         events: {
             "click .glyphicon-remove": "hide",
             "click .pager-right": "renderNext",
@@ -11,8 +11,10 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:currentCount": this.updatePager,
+                "change:themeIndex": this.updatePager,
+                // wird in den Subclasses aufgerufen
                 "change:isVisible": this.toggle,
+                // wird in gfi/desktop/detached/view.js aufgerufen
                 "change:coordinate": this.setMarker
             });
 
@@ -27,7 +29,10 @@ define(function (require) {
          */
         renderNext: function () {
             if ($(".pager-right").hasClass("disabled") === false) {
-                this.model.set("currentCount", this.model.get("currentCount") + 1);
+                var preWidth = $(".gfi-attached").width();
+
+                this.model.set("themeIndex", this.model.get("themeIndex") + 1);
+                this.replaceArrow(preWidth);
             }
         },
 
@@ -36,14 +41,17 @@ define(function (require) {
          */
         renderPrevious: function () {
             if ($(".pager-left").hasClass("disabled") === false) {
-                this.model.set("currentCount", this.model.get("currentCount") - 1);
+                var preWidth = $(".gfi-attached").width();
+
+                this.model.set("themeIndex", this.model.get("themeIndex") - 1);
+                this.replaceArrow(preWidth);
             }
         },
 
         /**
-         * [updatePager description]
-         * @param  {[type]} model [description]
-         * @param  {[type]} value [description]
+         * Pager css wird angepasst
+         * @param  {Backbone.Model} model - this
+         * @param  {number} value - themeIndex
          */
         updatePager: function (model, value) {
             if (value === 0) {
@@ -61,13 +69,24 @@ define(function (require) {
         },
 
         /**
+         * Ein bisschen jQuery-Magie, damit der Arrow von der detached View an der richtigen Stelle bleibt
+         * @param  {number} preWidth - vorherige Breite der detached View
+         */
+        replaceArrow: function (preWidth) {
+            $(".popover.bottom > .arrow").css({
+                "margin-left": function (index, value) {
+                    return parseFloat(value, 10) - (($(".gfi-attached").width() - preWidth) / 2);
+                }
+            });
+        },
+
+        /**
          * Ruft die Funktion setIsVisible im Model auf
          */
         hide: function () {
             this.model.setIsVisible(false);
-            // this.model.getThemeList().at(this.model.get(""))
         }
     });
 
-    return GFIDesktopView;
+    return GFIView;
 });

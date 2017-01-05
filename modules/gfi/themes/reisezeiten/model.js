@@ -12,7 +12,7 @@ define(function (require) {
          */
         initialize: function () {
             this.listenTo(this, {
-                "change:ready": this.setDefaults
+                "change:isReady": this.setDefaults
             });
         },
         setDefaults: function () {

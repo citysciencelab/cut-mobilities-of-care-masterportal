@@ -6,7 +6,7 @@ define(function (require) {
 
     TableThemeView = ThemeView.extend({
         tagName: "table",
-        className: "table table-striped table-condensed table-gfi",
+        className: "table table-striped table-condensed table-gfi table-responsive",
         template: _.template(TableThemeTemplate)
     });
 

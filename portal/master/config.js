@@ -47,7 +47,7 @@ define(function () {
         * @type String
         * @desc bei "attached" wird das GFI-Fenster am Klickpunkt angezeigt, bei jedem anderen String wird es als eigenes Fenster erzeugt. Wird das attribut nicht gesetzt wird der default "detached" verwendet
         */
-        // gfiWindow: "attached",
+        gfiWindow: "attached",
 
         /**
         * @memberof config

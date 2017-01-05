@@ -5,18 +5,18 @@
         <!-- <span class="glyphicon glyphicon-minus gfi-toggle" title="Minimieren"></span> -->
     </p>
     <p class="title">
-        <span class="gfi-title"></span>
+        <span class="gfi-title"><%= titles[themeIndex] %></span>
     </p>
 </div>
 <div class="gfi-content">
 </div>
 
-<% if(numberOfThemes > 1) { console.log(currentCount);%>
+<% if(numberOfThemes > 1) { %>
 <div class="gfi-footer">
-    <div class="pager-left <% if(currentCount === 0) {print (' disabled') }%>">
+    <div class="pager-left <% if(themeIndex === 0) {print (' disabled') }%>">
         <span class="glyphicon glyphicon-chevron-left"></span>
     </div>
-    <div class="pager-right">
+    <div class="pager-right <% if(themeIndex === numberOfThemes - 1) {print (' disabled') }%>">
         <span class="glyphicon glyphicon-chevron-right"></span>
     </div>
 </div>

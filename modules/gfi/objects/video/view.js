@@ -23,7 +23,7 @@ define([
         /**
          *
          */
-        render: function () {console.log("render");
+        render: function () {
             var attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         },

@@ -9,7 +9,7 @@ define(function (require) {
          */
         initialize: function () {
             this.listenTo(this, {
-                "change:ready": this.splitContent
+                "change:isReady": this.splitContent
             });
         },
         splitContent: function () {

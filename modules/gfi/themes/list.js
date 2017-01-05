@@ -35,19 +35,21 @@ define(function (require) {
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
-                        model.requestFeatures();
+                        model.requestFeatureInfos();
                     });
-                }
-            });
-            this.listenTo(this, {
+                },
                 "change:isReady": function () {
+                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                     if (_.contains(this.pluck("isReady"), false) === false) {
+                        // WMS Layer die beim Klickpunkt keine GFIs haben
                         var removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
+
                         this.remove(removeModels);
                         this.forEach(this.addView, this);
-                        this.trigger("ready");
+                        // listener in modules/gfi/model.js
+                        this.trigger("isReady");
                     }
                 }
             });
@@ -82,6 +84,9 @@ define(function (require) {
             this.at(value).setIsVisible(true);
         },
 
+        /**
+         * Setzt visibility aller Themes auf false
+         */
         setAllInVisible: function () {
             this.forEach(function (model) {
                 model.setIsVisible(false);
